@@ -1,3 +1,46 @@
 <resources>
     <string name="app_name">Prognoza</string>
+
+    <!--Weather descriptions-->
+    <string name="clearsky">Clear sky</string>
+    <string name="cloudy">Cloudy</string>
+    <string name="fair">Fair</string>
+    <string name="fog">Fog</string>
+    <string name="heavyrain">Heavy rain</string>
+    <string name="heavyrainandthunder">Heavy rain and thunder</string>
+    <string name="heavyrainshowers">Heavy rain showers</string>
+    <string name="heavyrainshowersandthunder">Heavy rain showers and thunder</string>
+    <string name="heavysleet">Heavy sleet</string>
+    <string name="heavysleetandthunder">Heavy sleet and thunder</string>
+    <string name="heavysleetshowers">Heavy sleet showers</string>
+    <string name="heavysleetshowersandthunder">Heavy sleet showers and thunder</string>
+    <string name="heavysnow">Heavy snow</string>
+    <string name="heavysnowandthunder">Heavy snow and thunder</string>
+    <string name="heavysnowshowers">Heavy snow showers</string>
+    <string name="heavysnowshowersandthunder">Heavy snow showers and thunder</string>
+    <string name="lightrain">Light rain</string>
+    <string name="lightrainandthunder">Light rain and thunder</string>
+    <string name="lightrainshowers">Light rain showers</string>
+    <string name="lightrainshowersandthunder">Light rain showers and thunder</string>
+    <string name="lightsleet">Light sleet</string>
+    <string name="lightsleetandthunder">Light sleet and thunder</string>
+    <string name="lightsleetshowers">Light sleet showers</string>
+    <string name="lightsnow">Light snow</string>
+    <string name="lightsnowandthunder">Light snow and thunder</string>
+    <string name="lightsnowshowers">Light snow showers</string>
+    <string name="lightssleetshowersandthunder">Light sleet showers and thunder</string>
+    <string name="lightssnowshowersandthunder">Light snow showers and thunder</string>
+    <string name="partlycloudy">Partly cloudy</string>
+    <string name="rain">Rain</string>
+    <string name="rainandthunder">Rain and thunder</string>
+    <string name="rainshowers">Rain showers</string>
+    <string name="rainshowersandthunder">Rain showers and thunder</string>
+    <string name="sleet">Sleet</string>
+    <string name="sleetandthunder">Sleet and thunder</string>
+    <string name="sleetshowers">Sleet showers</string>
+    <string name="sleetshowersandthunder">Sleet showers and thunder</string>
+    <string name="snow">Snow</string>
+    <string name="snowandthunder">Snow and thunder</string>
+    <string name="snowshowers">Snow showers</string>
+    <string name="snowshowersandthunder">Snow showers and thunder</string>
 </resources>
