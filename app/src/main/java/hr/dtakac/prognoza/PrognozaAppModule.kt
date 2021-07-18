@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza
 
-import hr.dtakac.prognoza.api.MetNorwayForecastService
+import hr.dtakac.prognoza.api.ForecastService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -19,6 +19,6 @@ val prognozaAppModule = module {
     }
 
     single {
-        get<Retrofit>().create(MetNorwayForecastService::class.java)
+        get<Retrofit>().create(ForecastService::class.java)
     }
 }
