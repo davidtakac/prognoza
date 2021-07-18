@@ -66,7 +66,14 @@ data class ForecastInstantData(
 
 data class ForecastTimePeriod(
     @SerializedName("details")
-    val data: ForecastTimePeriodData
+    val data: ForecastTimePeriodData,
+    @SerializedName("summary")
+    val summary: ForecastTimePeriodSummary
+)
+
+data class ForecastTimePeriodSummary(
+    @SerializedName("symbol_code")
+    val symbolCode: String
 )
 
 data class ForecastTimePeriodData(
