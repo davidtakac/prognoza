@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class ForecastDay(
     @PrimaryKey
-    val key: Int = 0,
+    val id: Long,
     val date: String,
     val symbolCode: String,
     val lowTemperature: String,

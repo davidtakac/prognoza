@@ -6,8 +6,10 @@ import androidx.room.PrimaryKey
 @Entity
 data class ForecastLocation(
     @PrimaryKey(autoGenerate = true)
-    val key: Int = 0,
+    val id: Long,
     val name: String,
     val postCode: String,
-    val country: String
+    val country: String,
+    val latitude: Float,
+    val longitude: Float
 )
