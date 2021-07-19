@@ -11,7 +11,7 @@
         android:name=".PrognozaApplication"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Prognoza">
-        <activity android:name=".MainActivity">
+        <activity android:name=".forecast.ForecastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

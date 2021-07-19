@@ -45,5 +45,7 @@ ext {
             desugar: '1.1.0',
             // dependency injection
             koin: '3.1.2',
+            // other
+            viewpager2: '1.0.0',
     ]
 }

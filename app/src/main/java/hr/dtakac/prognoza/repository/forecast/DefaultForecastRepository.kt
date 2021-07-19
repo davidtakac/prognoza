@@ -12,6 +12,7 @@ import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -22,32 +23,28 @@ class DefaultForecastRepository(
     private val preferencesRepository: PreferencesRepository
 ) : ForecastRepository {
     private val minimumDateTimeRfc1123 = "Thu, 1 January 1970 00:00:00 GMT"
-    private val todayNumberOfHours = 24
-    private val tomorrowNumberOfHours = 24
 
     override suspend fun getTodayForecastHours(): List<ForecastHour> {
-        return getForecastHours(ZonedDateTime.now(), todayNumberOfHours)
+        return getDailyForecastHours(LocalDateTime.now())
     }
 
     override suspend fun getTomorrowForecastHours(): List<ForecastHour> {
-        return getForecastHours(ZonedDateTime.now().plusHours(todayNumberOfHours.toLong()), tomorrowNumberOfHours)
+        TODO("Not yet implemented")
     }
 
     override suspend fun getForecastDays(): List<ForecastDay> {
         TODO("Not yet implemented")
     }
 
-    private suspend fun getForecastHours(
-        startDateTime: ZonedDateTime,
-        numberOfHours: Int
+    private suspend fun getDailyForecastHours(
+        startDateTime: LocalDateTime
     ): List<ForecastHour> {
         val forecastMeta = appDatabase.metaDao().get()
         if (hasCachedForecastExpired(forecastMeta)) {
             updateForecastDatabase(forecastMeta)
         }
         return appDatabase.hourDao().getForecastHours(
-            startDateTime = startDateTime.toInstant().toString(),
-            numberOfHours = numberOfHours,
+            startDateTime = startDateTime.format(DateTimeFormatter.ISO_DATE_TIME),
             locationId = preferencesRepository.locationId
         )
     }
@@ -81,7 +78,7 @@ class DefaultForecastRepository(
         val forecastHours = withContext(dispatcherProvider.default) {
             locationForecast?.forecast?.forecastTimeSteps?.map {
                 ForecastHour(
-                    date = it.time,
+                    dateTime = it.time,
                     locationId = forecastLocation.id,
                     temperature = it.data.instant?.data?.airTemperature,
                     symbolCode = it.data.next1Hours?.summary?.symbolCode,

@@ -9,6 +9,12 @@ const val FORECAST_META_KEY = 1
 data class ForecastMeta(
     @PrimaryKey(autoGenerate = false)
     val id: Int = FORECAST_META_KEY,
+    /**
+     * Date time when forecast data expires. In RFC1123 format.
+     */
     val expires: String,
+    /**
+     * Date time when forecast data was last modified. In RFC1123 format.
+     */
     val lastModified: String
 )

@@ -2,9 +2,9 @@ package hr.dtakac.prognoza.database.entity
 
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["date", "locationId"])
+@Entity(primaryKeys = ["dateTime", "locationId"])
 data class ForecastHour(
-    val date: String,
+    val dateTime: String,
     val locationId: Long,
     val temperature: Float?,
     val symbolCode: String?,

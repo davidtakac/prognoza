@@ -43,4 +43,14 @@
     <string name="snowandthunder">Snow and thunder</string>
     <string name="snowshowers">Snow showers</string>
     <string name="snowshowersandthunder">Snow showers and thunder</string>
+
+    <string-array name="forecast_tab_names">
+        <item>Today</item>
+        <item>Tomorrow</item>
+        <item>Other days</item>
+    </string-array>
+
+    <string name="template_degrees">%1$d°</string>
+    <string name="template_mm">%1$.1fmm</string>
+    <string name="precipitation_no_value"/>
 </resources>

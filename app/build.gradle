@@ -69,4 +69,6 @@ dependencies {
     // dependency injection
     implementation "io.insert-koin:koin-core:$versions.koin"
     implementation "io.insert-koin:koin-android:$versions.koin"
+    // other
+    implementation "androidx.viewpager2:viewpager2:$versions.viewpager2"
 }
