@@ -11,6 +11,7 @@ import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
 import hr.dtakac.prognoza.getTomorrow
+import hr.dtakac.prognoza.mostCommon
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -30,21 +31,21 @@ class ForecastViewModel(
     private val _tomorrowForecast = MutableLiveData<TomorrowUiModel>()
     val tomorrowForecast: LiveData<TomorrowUiModel> get() = _tomorrowForecast
 
-    private val _isTodayForecastLoading = MutableLiveData<Boolean>()
+    private val _isTodayForecastLoading = MutableLiveData(false)
     val isTodayForecastLoading: LiveData<Boolean> get() = _isTodayForecastLoading
 
-    private val _isTomorrowForecastLoading = MutableLiveData<Boolean>()
+    private val _isTomorrowForecastLoading = MutableLiveData(false)
     val isTomorrowForecastLoading: LiveData<Boolean> get() = _isTomorrowForecastLoading
 
     fun getTodayForecast() {
         _isTodayForecastLoading.value = true
         coroutineScope.launch {
-            val forecastHourUiModels = mapToHourUiModels(forecastRepository.getRestOfDayForecastHours())
+            val uiModels = mapToHourUiModels(forecastRepository.getRestOfDayForecastHours())
             val forecastTodayUiModel = TodayUiModel(
                 dateTime = ZonedDateTime.now(),
-                currentTemperature = forecastHourUiModels[0].temperature.roundToInt().toShort(),
-                weatherIcon = forecastHourUiModels[0].weatherIcon,
-                nextHours = forecastHourUiModels
+                currentTemperature = uiModels[0].temperature.roundToInt().toShort(),
+                weatherIcon = uiModels[0].weatherIcon,
+                nextHours = uiModels
             )
             _todayForecast.value = forecastTodayUiModel
             _isTodayForecastLoading.value = false
@@ -54,25 +55,13 @@ class ForecastViewModel(
     fun getTomorrowForecast() {
         _isTomorrowForecastLoading.value = true
         coroutineScope.launch {
-            val forecastHourUiModels = mapToHourUiModels(forecastRepository.getTomorrowForecastHours())
-            val lowTemperature = withContext(dispatcherProvider.default) {
-                forecastHourUiModels.minOf { it.temperature }
-            }
-            val highTemperature = withContext(dispatcherProvider.default) {
-                forecastHourUiModels.maxOf { it.temperature }
-            }
-            val representativeWeatherIcon = forecastHourUiModels
-                .map { it.weatherIcon }
-                .groupingBy { it }
-                .eachCount()
-                .maxByOrNull { it.value }!!
-                .key
+            val uiModels = mapToHourUiModels(forecastRepository.getTomorrowForecastHours())
             val forecastTomorrowUiModel = TomorrowUiModel(
                 dateTime = getTomorrow(),
-                lowTemperature = lowTemperature.roundToInt().toShort(),
-                highTemperature = highTemperature.roundToInt().toShort(),
-                weatherIcon = representativeWeatherIcon,
-                hours = forecastHourUiModels
+                lowTemperature = uiModels.getLowestTemperature().roundToInt().toShort(),
+                highTemperature = uiModels.getHighestTemperature().roundToInt().toShort(),
+                weatherIcon = uiModels.getMostCommonWeatherIcon(),
+                hours = uiModels
             )
             _tomorrowForecast.value = forecastTomorrowUiModel
             _isTomorrowForecastLoading.value = false
@@ -93,4 +82,19 @@ class ForecastViewModel(
                 )
             }
     }
+
+    private suspend fun List<HourUiModel>.getLowestTemperature() =
+        withContext(dispatcherProvider.default) {
+            minOf { it.temperature }
+        }
+
+    private suspend fun List<HourUiModel>.getHighestTemperature() =
+        withContext(dispatcherProvider.default) {
+            maxOf { it.temperature }
+        }
+
+    private suspend fun List<HourUiModel>.getMostCommonWeatherIcon() =
+        withContext(dispatcherProvider.default) {
+            map { it.weatherIcon }.mostCommon()
+        }
 }

@@ -61,6 +61,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:indeterminate="true"
+        app:showDelay="300"
         app:showAnimationBehavior="outward"
         app:hideAnimationBehavior="inward"
         app:layout_constraintTop_toTopOf="parent"
