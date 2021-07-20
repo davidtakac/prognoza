@@ -6,7 +6,7 @@ import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
-import hr.dtakac.prognoza.forecast.viewmodel.TodayFragmentViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.preferences.DefaultPreferencesRepository
@@ -57,6 +57,6 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        TodayFragmentViewModel(null, get(), get())
+        ForecastViewModel(null, get(), get())
     }
 }

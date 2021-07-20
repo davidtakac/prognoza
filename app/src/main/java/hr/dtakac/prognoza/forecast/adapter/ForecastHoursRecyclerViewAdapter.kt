@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.forecast.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
@@ -40,10 +41,14 @@ class ForecastHourViewHolder(
             R.string.template_degrees,
             uiModel.temperature.roundToInt()
         )
-        binding.tvPrecipitationAmount.text = if (uiModel.precipitationAmount != null) {
-            resources.getString(R.string.template_mm, uiModel.precipitationAmount)
-        } else {
-            resources.getString(R.string.precipitation_no_value)
+        binding.tvPrecipitationAmount.apply {
+            if (uiModel.precipitationAmount ?: 0f != 0f) {
+                text = resources.getString(R.string.template_mm, uiModel.precipitationAmount)
+                visibility = View.VISIBLE
+            } else {
+                text = null
+                visibility = View.GONE
+            }
         }
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
         binding.tvTime.text = uiModel.dateTime.format(dateTimeFormatter)

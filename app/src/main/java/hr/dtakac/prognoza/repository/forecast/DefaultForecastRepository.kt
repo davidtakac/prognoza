@@ -24,8 +24,14 @@ class DefaultForecastRepository(
 ) : ForecastRepository {
     private val minimumDateTimeRfc1123 = "Thu, 1 January 1970 00:00:00 GMT"
 
-    override suspend fun getTodayForecastHours(): List<ForecastHour> {
-        return getDailyForecastHours(LocalDateTime.now())
+    override suspend fun getRestOfDayForecastHours(): List<ForecastHour> {
+        // subtract an hour to show forecast for the current hour as well
+        val startDateTime = LocalDateTime.now().minusHours(1)
+        val minHoursToShow = 6L
+        return getForecastHours(
+            startDateTime = startDateTime,
+            endDateTime = startDateTime.plusHours(minHoursToShow + (23 - startDateTime.hour))
+        )
     }
 
     override suspend fun getTomorrowForecastHours(): List<ForecastHour> {
@@ -36,8 +42,9 @@ class DefaultForecastRepository(
         TODO("Not yet implemented")
     }
 
-    private suspend fun getDailyForecastHours(
-        startDateTime: LocalDateTime
+    private suspend fun getForecastHours(
+        startDateTime: LocalDateTime,
+        endDateTime: LocalDateTime
     ): List<ForecastHour> {
         val forecastMeta = appDatabase.metaDao().get()
         if (hasCachedForecastExpired(forecastMeta)) {
@@ -45,6 +52,7 @@ class DefaultForecastRepository(
         }
         return appDatabase.hourDao().getForecastHours(
             startDateTime = startDateTime.format(DateTimeFormatter.ISO_DATE_TIME),
+            endDateTime = endDateTime.format(DateTimeFormatter.ISO_DATE_TIME),
             locationId = preferencesRepository.locationId
         )
     }

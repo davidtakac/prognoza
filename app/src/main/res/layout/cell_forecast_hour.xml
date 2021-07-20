@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="64dp"
-    android:layout_height="wrap_content"
+    android:layout_height="128dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -13,6 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_precipitation_amount"
+        app:layout_constraintVertical_chainStyle="packed"
         android:gravity="center"
         tools:text="24C"/>
 
@@ -23,6 +25,8 @@
         app:layout_constraintTop_toBottomOf="@id/tv_temperature"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/iv_weather_icon"
+        android:visibility="visible"
         android:gravity="center"
         tools:text="4\mm"/>
 
@@ -31,9 +35,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintTop_toBottomOf="@id/tv_precipitation_amount"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/tv_time"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="8dp"
         tools:src="@drawable/lightsleetandthunder"/>
 
     <TextView
@@ -43,9 +49,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_weather_icon"
         android:gravity="center"
-        android:layout_marginTop="8dp"
         tools:text="19:00"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,10 +17,10 @@ interface ForecastHourDao {
     @Query(
         value = """
             SELECT * FROM ForecastHour 
-            WHERE DATETIME(dateTime) BETWEEN DATETIME(:startDateTime, '-1 hours') AND DATETIME(:startDateTime, '+1 days', 'start of day', '+5 hours') 
+            WHERE DATETIME(dateTime) BETWEEN DATETIME(:startDateTime) AND DATETIME(:endDateTime) 
             AND locationId == :locationId 
             ORDER BY DATETIME(dateTime) ASC
         """
     )
-    suspend fun getForecastHours(startDateTime: String, locationId: Long): List<ForecastHour>
+    suspend fun getForecastHours(startDateTime: String, endDateTime: String, locationId: Long): List<ForecastHour>
 }
