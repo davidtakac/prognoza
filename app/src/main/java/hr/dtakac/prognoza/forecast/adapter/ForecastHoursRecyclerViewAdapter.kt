@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellForecastHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
@@ -51,6 +52,8 @@ class ForecastHourViewHolder(
             }
         }
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
-        binding.tvTime.text = uiModel.dateTime.format(dateTimeFormatter)
+        binding.tvTime.text = uiModel.dateTimeGmt
+            .withZoneSameInstant(ZoneId.systemDefault())
+            .format(dateTimeFormatter)
     }
 }

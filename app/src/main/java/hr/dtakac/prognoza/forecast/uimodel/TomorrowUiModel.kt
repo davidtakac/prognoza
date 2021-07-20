@@ -2,9 +2,10 @@ package hr.dtakac.prognoza.forecast.uimodel
 
 import java.time.ZonedDateTime
 
-data class TodayUiModel(
+data class TomorrowUiModel(
     val dateTime: ZonedDateTime,
-    val currentTemperature: Short,
+    val lowTemperature: Short,
+    val highTemperature: Short,
     val weatherIcon: WeatherIcon,
-    val nextHours: List<HourUiModel>
+    val hours: List<HourUiModel>
 )

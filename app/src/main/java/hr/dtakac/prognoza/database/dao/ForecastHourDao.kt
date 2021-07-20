@@ -11,16 +11,16 @@ interface ForecastHourDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateAll(forecastHours: List<ForecastHour>)
 
-    @Query("DELETE FROM ForecastHour WHERE DATE(dateTime) < DATE('now')")
+    @Query("DELETE FROM ForecastHour WHERE DATE(timestamp) < DATE('now')")
     suspend fun deletePastForecastHours()
 
     @Query(
         value = """
             SELECT * FROM ForecastHour 
-            WHERE DATETIME(dateTime) BETWEEN DATETIME(:startDateTime) AND DATETIME(:endDateTime) 
+            WHERE DATETIME(timestamp) BETWEEN DATETIME(:startDateTimeGmt) AND DATETIME(:endDateTimeGmt) 
             AND locationId == :locationId 
-            ORDER BY DATETIME(dateTime) ASC
+            ORDER BY DATETIME(timestamp) ASC
         """
     )
-    suspend fun getForecastHours(startDateTime: String, endDateTime: String, locationId: Long): List<ForecastHour>
+    suspend fun getForecastHours(startDateTimeGmt: String, endDateTimeGmt: String, locationId: Long): List<ForecastHour>
 }

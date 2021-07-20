@@ -1,11 +1,10 @@
 package hr.dtakac.prognoza.forecast.uimodel
 
-import hr.dtakac.prognoza.WeatherIcon
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 
 data class HourUiModel(
     val temperature: Float,
     val precipitationAmount: Float?,
     val weatherIcon: WeatherIcon,
-    val dateTime: LocalDateTime
+    val dateTimeGmt: ZonedDateTime
 )
