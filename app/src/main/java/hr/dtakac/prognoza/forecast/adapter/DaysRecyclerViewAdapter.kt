@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -35,7 +36,7 @@ class DayViewHolder(
 
     fun bind(uiModel: DayUiModel) {
         val resources = binding.root.context
-        binding.tvDateTime.text = uiModel.dateTimeGmt.format(dateTimeFormatter)
+        binding.tvDateTime.text = uiModel.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateTimeFormatter)
         binding.tvTemperatureHigh.text = resources.getString(R.string.template_degrees, uiModel.highTemperature)
         binding.tvTemperatureLow.text = resources.getString(R.string.template_degrees, uiModel.lowTemperature)
         binding.tvDescription.text = resources.getString(uiModel.weatherIcon.descriptionResourceId)

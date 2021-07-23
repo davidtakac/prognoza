@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.GMT_ZONE_ID
 import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.ForecastTimeStepData
@@ -14,7 +13,6 @@ import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -31,13 +29,11 @@ class DefaultForecastRepository(
         val anHourAgo = ZonedDateTime
             .now()
             .minusHours(1) // to get the current hour as well
-            .withZoneSameInstant(GMT_ZONE_ID)
-            .toLocalDateTime()
-        val hoursLeftInTheDay = 23 - 1 - anHourAgo.hour
+        val hoursLeftInTheDay = 24 - anHourAgo.hour
         val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
         return getForecastHours(
-            startDateTimeGmt = anHourAgo,
-            endDateTimeGmt = anHourAgo.plusHours(hoursToShow)
+            start = anHourAgo,
+            end = anHourAgo.plusHours(hoursToShow)
         )
     }
 
@@ -47,45 +43,38 @@ class DefaultForecastRepository(
             .atStartOfDay()
             .plusDays(1)
         return getForecastHours(
-            startDateTimeGmt = tomorrow
-                .plusHours(hoursAfterMidnightToShow + 1L)
-                .withZoneSameInstant(GMT_ZONE_ID)
-                .toLocalDateTime(),
-            endDateTimeGmt = tomorrow
-                .plusDays(1)
-                .plusHours(hoursAfterMidnightToShow)
-                .withZoneSameInstant(GMT_ZONE_ID)
-                .toLocalDateTime()
+            start = tomorrow.plusHours(hoursAfterMidnightToShow + 1L /* start where today left off */),
+            end = tomorrow.plusDays(1).plusHours(hoursAfterMidnightToShow)
         )
     }
 
     override suspend fun getAllForecastHours(
-        startDateTimeGmt: ZonedDateTime
+        start: ZonedDateTime
     ): List<ForecastHour> {
         return getForecastHours(
-            startDateTimeGmt = startDateTimeGmt.toLocalDateTime(),
-            endDateTimeGmt = startDateTimeGmt.plusWeeks(2L).toLocalDateTime()
+            start = start,
+            end = start.plusWeeks(2L)
         )
     }
 
     private suspend fun getForecastHours(
-        startDateTimeGmt: LocalDateTime,
-        endDateTimeGmt: LocalDateTime
+        start: ZonedDateTime,
+        end: ZonedDateTime
     ): List<ForecastHour> {
         val forecastMeta = appDatabase.metaDao().get()
         if (hasCachedForecastExpired(forecastMeta)) {
             updateForecastDatabase(forecastMeta)
         }
         return appDatabase.hourDao().getForecastHours(
-            startDateTimeGmt = startDateTimeGmt.format(DateTimeFormatter.ISO_DATE_TIME),
-            endDateTimeGmt = endDateTimeGmt.format(DateTimeFormatter.ISO_DATE_TIME),
+            start = start,
+            end = end,
             locationId = preferencesRepository.locationId
         )
     }
 
     private suspend fun updateForecastDatabase(forecastMeta: ForecastMeta?) {
         val forecastLocation = appDatabase.locationDao().get(preferencesRepository.locationId)
-            // todo: throw exception if not initialized
+        // todo: throw exception if not initialized
             ?: ForecastLocation(1, "Osijek", "31000", "Croatia", 45f, 18f)
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
@@ -112,7 +101,7 @@ class DefaultForecastRepository(
         val forecastHours = withContext(dispatcherProvider.default) {
             locationForecast?.forecast?.forecastTimeSteps?.map {
                 ForecastHour(
-                    timestamp = it.time,
+                    time = ZonedDateTime.parse(it.time),
                     locationId = forecastLocation.id,
                     temperature = it.data.instant?.data?.airTemperature,
                     symbolCode = it.data.findSymbolCode(),

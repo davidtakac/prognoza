@@ -1,26 +1,26 @@
 package hr.dtakac.prognoza.database.dao
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import hr.dtakac.prognoza.database.ForecastHourDateTimeConverter
 import hr.dtakac.prognoza.database.entity.ForecastHour
+import java.time.ZonedDateTime
 
 @Dao
 interface ForecastHourDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdateAll(forecastHours: List<ForecastHour>)
 
-    @Query("DELETE FROM ForecastHour WHERE DATE(timestamp) < DATE('now')")
+    @Query("DELETE FROM ForecastHour WHERE DATE(time) < DATE('now')")
     suspend fun deletePastForecastHours()
 
     @Query(
         value = """
             SELECT * FROM ForecastHour 
-            WHERE DATETIME(timestamp) BETWEEN DATETIME(:startDateTimeGmt) AND DATETIME(:endDateTimeGmt) 
+            WHERE DATETIME(time) BETWEEN DATETIME(:start) AND DATETIME(:end) 
             AND locationId == :locationId 
-            ORDER BY DATETIME(timestamp) ASC
+            ORDER BY DATETIME(time) ASC
         """
     )
-    suspend fun getForecastHours(startDateTimeGmt: String, endDateTimeGmt: String, locationId: Long): List<ForecastHour>
+    @TypeConverters(ForecastHourDateTimeConverter::class)
+    suspend fun getForecastHours(start: ZonedDateTime, end: ZonedDateTime, locationId: Long): List<ForecastHour>
 }

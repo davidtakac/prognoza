@@ -13,7 +13,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.ZoneId
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
 //todo: handle exceptions and http codes
@@ -76,11 +75,10 @@ class ForecastViewModel(
         _isOtherDaysForecastLoading.value = true
         coroutineScope.launch {
             val uiModels = repo.getAllForecastHours(
-                startDateTimeGmt = ZonedDateTime
+                start = ZonedDateTime
                     .now()
                     .atStartOfDay()
                     .plusDays(2)
-                    .withZoneSameInstant(GMT_ZONE_ID)
             ).toDayUiModels()
             _otherDaysForecast.value = OtherDaysUiModel(days = uiModels)
             _isOtherDaysForecastLoading.value = false
@@ -124,32 +122,19 @@ class ForecastViewModel(
                         temperature = it.temperature!!,
                         precipitationAmount = it.precipitationAmount,
                         weatherIcon = WEATHER_ICONS[it.symbolCode!!]!!,
-                        dateTimeGmt = ZonedDateTime
-                            .parse(it.timestamp, DateTimeFormatter.ISO_DATE_TIME)
-                            .withZoneSameInstant(GMT_ZONE_ID)
+                        time = it.time
                     )
                 }
         }
 
     private suspend fun List<ForecastHour>.toDayUiModels() =
         withContext(dispatcherProvider.default) {
-            groupBy {
-                ZonedDateTime
-                    .parse(it.timestamp)
-                    .withZoneSameInstant(ZoneId.systemDefault())
-                    .toLocalDate()
-            }
-                .map {
-                    it.value.filterInvalidHours()
-                }
-                .filter {
-                    it.isNotEmpty()
-                }
+            groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
+                .map { it.value.filterInvalidHours() }
+                .filter { it.isNotEmpty() }
                 .map { hours ->
                     DayUiModel(
-                        dateTimeGmt = ZonedDateTime
-                            .parse(hours[0].timestamp, DateTimeFormatter.ISO_DATE_TIME)
-                            .withZoneSameInstant(GMT_ZONE_ID),
+                        time = hours[0].time,
                         weatherIcon = hours.representativeWeatherIcon(),
                         lowTemperature = hours.minTemperature(),
                         highTemperature = hours.maxTemperature(),

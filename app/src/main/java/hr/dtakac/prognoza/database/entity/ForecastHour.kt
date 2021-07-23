@@ -1,13 +1,14 @@
 package hr.dtakac.prognoza.database.entity
 
 import androidx.room.Entity
+import androidx.room.TypeConverters
+import hr.dtakac.prognoza.database.ForecastHourDateTimeConverter
+import java.time.ZonedDateTime
 
-@Entity(primaryKeys = ["timestamp", "locationId"])
+@Entity(primaryKeys = ["time", "locationId"])
+@TypeConverters(ForecastHourDateTimeConverter::class)
 data class ForecastHour(
-    /**
-     * Timestamp of the hour in ISO-8601 GMT.
-     */
-    val timestamp: String,
+    val time: ZonedDateTime,
     val locationId: Long,
     val temperature: Float?,
     val symbolCode: String?,

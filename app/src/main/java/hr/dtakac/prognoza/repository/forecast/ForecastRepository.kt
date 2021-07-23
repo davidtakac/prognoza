@@ -6,5 +6,5 @@ import java.time.ZonedDateTime
 interface ForecastRepository {
     suspend fun getTodayForecastHours(): List<ForecastHour>
     suspend fun getTomorrowForecastHours(): List<ForecastHour>
-    suspend fun getAllForecastHours(startDateTimeGmt: ZonedDateTime): List<ForecastHour>
+    suspend fun getAllForecastHours(start: ZonedDateTime): List<ForecastHour>
 }

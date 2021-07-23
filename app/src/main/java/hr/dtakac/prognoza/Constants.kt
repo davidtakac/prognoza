@@ -1,15 +1,12 @@
 package hr.dtakac.prognoza
 
 import hr.dtakac.prognoza.forecast.uimodel.WeatherIcon
-import java.time.ZoneId
 
 const val USER_AGENT = "Prognoza/${BuildConfig.VERSION_NAME}, " +
         "github.com/davidtakac/Prognoza, " +
         "developer.takac@gmail.com"
 
 const val BASE_URL = "https://api.met.no/weatherapi/"
-
-val GMT_ZONE_ID: ZoneId = ZoneId.of("Etc/GMT")
 
 val WEATHER_ICONS = mapOf(
     "clearsky_day"                                to    WeatherIcon(R.drawable.clearsky_day, R.string.clearsky),

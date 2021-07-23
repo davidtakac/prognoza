@@ -6,5 +6,5 @@ data class HourUiModel(
     val temperature: Float,
     val precipitationAmount: Float?,
     val weatherIcon: WeatherIcon,
-    val dateTimeGmt: ZonedDateTime
+    val time: ZonedDateTime
 )

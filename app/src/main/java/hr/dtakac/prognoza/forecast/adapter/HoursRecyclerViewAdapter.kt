@@ -52,7 +52,7 @@ class HourViewHolder(
             }
         }
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
-        binding.tvTime.text = uiModel.dateTimeGmt
+        binding.tvTime.text = uiModel.time
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)
     }
