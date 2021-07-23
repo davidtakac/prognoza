@@ -6,17 +6,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
-import hr.dtakac.prognoza.forecast.adapter.ForecastHoursRecyclerViewAdapter
+import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
 import org.koin.android.ext.android.inject
-import java.time.ZoneId
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
-    private val adapter = ForecastHoursRecyclerViewAdapter()
-    private val viewModel by inject<ForecastViewModel>()
+    private val adapter = HoursRecyclerViewAdapter()
+    private val viewModel by sharedViewModel<ForecastViewModel>()
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL, HH:mm", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -5,14 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.databinding.CellForecastHourBinding
+import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 
-class ForecastHoursRecyclerViewAdapter : RecyclerView.Adapter<ForecastHourViewHolder>() {
+class HoursRecyclerViewAdapter : RecyclerView.Adapter<HourViewHolder>() {
     var data: List<HourUiModel> = listOf()
         set(value) {
             field = value
@@ -21,18 +21,18 @@ class ForecastHoursRecyclerViewAdapter : RecyclerView.Adapter<ForecastHourViewHo
 
     override fun getItemCount(): Int = data.size
 
-    override fun onBindViewHolder(holder: ForecastHourViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
         holder.bind(data[position])
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastHourViewHolder {
-        val binding = CellForecastHourBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ForecastHourViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder {
+        val binding = CellHourBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return HourViewHolder(binding)
     }
 }
 
-class ForecastHourViewHolder(
-    private val binding: CellForecastHourBinding
+class HourViewHolder(
+    private val binding: CellHourBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
 

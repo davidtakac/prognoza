@@ -3,14 +3,14 @@ package hr.dtakac.prognoza.repository.forecast
 import hr.dtakac.prognoza.GMT_ZONE_ID
 import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.ForecastService
+import hr.dtakac.prognoza.api.ForecastTimeStepData
 import hr.dtakac.prognoza.api.LocationForecast
+import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
-import hr.dtakac.prognoza.database.entity.ForecastDay
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.ForecastLocation
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.getTomorrow
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
@@ -25,38 +25,47 @@ class DefaultForecastRepository(
     private val preferencesRepository: PreferencesRepository
 ) : ForecastRepository {
     private val minimumDateTimeRfc1123 = "Thu, 1 January 1970 00:00:00 GMT"
+    private val hoursAfterMidnightToShow = 6L
 
-    override suspend fun getRestOfDayForecastHours(): List<ForecastHour> {
+    override suspend fun getTodayForecastHours(): List<ForecastHour> {
         val anHourAgo = ZonedDateTime
             .now()
-            .minusHours(1)
+            .minusHours(1) // to get the current hour as well
             .withZoneSameInstant(GMT_ZONE_ID)
             .toLocalDateTime()
-        val minimumHoursToShow = 6
-        val hoursLeftInTheDay = 22 - anHourAgo.hour
-        val hoursToShow = if (hoursLeftInTheDay < minimumHoursToShow) {
-            minimumHoursToShow
-        } else {
-            hoursLeftInTheDay
-        }
+        val hoursLeftInTheDay = 23 - 1 - anHourAgo.hour
+        val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
         return getForecastHours(
             startDateTimeGmt = anHourAgo,
-            endDateTimeGmt = anHourAgo.plusHours(hoursToShow.toLong())
+            endDateTimeGmt = anHourAgo.plusHours(hoursToShow)
         )
     }
 
     override suspend fun getTomorrowForecastHours(): List<ForecastHour> {
-        val tomorrow = getTomorrow()
-            .withZoneSameInstant(GMT_ZONE_ID)
-            .toLocalDateTime()
+        val tomorrow = ZonedDateTime
+            .now()
+            .atStartOfDay()
+            .plusDays(1)
         return getForecastHours(
-            startDateTimeGmt = tomorrow,
-            endDateTimeGmt = tomorrow.plusDays(1)
+            startDateTimeGmt = tomorrow
+                .plusHours(hoursAfterMidnightToShow + 1L)
+                .withZoneSameInstant(GMT_ZONE_ID)
+                .toLocalDateTime(),
+            endDateTimeGmt = tomorrow
+                .plusDays(1)
+                .plusHours(hoursAfterMidnightToShow)
+                .withZoneSameInstant(GMT_ZONE_ID)
+                .toLocalDateTime()
         )
     }
 
-    override suspend fun getForecastDays(): List<ForecastDay> {
-        TODO("Not yet implemented")
+    override suspend fun getAllForecastHours(
+        startDateTimeGmt: ZonedDateTime
+    ): List<ForecastHour> {
+        return getForecastHours(
+            startDateTimeGmt = startDateTimeGmt.toLocalDateTime(),
+            endDateTimeGmt = startDateTimeGmt.plusWeeks(2L).toLocalDateTime()
+        )
     }
 
     private suspend fun getForecastHours(
@@ -106,9 +115,9 @@ class DefaultForecastRepository(
                     timestamp = it.time,
                     locationId = forecastLocation.id,
                     temperature = it.data.instant?.data?.airTemperature,
-                    symbolCode = it.data.next1Hours?.summary?.symbolCode,
-                    precipitationProbability = it.data.next1Hours?.data?.probabilityOfPrecipitation,
-                    precipitationAmount = it.data.next1Hours?.data?.precipitationAmount,
+                    symbolCode = it.data.findSymbolCode(),
+                    precipitationProbability = it.data.findProbabilityOfPrecipitation(),
+                    precipitationAmount = it.data.findPrecipitationAmount(),
                     windSpeed = it.data.instant?.data?.windSpeed
                 )
             }
@@ -121,4 +130,22 @@ class DefaultForecastRepository(
             forecastMeta.expires,
             DateTimeFormatter.RFC_1123_DATE_TIME
         ) <= ZonedDateTime.now()
+
+    private fun ForecastTimeStepData.findSymbolCode(): String? {
+        return next1Hours?.summary?.symbolCode
+            ?: next6Hours?.summary?.symbolCode
+            ?: next12Hours?.summary?.symbolCode
+    }
+
+    private fun ForecastTimeStepData.findProbabilityOfPrecipitation(): Float? {
+        return next1Hours?.data?.probabilityOfPrecipitation
+            ?: next6Hours?.data?.probabilityOfPrecipitation
+            ?: next12Hours?.data?.probabilityOfPrecipitation
+    }
+
+    private fun ForecastTimeStepData.findPrecipitationAmount(): Float? {
+        return next1Hours?.data?.precipitationAmount
+            ?: next6Hours?.data?.precipitationAmount
+            ?: next12Hours?.data?.precipitationAmount
+    }
 }

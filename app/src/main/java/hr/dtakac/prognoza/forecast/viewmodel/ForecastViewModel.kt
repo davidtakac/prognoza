@@ -2,28 +2,25 @@ package hr.dtakac.prognoza.forecast.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.GMT_ZONE_ID
-import hr.dtakac.prognoza.WEATHER_ICONS
+import hr.dtakac.prognoza.*
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastHour
-import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
-import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
-import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
-import hr.dtakac.prognoza.getTomorrow
-import hr.dtakac.prognoza.mostCommon
+import hr.dtakac.prognoza.forecast.uimodel.*
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.roundToInt
 
+//todo: handle exceptions and http codes
 class ForecastViewModel(
     coroutineScope: CoroutineScope?,
     private val dispatcherProvider: DispatcherProvider,
-    private val forecastRepository: ForecastRepository
+    private val repo: ForecastRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private val _todayForecast = MutableLiveData<TodayUiModel>()
     val todayForecast: LiveData<TodayUiModel> get() = _todayForecast
@@ -31,19 +28,25 @@ class ForecastViewModel(
     private val _tomorrowForecast = MutableLiveData<TomorrowUiModel>()
     val tomorrowForecast: LiveData<TomorrowUiModel> get() = _tomorrowForecast
 
+    private val _otherDaysForecast = MutableLiveData<OtherDaysUiModel>()
+    val otherDaysForecast: LiveData<OtherDaysUiModel> get() = _otherDaysForecast
+
     private val _isTodayForecastLoading = MutableLiveData(false)
     val isTodayForecastLoading: LiveData<Boolean> get() = _isTodayForecastLoading
 
     private val _isTomorrowForecastLoading = MutableLiveData(false)
     val isTomorrowForecastLoading: LiveData<Boolean> get() = _isTomorrowForecastLoading
 
+    private val _isOtherDaysForecastLoading = MutableLiveData(false)
+    val isOtherDaysForecastLoading: LiveData<Boolean> get() = _isOtherDaysForecastLoading
+
     fun getTodayForecast() {
         _isTodayForecastLoading.value = true
         coroutineScope.launch {
-            val uiModels = mapToHourUiModels(forecastRepository.getRestOfDayForecastHours())
+            val uiModels = repo.getTodayForecastHours().toHourUiModels()
             val forecastTodayUiModel = TodayUiModel(
                 dateTime = ZonedDateTime.now(),
-                currentTemperature = uiModels[0].temperature.roundToInt().toShort(),
+                currentTemperature = uiModels[0].temperature.roundToInt(),
                 weatherIcon = uiModels[0].weatherIcon,
                 nextHours = uiModels
             )
@@ -55,12 +58,13 @@ class ForecastViewModel(
     fun getTomorrowForecast() {
         _isTomorrowForecastLoading.value = true
         coroutineScope.launch {
-            val uiModels = mapToHourUiModels(forecastRepository.getTomorrowForecastHours())
+            val tomorrowHours = repo.getTomorrowForecastHours()
+            val uiModels = tomorrowHours.toHourUiModels()
             val forecastTomorrowUiModel = TomorrowUiModel(
-                dateTime = getTomorrow(),
-                lowTemperature = uiModels.getLowestTemperature().roundToInt().toShort(),
-                highTemperature = uiModels.getHighestTemperature().roundToInt().toShort(),
-                weatherIcon = uiModels.getMostCommonWeatherIcon(),
+                dateTime = ZonedDateTime.now().atStartOfDay().plusDays(1),
+                lowTemperature = tomorrowHours.minTemperature(),
+                highTemperature = tomorrowHours.maxTemperature(),
+                weatherIcon = tomorrowHours.representativeWeatherIcon(),
                 hours = uiModels
             )
             _tomorrowForecast.value = forecastTomorrowUiModel
@@ -68,33 +72,89 @@ class ForecastViewModel(
         }
     }
 
-    private suspend fun mapToHourUiModels(forecastHours: List<ForecastHour>) = withContext(dispatcherProvider.default) {
-        forecastHours
-            .filter { it.temperature != null && it.symbolCode != null }
-            .map {
-                HourUiModel(
-                    temperature = it.temperature!!,
-                    precipitationAmount = it.precipitationAmount,
-                    weatherIcon = WEATHER_ICONS[it.symbolCode!!]!!,
-                    dateTimeGmt = ZonedDateTime
-                        .parse(it.timestamp, DateTimeFormatter.ISO_DATE_TIME)
-                        .withZoneSameInstant(GMT_ZONE_ID)
-                )
-            }
+    fun getOtherDaysForecast() {
+        _isOtherDaysForecastLoading.value = true
+        coroutineScope.launch {
+            val uiModels = repo.getAllForecastHours(
+                startDateTimeGmt = ZonedDateTime
+                    .now()
+                    .atStartOfDay()
+                    .plusDays(2)
+                    .withZoneSameInstant(GMT_ZONE_ID)
+            ).toDayUiModels()
+            _otherDaysForecast.value = OtherDaysUiModel(days = uiModels)
+            _isOtherDaysForecastLoading.value = false
+        }
     }
 
-    private suspend fun List<HourUiModel>.getLowestTemperature() =
+    private suspend fun List<ForecastHour>.filterInvalidHours() =
         withContext(dispatcherProvider.default) {
-            minOf { it.temperature }
+            filter { it.temperature != null && it.symbolCode != null }
         }
 
-    private suspend fun List<HourUiModel>.getHighestTemperature() =
+    private suspend fun List<ForecastHour>.maxTemperature() =
         withContext(dispatcherProvider.default) {
-            maxOf { it.temperature }
+            maxOf { it.temperature!! }.roundToInt()
         }
 
-    private suspend fun List<HourUiModel>.getMostCommonWeatherIcon() =
+    private suspend fun List<ForecastHour>.minTemperature() =
         withContext(dispatcherProvider.default) {
-            map { it.weatherIcon }.mostCommon()
+            minOf { it.temperature!! }.roundToInt()
+        }
+
+    private suspend fun List<ForecastHour>.representativeWeatherIcon(): WeatherIcon {
+        return withContext(dispatcherProvider.default) {
+            val representativeSymbolCode = filter { it.symbolCode != null }
+                .map { it.symbolCode!! }
+                .mostCommon()
+            WEATHER_ICONS[representativeSymbolCode]!!
+        }
+    }
+
+    private suspend fun List<ForecastHour>.totalPrecipitationAmount() =
+        withContext(dispatcherProvider.default) {
+            sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
+        }
+
+    private suspend fun List<ForecastHour>.toHourUiModels() =
+        withContext(dispatcherProvider.default) {
+            filterInvalidHours()
+                .map {
+                    HourUiModel(
+                        temperature = it.temperature!!,
+                        precipitationAmount = it.precipitationAmount,
+                        weatherIcon = WEATHER_ICONS[it.symbolCode!!]!!,
+                        dateTimeGmt = ZonedDateTime
+                            .parse(it.timestamp, DateTimeFormatter.ISO_DATE_TIME)
+                            .withZoneSameInstant(GMT_ZONE_ID)
+                    )
+                }
+        }
+
+    private suspend fun List<ForecastHour>.toDayUiModels() =
+        withContext(dispatcherProvider.default) {
+            groupBy {
+                ZonedDateTime
+                    .parse(it.timestamp)
+                    .withZoneSameInstant(ZoneId.systemDefault())
+                    .toLocalDate()
+            }
+                .map {
+                    it.value.filterInvalidHours()
+                }
+                .filter {
+                    it.isNotEmpty()
+                }
+                .map { hours ->
+                    DayUiModel(
+                        dateTimeGmt = ZonedDateTime
+                            .parse(hours[0].timestamp, DateTimeFormatter.ISO_DATE_TIME)
+                            .withZoneSameInstant(GMT_ZONE_ID),
+                        weatherIcon = hours.representativeWeatherIcon(),
+                        lowTemperature = hours.minTemperature(),
+                        highTemperature = hours.maxTemperature(),
+                        precipitationAmount = hours.totalPrecipitationAmount()
+                    )
+                }
         }
 }

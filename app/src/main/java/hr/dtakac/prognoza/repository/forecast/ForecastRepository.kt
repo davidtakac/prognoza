@@ -1,10 +1,10 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.database.entity.ForecastDay
 import hr.dtakac.prognoza.database.entity.ForecastHour
+import java.time.ZonedDateTime
 
 interface ForecastRepository {
-    suspend fun getRestOfDayForecastHours(): List<ForecastHour>
+    suspend fun getTodayForecastHours(): List<ForecastHour>
     suspend fun getTomorrowForecastHours(): List<ForecastHour>
-    suspend fun getForecastDays(): List<ForecastDay>
+    suspend fun getAllForecastHours(startDateTimeGmt: ZonedDateTime): List<ForecastHour>
 }
