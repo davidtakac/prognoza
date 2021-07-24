@@ -9,6 +9,10 @@ import hr.dtakac.prognoza.database.AppDatabase
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.repository.location.DefaultLocationRepository
+import hr.dtakac.prognoza.repository.location.LocationRepository
+import hr.dtakac.prognoza.repository.meta.DefaultMetaRepository
+import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import okhttp3.OkHttpClient
@@ -52,11 +56,26 @@ val prognozaAppModule = module {
         ))
     }
 
+    factory<MetaRepository> {
+        DefaultMetaRepository(get<AppDatabase>().metaDao())
+    }
+
+    factory<LocationRepository> {
+        DefaultLocationRepository(get<AppDatabase>().locationDao(), get())
+    }
+
     factory<ForecastRepository> {
-        DefaultForecastRepository(get(), get(), get(), get())
+        DefaultForecastRepository(
+            dispatcherProvider = get(),
+            forecastService = get(),
+            forecastDao = get<AppDatabase>().hourDao(),
+            locationRepository = get(),
+            metaRepository = get(),
+            preferencesRepository = get()
+        )
     }
 
     viewModel {
-        ForecastViewModel(null, get(), get())
+        ForecastViewModel(null, get(), get(), get())
     }
 }

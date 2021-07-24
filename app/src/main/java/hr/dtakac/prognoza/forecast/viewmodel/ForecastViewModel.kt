@@ -8,6 +8,7 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.forecast.uimodel.*
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.repository.location.LocationRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -20,7 +21,8 @@ import kotlin.math.roundToInt
 class ForecastViewModel(
     coroutineScope: CoroutineScope?,
     private val dispatcherProvider: DispatcherProvider,
-    private val repo: ForecastRepository
+    private val forecastRepository: ForecastRepository,
+    private val locationRepository: LocationRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private val _todayForecast = MutableLiveData<TodayUiModel>()
     val todayForecast: LiveData<TodayUiModel> get() = _todayForecast
@@ -30,6 +32,9 @@ class ForecastViewModel(
 
     private val _otherDaysForecast = MutableLiveData<OtherDaysUiModel>()
     val otherDaysForecast: LiveData<OtherDaysUiModel> get() = _otherDaysForecast
+
+    private val _locationName = MutableLiveData<String>()
+    val locationName: LiveData<String> get() = _locationName
 
     private val _isTodayForecastLoading = MutableLiveData(false)
     val isTodayForecastLoading: LiveData<Boolean> get() = _isTodayForecastLoading
@@ -43,7 +48,7 @@ class ForecastViewModel(
     fun getTodayForecast() {
         _isTodayForecastLoading.value = true
         coroutineScope.launch {
-            val uiModels = repo.getTodayForecastHours().toHourUiModels()
+            val uiModels = forecastRepository.getTodayForecastHours().toHourUiModels()
             val forecastTodayUiModel = TodayUiModel(
                 dateTime = ZonedDateTime.now(),
                 currentTemperature = uiModels[0].temperature,
@@ -58,7 +63,7 @@ class ForecastViewModel(
     fun getTomorrowForecast() {
         _isTomorrowForecastLoading.value = true
         coroutineScope.launch {
-            val tomorrowHours = repo.getTomorrowForecastHours()
+            val tomorrowHours = forecastRepository.getTomorrowForecastHours()
             val weatherIconAsync = async { tomorrowHours.representativeWeatherIcon() }
             val lowTempAsync = async { tomorrowHours.minTemperature() }
             val highTempAsync = async { tomorrowHours.maxTemperature() }
@@ -77,7 +82,7 @@ class ForecastViewModel(
     fun getOtherDaysForecast() {
         _isOtherDaysForecastLoading.value = true
         coroutineScope.launch {
-            val uiModels = repo.getAllForecastHours(
+            val uiModels = forecastRepository.getAllForecastHours(
                 start = ZonedDateTime
                     .now()
                     .atStartOfDay()
@@ -85,6 +90,12 @@ class ForecastViewModel(
             ).toDayUiModels()
             _otherDaysForecast.value = OtherDaysUiModel(days = uiModels)
             _isOtherDaysForecastLoading.value = false
+        }
+    }
+
+    fun getLocationName() {
+        coroutineScope.launch {
+            _locationName.value = locationRepository.getSelectedLocation().name
         }
     }
 
