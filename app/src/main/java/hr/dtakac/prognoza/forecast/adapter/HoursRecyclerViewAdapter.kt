@@ -3,6 +3,8 @@ package hr.dtakac.prognoza.forecast.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
@@ -12,17 +14,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class HoursRecyclerViewAdapter : RecyclerView.Adapter<HourViewHolder>() {
-    var data: List<HourUiModel> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount(): Int = data.size
-
+class HoursRecyclerViewAdapter : ListAdapter<HourUiModel, HourViewHolder>(HourDiffCallback()) {
     override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(getItem(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HourViewHolder {
@@ -59,5 +53,15 @@ class HourViewHolder(
         binding.tvTime.text = uiModel.time
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)
+    }
+}
+
+class HourDiffCallback : DiffUtil.ItemCallback<HourUiModel>() {
+    override fun areContentsTheSame(oldItem: HourUiModel, newItem: HourUiModel): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areItemsTheSame(oldItem: HourUiModel, newItem: HourUiModel): Boolean {
+        return oldItem == newItem
     }
 }

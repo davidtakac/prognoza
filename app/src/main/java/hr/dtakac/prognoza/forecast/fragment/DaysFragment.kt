@@ -22,7 +22,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
 
     private fun observeViewModel() {
         viewModel.otherDaysForecast.observe(viewLifecycleOwner) {
-            adapter.data = it.days
+            adapter.submitList(it.days)
         }
         viewModel.isOtherDaysForecastLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {

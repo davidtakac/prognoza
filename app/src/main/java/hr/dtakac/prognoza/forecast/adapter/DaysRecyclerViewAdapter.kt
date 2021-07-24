@@ -2,6 +2,8 @@ package hr.dtakac.prognoza.forecast.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
@@ -11,17 +13,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class DaysRecyclerViewAdapter : RecyclerView.Adapter<DayViewHolder>() {
-    var data: List<DayUiModel> = listOf()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
-
-    override fun getItemCount(): Int = data.size
-
+class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
-        holder.bind(data[position])
+        holder.bind(getItem(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
@@ -42,5 +36,15 @@ class DayViewHolder(
         binding.tvTemperatureLow.text = resources.getString(R.string.template_degrees, uiModel.lowTemperature)
         binding.tvDescription.text = resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: IMAGE_PLACEHOLDER)
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
+    }
+}
+
+class DayDiffCallback : DiffUtil.ItemCallback<DayUiModel>() {
+    override fun areContentsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
+        return oldItem == newItem
+    }
+
+    override fun areItemsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
+        return oldItem == newItem
     }
 }

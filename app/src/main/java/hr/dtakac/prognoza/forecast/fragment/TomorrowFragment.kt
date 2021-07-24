@@ -56,6 +56,6 @@ class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTo
         binding.tvDescription.text = resources.getString(
             uiModel.weatherIcon?.descriptionResourceId ?: R.string.weather_icon_description_placeholder
         )
-        adapter.data = uiModel.hours
+        adapter.submitList(uiModel.hours)
     }
 }
