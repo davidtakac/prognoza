@@ -6,9 +6,5 @@ import java.time.ZonedDateTime
 fun ZonedDateTime.atStartOfDay(): ZonedDateTime =
     toLocalDate().atStartOfDay(ZoneId.systemDefault())
 
-fun <T> List<T>.mostCommon(): T {
-    return groupingBy { it }
-        .eachCount()
-        .maxByOrNull { it.value }!!
-        .key
-}
+fun <T> List<T>.mostCommon(): T? =
+    groupingBy { it }.eachCount().maxByOrNull { it.value }?.key

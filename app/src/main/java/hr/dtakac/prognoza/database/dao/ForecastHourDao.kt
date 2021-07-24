@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.database.dao
 
 import androidx.room.*
-import hr.dtakac.prognoza.database.ForecastHourDateTimeConverter
+import hr.dtakac.prognoza.database.converter.ForecastHourDateTimeConverter
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import java.time.ZonedDateTime
 

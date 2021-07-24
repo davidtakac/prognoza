@@ -8,6 +8,8 @@ const val USER_AGENT = "Prognoza/${BuildConfig.VERSION_NAME}, " +
 
 const val BASE_URL = "https://api.met.no/weatherapi/"
 
+const val DEFAULT_SYMBOL_CODE = "clearsky_day"
+
 val WEATHER_ICONS = mapOf(
     "clearsky_day"                                to    WeatherIcon(R.drawable.clearsky_day, R.string.clearsky),
     "clearsky_night"                              to    WeatherIcon(R.drawable.clearsky_night, R.string.clearsky),
@@ -92,4 +94,28 @@ val WEATHER_ICONS = mapOf(
     "snowshowers_day"                             to    WeatherIcon(R.drawable.snowshowers_day, R.string.snowshowers),
     "snowshowers_night"                           to    WeatherIcon(R.drawable.snowshowers_night, R.string.snowshowers),
     "snowshowers_polartwilight"                   to    WeatherIcon(R.drawable.snowshowers_polartwilight, R.string.snowshowers)
+)
+
+val NIGHT_SYMBOL_CODES = listOf(
+    "clearsky_night",
+    "fair_night",
+    "heavyrainshowersandthunder_night",
+    "heavyrainshowers_night",
+    "heavysleetshowersandthunder_night",
+    "heavysleetshowers_night",
+    "heavysnowshowersandthunder_night",
+    "heavysnowshowers_night",
+    "lightrainshowersandthunder_night",
+    "lightrainshowers_night",
+    "lightsleetshowers_night",
+    "lightsnowshowers_night",
+    "lightssleetshowersandthunder_night",
+    "lightssnowshowersandthunder_night",
+    "partlycloudy_night",
+    "rainshowersandthunder_night",
+    "rainshowers_night",
+    "sleetshowersandthunder_night",
+    "sleetshowers_night",
+    "snowshowersandthunder_night",
+    "snowshowers_night",
 )

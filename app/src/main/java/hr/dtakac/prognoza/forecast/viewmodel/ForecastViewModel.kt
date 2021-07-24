@@ -100,11 +100,14 @@ class ForecastViewModel(
             minOf { it.temperature!! }.roundToInt()
         }
 
-    private suspend fun List<ForecastHour>.representativeWeatherIcon(): WeatherIcon {
+    private suspend fun List<ForecastHour>.representativeWeatherIcon(
+        default: String = DEFAULT_SYMBOL_CODE
+    ): WeatherIcon {
         return withContext(dispatcherProvider.default) {
             val representativeSymbolCode = filter { it.symbolCode != null }
                 .map { it.symbolCode!! }
-                .mostCommon()
+                .filter { it !in NIGHT_SYMBOL_CODES }
+                .mostCommon() ?: default
             WEATHER_ICONS[representativeSymbolCode]!!
         }
     }

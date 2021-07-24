@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.database
+package hr.dtakac.prognoza.database.converter
 
 import androidx.room.TypeConverter
 import java.time.LocalDateTime
