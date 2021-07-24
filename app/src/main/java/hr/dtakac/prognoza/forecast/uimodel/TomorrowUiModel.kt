@@ -6,6 +6,6 @@ data class TomorrowUiModel(
     val dateTime: ZonedDateTime,
     val lowTemperature: Int,
     val highTemperature: Int,
-    val weatherIcon: WeatherIcon,
+    val weatherIcon: WeatherIcon?,
     val hours: List<HourUiModel>
 )

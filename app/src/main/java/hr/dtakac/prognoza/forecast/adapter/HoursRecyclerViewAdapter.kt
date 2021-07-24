@@ -4,13 +4,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.math.roundToInt
 
 class HoursRecyclerViewAdapter : RecyclerView.Adapter<HourViewHolder>() {
     var data: List<HourUiModel> = listOf()
@@ -38,10 +38,14 @@ class HourViewHolder(
 
     fun bind(uiModel: HourUiModel) {
         val resources = binding.root.context.resources
-        binding.tvTemperature.text = resources.getString(
-            R.string.template_degrees,
-            uiModel.temperature.roundToInt()
-        )
+        binding.tvTemperature.text = if (uiModel.temperature == null) {
+            resources.getString(R.string.temperature_placeholder)
+        } else {
+            resources.getString(
+                R.string.template_degrees,
+                uiModel.temperature
+            )
+        }
         binding.tvPrecipitationAmount.apply {
             if (uiModel.precipitationAmount ?: 0f != 0f) {
                 text = resources.getString(R.string.template_mm, uiModel.precipitationAmount)
@@ -51,7 +55,7 @@ class HourViewHolder(
                 visibility = View.GONE
             }
         }
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
+        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
         binding.tvTime.text = uiModel.time
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)

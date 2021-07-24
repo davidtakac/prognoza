@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.forecast.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
@@ -51,8 +52,10 @@ class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTo
             R.string.template_degrees_high_low,
             uiModel.highTemperature, uiModel.lowTemperature
         )
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
-        binding.tvDescription.text = resources.getString(uiModel.weatherIcon.descriptionResourceId)
+        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
+        binding.tvDescription.text = resources.getString(
+            uiModel.weatherIcon?.descriptionResourceId ?: R.string.weather_icon_description_placeholder
+        )
         adapter.data = uiModel.hours
     }
 }

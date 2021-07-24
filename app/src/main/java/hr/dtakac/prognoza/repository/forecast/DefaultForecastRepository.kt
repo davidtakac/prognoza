@@ -120,21 +120,18 @@ class DefaultForecastRepository(
             DateTimeFormatter.RFC_1123_DATE_TIME
         ) <= ZonedDateTime.now()
 
-    private fun ForecastTimeStepData.findSymbolCode(): String? {
-        return next1Hours?.summary?.symbolCode
+    private fun ForecastTimeStepData.findSymbolCode() =
+        next1Hours?.summary?.symbolCode
             ?: next6Hours?.summary?.symbolCode
             ?: next12Hours?.summary?.symbolCode
-    }
 
-    private fun ForecastTimeStepData.findProbabilityOfPrecipitation(): Float? {
-        return next1Hours?.data?.probabilityOfPrecipitation
+    private fun ForecastTimeStepData.findProbabilityOfPrecipitation() =
+        next1Hours?.data?.probabilityOfPrecipitation
             ?: next6Hours?.data?.probabilityOfPrecipitation
             ?: next12Hours?.data?.probabilityOfPrecipitation
-    }
 
-    private fun ForecastTimeStepData.findPrecipitationAmount(): Float? {
-        return next1Hours?.data?.precipitationAmount
+    private fun ForecastTimeStepData.findPrecipitationAmount() =
+        next1Hours?.data?.precipitationAmount
             ?: next6Hours?.data?.precipitationAmount
             ?: next12Hours?.data?.precipitationAmount
-    }
 }

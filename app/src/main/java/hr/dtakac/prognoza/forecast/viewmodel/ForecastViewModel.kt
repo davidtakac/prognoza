@@ -45,7 +45,7 @@ class ForecastViewModel(
             val uiModels = repo.getTodayForecastHours().toHourUiModels()
             val forecastTodayUiModel = TodayUiModel(
                 dateTime = ZonedDateTime.now(),
-                currentTemperature = uiModels[0].temperature.roundToInt(),
+                currentTemperature = uiModels[0].temperature,
                 weatherIcon = uiModels[0].weatherIcon,
                 nextHours = uiModels
             )
@@ -85,32 +85,24 @@ class ForecastViewModel(
         }
     }
 
-    private suspend fun List<ForecastHour>.filterInvalidHours() =
-        withContext(dispatcherProvider.default) {
-            filter { it.temperature != null && it.symbolCode != null }
-        }
-
     private suspend fun List<ForecastHour>.maxTemperature() =
         withContext(dispatcherProvider.default) {
-            maxOf { it.temperature!! }.roundToInt()
+            maxOf { it.temperature ?: Float.MIN_VALUE }.roundToInt()
         }
 
     private suspend fun List<ForecastHour>.minTemperature() =
         withContext(dispatcherProvider.default) {
-            minOf { it.temperature!! }.roundToInt()
+            minOf { it.temperature ?: Float.MAX_VALUE }.roundToInt()
         }
 
-    private suspend fun List<ForecastHour>.representativeWeatherIcon(
-        default: String = DEFAULT_SYMBOL_CODE
-    ): WeatherIcon {
-        return withContext(dispatcherProvider.default) {
+    private suspend fun List<ForecastHour>.representativeWeatherIcon() =
+        withContext(dispatcherProvider.default) {
             val representativeSymbolCode = filter { it.symbolCode != null }
                 .map { it.symbolCode!! }
                 .filter { it !in NIGHT_SYMBOL_CODES }
-                .mostCommon() ?: default
-            WEATHER_ICONS[representativeSymbolCode]!!
+                .mostCommon()
+            WEATHER_ICONS[representativeSymbolCode]
         }
-    }
 
     private suspend fun List<ForecastHour>.totalPrecipitationAmount() =
         withContext(dispatcherProvider.default) {
@@ -119,21 +111,20 @@ class ForecastViewModel(
 
     private suspend fun List<ForecastHour>.toHourUiModels() =
         withContext(dispatcherProvider.default) {
-            filterInvalidHours()
-                .map {
-                    HourUiModel(
-                        temperature = it.temperature!!,
-                        precipitationAmount = it.precipitationAmount,
-                        weatherIcon = WEATHER_ICONS[it.symbolCode!!]!!,
-                        time = it.time
-                    )
-                }
+            map {
+                HourUiModel(
+                    temperature = it.temperature?.roundToInt(),
+                    precipitationAmount = it.precipitationAmount,
+                    weatherIcon = WEATHER_ICONS[it.symbolCode],
+                    time = it.time
+                )
+            }
         }
 
     private suspend fun List<ForecastHour>.toDayUiModels() =
         withContext(dispatcherProvider.default) {
             groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
-                .map { it.value.filterInvalidHours() }
+                .map { it.value }
                 .filter { it.isNotEmpty() }
                 .map { hours ->
                     DayUiModel(

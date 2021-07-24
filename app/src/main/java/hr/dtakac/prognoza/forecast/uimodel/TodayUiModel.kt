@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 data class TodayUiModel(
     val dateTime: ZonedDateTime,
-    val currentTemperature: Int,
-    val weatherIcon: WeatherIcon,
+    val currentTemperature: Int?,
+    val weatherIcon: WeatherIcon?,
     val nextHours: List<HourUiModel>
 )

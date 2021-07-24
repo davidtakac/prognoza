@@ -3,13 +3,13 @@ package hr.dtakac.prognoza.forecast.fragment
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
+import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
-import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -52,8 +52,10 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             R.string.template_degrees,
             uiModel.currentTemperature
         )
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
-        binding.tvDescription.text = resources.getString(uiModel.weatherIcon.descriptionResourceId)
+        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
+        binding.tvDescription.text = resources.getString(
+            uiModel.weatherIcon?.descriptionResourceId ?: R.string.weather_icon_description_placeholder
+        )
         adapter.data = uiModel.nextHours
     }
 }

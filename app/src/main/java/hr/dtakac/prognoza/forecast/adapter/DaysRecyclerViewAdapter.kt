@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.forecast.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
@@ -39,7 +40,7 @@ class DayViewHolder(
         binding.tvDateTime.text = uiModel.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateTimeFormatter)
         binding.tvTemperatureHigh.text = resources.getString(R.string.template_degrees, uiModel.highTemperature)
         binding.tvTemperatureLow.text = resources.getString(R.string.template_degrees, uiModel.lowTemperature)
-        binding.tvDescription.text = resources.getString(uiModel.weatherIcon.descriptionResourceId)
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon.iconResourceId)
+        binding.tvDescription.text = resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: IMAGE_PLACEHOLDER)
+        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
     }
 }
