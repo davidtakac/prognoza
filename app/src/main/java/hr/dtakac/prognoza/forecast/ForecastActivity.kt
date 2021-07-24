@@ -1,24 +1,21 @@
 package hr.dtakac.prognoza.forecast
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.base.ViewBindingActivity
 import hr.dtakac.prognoza.databinding.ActivityMainBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG = "MainActivity"
-class ForecastActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+class ForecastActivity : ViewBindingActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
     private val viewModel by viewModel<ForecastViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
