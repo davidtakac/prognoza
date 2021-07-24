@@ -9,6 +9,7 @@ import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.forecast.uimodel.*
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.ZoneId
@@ -58,13 +59,15 @@ class ForecastViewModel(
         _isTomorrowForecastLoading.value = true
         coroutineScope.launch {
             val tomorrowHours = repo.getTomorrowForecastHours()
-            val uiModels = tomorrowHours.toHourUiModels()
+            val weatherIconAsync = async { tomorrowHours.representativeWeatherIcon() }
+            val lowTempAsync = async { tomorrowHours.minTemperature() }
+            val highTempAsync = async { tomorrowHours.maxTemperature() }
             val forecastTomorrowUiModel = TomorrowUiModel(
                 dateTime = ZonedDateTime.now().atStartOfDay().plusDays(1),
-                lowTemperature = tomorrowHours.minTemperature(),
-                highTemperature = tomorrowHours.maxTemperature(),
-                weatherIcon = tomorrowHours.representativeWeatherIcon(),
-                hours = uiModels
+                lowTemperature = lowTempAsync.await(),
+                highTemperature = highTempAsync.await(),
+                weatherIcon = weatherIconAsync.await(),
+                hours = tomorrowHours.toHourUiModels()
             )
             _tomorrowForecast.value = forecastTomorrowUiModel
             _isTomorrowForecastLoading.value = false
@@ -127,12 +130,16 @@ class ForecastViewModel(
                 .map { it.value }
                 .filter { it.isNotEmpty() }
                 .map { hours ->
+                    val weatherIconAsync = async { hours.representativeWeatherIcon() }
+                    val lowTempAsync = async { hours.minTemperature() }
+                    val highTempAsync = async { hours.maxTemperature() }
+                    val precipitationAsync = async { hours.totalPrecipitationAmount() }
                     DayUiModel(
                         time = hours[0].time,
-                        weatherIcon = hours.representativeWeatherIcon(),
-                        lowTemperature = hours.minTemperature(),
-                        highTemperature = hours.maxTemperature(),
-                        precipitationAmount = hours.totalPrecipitationAmount()
+                        weatherIcon = weatherIconAsync.await(),
+                        lowTemperature = lowTempAsync.await(),
+                        highTemperature = highTempAsync.await(),
+                        precipitationAmount = precipitationAsync.await()
                     )
                 }
         }
