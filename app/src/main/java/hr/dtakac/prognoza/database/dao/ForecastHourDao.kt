@@ -17,10 +17,10 @@ interface ForecastHourDao {
         value = """
             SELECT * FROM ForecastHour 
             WHERE DATETIME(time) BETWEEN DATETIME(:start) AND DATETIME(:end) 
-            AND locationId == :locationId 
+            AND placeId == :placeId 
             ORDER BY DATETIME(time) ASC
         """
     )
     @TypeConverters(ForecastHourDateTimeConverter::class)
-    suspend fun getForecastHours(start: ZonedDateTime, end: ZonedDateTime, locationId: Long): List<ForecastHour>
+    suspend fun getForecastHours(start: ZonedDateTime, end: ZonedDateTime, placeId: Long): List<ForecastHour>
 }

@@ -2,14 +2,14 @@ package hr.dtakac.prognoza.repository.preferences
 
 import android.content.SharedPreferences
 
-private const val LOCATION_ID_KEY = "location_id"
+private const val PLACE_ID_KEY = "place_id"
 
 class DefaultPreferencesRepository(
     private val sharedPreferences: SharedPreferences
 ) : PreferencesRepository {
-    override var locationId: Long
-        get() = sharedPreferences.getLong(LOCATION_ID_KEY, 1)
+    override var placeId: Long
+        get() = sharedPreferences.getLong(PLACE_ID_KEY, 1)
         set(value) {
-            sharedPreferences.edit().putLong(LOCATION_ID_KEY, value).apply()
+            sharedPreferences.edit().putLong(PLACE_ID_KEY, value).apply()
         }
 }

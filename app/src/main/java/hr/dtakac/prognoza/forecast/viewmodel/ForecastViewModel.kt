@@ -8,7 +8,7 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.forecast.uimodel.*
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.repository.location.LocationRepository
+import hr.dtakac.prognoza.repository.place.PlaceRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -22,7 +22,7 @@ class ForecastViewModel(
     coroutineScope: CoroutineScope?,
     private val dispatcherProvider: DispatcherProvider,
     private val forecastRepository: ForecastRepository,
-    private val locationRepository: LocationRepository
+    private val placeRepository: PlaceRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private val _todayForecast = MutableLiveData<TodayUiModel>()
     val todayForecast: LiveData<TodayUiModel> get() = _todayForecast
@@ -33,8 +33,8 @@ class ForecastViewModel(
     private val _otherDaysForecast = MutableLiveData<OtherDaysUiModel>()
     val otherDaysForecast: LiveData<OtherDaysUiModel> get() = _otherDaysForecast
 
-    private val _locationName = MutableLiveData<String>()
-    val locationName: LiveData<String> get() = _locationName
+    private val _placeName = MutableLiveData<String>()
+    val placeName: LiveData<String> get() = _placeName
 
     private val _isTodayForecastLoading = MutableLiveData(false)
     val isTodayForecastLoading: LiveData<Boolean> get() = _isTodayForecastLoading
@@ -93,9 +93,9 @@ class ForecastViewModel(
         }
     }
 
-    fun getLocationName() {
+    fun getPlaceName() {
         coroutineScope.launch {
-            _locationName.value = locationRepository.getSelectedLocation().name
+            _placeName.value = placeRepository.getSelectedPlace().name
         }
     }
 

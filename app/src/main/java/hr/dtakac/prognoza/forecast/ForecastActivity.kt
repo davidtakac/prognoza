@@ -19,11 +19,11 @@ class ForecastActivity : ViewBindingActivity<ActivityMainBinding>(ActivityMainBi
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
-        viewModel.getLocationName()
+        viewModel.getPlaceName()
     }
 
     private fun observeViewModel() {
-        viewModel.locationName.observe(this) {
+        viewModel.placeName.observe(this) {
             binding.toolbar.title = it
         }
     }

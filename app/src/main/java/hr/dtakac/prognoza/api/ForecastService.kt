@@ -12,5 +12,5 @@ interface ForecastService {
         @Header("If-Modified-Since") ifModifiedSince: String,
         @Query("lat") latitude: Float,
         @Query("lon") longitude: Float
-    ): Response<LocationForecast>
+    ): Response<LocationForecastResponse>
 }

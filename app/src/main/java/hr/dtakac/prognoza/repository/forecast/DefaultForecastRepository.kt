@@ -4,14 +4,14 @@ import hr.dtakac.prognoza.MIN_DATE_TIME_RFC_1123
 import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.ForecastTimeStepData
-import hr.dtakac.prognoza.api.LocationForecast
+import hr.dtakac.prognoza.api.LocationForecastResponse
 import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
 import hr.dtakac.prognoza.database.entity.ForecastHour
-import hr.dtakac.prognoza.database.entity.ForecastLocation
+import hr.dtakac.prognoza.database.entity.Place
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.repository.location.LocationRepository
+import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.withContext
@@ -23,7 +23,7 @@ class DefaultForecastRepository(
     private val dispatcherProvider: DispatcherProvider,
     private val forecastService: ForecastService,
     private val forecastDao: ForecastHourDao,
-    private val locationRepository: LocationRepository,
+    private val placeRepository: PlaceRepository,
     private val metaRepository: MetaRepository,
     private val preferencesRepository: PreferencesRepository
 ) : ForecastRepository {
@@ -72,20 +72,20 @@ class DefaultForecastRepository(
         return forecastDao.getForecastHours(
             start = start,
             end = end,
-            locationId = preferencesRepository.locationId
+            placeId = preferencesRepository.placeId
         )
     }
 
     private suspend fun updateForecastDatabase(forecastMeta: ForecastMeta?) {
-        val forecastLocation = locationRepository.getSelectedLocation()
+        val forecastPlace = placeRepository.getSelectedPlace()
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
             ifModifiedSince = forecastMeta?.lastModified ?: MIN_DATE_TIME_RFC_1123,
-            latitude = forecastLocation.latitude,
-            longitude = forecastLocation.longitude
+            latitude = forecastPlace.latitude,
+            longitude = forecastPlace.longitude
         )
         updateForecastMeta(forecastResponse.headers())
-        updateForecastHours(forecastResponse.body(), forecastLocation)
+        updateForecastHours(forecastResponse.body(), forecastPlace)
     }
 
     private suspend fun updateForecastMeta(forecastResponseHeaders: Headers) {
@@ -96,14 +96,14 @@ class DefaultForecastRepository(
     }
 
     private suspend fun updateForecastHours(
-        locationForecast: LocationForecast?,
-        forecastLocation: ForecastLocation
+        locationForecastResponse: LocationForecastResponse?,
+        place: Place
     ) {
         val forecastHours = withContext(dispatcherProvider.default) {
-            locationForecast?.forecast?.forecastTimeSteps?.map {
+            locationForecastResponse?.forecast?.forecastTimeSteps?.map {
                 ForecastHour(
                     time = ZonedDateTime.parse(it.time),
-                    locationId = forecastLocation.id,
+                    placeId = place.id,
                     temperature = it.data.instant?.data?.airTemperature,
                     symbolCode = it.data.findSymbolCode(),
                     precipitationProbability = it.data.findProbabilityOfPrecipitation(),

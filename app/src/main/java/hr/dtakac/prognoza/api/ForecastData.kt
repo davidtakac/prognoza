@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.api
 
 import com.google.gson.annotations.SerializedName
 
-data class LocationForecast(
+data class LocationForecastResponse(
     @SerializedName("properties")
     val forecast: Forecast
 )
