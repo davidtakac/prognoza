@@ -1,17 +1,19 @@
 package hr.dtakac.prognoza.forecast
 
+import android.content.Intent
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingActivity
-import hr.dtakac.prognoza.databinding.ActivityMainBinding
+import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
+import hr.dtakac.prognoza.places.PlacesActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val TAG = "MainActivity"
-class ForecastActivity : ViewBindingActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+class ForecastActivity : ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
     private val viewModel by viewModel<ForecastViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +40,7 @@ class ForecastActivity : ViewBindingActivity<ActivityMainBinding>(ActivityMainBi
 
     private fun initializeToolbar() {
         binding.toolbar.setOnClickListener {
-            Snackbar.make(binding.root, "Pick location", Snackbar.LENGTH_LONG).show()
+            startActivity(Intent(this, PlacesActivity::class.java))
         }
     }
 }
