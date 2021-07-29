@@ -82,12 +82,7 @@ class ForecastViewModel(
     fun getOtherDaysForecast() {
         _isOtherDaysForecastLoading.value = true
         coroutineScope.launch {
-            val uiModels = forecastRepository.getAllForecastHours(
-                start = ZonedDateTime
-                    .now()
-                    .atStartOfDay()
-                    .plusDays(2)
-            ).toDayUiModels()
+            val uiModels = forecastRepository.getOtherDaysForecastHours().toDayUiModels()
             _otherDaysForecast.value = OtherDaysUiModel(days = uiModels)
             _isOtherDaysForecastLoading.value = false
         }

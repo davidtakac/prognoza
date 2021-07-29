@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.database.entity.Place
 @Dao
 interface PlaceDao {
     @Query("SELECT * FROM Place WHERE id == :id")
-    suspend fun get(id: Long): Place?
+    suspend fun get(id: String): Place?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(place: Place)

@@ -22,5 +22,5 @@ interface ForecastHourDao {
         """
     )
     @TypeConverters(ForecastHourDateTimeConverter::class)
-    suspend fun getForecastHours(start: ZonedDateTime, end: ZonedDateTime, placeId: Long): List<ForecastHour>
+    suspend fun getForecastHours(start: ZonedDateTime, end: ZonedDateTime, placeId: String): List<ForecastHour>
 }

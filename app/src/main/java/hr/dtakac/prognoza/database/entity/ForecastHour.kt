@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 @TypeConverters(ForecastHourDateTimeConverter::class)
 data class ForecastHour(
     val time: ZonedDateTime,
-    val placeId: Long,
+    val placeId: String,
     val temperature: Float?,
     val symbolCode: String?,
     val precipitationProbability: Float?,

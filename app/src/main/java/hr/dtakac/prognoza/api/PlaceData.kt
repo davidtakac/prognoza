@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PlaceResponse(
     @SerializedName("place_id")
-    val id: Int,
+    val id: String,
     @SerializedName("lat")
     val latitude: Float,
     @SerializedName("lon")

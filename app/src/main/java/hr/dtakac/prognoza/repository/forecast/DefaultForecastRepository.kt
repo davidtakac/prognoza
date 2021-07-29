@@ -52,12 +52,11 @@ class DefaultForecastRepository(
         )
     }
 
-    override suspend fun getAllForecastHours(
-        start: ZonedDateTime
-    ): List<ForecastHour> {
+    override suspend fun getOtherDaysForecastHours(): List<ForecastHour> {
+        val now = ZonedDateTime.now().atStartOfDay()
         return getForecastHours(
-            start = start,
-            end = start.plusWeeks(2L)
+            start = now.plusDays(2),
+            end = now.plusDays(2 + 5)
         )
     }
 

@@ -5,11 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Place(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    @PrimaryKey
+    val id: String,
     val name: String,
-    val postCode: String,
-    val country: String,
+    val fullName: String,
     val latitude: Float,
     val longitude: Float
 )
