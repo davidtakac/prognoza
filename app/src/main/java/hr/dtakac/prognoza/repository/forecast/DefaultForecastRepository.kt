@@ -9,7 +9,6 @@ import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
 import hr.dtakac.prognoza.database.entity.ForecastHour
-import hr.dtakac.prognoza.database.entity.Place
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.meta.MetaRepository
@@ -64,14 +63,14 @@ class DefaultForecastRepository(
         start: ZonedDateTime,
         end: ZonedDateTime
     ): List<ForecastHour> {
-        val forecastMeta = metaRepository.get()
+        val forecastMeta = metaRepository.get(preferencesRepository.getSelectedPlaceId())
         if (hasCachedForecastExpired(forecastMeta)) {
             updateForecastDatabase(forecastMeta)
         }
         return forecastDao.getForecastHours(
             start = start,
             end = end,
-            placeId = preferencesRepository.placeId
+            placeId = preferencesRepository.getSelectedPlaceId()
         )
     }
 
@@ -83,26 +82,27 @@ class DefaultForecastRepository(
             latitude = forecastPlace.latitude,
             longitude = forecastPlace.longitude
         )
-        updateForecastMeta(forecastResponse.headers())
-        updateForecastHours(forecastResponse.body(), forecastPlace)
+        updateForecastMeta(forecastResponse.headers(), forecastPlace.id)
+        updateForecastHours(forecastResponse.body(), forecastPlace.id)
     }
 
-    private suspend fun updateForecastMeta(forecastResponseHeaders: Headers) {
+    private suspend fun updateForecastMeta(forecastResponseHeaders: Headers, placeId: String) {
         metaRepository.update(
             expiresTime = forecastResponseHeaders["Expires"],
-            lastModifiedTime = forecastResponseHeaders["Last-Modified"]
+            lastModifiedTime = forecastResponseHeaders["Last-Modified"],
+            placeId = placeId
         )
     }
 
     private suspend fun updateForecastHours(
         locationForecastResponse: LocationForecastResponse?,
-        place: Place
+        placeId: String
     ) {
         val forecastHours = withContext(dispatcherProvider.default) {
             locationForecastResponse?.forecast?.forecastTimeSteps?.map {
                 ForecastHour(
                     time = ZonedDateTime.parse(it.time),
-                    placeId = place.id,
+                    placeId = placeId,
                     temperature = it.data.instant?.data?.airTemperature,
                     symbolCode = it.data.findSymbolCode(),
                     precipitationProbability = it.data.findProbabilityOfPrecipitation(),

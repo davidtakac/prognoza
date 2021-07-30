@@ -53,6 +53,7 @@
     <string name="template_degrees">%1$d°</string>
     <string name="template_mm">%1$.1fmm</string>
     <string name="template_degrees_high_low">High %1$d° | Low %2$d°</string>
-    <string name="temperature_placeholder">-</string>
-    <string name="weather_icon_description_placeholder">Description missing</string>
+    <string name="placeholder_temperature">-</string>
+    <string name="placeholder_weather_description">Description missing</string>
+    <string name="hint_search">Search…</string>
 </resources>

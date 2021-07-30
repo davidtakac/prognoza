@@ -5,7 +5,8 @@ import hr.dtakac.prognoza.database.entity.ForecastMeta
 interface MetaRepository {
     suspend fun update(
         expiresTime: String?,
-        lastModifiedTime: String?
+        lastModifiedTime: String?,
+        placeId: String
     )
-    suspend fun get(): ForecastMeta?
+    suspend fun get(placeId: String): ForecastMeta?
 }

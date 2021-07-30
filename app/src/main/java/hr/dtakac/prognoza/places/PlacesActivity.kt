@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.places.adapter.PlacesRecyclerViewAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlacesBinding::inflate) {
-    private val adapter = PlacesRecyclerViewAdapter()
+    private val adapter = PlacesRecyclerViewAdapter { viewModel.select(it) }
     private val viewModel by viewModel<PlacesViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

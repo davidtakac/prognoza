@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.repository.preferences
 
 interface PreferencesRepository {
-    var placeId: String
+    suspend fun setSelectedPlaceId(placeId: String)
+    suspend fun getSelectedPlaceId(): String
 }

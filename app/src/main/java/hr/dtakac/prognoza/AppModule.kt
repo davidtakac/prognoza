@@ -73,7 +73,7 @@ val prognozaAppModule = module {
         DefaultPreferencesRepository(androidApplication().getSharedPreferences(
             "shared_preferences",
             Context.MODE_PRIVATE
-        ))
+        ), get())
     }
 
     factory<MetaRepository> {

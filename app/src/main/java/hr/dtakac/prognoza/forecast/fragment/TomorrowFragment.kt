@@ -54,7 +54,7 @@ class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTo
         )
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
         binding.tvDescription.text = resources.getString(
-            uiModel.weatherIcon?.descriptionResourceId ?: R.string.weather_icon_description_placeholder
+            uiModel.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
         )
         adapter.submitList(uiModel.hours)
     }

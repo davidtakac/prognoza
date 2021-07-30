@@ -16,7 +16,7 @@ class DefaultPlaceRepository(
     private val preferencesRepository: PreferencesRepository
 ) : PlaceRepository {
     override suspend fun getSelectedPlace(): Place {
-        val place = placeDao.get(preferencesRepository.placeId)
+        val place = placeDao.get(preferencesRepository.getSelectedPlaceId())
         return if (place == null) {
             val defaultPlace = Place(
                 id = DEFAULT_PLACE_ID,
@@ -59,6 +59,6 @@ class DefaultPlaceRepository(
         placeDao.insertOrUpdate(
             if (!place.isSaved) place.copy(isSaved = true) else place
         )
-        preferencesRepository.placeId = place.id
+        preferencesRepository.setSelectedPlaceId(place.id)
     }
 }

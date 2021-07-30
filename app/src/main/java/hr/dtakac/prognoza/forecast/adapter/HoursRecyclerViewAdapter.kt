@@ -33,7 +33,7 @@ class HourViewHolder(
     fun bind(uiModel: HourUiModel) {
         val resources = binding.root.context.resources
         binding.tvTemperature.text = if (uiModel.temperature == null) {
-            resources.getString(R.string.temperature_placeholder)
+            resources.getString(R.string.placeholder_temperature)
         } else {
             resources.getString(
                 R.string.template_degrees,

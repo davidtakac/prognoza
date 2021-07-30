@@ -12,6 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:importantForAutofill="no"
+        android:hint="@string/hint_search"
         android:inputType="text"
         android:imeOptions="actionSearch"/>
 
