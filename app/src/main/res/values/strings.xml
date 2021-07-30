@@ -56,4 +56,5 @@
     <string name="placeholder_temperature">-</string>
     <string name="placeholder_weather_description">Description missing</string>
     <string name="hint_search">Search…</string>
+    <string name="forecast_place">Forecast place</string>
 </resources>

@@ -11,7 +11,7 @@ interface ForecastHourDao {
     suspend fun insertOrUpdateAll(forecastHours: List<ForecastHour>)
 
     @Query("DELETE FROM ForecastHour WHERE DATE(time) < DATE('now')")
-    suspend fun deletePastForecastHours()
+    suspend fun deleteExpiredForecastHours()
 
     @Query(
         value = """

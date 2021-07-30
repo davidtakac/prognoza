@@ -24,6 +24,7 @@ class ForecastActivity : ViewBindingActivity<ActivityForecastBinding>(ActivityFo
     override fun onResume() {
         super.onResume()
         viewModel.getPlaceName()
+        viewModel.cleanUpDatabase()
     }
 
     private fun observeViewModel() {

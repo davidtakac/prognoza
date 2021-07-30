@@ -2,9 +2,7 @@ package hr.dtakac.prognoza.repository.forecast
 
 import hr.dtakac.prognoza.MIN_DATE_TIME_RFC_1123
 import hr.dtakac.prognoza.USER_AGENT
-import hr.dtakac.prognoza.api.ForecastService
-import hr.dtakac.prognoza.api.ForecastTimeStepData
-import hr.dtakac.prognoza.api.LocationForecastResponse
+import hr.dtakac.prognoza.api.*
 import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
@@ -60,6 +58,10 @@ class DefaultForecastRepository(
             end = now.plusDays(2 + 5),
             placeId
         )
+    }
+
+    override suspend fun deleteExpiredData() {
+        forecastDao.deleteExpiredForecastHours()
     }
 
     private suspend fun getForecastHours(
@@ -123,19 +125,4 @@ class DefaultForecastRepository(
         } ?: return
         forecastDao.insertOrUpdateAll(forecastHours)
     }
-
-    private fun ForecastTimeStepData.findSymbolCode() =
-        next1Hours?.summary?.symbolCode
-            ?: next6Hours?.summary?.symbolCode
-            ?: next12Hours?.summary?.symbolCode
-
-    private fun ForecastTimeStepData.findProbabilityOfPrecipitation() =
-        next1Hours?.data?.probabilityOfPrecipitation
-            ?: next6Hours?.data?.probabilityOfPrecipitation
-            ?: next12Hours?.data?.probabilityOfPrecipitation
-
-    private fun ForecastTimeStepData.findPrecipitationAmount() =
-        next1Hours?.data?.precipitationAmount
-            ?: next6Hours?.data?.precipitationAmount
-            ?: next12Hours?.data?.precipitationAmount
 }

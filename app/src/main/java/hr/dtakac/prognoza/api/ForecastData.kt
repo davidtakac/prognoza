@@ -32,6 +32,21 @@ data class ForecastTimeStepData(
     val next12Hours: ForecastTimePeriod?
 )
 
+fun ForecastTimeStepData.findSymbolCode() =
+    next1Hours?.summary?.symbolCode
+        ?: next6Hours?.summary?.symbolCode
+        ?: next12Hours?.summary?.symbolCode
+
+fun ForecastTimeStepData.findProbabilityOfPrecipitation() =
+    next1Hours?.data?.probabilityOfPrecipitation
+        ?: next6Hours?.data?.probabilityOfPrecipitation
+        ?: next12Hours?.data?.probabilityOfPrecipitation
+
+fun ForecastTimeStepData.findPrecipitationAmount() =
+    next1Hours?.data?.precipitationAmount
+        ?: next6Hours?.data?.precipitationAmount
+        ?: next12Hours?.data?.precipitationAmount
+
 data class ForecastTimeInstant(
     @SerializedName("details")
     val data: ForecastInstantData,

@@ -25,6 +25,16 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
         viewModel.places.observe(this) {
             adapter.submitList(it)
         }
+        viewModel.isLoading.observe(this) { isLoading ->
+            binding.progressBar.apply {
+                if (isLoading) show() else hide()
+            }
+        }
+        viewModel.placeSelectedEvent.observe(this) {
+            if (!it.isConsumed) {
+                finish()
+            }
+        }
     }
 
     private fun initializeRecyclerView() {
