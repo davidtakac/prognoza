@@ -18,6 +18,7 @@ import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
+import okhttp3.internal.format
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -93,8 +94,8 @@ class DefaultForecastRepository(
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
             ifModifiedSince = ForecastMetaDateTimeConverter.toTimestamp(forecastMeta?.lastModified) ?: MIN_DATE_TIME_RFC_1123,
-            latitude = forecastPlace.latitude,
-            longitude = forecastPlace.longitude
+            latitude = format("%.2f", forecastPlace.latitude),
+            longitude = format("%.2f", forecastPlace.longitude)
         )
         updateForecastMeta(forecastResponse.headers())
         updateForecastHours(forecastResponse.body(), forecastPlace.id)
