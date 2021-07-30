@@ -10,13 +10,13 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.ForecastMeta
+import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 class DefaultForecastRepository(
     private val dispatcherProvider: DispatcherProvider,
@@ -63,8 +63,8 @@ class DefaultForecastRepository(
         start: ZonedDateTime,
         end: ZonedDateTime
     ): List<ForecastHour> {
-        val forecastMeta = metaRepository.get(preferencesRepository.getSelectedPlaceId())
-        if (hasCachedForecastExpired(forecastMeta)) {
+        val forecastMeta = metaRepository.getSelectedPlaceMeta()
+        if (forecastMeta.hasExpired()) {
             updateForecastDatabase(forecastMeta)
         }
         return forecastDao.getForecastHours(
@@ -82,15 +82,14 @@ class DefaultForecastRepository(
             latitude = forecastPlace.latitude,
             longitude = forecastPlace.longitude
         )
-        updateForecastMeta(forecastResponse.headers(), forecastPlace.id)
+        updateForecastMeta(forecastResponse.headers())
         updateForecastHours(forecastResponse.body(), forecastPlace.id)
     }
 
-    private suspend fun updateForecastMeta(forecastResponseHeaders: Headers, placeId: String) {
-        metaRepository.update(
+    private suspend fun updateForecastMeta(forecastResponseHeaders: Headers) {
+        metaRepository.updateSelectedPlaceMeta(
             expiresTime = forecastResponseHeaders["Expires"],
             lastModifiedTime = forecastResponseHeaders["Last-Modified"],
-            placeId = placeId
         )
     }
 
@@ -113,12 +112,6 @@ class DefaultForecastRepository(
         } ?: return
         forecastDao.insertOrUpdateAll(forecastHours)
     }
-
-    private fun hasCachedForecastExpired(forecastMeta: ForecastMeta?) =
-        forecastMeta == null || ZonedDateTime.parse(
-            forecastMeta.expires,
-            DateTimeFormatter.RFC_1123_DATE_TIME
-        ) <= ZonedDateTime.now()
 
     private fun ForecastTimeStepData.findSymbolCode() =
         next1Hours?.summary?.symbolCode

@@ -7,7 +7,10 @@ import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
-import hr.dtakac.prognoza.forecast.ForecastViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
 import hr.dtakac.prognoza.places.PlacesViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
@@ -26,8 +29,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-val metNorwayRetrofit = named("MET Norway")
-val nominatimRetrofit = named("OSM Nominatim")
+private val metNorwayRetrofit = named("MET Norway")
+private val nominatimRetrofit = named("OSM Nominatim")
 
 val prognozaAppModule = module {
     single(metNorwayRetrofit) {
@@ -77,7 +80,7 @@ val prognozaAppModule = module {
     }
 
     factory<MetaRepository> {
-        DefaultMetaRepository(get<AppDatabase>().metaDao())
+        DefaultMetaRepository(get<AppDatabase>().metaDao(), get())
     }
 
     factory<PlaceRepository> {
@@ -96,7 +99,19 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        ForecastViewModel(null, get(), get(), get())
+        DaysViewModel(null, get())
+    }
+
+    viewModel {
+        ForecastViewModel(null, get())
+    }
+
+    viewModel {
+        TodayViewModel(null, get(), get())
+    }
+
+    viewModel {
+        TomorrowViewModel(null, get(), get())
     }
 
     viewModel {

@@ -9,14 +9,14 @@ import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
-import hr.dtakac.prognoza.forecast.ForecastViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
-    private val viewModel by sharedViewModel<ForecastViewModel>()
+    private val viewModel by viewModel<TodayViewModel>()
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL, HH:mm", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,7 +30,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         viewModel.todayForecast.observe(viewLifecycleOwner) {
             populateForecastViews(it)
         }
-        viewModel.isTodayForecastLoading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
                 if (isLoading) show() else hide()
             }

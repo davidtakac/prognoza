@@ -43,6 +43,7 @@ class DefaultPlaceRepository(
             format = "jsonv2"
         )
         return withContext(dispatcherProvider.default) {
+            // todo: truncate lat lon as per https://api.met.no/doc/TermsOfService
             response.map {
                 Place(
                     id = it.id,

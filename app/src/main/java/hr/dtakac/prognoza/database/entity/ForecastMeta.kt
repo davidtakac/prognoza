@@ -2,6 +2,8 @@ package hr.dtakac.prognoza.database.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 @Entity
 data class ForecastMeta(
@@ -16,3 +18,9 @@ data class ForecastMeta(
      */
     val lastModified: String
 )
+
+fun ForecastMeta?.hasExpired(): Boolean =
+    this == null || ZonedDateTime.parse(
+        expires,
+        DateTimeFormatter.RFC_1123_DATE_TIME
+    ) <= ZonedDateTime.now()

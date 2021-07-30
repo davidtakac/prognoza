@@ -6,12 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
-import hr.dtakac.prognoza.forecast.ForecastViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBinding::inflate) {
     private val adapter = DaysRecyclerViewAdapter()
-    private val viewModel by sharedViewModel<ForecastViewModel>()
+    private val viewModel by viewModel<DaysViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -21,10 +21,10 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     }
 
     private fun observeViewModel() {
-        viewModel.otherDaysForecast.observe(viewLifecycleOwner) {
+        viewModel.daysForecast.observe(viewLifecycleOwner) {
             adapter.submitList(it.days)
         }
-        viewModel.isOtherDaysForecastLoading.observe(viewLifecycleOwner) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
                 if (isLoading) show() else hide()
             }
