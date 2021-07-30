@@ -22,7 +22,7 @@ class ForecastViewModel(
     fun getPlaceName() {
         coroutineScope.launch {
             if (isReloadNeeded()) {
-                val selectedPlace = placeRepository.getSelectedPlace()
+                val selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
                 _placeName.value = selectedPlace.shortenedName
                 currentPlaceId = selectedPlace.id
             }

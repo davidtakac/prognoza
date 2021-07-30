@@ -33,8 +33,10 @@ class TodayViewModel(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 _isLoading.value = true
-                val forecastHours = forecastRepository.getTodayForecastHours()
-                val uiModels = withContext(dispatcherProvider.default) { forecastHours.hours.toHourUiModels() }
+                val forecastHours =
+                    forecastRepository.getTodayForecastHours(preferencesRepository.getSelectedPlaceId())
+                val uiModels =
+                    withContext(dispatcherProvider.default) { forecastHours.hours.toHourUiModels() }
                 val forecastTodayUiModel = TodayUiModel(
                     dateTime = ZonedDateTime.now(),
                     currentTemperature = uiModels[0].temperature,

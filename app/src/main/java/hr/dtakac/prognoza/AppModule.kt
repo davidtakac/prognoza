@@ -80,11 +80,11 @@ val prognozaAppModule = module {
     }
 
     factory<MetaRepository> {
-        DefaultMetaRepository(get<AppDatabase>().metaDao(), get())
+        DefaultMetaRepository(get<AppDatabase>().metaDao())
     }
 
     factory<PlaceRepository> {
-        DefaultPlaceRepository(get<AppDatabase>().placeDao(), get(), get(), get())
+        DefaultPlaceRepository(get<AppDatabase>().placeDao(), get(), get())
     }
 
     factory<ForecastRepository> {
@@ -94,7 +94,6 @@ val prognozaAppModule = module {
             forecastDao = get<AppDatabase>().hourDao(),
             placeRepository = get(),
             metaRepository = get(),
-            preferencesRepository = get()
         )
     }
 
@@ -115,6 +114,6 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        PlacesViewModel(null, get(), get())
+        PlacesViewModel(null, get(), get(), get())
     }
 }

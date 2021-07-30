@@ -32,7 +32,8 @@ class TomorrowViewModel(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 _isLoading.value = true
-                val forecastHours = forecastRepository.getTomorrowForecastHours()
+                val forecastHours =
+                    forecastRepository.getTomorrowForecastHours(preferencesRepository.getSelectedPlaceId())
                 val weatherIconAsync =
                     async(dispatcherProvider.default) { forecastHours.hours.representativeWeatherIcon() }
                 val lowTempAsync =

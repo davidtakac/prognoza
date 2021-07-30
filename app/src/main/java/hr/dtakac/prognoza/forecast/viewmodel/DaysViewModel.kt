@@ -32,7 +32,8 @@ class DaysViewModel(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 _isLoading.value = true
-                val forecastHours = forecastRepository.getOtherDaysForecastHours()
+                val forecastHours =
+                    forecastRepository.getOtherDaysForecastHours(preferencesRepository.getSelectedPlaceId())
                 val uiModels = withContext(dispatcherProvider.default) {
                     forecastHours.hours.toDayUiModels(this)
                 }

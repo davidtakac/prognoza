@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.database.converter
 
 import androidx.room.TypeConverter
+import java.lang.Exception
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
@@ -11,13 +12,21 @@ object ForecastMetaDateTimeConverter {
     @TypeConverter
     fun fromTimestamp(timestamp: String?): ZonedDateTime? {
         return timestamp?.let {
-            ZonedDateTime.parse(timestamp, formatter)
+            try {
+                ZonedDateTime.parse(timestamp, formatter)
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 
     @JvmStatic
     @TypeConverter
     fun toTimestamp(dateTime: ZonedDateTime?): String? {
-        return dateTime?.format(formatter)
+        return try {
+            dateTime?.format(formatter)
+        } catch (e: Exception) {
+            null
+        }
     }
 }

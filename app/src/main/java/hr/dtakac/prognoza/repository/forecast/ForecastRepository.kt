@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.repository.forecast
 import hr.dtakac.prognoza.database.databasemodel.ForecastHours
 
 interface ForecastRepository {
-    suspend fun getTodayForecastHours(): ForecastHours
-    suspend fun getTomorrowForecastHours(): ForecastHours
-    suspend fun getOtherDaysForecastHours(): ForecastHours
+    suspend fun getTodayForecastHours(placeId: String): ForecastHours
+    suspend fun getTomorrowForecastHours(placeId: String): ForecastHours
+    suspend fun getOtherDaysForecastHours(placeId: String): ForecastHours
 }

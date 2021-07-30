@@ -8,6 +8,7 @@ import hr.dtakac.prognoza.database.entity.Place
 import hr.dtakac.prognoza.database.entity.shortenedName
 import hr.dtakac.prognoza.places.uimodel.PlaceUiModel
 import hr.dtakac.prognoza.repository.place.PlaceRepository
+import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,7 +16,8 @@ import kotlinx.coroutines.withContext
 class PlacesViewModel(
     coroutineScope: CoroutineScope?,
     private val dispatcherProvider: DispatcherProvider,
-    private val placeRepository: PlaceRepository
+    private val placeRepository: PlaceRepository,
+    private val preferencesRepository: PreferencesRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var displayedPlaces = listOf<Place>()
     private val _places = MutableLiveData<List<PlaceUiModel>>()
@@ -23,7 +25,7 @@ class PlacesViewModel(
 
     fun showSavedPlaces() {
         coroutineScope.launch {
-            displayedPlaces = placeRepository.getSavedPlaces()
+            displayedPlaces = placeRepository.getAll()
             _places.value = displayedPlaces.mapToPlaceUiModels()
         }
     }
@@ -41,7 +43,8 @@ class PlacesViewModel(
                 displayedPlaces.firstOrNull { it.id == placeId }
                     ?: TODO("show that error has occurred")
             }
-            placeRepository.selectPlace(selectedPlace)
+            placeRepository.save(selectedPlace)
+            preferencesRepository.setSelectedPlaceId(selectedPlace.id)
         }
     }
 
