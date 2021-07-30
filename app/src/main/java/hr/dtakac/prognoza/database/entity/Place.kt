@@ -7,8 +7,10 @@ import androidx.room.PrimaryKey
 data class Place(
     @PrimaryKey
     val id: String,
-    val name: String,
     val fullName: String,
     val latitude: Float,
-    val longitude: Float
+    val longitude: Float,
+    val isSaved: Boolean
 )
+
+val Place.shortenedName get() = fullName.split(", ").getOrNull(0) ?: fullName

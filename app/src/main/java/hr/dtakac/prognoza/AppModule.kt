@@ -7,7 +7,8 @@ import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
-import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
+import hr.dtakac.prognoza.forecast.ForecastViewModel
+import hr.dtakac.prognoza.places.PlacesViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.DefaultPlaceRepository
@@ -80,7 +81,7 @@ val prognozaAppModule = module {
     }
 
     factory<PlaceRepository> {
-        DefaultPlaceRepository(get<AppDatabase>().placeDao(), get())
+        DefaultPlaceRepository(get<AppDatabase>().placeDao(), get(), get(), get())
     }
 
     factory<ForecastRepository> {
@@ -96,5 +97,9 @@ val prognozaAppModule = module {
 
     viewModel {
         ForecastViewModel(null, get(), get(), get())
+    }
+
+    viewModel {
+        PlacesViewModel(null, get(), get())
     }
 }

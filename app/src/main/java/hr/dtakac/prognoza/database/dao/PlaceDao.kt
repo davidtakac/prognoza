@@ -13,4 +13,7 @@ interface PlaceDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(place: Place)
+
+    @Query("SELECT * FROM Place")
+    suspend fun getAll(): List<Place>
 }

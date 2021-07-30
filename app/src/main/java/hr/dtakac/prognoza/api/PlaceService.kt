@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface PlaceService {
     @GET("search")
-    fun search(
+    suspend fun search(
         @Header("User-Agent") userAgent: String,
         @Query("q") query: String
     ): List<PlaceResponse>

@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.forecast.viewmodel
+package hr.dtakac.prognoza.forecast
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.*
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastHour
+import hr.dtakac.prognoza.database.entity.shortenedName
 import hr.dtakac.prognoza.forecast.uimodel.*
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
@@ -90,7 +91,7 @@ class ForecastViewModel(
 
     fun getPlaceName() {
         coroutineScope.launch {
-            _placeName.value = placeRepository.getSelectedPlace().name
+            _placeName.value = placeRepository.getSelectedPlace().shortenedName
         }
     }
 

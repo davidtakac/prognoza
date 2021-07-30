@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
-import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
+import hr.dtakac.prognoza.forecast.ForecastViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
