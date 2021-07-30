@@ -23,6 +23,10 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getTodayForecast()
     }
 

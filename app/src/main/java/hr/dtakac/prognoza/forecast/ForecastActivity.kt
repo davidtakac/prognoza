@@ -11,7 +11,6 @@ import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
 import hr.dtakac.prognoza.places.PlacesActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-private const val TAG = "MainActivity"
 class ForecastActivity : ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
     private val viewModel by viewModel<ForecastViewModel>()
 
@@ -20,6 +19,10 @@ class ForecastActivity : ViewBindingActivity<ActivityForecastBinding>(ActivityFo
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
+    }
+
+    override fun onResume() {
+        super.onResume()
         viewModel.getPlaceName()
     }
 

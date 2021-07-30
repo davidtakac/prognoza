@@ -26,6 +26,11 @@ class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTo
         viewModel.getTomorrowForecast()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getTomorrowForecast()
+    }
+
     private fun observeViewModel() {
         viewModel.tomorrowForecast.observe(viewLifecycleOwner) {
             populateForecastViews(it)

@@ -17,7 +17,11 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
-        viewModel.getOtherDaysForecast()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getDaysForecast()
     }
 
     private fun observeViewModel() {

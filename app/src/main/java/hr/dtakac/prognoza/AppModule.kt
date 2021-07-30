@@ -99,19 +99,19 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        DaysViewModel(null, get())
+        DaysViewModel(null, get(), get(), get())
     }
 
     viewModel {
-        ForecastViewModel(null, get())
+        ForecastViewModel(null, get(), get())
     }
 
     viewModel {
-        TodayViewModel(null, get(), get())
+        TodayViewModel(null, get(), get(), get())
     }
 
     viewModel {
-        TomorrowViewModel(null, get(), get())
+        TomorrowViewModel(null, get(), get(), get())
     }
 
     viewModel {

@@ -1,9 +1,9 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.database.entity.ForecastHour
+import hr.dtakac.prognoza.database.databasemodel.ForecastHours
 
 interface ForecastRepository {
-    suspend fun getTodayForecastHours(): List<ForecastHour>
-    suspend fun getTomorrowForecastHours(): List<ForecastHour>
-    suspend fun getOtherDaysForecastHours(): List<ForecastHour>
+    suspend fun getTodayForecastHours(): ForecastHours
+    suspend fun getTomorrowForecastHours(): ForecastHours
+    suspend fun getOtherDaysForecastHours(): ForecastHours
 }
