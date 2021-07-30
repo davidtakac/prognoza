@@ -1,6 +1,8 @@
 package hr.dtakac.prognoza.places
 
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingActivity
 import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
@@ -15,7 +17,8 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
         super.onCreate(savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
-        viewModel.getSavedPlaces()
+        initializeSearchField()
+        viewModel.showSavedPlaces()
     }
 
     private fun observeViewModel() {
@@ -31,5 +34,21 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
             false
         )
         binding.rvResults.adapter = adapter
+    }
+
+    private fun initializeSearchField() {
+        binding.etSearch.setOnEditorActionListener { textView, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                viewModel.search(textView.text.toString())
+                true
+            } else {
+                false
+            }
+        }
+        binding.etSearch.addTextChangedListener {
+            if (it.isNullOrBlank()) {
+                viewModel.showSavedPlaces()
+            }
+        }
     }
 }

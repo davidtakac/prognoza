@@ -21,7 +21,7 @@ class PlacesViewModel(
     private val _places = MutableLiveData<List<PlaceUiModel>>()
     val places: LiveData<List<PlaceUiModel>> get() = _places
 
-    fun getSavedPlaces() {
+    fun showSavedPlaces() {
         coroutineScope.launch {
             displayedPlaces = placeRepository.getSavedPlaces()
             _places.value = displayedPlaces.mapToPlaceUiModels()

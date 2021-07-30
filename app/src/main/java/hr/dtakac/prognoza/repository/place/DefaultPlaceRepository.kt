@@ -39,7 +39,8 @@ class DefaultPlaceRepository(
     override suspend fun search(query: String): List<Place> {
         val response = placeService.search(
             userAgent = USER_AGENT,
-            query = query
+            query = query,
+            format = "jsonv2"
         )
         return withContext(dispatcherProvider.default) {
             response.map {
