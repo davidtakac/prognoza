@@ -21,6 +21,7 @@ data class ForecastHour(
     val precipitationProbability: Float?,
     val precipitationAmount: Float?,
     val windSpeed: Float?,
+    val windFromDirection: Float?
 )
 
 fun List<ForecastHour>.toHourUiModels() =
@@ -42,12 +43,14 @@ suspend fun List<ForecastHour>.toDayUiModels(coroutineScope: CoroutineScope) =
             val lowTempAsync = coroutineScope.async { hours.minTemperature() }
             val highTempAsync = coroutineScope.async { hours.maxTemperature() }
             val precipitationAsync = coroutineScope.async { hours.totalPrecipitationAmount() }
+            val windAsync = coroutineScope.async { hours.maxWindSpeed() }
             DayUiModel(
                 time = hours[0].time,
                 weatherIcon = weatherIconAsync.await(),
                 lowTemperature = lowTempAsync.await(),
                 highTemperature = highTempAsync.await(),
-                precipitationAmount = precipitationAsync.await()
+                precipitationAmount = precipitationAsync.await(),
+                maxWindSpeed = windAsync.await()
             )
         }
 
@@ -65,3 +68,9 @@ fun List<ForecastHour>.representativeWeatherIcon(): WeatherIcon? {
 
 fun List<ForecastHour>.totalPrecipitationAmount() =
     sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
+
+fun List<ForecastHour>.maxWindSpeed() = maxOf { it.windSpeed ?: Float.MIN_VALUE }
+
+fun Float?.isPrecipitationAmountSignificant() = this != null && this >= 0.1f
+
+fun Float?.isWindSpeedSignificant() = this != null && this >= 0.1f

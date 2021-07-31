@@ -36,13 +36,13 @@ class HourViewHolder(
             resources.getString(R.string.placeholder_temperature)
         } else {
             resources.getString(
-                R.string.template_degrees,
+                R.string.template_temperature,
                 uiModel.temperature
             )
         }
         binding.tvPrecipitationAmount.apply {
             if (uiModel.precipitationAmount ?: 0f != 0f) {
-                text = resources.getString(R.string.template_mm, uiModel.precipitationAmount)
+                text = resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)
                 visibility = View.VISIBLE
             } else {
                 text = null

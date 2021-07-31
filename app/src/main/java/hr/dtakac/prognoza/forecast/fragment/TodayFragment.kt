@@ -53,7 +53,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private fun populateForecastViews(uiModel: TodayUiModel) {
         binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.getString(
-            R.string.template_degrees,
+            R.string.template_temperature,
             uiModel.currentTemperature
         )
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)

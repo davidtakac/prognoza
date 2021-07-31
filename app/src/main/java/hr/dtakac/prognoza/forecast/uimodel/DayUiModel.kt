@@ -7,5 +7,6 @@ data class DayUiModel(
     val weatherIcon: WeatherIcon?,
     val lowTemperature: Int,
     val highTemperature: Int,
+    val maxWindSpeed: Float?,
     val precipitationAmount: Float?
 )

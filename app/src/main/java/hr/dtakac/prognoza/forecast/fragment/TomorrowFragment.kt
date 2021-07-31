@@ -54,7 +54,7 @@ class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTo
     private fun populateForecastViews(uiModel: TomorrowUiModel) {
         binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.getString(
-            R.string.template_degrees_high_low,
+            R.string.template_temperature_high_low,
             uiModel.highTemperature, uiModel.lowTemperature
         )
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)

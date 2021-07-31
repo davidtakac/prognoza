@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.database.entity.isPrecipitationAmountSignificant
+import hr.dtakac.prognoza.database.entity.isWindSpeedSignificant
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import java.time.ZoneId
@@ -32,10 +34,22 @@ class DayViewHolder(
     fun bind(uiModel: DayUiModel) {
         val resources = binding.root.context
         binding.tvDateTime.text = uiModel.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateTimeFormatter)
-        binding.tvTemperatureHigh.text = resources.getString(R.string.template_degrees, uiModel.highTemperature)
-        binding.tvTemperatureLow.text = resources.getString(R.string.template_degrees, uiModel.lowTemperature)
+        binding.tvTemperatureHigh.text = resources.getString(R.string.template_temperature, uiModel.highTemperature)
+        binding.tvTemperatureLow.text = resources.getString(R.string.template_temperature, uiModel.lowTemperature)
         binding.tvDescription.text = resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: IMAGE_PLACEHOLDER)
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
+        binding.tvPrecipitationAmount.text =
+            if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
+                resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)
+            } else {
+                resources.getString(R.string.placeholder_precipitation)
+            }
+        binding.tvWindSpeed.text =
+            if (uiModel.maxWindSpeed.isWindSpeedSignificant()) {
+                resources.getString(R.string.template_wind_speed, uiModel.maxWindSpeed)
+            } else {
+                resources.getString(R.string.placeholder_wind_speed)
+            }
     }
 }
 
