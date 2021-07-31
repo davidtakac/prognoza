@@ -3,10 +3,11 @@ package hr.dtakac.prognoza.places
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingActivity
 import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
-import hr.dtakac.prognoza.places.adapter.PlacesRecyclerViewAdapter
+import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlacesBinding::inflate) {
@@ -44,6 +45,13 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
             false
         )
         binding.rvResults.adapter = adapter
+        binding.rvResults.addItemDecoration(ForecastItemDecoration())
+        binding.rvResults.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     private fun initializeSearchField() {

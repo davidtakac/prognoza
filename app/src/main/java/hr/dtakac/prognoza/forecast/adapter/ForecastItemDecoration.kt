@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.forecast.decoration
+package hr.dtakac.prognoza.forecast.adapter
 
 import android.graphics.Rect
 import android.view.View
@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.toPx
 import kotlin.math.roundToInt
 
-class HoursItemDecoration : RecyclerView.ItemDecoration() {
+class ForecastItemDecoration : RecyclerView.ItemDecoration() {
     private val eightDp = 8.toPx.roundToInt()
     private val sixteenDp = 16.toPx.roundToInt()
     private val verticalOffset = eightDp

@@ -53,9 +53,10 @@ class DefaultForecastRepository(
 
     override suspend fun getOtherDaysForecastHours(placeId: String): ForecastHours {
         val now = ZonedDateTime.now().atStartOfDay()
+        val startDaysOffset = 2L
         return getForecastHours(
-            start = now.plusDays(2),
-            end = now.plusDays(2 + 5),
+            start = now.plusDays(startDaysOffset),
+            end = now.plusDays(startDaysOffset + 5L),
             placeId
         )
     }

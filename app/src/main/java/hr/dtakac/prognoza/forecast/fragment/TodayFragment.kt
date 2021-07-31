@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.forecast.decoration.HoursItemDecoration
+import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -50,7 +50,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             false
         )
         binding.rvHours.adapter = adapter
-        binding.rvHours.addItemDecoration(HoursItemDecoration())
+        binding.rvHours.addItemDecoration(ForecastItemDecoration())
         binding.rvHours.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),

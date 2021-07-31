@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.places.uimodel
+package hr.dtakac.prognoza.places
 
 data class PlaceUiModel(
     val id: String,

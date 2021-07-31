@@ -1,13 +1,13 @@
-package hr.dtakac.prognoza.places.adapter
+package hr.dtakac.prognoza.places
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
-import hr.dtakac.prognoza.places.uimodel.PlaceUiModel
+import hr.dtakac.prognoza.places.PlaceUiModel
 
 class PlacesRecyclerViewAdapter(
     private val placeClickListener: (String) -> Unit
@@ -26,9 +26,11 @@ class PlaceViewHolder(
     private val binding: CellPlaceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(uiModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
-        binding.ivSaved.setImageResource(
-            if (uiModel.isSaved) R.drawable.star_full else R.drawable.star_empty
-        )
+        binding.ivSaved.visibility = if (uiModel.isSaved) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
         binding.tvName.text = uiModel.name
         binding.tvFullName.text = uiModel.fullName
         binding.root.setOnClickListener {
