@@ -18,7 +18,7 @@ data class ForecastTimeStep(
     @SerializedName("time")
     val time: String,
     @SerializedName("data")
-    val data: ForecastTimeStepData
+    val data: ForecastTimeStepData?
 )
 
 data class ForecastTimeStepData(

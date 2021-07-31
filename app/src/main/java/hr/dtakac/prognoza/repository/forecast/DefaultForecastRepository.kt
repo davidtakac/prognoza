@@ -87,6 +87,7 @@ class DefaultForecastRepository(
     }
 
     private suspend fun updateForecastDatabase(placeId: String, lastModified: String?) {
+        // todo: handle error codes, dont update meta if something fishy happens
         val forecastPlace = placeRepository.get(placeId)
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
@@ -115,11 +116,11 @@ class DefaultForecastRepository(
                 ForecastHour(
                     time = ZonedDateTime.parse(it.time),
                     placeId = placeId,
-                    temperature = it.data.instant?.data?.airTemperature,
-                    symbolCode = it.data.findSymbolCode(),
-                    precipitationProbability = it.data.findProbabilityOfPrecipitation(),
-                    precipitationAmount = it.data.findPrecipitationAmount(),
-                    windSpeed = it.data.instant?.data?.windSpeed
+                    temperature = it.data?.instant?.data?.airTemperature,
+                    symbolCode = it.data?.findSymbolCode(),
+                    precipitationProbability = it.data?.findProbabilityOfPrecipitation(),
+                    precipitationAmount = it.data?.findPrecipitationAmount(),
+                    windSpeed = it.data?.instant?.data?.windSpeed
                 )
             }
         } ?: return
