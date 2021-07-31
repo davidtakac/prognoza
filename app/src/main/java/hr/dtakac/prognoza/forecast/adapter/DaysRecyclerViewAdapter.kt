@@ -29,7 +29,7 @@ class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCa
 class DayViewHolder(
     private val binding: CellDayBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL", Locale.getDefault())
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE d LLLL", Locale.getDefault())
 
     fun bind(uiModel: DayUiModel) {
         val resources = binding.root.context

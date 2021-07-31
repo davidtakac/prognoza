@@ -2,12 +2,14 @@ package hr.dtakac.prognoza.forecast.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.forecast.decoration.HoursItemDecoration
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,7 +19,7 @@ import java.util.*
 class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
     private val viewModel by viewModel<TomorrowViewModel>()
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL", Locale.getDefault())
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -45,17 +47,28 @@ class TomorrowFragment : ViewBindingFragment<FragmentTomorrowBinding>(FragmentTo
     private fun initializeRecyclerView() {
         binding.rvHours.layoutManager = LinearLayoutManager(
             requireContext(),
-            LinearLayoutManager.HORIZONTAL,
+            LinearLayoutManager.VERTICAL,
             false
         )
         binding.rvHours.adapter = adapter
+        binding.rvHours.addItemDecoration(HoursItemDecoration())
+        binding.rvHours.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     private fun populateForecastViews(uiModel: TomorrowUiModel) {
         binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
-        binding.tvTemperature.text = resources.getString(
-            R.string.template_temperature_high_low,
-            uiModel.highTemperature, uiModel.lowTemperature
+        binding.tvTemperatureHigh.text = resources.getString(
+            R.string.template_temperature,
+            uiModel.highTemperature
+        )
+        binding.tvTemperatureLow.text = resources.getString(
+            R.string.template_temperature,
+            uiModel.lowTemperature
         )
         binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
         binding.tvDescription.text = resources.getString(

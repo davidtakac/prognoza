@@ -29,6 +29,8 @@ fun List<ForecastHour>.toHourUiModels() =
         HourUiModel(
             temperature = it.temperature?.roundToInt(),
             precipitationAmount = it.precipitationAmount,
+            windSpeed = it.windSpeed,
+            windFromDirection = it.windFromDirection,
             weatherIcon = WEATHER_ICONS[it.symbolCode],
             time = it.time
         )

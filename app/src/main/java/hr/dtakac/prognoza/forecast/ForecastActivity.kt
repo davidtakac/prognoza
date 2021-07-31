@@ -35,7 +35,6 @@ class ForecastActivity : ViewBindingActivity<ActivityForecastBinding>(ActivityFo
 
     private fun initializeViewPager() {
         binding.viewPager.adapter = ForecastPagerAdapter(this)
-        binding.viewPager.isUserInputEnabled = false
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = resources.getStringArray(R.array.forecast_tab_names)[position]
         }.attach()

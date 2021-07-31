@@ -36,7 +36,10 @@ class TodayViewModel(
                 val forecastHours =
                     forecastRepository.getTodayForecastHours(preferencesRepository.getSelectedPlaceId())
                 val uiModels =
-                    withContext(dispatcherProvider.default) { forecastHours.hours.toHourUiModels() }
+                    withContext(dispatcherProvider.default) {
+                        // omit current hour from hour list
+                        forecastHours.hours.subList(1, forecastHours.hours.size).toHourUiModels()
+                    }
                 val forecastTodayUiModel = TodayUiModel(
                     dateTime = ZonedDateTime.now(),
                     currentTemperature = uiModels[0].temperature,

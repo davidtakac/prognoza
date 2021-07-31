@@ -2,12 +2,14 @@ package hr.dtakac.prognoza.forecast.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.forecast.decoration.HoursItemDecoration
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -17,7 +19,7 @@ import java.util.*
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
     private val viewModel by viewModel<TodayViewModel>()
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd LLLL, HH:mm", Locale.getDefault())
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE d LLLL, HH:mm", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -44,10 +46,17 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private fun initializeRecyclerView() {
         binding.rvHours.layoutManager = LinearLayoutManager(
             requireContext(),
-            LinearLayoutManager.HORIZONTAL,
+            LinearLayoutManager.VERTICAL,
             false
         )
         binding.rvHours.adapter = adapter
+        binding.rvHours.addItemDecoration(HoursItemDecoration())
+        binding.rvHours.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     private fun populateForecastViews(uiModel: TodayUiModel) {

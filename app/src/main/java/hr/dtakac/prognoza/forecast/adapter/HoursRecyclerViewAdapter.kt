@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.database.entity.isPrecipitationAmountSignificant
+import hr.dtakac.prognoza.database.entity.isWindSpeedSignificant
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import java.time.ZoneId
@@ -40,19 +42,31 @@ class HourViewHolder(
                 uiModel.temperature
             )
         }
-        binding.tvPrecipitationAmount.apply {
-            if (uiModel.precipitationAmount ?: 0f != 0f) {
-                text = resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)
-                visibility = View.VISIBLE
+        binding.tvPrecipitationAmount.text =
+            if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
+                resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)
             } else {
-                text = null
-                visibility = View.GONE
+                resources.getString(R.string.placeholder_precipitation)
             }
+        binding.ivWeatherIcon.setImageResource(
+            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+        )
+        binding.tvDescription.text = if (uiModel.weatherIcon?.descriptionResourceId == null) {
+            resources.getString(R.string.placeholder_weather_description)
+        } else {
+            resources.getString(uiModel.weatherIcon.descriptionResourceId)
         }
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
         binding.tvTime.text = uiModel.time
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)
+        if (uiModel.windSpeed.isWindSpeedSignificant()) {
+            binding.tvWindSpeed.text = resources.getString(R.string.template_wind_speed, uiModel.windSpeed)
+            binding.ivWindFromDirection.visibility = View.VISIBLE
+            binding.ivWindFromDirection.rotation = uiModel.windFromDirection ?: 0f
+        } else {
+            binding.tvWindSpeed.text = resources.getString(R.string.placeholder_wind_speed)
+            binding.ivWindFromDirection.visibility = View.INVISIBLE
+        }
     }
 }
 

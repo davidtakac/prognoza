@@ -1,55 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="64dp"
-    android:layout_height="128dp"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
-        android:id="@+id/tv_temperature"
-        android:layout_width="0dp"
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_precipitation_amount"
+        app:layout_constraintBottom_toTopOf="@id/tv_description"
         app:layout_constraintVertical_chainStyle="packed"
-        android:gravity="center"
-        tools:text="24C"/>
+        tools:text="19:00"/>
 
     <TextView
-        android:id="@+id/tv_precipitation_amount"
-        android:layout_width="0dp"
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_temperature"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/iv_weather_icon"
-        android:visibility="visible"
-        android:gravity="center"
-        tools:text="4\mm"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:text="Mostly sunny"/>
 
     <ImageView
         android:id="@+id/iv_weather_icon"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/tv_time"
-        android:layout_marginHorizontal="8dp"
-        android:layout_marginBottom="8dp"
-        tools:src="@drawable/lightsleetandthunder"/>
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_temperature"
+        android:layout_marginEnd="8dp"
+        tools:src="@drawable/rain"/>
 
     <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="0dp"
+        android:id="@+id/tv_temperature"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:gravity="center"
-        tools:text="19:00"/>
+        app:layout_constraintVertical_chainStyle="packed"
+        android:layout_marginEnd="8dp"
+        android:textSize="20sp"
+        tools:text="22C"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+        android:layout_marginEnd="8dp">
+
+        <ImageView
+            android:id="@+id/iv_precipitation"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:padding="4dp"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/drop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_precipitation_amount"
+            app:layout_constraintBottom_toBottomOf="@id/tv_precipitation_amount"/>
+
+        <ImageView
+            android:id="@+id/iv_wind"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:padding="4dp"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/wind"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_wind_speed"
+            app:layout_constraintBottom_toBottomOf="@id/tv_wind_speed"/>
+
+        <TextView
+            android:id="@+id/tv_precipitation_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/iv_precipitation"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="8dp"
+            tools:text="24 mm"/>
+
+        <TextView
+            android:id="@+id/tv_wind_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/iv_precipitation"
+            app:layout_constraintTop_toBottomOf="@id/tv_precipitation_amount"
+            app:layout_constraintEnd_toStartOf="@id/iv_wind_from_direction"
+            tools:text="8 m/s"/>
+
+        <ImageView
+            android:id="@+id/iv_wind_from_direction"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:padding="4dp"
+            android:layout_marginEnd="2dp"
+            android:src="@drawable/arrow_upward"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_wind_speed"
+            app:layout_constraintBottom_toBottomOf="@id/tv_wind_speed"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

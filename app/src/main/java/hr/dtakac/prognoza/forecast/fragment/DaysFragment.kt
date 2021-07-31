@@ -2,10 +2,12 @@ package hr.dtakac.prognoza.forecast.fragment
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
+import hr.dtakac.prognoza.forecast.decoration.HoursItemDecoration
 import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -42,5 +44,12 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
             false
         )
         binding.rvDays.adapter = adapter
+        binding.rvDays.addItemDecoration(HoursItemDecoration())
+        binding.rvDays.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 }

@@ -53,7 +53,7 @@
     <string name="template_temperature">%1$d °C</string>
     <string name="template_precipitation">%1$.1f mm</string>
     <string name="template_wind_speed">%1$.1f m/s</string>
-    <string name="template_temperature_high_low">High %1$d °C | Low %2$d °C</string>
+    <string name="template_temperature_high_low">High %1$d °C Low %2$d °C</string>
     <string name="placeholder_temperature">-</string>
     <string name="placeholder_weather_description">-</string>
     <string name="placeholder_precipitation">-</string>
