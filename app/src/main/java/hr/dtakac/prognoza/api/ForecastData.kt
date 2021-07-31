@@ -37,7 +37,7 @@ fun ForecastTimeStepData.findSymbolCode() =
         ?: next6Hours?.summary?.symbolCode
         ?: next12Hours?.summary?.symbolCode
 
-fun ForecastTimeStepData.findProbabilityOfPrecipitation() =
+fun ForecastTimeStepData.findPrecipitationProbability() =
     next1Hours?.data?.probabilityOfPrecipitation
         ?: next6Hours?.data?.probabilityOfPrecipitation
         ?: next12Hours?.data?.probabilityOfPrecipitation
@@ -81,9 +81,9 @@ data class ForecastInstantData(
 
 data class ForecastTimePeriod(
     @SerializedName("details")
-    val data: ForecastTimePeriodData,
+    val data: ForecastTimePeriodData?,
     @SerializedName("summary")
-    val summary: ForecastTimePeriodSummary
+    val summary: ForecastTimePeriodSummary?
 )
 
 data class ForecastTimePeriodSummary(

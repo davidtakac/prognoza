@@ -118,7 +118,7 @@ class DefaultForecastRepository(
                     placeId = placeId,
                     temperature = it.data?.instant?.data?.airTemperature,
                     symbolCode = it.data?.findSymbolCode(),
-                    precipitationProbability = it.data?.findProbabilityOfPrecipitation(),
+                    precipitationProbability = it.data?.findPrecipitationProbability(),
                     precipitationAmount = it.data?.findPrecipitationAmount(),
                     windSpeed = it.data?.instant?.data?.windSpeed
                 )
