@@ -60,4 +60,10 @@
     <string name="placeholder_wind_speed">-</string>
     <string name="hint_search">Search…</string>
     <string name="title_place_select">Select a place</string>
+    <string name="error_met_client">There appears to be something wrong with your request. Please try again.</string>
+    <string name="error_met_server">The server is currently unable to process your request. Please try again.</string>
+    <string name="error_met_unknown">Something went wrong when communicating with the server. Please try again.</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+    <string name="error_forecast_empty">There is no forecast for this place and time.</string>
+    <string name="button_try_again">Try again</string>
 </resources>

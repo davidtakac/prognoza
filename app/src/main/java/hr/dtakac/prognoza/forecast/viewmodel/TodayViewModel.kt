@@ -9,6 +9,7 @@ import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.database.entity.toHourUiModels
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -32,25 +33,39 @@ class TodayViewModel(
     fun getTodayForecast() {
         coroutineScope.launch {
             if (isReloadNeeded()) {
-                _isLoading.value = true
-                val forecastHours =
-                    forecastRepository.getTodayForecastHours(preferencesRepository.getSelectedPlaceId())
-                val uiModels =
-                    withContext(dispatcherProvider.default) {
-                        // omit current hour from hour list
-                        forecastHours.hours.subList(1, forecastHours.hours.size).toHourUiModels()
-                    }
-                val forecastTodayUiModel = TodayUiModel(
-                    dateTime = ZonedDateTime.now(),
-                    currentTemperature = uiModels[0].temperature,
-                    weatherIcon = uiModels[0].weatherIcon,
-                    nextHours = uiModels
-                )
-                currentMeta = forecastHours.meta
-                _todayForecast.value = forecastTodayUiModel
-                _isLoading.value = false
+                getNewForecast()
             }
         }
+    }
+
+    private suspend fun getNewForecast() {
+        _isLoading.value = true
+        val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
+        when (val result = forecastRepository.getTodayForecastHours(selectedPlaceId)) {
+            is ForecastResult.Success -> handleSuccess(result)
+            is ForecastResult.Error -> handleError(result)
+        }
+    }
+
+    private suspend fun handleSuccess(result: ForecastResult.Success) {
+        val uiModels =
+            withContext(dispatcherProvider.default) {
+                // omit current hour from hour list
+                result.hours.subList(1, result.hours.size).toHourUiModels()
+            }
+        val forecastTodayUiModel = TodayUiModel.Success(
+            dateTime = ZonedDateTime.now(),
+            currentTemperature = uiModels[0].temperature,
+            weatherIcon = uiModels[0].weatherIcon,
+            nextHours = uiModels
+        )
+        currentMeta = result.meta
+        _todayForecast.value = forecastTodayUiModel
+        _isLoading.value = false
+    }
+
+    private fun handleError(error: ForecastResult.Error) {
+        _todayForecast.value = TodayUiModel.Error(error.errorMessageResourceId)
     }
 
     private suspend fun isReloadNeeded(): Boolean {

@@ -36,7 +36,10 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
 
     private fun observeViewModel() {
         viewModel.todayForecast.observe(viewLifecycleOwner) {
-            populateForecastViews(it)
+            when (it) {
+                is TodayUiModel.Success -> showForecast(it)
+                is TodayUiModel.Error -> showError(it)
+            }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
@@ -67,7 +70,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         }
     }
 
-    private fun populateForecastViews(uiModel: TodayUiModel) {
+    private fun showForecast(uiModel: TodayUiModel.Success) {
         binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.getString(
             R.string.template_temperature,
@@ -80,5 +83,11 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             uiModel.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
         )
         adapter.submitList(uiModel.nextHours)
+        binding.error.root.visibility = View.GONE
+    }
+
+    private fun showError(error: TodayUiModel.Error) {
+        binding.error.root.visibility = View.VISIBLE
+        binding.error.tvErrorMessage.text = resources.getString(error.errorMessageResourceId)
     }
 }

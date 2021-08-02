@@ -1,13 +1,13 @@
 package hr.dtakac.prognoza.repository.forecast
 
 import hr.dtakac.prognoza.MIN_DATE_TIME_RFC_1123
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.*
 import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
-import hr.dtakac.prognoza.database.databasemodel.ForecastHours
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.repository.meta.MetaRepository
@@ -15,6 +15,7 @@ import hr.dtakac.prognoza.repository.place.PlaceRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
+import retrofit2.HttpException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -26,7 +27,7 @@ class DefaultForecastRepository(
 ) : ForecastRepository {
     private val hoursAfterMidnightToShow = 6L
 
-    override suspend fun getTodayForecastHours(placeId: String): ForecastHours {
+    override suspend fun getTodayForecastHours(placeId: String): ForecastResult {
         val anHourAgo = ZonedDateTime
             .now()
             .minusHours(1) // to get the current hour as well
@@ -39,7 +40,7 @@ class DefaultForecastRepository(
         )
     }
 
-    override suspend fun getTomorrowForecastHours(placeId: String): ForecastHours {
+    override suspend fun getTomorrowForecastHours(placeId: String): ForecastResult {
         val tomorrow = ZonedDateTime
             .now()
             .atStartOfDay()
@@ -51,7 +52,7 @@ class DefaultForecastRepository(
         )
     }
 
-    override suspend fun getOtherDaysForecastHours(placeId: String): ForecastHours {
+    override suspend fun getOtherDaysForecastHours(placeId: String): ForecastResult {
         val now = ZonedDateTime.now().atStartOfDay()
         val startDaysOffset = 2L
         return getForecastHours(
@@ -62,37 +63,55 @@ class DefaultForecastRepository(
     }
 
     override suspend fun deleteExpiredData() {
-        forecastDao.deleteExpiredForecastHours()
+        try {
+            forecastDao.deleteExpiredForecastHours()
+        } catch (e: Exception) {
+            // intentionally ignored
+            e.printStackTrace()
+        }
     }
 
     private suspend fun getForecastHours(
         start: ZonedDateTime,
         end: ZonedDateTime,
         placeId: String
-    ): ForecastHours {
-        val currentMeta = metaRepository.get(placeId)
-        val wasMetaUpdated = if (currentMeta?.hasExpired() != false) {
-            updateForecastDatabase(
-                placeId,
-                lastModified = ForecastMetaDateTimeConverter.toTimestamp(currentMeta?.lastModified)
+    ): ForecastResult {
+        return try {
+            val currentMeta = metaRepository.get(placeId)
+            val wasMetaUpdated = if (currentMeta?.hasExpired() != false) {
+                updateForecastDatabase(placeId, currentMeta?.lastModified)
+                true
+            } else {
+                false
+            }
+            val hours = forecastDao.getForecastHours(start, end, placeId)
+            return if (hours.isNullOrEmpty()) {
+                ForecastResult.Error(R.string.error_forecast_empty)
+            } else {
+                ForecastResult.Success(
+                    if (wasMetaUpdated) metaRepository.get(placeId) else currentMeta,
+                    hours
+                )
+            }
+        } catch (httpException: HttpException) {
+            ForecastResult.Error(
+                when (httpException.code()) {
+                    in 400..499 -> R.string.error_met_client
+                    in 500..504 -> R.string.error_met_server
+                    else -> R.string.error_met_unknown
+                }
             )
-            true
-        } else {
-            false
+        } catch (e: Exception) {
+            ForecastResult.Error(R.string.error_generic)
         }
-        val hours = forecastDao.getForecastHours(start, end, placeId)
-        return ForecastHours(
-            meta = if (wasMetaUpdated) metaRepository.get(placeId) else currentMeta,
-            hours = hours
-        )
     }
 
-    private suspend fun updateForecastDatabase(placeId: String, lastModified: String?) {
-        // todo: handle error codes, dont update meta if something fishy happens
+    private suspend fun updateForecastDatabase(placeId: String, lastModified: ZonedDateTime?) {
         val forecastPlace = placeRepository.get(placeId)
+        val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
-            ifModifiedSince = lastModified ?: MIN_DATE_TIME_RFC_1123,
+            ifModifiedSince = lastModifiedTimestamp ?: MIN_DATE_TIME_RFC_1123,
             latitude = format("%.2f", forecastPlace.latitude),
             longitude = format("%.2f", forecastPlace.longitude)
         )
