@@ -12,8 +12,9 @@ fun <T> List<T>.mostCommon(): T? =
     groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
 
 // courtesy of https://stackoverflow.com/a/6327095
-val Number.toPx get() = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP,
-    this.toFloat(),
-    Resources.getSystem().displayMetrics
-)
+val Number.toPx
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this.toFloat(),
+        Resources.getSystem().displayMetrics
+    )

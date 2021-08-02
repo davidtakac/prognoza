@@ -8,8 +8,8 @@ import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
-import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
+import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -19,7 +19,8 @@ import java.util.*
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
     private val viewModel by viewModel<TodayViewModel>()
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE d LLLL, HH:mm", Locale.getDefault())
+    private val dateTimeFormatter =
+        DateTimeFormatter.ofPattern("EE d LLLL, HH:mm", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -72,7 +73,9 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             R.string.template_temperature,
             uiModel.currentTemperature
         )
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
+        binding.ivWeatherIcon.setImageResource(
+            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+        )
         binding.tvDescription.text = resources.getString(
             uiModel.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
         )

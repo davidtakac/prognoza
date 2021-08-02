@@ -6,7 +6,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import hr.dtakac.prognoza.forecast.fragment.DaysFragment
 import hr.dtakac.prognoza.forecast.fragment.TodayFragment
 import hr.dtakac.prognoza.forecast.fragment.TomorrowFragment
-import java.lang.IllegalStateException
 
 class ForecastPagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
     override fun createFragment(position: Int): Fragment {

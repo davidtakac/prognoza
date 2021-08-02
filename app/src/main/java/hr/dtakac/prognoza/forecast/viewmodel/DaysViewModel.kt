@@ -7,7 +7,7 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.database.entity.toDayUiModels
-import hr.dtakac.prognoza.forecast.uimodel.*
+import hr.dtakac.prognoza.forecast.uimodel.OtherDaysUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope

@@ -19,8 +19,12 @@ class DefaultMetaRepository(
     ) {
         metaDao.updateForecastMeta(
             ForecastMeta(
-                expires = ForecastMetaDateTimeConverter.fromTimestamp(expiresTime ?: MIN_DATE_TIME_RFC_1123)!!,
-                lastModified = ForecastMetaDateTimeConverter.fromTimestamp(lastModifiedTime ?: MIN_DATE_TIME_RFC_1123)!!,
+                expires = ForecastMetaDateTimeConverter.fromTimestamp(
+                    expiresTime ?: MIN_DATE_TIME_RFC_1123
+                )!!,
+                lastModified = ForecastMetaDateTimeConverter.fromTimestamp(
+                    lastModifiedTime ?: MIN_DATE_TIME_RFC_1123
+                )!!,
                 placeId = placeId
             )
         )

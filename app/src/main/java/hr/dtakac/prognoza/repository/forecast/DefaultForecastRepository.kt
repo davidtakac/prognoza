@@ -10,8 +10,8 @@ import hr.dtakac.prognoza.database.dao.ForecastHourDao
 import hr.dtakac.prognoza.database.databasemodel.ForecastHours
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.hasExpired
-import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.meta.MetaRepository
+import hr.dtakac.prognoza.repository.place.PlaceRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format

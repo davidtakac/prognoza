@@ -33,11 +33,17 @@ class DayViewHolder(
 
     fun bind(uiModel: DayUiModel) {
         val resources = binding.root.context
-        binding.tvDateTime.text = uiModel.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateTimeFormatter)
-        binding.tvTemperatureHigh.text = resources.getString(R.string.template_temperature, uiModel.highTemperature)
-        binding.tvTemperatureLow.text = resources.getString(R.string.template_temperature, uiModel.lowTemperature)
-        binding.tvDescription.text = resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: IMAGE_PLACEHOLDER)
-        binding.ivWeatherIcon.setImageResource(uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER)
+        binding.tvDateTime.text =
+            uiModel.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateTimeFormatter)
+        binding.tvTemperatureHigh.text =
+            resources.getString(R.string.template_temperature, uiModel.highTemperature)
+        binding.tvTemperatureLow.text =
+            resources.getString(R.string.template_temperature, uiModel.lowTemperature)
+        binding.tvDescription.text =
+            resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: IMAGE_PLACEHOLDER)
+        binding.ivWeatherIcon.setImageResource(
+            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+        )
         binding.tvPrecipitationAmount.text =
             if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
                 resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)

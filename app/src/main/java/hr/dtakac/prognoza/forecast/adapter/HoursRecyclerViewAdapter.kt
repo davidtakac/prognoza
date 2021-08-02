@@ -60,7 +60,8 @@ class HourViewHolder(
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)
         if (uiModel.windSpeed.isWindSpeedSignificant()) {
-            binding.tvWindSpeed.text = resources.getString(R.string.template_wind_speed, uiModel.windSpeed)
+            binding.tvWindSpeed.text =
+                resources.getString(R.string.template_wind_speed, uiModel.windSpeed)
             binding.ivWindFromDirection.visibility = View.VISIBLE
             binding.ivWindFromDirection.rotation = uiModel.windFromDirection ?: 0f
         } else {

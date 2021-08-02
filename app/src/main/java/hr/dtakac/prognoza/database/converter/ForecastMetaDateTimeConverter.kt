@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.database.converter
 
 import androidx.room.TypeConverter
-import java.lang.Exception
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 

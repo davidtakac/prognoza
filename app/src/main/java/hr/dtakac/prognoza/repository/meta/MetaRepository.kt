@@ -8,5 +8,6 @@ interface MetaRepository {
         expiresTime: String?,
         lastModifiedTime: String?
     )
+
     suspend fun get(placeId: String): ForecastMeta?
 }

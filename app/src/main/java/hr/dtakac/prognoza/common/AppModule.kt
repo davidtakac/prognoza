@@ -14,10 +14,10 @@ import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
 import hr.dtakac.prognoza.places.PlacesViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.repository.place.DefaultPlaceRepository
-import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.meta.DefaultMetaRepository
 import hr.dtakac.prognoza.repository.meta.MetaRepository
+import hr.dtakac.prognoza.repository.place.DefaultPlaceRepository
+import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import okhttp3.OkHttpClient
@@ -34,7 +34,8 @@ private val nominatimRetrofit = named("OSM Nominatim")
 
 val prognozaAppModule = module {
     single(metNorwayRetrofit) {
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val loggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
         Retrofit.Builder()
             .baseUrl(MET_NORWAY_BASE_URL)
@@ -44,7 +45,8 @@ val prognozaAppModule = module {
     }
 
     single(nominatimRetrofit) {
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val loggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
         Retrofit.Builder()
             .baseUrl(OSM_NOMINATIM_BASE_URL)
@@ -73,10 +75,12 @@ val prognozaAppModule = module {
     }
 
     single<PreferencesRepository> {
-        DefaultPreferencesRepository(androidApplication().getSharedPreferences(
-            "shared_preferences",
-            Context.MODE_PRIVATE
-        ), get())
+        DefaultPreferencesRepository(
+            androidApplication().getSharedPreferences(
+                "shared_preferences",
+                Context.MODE_PRIVATE
+            ), get()
+        )
     }
 
     factory<MetaRepository> {

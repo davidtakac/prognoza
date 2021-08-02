@@ -11,7 +11,8 @@ import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
 import hr.dtakac.prognoza.places.PlacesActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ForecastActivity : ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
+class ForecastActivity :
+    ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
     private val viewModel by viewModel<ForecastViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
