@@ -12,6 +12,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_description"
         app:layout_constraintVertical_chainStyle="packed"
+        android:textStyle="bold"
         tools:text="19:00"/>
 
     <TextView

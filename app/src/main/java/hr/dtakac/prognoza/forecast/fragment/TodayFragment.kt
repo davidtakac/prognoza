@@ -25,6 +25,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
+        initializeReload()
     }
 
     override fun onResume() {
@@ -57,6 +58,12 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
                 LinearLayoutManager.VERTICAL
             )
         )
+    }
+
+    private fun initializeReload() {
+        binding.ivReload.setOnClickListener {
+            viewModel.getTodayForecast()
+        }
     }
 
     private fun populateForecastViews(uiModel: TodayUiModel) {

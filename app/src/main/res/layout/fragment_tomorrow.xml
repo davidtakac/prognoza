@@ -5,78 +5,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tv_date_time"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_summary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        tools:text="20 July"/>
+        android:layout_marginTop="16dp">
 
-    <ImageView
-        android:id="@+id/iv_temperature_high"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:padding="4dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_temperature_high"
-        app:layout_constraintBottom_toBottomOf="@id/tv_temperature_high"
-        android:src="@drawable/arrow_upward"/>
+        <TextView
+            android:id="@+id/tv_date_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="20 July"/>
 
-    <TextView
-        android:id="@+id/tv_temperature_high"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_date_time"
-        app:layout_constraintStart_toEndOf="@id/iv_temperature_high"
-        android:textSize="32sp"
-        tools:text="32C"/>
+        <TextView
+            android:id="@+id/tv_temperature_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="48sp"
+            tools:text="32C"/>
 
-    <ImageView
-        android:id="@+id/iv_temperature_low"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:padding="4dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
-        app:layout_constraintTop_toTopOf="@id/tv_temperature_low"
-        app:layout_constraintBottom_toBottomOf="@id/tv_temperature_low"
-        android:src="@drawable/arrow_upward"
-        android:rotation="180"/>
+        <TextView
+            android:id="@+id/tv_temperature_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
+            android:layout_marginStart="16dp"
+            android:textSize="30sp"
+            tools:text="18C"/>
 
-    <TextView
-        android:id="@+id/tv_temperature_low"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_date_time"
-        app:layout_constraintStart_toEndOf="@id/iv_temperature_low"
-        android:textSize="32sp"
-        tools:text="18C"/>
+        <ImageView
+            android:id="@+id/iv_weather_icon"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_description"
+            tools:src="@drawable/lightsleetandthunder"/>
 
-    <ImageView
-        android:id="@+id/iv_weather_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        app:layout_constraintTop_toBottomOf="@id/tv_date_time"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginEnd="16dp"
-        tools:src="@drawable/lightsleetandthunder"/>
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="20sp"
+            android:layout_marginTop="8dp"
+            tools:text="Light sleet showers and thunder"/>
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-        android:layout_marginHorizontal="16dp"
-        android:textSize="20sp"
-        android:layout_marginTop="8dp"
-        tools:text="Light sleet showers and thunder"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hours"
@@ -85,17 +73,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_description"
+        app:layout_constraintTop_toBottomOf="@id/cl_summary"
         android:layout_marginTop="24dp"
         tools:listitem="@layout/cell_hour"/>
-
-    <View
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        app:layout_constraintTop_toTopOf="@id/rv_hours"
-        app:layout_constraintStart_toStartOf="@id/rv_hours"
-        app:layout_constraintEnd_toEndOf="@id/rv_hours"
-        android:background="?android:attr/listDivider" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
