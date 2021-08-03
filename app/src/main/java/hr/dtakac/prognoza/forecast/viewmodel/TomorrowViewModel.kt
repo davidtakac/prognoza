@@ -40,12 +40,11 @@ class TomorrowViewModel(
     private suspend fun getNewForecast() {
         _isLoading.value = true
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-        val result = forecastRepository.getTomorrowForecastHours(selectedPlaceId)
-        when (result) {
+        when (val result = forecastRepository.getTomorrowForecastHours(selectedPlaceId)) {
             is ForecastResult.Success -> handleSuccess(result)
             is ForecastResult.Error -> handleError(result)
         }
-
+        _isLoading.value = false
     }
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
@@ -57,7 +56,7 @@ class TomorrowViewModel(
             coroutineScope.async(dispatcherProvider.default) { result.hours.maxTemperature() }
         val uiModelsAsync =
             coroutineScope.async(dispatcherProvider.default) { result.hours.toHourUiModels() }
-        val forecastTomorrowUiModel = TomorrowUiModel(
+        val successUiModel = TomorrowUiModel.Success(
             dateTime = ZonedDateTime.now().atStartOfDay().plusDays(1),
             lowTemperature = lowTempAsync.await(),
             highTemperature = highTempAsync.await(),
@@ -65,12 +64,11 @@ class TomorrowViewModel(
             hours = uiModelsAsync.await()
         )
         currentMeta = result.meta
-        _tomorrowForecast.value = forecastTomorrowUiModel
-        _isLoading.value = false
+        _tomorrowForecast.value = successUiModel
     }
 
     private fun handleError(error: ForecastResult.Error) {
-        // todo: same as in today view model
+        _tomorrowForecast.value = TomorrowUiModel.Error(error.errorMessageResourceId)
     }
 
     private suspend fun isReloadNeeded(): Boolean {

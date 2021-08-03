@@ -26,20 +26,28 @@ class TomorrowFragment :
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
-        viewModel.getTomorrowForecast()
+        initializeTryAgain()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getTomorrowForecast()
+        if (binding.error.root.visibility != View.VISIBLE) {
+            viewModel.getTomorrowForecast()
+        }
     }
 
     private fun observeViewModel() {
         viewModel.tomorrowForecast.observe(viewLifecycleOwner) {
-            populateForecastViews(it)
+            when (it) {
+                is TomorrowUiModel.Success -> showForecast(it)
+                is TomorrowUiModel.Error -> showError(it)
+            }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
+                if (isLoading) show() else hide()
+            }
+            binding.error.progressBar.apply {
                 if (isLoading) show() else hide()
             }
         }
@@ -61,7 +69,13 @@ class TomorrowFragment :
         )
     }
 
-    private fun populateForecastViews(uiModel: TomorrowUiModel) {
+    private fun initializeTryAgain() {
+        binding.error.btnTryAgain.setOnClickListener {
+            viewModel.getTomorrowForecast()
+        }
+    }
+
+    private fun showForecast(uiModel: TomorrowUiModel.Success) {
         binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
         binding.tvTemperatureHigh.text = resources.getString(
             R.string.template_temperature,
@@ -78,5 +92,11 @@ class TomorrowFragment :
             uiModel.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
         )
         adapter.submitList(uiModel.hours)
+        binding.error.root.visibility = View.GONE
+    }
+
+    private fun showError(uiModel: TomorrowUiModel.Error) {
+        binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
+        binding.error.root.visibility = View.VISIBLE
     }
 }

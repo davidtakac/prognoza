@@ -8,6 +8,7 @@ import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
+import hr.dtakac.prognoza.forecast.uimodel.DaysUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -19,19 +20,28 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
+        initializeTryAgain()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getDaysForecast()
+        if (binding.error.root.visibility != View.VISIBLE) {
+            viewModel.getDaysForecast()
+        }
     }
 
     private fun observeViewModel() {
         viewModel.daysForecast.observe(viewLifecycleOwner) {
-            adapter.submitList(it.days)
+            when (it) {
+                is DaysUiModel.Success -> showForecast(it)
+                is DaysUiModel.Error -> showError(it)
+            }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
+                if (isLoading) show() else hide()
+            }
+            binding.error.progressBar.apply {
                 if (isLoading) show() else hide()
             }
         }
@@ -51,5 +61,21 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
                 LinearLayoutManager.VERTICAL
             )
         )
+    }
+
+    private fun initializeTryAgain() {
+        binding.error.btnTryAgain.setOnClickListener {
+            viewModel.getDaysForecast()
+        }
+    }
+
+    private fun showForecast(uiModel: DaysUiModel.Success) {
+        adapter.submitList(uiModel.days)
+        binding.error.root.visibility = View.GONE
+    }
+
+    private fun showError(uiModel: DaysUiModel.Error) {
+        binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
+        binding.error.root.visibility = View.VISIBLE
     }
 }

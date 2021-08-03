@@ -7,8 +7,9 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.database.entity.toDayUiModels
-import hr.dtakac.prognoza.forecast.uimodel.OtherDaysUiModel
+import hr.dtakac.prognoza.forecast.uimodel.DaysUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -22,8 +23,8 @@ class DaysViewModel(
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
 
-    private val _daysForecast = MutableLiveData<OtherDaysUiModel>()
-    val daysForecast: LiveData<OtherDaysUiModel> get() = _daysForecast
+    private val _daysForecast = MutableLiveData<DaysUiModel>()
+    val daysForecast: LiveData<DaysUiModel> get() = _daysForecast
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -31,17 +32,31 @@ class DaysViewModel(
     fun getDaysForecast() {
         coroutineScope.launch {
             if (isReloadNeeded()) {
-                _isLoading.value = true
-                val forecastHours =
-                    forecastRepository.getOtherDaysForecastHours(preferencesRepository.getSelectedPlaceId())
-                val uiModels = withContext(dispatcherProvider.default) {
-                    forecastHours.hours.toDayUiModels(this)
-                }
-                currentMeta = forecastHours.meta
-                _daysForecast.value = OtherDaysUiModel(days = uiModels)
-                _isLoading.value = false
+                getNewForecast()
             }
         }
+    }
+
+    private suspend fun getNewForecast() {
+        _isLoading.value = true
+        val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
+        when (val result = forecastRepository.getOtherDaysForecastHours(selectedPlaceId)) {
+            is ForecastResult.Success -> handleSuccess(result)
+            is ForecastResult.Error -> handleError(result)
+        }
+        _isLoading.value = false
+    }
+
+    private suspend fun handleSuccess(result: ForecastResult.Success) {
+        val uiModels = withContext(dispatcherProvider.default) {
+            result.hours.toDayUiModels(this)
+        }
+        currentMeta = result.meta
+        _daysForecast.value = DaysUiModel.Success(days = uiModels)
+    }
+
+    private fun handleError(result: ForecastResult.Error) {
+        _daysForecast.value = DaysUiModel.Error(result.errorMessageResourceId)
     }
 
     private suspend fun isReloadNeeded(): Boolean {

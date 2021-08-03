@@ -89,4 +89,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
+    <include layout="@layout/layout_error"
+        android:visibility="gone"
+        android:id="@+id/error"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

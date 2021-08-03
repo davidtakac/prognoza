@@ -26,12 +26,14 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
-        initializeReload()
+        initializeTryAgain()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getTodayForecast()
+        if (binding.error.root.visibility != View.VISIBLE) {
+            viewModel.getTodayForecast()
+        }
     }
 
     private fun observeViewModel() {
@@ -43,6 +45,9 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
+                if (isLoading) show() else hide()
+            }
+            binding.error.progressBar.apply {
                 if (isLoading) show() else hide()
             }
         }
@@ -64,8 +69,8 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         )
     }
 
-    private fun initializeReload() {
-        binding.ivReload.setOnClickListener {
+    private fun initializeTryAgain() {
+        binding.error.btnTryAgain.setOnClickListener {
             viewModel.getTodayForecast()
         }
     }
@@ -86,8 +91,8 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         binding.error.root.visibility = View.GONE
     }
 
-    private fun showError(error: TodayUiModel.Error) {
+    private fun showError(uiModel: TodayUiModel.Error) {
         binding.error.root.visibility = View.VISIBLE
-        binding.error.tvErrorMessage.text = resources.getString(error.errorMessageResourceId)
+        binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
     }
 }

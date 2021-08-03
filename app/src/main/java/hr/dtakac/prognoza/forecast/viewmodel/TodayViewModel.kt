@@ -45,6 +45,7 @@ class TodayViewModel(
             is ForecastResult.Success -> handleSuccess(result)
             is ForecastResult.Error -> handleError(result)
         }
+        _isLoading.value = false
     }
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
@@ -61,7 +62,6 @@ class TodayViewModel(
         )
         currentMeta = result.meta
         _todayForecast.value = forecastTodayUiModel
-        _isLoading.value = false
     }
 
     private fun handleError(error: ForecastResult.Error) {

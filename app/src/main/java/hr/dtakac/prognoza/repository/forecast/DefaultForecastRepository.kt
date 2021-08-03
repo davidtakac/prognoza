@@ -12,18 +12,20 @@ import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
 import retrofit2.HttpException
+import java.lang.RuntimeException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
-    private val dispatcherProvider: DispatcherProvider,
     private val forecastService: ForecastService,
     private val forecastDao: ForecastHourDao,
     private val placeRepository: PlaceRepository,
     private val metaRepository: MetaRepository,
+    private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
     private val hoursAfterMidnightToShow = 6L
 
@@ -85,7 +87,7 @@ class DefaultForecastRepository(
                 false
             }
             val hours = forecastDao.getForecastHours(start, end, placeId)
-            return if (hours.isNullOrEmpty()) {
+            if (hours.isNullOrEmpty()) {
                 ForecastResult.Error(R.string.error_forecast_empty)
             } else {
                 ForecastResult.Success(

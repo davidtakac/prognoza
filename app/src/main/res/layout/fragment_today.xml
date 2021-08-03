@@ -18,23 +18,12 @@
 
         <TextView
             android:id="@+id/tv_date_time"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:text="19 July, 18:32"/>
-
-        <ImageView
-            android:id="@+id/iv_reload"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
-            android:src="@drawable/reload"
-            app:layout_constraintTop_toTopOf="@id/tv_date_time"
-            app:layout_constraintBottom_toBottomOf="@id/tv_date_time"
-            app:layout_constraintStart_toEndOf="@id/tv_date_time"
-            android:layout_marginStart="4dp"
-            android:padding="2dp"/>
 
         <TextView
             android:id="@+id/tv_temperature"

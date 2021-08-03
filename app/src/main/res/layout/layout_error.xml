@@ -27,7 +27,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/btn_try_again"
-        android:layout_marginHorizontal="16dp"
+        android:layout_marginHorizontal="48dp"
         android:layout_marginTop="8dp"
         tools:text="@string/error_forecast_empty"/>
 
@@ -40,5 +40,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="24dp"
         android:text="@string/button_try_again"/>
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:indeterminate="true"
+        app:showAnimationBehavior="outward"
+        app:hideAnimationBehavior="inward"
+        app:layout_constraintBottom_toTopOf="@id/btn_try_again"
+        app:layout_constraintStart_toStartOf="@id/btn_try_again"
+        app:layout_constraintEnd_toEndOf="@id/btn_try_again"
+        android:layout_marginBottom="8dp"
+        android:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
