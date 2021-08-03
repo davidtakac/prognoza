@@ -50,11 +50,7 @@ class TodayViewModel(
     }
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
-        val uiModels =
-            withContext(dispatcherProvider.default) {
-                // omit current hour from hour list
-                result.hours.subList(1, result.hours.size).toHourUiModels()
-            }
+        val uiModels = withContext(dispatcherProvider.default) { result.hours.toHourUiModels() }
         val forecastTodayUiModel = TodayUiModel.Success(
             currentHour = HourUiModel(
                 time = ZonedDateTime.now(),
@@ -64,7 +60,7 @@ class TodayViewModel(
                 windSpeed = uiModels[0].windSpeed,
                 windFromDirection = uiModels[0].windFromDirection
             ),
-            otherHours = uiModels
+            otherHours = uiModels.subList(1, uiModels.size)
         )
         currentMeta = result.meta
         _todayForecast.value = forecastTodayUiModel

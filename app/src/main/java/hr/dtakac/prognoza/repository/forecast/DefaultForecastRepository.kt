@@ -5,6 +5,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.*
 import hr.dtakac.prognoza.atStartOfDay
+import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
@@ -12,12 +13,10 @@ import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
 import retrofit2.HttpException
-import java.lang.RuntimeException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -25,7 +24,8 @@ class DefaultForecastRepository(
     private val forecastDao: ForecastHourDao,
     private val placeRepository: PlaceRepository,
     private val metaRepository: MetaRepository,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    private val networkChecker: NetworkChecker
 ) : ForecastRepository {
     private val hoursAfterMidnightToShow = 6L
 
@@ -80,11 +80,10 @@ class DefaultForecastRepository(
     ): ForecastResult {
         return try {
             val currentMeta = metaRepository.get(placeId)
-            val wasMetaUpdated = if (currentMeta?.hasExpired() != false) {
+            var wasMetaUpdated = false
+            if (currentMeta?.hasExpired() != false && networkChecker.hasInternetConnection()) {
                 updateForecastDatabase(placeId, currentMeta?.lastModified)
-                true
-            } else {
-                false
+                wasMetaUpdated = true
             }
             val hours = forecastDao.getForecastHours(start, end, placeId)
             if (hours.isNullOrEmpty()) {

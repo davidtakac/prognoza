@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.PlaceService
+import hr.dtakac.prognoza.common.network.DefaultNetworkChecker
+import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
@@ -23,6 +25,7 @@ import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -98,7 +101,12 @@ val prognozaAppModule = module {
             forecastDao = get<AppDatabase>().hourDao(),
             placeRepository = get(),
             metaRepository = get(),
+            networkChecker = get()
         )
+    }
+
+    factory<NetworkChecker> {
+        DefaultNetworkChecker(androidContext())
     }
 
     viewModel {
