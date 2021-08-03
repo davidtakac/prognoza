@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.database.entity.toHourUiModels
+import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
@@ -55,10 +56,15 @@ class TodayViewModel(
                 result.hours.subList(1, result.hours.size).toHourUiModels()
             }
         val forecastTodayUiModel = TodayUiModel.Success(
-            dateTime = ZonedDateTime.now(),
-            currentTemperature = uiModels[0].temperature,
-            weatherIcon = uiModels[0].weatherIcon,
-            nextHours = uiModels
+            currentHour = HourUiModel(
+                time = ZonedDateTime.now(),
+                temperature = uiModels[0].temperature,
+                weatherIcon = uiModels[0].weatherIcon,
+                precipitationAmount = uiModels[0].precipitationAmount,
+                windSpeed = uiModels[0].windSpeed,
+                windFromDirection = uiModels[0].windFromDirection
+            ),
+            otherHours = uiModels
         )
         currentMeta = result.meta
         _todayForecast.value = forecastTodayUiModel

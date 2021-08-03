@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
+import hr.dtakac.prognoza.database.entity.isPrecipitationAmountSignificant
+import hr.dtakac.prognoza.database.entity.isWindSpeedSignificant
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
@@ -76,18 +78,35 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     }
 
     private fun showForecast(uiModel: TodayUiModel.Success) {
-        binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
+        val currentHour = uiModel.currentHour
+        binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.getString(
             R.string.template_temperature,
-            uiModel.currentTemperature
+            currentHour.temperature
         )
         binding.ivWeatherIcon.setImageResource(
-            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+            currentHour.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
         )
         binding.tvDescription.text = resources.getString(
-            uiModel.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
+            currentHour.weatherIcon?.descriptionResourceId
+                ?: R.string.placeholder_weather_description
         )
-        adapter.submitList(uiModel.nextHours)
+        binding.windAndPrecipitation.tvPrecipitationAmount.text =
+            if (currentHour.precipitationAmount.isPrecipitationAmountSignificant()) {
+                resources.getString(R.string.template_precipitation, currentHour.precipitationAmount)
+            } else {
+                resources.getString(R.string.placeholder_precipitation)
+            }
+        if (currentHour.windSpeed.isWindSpeedSignificant()) {
+            binding.windAndPrecipitation.tvWindSpeed.text =
+                resources.getString(R.string.template_wind_speed, currentHour.windSpeed)
+            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.VISIBLE
+            binding.windAndPrecipitation.ivWindFromDirection.rotation = currentHour.windFromDirection ?: 0f
+        } else {
+            binding.windAndPrecipitation.tvWindSpeed.text = resources.getString(R.string.placeholder_wind_speed)
+            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.INVISIBLE
+        }
+        adapter.submitList(uiModel.otherHours)
         binding.error.root.visibility = View.GONE
     }
 

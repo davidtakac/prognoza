@@ -2,6 +2,9 @@ package hr.dtakac.prognoza.forecast
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingActivity
@@ -20,6 +23,21 @@ class ForecastActivity :
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_forecast, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.search -> {
+                startActivity(Intent(this, PlacesActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun onResume() {
@@ -42,8 +60,6 @@ class ForecastActivity :
     }
 
     private fun initializeToolbar() {
-        binding.toolbar.setOnClickListener {
-            startActivity(Intent(this, PlacesActivity::class.java))
-        }
+        setSupportActionBar(binding.toolbar)
     }
 }

@@ -42,7 +42,7 @@ class HourViewHolder(
                 uiModel.temperature
             )
         }
-        binding.tvPrecipitationAmount.text =
+        binding.windAndPrecipitation.tvPrecipitationAmount.text =
             if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
                 resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)
             } else {
@@ -60,13 +60,13 @@ class HourViewHolder(
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)
         if (uiModel.windSpeed.isWindSpeedSignificant()) {
-            binding.tvWindSpeed.text =
+            binding.windAndPrecipitation.tvWindSpeed.text =
                 resources.getString(R.string.template_wind_speed, uiModel.windSpeed)
-            binding.ivWindFromDirection.visibility = View.VISIBLE
-            binding.ivWindFromDirection.rotation = uiModel.windFromDirection ?: 0f
+            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.VISIBLE
+            binding.windAndPrecipitation.ivWindFromDirection.rotation = uiModel.windFromDirection ?: 0f
         } else {
-            binding.tvWindSpeed.text = resources.getString(R.string.placeholder_wind_speed)
-            binding.ivWindFromDirection.visibility = View.INVISIBLE
+            binding.windAndPrecipitation.tvWindSpeed.text = resources.getString(R.string.placeholder_wind_speed)
+            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.INVISIBLE
         }
     }
 }
