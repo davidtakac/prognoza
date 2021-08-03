@@ -15,14 +15,21 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp">
 
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
         <TextView
             android:id="@+id/tv_date_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="20 July"/>
+            app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+            tools:text="19 July, 18:32"/>
 
         <TextView
             android:id="@+id/tv_temperature_high"
@@ -30,27 +37,32 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_date_time"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_temperature_low"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintHorizontal_bias="0"
             android:textSize="48sp"
-            tools:text="32C"/>
+            tools:text="23 C"/>
 
         <TextView
             android:id="@+id/tv_temperature_low"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
             app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
-            android:layout_marginStart="16dp"
-            android:textSize="30sp"
-            tools:text="18C"/>
+            app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_temperature_high"
+            android:textSize="32sp"
+            android:layout_marginStart="12dp"
+            tools:text="12 C"/>
 
         <ImageView
             android:id="@+id/iv_weather_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/tv_description"
+            app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+            app:layout_constraintBottom_toTopOf="@id/wind_and_precipitation"
+            android:layout_marginBottom="12dp"
             tools:src="@drawable/lightsleetandthunder"/>
 
         <TextView
@@ -59,10 +71,17 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
             android:textSize="20sp"
-            android:layout_marginTop="8dp"
             tools:text="Light sleet showers and thunder"/>
+
+        <include layout="@layout/layout_wind_and_precipitation"
+            android:id="@+id/wind_and_precipitation"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

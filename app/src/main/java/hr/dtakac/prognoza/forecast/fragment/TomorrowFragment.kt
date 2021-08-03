@@ -7,9 +7,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
+import hr.dtakac.prognoza.database.entity.isPrecipitationAmountSignificant
+import hr.dtakac.prognoza.database.entity.isWindSpeedSignificant
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -76,21 +79,7 @@ class TomorrowFragment :
     }
 
     private fun showForecast(uiModel: TomorrowUiModel.Success) {
-        binding.tvDateTime.text = uiModel.dateTime.format(dateTimeFormatter)
-        binding.tvTemperatureHigh.text = resources.getString(
-            R.string.template_temperature,
-            uiModel.highTemperature
-        )
-        binding.tvTemperatureLow.text = resources.getString(
-            R.string.template_temperature,
-            uiModel.lowTemperature
-        )
-        binding.ivWeatherIcon.setImageResource(
-            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
-        )
-        binding.tvDescription.text = resources.getString(
-            uiModel.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
-        )
+        populateSummaryViews(uiModel.summary)
         adapter.submitList(uiModel.hours)
         binding.error.root.visibility = View.GONE
     }
@@ -98,5 +87,36 @@ class TomorrowFragment :
     private fun showError(uiModel: TomorrowUiModel.Error) {
         binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
         binding.error.root.visibility = View.VISIBLE
+    }
+
+    private fun populateSummaryViews(summary: DayUiModel) {
+        binding.tvDateTime.text = summary.time.format(dateTimeFormatter)
+        binding.tvTemperatureHigh.text = resources.getString(
+            R.string.template_temperature,
+            summary.highTemperature
+        )
+        binding.tvTemperatureLow.text = resources.getString(
+            R.string.template_temperature,
+            summary.lowTemperature
+        )
+        binding.ivWeatherIcon.setImageResource(
+            summary.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+        )
+        binding.tvDescription.text = resources.getString(
+            summary.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
+        )
+        binding.windAndPrecipitation.tvPrecipitationAmount.text =
+            if (summary.precipitationAmount.isPrecipitationAmountSignificant()) {
+                resources.getString(R.string.template_precipitation, summary.precipitationAmount)
+            } else {
+                resources.getString(R.string.placeholder_precipitation)
+            }
+        binding.windAndPrecipitation.ivWindFromDirection.visibility = View.INVISIBLE
+        binding.windAndPrecipitation.tvWindSpeed.text =
+            if (summary.maxWindSpeed.isWindSpeedSignificant()) {
+                resources.getString(R.string.template_wind_speed, summary.maxWindSpeed)
+            } else {
+                resources.getString(R.string.placeholder_wind_speed)
+            }
     }
 }

@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.*
+import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
@@ -54,13 +55,21 @@ class TomorrowViewModel(
             coroutineScope.async(dispatcherProvider.default) { result.hours.minTemperature() }
         val highTempAsync =
             coroutineScope.async(dispatcherProvider.default) { result.hours.maxTemperature() }
+        val maxWindSpeedAsync =
+            coroutineScope.async(dispatcherProvider.default) { result.hours.maxWindSpeed() }
+        val totalPrecipitationAsync =
+            coroutineScope.async(dispatcherProvider.default) { result.hours.totalPrecipitationAmount() }
         val uiModelsAsync =
             coroutineScope.async(dispatcherProvider.default) { result.hours.toHourUiModels() }
         val successUiModel = TomorrowUiModel.Success(
-            dateTime = ZonedDateTime.now().atStartOfDay().plusDays(1),
-            lowTemperature = lowTempAsync.await(),
-            highTemperature = highTempAsync.await(),
-            weatherIcon = weatherIconAsync.await(),
+            summary = DayUiModel(
+                time = ZonedDateTime.now().atStartOfDay().plusDays(1),
+                lowTemperature = lowTempAsync.await(),
+                highTemperature = highTempAsync.await(),
+                weatherIcon = weatherIconAsync.await(),
+                maxWindSpeed = maxWindSpeedAsync.await(),
+                precipitationAmount = totalPrecipitationAsync.await()
+            ),
             hours = uiModelsAsync.await()
         )
         currentMeta = result.meta
