@@ -55,9 +55,9 @@
     <string name="template_wind_speed">%1$.1f m/s</string>
     <string name="template_temperature_high_low">High %1$d °C Low %2$d °C</string>
     <string name="placeholder_temperature">-</string>
-    <string name="placeholder_weather_description">-</string>
-    <string name="placeholder_precipitation">-</string>
-    <string name="placeholder_wind_speed">-</string>
+    <string name="placeholder_weather_description">Unknown</string>
+    <string name="placeholder_precipitation">None</string>
+    <string name="placeholder_wind_speed">Still</string>
     <string name="hint_search">Search…</string>
     <string name="title_place_select">Select a place</string>
     <string name="error_met_client">There appears to be something wrong with your request. Please try again.</string>

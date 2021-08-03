@@ -11,7 +11,7 @@
         android:id="@+id/iv_error"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:src="@drawable/error"
+        android:src="@drawable/ic_error"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/tv_error_message"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/tv_error_message"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/iv_error"

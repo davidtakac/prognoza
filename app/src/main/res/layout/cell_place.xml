@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/tv_name"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/history" />
+        android:src="@drawable/ic_history" />
 
     <TextView
         android:id="@+id/tv_name"

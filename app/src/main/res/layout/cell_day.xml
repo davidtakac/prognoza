@@ -71,7 +71,7 @@
             app:layout_constraintDimensionRatio="1:1"
             android:padding="4dp"
             android:layout_marginEnd="2dp"
-            android:src="@drawable/drop"
+            android:src="@drawable/ic_umbrella"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_precipitation_amount"
             app:layout_constraintBottom_toBottomOf="@id/tv_precipitation_amount"/>
@@ -83,7 +83,7 @@
             app:layout_constraintDimensionRatio="1:1"
             android:padding="4dp"
             android:layout_marginEnd="2dp"
-            android:src="@drawable/wind"
+            android:src="@drawable/ic_air"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_wind_speed"
             app:layout_constraintBottom_toBottomOf="@id/tv_wind_speed"/>
