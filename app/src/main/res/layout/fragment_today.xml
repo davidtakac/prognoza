@@ -30,6 +30,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+            android:textStyle="bold"
             tools:text="19 July, 18:32"/>
 
         <TextView
@@ -46,9 +47,9 @@
             android:id="@+id/iv_weather_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline_vertical"
             app:layout_constraintBottom_toTopOf="@id/wind_and_precipitation"
             android:layout_marginBottom="8dp"
             tools:src="@drawable/lightsleetandthunder"/>
@@ -66,8 +67,7 @@
         <include layout="@layout/layout_wind_and_precipitation"
             android:id="@+id/wind_and_precipitation"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline_vertical"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/iv_weather_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </androidx.constraintlayout.widget.ConstraintLayout>

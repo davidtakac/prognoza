@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.forecast.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -29,7 +30,7 @@ class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCa
 class DayViewHolder(
     private val binding: CellDayBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE d LLLL", Locale.getDefault())
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
 
     fun bind(uiModel: DayUiModel) {
         val resources = binding.root.context
@@ -44,18 +45,19 @@ class DayViewHolder(
         binding.ivWeatherIcon.setImageResource(
             uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
         )
-        binding.tvPrecipitationAmount.text =
+        binding.windAndPrecipitation.tvPrecipitationAmount.text =
             if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
                 resources.getString(R.string.template_precipitation, uiModel.precipitationAmount)
             } else {
                 resources.getString(R.string.placeholder_precipitation)
             }
-        binding.tvWindSpeed.text =
+        binding.windAndPrecipitation.tvWindSpeed.text =
             if (uiModel.maxWindSpeed.isWindSpeedSignificant()) {
                 resources.getString(R.string.template_wind_speed, uiModel.maxWindSpeed)
             } else {
                 resources.getString(R.string.placeholder_wind_speed)
             }
+        binding.windAndPrecipitation.ivWindFromDirection.visibility = View.GONE
     }
 }
 

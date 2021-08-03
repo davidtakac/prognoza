@@ -104,7 +104,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             binding.windAndPrecipitation.ivWindFromDirection.rotation = currentHour.windFromDirection ?: 0f
         } else {
             binding.windAndPrecipitation.tvWindSpeed.text = resources.getString(R.string.placeholder_wind_speed)
-            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.INVISIBLE
+            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.GONE
         }
         adapter.submitList(uiModel.otherHours)
         binding.error.root.visibility = View.GONE

@@ -111,7 +111,7 @@ class TomorrowFragment :
             } else {
                 resources.getString(R.string.placeholder_precipitation)
             }
-        binding.windAndPrecipitation.ivWindFromDirection.visibility = View.INVISIBLE
+        binding.windAndPrecipitation.ivWindFromDirection.visibility = View.GONE
         binding.windAndPrecipitation.tvWindSpeed.text =
             if (summary.maxWindSpeed.isWindSpeedSignificant()) {
                 resources.getString(R.string.template_wind_speed, summary.maxWindSpeed)
