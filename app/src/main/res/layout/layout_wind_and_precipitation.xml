@@ -8,9 +8,8 @@
 
     <ImageView
         android:id="@+id/iv_precipitation"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         android:rotation="205"
         android:src="@drawable/ic_umbrella"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +18,8 @@
 
     <ImageView
         android:id="@+id/iv_wind"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
         app:layout_constraintDimensionRatio="1:1"
         android:src="@drawable/ic_air"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,8 +32,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iv_precipitation"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="2dp"
-        tools:text="24 mm"/>
+        app:layout_constraintHorizontal_bias="0"
+        tools:text="120 mm"/>
 
     <TextView
         android:id="@+id/tv_wind_speed"
@@ -42,8 +43,11 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/iv_precipitation"
         app:layout_constraintTop_toBottomOf="@id/tv_precipitation_amount"
+        app:layout_constraintEnd_toStartOf="@id/iv_wind_from_direction"
+        app:layout_constraintHorizontal_chainStyle="packed"
         android:layout_marginStart="2dp"
-        tools:text="8 m/s"/>
+        app:layout_constraintHorizontal_bias="0"
+        tools:text="200 km/h"/>
 
     <ImageView
         android:id="@+id/iv_wind_from_direction"
@@ -52,7 +56,9 @@
         app:layout_constraintDimensionRatio="1:1"
         android:padding="4dp"
         android:src="@drawable/ic_arrow_up"
-        app:layout_constraintStart_toEndOf="@id/tv_wind_speed"
         app:layout_constraintTop_toTopOf="@id/tv_wind_speed"
-        app:layout_constraintBottom_toBottomOf="@id/tv_wind_speed" />
+        app:layout_constraintBottom_toBottomOf="@id/tv_wind_speed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_wind_speed"
+        app:layout_constraintHorizontal_bias="0"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

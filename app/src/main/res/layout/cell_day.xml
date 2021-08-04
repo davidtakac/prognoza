@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.75" />
+        app:layout_constraintGuide_percent="0.5" />
 
     <TextView
         android:id="@+id/tv_date_time"
@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toStartOf="@id/tv_temperature_low"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintHorizontal_bias="0"
-        android:textSize="36sp"
+        android:textSize="32sp"
         tools:text="23 C"/>
 
     <TextView
@@ -72,7 +72,10 @@
         android:id="@+id/wind_and_precipitation"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="0dp"
+        app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constrainedWidth="true"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
