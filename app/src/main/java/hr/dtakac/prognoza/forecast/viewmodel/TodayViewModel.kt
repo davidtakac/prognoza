@@ -12,6 +12,7 @@ import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.common.toHourUiModels
+import hr.dtakac.prognoza.common.toKilometresPerHour
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -57,7 +58,7 @@ class TodayViewModel(
                 temperature = uiModels[0].temperature,
                 weatherIcon = uiModels[0].weatherIcon,
                 precipitationAmount = uiModels[0].precipitationAmount,
-                windSpeed = uiModels[0].windSpeed,
+                windSpeed = uiModels[0].windSpeed?.toKilometresPerHour(),
                 windFromDirection = uiModels[0].windFromDirection
             ),
             otherHours = uiModels.subList(1, uiModels.size)

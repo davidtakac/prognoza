@@ -84,7 +84,9 @@ fun List<ForecastHour>.maxWindSpeed() = maxOf { it.windSpeed ?: Float.MIN_VALUE 
 
 fun Float?.isPrecipitationAmountSignificant() = this != null && this >= 0.1f
 
-fun Float?.isWindSpeedSignificant() = this != null && this >= 0.1f
+fun Float?.isWindSpeedSignificant() = this != null && this > 1f
+
+fun Float.toKilometresPerHour() = this * 3.6f
 // endregion
 
 // region ForecastData (server response)
