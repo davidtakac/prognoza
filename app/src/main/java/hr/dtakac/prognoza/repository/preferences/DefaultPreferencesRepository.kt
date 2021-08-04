@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.repository.preferences
 
 import android.content.SharedPreferences
-import hr.dtakac.prognoza.DEFAULT_PLACE_ID
+import hr.dtakac.prognoza.common.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import kotlinx.coroutines.withContext
 

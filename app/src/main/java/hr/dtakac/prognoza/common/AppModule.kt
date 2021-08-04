@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza
+package hr.dtakac.prognoza.common
 
 import android.content.Context
 import androidx.room.Room

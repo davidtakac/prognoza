@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.meta
 
-import hr.dtakac.prognoza.MIN_DATE_TIME_RFC_1123
+import hr.dtakac.prognoza.common.MIN_DATE_TIME_RFC_1123
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastMetaDao
 import hr.dtakac.prognoza.database.entity.ForecastMeta

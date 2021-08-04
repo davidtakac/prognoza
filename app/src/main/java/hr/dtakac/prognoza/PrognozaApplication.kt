@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza
 
 import android.app.Application
+import hr.dtakac.prognoza.common.prognozaAppModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin

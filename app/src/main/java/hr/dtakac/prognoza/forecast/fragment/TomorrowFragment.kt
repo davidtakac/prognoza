@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
+import hr.dtakac.prognoza.common.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding

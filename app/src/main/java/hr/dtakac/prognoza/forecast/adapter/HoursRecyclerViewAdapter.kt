@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
+import hr.dtakac.prognoza.common.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel

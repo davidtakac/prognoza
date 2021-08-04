@@ -27,7 +27,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_saved"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textSize="16sp"
         tools:text="Osijek"/>
 
     <TextView
@@ -37,6 +38,6 @@
         app:layout_constraintTop_toBottomOf="@id/tv_name"
         app:layout_constraintStart_toStartOf="@id/tv_name"
         app:layout_constraintEnd_toEndOf="@id/tv_name"
-        tools:text="Osijek, Grad Osijek, Osjecko-Baranjska, Croatia"/>
+        tools:text="Osijek, Grad Osijek, Osjecko-Baranjska, Croatia" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,7 +32,7 @@
         app:layout_constraintEnd_toStartOf="@id/tv_temperature_low"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintHorizontal_bias="0"
-        android:textSize="32sp"
+        android:textSize="36sp"
         tools:text="23 C"/>
 
     <TextView

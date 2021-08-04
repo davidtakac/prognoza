@@ -1,4 +1,7 @@
-package hr.dtakac.prognoza
+package hr.dtakac.prognoza.common
+
+import hr.dtakac.prognoza.BuildConfig
+import hr.dtakac.prognoza.R
 
 const val USER_AGENT = "Prognoza/${BuildConfig.VERSION_NAME}, " +
         "github.com/davidtakac/Prognoza, " +
