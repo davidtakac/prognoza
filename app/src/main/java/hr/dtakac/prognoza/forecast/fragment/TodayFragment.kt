@@ -4,13 +4,12 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import hr.dtakac.prognoza.common.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
-import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
+import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
+import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import hr.dtakac.prognoza.common.isPrecipitationAmountSignificant
 import hr.dtakac.prognoza.common.isWindSpeedSignificant
@@ -41,8 +40,8 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private fun observeViewModel() {
         viewModel.todayForecast.observe(viewLifecycleOwner) {
             when (it) {
-                is TodayUiModel.Success -> showForecast(it)
-                is TodayUiModel.Error -> showError(it)
+                is TodayForecastUiModel.Success -> showForecast(it)
+                is TodayForecastUiModel.Error -> showError(it)
             }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -62,7 +61,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             false
         )
         binding.rvHours.adapter = adapter
-        binding.rvHours.addItemDecoration(ForecastItemDecoration())
+        binding.rvHours.addItemDecoration(MarginItemDecoration())
         binding.rvHours.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
@@ -77,7 +76,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         }
     }
 
-    private fun showForecast(uiModel: TodayUiModel.Success) {
+    private fun showForecast(uiModel: TodayForecastUiModel.Success) {
         val currentHour = uiModel.currentHour
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.getString(
@@ -85,7 +84,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             currentHour.temperature
         )
         binding.ivWeatherIcon.setImageResource(
-            currentHour.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+            currentHour.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvDescription.text = resources.getString(
             currentHour.weatherIcon?.descriptionResourceId
@@ -110,7 +109,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         binding.error.root.visibility = View.GONE
     }
 
-    private fun showError(uiModel: TodayUiModel.Error) {
+    private fun showError(uiModel: TodayForecastUiModel.Error) {
         binding.error.root.visibility = View.VISIBLE
         binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
     }

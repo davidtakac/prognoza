@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import hr.dtakac.prognoza.common.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
-import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
+import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
-import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
+import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
 import hr.dtakac.prognoza.common.isPrecipitationAmountSignificant
 import hr.dtakac.prognoza.common.isWindSpeedSignificant
@@ -42,8 +41,8 @@ class TomorrowFragment :
     private fun observeViewModel() {
         viewModel.tomorrowForecast.observe(viewLifecycleOwner) {
             when (it) {
-                is TomorrowUiModel.Success -> showForecast(it)
-                is TomorrowUiModel.Error -> showError(it)
+                is TomorrowForecastUiModel.Success -> showForecast(it)
+                is TomorrowForecastUiModel.Error -> showError(it)
             }
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -63,7 +62,7 @@ class TomorrowFragment :
             false
         )
         binding.rvHours.adapter = adapter
-        binding.rvHours.addItemDecoration(ForecastItemDecoration())
+        binding.rvHours.addItemDecoration(MarginItemDecoration())
         binding.rvHours.addItemDecoration(
             DividerItemDecoration(
                 requireContext(),
@@ -78,13 +77,13 @@ class TomorrowFragment :
         }
     }
 
-    private fun showForecast(uiModel: TomorrowUiModel.Success) {
+    private fun showForecast(uiModel: TomorrowForecastUiModel.Success) {
         populateSummaryViews(uiModel.summary)
         adapter.submitList(uiModel.hours)
         binding.error.root.visibility = View.GONE
     }
 
-    private fun showError(uiModel: TomorrowUiModel.Error) {
+    private fun showError(uiModel: TomorrowForecastUiModel.Error) {
         binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
         binding.error.root.visibility = View.VISIBLE
     }
@@ -100,7 +99,7 @@ class TomorrowFragment :
             summary.lowTemperature
         )
         binding.ivWeatherIcon.setImageResource(
-            summary.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+            summary.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvDescription.text = resources.getString(
             summary.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description

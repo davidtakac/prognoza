@@ -8,7 +8,7 @@ import hr.dtakac.prognoza.common.toDayUiModel
 import hr.dtakac.prognoza.common.toHourUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
+import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecastUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
@@ -24,8 +24,8 @@ class TomorrowViewModel(
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
 
-    private val _tomorrowForecast = MutableLiveData<TomorrowUiModel>()
-    val tomorrowForecast: LiveData<TomorrowUiModel> get() = _tomorrowForecast
+    private val _tomorrowForecast = MutableLiveData<TomorrowForecastUiModel>()
+    val tomorrowForecast: LiveData<TomorrowForecastUiModel> get() = _tomorrowForecast
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -55,7 +55,7 @@ class TomorrowViewModel(
         val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
             result.hours.map { it.toHourUiModel() }
         }
-        val successUiModel = TomorrowUiModel.Success(
+        val successUiModel = TomorrowForecastUiModel.Success(
             summary = summaryAsync.await(),
             hours = hoursAsync.await()
         )
@@ -64,7 +64,7 @@ class TomorrowViewModel(
     }
 
     private fun handleError(error: ForecastResult.Error) {
-        _tomorrowForecast.value = TomorrowUiModel.Error(error.errorMessageResourceId)
+        _tomorrowForecast.value = TomorrowForecastUiModel.Error(error.errorMessageResourceId)
     }
 
     private suspend fun isReloadNeeded(): Boolean {

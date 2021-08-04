@@ -1,12 +1,12 @@
 package hr.dtakac.prognoza.forecast.uimodel
 
-sealed class TomorrowUiModel {
+sealed class TomorrowForecastUiModel {
     data class Success(
         val summary: DayUiModel,
         val hours: List<HourUiModel>
-    ): TomorrowUiModel()
+    ): TomorrowForecastUiModel()
 
     data class Error(
         val errorMessageResourceId: Int
-    ): TomorrowUiModel()
+    ): TomorrowForecastUiModel()
 }

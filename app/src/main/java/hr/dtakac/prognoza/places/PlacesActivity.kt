@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingActivity
 import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
-import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
+import hr.dtakac.prognoza.common.MarginItemDecoration
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlacesBinding::inflate) {
@@ -45,7 +45,7 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
             false
         )
         binding.rvResults.adapter = adapter
-        binding.rvResults.addItemDecoration(ForecastItemDecoration())
+        binding.rvResults.addItemDecoration(MarginItemDecoration())
         binding.rvResults.addItemDecoration(
             DividerItemDecoration(
                 this,

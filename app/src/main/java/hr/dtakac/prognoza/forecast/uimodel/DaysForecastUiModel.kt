@@ -1,11 +1,11 @@
 package hr.dtakac.prognoza.forecast.uimodel
 
-sealed class DaysUiModel {
+sealed class DaysForecastUiModel {
     data class Success(
         val days: List<DayUiModel>
-    ) : DaysUiModel()
+    ) : DaysForecastUiModel()
 
     data class Error(
         val errorMessageResourceId: Int
-    ) : DaysUiModel()
+    ) : DaysForecastUiModel()
 }

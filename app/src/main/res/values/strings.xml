@@ -62,6 +62,7 @@
     <string name="error_met_client">There appears to be something wrong with your request. Please try again.</string>
     <string name="error_met_server">The server is currently unable to process your request. Please try again.</string>
     <string name="error_met_unknown">Something went wrong when communicating with the server. Please try again.</string>
+    <string name="error_met_throttling">Because of heavy traffic from other users, the server is refusing to service this request. Please try again later.</string>
     <string name="error_generic">An unexpected error occurred. Please try again.</string>
     <string name="error_forecast_empty">There is no forecast for this place and time. Please try again or change the place.</string>
     <string name="button_try_again">Try again</string>

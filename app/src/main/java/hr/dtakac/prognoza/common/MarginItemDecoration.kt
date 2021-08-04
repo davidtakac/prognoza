@@ -1,12 +1,11 @@
-package hr.dtakac.prognoza.forecast.adapter
+package hr.dtakac.prognoza.common
 
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.common.toPx
 import kotlin.math.roundToInt
 
-class ForecastItemDecoration : RecyclerView.ItemDecoration() {
+class MarginItemDecoration : RecyclerView.ItemDecoration() {
     private val eightDp = 8.toPx.roundToInt()
     private val sixteenDp = 16.toPx.roundToInt()
     private val verticalOffset = eightDp

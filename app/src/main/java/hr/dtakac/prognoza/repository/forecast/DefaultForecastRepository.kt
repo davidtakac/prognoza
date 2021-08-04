@@ -94,6 +94,7 @@ class DefaultForecastRepository(
         } catch (httpException: HttpException) {
             ForecastResult.Error(
                 when (httpException.code()) {
+                    429 -> R.string.error_met_throttling
                     in 400..499 -> R.string.error_met_client
                     in 500..504 -> R.string.error_met_server
                     else -> R.string.error_met_unknown

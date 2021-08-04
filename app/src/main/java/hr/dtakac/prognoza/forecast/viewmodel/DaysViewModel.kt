@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.forecast.uimodel.DaysUiModel
+import hr.dtakac.prognoza.forecast.uimodel.DaysForecastUiModel
 import hr.dtakac.prognoza.common.hasExpired
 import hr.dtakac.prognoza.common.toDayUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
@@ -24,8 +24,8 @@ class DaysViewModel(
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
 
-    private val _daysForecast = MutableLiveData<DaysUiModel>()
-    val daysForecast: LiveData<DaysUiModel> get() = _daysForecast
+    private val _daysForecast = MutableLiveData<DaysForecastUiModel>()
+    val daysForecast: LiveData<DaysForecastUiModel> get() = _daysForecast
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -57,11 +57,11 @@ class DaysViewModel(
                 .map { it.toDayUiModel(coroutineScope) }
         }
         currentMeta = result.meta
-        _daysForecast.value = DaysUiModel.Success(days = uiModels)
+        _daysForecast.value = DaysForecastUiModel.Success(days = uiModels)
     }
 
     private fun handleError(result: ForecastResult.Error) {
-        _daysForecast.value = DaysUiModel.Error(result.errorMessageResourceId)
+        _daysForecast.value = DaysForecastUiModel.Error(result.errorMessageResourceId)
     }
 
     private suspend fun isReloadNeeded(): Boolean {

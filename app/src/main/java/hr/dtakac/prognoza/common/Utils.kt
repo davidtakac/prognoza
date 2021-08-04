@@ -25,9 +25,7 @@ val Number.toPx
         this.toFloat(),
         Resources.getSystem().displayMetrics
     )
-// endregion
 
-// region ZonedDateTime
 fun ZonedDateTime.atStartOfDay(): ZonedDateTime =
     toLocalDate().atStartOfDay(ZoneId.systemDefault())
 // endregion

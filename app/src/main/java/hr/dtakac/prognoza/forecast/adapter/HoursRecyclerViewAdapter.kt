@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.common.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
@@ -49,7 +48,7 @@ class HourViewHolder(
                 resources.getString(R.string.placeholder_precipitation)
             }
         binding.ivWeatherIcon.setImageResource(
-            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+            uiModel.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvDescription.text = if (uiModel.weatherIcon?.descriptionResourceId == null) {
             resources.getString(R.string.placeholder_weather_description)

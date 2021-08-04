@@ -6,12 +6,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.common.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.databinding.CellDayBinding
-import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.common.isPrecipitationAmountSignificant
 import hr.dtakac.prognoza.common.isWindSpeedSignificant
+import hr.dtakac.prognoza.databinding.CellDayBinding
+import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -41,9 +40,9 @@ class DayViewHolder(
         binding.tvTemperatureLow.text =
             resources.getString(R.string.template_temperature, uiModel.lowTemperature)
         binding.tvDescription.text =
-            resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: IMAGE_PLACEHOLDER)
+            resources.getString(uiModel.weatherIcon?.descriptionResourceId ?: R.drawable.ic_cloud)
         binding.ivWeatherIcon.setImageResource(
-            uiModel.weatherIcon?.iconResourceId ?: IMAGE_PLACEHOLDER
+            uiModel.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.windAndPrecipitation.tvPrecipitationAmount.text =
             if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
