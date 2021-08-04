@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.base.Event
+import hr.dtakac.prognoza.common.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.common.toPlaceUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.Place
@@ -57,7 +58,7 @@ class PlacesViewModel(
             _isLoading.value = true
             val selectedPlace = withContext(dispatcherProvider.default) {
                 displayedPlaces.firstOrNull { it.id == placeId }
-                    ?: TODO("show that error has occurred")
+                    ?: placeRepository.get(DEFAULT_PLACE_ID)
             }
             placeRepository.save(selectedPlace)
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
