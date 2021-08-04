@@ -54,7 +54,7 @@
     <string name="template_precipitation">%1$.1f mm</string>
     <string name="template_wind_speed">%1$.1f km/h</string>
     <string name="placeholder_temperature">-</string>
-    <string name="placeholder_weather_description">Unknown</string>
+    <string name="placeholder_description">Unknown</string>
     <string name="placeholder_precipitation">None</string>
     <string name="placeholder_wind_speed">Calm</string>
     <string name="hint_search">Search…</string>
@@ -67,4 +67,7 @@
     <string name="error_forecast_empty">There is no forecast for this place and time. Please try again or change the place.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
+    <string name="template_total_precipitation">Total: %1$s</string>
+    <string name="template_maximum_wind_speed">Maximum: %1$s</string>
+    <string name="template_mostly">Mostly %1$s</string>
 </resources>

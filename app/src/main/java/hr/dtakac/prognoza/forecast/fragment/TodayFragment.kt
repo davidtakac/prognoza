@@ -8,11 +8,10 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.common.bind
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
-import hr.dtakac.prognoza.common.isPrecipitationAmountSignificant
-import hr.dtakac.prognoza.common.isWindSpeedSignificant
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -88,24 +87,13 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         )
         binding.tvDescription.text = resources.getString(
             currentHour.weatherIcon?.descriptionResourceId
-                ?: R.string.placeholder_weather_description
+                ?: R.string.placeholder_description
         )
-        binding.windAndPrecipitation.root.visibility = View.VISIBLE
-        binding.windAndPrecipitation.tvPrecipitationAmount.text =
-            if (currentHour.precipitationAmount.isPrecipitationAmountSignificant()) {
-                resources.getString(R.string.template_precipitation, currentHour.precipitationAmount)
-            } else {
-                resources.getString(R.string.placeholder_precipitation)
-            }
-        if (currentHour.windSpeed.isWindSpeedSignificant()) {
-            binding.windAndPrecipitation.tvWindSpeed.text =
-                resources.getString(R.string.template_wind_speed, currentHour.windSpeed)
-            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.VISIBLE
-            binding.windAndPrecipitation.ivWindFromDirection.rotation = currentHour.windFromDirection ?: 0f
-        } else {
-            binding.windAndPrecipitation.tvWindSpeed.text = resources.getString(R.string.placeholder_wind_speed)
-            binding.windAndPrecipitation.ivWindFromDirection.visibility = View.GONE
-        }
+        binding.windAndPrecipitation.bind(
+            uiModel.currentHour.windSpeed,
+            uiModel.currentHour.windFromDirection,
+            uiModel.currentHour.precipitationAmount
+        )
         adapter.submitList(uiModel.otherHours)
         binding.error.root.visibility = View.GONE
     }
