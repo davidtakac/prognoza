@@ -4,11 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.base.Event
+import hr.dtakac.prognoza.common.toPlaceUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.Place
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.common.toPlaceUiModels
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,7 +35,7 @@ class PlacesViewModel(
             _isLoading.value = true
             displayedPlaces = placeRepository.getAll()
             _places.value = withContext(dispatcherProvider.default) {
-                displayedPlaces.toPlaceUiModels()
+                displayedPlaces.map { it.toPlaceUiModel() }
             }
             _isLoading.value = false
         }
@@ -46,7 +46,7 @@ class PlacesViewModel(
             _isLoading.value = true
             displayedPlaces = placeRepository.search(query)
             _places.value = withContext(dispatcherProvider.default) {
-                displayedPlaces.toPlaceUiModels()
+                displayedPlaces.map { it.toPlaceUiModel() }
             }
             _isLoading.value = false
         }

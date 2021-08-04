@@ -3,10 +3,11 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
-import hr.dtakac.prognoza.common.*
+import hr.dtakac.prognoza.common.hasExpired
+import hr.dtakac.prognoza.common.toDayUiModel
+import hr.dtakac.prognoza.common.toHourUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.database.entity.*
-import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
+import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
@@ -14,7 +15,6 @@ import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.time.ZonedDateTime
 
 class TomorrowViewModel(
     coroutineScope: CoroutineScope?,
@@ -49,28 +49,15 @@ class TomorrowViewModel(
     }
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
-        val weatherIconAsync =
-            coroutineScope.async(dispatcherProvider.default) { result.hours.representativeWeatherIcon() }
-        val lowTempAsync =
-            coroutineScope.async(dispatcherProvider.default) { result.hours.minTemperature() }
-        val highTempAsync =
-            coroutineScope.async(dispatcherProvider.default) { result.hours.maxTemperature() }
-        val maxWindSpeedAsync =
-            coroutineScope.async(dispatcherProvider.default) { result.hours.maxWindSpeed() }
-        val totalPrecipitationAsync =
-            coroutineScope.async(dispatcherProvider.default) { result.hours.totalPrecipitationAmount() }
-        val uiModelsAsync =
-            coroutineScope.async(dispatcherProvider.default) { result.hours.toHourUiModels() }
+        val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
+            result.hours.toDayUiModel(coroutineScope)
+        }
+        val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
+            result.hours.map { it.toHourUiModel() }
+        }
         val successUiModel = TomorrowUiModel.Success(
-            summary = DayUiModel(
-                time = ZonedDateTime.now().atStartOfDay().plusDays(1),
-                lowTemperature = lowTempAsync.await(),
-                highTemperature = highTempAsync.await(),
-                weatherIcon = weatherIconAsync.await(),
-                maxWindSpeed = maxWindSpeedAsync.await(),
-                precipitationAmount = totalPrecipitationAsync.await()
-            ),
-            hours = uiModelsAsync.await()
+            summary = summaryAsync.await(),
+            hours = hoursAsync.await()
         )
         currentMeta = result.meta
         _tomorrowForecast.value = successUiModel

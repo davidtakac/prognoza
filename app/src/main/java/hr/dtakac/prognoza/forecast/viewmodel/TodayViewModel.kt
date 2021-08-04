@@ -5,17 +5,15 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
 import hr.dtakac.prognoza.common.hasExpired
+import hr.dtakac.prognoza.common.toHourUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.common.toHourUiModels
-import hr.dtakac.prognoza.common.toKilometresPerHour
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 
 class TodayViewModel(
@@ -51,17 +49,15 @@ class TodayViewModel(
     }
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
-        val uiModels = withContext(dispatcherProvider.default) { result.hours.toHourUiModels() }
+        val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
+            result.hours[0].toHourUiModel().copy(time = ZonedDateTime.now())
+        }
+        val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
+            result.hours.subList(1, result.hours.size).map { it.toHourUiModel() }
+        }
         val forecastTodayUiModel = TodayUiModel.Success(
-            currentHour = HourUiModel(
-                time = ZonedDateTime.now(),
-                temperature = uiModels[0].temperature,
-                weatherIcon = uiModels[0].weatherIcon,
-                precipitationAmount = uiModels[0].precipitationAmount,
-                windSpeed = uiModels[0].windSpeed?.toKilometresPerHour(),
-                windFromDirection = uiModels[0].windFromDirection
-            ),
-            otherHours = uiModels.subList(1, uiModels.size)
+            currentHour = currentHourAsync.await(),
+            otherHours = otherHoursAsync.await()
         )
         currentMeta = result.meta
         _todayForecast.value = forecastTodayUiModel

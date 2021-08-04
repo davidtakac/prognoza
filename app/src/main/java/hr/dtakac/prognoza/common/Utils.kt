@@ -33,37 +33,31 @@ fun ZonedDateTime.atStartOfDay(): ZonedDateTime =
 // endregion
 
 // region ForecastHour
-fun List<ForecastHour>.toHourUiModels() =
-    map {
-        HourUiModel(
-            temperature = it.temperature?.roundToInt(),
-            precipitationAmount = it.precipitationAmount,
-            windSpeed = it.windSpeed,
-            windFromDirection = it.windFromDirection,
-            weatherIcon = WEATHER_ICONS[it.symbolCode],
-            time = it.time
-        )
-    }
+fun ForecastHour.toHourUiModel() =
+    HourUiModel(
+        temperature = temperature?.roundToInt(),
+        precipitationAmount = precipitationAmount,
+        windSpeed = windSpeed,
+        windFromDirection = windFromDirection,
+        weatherIcon = WEATHER_ICONS[symbolCode],
+        time = time
+    )
 
-suspend fun List<ForecastHour>.toDayUiModels(coroutineScope: CoroutineScope) =
-    groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
-        .map { it.value }
-        .filter { it.isNotEmpty() }
-        .map { hours ->
-            val weatherIconAsync = coroutineScope.async { hours.representativeWeatherIcon() }
-            val lowTempAsync = coroutineScope.async { hours.minTemperature() }
-            val highTempAsync = coroutineScope.async { hours.maxTemperature() }
-            val precipitationAsync = coroutineScope.async { hours.totalPrecipitationAmount() }
-            val windAsync = coroutineScope.async { hours.maxWindSpeed() }
-            DayUiModel(
-                time = hours[0].time,
-                weatherIcon = weatherIconAsync.await(),
-                lowTemperature = lowTempAsync.await(),
-                highTemperature = highTempAsync.await(),
-                precipitationAmount = precipitationAsync.await(),
-                maxWindSpeed = windAsync.await()
-            )
-        }
+suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): DayUiModel {
+    val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
+    val lowTempAsync = coroutineScope.async { minTemperature() }
+    val highTempAsync = coroutineScope.async { maxTemperature() }
+    val precipitationAsync = coroutineScope.async { totalPrecipitationAmount() }
+    val windAsync = coroutineScope.async { maxWindSpeed() }
+    return DayUiModel(
+        time = get(0).time,
+        weatherIcon = weatherIconAsync.await(),
+        lowTemperature = lowTempAsync.await(),
+        highTemperature = highTempAsync.await(),
+        precipitationAmount = precipitationAsync.await(),
+        maxWindSpeed = windAsync.await()
+    )
+}
 
 fun List<ForecastHour>.maxTemperature() = maxOf { it.temperature ?: Float.MIN_VALUE }.roundToInt()
 
@@ -109,15 +103,13 @@ fun ForecastTimeStepData.findPrecipitationAmount() =
 // region Place
 val Place.shortenedName get() = fullName.split(", ").getOrNull(0) ?: fullName
 
-fun List<Place>.toPlaceUiModels(): List<PlaceUiModel> =
-    map {
-        PlaceUiModel(
-            id = it.id,
-            name = it.shortenedName,
-            fullName = it.fullName,
-            isSaved = it.isSaved
-        )
-    }
+fun Place.toPlaceUiModel() =
+    PlaceUiModel(
+        id = id,
+        name = shortenedName,
+        fullName = fullName,
+        isSaved = isSaved
+    )
 // endregion
 
 // region ForecastMeta

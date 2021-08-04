@@ -7,13 +7,14 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.DaysUiModel
 import hr.dtakac.prognoza.common.hasExpired
+import hr.dtakac.prognoza.common.toDayUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.common.toDayUiModels
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.time.ZoneId
 
 class DaysViewModel(
     coroutineScope: CoroutineScope?,
@@ -49,7 +50,11 @@ class DaysViewModel(
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
         val uiModels = withContext(dispatcherProvider.default) {
-            result.hours.toDayUiModels(this)
+            result.hours
+                .groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
+                .map { it.value }
+                .filter { it.isNotEmpty() }
+                .map { it.toDayUiModel(coroutineScope) }
         }
         currentMeta = result.meta
         _daysForecast.value = DaysUiModel.Success(days = uiModels)
