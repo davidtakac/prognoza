@@ -1,16 +1,13 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.MIN_DATE_TIME_RFC_1123
-import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.USER_AGENT
+import hr.dtakac.prognoza.*
 import hr.dtakac.prognoza.api.*
-import hr.dtakac.prognoza.atStartOfDay
+import hr.dtakac.prognoza.common.*
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
 import hr.dtakac.prognoza.database.entity.ForecastHour
-import hr.dtakac.prognoza.database.entity.hasExpired
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import kotlinx.coroutines.withContext

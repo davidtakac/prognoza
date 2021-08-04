@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.database.entity.isPrecipitationAmountSignificant
-import hr.dtakac.prognoza.database.entity.isWindSpeedSignificant
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
+import hr.dtakac.prognoza.common.isPrecipitationAmountSignificant
+import hr.dtakac.prognoza.common.isWindSpeedSignificant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*

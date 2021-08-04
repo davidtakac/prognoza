@@ -2,8 +2,8 @@ package hr.dtakac.prognoza.forecast.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.atStartOfDay
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
+import hr.dtakac.prognoza.common.*
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.*
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel

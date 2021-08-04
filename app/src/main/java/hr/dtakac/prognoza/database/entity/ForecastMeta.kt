@@ -14,5 +14,3 @@ data class ForecastMeta(
     val expires: ZonedDateTime,
     val lastModified: ZonedDateTime
 )
-
-fun ForecastMeta.hasExpired(): Boolean = ZonedDateTime.now() > expires

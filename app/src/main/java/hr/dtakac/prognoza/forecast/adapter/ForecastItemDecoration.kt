@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.forecast.adapter
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.toPx
+import hr.dtakac.prognoza.common.toPx
 import kotlin.math.roundToInt
 
 class ForecastItemDecoration : RecyclerView.ItemDecoration() {

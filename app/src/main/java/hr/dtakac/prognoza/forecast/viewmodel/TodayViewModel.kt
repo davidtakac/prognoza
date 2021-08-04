@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.database.entity.hasExpired
-import hr.dtakac.prognoza.database.entity.toHourUiModels
 import hr.dtakac.prognoza.forecast.uimodel.HourUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TodayUiModel
+import hr.dtakac.prognoza.common.hasExpired
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.common.toHourUiModels
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

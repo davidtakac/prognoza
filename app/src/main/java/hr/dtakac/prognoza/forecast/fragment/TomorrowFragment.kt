@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.IMAGE_PLACEHOLDER
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
-import hr.dtakac.prognoza.database.entity.isPrecipitationAmountSignificant
-import hr.dtakac.prognoza.database.entity.isWindSpeedSignificant
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastItemDecoration
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
+import hr.dtakac.prognoza.common.isPrecipitationAmountSignificant
+import hr.dtakac.prognoza.common.isWindSpeedSignificant
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
