@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.base.Event
 import hr.dtakac.prognoza.common.DEFAULT_PLACE_ID
+import hr.dtakac.prognoza.common.shortenedName
 import hr.dtakac.prognoza.common.toPlaceUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.Place
@@ -31,13 +32,13 @@ class PlacesViewModel(
     private val _placeSelectedEvent = MutableLiveData<Event<Boolean>>()
     val placeSelectedEvent: LiveData<Event<Boolean>> get() = _placeSelectedEvent
 
+    private val _placeDeletedEvent = MutableLiveData<Event<String>>()
+    val placeDeletedEvent: LiveData<Event<String>> get() = _placeDeletedEvent
+
     fun showSavedPlaces() {
         coroutineScope.launch {
             _isLoading.value = true
-            displayedPlaces = placeRepository.getAll()
-            _places.value = withContext(dispatcherProvider.default) {
-                displayedPlaces.map { it.toPlaceUiModel() }
-            }
+            setDisplayedPlaces(placeRepository.getAll())
             _isLoading.value = false
         }
     }
@@ -45,10 +46,7 @@ class PlacesViewModel(
     fun search(query: String) {
         coroutineScope.launch {
             _isLoading.value = true
-            displayedPlaces = placeRepository.search(query)
-            _places.value = withContext(dispatcherProvider.default) {
-                displayedPlaces.map { it.toPlaceUiModel() }
-            }
+            setDisplayedPlaces(placeRepository.search(query))
             _isLoading.value = false
         }
     }
@@ -64,6 +62,25 @@ class PlacesViewModel(
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
             _isLoading.value = false
             _placeSelectedEvent.value = Event(true)
+        }
+    }
+
+    fun delete(placeId: String) {
+        coroutineScope.launch {
+            val placeToDelete = withContext(dispatcherProvider.default) {
+                displayedPlaces.firstOrNull { it.id == placeId }
+            }
+            if (placeToDelete != null) {
+                placeRepository.delete(placeToDelete)
+                _placeDeletedEvent.value = Event(placeToDelete.shortenedName)
+            }
+        }
+    }
+
+    private suspend fun setDisplayedPlaces(places: List<Place>) {
+        displayedPlaces = places
+        _places.value = withContext(dispatcherProvider.default) {
+            displayedPlaces.map { it.toPlaceUiModel() }
         }
     }
 }

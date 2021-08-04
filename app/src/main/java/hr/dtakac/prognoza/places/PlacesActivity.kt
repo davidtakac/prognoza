@@ -6,12 +6,15 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingActivity
-import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlacesBinding::inflate) {
-    private val adapter = PlacesRecyclerViewAdapter { viewModel.select(it) }
+    private val adapter = PlacesRecyclerViewAdapter(
+        placeClickListener = { viewModel.select(it) },
+        placeLongClickListener = { viewModel.delete(it) }
+    )
     private val viewModel by viewModel<PlacesViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {

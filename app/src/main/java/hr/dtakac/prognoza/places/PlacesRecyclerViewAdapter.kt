@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
 
 class PlacesRecyclerViewAdapter(
-    private val placeClickListener: (String) -> Unit
+    private val placeClickListener: (String) -> Unit,
+    private val placeLongClickListener: (String) -> Unit
 ) : ListAdapter<PlaceUiModel, PlaceViewHolder>(PlaceDiffCallback()) {
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
-        holder.bind(getItem(position), placeClickListener)
+        holder.bind(getItem(position), placeClickListener, placeLongClickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaceViewHolder {
@@ -24,7 +25,11 @@ class PlacesRecyclerViewAdapter(
 class PlaceViewHolder(
     private val binding: CellPlaceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(uiModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
+    fun bind(
+        uiModel: PlaceUiModel,
+        placeClickListener: (String) -> Unit,
+        placeLongClickListener: (String) -> Unit
+    ) {
         binding.ivSaved.visibility = if (uiModel.isSaved) {
             View.VISIBLE
         } else {
@@ -34,6 +39,10 @@ class PlaceViewHolder(
         binding.tvFullName.text = uiModel.fullName
         binding.root.setOnClickListener {
             placeClickListener.invoke(uiModel.id)
+        }
+        binding.root.setOnLongClickListener {
+            placeLongClickListener.invoke(uiModel.id)
+            true
         }
     }
 }
