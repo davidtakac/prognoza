@@ -37,7 +37,7 @@ fun ForecastHour.toHourUiModel() =
     HourUiModel(
         temperature = temperature?.roundToInt(),
         precipitationAmount = precipitationAmount,
-        windSpeed = windSpeed,
+        windSpeed = windSpeed?.toKilometresPerHour(),
         windFromDirection = windFromDirection,
         weatherIcon = WEATHER_ICONS[symbolCode],
         time = time
@@ -48,14 +48,14 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
     val lowTempAsync = coroutineScope.async { minTemperature() }
     val highTempAsync = coroutineScope.async { maxTemperature() }
     val precipitationAsync = coroutineScope.async { totalPrecipitationAmount() }
-    val windAsync = coroutineScope.async { maxWindSpeed() }
+    val maxWindSpeedAsync = coroutineScope.async { maxWindSpeed() }
     return DayUiModel(
         time = get(0).time,
         weatherIcon = weatherIconAsync.await(),
         lowTemperature = lowTempAsync.await(),
         highTemperature = highTempAsync.await(),
         precipitationAmount = precipitationAsync.await(),
-        maxWindSpeed = windAsync.await()
+        maxWindSpeed = maxWindSpeedAsync.await().toKilometresPerHour()
     )
 }
 

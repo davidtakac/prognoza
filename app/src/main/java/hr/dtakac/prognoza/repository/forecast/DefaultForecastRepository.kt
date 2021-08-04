@@ -138,7 +138,7 @@ class DefaultForecastRepository(
                     symbolCode = it.data?.findSymbolCode(),
                     precipitationProbability = it.data?.findPrecipitationProbability(),
                     precipitationAmount = it.data?.findPrecipitationAmount(),
-                    windSpeed = it.data?.instant?.data?.windSpeed?.toKilometresPerHour(),
+                    windSpeed = it.data?.instant?.data?.windSpeed,
                     windFromDirection = it.data?.instant?.data?.windFromDirection
                 )
             }
