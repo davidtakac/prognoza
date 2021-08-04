@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.75" />
+            app:layout_constraintGuide_percent="0.7" />
 
         <TextView
             android:id="@+id/tv_date_time"
@@ -68,8 +68,12 @@
             android:id="@+id/wind_and_precipitation"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/iv_weather_icon"
+            app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+            app:layout_constraintHorizontal_bias="1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            tools:visibility="visible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView

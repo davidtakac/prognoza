@@ -104,6 +104,7 @@ class TomorrowFragment :
         binding.tvDescription.text = resources.getString(
             summary.weatherIcon?.descriptionResourceId ?: R.string.placeholder_weather_description
         )
+        binding.windAndPrecipitation.root.visibility = View.VISIBLE
         binding.windAndPrecipitation.tvPrecipitationAmount.text =
             if (summary.precipitationAmount.isPrecipitationAmountSignificant()) {
                 resources.getString(R.string.template_precipitation, summary.precipitationAmount)

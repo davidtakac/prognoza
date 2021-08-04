@@ -20,7 +20,6 @@
         android:id="@+id/iv_wind"
         android:layout_width="18dp"
         android:layout_height="18dp"
-        app:layout_constraintDimensionRatio="1:1"
         android:src="@drawable/ic_air"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_wind_speed"
@@ -35,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="2dp"
         app:layout_constraintHorizontal_bias="0"
-        tools:text="120 mm"/>
+        tools:text="999 mm"/>
 
     <TextView
         android:id="@+id/tv_wind_speed"
@@ -47,14 +46,13 @@
         app:layout_constraintHorizontal_chainStyle="packed"
         android:layout_marginStart="2dp"
         app:layout_constraintHorizontal_bias="0"
-        tools:text="200 km/h"/>
+        tools:text="999 km/h"/>
 
     <ImageView
         android:id="@+id/iv_wind_from_direction"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        android:padding="4dp"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginStart="2dp"
         android:src="@drawable/ic_arrow_up"
         app:layout_constraintTop_toTopOf="@id/tv_wind_speed"
         app:layout_constraintBottom_toBottomOf="@id/tv_wind_speed"

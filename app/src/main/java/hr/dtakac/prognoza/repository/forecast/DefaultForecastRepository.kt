@@ -1,7 +1,8 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.*
-import hr.dtakac.prognoza.api.*
+import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.api.ForecastService
+import hr.dtakac.prognoza.api.LocationForecastResponse
 import hr.dtakac.prognoza.common.*
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
@@ -75,33 +76,33 @@ class DefaultForecastRepository(
         end: ZonedDateTime,
         placeId: String
     ): ForecastResult {
-        return try {
-            val currentMeta = metaRepository.get(placeId)
-            var wasMetaUpdated = false
-            if (currentMeta?.hasExpired() != false && networkChecker.hasInternetConnection()) {
+        val currentMeta = metaRepository.get(placeId)
+        var wasMetaUpdated = false
+        if (currentMeta?.hasExpired() != false && networkChecker.hasInternetConnection()) {
+            try {
                 updateForecastDatabase(placeId, currentMeta?.lastModified)
                 wasMetaUpdated = true
-            }
-            val hours = forecastDao.getForecastHours(start, end, placeId)
-            if (hours.isNullOrEmpty()) {
-                ForecastResult.Error(R.string.error_forecast_empty)
-            } else {
-                ForecastResult.Success(
-                    if (wasMetaUpdated) metaRepository.get(placeId) else currentMeta,
-                    hours
+            } catch (httpException: HttpException) {
+                return ForecastResult.Error(
+                    when (httpException.code()) {
+                        429 -> R.string.error_met_throttling
+                        in 400..499 -> R.string.error_met_client
+                        in 500..504 -> R.string.error_met_server
+                        else -> R.string.error_met_unknown
+                    }
                 )
+            } catch (e: Exception) {
+                return ForecastResult.Error(R.string.error_generic)
             }
-        } catch (httpException: HttpException) {
-            ForecastResult.Error(
-                when (httpException.code()) {
-                    429 -> R.string.error_met_throttling
-                    in 400..499 -> R.string.error_met_client
-                    in 500..504 -> R.string.error_met_server
-                    else -> R.string.error_met_unknown
-                }
+        }
+        val hours = forecastDao.getForecastHours(start, end, placeId)
+        return if (hours.isNullOrEmpty()) {
+            ForecastResult.Error(R.string.error_forecast_empty)
+        } else {
+            ForecastResult.Success(
+                if (wasMetaUpdated) metaRepository.get(placeId) else currentMeta,
+                hours
             )
-        } catch (e: Exception) {
-            ForecastResult.Error(R.string.error_generic)
         }
     }
 

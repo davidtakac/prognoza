@@ -4,23 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.45" />
-
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+        app:layout_constraintEnd_toStartOf="@id/wind_and_precipitation"
         app:layout_constraintBottom_toTopOf="@id/tv_description"
         app:layout_constraintVertical_chainStyle="packed"
         android:textStyle="bold"
+        android:layout_marginEnd="8dp"
         tools:text="19:00"/>
 
     <TextView
@@ -30,7 +24,8 @@
         app:layout_constraintTop_toBottomOf="@id/tv_time"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/guideline_vertical"
+        app:layout_constraintEnd_toStartOf="@id/wind_and_precipitation"
+        android:layout_marginEnd="8dp"
         tools:text="Mostly sunny and some other long text "/>
 
     <ImageView
@@ -57,13 +52,10 @@
     <include layout="@layout/layout_wind_and_precipitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constrainedWidth="true"
         android:id="@+id/wind_and_precipitation"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-        app:layout_constraintStart_toEndOf="@id/guideline_vertical"
-        app:layout_constraintHorizontal_bias="1"
         android:layout_marginEnd="8dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

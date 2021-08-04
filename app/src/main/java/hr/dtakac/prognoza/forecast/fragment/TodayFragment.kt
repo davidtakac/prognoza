@@ -90,6 +90,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             currentHour.weatherIcon?.descriptionResourceId
                 ?: R.string.placeholder_weather_description
         )
+        binding.windAndPrecipitation.root.visibility = View.VISIBLE
         binding.windAndPrecipitation.tvPrecipitationAmount.text =
             if (currentHour.precipitationAmount.isPrecipitationAmountSignificant()) {
                 resources.getString(R.string.template_precipitation, currentHour.precipitationAmount)
