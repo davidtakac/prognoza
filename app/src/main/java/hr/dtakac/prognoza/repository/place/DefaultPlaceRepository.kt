@@ -56,8 +56,4 @@ class DefaultPlaceRepository(
     override suspend fun save(place: Place) {
         placeDao.insertOrUpdate(if (!place.isSaved) place.copy(isSaved = true) else place)
     }
-
-    override suspend fun delete(place: Place) {
-        placeDao.delete(place)
-    }
 }
