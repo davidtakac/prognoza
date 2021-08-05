@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.places
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
@@ -34,10 +35,7 @@ class PlacesViewModel(
     fun showSavedPlaces() {
         coroutineScope.launch {
             _isLoading.value = true
-            displayedPlaces = placeRepository.getAll()
-            _places.value = withContext(dispatcherProvider.default) {
-                displayedPlaces.map { it.toPlaceUiModel() }
-            }
+            setDisplayedPlaces(placeRepository.getAll())
             _isLoading.value = false
         }
     }
@@ -45,10 +43,7 @@ class PlacesViewModel(
     fun search(query: String) {
         coroutineScope.launch {
             _isLoading.value = true
-            displayedPlaces = placeRepository.search(query)
-            _places.value = withContext(dispatcherProvider.default) {
-                displayedPlaces.map { it.toPlaceUiModel() }
-            }
+            setDisplayedPlaces(placeRepository.search(query))
             _isLoading.value = false
         }
     }
@@ -64,6 +59,19 @@ class PlacesViewModel(
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
             _isLoading.value = false
             _placeSelectedEvent.value = Event(true)
+        }
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    private suspend fun setDisplayedPlaces(places: List<Place>) {
+        displayedPlaces = places
+        _places.value = withContext(dispatcherProvider.default) {
+            displayedPlaces.map {
+                it.toPlaceUiModel(
+                    isSaved = placeRepository.isSaved(it.id),
+                    isSelected = preferencesRepository.getSelectedPlaceId() == it.id
+                )
+            }
         }
     }
 }

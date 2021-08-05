@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
 
 class PlacesRecyclerViewAdapter(
@@ -30,6 +31,9 @@ class PlaceViewHolder(
         } else {
             View.GONE
         }
+        binding.ivSaved.setImageResource(
+            if (uiModel.isSelected) R.drawable.ic_check_circle else R.drawable.ic_history
+        )
         binding.tvName.text = uiModel.name
         binding.tvFullName.text = uiModel.fullName
         binding.root.setOnClickListener {

@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.PlaceDao
 import hr.dtakac.prognoza.database.entity.Place
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 
 class DefaultPlaceRepository(
     private val placeDao: PlaceDao,
@@ -20,8 +21,7 @@ class DefaultPlaceRepository(
                 id = DEFAULT_PLACE_ID,
                 fullName = "Osijek, Grad Osijek, Osijek-Baranja County, Croatia",
                 latitude = 45.55f,
-                longitude = 18.69f,
-                isSaved = true
+                longitude = 18.69f
             )
             placeDao.insertOrUpdate(defaultPlace)
             defaultPlace
@@ -47,13 +47,21 @@ class DefaultPlaceRepository(
                     fullName = it.displayName,
                     latitude = it.latitude,
                     longitude = it.longitude,
-                    isSaved = false
                 )
             }
         }
     }
 
     override suspend fun save(place: Place) {
-        placeDao.insertOrUpdate(if (!place.isSaved) place.copy(isSaved = true) else place)
+        placeDao.insertOrUpdate(place)
+    }
+
+    override suspend fun isSaved(placeId: String): Boolean {
+        return try {
+            placeDao.get(placeId)
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 }

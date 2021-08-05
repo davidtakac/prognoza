@@ -10,5 +10,4 @@ data class Place(
     val fullName: String,
     val latitude: Float,
     val longitude: Float,
-    val isSaved: Boolean
 )

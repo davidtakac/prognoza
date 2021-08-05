@@ -107,12 +107,13 @@ fun ForecastTimeStepData.findPrecipitationAmount() =
 // region Place
 val Place.shortenedName get() = fullName.split(", ").getOrNull(0) ?: fullName
 
-fun Place.toPlaceUiModel() =
+fun Place.toPlaceUiModel(isSaved: Boolean, isSelected: Boolean) =
     PlaceUiModel(
         id = id,
         name = shortenedName,
         fullName = fullName,
-        isSaved = isSaved
+        isSaved = isSaved,
+        isSelected = isSelected
     )
 // endregion
 

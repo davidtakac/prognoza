@@ -7,4 +7,5 @@ interface PlaceRepository {
     suspend fun getAll(): List<Place>
     suspend fun search(query: String): List<Place>
     suspend fun save(place: Place)
+    suspend fun isSaved(placeId: String): Boolean
 }
