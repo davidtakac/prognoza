@@ -57,11 +57,6 @@ class DefaultPlaceRepository(
     }
 
     override suspend fun isSaved(placeId: String): Boolean {
-        return try {
-            placeDao.get(placeId)
-            true
-        } catch (e: Exception) {
-            false
-        }
+        return placeDao.get(placeId) != null
     }
 }
