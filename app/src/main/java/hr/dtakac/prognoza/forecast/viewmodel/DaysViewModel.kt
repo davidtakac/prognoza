@@ -54,7 +54,7 @@ class DaysViewModel(
                 .groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
                 .map { it.value }
                 .filter { it.isNotEmpty() }
-                .map { it.toDayUiModel(coroutineScope) }
+                .map { it.toDayUiModel(this) }
         }
         currentMeta = result.meta
         _daysForecast.value = DaysForecastUiModel.Success(days = uiModels)
