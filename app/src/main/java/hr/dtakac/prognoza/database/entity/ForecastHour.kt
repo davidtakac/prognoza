@@ -15,5 +15,6 @@ data class ForecastHour(
     val precipitationProbability: Float?,
     val precipitationAmount: Float?,
     val windSpeed: Float?,
-    val windFromDirection: Float?
+    val windFromDirection: Float?,
+    val relativeHumidity: Float?
 )

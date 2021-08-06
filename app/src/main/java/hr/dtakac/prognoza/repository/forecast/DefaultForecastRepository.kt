@@ -141,7 +141,8 @@ class DefaultForecastRepository(
                     precipitationProbability = it.data?.findPrecipitationProbability(),
                     precipitationAmount = it.data?.findPrecipitationAmount(),
                     windSpeed = it.data?.instant?.data?.windSpeed,
-                    windFromDirection = it.data?.instant?.data?.windFromDirection
+                    windFromDirection = it.data?.instant?.data?.windFromDirection,
+                    relativeHumidity = it.data?.instant?.data?.relativeHumidity
                 )
             }
         } ?: return

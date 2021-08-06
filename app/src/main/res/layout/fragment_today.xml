@@ -16,12 +16,12 @@
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="16dp">
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_vertical"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/barrier"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.7" />
+            android:layout_width="wrap_content"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="iv_weather_icon,wind_and_precipitation"/>
 
         <TextView
             android:id="@+id/tv_date_time"
@@ -29,7 +29,8 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            android:layout_marginEnd="8dp"
             android:textStyle="bold"
             tools:text="19 July, 18:32"/>
 
@@ -39,18 +40,30 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_date_time"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            android:layout_marginEnd="8dp"
             android:textSize="48sp"
             tools:text="23 C"/>
+
+        <TextView
+            android:id="@+id/tv_feels_like"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_temperature"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            tools:text="Feels like 18C"/>
 
         <ImageView
             android:id="@+id/iv_weather_icon"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_date_time"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/wind_and_precipitation"
+            app:layout_constraintBottom_toBottomOf="@id/tv_temperature"
             android:layout_marginBottom="8dp"
             tools:src="@drawable/lightsleetandthunder"/>
 
@@ -58,17 +71,17 @@
             android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_temperature"
+            app:layout_constraintTop_toBottomOf="@id/tv_feels_like"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/guideline_vertical"
-            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@id/barrier"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
             tools:text="Light sleet showers and thunder"/>
 
         <include layout="@layout/layout_wind_and_precipitation"
             android:id="@+id/wind_and_precipitation"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toEndOf="@id/guideline_vertical"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

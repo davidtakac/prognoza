@@ -78,16 +78,28 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private fun showForecast(uiModel: TodayForecastUiModel.Success) {
         val currentHour = uiModel.currentHour
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
-        binding.tvTemperature.text = resources.getString(
-            R.string.template_temperature,
-            currentHour.temperature
-        )
+        binding.tvTemperature.text = if (uiModel.currentHour.temperature == null) {
+            resources.getString(R.string.placeholder_temperature)
+        } else {
+            resources.getString(
+                R.string.template_temperature,
+                currentHour.temperature
+            )
+        }
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvDescription.text = resources.getString(
             currentHour.weatherIcon?.descriptionResourceId
                 ?: R.string.placeholder_description
+        )
+        binding.tvFeelsLike?.text = resources.getString(
+            R.string.template_feels_like,
+            if (uiModel.currentHour.feelsLike == null) {
+                resources.getString(R.string.placeholder_temperature)
+            } else {
+                resources.getString(R.string.template_temperature, uiModel.currentHour.feelsLike)
+            }
         )
         binding.windAndPrecipitation.bind(
             uiModel.currentHour.windSpeed,
