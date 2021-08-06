@@ -42,7 +42,7 @@ fun ForecastHour.toHourUiModel() =
         temperature = temperature?.roundToInt(),
         precipitationAmount = precipitationAmount,
         windSpeed = windSpeed?.toKilometresPerHour(),
-        windFromDirection = windFromDirection,
+        windIconRotation = windFromDirection?.plus(180f),
         weatherIcon = WEATHER_ICONS[symbolCode],
         time = time
     )

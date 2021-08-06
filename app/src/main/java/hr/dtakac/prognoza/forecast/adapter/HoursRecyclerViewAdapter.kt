@@ -52,7 +52,7 @@ class HourViewHolder(
             .format(dateTimeFormatter)
         binding.windAndPrecipitation.bind(
             uiModel.windSpeed,
-            uiModel.windFromDirection,
+            uiModel.windIconRotation,
             uiModel.precipitationAmount
         )
     }

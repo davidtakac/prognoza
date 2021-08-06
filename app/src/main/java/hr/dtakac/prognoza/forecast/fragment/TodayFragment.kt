@@ -91,7 +91,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         )
         binding.windAndPrecipitation.bind(
             uiModel.currentHour.windSpeed,
-            uiModel.currentHour.windFromDirection,
+            uiModel.currentHour.windIconRotation,
             uiModel.currentHour.precipitationAmount
         )
         adapter.submitList(uiModel.otherHours)
