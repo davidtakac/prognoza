@@ -24,6 +24,7 @@
         app:layout_constraintStart_toEndOf="@id/summary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="8dp"
         tools:listitem="@layout/cell_hour"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator

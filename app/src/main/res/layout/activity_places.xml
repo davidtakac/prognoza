@@ -23,19 +23,6 @@
             android:imeOptions="actionSearch" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!--<EditText
-        android:id="@+id/et_search"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="16dp"
-        android:importantForAutofill="no"
-        android:hint="@string/hint_search"
-        android:inputType="text"
-        android:imeOptions="actionSearch"/>-->
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_results"
         android:layout_width="0dp"

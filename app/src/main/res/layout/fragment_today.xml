@@ -80,11 +80,12 @@
         android:id="@+id/rv_hours"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cl_current_hour"
+        android:paddingTop="8dp"
+        android:layout_marginTop="8dp"
         tools:listitem="@layout/cell_hour"/>
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
