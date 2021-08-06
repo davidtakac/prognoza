@@ -4,20 +4,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_precipitation_amount, tv_temperature_feels_like, iv_weather_icon" />
+
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/wind_and_precipitation"
-        app:layout_constraintBottom_toTopOf="@id/tv_description"
+        app:layout_constraintBottom_toTopOf="@id/tv_precipitation_amount"
         app:layout_constraintVertical_chainStyle="packed"
         android:textStyle="bold"
         android:layout_marginEnd="8dp"
+        android:textSize="16sp"
         tools:text="19:00"/>
 
     <TextView
+        android:id="@+id/tv_precipitation_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/cl_details"
+        tools:text="0.1 mm"/>
+
+    <!--<TextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -26,16 +42,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/wind_and_precipitation"
         android:layout_marginEnd="8dp"
-        tools:text="Mostly sunny and some other long text "/>
+        tools:text="Mostly sunny and some other long text "/>-->
 
     <ImageView
         android:id="@+id/iv_weather_icon"
         android:layout_width="46dp"
         android:layout_height="46dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/tv_temperature"
-        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/barrier_details"
         tools:src="@drawable/rain"/>
 
     <TextView
@@ -43,19 +58,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+        app:layout_constraintBottom_toTopOf="@id/tv_temperature_feels_like"
         app:layout_constraintVertical_chainStyle="packed"
-        android:textSize="20sp"
+        android:layout_marginEnd="8dp"
+        android:textSize="18sp"
         tools:text="22C"/>
 
-    <include layout="@layout/layout_wind_and_precipitation"
+    <TextView
+        android:id="@+id/tv_temperature_feels_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv_temperature"
+        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+        app:layout_constraintBottom_toTopOf="@id/cl_details"
+        android:layout_marginEnd="8dp"
+        android:textSize="16sp"
+        tools:text="Feels like 18C"/>
+
+    <!--<include layout="@layout/layout_wind_and_precipitation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/wind_and_precipitation"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp"/>-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_details">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
