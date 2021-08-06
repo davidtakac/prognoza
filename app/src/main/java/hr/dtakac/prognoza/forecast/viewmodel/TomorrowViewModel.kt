@@ -50,7 +50,7 @@ class TomorrowViewModel(
 
     private suspend fun handleSuccess(result: ForecastResult.Success) {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
-            result.hours.toDayUiModel(coroutineScope)
+            result.hours.toDayUiModel(this)
         }
         val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
             result.hours.map { it.toHourUiModel() }
