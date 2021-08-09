@@ -74,7 +74,7 @@ class TomorrowFragment :
 
     private fun showForecast(uiModel: TomorrowForecastUiModel.Success) {
         populateSummaryViews(uiModel.summary)
-        adapter.submitList(uiModel.hours)
+        adapter.submitListActual(uiModel.hours)
         binding.error.root.visibility = View.GONE
     }
 

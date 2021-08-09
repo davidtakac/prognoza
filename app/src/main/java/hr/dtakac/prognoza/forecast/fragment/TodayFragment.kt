@@ -6,15 +6,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
-import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.common.bind
+import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
+
 
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
@@ -82,7 +83,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             resources.getString(R.string.placeholder_temperature)
         } else {
             resources.getString(
-                R.string.template_temperature,
+                R.string.template_temperature_universal,
                 currentHour.temperature
             )
         }
@@ -98,7 +99,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             if (uiModel.currentHour.feelsLike == null) {
                 resources.getString(R.string.placeholder_temperature)
             } else {
-                resources.getString(R.string.template_temperature, uiModel.currentHour.feelsLike)
+                resources.getString(R.string.template_temperature_universal, uiModel.currentHour.feelsLike)
             }
         )
         binding.windAndPrecipitation.bind(
@@ -106,7 +107,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             uiModel.currentHour.windIconRotation,
             uiModel.currentHour.precipitationAmount
         )
-        adapter.submitList(uiModel.otherHours)
+        adapter.submitListActual(uiModel.otherHours)
         binding.error.root.visibility = View.GONE
     }
 

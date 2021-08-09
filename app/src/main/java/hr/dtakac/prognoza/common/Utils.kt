@@ -132,7 +132,9 @@ fun ForecastHour.toHourUiModel() =
         windSpeed = windSpeed?.toKilometresPerHour(),
         windIconRotation = windFromDirection?.plus(180f),
         weatherIcon = WEATHER_ICONS[symbolCode],
-        time = time
+        time = time,
+        relativeHumidity = relativeHumidity,
+        windFromCompassDirection = windFromDirection?.toCompassDirection()
     )
 
 suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): DayUiModel {
@@ -173,6 +175,17 @@ fun Float?.isPrecipitationAmountSignificant() = this != null && this >= 0.1f
 fun Float?.isWindSpeedSignificant() = this != null && this > 1f
 
 fun Float.toKilometresPerHour() = this * 3.6f
+
+fun Float.toCompassDirection() = when (this.roundToInt()) {
+    in 0..44 -> R.string.direction_n
+    in 45..89 -> R.string.direction_ne
+    in 90..134 -> R.string.direction_e
+    in 135..179 -> R.string.direction_se
+    in 180..224 -> R.string.direction_s
+    in 225..269 -> R.string.direction_sw
+    in 270..314 -> R.string.direction_w
+    else -> R.string.direction_n
+}
 // endregion
 
 // region ForecastData (server response)
@@ -216,9 +229,9 @@ fun CellDayBinding.bind(uiModel: DayUiModel) {
     tvDateTime.text =
         uiModel.time.withZoneSameInstant(ZoneId.systemDefault()).format(dateTimeFormatter)
     tvTemperatureHigh.text =
-        resources.getString(R.string.template_temperature, uiModel.highTemperature)
+        resources.getString(R.string.template_temperature_universal, uiModel.highTemperature)
     tvTemperatureLow.text =
-        resources.getString(R.string.template_temperature, uiModel.lowTemperature)
+        resources.getString(R.string.template_temperature_universal, uiModel.lowTemperature)
     tvDescription.text =
         resources.getString(
             R.string.template_mostly,
@@ -242,13 +255,13 @@ fun LayoutWindAndPrecipitationBinding.bind(
     root.visibility = View.VISIBLE
     tvPrecipitationAmount.text =
         if (precipitationAmount.isPrecipitationAmountSignificant()) {
-            resources.getString(R.string.template_precipitation, precipitationAmount)
+            resources.getString(R.string.template_precipitation_metric, precipitationAmount)
         } else {
             resources.getString(R.string.placeholder_precipitation)
         }
     if (windSpeed.isWindSpeedSignificant()) {
         tvWindSpeed.text =
-            resources.getString(R.string.template_wind_speed, windSpeed)
+            resources.getString(R.string.template_wind_metric, windSpeed)
         ivWindFromDirection.visibility = View.VISIBLE
         ivWindFromDirection.rotation = windFromDirection ?: 0f
     } else {
@@ -266,7 +279,7 @@ fun LayoutWindAndPrecipitationBinding.bind(
         resources.getString(
             R.string.template_total_precipitation,
             if (totalPrecipitationAmount.isPrecipitationAmountSignificant()) {
-                resources.getString(R.string.template_precipitation, totalPrecipitationAmount)
+                resources.getString(R.string.template_precipitation_metric, totalPrecipitationAmount)
             } else {
                 resources.getString(R.string.placeholder_precipitation)
             }
@@ -275,7 +288,7 @@ fun LayoutWindAndPrecipitationBinding.bind(
         resources.getString(
             R.string.template_maximum_wind_speed,
             if (maxWindSpeed.isWindSpeedSignificant()) {
-                resources.getString(R.string.template_wind_speed, maxWindSpeed)
+                resources.getString(R.string.template_wind_metric, maxWindSpeed)
             } else {
                 resources.getString(R.string.placeholder_wind_speed)
             }

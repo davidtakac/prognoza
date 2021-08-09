@@ -8,6 +8,8 @@ data class HourUiModel(
     val precipitationAmount: Float?,
     val windSpeed: Float?,
     val windIconRotation: Float?,
+    val windFromCompassDirection: Int?,
     val weatherIcon: WeatherIcon?,
-    val time: ZonedDateTime
+    val time: ZonedDateTime,
+    val relativeHumidity: Float?
 )

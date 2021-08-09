@@ -43,6 +43,16 @@
     <string name="snowandthunder">Snow and thunder</string>
     <string name="snowshowers">Snow showers</string>
     <string name="snowshowersandthunder">Snow showers and thunder</string>
+    
+    <!-- Compass directions -->
+    <string name="direction_n">N</string>
+    <string name="direction_ne">NE</string>
+    <string name="direction_e">E</string>
+    <string name="direction_se">SE</string>
+    <string name="direction_s">S</string>
+    <string name="direction_sw">SW</string>
+    <string name="direction_w">W</string>
+    <string name="direction_nw">NW</string>
 
     <string-array name="forecast_tab_names">
         <item>Today</item>
@@ -50,9 +60,10 @@
         <item>Other days</item>
     </string-array>
 
-    <string name="template_temperature">%1$d°</string>
-    <string name="template_precipitation">%1$.1f mm</string>
-    <string name="template_wind_speed">%1$.1f km/h</string>
+    <string name="template_temperature_universal">%1$d°</string>
+    <string name="template_precipitation_metric">%1$.1f mm</string>
+    <string name="template_wind_metric">%1$.1f km/h</string>
+    <string name="template_humidity_universal">%1$d%%</string>
     <string name="placeholder_temperature">-</string>
     <string name="placeholder_description">Unknown</string>
     <string name="placeholder_precipitation">None</string>
@@ -71,4 +82,10 @@
     <string name="template_maximum_wind_speed">Maximum: %1$s</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
+    <string name="template_wind_description">Wind: %1$s, %2$s</string>
+    <string name="template_humidity">Humidity: %1$s</string>
+    <string name="placeholder_wind_direction">Unknown</string>
+    <string name="placeholder_humidity">Unknown</string>
+
+
 </resources>
