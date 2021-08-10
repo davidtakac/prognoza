@@ -13,8 +13,10 @@ fun CellDayBinding.bind(uiModel: DayUiModel) {
     tvDateTime.text = uiModel.time
         .withZoneSameInstant(ZoneId.systemDefault())
         .format(dateTimeFormatter)
-    tvTemperatureHighLow.text = resources.formatTemperatureHighLow(uiModel.highTemperature, uiModel.lowTemperature)
-    tvDescription.text = resources.formatWeatherIconDescriptionMostly(uiModel.weatherIcon?.descriptionResourceId)
+    tvTemperatureHighLow.text =
+        resources.formatTemperatureHighLow(uiModel.highTemperature, uiModel.lowTemperature)
+    tvDescription.text =
+        resources.formatWeatherIconDescriptionMostly(uiModel.weatherIcon?.descriptionResourceId)
     ivWeatherIcon.setImageResource(
         uiModel.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
     )

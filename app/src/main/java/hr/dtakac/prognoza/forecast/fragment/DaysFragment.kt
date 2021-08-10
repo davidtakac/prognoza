@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.base.ViewBindingFragment
-import hr.dtakac.prognoza.databinding.FragmentDaysBinding
-import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.common.util.formatEmptyMessage
+import hr.dtakac.prognoza.databinding.FragmentDaysBinding
+import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel

@@ -5,9 +5,10 @@ import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.base.ViewBindingActivity
-import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlacesBinding::inflate) {
@@ -34,6 +35,15 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
         viewModel.placeSelectedEvent.observe(this) {
             if (!it.isConsumed) {
                 finish()
+            }
+        }
+        viewModel.message.observe(this) {
+            if (!it.isConsumed) {
+                Snackbar.make(
+                    binding.root,
+                    resources.getString(it.getValue()),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }

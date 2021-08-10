@@ -46,12 +46,16 @@ class HourViewHolder(
         // predefined formatting
         binding.tvTemperature.text = resources.formatTemperatureValue(uiModel.temperature)
         binding.tvFeelsLike.text = resources.formatFeelsLikeDescription(uiModel.feelsLike)
-        binding.tvPrecipitationAmount.text = resources.formatPrecipitationValue(uiModel.precipitation)
-        binding.tvWind.text = resources.formatWindDescription(uiModel.windSpeed, uiModel.windFromCompassDirection)
+        binding.tvPrecipitationAmount.text =
+            resources.formatPrecipitationValue(uiModel.precipitation)
+        binding.tvWind.text =
+            resources.formatWindDescription(uiModel.windSpeed, uiModel.windFromCompassDirection)
         binding.tvHumidity.text = resources.formatHumidityDescription(uiModel.relativeHumidity)
         binding.tvPressure.text = resources.formatPressureDescription(uiModel.pressure)
-        binding.tvDescription.text = resources.formatWeatherIconDescription(uiModel.weatherIcon?.descriptionResourceId)
-        binding.tvPrecipitationAmount.text = resources.formatPrecipitationValue(uiModel.precipitation)
+        binding.tvDescription.text =
+            resources.formatWeatherIconDescription(uiModel.weatherIcon?.descriptionResourceId)
+        binding.tvPrecipitationAmount.text =
+            resources.formatPrecipitationValue(uiModel.precipitation)
         // other, view-specific operations
         binding.tvPrecipitationAmount.apply {
             visibility = if (uiModel.precipitation.isPrecipitationAmountSignificant()) {

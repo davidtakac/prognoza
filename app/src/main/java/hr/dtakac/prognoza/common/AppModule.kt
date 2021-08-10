@@ -126,6 +126,6 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        PlacesViewModel(null, get(), get(), get())
+        PlacesViewModel(null, get(), get(), get(), get())
     }
 }

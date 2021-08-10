@@ -52,7 +52,6 @@
     <string name="direction_s">S</string>
     <string name="direction_sw">SW</string>
     <string name="direction_w">W</string>
-    <string name="direction_nw">NW</string>
 
     <string-array name="forecast_tab_names">
         <item>Today</item>
@@ -68,9 +67,8 @@
     <string name="placeholder_temperature">/</string>
     <string name="placeholder_description">Unknown</string>
     <string name="placeholder_precipitation">None</string>
-    <string name="placeholder_wind_speed">Calm</string>
+    <string name="placeholder_wind_speed">/</string>
     <string name="hint_search">Search…</string>
-    <string name="title_place_select">Select a place</string>
     <string name="error_met_client">Something is wrong with your request.</string>
     <string name="error_met_server">Server is currently unable to process the request.</string>
     <string name="error_met_unknown">Unknown error when communicating with the server.</string>
@@ -81,7 +79,6 @@
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
     <string name="template_total_precipitation">Total %1$s</string>
-    <string name="template_max_wind">Maximum: %1$s</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_wind_description">Wind %1$s, %2$s</string>
@@ -92,5 +89,6 @@
     <string name="placeholder_humidity">/</string>
     <string name="placeholder_pressure">/</string>
     <string name="notify_cached_result">Showing cached results because of a network error.</string>
+    <string name="notify_no_internet">You\'re not connected to the Internet.</string>
 
 </resources>

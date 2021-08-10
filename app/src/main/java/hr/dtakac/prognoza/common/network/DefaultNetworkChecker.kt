@@ -6,7 +6,7 @@ import android.net.NetworkInfo
 
 class DefaultNetworkChecker(
     private val context: Context
-): NetworkChecker {
+) : NetworkChecker {
     override fun hasInternetConnection(): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork: NetworkInfo? = cm.activeNetworkInfo

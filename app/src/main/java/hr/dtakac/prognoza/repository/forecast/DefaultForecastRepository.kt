@@ -3,7 +3,8 @@ package hr.dtakac.prognoza.repository.forecast
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.LocationForecastResponse
-import hr.dtakac.prognoza.common.*
+import hr.dtakac.prognoza.common.MIN_DATE_TIME_RFC_1123
+import hr.dtakac.prognoza.common.USER_AGENT
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.common.util.*
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
@@ -86,11 +87,11 @@ class DefaultForecastRepository(
                 wasMetaUpdated = true
             } catch (httpException: HttpException) {
                 errorResourceId = when (httpException.code()) {
-                        429 -> R.string.error_met_throttling
-                        in 400..499 -> R.string.error_met_client
-                        in 500..504 -> R.string.error_met_server
-                        else -> R.string.error_met_unknown
-                    }
+                    429 -> R.string.error_met_throttling
+                    in 400..499 -> R.string.error_met_client
+                    in 500..504 -> R.string.error_met_server
+                    else -> R.string.error_met_unknown
+                }
             } catch (e: Exception) {
                 errorResourceId = R.string.error_generic
             }

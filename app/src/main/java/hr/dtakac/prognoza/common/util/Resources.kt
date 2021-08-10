@@ -46,7 +46,7 @@ fun Resources.formatWeatherIconDescription(descriptionResourceId: Int?): String 
 }
 
 fun Resources.formatWindSpeedValue(windSpeed: Float?): String {
-    return if (windSpeed != null && windSpeed > 1f) {
+    return if (windSpeed != null) {
         getString(R.string.template_wind_metric, windSpeed.toKilometresPerHour())
     } else {
         getString(R.string.placeholder_wind_speed)

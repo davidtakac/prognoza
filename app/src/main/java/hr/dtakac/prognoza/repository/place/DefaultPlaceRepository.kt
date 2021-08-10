@@ -1,13 +1,12 @@
 package hr.dtakac.prognoza.repository.place
 
+import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.common.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.common.USER_AGENT
-import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.PlaceDao
 import hr.dtakac.prognoza.database.entity.Place
 import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 class DefaultPlaceRepository(
     private val placeDao: PlaceDao,
