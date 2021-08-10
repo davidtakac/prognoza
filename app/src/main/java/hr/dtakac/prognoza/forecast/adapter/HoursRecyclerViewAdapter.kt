@@ -53,7 +53,7 @@ class HourViewHolder(
                 uiModel.temperature
             )
         }
-        binding.tvTemperatureFeelsLike.text = resources.getString(
+        binding.tvFeelsLike.text = resources.getString(
             R.string.template_feels_like,
             if (uiModel.feelsLike == null) {
                 resources.getString(R.string.placeholder_temperature)
@@ -62,11 +62,11 @@ class HourViewHolder(
             }
         )
         binding.tvPrecipitationAmount.apply {
-            if (uiModel.precipitationAmount.isPrecipitationAmountSignificant()) {
+            if (uiModel.precipitation.isPrecipitationAmountSignificant()) {
                 visibility = View.VISIBLE
                 text = resources.getString(
                     R.string.template_precipitation_metric,
-                    uiModel.precipitationAmount
+                    uiModel.precipitation
                 )
             } else {
                 visibility = View.GONE
@@ -91,13 +91,29 @@ class HourViewHolder(
             } else {
                 resources.getString(R.string.placeholder_wind_speed)
             },
-            resources.getString(uiModel.windFromCompassDirection ?: R.string.placeholder_wind_direction)
+            resources.getString(
+                uiModel.windFromCompassDirection ?: R.string.placeholder_wind_direction
+            )
         )
         binding.tvHumidity.text = if (uiModel.relativeHumidity != null) {
-            resources.getString(R.string.template_humidity, resources.getString(R.string.template_humidity_universal, uiModel.relativeHumidity.roundToInt()))
+            resources.getString(
+                R.string.template_humidity_description,
+                resources.getString(
+                    R.string.template_humidity_universal,
+                    uiModel.relativeHumidity.roundToInt()
+                )
+            )
         } else {
             resources.getString(R.string.placeholder_humidity)
         }
+        binding.tvPressure.text = resources.getString(
+            R.string.template_pressure_description,
+            if (uiModel.pressure == null) resources.getString(R.string.placeholder_precipitation)
+            else resources.getString(
+                R.string.template_pressure_metric,
+                uiModel.pressure.roundToInt()
+            )
+        )
         binding.clDetails.visibility = if (isExpanded) View.VISIBLE else View.GONE
     }
 }

@@ -64,7 +64,8 @@
     <string name="template_precipitation_metric">%1$.1f mm</string>
     <string name="template_wind_metric">%1$.1f km/h</string>
     <string name="template_humidity_universal">%1$d%%</string>
-    <string name="placeholder_temperature">-</string>
+    <string name="template_pressure_metric">%1$d hPa</string>
+    <string name="placeholder_temperature">/</string>
     <string name="placeholder_description">Unknown</string>
     <string name="placeholder_precipitation">None</string>
     <string name="placeholder_wind_speed">Calm</string>
@@ -79,13 +80,14 @@
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
     <string name="template_total_precipitation">Total: %1$s</string>
-    <string name="template_maximum_wind_speed">Maximum: %1$s</string>
+    <string name="template_max_wind">Maximum: %1$s</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
-    <string name="template_wind_description">Wind: %1$s, %2$s</string>
-    <string name="template_humidity">Humidity: %1$s</string>
-    <string name="placeholder_wind_direction">Unknown</string>
-    <string name="placeholder_humidity">Unknown</string>
-
+    <string name="template_wind_description">Wind %1$s, %2$s</string>
+    <string name="template_humidity_description">Humidity %1$s</string>
+    <string name="template_pressure_description">Pressure %1$s</string>
+    <string name="placeholder_wind_direction">/</string>
+    <string name="placeholder_humidity">/</string>
+    <string name="placeholder_pressure">/</string>
 
 </resources>

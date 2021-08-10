@@ -128,13 +128,14 @@ fun ForecastHour.toHourUiModel() =
         } else {
             calculateFeelsLikeTemperature(temperature, windSpeed, relativeHumidity)?.roundToInt()
         },
-        precipitationAmount = precipitationAmount,
+        precipitation = precipitationAmount,
         windSpeed = windSpeed?.toKilometresPerHour(),
         windIconRotation = windFromDirection?.plus(180f),
         weatherIcon = WEATHER_ICONS[symbolCode],
         time = time,
         relativeHumidity = relativeHumidity,
-        windFromCompassDirection = windFromDirection?.toCompassDirection()
+        windFromCompassDirection = windFromDirection?.toCompassDirection(),
+        pressure = pressure
     )
 
 suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): DayUiModel {
@@ -286,7 +287,7 @@ fun LayoutWindAndPrecipitationBinding.bind(
         )
     tvWindSpeed.text =
         resources.getString(
-            R.string.template_maximum_wind_speed,
+            R.string.template_max_wind,
             if (maxWindSpeed.isWindSpeedSignificant()) {
                 resources.getString(R.string.template_wind_metric, maxWindSpeed)
             } else {

@@ -142,7 +142,8 @@ class DefaultForecastRepository(
                     precipitationAmount = it.data?.findPrecipitationAmount(),
                     windSpeed = it.data?.instant?.data?.windSpeed,
                     windFromDirection = it.data?.instant?.data?.windFromDirection,
-                    relativeHumidity = it.data?.instant?.data?.relativeHumidity
+                    relativeHumidity = it.data?.instant?.data?.relativeHumidity,
+                    pressure = it.data?.instant?.data?.airPressureAtSeaLevel
                 )
             }
         } ?: return

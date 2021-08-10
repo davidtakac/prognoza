@@ -105,7 +105,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         binding.windAndPrecipitation.bind(
             uiModel.currentHour.windSpeed,
             uiModel.currentHour.windIconRotation,
-            uiModel.currentHour.precipitationAmount
+            uiModel.currentHour.precipitation
         )
         adapter.submitListActual(uiModel.otherHours)
         binding.error.root.visibility = View.GONE
