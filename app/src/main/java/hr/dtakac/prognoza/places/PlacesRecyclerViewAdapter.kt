@@ -26,13 +26,7 @@ class PlaceViewHolder(
     private val binding: CellPlaceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(uiModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
-        binding.ivSaved.setImageResource(
-            if (uiModel.isSelected) {
-                R.drawable.ic_check_circle
-            } else {
-                R.drawable.ic_history
-            }
-        )
+        binding.ivSaved.setImageResource(R.drawable.ic_history)
         binding.ivSaved.visibility = if (uiModel.isSaved) {
             View.VISIBLE
         } else {
