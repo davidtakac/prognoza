@@ -9,7 +9,14 @@ sealed class ForecastResult {
         val hours: List<ForecastHour>
     ): ForecastResult()
 
-    data class Error(
-        val errorMessageResourceId: Int
+    data class CachedSuccess(
+        val success: Success,
+        val reasonResourceId: Int
+    ): ForecastResult()
+
+    object Empty : ForecastResult()
+
+    data class EmptyWithReason(
+        val reasonResourceId: Int,
     ): ForecastResult()
 }

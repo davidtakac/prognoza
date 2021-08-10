@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.forecast.uimodel.DaysForecastUiModel
+import hr.dtakac.prognoza.common.util.formatEmptyMessage
+import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -32,10 +35,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
 
     private fun observeViewModel() {
         viewModel.daysForecast.observe(viewLifecycleOwner) {
-            when (it) {
-                is DaysForecastUiModel.Success -> showForecast(it)
-                is DaysForecastUiModel.Error -> showError(it)
-            }
+            showForecast(it)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
@@ -43,6 +43,22 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
             }
             binding.error.progressBar.apply {
                 if (isLoading) show() else hide()
+            }
+        }
+        viewModel.emptyScreen.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.error.root.visibility = View.GONE
+            } else {
+                showEmptyScreen(it)
+            }
+        }
+        viewModel.message.observe(viewLifecycleOwner) {
+            if (!it.isConsumed) {
+                Snackbar.make(
+                    binding.root,
+                    resources.getString(it.getValue()),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -69,13 +85,12 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
         }
     }
 
-    private fun showForecast(uiModel: DaysForecastUiModel.Success) {
+    private fun showForecast(uiModel: DaysForecast) {
         adapter.submitList(uiModel.days)
-        binding.error.root.visibility = View.GONE
     }
 
-    private fun showError(uiModel: DaysForecastUiModel.Error) {
-        binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
+    private fun showEmptyScreen(uiModel: EmptyForecast) {
+        binding.error.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
         binding.error.root.visibility = View.VISIBLE
     }
 }

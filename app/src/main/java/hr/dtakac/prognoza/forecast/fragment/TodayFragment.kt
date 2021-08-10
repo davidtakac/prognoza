@@ -4,15 +4,18 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.common.util.formatEmptyMessage
 import hr.dtakac.prognoza.common.util.formatFeelsLikeDescription
 import hr.dtakac.prognoza.common.util.formatTemperatureValue
 import hr.dtakac.prognoza.common.util.formatWeatherIconDescription
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
+import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
@@ -33,17 +36,12 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
 
     override fun onResume() {
         super.onResume()
-        if (binding.error.root.visibility != View.VISIBLE) {
-            viewModel.getTodayForecast()
-        }
+        viewModel.getTodayForecast()
     }
 
     private fun observeViewModel() {
         viewModel.todayForecast.observe(viewLifecycleOwner) {
-            when (it) {
-                is TodayForecastUiModel.Success -> showForecast(it)
-                is TodayForecastUiModel.Error -> showError(it)
-            }
+            showForecast(it)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
@@ -51,6 +49,22 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             }
             binding.error.progressBar.apply {
                 if (isLoading) show() else hide()
+            }
+        }
+        viewModel.emptyScreen.observe(viewLifecycleOwner) {
+            if (it == null) {
+                binding.error.root.visibility = View.GONE
+            } else {
+                showEmptyScreen(it)
+            }
+        }
+        viewModel.message.observe(viewLifecycleOwner) {
+            if (!it.isConsumed) {
+                Snackbar.make(
+                    binding.root,
+                    resources.getString(it.getValue()),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -77,21 +91,21 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         }
     }
 
-    private fun showForecast(uiModel: TodayForecastUiModel.Success) {
+    private fun showForecast(uiModel: TodayForecast) {
         val currentHour = uiModel.currentHour
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature)
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
-        binding.tvDescription.text = resources.formatWeatherIconDescription(currentHour.weatherIcon?.descriptionResourceId)
+        binding.tvDescription.text =
+            resources.formatWeatherIconDescription(currentHour.weatherIcon?.descriptionResourceId)
         binding.tvFeelsLike.text = resources.formatFeelsLikeDescription(currentHour.feelsLike)
         adapter.submitListActual(uiModel.otherHours)
-        binding.error.root.visibility = View.GONE
     }
 
-    private fun showError(uiModel: TodayForecastUiModel.Error) {
+    private fun showEmptyScreen(uiModel: EmptyForecast) {
         binding.error.root.visibility = View.VISIBLE
-        binding.error.tvErrorMessage.text = resources.getString(uiModel.errorMessageResourceId)
+        binding.error.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
     }
 }

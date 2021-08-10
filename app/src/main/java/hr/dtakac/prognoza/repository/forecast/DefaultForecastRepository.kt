@@ -79,31 +79,39 @@ class DefaultForecastRepository(
     ): ForecastResult {
         val currentMeta = metaRepository.get(placeId)
         var wasMetaUpdated = false
+        var errorResourceId: Int = -1
         if (currentMeta?.hasExpired() != false && networkChecker.hasInternetConnection()) {
             try {
                 updateForecastDatabase(placeId, currentMeta?.lastModified)
                 wasMetaUpdated = true
             } catch (httpException: HttpException) {
-                return ForecastResult.Error(
-                    when (httpException.code()) {
+                errorResourceId = when (httpException.code()) {
                         429 -> R.string.error_met_throttling
                         in 400..499 -> R.string.error_met_client
                         in 500..504 -> R.string.error_met_server
                         else -> R.string.error_met_unknown
                     }
-                )
             } catch (e: Exception) {
-                return ForecastResult.Error(R.string.error_generic)
+                errorResourceId = R.string.error_generic
             }
         }
         val hours = forecastDao.getForecastHours(start, end, placeId)
         return if (hours.isNullOrEmpty()) {
-            ForecastResult.Error(R.string.error_forecast_empty)
+            if (errorResourceId == -1) {
+                ForecastResult.Empty
+            } else {
+                ForecastResult.EmptyWithReason(errorResourceId)
+            }
         } else {
-            ForecastResult.Success(
+            val success = ForecastResult.Success(
                 if (wasMetaUpdated) metaRepository.get(placeId) else currentMeta,
                 hours
             )
+            if (errorResourceId == -1) {
+                success
+            } else {
+                ForecastResult.CachedSuccess(success, errorResourceId)
+            }
         }
     }
 

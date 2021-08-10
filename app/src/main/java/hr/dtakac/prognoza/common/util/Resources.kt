@@ -115,3 +115,14 @@ fun Resources.formatWeatherIconDescriptionMostly(descriptionResourceId: Int?): S
 fun Resources.formatTotalPrecipitation(precipitation: Float?): String {
     return getString(R.string.template_total_precipitation, formatPrecipitationValue(precipitation))
 }
+
+fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
+    return if (reasonResourceId != null) {
+        getString(
+            R.string.template_error_forecast_empty_reason,
+            getString(reasonResourceId)
+        )
+    } else {
+        getString(R.string.error_forecast_empty)
+    }
+}

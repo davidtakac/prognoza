@@ -29,7 +29,7 @@
         app:layout_constraintBottom_toTopOf="@id/btn_try_again"
         android:layout_marginHorizontal="48dp"
         android:layout_marginTop="8dp"
-        tools:text="@string/error_forecast_empty"/>
+        tools:text="@string/template_error_forecast_empty_reason"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_try_again"

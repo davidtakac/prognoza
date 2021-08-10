@@ -3,11 +3,13 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
+import hr.dtakac.prognoza.base.Event
 import hr.dtakac.prognoza.common.util.hasExpired
 import hr.dtakac.prognoza.common.util.toDayUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.forecast.uimodel.DaysForecastUiModel
+import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
@@ -24,8 +26,14 @@ class DaysViewModel(
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
 
-    private val _daysForecast = MutableLiveData<DaysForecastUiModel>()
-    val daysForecast: LiveData<DaysForecastUiModel> get() = _daysForecast
+    private val _daysForecast = MutableLiveData<DaysForecast>()
+    val daysForecast: LiveData<DaysForecast> get() = _daysForecast
+
+    private val _emptyScreen = MutableLiveData<EmptyForecast?>()
+    val emptyScreen: LiveData<EmptyForecast?> get() = _emptyScreen
+
+    private val _message = MutableLiveData<Event<Int>>()
+    val message: LiveData<Event<Int>> get() = _message
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -43,7 +51,7 @@ class DaysViewModel(
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
         when (val result = forecastRepository.getOtherDaysForecastHours(selectedPlaceId)) {
             is ForecastResult.Success -> handleSuccess(result)
-            is ForecastResult.Error -> handleError(result)
+            is ForecastResult.Empty -> handleEmpty(result)
         }
         _isLoading.value = false
     }
@@ -57,11 +65,20 @@ class DaysViewModel(
                 .map { it.toDayUiModel(this) }
         }
         currentMeta = result.meta
-        _daysForecast.value = DaysForecastUiModel.Success(days = uiModels)
+        _daysForecast.value = DaysForecast(uiModels)
     }
 
-    private fun handleError(result: ForecastResult.Error) {
-        _daysForecast.value = DaysForecastUiModel.Error(result.errorMessageResourceId)
+    private fun handleEmpty(empty: ForecastResult.Empty) {
+        _emptyScreen.value = EmptyForecast(null)
+    }
+
+    private suspend fun handleCachedSuccess(cachedResult: ForecastResult.CachedSuccess) {
+        handleSuccess(cachedResult.success)
+        _message.value = Event(cachedResult.reasonResourceId)
+    }
+
+    private suspend fun handleEmptyWithReason(emptyWithReason: ForecastResult.EmptyWithReason) {
+        _emptyScreen.value = EmptyForecast(emptyWithReason.reasonResourceId)
     }
 
     private suspend fun isReloadNeeded(): Boolean {
