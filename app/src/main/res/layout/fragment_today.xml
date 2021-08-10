@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/barrier"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             android:layout_marginEnd="8dp"
             android:textStyle="bold"
             tools:text="19 July, 18:32"/>
@@ -60,7 +60,7 @@
             tools:src="@drawable/lightsleetandthunder"/>
 
         <TextView
-            android:id="@+id/tv_description"
+            android:id="@+id/tv_precipitation_forecast"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tv_feels_like"

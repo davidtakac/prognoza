@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.base.Event
 import hr.dtakac.prognoza.common.util.hasExpired
 import hr.dtakac.prognoza.common.util.toHourUiModel
+import hr.dtakac.prognoza.common.util.totalPrecipitationAmount
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
@@ -66,9 +67,14 @@ class TodayViewModel(
         val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
             result.hours.map { it.toHourUiModel() }
         }
+        val precipitationForecastAsync = coroutineScope.async(dispatcherProvider.default) {
+            val total = result.hours.subList(0, 2).totalPrecipitationAmount()
+            if (total <= 0f) null else total
+        }
         val forecastTodayUiModel = TodayForecast(
             currentHour = currentHourAsync.await(),
-            otherHours = otherHoursAsync.await()
+            otherHours = otherHoursAsync.await(),
+            precipitationForecast = precipitationForecastAsync.await()
         )
         currentMeta = result.meta
         _todayForecast.value = forecastTodayUiModel

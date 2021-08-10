@@ -126,3 +126,14 @@ fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
         getString(R.string.error_forecast_empty)
     }
 }
+
+fun Resources.formatPrecipitationForecast(precipitationForecast: Float?): String {
+    return if (precipitationForecast == null) {
+        getString(R.string.precipitation_forecast_none)
+    } else {
+        getString(
+            R.string.template_precipitation_forecast,
+            formatPrecipitationValue(precipitationForecast)
+        )
+    }
+}
