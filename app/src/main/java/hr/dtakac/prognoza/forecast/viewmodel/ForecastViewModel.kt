@@ -3,10 +3,10 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
+import hr.dtakac.prognoza.common.util.shortenedName
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.common.shortenedName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

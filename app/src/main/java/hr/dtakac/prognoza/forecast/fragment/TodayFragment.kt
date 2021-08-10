@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.common.bind
+import hr.dtakac.prognoza.common.util.formatFeelsLikeDescription
+import hr.dtakac.prognoza.common.util.formatTemperatureValue
+import hr.dtakac.prognoza.common.util.formatWeatherIconDescription
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
@@ -15,7 +17,6 @@ import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
-
 
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
@@ -79,34 +80,12 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private fun showForecast(uiModel: TodayForecastUiModel.Success) {
         val currentHour = uiModel.currentHour
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
-        binding.tvTemperature.text = if (uiModel.currentHour.temperature == null) {
-            resources.getString(R.string.placeholder_temperature)
-        } else {
-            resources.getString(
-                R.string.template_temperature_universal,
-                currentHour.temperature
-            )
-        }
+        binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature)
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
-        binding.tvDescription.text = resources.getString(
-            currentHour.weatherIcon?.descriptionResourceId
-                ?: R.string.placeholder_description
-        )
-        binding.tvFeelsLike?.text = resources.getString(
-            R.string.template_feels_like,
-            if (uiModel.currentHour.feelsLike == null) {
-                resources.getString(R.string.placeholder_temperature)
-            } else {
-                resources.getString(R.string.template_temperature_universal, uiModel.currentHour.feelsLike)
-            }
-        )
-        binding.windAndPrecipitation.bind(
-            uiModel.currentHour.windSpeed,
-            uiModel.currentHour.windIconRotation,
-            uiModel.currentHour.precipitation
-        )
+        binding.tvDescription.text = resources.formatWeatherIconDescription(currentHour.weatherIcon?.descriptionResourceId)
+        binding.tvFeelsLike.text = resources.formatFeelsLikeDescription(currentHour.feelsLike)
         adapter.submitListActual(uiModel.otherHours)
         binding.error.root.visibility = View.GONE
     }

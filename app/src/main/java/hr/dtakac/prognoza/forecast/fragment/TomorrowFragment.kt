@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.common.bind
+import hr.dtakac.prognoza.common.util.bind
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecastUiModel

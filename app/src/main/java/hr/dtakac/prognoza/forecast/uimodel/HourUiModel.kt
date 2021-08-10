@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.forecast.uimodel
 import java.time.ZonedDateTime
 
 data class HourUiModel(
-    val temperature: Int?,
-    val feelsLike: Int?,
+    val temperature: Float?,
+    val feelsLike: Float?,
     val precipitation: Float?,
     val windSpeed: Float?,
     val windIconRotation: Float?,

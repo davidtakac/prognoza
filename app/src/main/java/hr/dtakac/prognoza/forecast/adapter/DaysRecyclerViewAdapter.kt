@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.common.bind
+import hr.dtakac.prognoza.common.util.bind
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 

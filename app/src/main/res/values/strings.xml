@@ -79,13 +79,14 @@
     <string name="error_forecast_empty">There is no forecast for this place and time. Please try again or change the place.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
-    <string name="template_total_precipitation">Total: %1$s</string>
+    <string name="template_total_precipitation">Total %1$s</string>
     <string name="template_max_wind">Maximum: %1$s</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_wind_description">Wind %1$s, %2$s</string>
     <string name="template_humidity_description">Humidity %1$s</string>
     <string name="template_pressure_description">Pressure %1$s</string>
+    <string name="template_temperature_high_low">%1$s / %2$s</string>
     <string name="placeholder_wind_direction">/</string>
     <string name="placeholder_humidity">/</string>
     <string name="placeholder_pressure">/</string>

@@ -3,9 +3,9 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
-import hr.dtakac.prognoza.common.hasExpired
-import hr.dtakac.prognoza.common.toDayUiModel
-import hr.dtakac.prognoza.common.toHourUiModel
+import hr.dtakac.prognoza.common.util.hasExpired
+import hr.dtakac.prognoza.common.util.toDayUiModel
+import hr.dtakac.prognoza.common.util.toHourUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecastUiModel

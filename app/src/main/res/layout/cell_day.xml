@@ -12,59 +12,53 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+        android:layout_marginEnd="8dp"
         android:textStyle="bold"
         tools:text="19 July, 18:32"/>
 
     <TextView
-        android:id="@+id/tv_temperature_high"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_temperature_high_low"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/tv_date_time"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+        android:layout_marginEnd="8dp"
         android:textSize="32sp"
-        tools:text="23 C"/>
+        tools:text="23 / 12"/>
 
     <TextView
-        android:id="@+id/tv_temperature_low"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_precipitation"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
-        app:layout_constraintBaseline_toBaselineOf="@id/tv_temperature_high"
-        android:textSize="26sp"
-        android:layout_marginStart="12dp"
-        tools:text="12 C"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_temperature_high_low"
+        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+        tools:text="Total precipitation: 40 mm"
+        android:layout_marginEnd="8dp"
+        android:textSize="16sp"/>
 
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
+        app:layout_constraintTop_toBottomOf="@id/tv_precipitation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
         android:layout_marginEnd="8dp"
         android:textSize="16sp"
-        tools:text="Light sleet showers and thunder"/>
+        tools:text="Mostly light sleet showers and thunder"/>
 
     <ImageView
         android:id="@+id/iv_weather_icon"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="86dp"
+        android:layout_height="86dp"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1"
         tools:src="@drawable/lightsleetandthunder"/>
-
-    <include layout="@layout/layout_wind_and_precipitation"
-        android:id="@+id/wind_and_precipitation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/tv_description"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-        android:layout_marginEnd="8dp"
-        android:visibility="gone"
-        tools:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,11 +3,11 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
+import hr.dtakac.prognoza.common.util.hasExpired
+import hr.dtakac.prognoza.common.util.toHourUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
-import hr.dtakac.prognoza.common.hasExpired
-import hr.dtakac.prognoza.common.toHourUiModel
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
@@ -53,7 +53,7 @@ class TodayViewModel(
             result.hours[0].toHourUiModel().copy(time = ZonedDateTime.now())
         }
         val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            result.hours.subList(1, result.hours.size).map { it.toHourUiModel() }
+            result.hours.map { it.toHourUiModel() }
         }
         val forecastTodayUiModel = TodayForecastUiModel.Success(
             currentHour = currentHourAsync.await(),

@@ -5,6 +5,7 @@ import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.LocationForecastResponse
 import hr.dtakac.prognoza.common.*
 import hr.dtakac.prognoza.common.network.NetworkChecker
+import hr.dtakac.prognoza.common.util.*
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
