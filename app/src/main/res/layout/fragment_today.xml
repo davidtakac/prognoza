@@ -24,7 +24,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             android:layout_marginEnd="8dp"
-            android:textStyle="bold"
+            android:textColor="@color/high_emphasis"
+            android:textSize="16sp"
             tools:text="19 July, 18:32"/>
 
         <TextView
@@ -36,6 +37,7 @@
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             android:layout_marginEnd="8dp"
             android:textSize="48sp"
+            android:textColor="@color/high_emphasis"
             tools:text="23 C"/>
 
         <TextView

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="high_emphasis">@color/white_87</color>
+    <color name="med_emphasis">@color/white_60</color>
+    <color name="precipitation">@color/blue_300</color>
+</resources>

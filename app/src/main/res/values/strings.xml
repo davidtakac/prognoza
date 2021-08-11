@@ -82,9 +82,7 @@
     <string name="total_precipitation_none">No precipitation</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
-    <string name="template_wind_description">Wind %1$s, %2$s</string>
-    <string name="template_humidity_description">Humidity %1$s</string>
-    <string name="template_pressure_description">Pressure %1$s</string>
+    <string name="template_wind_with_direction">%1$s, %2$s</string>
     <string name="template_temperature_high_low">%1$s / %2$s</string>
     <string name="placeholder_wind_direction">/</string>
     <string name="placeholder_humidity">/</string>
@@ -93,5 +91,9 @@
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
     <string name="template_precipitation_forecast">%1$s in the next two hours</string>
     <string name="precipitation_forecast_none">No precipitation in the next two hours</string>
+    <string name="feels_like">Feels like</string>
+    <string name="wind">Wind</string>
+    <string name="humidity">Humidity</string>
+    <string name="pressure">Pressure</string>
 
 </resources>

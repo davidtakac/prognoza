@@ -16,17 +16,6 @@ fun Resources.formatTemperatureValue(temperature: Float?): String {
     }
 }
 
-fun Resources.formatFeelsLikeDescription(feelsLike: Float?): String {
-    return getString(
-        R.string.template_feels_like,
-        if (feelsLike == null) {
-            getString(R.string.placeholder_temperature)
-        } else {
-            formatTemperatureValue(feelsLike)
-        }
-    )
-}
-
 fun Resources.formatPrecipitationValue(precipitation: Float?): String {
     return if (precipitation.isPrecipitationAmountSignificant()) {
         getString(
@@ -54,9 +43,9 @@ fun Resources.formatWindSpeedValue(windSpeed: Float?): String {
     }
 }
 
-fun Resources.formatWindDescription(windSpeed: Float?, windFromCompassDirection: Int?): String {
+fun Resources.formatWindWithDirection(windSpeed: Float?, windFromCompassDirection: Int?): String {
     return getString(
-        R.string.template_wind_description,
+        R.string.template_wind_with_direction,
         formatWindSpeedValue(windSpeed),
         getString(windFromCompassDirection ?: R.string.placeholder_wind_direction)
     )
@@ -73,13 +62,6 @@ fun Resources.formatHumidityValue(relativeHumidity: Float?): String {
     }
 }
 
-fun Resources.formatHumidityDescription(relativeHumidity: Float?): String {
-    return getString(
-        R.string.template_humidity_description,
-        formatHumidityValue(relativeHumidity)
-    )
-}
-
 fun Resources.formatPressureValue(pressure: Float?): String {
     return if (pressure == null) {
         getString(R.string.placeholder_pressure)
@@ -89,21 +71,6 @@ fun Resources.formatPressureValue(pressure: Float?): String {
             pressure.roundToInt()
         )
     }
-}
-
-fun Resources.formatPressureDescription(pressure: Float?): String {
-    return getString(
-        R.string.template_pressure_description,
-        formatPressureValue(pressure)
-    )
-}
-
-fun Resources.formatTemperatureHighLow(high: Float?, low: Float?): String {
-    return getString(
-        R.string.template_temperature_high_low,
-        formatTemperatureValue(high),
-        formatTemperatureValue(low)
-    )
 }
 
 fun Resources.formatRepresentativeWeatherIconDescription(representativeWeatherIcon: RepresentativeWeatherIcon?): String {

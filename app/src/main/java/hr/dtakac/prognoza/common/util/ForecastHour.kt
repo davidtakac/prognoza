@@ -7,6 +7,7 @@ import kotlinx.coroutines.async
 
 fun ForecastHour.toHourUiModel() =
     HourUiModel(
+        id = "$placeId-$time",
         temperature = temperature,
         feelsLike = if (temperature == null) {
             null

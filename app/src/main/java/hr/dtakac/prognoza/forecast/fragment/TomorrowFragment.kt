@@ -5,10 +5,10 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.common.util.bind
-import hr.dtakac.prognoza.common.util.formatEmptyMessage
+import hr.dtakac.prognoza.common.util.*
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
@@ -16,11 +16,15 @@ import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 class TomorrowFragment :
     ViewBindingFragment<FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
     private val viewModel by viewModel<TomorrowViewModel>()
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -90,7 +94,7 @@ class TomorrowFragment :
 
     private fun showForecast(uiModel: TomorrowForecast) {
         populateSummaryViews(uiModel.summary)
-        adapter.submitListActual(uiModel.hours)
+        adapter.submitList(uiModel.hours)
     }
 
     private fun showEmptyScreen(uiModel: EmptyForecast) {
@@ -99,6 +103,19 @@ class TomorrowFragment :
     }
 
     private fun populateSummaryViews(uiModel: DayUiModel) {
-        binding.summary.bind(uiModel)
+        val resources = binding.root.context.resources
+        binding.tvDateTime.text = uiModel.time
+            .withZoneSameInstant(ZoneId.systemDefault())
+            .format(dateTimeFormatter)
+        binding.tvTemperatureHigh.text =
+            resources.formatTemperatureValue(uiModel.highTemperature)
+        binding.tvTemperatureLow.text =
+            resources.formatTemperatureValue(uiModel.lowTemperature)
+        binding.tvDescription.text =
+            resources.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherIcon)
+        binding.ivWeatherIcon.setImageResource(
+            uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
+        )
+        binding.tvPrecipitation.text = resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
     }
 }

@@ -8,7 +8,9 @@ import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.common.util.*
+import hr.dtakac.prognoza.common.util.formatEmptyMessage
+import hr.dtakac.prognoza.common.util.formatPrecipitationTwoHours
+import hr.dtakac.prognoza.common.util.formatTemperatureValue
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
@@ -97,8 +99,15 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         )
         binding.tvPrecipitationForecast.text =
             resources.formatPrecipitationTwoHours(uiModel.precipitationForecast)
-        binding.tvFeelsLike.text = resources.formatFeelsLikeDescription(currentHour.feelsLike)
-        adapter.submitListActual(uiModel.otherHours)
+        binding.tvFeelsLike.text = resources.getString(
+            R.string.template_feels_like,
+            if (currentHour.feelsLike == null) {
+                resources.getString(R.string.placeholder_temperature)
+            } else {
+                resources.formatTemperatureValue(currentHour.feelsLike)
+            }
+        )
+        adapter.submitList(uiModel.otherHours)
     }
 
     private fun showEmptyScreen(uiModel: EmptyForecast) {

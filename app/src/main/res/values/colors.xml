@@ -7,4 +7,14 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="black_87">#DE000000</color>
+    <color name="white_87">#DEFFFFFF</color>
+    <color name="black_60">#99000000</color>
+    <color name="white_60">#99FFFFFF</color>
+    <color name="blue_700">#1976D2</color>
+    <color name="blue_300">#64B5F6</color>
+
+    <color name="high_emphasis">@color/black_87</color>
+    <color name="med_emphasis">@color/black_60</color>
+    <color name="precipitation">@color/blue_700</color>
 </resources>

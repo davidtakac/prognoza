@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <include layout="@layout/cell_day"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/summary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -14,7 +14,76 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp">
+
+        <TextView
+            android:id="@+id/tv_date_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            android:textColor="@color/high_emphasis"
+            tools:text="19 July, 18:32"/>
+
+        <TextView
+            android:id="@+id/tv_temperature_high"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/high_emphasis"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="8dp"
+            android:textSize="36sp"
+            tools:text="32"/>
+
+        <TextView
+            android:id="@+id/tv_temperature_low"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBaseline_toBaselineOf="@id/tv_temperature_high"
+            app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
+            android:layout_marginStart="8dp"
+            android:textColor="@color/med_emphasis"
+            android:textSize="32sp"
+            tools:text="32"/>
+
+        <TextView
+            android:id="@+id/tv_description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            tools:text="Precipitation: 40 mm"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/tv_precipitation"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv_description"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            android:layout_marginEnd="8dp"
+            android:textSize="16sp"
+            tools:text="Mostly light sleet showers and thunder"/>
+
+        <ImageView
+            android:id="@+id/iv_weather_icon"
+            android:layout_width="86dp"
+            android:layout_height="86dp"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            tools:src="@drawable/lightsleetandthunder"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hours"
