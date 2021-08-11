@@ -46,11 +46,15 @@ class ForecastActivity :
         binding.toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.search -> {
-                    startActivity(Intent(this, PlacesActivity::class.java))
+                    openSearch()
                     true
                 }
                 else -> false
             }
         }
+    }
+
+    private fun openSearch() {
+        startActivity(Intent(this, PlacesActivity::class.java))
     }
 }

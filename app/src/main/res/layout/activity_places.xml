@@ -13,7 +13,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:endIconMode="clear_text"
         app:startIconDrawable="@drawable/ic_search"
-        android:hint="@string/hint_search">
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+        android:hint="@string/hint_places_search">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search"
             android:layout_width="match_parent"

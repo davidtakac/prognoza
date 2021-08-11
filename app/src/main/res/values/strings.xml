@@ -68,7 +68,7 @@
     <string name="placeholder_description">Unknown</string>
     <string name="placeholder_precipitation">none</string>
     <string name="placeholder_wind_speed">/</string>
-    <string name="hint_search">Search…</string>
+    <string name="hint_places_search">Search places…</string>
     <string name="error_met_client">Something is wrong with your request.</string>
     <string name="error_met_server">Server is currently unable to process the request.</string>
     <string name="error_met_unknown">Unknown error when communicating with the server.</string>
