@@ -16,9 +16,9 @@ fun CellDayBinding.bind(uiModel: DayUiModel) {
     tvTemperatureHighLow.text =
         resources.formatTemperatureHighLow(uiModel.highTemperature, uiModel.lowTemperature)
     tvDescription.text =
-        resources.formatWeatherIconDescriptionMostly(uiModel.weatherIcon?.descriptionResourceId)
+        resources.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherIcon)
     ivWeatherIcon.setImageResource(
-        uiModel.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
+        uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
     )
     tvPrecipitation.text = resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
 }

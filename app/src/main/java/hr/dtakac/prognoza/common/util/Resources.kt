@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.common.util
 
 import android.content.res.Resources
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.forecast.uimodel.RepresentativeWeatherIcon
 import kotlin.math.roundToInt
 
 fun Resources.formatTemperatureValue(temperature: Float?): String {
@@ -105,15 +106,24 @@ fun Resources.formatTemperatureHighLow(high: Float?, low: Float?): String {
     )
 }
 
-fun Resources.formatWeatherIconDescriptionMostly(descriptionResourceId: Int?): String {
-    return getString(
-        R.string.template_mostly,
-        formatWeatherIconDescription(descriptionResourceId).lowercase()
-    )
+fun Resources.formatRepresentativeWeatherIconDescription(representativeWeatherIcon: RepresentativeWeatherIcon?): String {
+    val weatherIconDescription = formatWeatherIconDescription(representativeWeatherIcon?.weatherIcon?.descriptionResourceId)
+    return if (representativeWeatherIcon?.isMostly == true) {
+        getString(
+            R.string.template_mostly,
+            weatherIconDescription.lowercase()
+        )
+    } else {
+        weatherIconDescription
+    }
 }
 
 fun Resources.formatTotalPrecipitation(precipitation: Float?): String {
-    return getString(R.string.template_total_precipitation, formatPrecipitationValue(precipitation))
+    return if (!precipitation.isPrecipitationAmountSignificant()) {
+        getString(R.string.total_precipitation_none)
+    } else {
+        getString(R.string.template_total_precipitation, formatPrecipitationValue(precipitation))
+    }
 }
 
 fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
@@ -127,7 +137,7 @@ fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
     }
 }
 
-fun Resources.formatPrecipitationForecast(precipitationForecast: Float?): String {
+fun Resources.formatPrecipitationTwoHours(precipitationForecast: Float?): String {
     return if (precipitationForecast == null) {
         getString(R.string.precipitation_forecast_none)
     } else {

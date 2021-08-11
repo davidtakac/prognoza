@@ -31,7 +31,7 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
     val maxWindSpeedAsync = coroutineScope.async { maxWindSpeed() }
     return DayUiModel(
         time = get(0).time,
-        weatherIcon = weatherIconAsync.await(),
+        representativeWeatherIcon = weatherIconAsync.await(),
         lowTemperature = lowTempAsync.await(),
         highTemperature = highTempAsync.await(),
         totalPrecipitationAmount = precipitationAsync.await(),
@@ -43,12 +43,20 @@ fun List<ForecastHour>.maxTemperature() = maxOf { it.temperature ?: Float.MIN_VA
 
 fun List<ForecastHour>.minTemperature() = minOf { it.temperature ?: Float.MAX_VALUE }
 
-fun List<ForecastHour>.representativeWeatherIcon(): WeatherIcon? {
-    val representativeSymbolCode = filter { it.symbolCode != null }
+fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
+    val eligibleSymbolCodes = filter { it.symbolCode != null }
         .map { it.symbolCode!! }
         .filter { it !in NIGHT_SYMBOL_CODES }
-        .mostCommon()
-    return WEATHER_ICONS[representativeSymbolCode]
+    val mostCommonSymbolCode = eligibleSymbolCodes.mostCommon()
+    val weatherIcon = WEATHER_ICONS[mostCommonSymbolCode]
+    return if (weatherIcon == null) {
+        null
+    } else {
+        RepresentativeWeatherIcon(
+            weatherIcon = weatherIcon,
+            isMostly = eligibleSymbolCodes.any { it != mostCommonSymbolCode }
+        )
+    }
 }
 
 fun List<ForecastHour>.totalPrecipitationAmount() =

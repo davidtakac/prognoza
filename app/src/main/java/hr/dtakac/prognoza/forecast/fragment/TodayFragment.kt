@@ -22,7 +22,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private val adapter = HoursRecyclerViewAdapter()
     private val viewModel by viewModel<TodayViewModel>()
     private val dateTimeFormatter =
-        DateTimeFormatter.ofPattern("EE d LLLL, HH:mm", Locale.getDefault())
+        DateTimeFormatter.ofPattern("d LLLL, HH:mm", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -96,7 +96,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             currentHour.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitationForecast.text =
-            resources.formatPrecipitationForecast(uiModel.precipitationForecast)
+            resources.formatPrecipitationTwoHours(uiModel.precipitationForecast)
         binding.tvFeelsLike.text = resources.formatFeelsLikeDescription(currentHour.feelsLike)
         adapter.submitListActual(uiModel.otherHours)
     }

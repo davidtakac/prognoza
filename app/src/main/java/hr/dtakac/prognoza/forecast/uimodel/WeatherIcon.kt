@@ -7,6 +7,11 @@ data class WeatherIcon(
     val descriptionResourceId: Int
 )
 
+data class RepresentativeWeatherIcon(
+    val weatherIcon: WeatherIcon,
+    val isMostly: Boolean
+)
+
 val WEATHER_ICONS = mapOf(
     "clearsky_day" to WeatherIcon(R.drawable.clearsky_day, R.string.clearsky),
     "clearsky_night" to WeatherIcon(R.drawable.clearsky_night, R.string.clearsky),

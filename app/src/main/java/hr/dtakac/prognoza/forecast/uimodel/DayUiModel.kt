@@ -4,7 +4,7 @@ import java.time.ZonedDateTime
 
 data class DayUiModel(
     val time: ZonedDateTime,
-    val weatherIcon: WeatherIcon?,
+    val representativeWeatherIcon: RepresentativeWeatherIcon?,
     val lowTemperature: Float?,
     val highTemperature: Float?,
     val maxWindSpeed: Float?,
