@@ -1,22 +1,34 @@
 package hr.dtakac.prognoza.places
 
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import hr.dtakac.prognoza.base.ViewBindingActivity
+import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.databinding.ActivityPlacesBinding
+import hr.dtakac.prognoza.databinding.FragmentPlacesBinding
+import hr.dtakac.prognoza.forecast.ForecastActivity
+import hr.dtakac.prognoza.forecast.fragment.DaysFragment
+import hr.dtakac.prognoza.forecast.fragment.TodayFragment
+import hr.dtakac.prognoza.forecast.fragment.TomorrowFragment
+import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlacesBinding::inflate) {
+// todo: ideja, wrappaj fragmentcontainerview u constraintlayout pa probaj tako elevaciju postic?
+class PlaceSearchFragment :
+    ViewBindingFragment<FragmentPlacesBinding>(FragmentPlacesBinding::inflate) {
     private val adapter = PlacesRecyclerViewAdapter { viewModel.select(it) }
     private val viewModel by viewModel<PlacesViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    companion object {
+        const val RESULT_PLACE_PICKED = "search_place_picked"
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
         initializeSearchField()
@@ -24,20 +36,26 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
     }
 
     private fun observeViewModel() {
-        viewModel.places.observe(this) {
+        viewModel.places.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
-        viewModel.isLoading.observe(this) { isLoading ->
+        viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.progressBar.apply {
                 if (isLoading) show() else hide()
             }
         }
-        viewModel.placeSelectedEvent.observe(this) {
+        viewModel.placeSelectedEvent.observe(viewLifecycleOwner) {
             if (!it.isConsumed) {
-                finish()
+                val result = Bundle().apply { putBoolean(RESULT_PLACE_PICKED, true) }
+                parentFragmentManager.apply {
+                    setFragmentResult(ForecastActivity.REQUEST_KEY, result)
+                    setFragmentResult(TodayFragment.REQUEST_KEY, result)
+                    setFragmentResult(TomorrowFragment.REQUEST_KEY, result)
+                    setFragmentResult(DaysFragment.REQUEST_KEY, result)
+                }
             }
         }
-        viewModel.message.observe(this) {
+        viewModel.message.observe(viewLifecycleOwner) {
             if (!it.isConsumed) {
                 Snackbar.make(
                     binding.root,
@@ -50,7 +68,7 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
 
     private fun initializeRecyclerView() {
         binding.rvResults.layoutManager = LinearLayoutManager(
-            this,
+            requireContext(),
             LinearLayoutManager.VERTICAL,
             false
         )
@@ -58,7 +76,7 @@ class PlacesActivity : ViewBindingActivity<ActivityPlacesBinding>(ActivityPlaces
         binding.rvResults.addItemDecoration(MarginItemDecoration())
         binding.rvResults.addItemDecoration(
             DividerItemDecoration(
-                this,
+                requireContext(),
                 LinearLayoutManager.VERTICAL
             )
         )

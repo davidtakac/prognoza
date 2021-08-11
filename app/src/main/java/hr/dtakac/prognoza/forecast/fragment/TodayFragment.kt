@@ -16,6 +16,7 @@ import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
+import hr.dtakac.prognoza.places.PlaceSearchFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -26,11 +27,16 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private val dateTimeFormatter =
         DateTimeFormatter.ofPattern("d LLLL, HH:mm", Locale.getDefault())
 
+    companion object {
+        const val REQUEST_KEY = "today_request_key"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
         initializeTryAgain()
+        initializeDataRefreshOnChangedPlace()
     }
 
     override fun onResume() {
@@ -88,6 +94,18 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         binding.error.btnTryAgain.setOnClickListener {
             viewModel.getTodayForecast()
         }
+    }
+
+    private fun initializeDataRefreshOnChangedPlace() {
+        parentFragmentManager.setFragmentResultListener(
+            REQUEST_KEY,
+            this,
+            { _, bundle ->
+                if (bundle.getBoolean(PlaceSearchFragment.RESULT_PLACE_PICKED)) {
+                    viewModel.getTodayForecast()
+                }
+            }
+        )
     }
 
     private fun showForecast(uiModel: TodayForecast) {

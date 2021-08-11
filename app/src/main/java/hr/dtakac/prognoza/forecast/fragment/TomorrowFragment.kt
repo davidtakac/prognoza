@@ -15,6 +15,7 @@ import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
+import hr.dtakac.prognoza.places.PlaceSearchFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -26,11 +27,16 @@ class TomorrowFragment :
     private val viewModel by viewModel<TomorrowViewModel>()
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
 
+    companion object {
+        const val REQUEST_KEY = "tomorrow_request_key"
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
         initializeRecyclerView()
         initializeTryAgain()
+        initializeDataRefreshOnChangedPlace()
     }
 
     override fun onResume() {
@@ -90,6 +96,18 @@ class TomorrowFragment :
         binding.error.btnTryAgain.setOnClickListener {
             viewModel.getTomorrowForecast()
         }
+    }
+
+    private fun initializeDataRefreshOnChangedPlace() {
+        parentFragmentManager.setFragmentResultListener(
+            REQUEST_KEY,
+            this,
+            { _, bundle ->
+                if (bundle.getBoolean(PlaceSearchFragment.RESULT_PLACE_PICKED)) {
+                    viewModel.getTomorrowForecast()
+                }
+            }
+        )
     }
 
     private fun showForecast(uiModel: TomorrowForecast) {
