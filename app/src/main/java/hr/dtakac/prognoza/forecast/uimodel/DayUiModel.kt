@@ -8,5 +8,9 @@ data class DayUiModel(
     val lowTemperature: Float?,
     val highTemperature: Float?,
     val maxWindSpeed: Float?,
-    val totalPrecipitationAmount: Float?
+    val windFromCompassDirection: Int?,
+    val totalPrecipitationAmount: Float?,
+    val maxHumidity: Float?,
+    val maxPressure: Float?,
+    var isExpanded: Boolean = false
 )

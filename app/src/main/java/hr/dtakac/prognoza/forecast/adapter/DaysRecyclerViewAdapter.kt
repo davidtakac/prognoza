@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.forecast.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -15,6 +16,11 @@ import java.util.*
 
 class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
+        holder.binding.clHeader.setOnClickListener {
+            val itemAtPosition = getItem(position)
+            itemAtPosition.isExpanded = !itemAtPosition.isExpanded
+            notifyItemChanged(position)
+        }
         holder.bind(getItem(position))
     }
 
@@ -25,7 +31,7 @@ class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCa
 }
 
 class DayViewHolder(
-    private val binding: CellDayBinding
+    val binding: CellDayBinding
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
 
@@ -45,6 +51,10 @@ class DayViewHolder(
                 uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
             )
             tvPrecipitation.text = resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
+            tvWind.text = resources.formatWindWithDirection(uiModel.maxWindSpeed, uiModel.windFromCompassDirection)
+            tvHumidity.text = resources.formatHumidityValue(uiModel.maxHumidity)
+            tvPressure.text = resources.formatPressureValue(uiModel.maxPressure)
+            clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE
         }
     }
 }

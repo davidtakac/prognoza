@@ -29,20 +29,29 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
     val lowTempAsync = coroutineScope.async { minTemperature() }
     val highTempAsync = coroutineScope.async { maxTemperature() }
     val precipitationAsync = coroutineScope.async { totalPrecipitationAmount() }
-    val maxWindSpeedAsync = coroutineScope.async { maxWindSpeed() }
+    val hourWithMaxWindSpeedAsync = coroutineScope.async { hourWithMaxWindSpeed() }
+    val maxHumidityAsync = coroutineScope.async { maxHumidity() }
+    val maxPressureAsync = coroutineScope.async { maxPressure() }
     return DayUiModel(
         time = get(0).time,
         representativeWeatherIcon = weatherIconAsync.await(),
         lowTemperature = lowTempAsync.await(),
         highTemperature = highTempAsync.await(),
         totalPrecipitationAmount = precipitationAsync.await(),
-        maxWindSpeed = maxWindSpeedAsync.await()
+        maxWindSpeed = hourWithMaxWindSpeedAsync.await()?.windSpeed,
+        windFromCompassDirection = hourWithMaxWindSpeedAsync.await()?.windFromDirection?.toCompassDirection(),
+        maxHumidity = maxHumidityAsync.await(),
+        maxPressure = maxPressureAsync.await()
     )
 }
 
 fun List<ForecastHour>.maxTemperature() = maxOf { it.temperature ?: Float.MIN_VALUE }
 
 fun List<ForecastHour>.minTemperature() = minOf { it.temperature ?: Float.MAX_VALUE }
+
+fun List<ForecastHour>.maxHumidity() = maxOf { it.relativeHumidity ?: Float.MIN_VALUE }
+
+fun List<ForecastHour>.maxPressure() = maxOf { it.pressure ?: Float.MIN_VALUE }
 
 fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
     val eligibleSymbolCodes = filter { it.symbolCode != null }
@@ -63,4 +72,11 @@ fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
 fun List<ForecastHour>.totalPrecipitationAmount() =
     sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
 
-fun List<ForecastHour>.maxWindSpeed() = maxOf { it.windSpeed ?: Float.MIN_VALUE }
+fun List<ForecastHour>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
+    val difference = (o1.windSpeed ?: Float.MIN_VALUE) - (o2.windSpeed ?: Float.MIN_VALUE)
+    when {
+        difference < 0f -> -1
+        difference > 0f -> 1
+        else -> 0
+    }
+}
