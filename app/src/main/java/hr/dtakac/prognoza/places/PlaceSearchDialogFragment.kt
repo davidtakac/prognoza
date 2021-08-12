@@ -109,7 +109,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
     // https://stackoverflow.com/questions/9698410/position-of-dialogfragment-in-android
     override fun onStart() {
         super.onStart()
-        dialog?.window?.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, 350.toPx.roundToInt())
+        dialog?.window?.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, 324.toPx.roundToInt())
     }
 
     private fun setDialogPosition() {
