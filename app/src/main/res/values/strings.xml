@@ -73,7 +73,7 @@
     <string name="error_met_server">Server is currently unable to process the request.</string>
     <string name="error_met_unknown">Unknown error when communicating with the server.</string>
     <string name="error_met_throttling">Heavy traffic from other users.</string>
-    <string name="error_generic">An unexpected error occurred. Please try again.</string>
+    <string name="error_generic">An unexpected error occurred.</string>
     <string name="error_forecast_empty">There is no forecast data for this place and time. Please connect to the Internet and try again.</string>
     <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
     <string name="button_try_again">Try again</string>

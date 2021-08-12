@@ -3,4 +3,5 @@
     <color name="high_emphasis">@color/white_87</color>
     <color name="med_emphasis">@color/white_60</color>
     <color name="precipitation">@color/blue_300</color>
+    <color name="error">@color/red_900</color>
 </resources>

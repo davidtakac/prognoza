@@ -13,8 +13,11 @@
     <color name="white_60">#99FFFFFF</color>
     <color name="blue_700">#1976D2</color>
     <color name="blue_300">#64B5F6</color>
+    <color name="red_600">#E53935</color>
+    <color name="red_900">#B71C1C</color>
 
     <color name="high_emphasis">@color/black_87</color>
     <color name="med_emphasis">@color/black_60</color>
     <color name="precipitation">@color/blue_700</color>
+    <color name="error">@color/red_600</color>
 </resources>

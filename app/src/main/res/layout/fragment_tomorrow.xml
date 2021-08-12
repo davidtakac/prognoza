@@ -47,7 +47,7 @@
             app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
             android:layout_marginStart="8dp"
             android:textColor="@color/med_emphasis"
-            android:textSize="32sp"
+            android:textSize="36sp"
             tools:text="32"/>
 
         <TextView
@@ -58,6 +58,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             tools:text="Precipitation: 40 mm"
+            android:textColor="@color/med_emphasis"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:textSize="16sp"/>
@@ -71,6 +72,7 @@
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
+            android:textColor="@color/med_emphasis"
             android:textSize="16sp"
             tools:text="Mostly light sleet showers and thunder"/>
 
