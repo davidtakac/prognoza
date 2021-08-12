@@ -13,7 +13,7 @@ import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
-import hr.dtakac.prognoza.places.PlaceSearchFragment
+import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBinding::inflate) {
@@ -94,7 +94,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     private fun initializeDataRefreshOnChangedPlace() {
         parentFragmentManager.setFragmentResultListener(REQUEST_KEY, this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
                     viewModel.getDaysForecast()
                 }
             }

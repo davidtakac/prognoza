@@ -8,7 +8,7 @@ import hr.dtakac.prognoza.base.ViewBindingActivity
 import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
-import hr.dtakac.prognoza.places.PlaceSearchFragment
+import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val SEARCH_FRAGMENT_TAG = "search"
@@ -61,7 +61,7 @@ class ForecastActivity :
             REQUEST_KEY,
             this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
                     viewModel.getPlaceName()
                     supportFragmentManager.popBackStack()
                 }
@@ -70,11 +70,12 @@ class ForecastActivity :
     }
 
     private fun openSearch() {
-        supportFragmentManager.beginTransaction()
+        /*supportFragmentManager.beginTransaction()
             .setReorderingAllowed(true)
-            .add(R.id.container_search, PlaceSearchFragment::class.java, null, SEARCH_FRAGMENT_TAG)
+            .add(R.id.container_search, PlaceSearchDialogFragment::class.java, null, SEARCH_FRAGMENT_TAG)
             .addToBackStack(null)
             .commit()
-        binding.layoutSearch.visibility = View.VISIBLE
+        binding.layoutSearch.visibility = View.VISIBLE*/
+        PlaceSearchDialogFragment().show(supportFragmentManager, SEARCH_FRAGMENT_TAG)
     }
 }

@@ -1,30 +1,51 @@
 package hr.dtakac.prognoza.places
 
+import android.app.Dialog
 import android.os.Bundle
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.common.util.toPx
 import hr.dtakac.prognoza.databinding.FragmentPlacesBinding
 import hr.dtakac.prognoza.forecast.ForecastActivity
 import hr.dtakac.prognoza.forecast.fragment.DaysFragment
 import hr.dtakac.prognoza.forecast.fragment.TodayFragment
 import hr.dtakac.prognoza.forecast.fragment.TomorrowFragment
-import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.roundToInt
 
-// todo: ideja, wrappaj fragmentcontainerview u constraintlayout pa probaj tako elevaciju postic?
-class PlaceSearchFragment :
-    ViewBindingFragment<FragmentPlacesBinding>(FragmentPlacesBinding::inflate) {
+class PlaceSearchDialogFragment : DialogFragment() {
     private val adapter = PlacesRecyclerViewAdapter { viewModel.select(it) }
     private val viewModel by viewModel<PlacesViewModel>()
+    private var _binding: FragmentPlacesBinding? = null
+    private val binding: FragmentPlacesBinding get() = _binding!!
 
     companion object {
         const val RESULT_PLACE_PICKED = "search_place_picked"
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, 350.toPx.roundToInt())
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPlacesBinding.inflate(inflater)
+        setDialogPosition()
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,6 +74,7 @@ class PlaceSearchFragment :
                     setFragmentResult(TomorrowFragment.REQUEST_KEY, result)
                     setFragmentResult(DaysFragment.REQUEST_KEY, result)
                 }
+                dismiss()
             }
         }
         viewModel.message.observe(viewLifecycleOwner) {
@@ -96,5 +118,10 @@ class PlaceSearchFragment :
                 viewModel.showSavedPlaces()
             }
         }
+    }
+
+    private fun setDialogPosition() {
+        val window = dialog?.window
+        window?.setGravity(Gravity.TOP or Gravity.START)
     }
 }

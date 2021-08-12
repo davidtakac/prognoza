@@ -16,7 +16,7 @@ import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
-import hr.dtakac.prognoza.places.PlaceSearchFragment
+import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -101,7 +101,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             REQUEST_KEY,
             this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
                     viewModel.getTodayForecast()
                 }
             }

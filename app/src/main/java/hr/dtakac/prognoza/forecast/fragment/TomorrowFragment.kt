@@ -15,7 +15,7 @@ import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
-import hr.dtakac.prognoza.places.PlaceSearchFragment
+import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -103,7 +103,7 @@ class TomorrowFragment :
             REQUEST_KEY,
             this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
                     viewModel.getTomorrowForecast()
                 }
             }
