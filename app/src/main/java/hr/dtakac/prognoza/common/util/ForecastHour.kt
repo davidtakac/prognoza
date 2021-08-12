@@ -32,8 +32,10 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
     val hourWithMaxWindSpeedAsync = coroutineScope.async { hourWithMaxWindSpeed() }
     val maxHumidityAsync = coroutineScope.async { maxHumidity() }
     val maxPressureAsync = coroutineScope.async { maxPressure() }
+    val firstHour = get(0)
     return DayUiModel(
-        time = get(0).time,
+        id = "${firstHour.placeId}-${firstHour.time}",
+        time = firstHour.time,
         representativeWeatherIcon = weatherIconAsync.await(),
         lowTemperature = lowTempAsync.await(),
         highTemperature = highTempAsync.await(),

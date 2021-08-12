@@ -1,10 +1,7 @@
 package hr.dtakac.prognoza.places
 
 import android.os.Bundle
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -16,22 +13,22 @@ import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.common.PLACE_SEARCH_REQUEST_KEY
 import hr.dtakac.prognoza.common.util.toPx
-import hr.dtakac.prognoza.databinding.FragmentPlacesBinding
+import hr.dtakac.prognoza.databinding.FragmentPlaceSearchBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
 class PlaceSearchDialogFragment : DialogFragment() {
     private val adapter = PlacesRecyclerViewAdapter { viewModel.select(it) }
     private val viewModel by viewModel<PlacesViewModel>()
-    private var _binding: FragmentPlacesBinding? = null
-    private val binding: FragmentPlacesBinding get() = _binding!!
+    private var _binding: FragmentPlaceSearchBinding? = null
+    private val binding: FragmentPlaceSearchBinding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentPlacesBinding.inflate(inflater)
+        _binding = FragmentPlaceSearchBinding.inflate(inflater)
         setDialogPosition()
         return binding.root
     }

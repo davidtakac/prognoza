@@ -58,6 +58,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             tools:text="Precipitation: 40 mm"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:textSize="16sp"/>
 
@@ -68,6 +69,7 @@
             app:layout_constraintTop_toBottomOf="@id/tv_description"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:textSize="16sp"
             tools:text="Mostly light sleet showers and thunder"/>

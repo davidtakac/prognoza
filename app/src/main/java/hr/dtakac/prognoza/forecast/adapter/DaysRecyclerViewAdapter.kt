@@ -33,7 +33,7 @@ class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCa
 class DayViewHolder(
     val binding: CellDayBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
 
     fun bind(uiModel: DayUiModel) {
         binding.apply {
@@ -70,6 +70,6 @@ class DayDiffCallback : DiffUtil.ItemCallback<DayUiModel>() {
     }
 
     override fun areItemsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
-        return oldItem == newItem
+        return oldItem.id == newItem.id
     }
 }

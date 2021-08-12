@@ -29,7 +29,7 @@ class TomorrowFragment :
     ViewBindingFragment<FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
     private val viewModel by viewModel<TomorrowViewModel>()
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EE, d LLLL", Locale.getDefault())
+    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

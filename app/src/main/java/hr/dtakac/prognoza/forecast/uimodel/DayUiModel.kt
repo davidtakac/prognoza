@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.forecast.uimodel
 import java.time.ZonedDateTime
 
 data class DayUiModel(
+    val id: String,
     val time: ZonedDateTime,
     val representativeWeatherIcon: RepresentativeWeatherIcon?,
     val lowTemperature: Float?,

@@ -1,6 +1,11 @@
 package hr.dtakac.prognoza.common.util
 
 import android.content.res.Resources
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import androidx.core.text.color
+import androidx.core.text.toSpannable
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.forecast.uimodel.RepresentativeWeatherIcon
 import kotlin.math.roundToInt
@@ -86,11 +91,20 @@ fun Resources.formatRepresentativeWeatherIconDescription(representativeWeatherIc
     }
 }
 
-fun Resources.formatTotalPrecipitation(precipitation: Float?): String {
+fun Resources.formatTotalPrecipitation(precipitation: Float?): Spannable {
     return if (!precipitation.isPrecipitationAmountSignificant()) {
-        getString(R.string.total_precipitation_none)
+        SpannableString(getString(R.string.total_precipitation_none))
     } else {
-        getString(R.string.template_total_precipitation, formatPrecipitationValue(precipitation))
+        SpannableStringBuilder()
+            .color(getColor(R.color.precipitation, null)) {
+                append(
+                    formatPrecipitationValue(
+                        precipitation
+                    )
+                )
+            }
+            .append(getString(R.string.amount_of_precipitation))
+            .toSpannable()
     }
 }
 
@@ -105,13 +119,18 @@ fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
     }
 }
 
-fun Resources.formatPrecipitationTwoHours(precipitationForecast: Float?): String {
+fun Resources.formatPrecipitationTwoHours(precipitationForecast: Float?): Spannable {
     return if (precipitationForecast == null) {
-        getString(R.string.precipitation_forecast_none)
+        SpannableString(getString(R.string.precipitation_forecast_none))
     } else {
-        getString(
-            R.string.template_precipitation_forecast,
-            formatPrecipitationValue(precipitationForecast)
-        )
+        SpannableStringBuilder()
+            .color(getColor(R.color.precipitation, null)) {
+                append(
+                    formatPrecipitationValue(
+                        precipitationForecast
+                    )
+                )
+            }
+            .append(getString(R.string.amount_of_precipitation_forecast))
     }
 }
