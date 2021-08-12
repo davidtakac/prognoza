@@ -95,5 +95,7 @@
     <string name="wind">Wind</string>
     <string name="humidity">Humidity</string>
     <string name="pressure">Pressure</string>
+    <string name="met_norway_credit">Data from MET Norway</string>
+    <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
 
 </resources>
