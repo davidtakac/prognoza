@@ -15,25 +15,33 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
-    override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
-        holder.binding.clHeader.setOnClickListener {
+    private val onItemClickCallback = object : (Int) -> Unit {
+        override fun invoke(position: Int) {
             val itemAtPosition = getItem(position)
             itemAtPosition.isExpanded = !itemAtPosition.isExpanded
             notifyItemChanged(position)
         }
+    }
+
+    override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayViewHolder {
         val binding = CellDayBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DayViewHolder(binding)
+        return DayViewHolder(binding, onItemClickCallback)
     }
 }
 
 class DayViewHolder(
-    val binding: CellDayBinding
+    private val binding: CellDayBinding,
+    onItemClickCallback: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
+
+    init {
+        binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
+    }
 
     fun bind(uiModel: DayUiModel) {
         binding.apply {
