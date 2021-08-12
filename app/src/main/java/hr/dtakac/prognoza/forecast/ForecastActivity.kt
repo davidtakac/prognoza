@@ -1,10 +1,11 @@
 package hr.dtakac.prognoza.forecast
 
 import android.os.Bundle
-import android.view.View
+import androidx.fragment.app.DialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingActivity
+import hr.dtakac.prognoza.common.*
 import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
@@ -12,13 +13,10 @@ import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val SEARCH_FRAGMENT_TAG = "search"
+
 class ForecastActivity :
     ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
     private val viewModel by viewModel<ForecastViewModel>()
-
-    companion object {
-        const val REQUEST_KEY = "forecast_request_key"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,24 +56,32 @@ class ForecastActivity :
             }
         }
         supportFragmentManager.setFragmentResultListener(
-            REQUEST_KEY,
+            PLACE_SEARCH_REQUEST_KEY,
             this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
                     viewModel.getPlaceName()
-                    supportFragmentManager.popBackStack()
+                    notifyFragmentsOfNewPlace()
+                    closeSearch()
                 }
             }
         )
     }
 
     private fun openSearch() {
-        /*supportFragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .add(R.id.container_search, PlaceSearchDialogFragment::class.java, null, SEARCH_FRAGMENT_TAG)
-            .addToBackStack(null)
-            .commit()
-        binding.layoutSearch.visibility = View.VISIBLE*/
         PlaceSearchDialogFragment().show(supportFragmentManager, SEARCH_FRAGMENT_TAG)
+    }
+
+    private fun closeSearch() {
+        (supportFragmentManager.findFragmentByTag(SEARCH_FRAGMENT_TAG) as? DialogFragment)?.dismiss()
+    }
+
+    private fun notifyFragmentsOfNewPlace() {
+        val result = Bundle().apply { putBoolean(BUNDLE_KEY_PLACE_PICKED, true) }
+        supportFragmentManager.apply {
+            setFragmentResult(TODAY_REQUEST_KEY, result)
+            setFragmentResult(TOMORROW_REQUEST_KEY, result)
+            setFragmentResult(DAYS_REQUEST_KEY, result)
+        }
     }
 }

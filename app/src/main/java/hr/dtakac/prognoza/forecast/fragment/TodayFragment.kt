@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
+import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.common.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.common.util.formatEmptyMessage
 import hr.dtakac.prognoza.common.util.formatPrecipitationTwoHours
 import hr.dtakac.prognoza.common.util.formatTemperatureValue
@@ -26,10 +28,6 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     private val viewModel by viewModel<TodayViewModel>()
     private val dateTimeFormatter =
         DateTimeFormatter.ofPattern("d LLLL, HH:mm", Locale.getDefault())
-
-    companion object {
-        const val REQUEST_KEY = "today_request_key"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -98,10 +96,10 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
 
     private fun initializeDataRefreshOnChangedPlace() {
         parentFragmentManager.setFragmentResultListener(
-            REQUEST_KEY,
+            TODAY_REQUEST_KEY,
             this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
                     viewModel.getTodayForecast()
                 }
             }

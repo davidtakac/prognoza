@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.base.ViewBindingFragment
+import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
+import hr.dtakac.prognoza.common.DAYS_REQUEST_KEY
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.common.util.formatEmptyMessage
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
@@ -13,16 +15,11 @@ import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
-import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBinding::inflate) {
     private val adapter = DaysRecyclerViewAdapter()
     private val viewModel by viewModel<DaysViewModel>()
-
-    companion object {
-        const val REQUEST_KEY = "days_request_key"
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -92,9 +89,11 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     }
 
     private fun initializeDataRefreshOnChangedPlace() {
-        parentFragmentManager.setFragmentResultListener(REQUEST_KEY, this,
+        parentFragmentManager.setFragmentResultListener(
+            DAYS_REQUEST_KEY,
+            this,
             { _, bundle ->
-                if (bundle.getBoolean(PlaceSearchDialogFragment.RESULT_PLACE_PICKED)) {
+                if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
                     viewModel.getDaysForecast()
                 }
             }

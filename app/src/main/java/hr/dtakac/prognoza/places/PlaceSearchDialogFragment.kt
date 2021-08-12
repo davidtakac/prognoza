@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.places
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -13,13 +12,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.common.PLACE_SEARCH_REQUEST_KEY
 import hr.dtakac.prognoza.common.util.toPx
 import hr.dtakac.prognoza.databinding.FragmentPlacesBinding
-import hr.dtakac.prognoza.forecast.ForecastActivity
-import hr.dtakac.prognoza.forecast.fragment.DaysFragment
-import hr.dtakac.prognoza.forecast.fragment.TodayFragment
-import hr.dtakac.prognoza.forecast.fragment.TomorrowFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt
 
@@ -28,15 +25,6 @@ class PlaceSearchDialogFragment : DialogFragment() {
     private val viewModel by viewModel<PlacesViewModel>()
     private var _binding: FragmentPlacesBinding? = null
     private val binding: FragmentPlacesBinding get() = _binding!!
-
-    companion object {
-        const val RESULT_PLACE_PICKED = "search_place_picked"
-    }
-
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, 350.toPx.roundToInt())
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,14 +55,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
         }
         viewModel.placeSelectedEvent.observe(viewLifecycleOwner) {
             if (!it.isConsumed) {
-                val result = Bundle().apply { putBoolean(RESULT_PLACE_PICKED, true) }
-                parentFragmentManager.apply {
-                    setFragmentResult(ForecastActivity.REQUEST_KEY, result)
-                    setFragmentResult(TodayFragment.REQUEST_KEY, result)
-                    setFragmentResult(TomorrowFragment.REQUEST_KEY, result)
-                    setFragmentResult(DaysFragment.REQUEST_KEY, result)
-                }
-                dismiss()
+                notifyParentPlaceWasPicked()
             }
         }
         viewModel.message.observe(viewLifecycleOwner) {
@@ -118,6 +99,20 @@ class PlaceSearchDialogFragment : DialogFragment() {
                 viewModel.showSavedPlaces()
             }
         }
+    }
+
+    private fun notifyParentPlaceWasPicked() {
+        val result = Bundle().apply { putBoolean(BUNDLE_KEY_PLACE_PICKED, true) }
+        parentFragmentManager.apply {
+            setFragmentResult(PLACE_SEARCH_REQUEST_KEY, result)
+        }
+    }
+
+    // dialog specific shenanigans, useful stackoverflow article:
+    // https://stackoverflow.com/questions/9698410/position-of-dialogfragment-in-android
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(ConstraintLayout.LayoutParams.MATCH_PARENT, 350.toPx.roundToInt())
     }
 
     private fun setDialogPosition() {
