@@ -74,7 +74,8 @@ fun Resources.formatPressureValue(pressure: Float?): String {
 }
 
 fun Resources.formatRepresentativeWeatherIconDescription(representativeWeatherIcon: RepresentativeWeatherIcon?): String {
-    val weatherIconDescription = formatWeatherIconDescription(representativeWeatherIcon?.weatherIcon?.descriptionResourceId)
+    val weatherIconDescription =
+        formatWeatherIconDescription(representativeWeatherIcon?.weatherIcon?.descriptionResourceId)
     return if (representativeWeatherIcon?.isMostly == true) {
         getString(
             R.string.template_mostly,

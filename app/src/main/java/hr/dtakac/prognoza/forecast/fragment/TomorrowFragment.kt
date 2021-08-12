@@ -10,7 +10,10 @@ import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.common.TOMORROW_REQUEST_KEY
-import hr.dtakac.prognoza.common.util.*
+import hr.dtakac.prognoza.common.util.formatEmptyMessage
+import hr.dtakac.prognoza.common.util.formatRepresentativeWeatherIconDescription
+import hr.dtakac.prognoza.common.util.formatTemperatureValue
+import hr.dtakac.prognoza.common.util.formatTotalPrecipitation
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
@@ -131,6 +134,7 @@ class TomorrowFragment :
         binding.ivWeatherIcon.setImageResource(
             uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
         )
-        binding.tvPrecipitation.text = resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
+        binding.tvPrecipitation.text =
+            resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
     }
 }

@@ -48,10 +48,15 @@ class DayViewHolder(
             tvDescription.text =
                 resources.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherIcon)
             ivWeatherIcon.setImageResource(
-                uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
+                uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId
+                    ?: R.drawable.ic_cloud
             )
-            tvPrecipitation.text = resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
-            tvWind.text = resources.formatWindWithDirection(uiModel.maxWindSpeed, uiModel.windFromCompassDirection)
+            tvPrecipitation.text =
+                resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
+            tvWind.text = resources.formatWindWithDirection(
+                uiModel.maxWindSpeed,
+                uiModel.windFromCompassDirection
+            )
             tvHumidity.text = resources.formatHumidityValue(uiModel.maxHumidity)
             tvPressure.text = resources.formatPressureValue(uiModel.maxPressure)
             clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE

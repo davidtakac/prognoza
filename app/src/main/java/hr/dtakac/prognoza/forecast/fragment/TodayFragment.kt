@@ -18,7 +18,6 @@ import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
 import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
-import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*

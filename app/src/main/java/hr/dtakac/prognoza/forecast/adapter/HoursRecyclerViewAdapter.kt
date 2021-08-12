@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class HoursRecyclerViewAdapter : ListAdapter<HourUiModel, HourViewHolder>(HourDiffCallback()) {
-override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HourViewHolder, position: Int) {
         holder.binding.clHeader.setOnClickListener {
             val itemAtPosition = getItem(position)
             itemAtPosition.isExpanded = !itemAtPosition.isExpanded
