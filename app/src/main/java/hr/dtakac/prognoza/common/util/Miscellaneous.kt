@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.common.util
 import android.content.res.Resources
 import android.util.TypedValue
 import hr.dtakac.prognoza.database.entity.ForecastMeta
+import java.lang.Exception
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
@@ -20,4 +21,8 @@ val Number.toPx
 fun ZonedDateTime.atStartOfDay(): ZonedDateTime =
     toLocalDate().atStartOfDay(ZoneId.systemDefault())
 
-fun ForecastMeta.hasExpired(): Boolean = ZonedDateTime.now() > expires
+fun ForecastMeta.hasExpired(): Boolean = try {
+    ZonedDateTime.now() > expires
+} catch (e: Exception) {
+    true
+}

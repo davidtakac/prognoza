@@ -11,6 +11,6 @@ import java.time.ZonedDateTime
 data class ForecastMeta(
     @PrimaryKey
     val placeId: String,
-    val expires: ZonedDateTime,
-    val lastModified: ZonedDateTime
+    val expires: ZonedDateTime?,
+    val lastModified: ZonedDateTime?
 )

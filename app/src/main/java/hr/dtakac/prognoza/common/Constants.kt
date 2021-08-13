@@ -8,7 +8,6 @@ const val USER_AGENT = "Prognoza/${BuildConfig.VERSION_NAME}, " +
 
 const val MET_NORWAY_BASE_URL = "https://api.met.no/weatherapi/"
 const val OSM_NOMINATIM_BASE_URL = "https://nominatim.openstreetmap.org/"
-const val MIN_DATE_TIME_RFC_1123 = "Thu, 1 January 1970 00:00:00 GMT"
 const val DEFAULT_PLACE_ID = "259515203" // corresponds to Osijek, Croatia
 
 const val PLACE_SEARCH_REQUEST_KEY = "place_search_request_key"

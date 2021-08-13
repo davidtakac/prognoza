@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.repository.forecast
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.LocationForecastResponse
-import hr.dtakac.prognoza.common.MIN_DATE_TIME_RFC_1123
 import hr.dtakac.prognoza.common.USER_AGENT
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.common.util.*
