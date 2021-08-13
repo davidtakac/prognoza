@@ -14,12 +14,12 @@ import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
-import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.DaysFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBinding::inflate) {
     private val adapter = DaysRecyclerViewAdapter()
-    private val viewModel by viewModel<DaysViewModel>()
+    private val viewModel by viewModel<DaysFragmentViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -32,7 +32,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     override fun onResume() {
         super.onResume()
         if (binding.error.root.visibility != View.VISIBLE) {
-            viewModel.getDaysForecast()
+            viewModel.getForecast()
         }
     }
 
@@ -84,7 +84,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
 
     private fun initializeTryAgain() {
         binding.error.btnTryAgain.setOnClickListener {
-            viewModel.getDaysForecast()
+            viewModel.getForecast()
         }
     }
 
@@ -94,7 +94,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
             this,
             { _, bundle ->
                 if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
-                    viewModel.getDaysForecast()
+                    viewModel.getForecast()
                 }
             }
         )

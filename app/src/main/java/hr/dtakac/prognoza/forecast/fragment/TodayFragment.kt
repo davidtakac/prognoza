@@ -17,14 +17,14 @@ import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
-import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
-    private val viewModel by viewModel<TodayViewModel>()
+    private val viewModel by viewModel<TodayFragmentViewModel>()
     private val dateTimeFormatter =
         DateTimeFormatter.ofPattern("d LLLL, HH:mm", Locale.getDefault())
 
@@ -38,7 +38,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
 
     override fun onResume() {
         super.onResume()
-        viewModel.getTodayForecast()
+        viewModel.getForecast()
     }
 
     private fun observeViewModel() {
@@ -89,7 +89,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
 
     private fun initializeTryAgain() {
         binding.error.btnTryAgain.setOnClickListener {
-            viewModel.getTodayForecast()
+            viewModel.getForecast()
         }
     }
 
@@ -99,7 +99,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
             this,
             { _, bundle ->
                 if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
-                    viewModel.getTodayForecast()
+                    viewModel.getForecast()
                 }
             }
         )

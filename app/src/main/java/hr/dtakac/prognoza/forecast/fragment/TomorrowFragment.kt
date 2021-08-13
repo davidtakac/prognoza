@@ -19,7 +19,7 @@ import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
-import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TomorrowFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
@@ -28,7 +28,7 @@ import java.util.*
 class TomorrowFragment :
     ViewBindingFragment<FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
     private val adapter = HoursRecyclerViewAdapter()
-    private val viewModel by viewModel<TomorrowViewModel>()
+    private val viewModel by viewModel<TomorrowFragmentViewModel>()
     private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +42,7 @@ class TomorrowFragment :
     override fun onResume() {
         super.onResume()
         if (binding.error.root.visibility != View.VISIBLE) {
-            viewModel.getTomorrowForecast()
+            viewModel.getForecast()
         }
     }
 
@@ -94,7 +94,7 @@ class TomorrowFragment :
 
     private fun initializeTryAgain() {
         binding.error.btnTryAgain.setOnClickListener {
-            viewModel.getTomorrowForecast()
+            viewModel.getForecast()
         }
     }
 
@@ -104,7 +104,7 @@ class TomorrowFragment :
             this,
             { _, bundle ->
                 if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
-                    viewModel.getTomorrowForecast()
+                    viewModel.getForecast()
                 }
             }
         )

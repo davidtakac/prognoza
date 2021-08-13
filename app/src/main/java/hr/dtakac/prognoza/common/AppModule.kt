@@ -9,10 +9,10 @@ import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
-import hr.dtakac.prognoza.forecast.viewmodel.DaysViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.ForecastViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.TodayViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.TomorrowViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.DaysFragmentViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.ForecastActivityViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TodayFragmentViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.TomorrowFragmentViewModel
 import hr.dtakac.prognoza.places.PlacesViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
@@ -110,19 +110,19 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        DaysViewModel(null, get(), get(), get())
+        DaysFragmentViewModel(null, get(), get(), get())
     }
 
     viewModel {
-        ForecastViewModel(null, get(), get(), get())
+        ForecastActivityViewModel(null, get(), get(), get())
     }
 
     viewModel {
-        TodayViewModel(null, get(), get(), get())
+        TodayFragmentViewModel(null, get(), get(), get())
     }
 
     viewModel {
-        TomorrowViewModel(null, get(), get(), get())
+        TomorrowFragmentViewModel(null, get(), get(), get())
     }
 
     viewModel {

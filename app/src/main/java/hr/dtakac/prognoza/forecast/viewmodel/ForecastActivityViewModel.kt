@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class ForecastViewModel(
+class ForecastActivityViewModel(
     coroutineScope: CoroutineScope?,
     private val placeRepository: PlaceRepository,
     private val forecastRepository: ForecastRepository,
