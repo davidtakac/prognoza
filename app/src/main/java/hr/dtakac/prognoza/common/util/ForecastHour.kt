@@ -1,7 +1,9 @@
 package hr.dtakac.prognoza.common.util
 
 import hr.dtakac.prognoza.database.entity.ForecastHour
+import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.*
+import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
@@ -45,6 +47,23 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
         maxHumidity = maxHumidityAsync.await(),
         maxPressure = maxPressureAsync.await()
     )
+}
+
+fun List<ForecastHour>.toForecastResult(meta: ForecastMeta?, errorResourceId: Int): ForecastResult {
+    return if (isNullOrEmpty()) {
+        if (errorResourceId == -1) {
+            ForecastResult.Empty
+        } else {
+            ForecastResult.EmptyWithReason(errorResourceId)
+        }
+    } else {
+        val success = ForecastResult.Success(meta, this)
+        if (errorResourceId == -1) {
+            success
+        } else {
+            ForecastResult.CachedSuccess(success, errorResourceId)
+        }
+    }
 }
 
 fun List<ForecastHour>.maxTemperature() = maxOf { it.temperature ?: Float.MIN_VALUE }

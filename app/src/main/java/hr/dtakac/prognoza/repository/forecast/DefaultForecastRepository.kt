@@ -75,41 +75,27 @@ class DefaultForecastRepository(
         end: ZonedDateTime,
         placeId: String
     ): ForecastResult {
-        val currentMeta = metaRepository.get(placeId)
-        var wasMetaUpdated = false
+        var meta = metaRepository.get(placeId)
         var errorResourceId: Int = -1
-        if (currentMeta?.hasExpired() != false) {
+        if (meta?.hasExpired() != false) {
             try {
-                updateForecastDatabase(placeId, currentMeta?.lastModified)
-                wasMetaUpdated = true
-            } catch (httpException: HttpException) {
-                errorResourceId = when (httpException.code()) {
-                    429 -> R.string.error_met_throttling
-                    in 400..499 -> R.string.error_met_client
-                    in 500..504 -> R.string.error_met_server
-                    else -> R.string.error_met_unknown
-                }
+                updateForecastDatabase(placeId, meta?.lastModified)
+                meta = metaRepository.get(placeId)
+            } catch (e: HttpException) {
+                errorResourceId = handleHttpException(e)
             } catch (e: Exception) {
                 errorResourceId = R.string.error_generic
             }
         }
-        val hours = forecastDao.getForecastHours(start, end, placeId)
-        return if (hours.isNullOrEmpty()) {
-            if (errorResourceId == -1) {
-                ForecastResult.Empty
-            } else {
-                ForecastResult.EmptyWithReason(errorResourceId)
-            }
-        } else {
-            val success = ForecastResult.Success(
-                if (wasMetaUpdated) metaRepository.get(placeId) else currentMeta,
-                hours
-            )
-            if (errorResourceId == -1) {
-                success
-            } else {
-                ForecastResult.CachedSuccess(success, errorResourceId)
-            }
+        return forecastDao.getForecastHours(start, end, placeId).toForecastResult(meta, errorResourceId)
+    }
+
+    private fun handleHttpException(httpException: HttpException): Int {
+        return when (httpException.code()) {
+            429 -> R.string.error_met_throttling
+            in 400..499 -> R.string.error_met_client
+            in 500..504 -> R.string.error_met_server
+            else -> R.string.error_met_unknown
         }
     }
 
