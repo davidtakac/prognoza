@@ -9,7 +9,7 @@ interface ForecastService {
     @GET("locationforecast/2.0/compact")
     suspend fun getCompactLocationForecast(
         @Header("User-Agent") userAgent: String,
-        @Header("If-Modified-Since") ifModifiedSince: String,
+        @Header("If-Modified-Since") ifModifiedSince: String?,
         @Query("lat") latitude: String,
         @Query("lon") longitude: String
     ): Response<LocationForecastResponse>

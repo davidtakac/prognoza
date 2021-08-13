@@ -121,7 +121,7 @@ class DefaultForecastRepository(
         val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
-            ifModifiedSince = lastModifiedTimestamp ?: MIN_DATE_TIME_RFC_1123,
+            ifModifiedSince = lastModifiedTimestamp,
             latitude = format("%.2f", forecastPlace.latitude),
             longitude = format("%.2f", forecastPlace.longitude)
         )
