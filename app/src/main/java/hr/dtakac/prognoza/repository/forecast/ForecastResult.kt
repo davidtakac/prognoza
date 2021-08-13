@@ -14,9 +14,7 @@ sealed class ForecastResult {
         val reasonResourceId: Int
     ) : ForecastResult()
 
-    object Empty : ForecastResult()
-
-    data class EmptyWithReason(
-        val reasonResourceId: Int,
+    data class Empty(
+        val reasonResourceId: Int?,
     ) : ForecastResult()
 }

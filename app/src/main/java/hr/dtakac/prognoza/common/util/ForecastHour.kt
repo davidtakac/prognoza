@@ -51,11 +51,7 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
 
 fun List<ForecastHour>.toForecastResult(meta: ForecastMeta?, errorResourceId: Int): ForecastResult {
     return if (isNullOrEmpty()) {
-        if (errorResourceId == -1) {
-            ForecastResult.Empty
-        } else {
-            ForecastResult.EmptyWithReason(errorResourceId)
-        }
+        ForecastResult.Empty(if (errorResourceId == -1) null else errorResourceId)
     } else {
         val success = ForecastResult.Success(meta, this)
         if (errorResourceId == -1) {

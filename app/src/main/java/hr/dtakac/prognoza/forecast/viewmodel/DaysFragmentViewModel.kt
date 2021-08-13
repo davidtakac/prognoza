@@ -27,7 +27,6 @@ class DaysFragmentViewModel(
         when (val result = forecastRepository.getOtherDaysForecastHours(selectedPlaceId)) {
             is ForecastResult.Success -> handleSuccess(result)
             is ForecastResult.Empty -> handleEmpty(result)
-            is ForecastResult.EmptyWithReason -> handleEmptyWithReason(result)
             is ForecastResult.CachedSuccess -> handleCachedSuccess(result)
         }
         _isLoading.value = false

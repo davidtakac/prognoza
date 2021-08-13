@@ -29,7 +29,6 @@ class TodayFragmentViewModel(
             is ForecastResult.Success -> handleSuccess(result)
             is ForecastResult.Empty -> handleEmpty(result)
             is ForecastResult.CachedSuccess -> handleCachedSuccess(result)
-            is ForecastResult.EmptyWithReason -> handleEmptyWithReason(result)
         }
         _isLoading.value = false
     }

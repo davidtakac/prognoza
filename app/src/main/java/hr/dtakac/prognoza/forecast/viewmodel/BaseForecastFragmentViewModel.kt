@@ -41,16 +41,12 @@ abstract class BaseForecastFragmentViewModel(
     protected abstract suspend fun handleSuccess(success: ForecastResult.Success)
 
     protected open fun handleEmpty(empty: ForecastResult.Empty) {
-        _emptyScreen.value = EmptyForecast(null)
+        _emptyScreen.value = EmptyForecast(empty.reasonResourceId)
     }
 
     protected open suspend fun handleCachedSuccess(cachedResult: ForecastResult.CachedSuccess) {
         handleSuccess(cachedResult.success)
         _message.value = Event(R.string.notify_cached_result)
-    }
-
-    protected open fun handleEmptyWithReason(emptyWithReason: ForecastResult.EmptyWithReason) {
-        _emptyScreen.value = EmptyForecast(emptyWithReason.reasonResourceId)
     }
 
     protected open suspend fun isReloadNeeded(): Boolean {
