@@ -38,7 +38,9 @@ class PlaceSearchDialogFragment : DialogFragment() {
         observeViewModel()
         initializeRecyclerView()
         initializeSearchField()
-        viewModel.showSavedPlaces()
+        if (viewModel.places.value.isNullOrEmpty()) {
+            viewModel.showPlaces()
+        }
     }
 
     private fun observeViewModel() {
@@ -85,7 +87,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
     private fun initializeSearchField() {
         binding.etSearch.setOnEditorActionListener { textView, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.search(textView.text.toString())
+                viewModel.showPlaces(textView.text.toString())
                 true
             } else {
                 false
@@ -93,7 +95,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
         }
         binding.etSearch.addTextChangedListener {
             if (it.isNullOrBlank()) {
-                viewModel.showSavedPlaces()
+                viewModel.showPlaces()
             }
         }
     }

@@ -38,7 +38,21 @@ class PlacesViewModel(
     private val _message = MutableLiveData<Event<Int>>()
     val message: LiveData<Event<Int>> get() = _message
 
-    fun showSavedPlaces() {
+    fun showPlaces(query: String = "") {
+        when {
+            query.isBlank() -> {
+                showSavedPlaces()
+            }
+            networkChecker.hasInternetConnection() -> {
+                search(query)
+            }
+            else -> {
+                _message.value = Event(R.string.notify_no_internet)
+            }
+        }
+    }
+
+    private fun showSavedPlaces() {
         coroutineScope.launch {
             _isLoading.value = true
             setDisplayedPlaces(placeRepository.getAll())
@@ -46,15 +60,11 @@ class PlacesViewModel(
         }
     }
 
-    fun search(query: String) {
-        if (networkChecker.hasInternetConnection()) {
-            coroutineScope.launch {
-                _isLoading.value = true
-                setDisplayedPlaces(placeRepository.search(query))
-                _isLoading.value = false
-            }
-        } else {
-            _message.value = Event(R.string.notify_no_internet)
+    private fun search(query: String) {
+        coroutineScope.launch {
+            _isLoading.value = true
+            setDisplayedPlaces(placeRepository.search(query))
+            _isLoading.value = false
         }
     }
 

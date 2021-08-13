@@ -87,7 +87,7 @@
     <string name="placeholder_wind_direction">/</string>
     <string name="placeholder_humidity">/</string>
     <string name="placeholder_pressure">/</string>
-    <string name="notify_cached_result">Showing cached results because of a network error.</string>
+    <string name="notify_cached_result">Showing cached results.</string>
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
     <string name="amount_of_precipitation_forecast">" in the next two hours"</string>
     <string name="precipitation_forecast_none">No precipitation in the next two hours</string>
