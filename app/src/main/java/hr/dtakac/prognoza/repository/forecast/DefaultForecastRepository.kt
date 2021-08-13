@@ -4,7 +4,6 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.LocationForecastResponse
 import hr.dtakac.prognoza.common.USER_AGENT
-import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.common.util.*
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
@@ -23,8 +22,7 @@ class DefaultForecastRepository(
     private val forecastDao: ForecastHourDao,
     private val placeRepository: PlaceRepository,
     private val metaRepository: MetaRepository,
-    private val dispatcherProvider: DispatcherProvider,
-    private val networkChecker: NetworkChecker
+    private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
     private val hoursAfterMidnightToShow = 6L
 
@@ -80,7 +78,7 @@ class DefaultForecastRepository(
         val currentMeta = metaRepository.get(placeId)
         var wasMetaUpdated = false
         var errorResourceId: Int = -1
-        if (currentMeta?.hasExpired() != false && networkChecker.hasInternetConnection()) {
+        if (currentMeta?.hasExpired() != false) {
             try {
                 updateForecastDatabase(placeId, currentMeta?.lastModified)
                 wasMetaUpdated = true

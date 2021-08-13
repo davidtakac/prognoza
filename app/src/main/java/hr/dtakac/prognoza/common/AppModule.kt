@@ -100,8 +100,7 @@ val prognozaAppModule = module {
             forecastService = get(),
             forecastDao = get<AppDatabase>().hourDao(),
             placeRepository = get(),
-            metaRepository = get(),
-            networkChecker = get()
+            metaRepository = get()
         )
     }
 
