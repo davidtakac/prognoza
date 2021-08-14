@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.common.util
 import hr.dtakac.prognoza.database.entity.ForecastHour
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.*
-import hr.dtakac.prognoza.repository.forecast.ForecastResult
+import hr.dtakac.prognoza.repository.forecast.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
@@ -49,15 +49,15 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
     )
 }
 
-fun List<ForecastHour>.toForecastResult(meta: ForecastMeta?, errorResourceId: Int): ForecastResult {
+fun List<ForecastHour>.toForecastResult(meta: ForecastMeta?, error: ForecastError?): ForecastResult {
     return if (isNullOrEmpty()) {
-        ForecastResult.Empty(if (errorResourceId == -1) null else errorResourceId)
+        Empty(error)
     } else {
-        val success = ForecastResult.Success(meta, this)
-        if (errorResourceId == -1) {
+        val success = Success(meta, this)
+        if (error == null) {
             success
         } else {
-            ForecastResult.CachedSuccess(success, errorResourceId)
+            CachedSuccess(success, error)
         }
     }
 }

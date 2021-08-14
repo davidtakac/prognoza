@@ -6,9 +6,12 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.base.Event
 import hr.dtakac.prognoza.common.util.hasExpired
+import hr.dtakac.prognoza.common.util.toErrorResourceId
 import hr.dtakac.prognoza.database.entity.ForecastMeta
 import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
-import hr.dtakac.prognoza.repository.forecast.ForecastResult
+import hr.dtakac.prognoza.repository.forecast.CachedSuccess
+import hr.dtakac.prognoza.repository.forecast.Empty
+import hr.dtakac.prognoza.repository.forecast.Success
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,13 +41,13 @@ abstract class BaseForecastFragmentViewModel(
 
     protected abstract suspend fun getNewForecast()
 
-    protected abstract suspend fun handleSuccess(success: ForecastResult.Success)
+    protected abstract suspend fun handleSuccess(success: Success)
 
-    protected open fun handleEmpty(empty: ForecastResult.Empty) {
-        _emptyScreen.value = EmptyForecast(empty.reasonResourceId)
+    protected open fun handleEmpty(empty: Empty) {
+        _emptyScreen.value = EmptyForecast(empty.reason?.toErrorResourceId())
     }
 
-    protected open suspend fun handleCachedSuccess(cachedResult: ForecastResult.CachedSuccess) {
+    protected open suspend fun handleCachedSuccess(cachedResult: CachedSuccess) {
         handleSuccess(cachedResult.success)
         _message.value = Event(R.string.notify_cached_result)
     }

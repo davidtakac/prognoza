@@ -71,7 +71,6 @@
     <string name="hint_places_search">Search places…</string>
     <string name="error_met_client">Something is wrong with your request.</string>
     <string name="error_met_server">Server is currently unable to process the request.</string>
-    <string name="error_met_unknown">Unknown error when communicating with the server.</string>
     <string name="error_met_throttling">Heavy traffic from other users.</string>
     <string name="error_generic">An unexpected error occurred.</string>
     <string name="error_forecast_empty">There is no forecast data for this place and time. Please connect to the Internet and try again.</string>
@@ -97,5 +96,6 @@
     <string name="pressure">Pressure</string>
     <string name="met_norway_credit">Data from MET Norway</string>
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
+    <string name="error_database">An error occurred when fetching forecast data from the database. Try clearing your app data.</string>
 
 </resources>

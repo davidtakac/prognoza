@@ -6,8 +6,7 @@ import hr.dtakac.prognoza.common.util.toDayUiModel
 import hr.dtakac.prognoza.common.util.toHourUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
-import hr.dtakac.prognoza.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.repository.forecast.ForecastResult
+import hr.dtakac.prognoza.repository.forecast.*
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -25,14 +24,14 @@ class TomorrowFragmentViewModel(
         _isLoading.value = true
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
         when (val result = forecastRepository.getTomorrowForecastHours(selectedPlaceId)) {
-            is ForecastResult.Success -> handleSuccess(result)
-            is ForecastResult.Empty -> handleEmpty(result)
-            is ForecastResult.CachedSuccess -> handleCachedSuccess(result)
+            is Success -> handleSuccess(result)
+            is Empty -> handleEmpty(result)
+            is CachedSuccess -> handleCachedSuccess(result)
         }
         _isLoading.value = false
     }
 
-    override suspend fun handleSuccess(success: ForecastResult.Success) {
+    override suspend fun handleSuccess(success: Success) {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
             success.hours.toDayUiModel(this)
         }

@@ -5,8 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.common.util.toDayUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
-import hr.dtakac.prognoza.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.repository.forecast.ForecastResult
+import hr.dtakac.prognoza.repository.forecast.*
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
@@ -25,14 +24,14 @@ class DaysFragmentViewModel(
         _isLoading.value = true
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
         when (val result = forecastRepository.getOtherDaysForecastHours(selectedPlaceId)) {
-            is ForecastResult.Success -> handleSuccess(result)
-            is ForecastResult.Empty -> handleEmpty(result)
-            is ForecastResult.CachedSuccess -> handleCachedSuccess(result)
+            is Success -> handleSuccess(result)
+            is Empty -> handleEmpty(result)
+            is CachedSuccess -> handleCachedSuccess(result)
         }
         _isLoading.value = false
     }
 
-    override suspend fun handleSuccess(success: ForecastResult.Success) {
+    override suspend fun handleSuccess(success: Success) {
         val uiModels = withContext(dispatcherProvider.default) {
             success.hours
                 .groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }

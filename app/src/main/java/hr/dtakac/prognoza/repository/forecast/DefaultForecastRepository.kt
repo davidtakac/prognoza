@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.R
+import android.database.sqlite.SQLiteException
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.LocationForecastResponse
 import hr.dtakac.prognoza.common.USER_AGENT
@@ -75,27 +75,40 @@ class DefaultForecastRepository(
         end: ZonedDateTime,
         placeId: String
     ): ForecastResult {
-        var meta = metaRepository.get(placeId)
-        var errorResourceId: Int = -1
+        var meta = try {
+            metaRepository.get(placeId)
+        } catch (e: Exception) {
+            null
+        }
+        var error: ForecastError? = null
         if (meta?.hasExpired() != false) {
             try {
                 updateForecastDatabase(placeId, meta?.lastModified)
                 meta = metaRepository.get(placeId)
             } catch (e: HttpException) {
-                errorResourceId = handleHttpException(e)
+                error = handleHttpException(e)
+            } catch (e: SQLiteException) {
+                error = DatabaseError(e)
             } catch (e: Exception) {
-                errorResourceId = R.string.error_generic
+                error = Unknown(e)
             }
         }
-        return forecastDao.getForecastHours(start, end, placeId).toForecastResult(meta, errorResourceId)
+        return try {
+            val hours = forecastDao.getForecastHours(start, end, placeId)
+            hours.toForecastResult(meta, error)
+        } catch (e: SQLiteException) {
+            Empty(DatabaseError(e))
+        } catch (e: Exception) {
+            Empty(Unknown(e))
+        }
     }
 
-    private fun handleHttpException(httpException: HttpException): Int {
+    private fun handleHttpException(httpException: HttpException): ForecastError {
         return when (httpException.code()) {
-            429 -> R.string.error_met_throttling
-            in 400..499 -> R.string.error_met_client
-            in 500..504 -> R.string.error_met_server
-            else -> R.string.error_met_unknown
+            429 -> Throttling(httpException)
+            in 400..499 -> ClientSide(httpException)
+            in 500..504 -> ServerSide(httpException)
+            else -> Unknown(httpException)
         }
     }
 
