@@ -1,11 +1,10 @@
 package hr.dtakac.prognoza.forecast.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.common.util.toDayUiModel
 import hr.dtakac.prognoza.common.util.toHourUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
+import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecastUiModel
 import hr.dtakac.prognoza.repository.forecast.*
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
@@ -16,38 +15,24 @@ class TomorrowFragmentViewModel(
     private val forecastRepository: ForecastRepository,
     private val dispatcherProvider: DispatcherProvider,
     preferencesRepository: PreferencesRepository
-) : BaseForecastFragmentViewModel(coroutineScope, preferencesRepository) {
-    private val _tomorrowForecast = MutableLiveData<TomorrowForecast>()
-    val tomorrowForecast: LiveData<TomorrowForecast> get() = _tomorrowForecast
+) : BaseForecastFragmentViewModel<TomorrowForecastUiModel>(coroutineScope, preferencesRepository) {
+    override val _forecast = MutableLiveData<TomorrowForecastUiModel>()
 
-    override suspend fun getNewForecast() {
-        _isLoading.value = true
+    override suspend fun getNewForecast(): ForecastResult {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-        when (val result = forecastRepository.getTomorrowForecastHours(selectedPlaceId)) {
-            is Success -> handleSuccess(result)
-            is Empty -> handleEmpty(result)
-            is CachedSuccess -> handleCachedSuccess(result)
-        }
-        _isLoading.value = false
+        return forecastRepository.getTomorrowForecastHours(selectedPlaceId)
     }
 
-    override suspend fun handleSuccess(success: Success) {
+    override suspend fun mapToForecastUiModel(success: Success): TomorrowForecastUiModel {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
             success.hours.toDayUiModel(this)
         }
         val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
             success.hours.map { it.toHourUiModel() }
         }
-        val successUiModel = TomorrowForecast(
+        return TomorrowForecastUiModel(
             summary = summaryAsync.await(),
             hours = hoursAsync.await()
         )
-        currentMeta = success.meta
-        _tomorrowForecast.value = successUiModel
-        _emptyScreen.value = null
-    }
-
-    override suspend fun isReloadNeeded(): Boolean {
-        return super.isReloadNeeded() || _tomorrowForecast.value == null
     }
 }

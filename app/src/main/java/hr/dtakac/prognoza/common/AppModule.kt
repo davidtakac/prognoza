@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
 import hr.dtakac.prognoza.forecast.viewmodel.DaysFragmentViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.ForecastActivityViewModel
+import hr.dtakac.prognoza.forecast.ForecastActivityViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayFragmentViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowFragmentViewModel
 import hr.dtakac.prognoza.places.PlacesViewModel

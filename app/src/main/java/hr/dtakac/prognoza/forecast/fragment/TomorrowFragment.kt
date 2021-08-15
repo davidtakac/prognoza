@@ -18,8 +18,8 @@ import hr.dtakac.prognoza.common.util.formatTotalPrecipitation
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
-import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
-import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecast
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecastUiModel
+import hr.dtakac.prognoza.forecast.uimodel.TomorrowForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.ZoneId
@@ -48,7 +48,7 @@ class TomorrowFragment :
     }
 
     private fun observeViewModel() {
-        viewModel.tomorrowForecast.observe(viewLifecycleOwner) {
+        viewModel.forecast.observe(viewLifecycleOwner) {
             showForecast(it)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -107,12 +107,12 @@ class TomorrowFragment :
         )
     }
 
-    private fun showForecast(uiModel: TomorrowForecast) {
+    private fun showForecast(uiModel: TomorrowForecastUiModel) {
         populateSummaryViews(uiModel.summary)
         adapter.submitList(uiModel.hours)
     }
 
-    private fun showEmptyScreen(uiModel: EmptyForecast) {
+    private fun showEmptyScreen(uiModel: EmptyForecastUiModel) {
         binding.emptyScreen.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
         binding.emptyScreen.root.visibility = View.VISIBLE
     }

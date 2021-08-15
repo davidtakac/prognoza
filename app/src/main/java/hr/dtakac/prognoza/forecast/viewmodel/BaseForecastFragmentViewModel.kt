@@ -7,52 +7,70 @@ import hr.dtakac.prognoza.base.Event
 import hr.dtakac.prognoza.common.util.hasExpired
 import hr.dtakac.prognoza.common.util.toErrorResourceId
 import hr.dtakac.prognoza.database.entity.ForecastMeta
-import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecastUiModel
+import hr.dtakac.prognoza.forecast.uimodel.ForecastUiModel
 import hr.dtakac.prognoza.repository.forecast.CachedSuccess
 import hr.dtakac.prognoza.repository.forecast.Empty
+import hr.dtakac.prognoza.repository.forecast.ForecastResult
 import hr.dtakac.prognoza.repository.forecast.Success
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-abstract class BaseForecastFragmentViewModel(
+abstract class BaseForecastFragmentViewModel<T: ForecastUiModel>(
     coroutineScope: CoroutineScope?,
     protected val preferencesRepository: PreferencesRepository
 ): CoroutineScopeViewModel(coroutineScope) {
-    protected var currentMeta: ForecastMeta? = null
+    private var currentMeta: ForecastMeta? = null
 
-    protected val _emptyScreen = MutableLiveData<EmptyForecast?>()
-    val emptyScreen: LiveData<EmptyForecast?> get() = _emptyScreen
+    abstract val _forecast: MutableLiveData<T>
+    val forecast: LiveData<T> get() = _forecast
 
-    protected val _cachedResultsMessage = MutableLiveData<Event<Int?>>()
+    private val _emptyScreen = MutableLiveData<EmptyForecastUiModel?>()
+    val emptyScreen: LiveData<EmptyForecastUiModel?> get() = _emptyScreen
+
+    private val _cachedResultsMessage = MutableLiveData<Event<Int?>>()
     val cachedResultsMessage: LiveData<Event<Int?>> get() = _cachedResultsMessage
 
-    protected val _isLoading = MutableLiveData(false)
+    private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    open fun getForecast() {
+    fun getForecast() {
         coroutineScope.launch {
             if (isReloadNeeded()) {
-                getNewForecast()
+                _isLoading.value = true
+                when (val result = getNewForecast()) {
+                    is Success -> handleSuccess(result)
+                    is CachedSuccess -> handleCachedSuccess(result)
+                    is Empty -> handleEmpty(result)
+                }
+                _isLoading.value = false
             }
         }
     }
 
-    protected abstract suspend fun getNewForecast()
+    protected abstract suspend fun getNewForecast(): ForecastResult
 
-    protected abstract suspend fun handleSuccess(success: Success)
+    protected abstract suspend fun mapToForecastUiModel(success: Success): T
 
-    protected open fun handleEmpty(empty: Empty) {
-        _emptyScreen.value = EmptyForecast(empty.reason?.toErrorResourceId())
+    private suspend fun handleSuccess(success: Success) {
+        _forecast.value = mapToForecastUiModel(success)
+        currentMeta = success.meta
+        _emptyScreen.value = null
     }
 
-    protected open suspend fun handleCachedSuccess(cachedResult: CachedSuccess) {
+    private fun handleEmpty(empty: Empty) {
+        _emptyScreen.value = EmptyForecastUiModel(empty.reason?.toErrorResourceId())
+    }
+
+    private suspend fun handleCachedSuccess(cachedResult: CachedSuccess) {
         handleSuccess(cachedResult.success)
         _cachedResultsMessage.value = Event(cachedResult.reason?.toErrorResourceId())
     }
 
-    protected open suspend fun isReloadNeeded(): Boolean {
+    private suspend fun isReloadNeeded(): Boolean {
         return currentMeta?.hasExpired() != false ||
-                currentMeta?.placeId != preferencesRepository.getSelectedPlaceId()
+                currentMeta?.placeId != preferencesRepository.getSelectedPlaceId() ||
+                _forecast.value == null
     }
 }

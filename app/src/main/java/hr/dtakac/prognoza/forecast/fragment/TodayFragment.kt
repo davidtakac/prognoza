@@ -16,8 +16,8 @@ import hr.dtakac.prognoza.common.util.formatPrecipitationTwoHours
 import hr.dtakac.prognoza.common.util.formatTemperatureValue
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.forecast.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
-import hr.dtakac.prognoza.forecast.uimodel.TodayForecast
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecastUiModel
+import hr.dtakac.prognoza.forecast.uimodel.TodayForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
@@ -43,7 +43,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
     }
 
     private fun observeViewModel() {
-        viewModel.todayForecast.observe(viewLifecycleOwner) {
+        viewModel.forecast.observe(viewLifecycleOwner) {
             showForecast(it)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -102,7 +102,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         )
     }
 
-    private fun showForecast(uiModel: TodayForecast) {
+    private fun showForecast(uiModel: TodayForecastUiModel) {
         val currentHour = uiModel.currentHour
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature)
@@ -122,7 +122,7 @@ class TodayFragment : ViewBindingFragment<FragmentTodayBinding>(FragmentTodayBin
         adapter.submitList(uiModel.otherHours)
     }
 
-    private fun showEmptyScreen(uiModel: EmptyForecast) {
+    private fun showEmptyScreen(uiModel: EmptyForecastUiModel) {
         binding.emptyScreen.root.visibility = View.VISIBLE
         binding.emptyScreen.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
     }

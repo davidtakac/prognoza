@@ -14,8 +14,8 @@ import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.common.util.formatEmptyMessage
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.forecast.adapter.DaysRecyclerViewAdapter
-import hr.dtakac.prognoza.forecast.uimodel.DaysForecast
-import hr.dtakac.prognoza.forecast.uimodel.EmptyForecast
+import hr.dtakac.prognoza.forecast.uimodel.DaysForecastUiModel
+import hr.dtakac.prognoza.forecast.uimodel.EmptyForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.DaysFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -39,7 +39,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     }
 
     private fun observeViewModel() {
-        viewModel.daysForecast.observe(viewLifecycleOwner) {
+        viewModel.forecast.observe(viewLifecycleOwner) {
             showForecast(it)
         }
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
@@ -98,11 +98,11 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
         )
     }
 
-    private fun showForecast(uiModel: DaysForecast) {
+    private fun showForecast(uiModel: DaysForecastUiModel) {
         adapter.submitList(uiModel.days)
     }
 
-    private fun showEmptyScreen(uiModel: EmptyForecast) {
+    private fun showEmptyScreen(uiModel: EmptyForecastUiModel) {
         binding.emptyScreen.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
         binding.emptyScreen.root.visibility = View.VISIBLE
     }

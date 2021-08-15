@@ -1,5 +1,5 @@
 package hr.dtakac.prognoza.forecast.uimodel
 
-data class EmptyForecast(
+data class EmptyForecastUiModel(
     val reasonResourceId: Int?
 )

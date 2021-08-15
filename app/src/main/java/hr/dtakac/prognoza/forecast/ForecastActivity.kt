@@ -8,7 +8,6 @@ import hr.dtakac.prognoza.base.ViewBindingActivity
 import hr.dtakac.prognoza.common.*
 import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.forecast.adapter.ForecastPagerAdapter
-import hr.dtakac.prognoza.forecast.viewmodel.ForecastActivityViewModel
 import hr.dtakac.prognoza.places.PlaceSearchDialogFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

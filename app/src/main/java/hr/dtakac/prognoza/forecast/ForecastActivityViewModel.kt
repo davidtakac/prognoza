@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.forecast.viewmodel
+package hr.dtakac.prognoza.forecast
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
