@@ -1,10 +1,12 @@
 package hr.dtakac.prognoza.forecast.fragment
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.ViewBindingFragment
 import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.common.DAYS_REQUEST_KEY
@@ -31,7 +33,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
 
     override fun onResume() {
         super.onResume()
-        if (binding.error.root.visibility != View.VISIBLE) {
+        if (binding.emptyScreen.root.visibility != View.VISIBLE) {
             viewModel.getForecast()
         }
     }
@@ -44,24 +46,20 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
             binding.progressBar.apply {
                 if (isLoading) show() else hide()
             }
-            binding.error.progressBar.apply {
+            binding.emptyScreen.progressBar.apply {
                 if (isLoading) show() else hide()
             }
         }
         viewModel.emptyScreen.observe(viewLifecycleOwner) {
             if (it == null) {
-                binding.error.root.visibility = View.GONE
+                binding.emptyScreen.root.visibility = View.GONE
             } else {
                 showEmptyScreen(it)
             }
         }
-        viewModel.message.observe(viewLifecycleOwner) {
+        viewModel.cachedResultsMessage.observe(viewLifecycleOwner) {
             if (!it.isConsumed) {
-                Snackbar.make(
-                    binding.root,
-                    resources.getString(it.getValue()),
-                    Snackbar.LENGTH_SHORT
-                ).show()
+                showCachedResultsMessage(it.getValue())
             }
         }
     }
@@ -83,7 +81,7 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     }
 
     private fun initializeTryAgain() {
-        binding.error.btnTryAgain.setOnClickListener {
+        binding.emptyScreen.btnTryAgain.setOnClickListener {
             viewModel.getForecast()
         }
     }
@@ -105,7 +103,26 @@ class DaysFragment : ViewBindingFragment<FragmentDaysBinding>(FragmentDaysBindin
     }
 
     private fun showEmptyScreen(uiModel: EmptyForecast) {
-        binding.error.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
-        binding.error.root.visibility = View.VISIBLE
+        binding.emptyScreen.tvErrorMessage.text = resources.formatEmptyMessage(uiModel.reasonResourceId)
+        binding.emptyScreen.root.visibility = View.VISIBLE
+    }
+
+    private fun showCachedResultsMessage(reason: Int?) {
+        Snackbar.make(
+            binding.root,
+            resources.getString(R.string.notify_cached_result),
+            Snackbar.LENGTH_SHORT
+        )
+            .setAction(R.string.action_why) {
+                showAlertDialog(reason ?: R.string.error_generic)
+            }
+            .show()
+    }
+
+    private fun showAlertDialog(messageId: Int) {
+        AlertDialog.Builder(requireActivity())
+            .setMessage(messageId)
+            .setPositiveButton(R.string.action_ok, null)
+            .show()
     }
 }

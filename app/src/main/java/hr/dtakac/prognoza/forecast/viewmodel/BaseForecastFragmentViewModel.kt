@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.forecast.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.base.CoroutineScopeViewModel
 import hr.dtakac.prognoza.base.Event
 import hr.dtakac.prognoza.common.util.hasExpired
@@ -25,8 +24,8 @@ abstract class BaseForecastFragmentViewModel(
     protected val _emptyScreen = MutableLiveData<EmptyForecast?>()
     val emptyScreen: LiveData<EmptyForecast?> get() = _emptyScreen
 
-    protected val _message = MutableLiveData<Event<Int>>()
-    val message: LiveData<Event<Int>> get() = _message
+    protected val _cachedResultsMessage = MutableLiveData<Event<Int?>>()
+    val cachedResultsMessage: LiveData<Event<Int?>> get() = _cachedResultsMessage
 
     protected val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -49,7 +48,7 @@ abstract class BaseForecastFragmentViewModel(
 
     protected open suspend fun handleCachedSuccess(cachedResult: CachedSuccess) {
         handleSuccess(cachedResult.success)
-        _message.value = Event(R.string.notify_cached_result)
+        _cachedResultsMessage.value = Event(cachedResult.reason?.toErrorResourceId())
     }
 
     protected open suspend fun isReloadNeeded(): Boolean {

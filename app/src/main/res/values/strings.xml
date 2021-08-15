@@ -70,10 +70,10 @@
     <string name="placeholder_wind_speed">/</string>
     <string name="hint_places_search">Search places…</string>
     <string name="error_met_client">Something is wrong with your request.</string>
-    <string name="error_met_server">Server is currently unable to process the request.</string>
+    <string name="error_met_server">The server is currently unable to process your request.</string>
     <string name="error_met_throttling">Heavy traffic from other users.</string>
     <string name="error_generic">An unexpected error occurred.</string>
-    <string name="error_forecast_empty">There is no forecast data for this place and time. Please connect to the Internet and try again.</string>
+    <string name="error_forecast_empty">There is no saved forecast data for this place and time.</string>
     <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
@@ -97,5 +97,7 @@
     <string name="met_norway_credit">Data from MET Norway</string>
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
     <string name="error_database">An error occurred when fetching forecast data from the database. Try clearing your app data.</string>
+    <string name="action_why">Why?</string>
+    <string name="action_ok">Ok</string>
 
 </resources>

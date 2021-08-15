@@ -27,8 +27,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <include layout="@layout/layout_error"
+    <include layout="@layout/layout_empty_forecast"
         android:visibility="gone"
-        android:id="@+id/error"/>
+        android:id="@+id/empty_screen"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
