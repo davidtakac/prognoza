@@ -56,7 +56,7 @@
     <string-array name="forecast_tab_names">
         <item>Today</item>
         <item>Tomorrow</item>
-        <item>Other days</item>
+        <item>Upcoming</item>
     </string-array>
 
     <string name="template_temperature_universal">%1$d°</string>
@@ -98,6 +98,7 @@
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
     <string name="error_database">An error occurred when fetching forecast data from the database. Try clearing your app data.</string>
     <string name="action_why">Why?</string>
-    <string name="action_ok">Ok</string>
+    <string name="action_ok">OK</string>
+    <string name="today">Today</string>
 
 </resources>

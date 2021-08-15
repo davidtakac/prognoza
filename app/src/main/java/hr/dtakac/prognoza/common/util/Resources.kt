@@ -8,6 +8,10 @@ import androidx.core.text.color
 import androidx.core.text.toSpannable
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.forecast.uimodel.RepresentativeWeatherIcon
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 import kotlin.math.roundToInt
 
 fun Resources.formatTemperatureValue(temperature: Float?): String {
@@ -132,5 +136,19 @@ fun Resources.formatPrecipitationTwoHours(precipitationForecast: Float?): Spanna
                 )
             }
             .append(getString(R.string.amount_of_precipitation_forecast))
+    }
+}
+
+fun Resources.formatDaySummaryTime(time: ZonedDateTime): String {
+    val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
+    val nowAtStartOfDay = ZonedDateTime.now().atStartOfDay()
+    return when (time.withZoneSameInstant(ZoneId.systemDefault()).atStartOfDay()) {
+        nowAtStartOfDay -> {
+            getString(R.string.today)
+        }
+        else -> {
+            time.withZoneSameInstant(ZoneId.systemDefault())
+                .format(dateTimeFormatter)
+        }
     }
 }

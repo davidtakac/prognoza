@@ -37,8 +37,6 @@ class DayViewHolder(
     private val binding: CellDayBinding,
     onItemClickCallback: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
-
     init {
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
@@ -46,9 +44,7 @@ class DayViewHolder(
     fun bind(uiModel: DayUiModel) {
         binding.apply {
             val resources = root.context.resources
-            tvDateTime.text = uiModel.time
-                .withZoneSameInstant(ZoneId.systemDefault())
-                .format(dateTimeFormatter)
+            tvDateTime.text = resources.formatDaySummaryTime(uiModel.time)
             tvTemperatureHigh.text =
                 resources.formatTemperatureValue(uiModel.highTemperature)
             tvTemperatureLow.text =
