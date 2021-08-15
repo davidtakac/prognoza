@@ -13,10 +13,15 @@ class DefaultPlaceRepository(
     private val placeService: PlaceService,
     private val dispatcherProvider: DispatcherProvider,
 ) : PlaceRepository {
-    override suspend fun get(placeId: String): Place {
-        val place = placeDao.get(placeId)
-        return if (place == null) {
-            val defaultPlace = Place(
+
+    override suspend fun get(placeId: String): Place? {
+        return placeDao.get(placeId)
+    }
+
+    override suspend fun getDefaultPlace(): Place {
+        var defaultPlace = get(DEFAULT_PLACE_ID)
+        return if (defaultPlace == null) {
+            defaultPlace = Place(
                 id = DEFAULT_PLACE_ID,
                 fullName = "Osijek, Grad Osijek, Osijek-Baranja County, Croatia",
                 latitude = 45.55f,
@@ -25,7 +30,7 @@ class DefaultPlaceRepository(
             placeDao.insertOrUpdate(defaultPlace)
             defaultPlace
         } else {
-            place
+            defaultPlace
         }
     }
 
@@ -34,11 +39,15 @@ class DefaultPlaceRepository(
     }
 
     override suspend fun search(query: String): List<Place> {
-        val response = placeService.search(
-            userAgent = USER_AGENT,
-            query = query,
-            format = "jsonv2"
-        )
+        val response = try {
+            placeService.search(
+                userAgent = USER_AGENT,
+                query = query,
+                format = "jsonv2"
+            )
+        } catch (e: Exception) {
+            listOf()
+        }
         return withContext(dispatcherProvider.default) {
             response.map {
                 Place(

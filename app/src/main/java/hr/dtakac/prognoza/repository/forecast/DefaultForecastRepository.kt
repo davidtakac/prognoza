@@ -113,7 +113,7 @@ class DefaultForecastRepository(
     }
 
     private suspend fun updateForecastDatabase(placeId: String, lastModified: ZonedDateTime?) {
-        val forecastPlace = placeRepository.get(placeId)
+        val forecastPlace = placeRepository.get(placeId) ?: placeRepository.getDefaultPlace()
         val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,

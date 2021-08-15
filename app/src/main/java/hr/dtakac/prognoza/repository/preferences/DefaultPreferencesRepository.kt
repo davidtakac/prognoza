@@ -13,7 +13,7 @@ class DefaultPreferencesRepository(
 ) : PreferencesRepository {
     override suspend fun getSelectedPlaceId(): String =
         withContext(dispatcherProvider.io) {
-            val selected = sharedPreferences.getString(PLACE_ID_KEY, DEFAULT_PLACE_ID)
+            val selected = sharedPreferences.getString(PLACE_ID_KEY, null)
             if (selected == null) {
                 setSelectedPlaceId(DEFAULT_PLACE_ID)
                 DEFAULT_PLACE_ID

@@ -25,6 +25,7 @@ class ForecastActivityViewModel(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 val selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
+                    ?: placeRepository.getDefaultPlace()
                 _placeName.value = selectedPlace.shortenedName
                 currentPlaceId = selectedPlace.id
             }

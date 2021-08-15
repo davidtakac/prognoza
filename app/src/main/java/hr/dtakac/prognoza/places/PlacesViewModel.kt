@@ -73,7 +73,7 @@ class PlacesViewModel(
             _isLoading.value = true
             val selectedPlace = withContext(dispatcherProvider.default) {
                 displayedPlaces.firstOrNull { it.id == placeId }
-                    ?: placeRepository.get(DEFAULT_PLACE_ID)
+                    ?: placeRepository.getDefaultPlace()
             }
             placeRepository.save(selectedPlace)
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
