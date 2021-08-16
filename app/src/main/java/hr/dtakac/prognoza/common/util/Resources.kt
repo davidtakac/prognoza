@@ -113,14 +113,7 @@ fun Resources.formatTotalPrecipitation(precipitation: Float?): Spannable {
 }
 
 fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
-    return if (reasonResourceId != null) {
-        getString(
-            R.string.template_error_forecast_empty_reason,
-            getString(reasonResourceId)
-        )
-    } else {
-        getString(R.string.error_forecast_empty)
-    }
+    return getString(reasonResourceId ?: R.string.error_generic)
 }
 
 fun Resources.formatPrecipitationTwoHours(precipitationForecast: Float?): Spannable {

@@ -10,9 +10,6 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.util.*
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.forecast.uimodel.DayUiModel
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
