@@ -97,8 +97,9 @@
     <string name="met_norway_credit">Data from MET Norway</string>
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
     <string name="error_database">An error occurred when fetching forecast data from the database. Try clearing your app data.</string>
-    <string name="action_why">Why?</string>
+    <string name="action_why">Why</string>
     <string name="action_ok">OK</string>
     <string name="today">Today</string>
+    <string name="error_io">An IO error occurred. Check if you\'re connected to the Internet.</string>
 
 </resources>

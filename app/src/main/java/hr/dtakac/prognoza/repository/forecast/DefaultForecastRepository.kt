@@ -15,6 +15,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
 import retrofit2.HttpException
+import java.io.IOException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -86,10 +87,12 @@ class DefaultForecastRepository(
                 meta = metaRepository.get(placeId)
             } catch (e: HttpException) {
                 error = handleHttpException(e)
+            } catch (e: IOException) {
+                error = IOError(e)
             } catch (e: SQLiteException) {
                 error = DatabaseError(e)
             } catch (e: Exception) {
-                error = Unknown(e)
+                error = UnknownError(e)
             }
         }
         return try {
@@ -98,16 +101,16 @@ class DefaultForecastRepository(
         } catch (e: SQLiteException) {
             Empty(DatabaseError(e))
         } catch (e: Exception) {
-            Empty(Unknown(e))
+            Empty(UnknownError(e))
         }
     }
 
     private fun handleHttpException(httpException: HttpException): ForecastError {
         return when (httpException.code()) {
-            429 -> Throttling(httpException)
-            in 400..499 -> ClientSide(httpException)
-            in 500..504 -> ServerSide(httpException)
-            else -> Unknown(httpException)
+            429 -> ThrottlingError(httpException)
+            in 400..499 -> ClientError(httpException)
+            in 500..504 -> ServerError(httpException)
+            else -> UnknownError(httpException)
         }
     }
 
