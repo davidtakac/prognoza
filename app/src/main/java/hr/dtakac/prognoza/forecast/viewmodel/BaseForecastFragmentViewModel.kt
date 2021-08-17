@@ -23,7 +23,7 @@ abstract class BaseForecastFragmentViewModel<T: ForecastUiModel>(
 ): CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
 
-    abstract val _forecast: MutableLiveData<T>
+    protected abstract val _forecast: MutableLiveData<T>
     val forecast: LiveData<T> get() = _forecast
 
     private val _emptyScreen = MutableLiveData<EmptyForecastUiModel?>()

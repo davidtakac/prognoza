@@ -48,6 +48,7 @@ dependencies {
     testImplementation "androidx.room:room-testing:$versions.room"
     testImplementation "androidx.arch.core:core-testing:$versions.arch"
     testImplementation "io.insert-koin:koin-test-junit4:$versions.koin"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
     // networking
     implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
     implementation("com.squareup.okhttp3:logging-interceptor")
