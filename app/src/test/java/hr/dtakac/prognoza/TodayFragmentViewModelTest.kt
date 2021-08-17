@@ -3,7 +3,6 @@ package hr.dtakac.prognoza
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.fakes.FakeDispatcherProvider
 import hr.dtakac.prognoza.fakes.FakeForecastRepository
-import hr.dtakac.prognoza.fakes.FakeForecastService
 import hr.dtakac.prognoza.fakes.FakePreferencesRepository
 import hr.dtakac.prognoza.forecast.viewmodel.TodayFragmentViewModel
 import hr.dtakac.prognoza.repository.forecast.CachedSuccess
@@ -56,7 +55,7 @@ class TodayFragmentViewModelTest {
         // Act
         viewModel.getForecast()
         // Assert
-        val today = FakeForecastService.startOfData
+        val today = FakeForecastRepository.startOfData
         val hours = viewModel.forecast.value?.otherHours
         val firstHour = hours?.getOrNull(0)
         val lastHour = hours?.getOrNull(hours.lastIndex)
@@ -66,8 +65,8 @@ class TodayFragmentViewModelTest {
         assertTrue("Is the last hour in tomorrow") {
             lastHour?.time?.minusDays(1)?.toLocalDate() == today.toLocalDate()
         }
-        assertTrue("Is the last hour set to 6AM") {
-            lastHour?.time?.hour == 6
+        assertTrue("Is showing hours after midnight") {
+            lastHour?.time?.hour == FakeForecastRepository.hoursAfterMidnightToShow.toInt()
         }
     }
 

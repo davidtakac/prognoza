@@ -1,15 +1,25 @@
 package hr.dtakac.prognoza.fakes
 
+import com.google.gson.Gson
+import hr.dtakac.prognoza.api.LocationForecastResponse
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.common.util.atStartOfDay
 import hr.dtakac.prognoza.common.util.toForecastHour
 import hr.dtakac.prognoza.repository.forecast.*
+import okhttp3.Headers
+import retrofit2.Response
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
 import java.lang.IllegalStateException
 import java.time.ZonedDateTime
 
 class FakeForecastRepository : ForecastRepository {
-    private val fakeForecastService = FakeForecastService()
-    private val hoursAfterMidnightToShow = 6L
+    companion object {
+        val startOfData = ZonedDateTime.parse("2021-08-16T20:00:00Z")
+        val endOfData = ZonedDateTime.parse("2021-08-26T06:00:00Z")
+        const val hoursAfterMidnightToShow = 6L
+    }
 
     var typeOfResultToReturn: Class<*> = Success::class.java
 
@@ -18,7 +28,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     override suspend fun getOtherDaysForecastHours(placeId: String): ForecastResult {
-        val start = FakeForecastService.startOfData.atStartOfDay()
+        val start = startOfData.atStartOfDay()
         return getForecastHours(
             start,
             start.plusDays(7L),
@@ -27,8 +37,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     override suspend fun getTodayForecastHours(placeId: String): ForecastResult {
-        val anHourAgo = FakeForecastService
-            .startOfData
+        val anHourAgo = startOfData
             .minusHours(1)
         val hoursLeftInTheDay = 24 - anHourAgo.hour
         val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
@@ -36,8 +45,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     override suspend fun getTomorrowForecastHours(placeId: String): ForecastResult {
-        val tomorrow = FakeForecastService
-            .startOfData
+        val tomorrow = startOfData
             .atStartOfDay()
             .plusDays(1)
         return getForecastHours(
@@ -52,7 +60,7 @@ class FakeForecastRepository : ForecastRepository {
         end: ZonedDateTime,
         placeId: String
     ): ForecastResult {
-        val response = fakeForecastService.getData()
+        val response = getData()
         // filter data according to start and end times then map to ForecastHour
         val hours = response.body()!!.forecast.forecastTimeSteps
             .filter {
@@ -68,6 +76,35 @@ class FakeForecastRepository : ForecastRepository {
             Empty::class.java -> Empty(null)
             Success::class.java -> success
             else -> throw IllegalStateException("Result type $typeOfResultToReturn not recognized.")
+        }
+    }
+
+    private fun getData(): Response<LocationForecastResponse> {
+        val json = readFileWithoutNewLineFromResources("osijek_16_08_21_response.json")
+        val body = Gson().fromJson(json, LocationForecastResponse::class.java)
+        val headers = Headers.headersOf(
+            "Expires", "Mon, 16 Aug 2021 21:18:38 GMT",
+            "Last-Modified", "Mon, 16 Aug 2021 20:47:40 GMT"
+        )
+        return Response.success(body, headers)
+    }
+
+    private fun readFileWithoutNewLineFromResources(fileName: String): String {
+        var inputStream: InputStream? = null
+        try {
+            inputStream =
+                javaClass.classLoader?.getResourceAsStream(fileName)
+            val builder = StringBuilder()
+            val reader = BufferedReader(InputStreamReader(inputStream))
+
+            var str: String? = reader.readLine()
+            while (str != null) {
+                builder.append(str)
+                str = reader.readLine()
+            }
+            return builder.toString()
+        } finally {
+            inputStream?.close()
         }
     }
 }

@@ -38,7 +38,7 @@ class DayUiModelMappingTest {
     }
 
     @Test
-    fun toDayUiModel_mapsAllNullValues() = coroutineScope.runBlockingTest {
+    fun toDayUiModel_mapsNullValues() = coroutineScope.runBlockingTest {
         // Arrange
         val start = ZonedDateTime.now()
         val nullHours = getForecastHours_withAllNullValues(start)
