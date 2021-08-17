@@ -62,13 +62,41 @@ fun List<ForecastHour>.toForecastResult(meta: ForecastMeta?, error: ForecastErro
     }
 }
 
-fun List<ForecastHour>.maxTemperature() = maxOf { it.temperature ?: Float.MIN_VALUE }
+fun List<ForecastHour>.maxTemperature(): Float? {
+    val max = maxOf { it.temperature ?: Float.MIN_VALUE }
+    return if (max == Float.MIN_VALUE) {
+        null
+    } else {
+        max
+    }
+}
 
-fun List<ForecastHour>.minTemperature() = minOf { it.temperature ?: Float.MAX_VALUE }
+fun List<ForecastHour>.minTemperature(): Float? {
+    val min = minOf { it.temperature ?: Float.MAX_VALUE }
+    return if (min == Float.MAX_VALUE) {
+        null
+    } else {
+        min
+    }
+}
 
-fun List<ForecastHour>.maxHumidity() = maxOf { it.relativeHumidity ?: Float.MIN_VALUE }
+fun List<ForecastHour>.maxHumidity(): Float? {
+    val max =  maxOf { it.relativeHumidity ?: Float.MIN_VALUE }
+    return if (max == Float.MIN_VALUE) {
+        null
+    } else {
+        max
+    }
+}
 
-fun List<ForecastHour>.maxPressure() = maxOf { it.pressure ?: Float.MIN_VALUE }
+fun List<ForecastHour>.maxPressure(): Float? {
+    val max = maxOf { it.pressure ?: Float.MIN_VALUE }
+    return if (max == Float.MIN_VALUE) {
+        null
+    } else {
+        max
+    }
+}
 
 fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
     val eligibleSymbolCodes = filter { it.symbolCode != null }
@@ -86,8 +114,9 @@ fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
     }
 }
 
-fun List<ForecastHour>.totalPrecipitationAmount() =
-    sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
+fun List<ForecastHour>.totalPrecipitationAmount(): Float {
+    return sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
+}
 
 fun List<ForecastHour>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
     val difference = (o1.windSpeed ?: Float.MIN_VALUE) - (o2.windSpeed ?: Float.MIN_VALUE)
