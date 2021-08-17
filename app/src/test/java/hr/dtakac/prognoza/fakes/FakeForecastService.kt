@@ -9,18 +9,13 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.time.ZonedDateTime
 
-class FakeForecastService : ForecastService {
+class FakeForecastService {
     companion object {
         val startOfData = ZonedDateTime.parse("2021-08-16T20:00:00Z")
         val endOfData = ZonedDateTime.parse("2021-08-26T06:00:00Z")
     }
 
-    override suspend fun getCompactLocationForecast(
-        userAgent: String,
-        ifModifiedSince: String?,
-        latitude: String,
-        longitude: String
-    ): Response<LocationForecastResponse> {
+    fun getData(): Response<LocationForecastResponse> {
         val json = readFileWithoutNewLineFromResources("osijek_16_08_21_response.json")
         val body = Gson().fromJson(json, LocationForecastResponse::class.java)
         val headers = Headers.headersOf(

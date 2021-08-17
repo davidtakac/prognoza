@@ -52,8 +52,7 @@ class FakeForecastRepository : ForecastRepository {
         end: ZonedDateTime,
         placeId: String
     ): ForecastResult {
-        // we're using a fake forecast service so the parameters don't matter
-        val response = fakeForecastService.getCompactLocationForecast("", "", "", "")
+        val response = fakeForecastService.getData()
         // filter data according to start and end times then map to ForecastHour
         val hours = response.body()!!.forecast.forecastTimeSteps
             .filter {
