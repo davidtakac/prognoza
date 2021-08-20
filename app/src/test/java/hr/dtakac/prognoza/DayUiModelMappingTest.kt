@@ -32,9 +32,7 @@ class DayUiModelMappingTest {
         val actual = hours.toDayUiModel(this)
         // Assert
         val expected = getExpectedDayUiModel_forNormalValues(start)
-        assertTrue {
-            actual == expected
-        }
+        assertTrue { actual == expected }
     }
 
     @Test
@@ -46,23 +44,20 @@ class DayUiModelMappingTest {
         val actual = nullHours.toDayUiModel(this)
         // Assert
         val expected = getExpectedDayUiModel_forAllNullValues(start)
-        assertTrue {
-            actual == expected
-        }
+        assertTrue { actual == expected }
     }
 
     @Test
     fun toDayUiModel_isResistantToNullValues() = coroutineScope.runBlockingTest {
         // Arrange
         val start = ZonedDateTime.now()
-        val hours = getForecastHours_withNormalValues(start) + getForecastHours_withAllNullValues(start)
+        val hours = getForecastHours_withNormalValues(start) +
+                getForecastHours_withAllNullValues(start)
         // Act
         val actual = hours.toDayUiModel(this)
         // Assert
         val expected = getExpectedDayUiModel_forNormalValues(start)
-        assertTrue {
-            actual == expected
-        }
+        assertTrue { actual == expected }
     }
 
     private fun getForecastHours_withNormalValues(start: ZonedDateTime) = listOf(

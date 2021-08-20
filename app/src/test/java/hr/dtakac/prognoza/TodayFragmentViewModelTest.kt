@@ -23,7 +23,7 @@ class TodayFragmentViewModelTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val coroutineDispatcher = TestCoroutineDispatcher()
     private val coroutineScope = TestCoroutineScope(coroutineDispatcher)
-    private val repository = FakeForecastRepository()
+    private val forecastRepository = FakeForecastRepository()
     private val preferencesRepository = FakePreferencesRepository()
     private val dispatcherProvider = FakeDispatcherProvider(coroutineDispatcher)
 
@@ -34,7 +34,7 @@ class TodayFragmentViewModelTest {
     fun setup() {
         viewModel = TodayFragmentViewModel(
             coroutineScope,
-            repository,
+            forecastRepository,
             dispatcherProvider,
             preferencesRepository
         )
@@ -46,47 +46,49 @@ class TodayFragmentViewModelTest {
     }
 
     @Test
-    fun getForecast_showsForecastForToday() {
+    fun getForecast_whenSuccess_showsForecast() {
         // Arrange
         assertTrue {
             viewModel.forecast.value == null
         }
-        repository.typeOfResultToReturn = Success::class.java
+        forecastRepository.typeOfResultToReturn = Success::class.java
         // Act
         viewModel.getForecast()
         // Assert
-        val today = FakeForecastRepository.startOfData
+        val now = FakeForecastRepository.now
         val hours = viewModel.forecast.value?.otherHours
         val firstHour = hours?.getOrNull(0)
         val lastHour = hours?.getOrNull(hours.lastIndex)
-        assertTrue("Is the first hour equal to today") {
-            firstHour?.time == today
+        assertTrue("First hour is start of now") {
+            firstHour?.time == now.withMinute(0)
         }
-        assertTrue("Is the last hour in tomorrow") {
-            lastHour?.time?.minusDays(1)?.toLocalDate() == today.toLocalDate()
-        }
-        assertTrue("Is showing hours after midnight") {
-            lastHour?.time?.hour == FakeForecastRepository.hoursAfterMidnightToShow.toInt()
+        assertTrue("Last hour is tomorrow at 6AM") {
+            val isTomorrow = lastHour?.time?.minusDays(1)?.toLocalDate() == now.toLocalDate()
+            val is6Am = lastHour?.time?.hour == 6
+            isTomorrow && is6Am
         }
     }
 
     @Test
-    fun getForecast_showsEmptyScreen() {
+    fun getForecast_whenEmpty_showsEmptyScreen() {
         // Arrange
         assertTrue {
             viewModel.emptyScreen.value == null
         }
-        repository.typeOfResultToReturn = Empty::class.java
+        forecastRepository.typeOfResultToReturn = Empty::class.java
         // Act
         viewModel.getForecast()
         // Assert
+        assertTrue("Is forecast not shown") {
+            viewModel.forecast.value == null
+        }
         assertTrue("Is empty screen shown") {
             viewModel.emptyScreen.value != null
         }
     }
 
     @Test
-    fun getForecast_showsCachedResultsNotification() {
+    fun getForecast_whenCached_showsMessageAndForecast() {
         // Arrange
         assertTrue {
             viewModel.cachedResultsMessage.value == null
@@ -94,7 +96,7 @@ class TodayFragmentViewModelTest {
         assertTrue {
             viewModel.forecast.value == null
         }
-        repository.typeOfResultToReturn = CachedSuccess::class.java
+        forecastRepository.typeOfResultToReturn = CachedSuccess::class.java
         // Act
         viewModel.getForecast()
         // Assert

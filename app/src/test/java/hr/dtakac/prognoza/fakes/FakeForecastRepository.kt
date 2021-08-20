@@ -16,11 +16,10 @@ import java.time.ZonedDateTime
 
 class FakeForecastRepository : ForecastRepository {
     companion object {
-        val startOfData = ZonedDateTime.parse("2021-08-16T20:00:00Z")
-        val endOfData = ZonedDateTime.parse("2021-08-26T06:00:00Z")
-        const val hoursAfterMidnightToShow = 6L
+        val now: ZonedDateTime = ZonedDateTime.parse("2021-08-16T20:00:00Z")
     }
 
+    private val hoursAfterMidnightToShow = 6L
     var typeOfResultToReturn: Class<*> = Success::class.java
 
     override suspend fun deleteExpiredData() {
@@ -28,7 +27,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     override suspend fun getOtherDaysForecastHours(placeId: String): ForecastResult {
-        val start = startOfData.atStartOfDay()
+        val start = now.atStartOfDay()
         return getForecastHours(
             start,
             start.plusDays(7L),
@@ -37,7 +36,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     override suspend fun getTodayForecastHours(placeId: String): ForecastResult {
-        val anHourAgo = startOfData
+        val anHourAgo = now
             .minusHours(1)
         val hoursLeftInTheDay = 24 - anHourAgo.hour
         val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
@@ -45,7 +44,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     override suspend fun getTomorrowForecastHours(placeId: String): ForecastResult {
-        val tomorrow = startOfData
+        val tomorrow = now
             .atStartOfDay()
             .plusDays(1)
         return getForecastHours(
@@ -80,7 +79,7 @@ class FakeForecastRepository : ForecastRepository {
     }
 
     private fun getData(): Response<LocationForecastResponse> {
-        val json = readFileWithoutNewLineFromResources("osijek_16_08_21_response.json")
+        val json = readFileFromResources("osijek_16_08_21_response.json")
         val body = Gson().fromJson(json, LocationForecastResponse::class.java)
         val headers = Headers.headersOf(
             "Expires", "Mon, 16 Aug 2021 21:18:38 GMT",
@@ -89,7 +88,7 @@ class FakeForecastRepository : ForecastRepository {
         return Response.success(body, headers)
     }
 
-    private fun readFileWithoutNewLineFromResources(fileName: String): String {
+    private fun readFileFromResources(fileName: String): String {
         var inputStream: InputStream? = null
         try {
             inputStream =
