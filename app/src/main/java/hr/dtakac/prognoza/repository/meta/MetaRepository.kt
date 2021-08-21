@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.meta
 
-import hr.dtakac.prognoza.database.entity.ForecastMeta
+import hr.dtakac.prognoza.dbmodel.ForecastMeta
 
 interface MetaRepository {
     suspend fun update(

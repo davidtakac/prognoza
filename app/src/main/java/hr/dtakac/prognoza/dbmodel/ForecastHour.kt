@@ -1,0 +1,21 @@
+package hr.dtakac.prognoza.dbmodel
+
+import androidx.room.Entity
+import androidx.room.TypeConverters
+import hr.dtakac.prognoza.database.converter.ForecastHourDateTimeConverter
+import java.time.ZonedDateTime
+
+@Entity(primaryKeys = ["time", "placeId"])
+@TypeConverters(ForecastHourDateTimeConverter::class)
+data class ForecastHour(
+    val time: ZonedDateTime,
+    val placeId: String,
+    val temperature: Float?,
+    val symbolCode: String?,
+    val precipitationProbability: Float?,
+    val precipitationAmount: Float?,
+    val windSpeed: Float?,
+    val windFromDirection: Float?,
+    val relativeHumidity: Float?,
+    val pressure: Float?
+)

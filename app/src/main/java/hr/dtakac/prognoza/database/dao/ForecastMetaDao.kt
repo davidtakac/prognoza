@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import hr.dtakac.prognoza.database.entity.ForecastMeta
+import hr.dtakac.prognoza.dbmodel.ForecastMeta
 
 @Dao
 interface ForecastMetaDao {

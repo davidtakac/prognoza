@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.api
 
+import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

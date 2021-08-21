@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.place
 
-import hr.dtakac.prognoza.database.entity.Place
+import hr.dtakac.prognoza.dbmodel.Place
 
 interface PlaceRepository {
     suspend fun get(placeId: String): Place?

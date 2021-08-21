@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.common.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.common.USER_AGENT
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.PlaceDao
-import hr.dtakac.prognoza.database.entity.Place
+import hr.dtakac.prognoza.dbmodel.Place
 import kotlinx.coroutines.withContext
 
 class DefaultPlaceRepository(

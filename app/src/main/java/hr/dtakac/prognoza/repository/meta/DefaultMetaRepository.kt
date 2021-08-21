@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.repository.meta
 
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastMetaDao
-import hr.dtakac.prognoza.database.entity.ForecastMeta
+import hr.dtakac.prognoza.dbmodel.ForecastMeta
 
 class DefaultMetaRepository(
     private val metaDao: ForecastMetaDao,

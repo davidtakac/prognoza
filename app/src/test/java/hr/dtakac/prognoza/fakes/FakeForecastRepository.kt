@@ -1,10 +1,14 @@
 package hr.dtakac.prognoza.fakes
 
 import com.google.gson.Gson
-import hr.dtakac.prognoza.api.LocationForecastResponse
+import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
-import hr.dtakac.prognoza.common.util.atStartOfDay
-import hr.dtakac.prognoza.common.util.toForecastHour
+import hr.dtakac.prognoza.extensions.atStartOfDay
+import hr.dtakac.prognoza.extensions.toForecastHour
+import hr.dtakac.prognoza.repomodel.CachedSuccess
+import hr.dtakac.prognoza.repomodel.Empty
+import hr.dtakac.prognoza.repomodel.ForecastResult
+import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.*
 import okhttp3.Headers
 import retrofit2.Response

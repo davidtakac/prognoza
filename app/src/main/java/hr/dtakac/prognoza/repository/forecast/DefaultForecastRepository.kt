@@ -2,13 +2,14 @@ package hr.dtakac.prognoza.repository.forecast
 
 import android.database.sqlite.SQLiteException
 import hr.dtakac.prognoza.api.ForecastService
-import hr.dtakac.prognoza.api.LocationForecastResponse
+import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.common.USER_AGENT
-import hr.dtakac.prognoza.common.util.*
+import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastHourDao
-import hr.dtakac.prognoza.database.entity.ForecastHour
+import hr.dtakac.prognoza.dbmodel.ForecastHour
+import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import kotlinx.coroutines.withContext

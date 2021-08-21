@@ -1,0 +1,17 @@
+package hr.dtakac.prognoza.uimodel
+
+import java.time.ZonedDateTime
+
+data class DayUiModel(
+    val id: String,
+    val time: ZonedDateTime,
+    val representativeWeatherIcon: RepresentativeWeatherIcon?,
+    val lowTemperature: Float?,
+    val highTemperature: Float?,
+    val maxWindSpeed: Float?,
+    val windFromCompassDirection: Int?,
+    val totalPrecipitationAmount: Float?,
+    val maxHumidity: Float?,
+    val maxPressure: Float?,
+    var isExpanded: Boolean = false
+)
