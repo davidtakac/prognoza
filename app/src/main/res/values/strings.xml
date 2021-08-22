@@ -61,13 +61,18 @@
 
     <string name="template_temperature_universal">%1$d°</string>
     <string name="template_precipitation_metric">%1$.1f mm</string>
+    <string name="template_precipitation_imperial">%1$.2f\"</string>
     <string name="template_wind_metric">%1$.1f km/h</string>
+    <string name="template_wind_imperial">%1$.1f mi/h</string>
     <string name="template_humidity_universal">%1$d%%</string>
     <string name="template_pressure_metric">%1$d hPa</string>
-    <string name="placeholder_temperature">/</string>
+    <string name="template_pressure_imperial">%1$.2f psi</string>
+    <string name="placeholder_temperature">-</string>
     <string name="placeholder_description">Unknown</string>
-    <string name="placeholder_precipitation">none</string>
-    <string name="placeholder_wind_speed">/</string>
+    <string name="placeholder_precipitation_insignificant_metric">&lt;= 0.01 mm</string>
+    <string name="placeholder_precipitation_insignificant_imperial">&lt;= 0.01\"</string>
+    <string name="placeholder_precipitation_none">-</string>
+    <string name="placeholder_wind_speed">-</string>
     <string name="hint_places_search">Search places…</string>
     <string name="error_met_client">Something is wrong with your request.</string>
     <string name="error_met_server">The server is currently unable to process your request.</string>
@@ -78,14 +83,14 @@
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
     <string name="amount_of_precipitation">" of precipitation"</string>
-    <string name="total_precipitation_none">No precipitation</string>
+    <string name="placeholder_total_precipitation_none">No precipitation</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_wind_with_direction">%1$s, %2$s</string>
     <string name="template_temperature_high_low">%1$s / %2$s</string>
-    <string name="placeholder_wind_direction">/</string>
-    <string name="placeholder_humidity">/</string>
-    <string name="placeholder_pressure">/</string>
+    <string name="placeholder_wind_direction">-</string>
+    <string name="placeholder_humidity">-</string>
+    <string name="placeholder_pressure">-</string>
     <string name="notify_cached_result">Showing cached results.</string>
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
     <string name="amount_of_precipitation_forecast">" in the next two hours"</string>
@@ -101,6 +106,6 @@
     <string name="action_ok">OK</string>
     <string name="today">Today</string>
     <string name="error_io">An IO error occurred. Check if you\'re connected to the Internet.</string>
-    <string name="units">Units</string>
+    <string name="units">Change units</string>
 
 </resources>

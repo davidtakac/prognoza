@@ -10,8 +10,7 @@ data class DaysForecastUiModel(
 ): ForecastUiModel
 
 data class TodayForecastUiModel(
-    val currentHour: HourCellModel,
-    val precipitationForecast: Float?,
+    val currentConditionsModel: TodayForecastCurrentConditionsModel,
     val otherHours: List<HourCellModel>
 ): ForecastUiModel
 

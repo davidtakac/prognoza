@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.uimodel.cell.HourCellModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
-fun ForecastHour.toHourUiModel() =
+fun ForecastHour.toHourUiModel(unit: MeasurementUnit) =
     HourCellModel(
         id = "$placeId-$time",
         temperature = temperature,
@@ -25,10 +25,14 @@ fun ForecastHour.toHourUiModel() =
         time = time,
         relativeHumidity = relativeHumidity,
         windFromCompassDirection = windFromDirection?.toCompassDirection(),
-        pressure = pressure
+        pressure = pressure,
+        unit = unit
     )
 
-suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): DayCellModel {
+suspend fun List<ForecastHour>.toDayUiModel(
+    coroutineScope: CoroutineScope,
+    unit: MeasurementUnit
+): DayCellModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
     val lowTempAsync = coroutineScope.async { minTemperature() }
     val highTempAsync = coroutineScope.async { maxTemperature() }
@@ -47,7 +51,8 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
         maxWindSpeed = hourWithMaxWindSpeedAsync.await()?.windSpeed,
         windFromCompassDirection = hourWithMaxWindSpeedAsync.await()?.windFromDirection?.toCompassDirection(),
         maxHumidity = maxHumidityAsync.await(),
-        maxPressure = maxPressureAsync.await()
+        maxPressure = maxPressureAsync.await(),
+        unit = unit
     )
 }
 

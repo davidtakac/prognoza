@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.uimodel.cell
 
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.time.ZonedDateTime
 
@@ -14,5 +15,6 @@ data class DayCellModel(
     val totalPrecipitationAmount: Float?,
     val maxHumidity: Float?,
     val maxPressure: Float?,
-    var isExpanded: Boolean = false
+    var isExpanded: Boolean = false,
+    val unit: MeasurementUnit
 )

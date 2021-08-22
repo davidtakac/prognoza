@@ -10,6 +10,7 @@ import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.*
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.forecast.TodayForecastCurrentConditionsModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import java.time.ZonedDateTime
@@ -29,19 +30,22 @@ class TodayFragmentViewModel(
 
     override suspend fun mapToForecastUiModel(success: Success, unit: MeasurementUnit): TodayForecastUiModel {
         val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours[0].toHourUiModel().copy(time = ZonedDateTime.now())
+            success.hours[0].toHourUiModel(unit).copy(time = ZonedDateTime.now())
         }
         val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours.map { it.toHourUiModel() }
+            success.hours.map { it.toHourUiModel(unit) }
         }
         val precipitationForecastAsync = coroutineScope.async(dispatcherProvider.default) {
             val total = success.hours.subList(0, 2).totalPrecipitationAmount()
             if (total <= 0f) null else total
         }
         return TodayForecastUiModel(
-            currentHour = currentHourAsync.await(),
+            currentConditionsModel = TodayForecastCurrentConditionsModel(
+                currentHour = currentHourAsync.await(),
+                precipitationForecast = precipitationForecastAsync.await(),
+                unit = unit
+            ),
             otherHours = otherHoursAsync.await(),
-            precipitationForecast = precipitationForecastAsync.await()
         )
     }
 }

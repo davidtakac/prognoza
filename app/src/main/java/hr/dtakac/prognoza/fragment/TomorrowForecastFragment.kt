@@ -32,21 +32,22 @@ class TomorrowForecastFragment :
     override fun showForecast(uiModel: TomorrowForecastUiModel) {
         val resources = binding.root.context.resources
         val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
-        binding.tvDateTime.text = uiModel.summary.time
+        val summary = uiModel.summary
+        binding.tvDateTime.text = summary.time
             .withZoneSameInstant(ZoneId.systemDefault())
             .format(dateTimeFormatter)
         binding.tvTemperatureHigh.text =
-            resources.formatTemperatureValue(uiModel.summary.highTemperature)
+            resources.formatTemperatureValue(summary.highTemperature, summary.unit)
         binding.tvTemperatureLow.text =
-            resources.formatTemperatureValue(uiModel.summary.lowTemperature)
+            resources.formatTemperatureValue(summary.lowTemperature, summary.unit)
         binding.tvDescription.text =
-            resources.formatRepresentativeWeatherIconDescription(uiModel.summary.representativeWeatherDescription)
+            resources.formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
         binding.ivWeatherIcon.setImageResource(
-            uiModel.summary.representativeWeatherDescription?.weatherDescription?.iconResourceId
+            summary.representativeWeatherDescription?.weatherDescription?.iconResourceId
                 ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitation.text =
-            resources.formatTotalPrecipitation(uiModel.summary.totalPrecipitationAmount)
+            resources.formatTotalPrecipitation(summary.totalPrecipitationAmount, summary.unit)
         adapter.submitList(uiModel.hours)
     }
 }

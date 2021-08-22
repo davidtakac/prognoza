@@ -32,7 +32,7 @@ class DaysFragmentViewModel(
                 .groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
                 .map { it.value }
                 .filter { it.isNotEmpty() }
-                .map { it.toDayUiModel(this) }
+                .map { it.toDayUiModel(this, unit) }
 
         }
         return DaysForecastUiModel(daySummaries)

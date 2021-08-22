@@ -28,10 +28,10 @@ class TomorrowFragmentViewModel(
 
     override suspend fun mapToForecastUiModel(success: Success, unit: MeasurementUnit): TomorrowForecastUiModel {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours.toDayUiModel(this)
+            success.hours.toDayUiModel(this, unit)
         }
         val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours.map { it.toHourUiModel() }
+            success.hours.map { it.toHourUiModel(unit) }
         }
         return TomorrowForecastUiModel(
             summary = summaryAsync.await(),

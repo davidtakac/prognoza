@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.extensions.formatPrecipitationTwoHours
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.extensions.formatFeelsLike
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,22 +25,16 @@ class TodayForecastFragment :
 
     override fun showForecast(uiModel: TodayForecastUiModel) {
         val dateTimeFormatter = DateTimeFormatter.ofPattern("d LLLL, HH:mm", Locale.getDefault())
-        val currentHour = uiModel.currentHour
+        val currentConditions = uiModel.currentConditionsModel
+        val currentHour = currentConditions.currentHour
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
-        binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature)
+        binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature, currentHour.unit)
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitationForecast.text =
-            resources.formatPrecipitationTwoHours(uiModel.precipitationForecast)
-        binding.tvFeelsLike.text = resources.getString(
-            R.string.template_feels_like,
-            if (currentHour.feelsLike == null) {
-                resources.getString(R.string.placeholder_temperature)
-            } else {
-                resources.formatTemperatureValue(currentHour.feelsLike)
-            }
-        )
+            resources.formatPrecipitationTwoHours(currentConditions.precipitationForecast, currentConditions.unit)
+        binding.tvFeelsLike.text = resources.formatFeelsLike(currentHour.feelsLike, currentHour.unit)
         adapter.submitList(uiModel.otherHours)
     }
 

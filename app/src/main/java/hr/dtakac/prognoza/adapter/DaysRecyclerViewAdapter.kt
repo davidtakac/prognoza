@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.databinding.CellDayBinding
+import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.uimodel.cell.DayCellModel
 
 class DaysRecyclerViewAdapter : ListAdapter<DayCellModel, DayViewHolder>(DayDiffCallback()) {
@@ -43,9 +43,9 @@ class DayViewHolder(
             val resources = root.context.resources
             tvDateTime.text = resources.formatDaySummaryTime(cellModel.time)
             tvTemperatureHigh.text =
-                resources.formatTemperatureValue(cellModel.highTemperature)
+                resources.formatTemperatureValue(cellModel.highTemperature, cellModel.unit)
             tvTemperatureLow.text =
-                resources.formatTemperatureValue(cellModel.lowTemperature)
+                resources.formatTemperatureValue(cellModel.lowTemperature, cellModel.unit)
             tvDescription.text =
                 resources.formatRepresentativeWeatherIconDescription(cellModel.representativeWeatherDescription)
             ivWeatherIcon.setImageResource(
@@ -53,13 +53,17 @@ class DayViewHolder(
                     ?: R.drawable.ic_cloud
             )
             tvPrecipitation.text =
-                resources.formatTotalPrecipitation(cellModel.totalPrecipitationAmount)
+                resources.formatTotalPrecipitation(
+                    cellModel.totalPrecipitationAmount,
+                    cellModel.unit
+                )
             tvWind.text = resources.formatWindWithDirection(
                 cellModel.maxWindSpeed,
-                cellModel.windFromCompassDirection
+                cellModel.windFromCompassDirection,
+                cellModel.unit
             )
             tvHumidity.text = resources.formatHumidityValue(cellModel.maxHumidity)
-            tvPressure.text = resources.formatPressureValue(cellModel.maxPressure)
+            tvPressure.text = resources.formatPressureValue(cellModel.maxPressure, cellModel.unit)
             clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
         }
     }
