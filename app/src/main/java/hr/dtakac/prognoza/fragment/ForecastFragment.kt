@@ -13,14 +13,15 @@ import com.google.android.material.progressindicator.BaseProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
+import hr.dtakac.prognoza.common.BUNDLE_KEY_UNITS_CHANGED
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.extensions.formatEmptyMessage
 import hr.dtakac.prognoza.databinding.LayoutEmptyForecastBinding
-import hr.dtakac.prognoza.uimodel.EmptyForecastUiModel
-import hr.dtakac.prognoza.uimodel.ForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
 import hr.dtakac.prognoza.viewmodel.ForecastFragmentViewModel
 
-abstract class BaseForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
+abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : ViewBindingFragment<VB>(bindingInflater) {
     abstract val recyclerView: RecyclerView
@@ -34,7 +35,7 @@ abstract class BaseForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding
         observeViewModel()
         initializeRecyclerView()
         initializeTryAgain()
-        initializeDataRefreshOnChangedPlace()
+        initializeFragmentResultListener()
     }
 
     override fun onResume() {
@@ -91,13 +92,18 @@ abstract class BaseForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding
         }
     }
 
-    private fun initializeDataRefreshOnChangedPlace() {
+    private fun initializeFragmentResultListener() {
         parentFragmentManager.setFragmentResultListener(
             requestKey,
             this,
             { _, bundle ->
-                if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
-                    viewModel.getForecast()
+                when {
+                    bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED) -> {
+                        viewModel.getForecast()
+                    }
+                    bundle.getBoolean(BUNDLE_KEY_UNITS_CHANGED) -> {
+                        viewModel.getForecast()
+                    }
                 }
             }
         )

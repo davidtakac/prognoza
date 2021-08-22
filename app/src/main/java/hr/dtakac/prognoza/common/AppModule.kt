@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.PlaceService
+import hr.dtakac.prognoza.common.network.DefaultNetworkChecker
+import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase

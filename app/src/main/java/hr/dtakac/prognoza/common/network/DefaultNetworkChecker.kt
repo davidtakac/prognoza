@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.common
+package hr.dtakac.prognoza.common.network
 
 import android.content.Context
 import android.net.ConnectivityManager

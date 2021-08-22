@@ -7,7 +7,7 @@ import android.text.SpannableStringBuilder
 import androidx.core.text.color
 import androidx.core.text.toSpannable
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.uimodel.RepresentativeWeatherIcon
+import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -46,7 +46,7 @@ fun Resources.formatWeatherIconDescription(descriptionResourceId: Int?): String 
 
 fun Resources.formatWindSpeedValue(windSpeed: Float?): String {
     return if (windSpeed != null) {
-        getString(R.string.template_wind_metric, windSpeed.toKilometresPerHour())
+        getString(R.string.template_wind_metric, windSpeed.metersPerSecondToKilometresPerHour())
     } else {
         getString(R.string.placeholder_wind_speed)
     }
@@ -82,10 +82,10 @@ fun Resources.formatPressureValue(pressure: Float?): String {
     }
 }
 
-fun Resources.formatRepresentativeWeatherIconDescription(representativeWeatherIcon: RepresentativeWeatherIcon?): String {
+fun Resources.formatRepresentativeWeatherIconDescription(representativeWeatherDescription: RepresentativeWeatherDescription?): String {
     val weatherIconDescription =
-        formatWeatherIconDescription(representativeWeatherIcon?.weatherIcon?.descriptionResourceId)
-    return if (representativeWeatherIcon?.isMostly == true) {
+        formatWeatherIconDescription(representativeWeatherDescription?.weatherDescription?.descriptionResourceId)
+    return if (representativeWeatherDescription?.isMostly == true) {
         getString(
             R.string.template_mostly,
             weatherIconDescription.lowercase()

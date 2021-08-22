@@ -6,13 +6,14 @@ import hr.dtakac.prognoza.common.Event
 import hr.dtakac.prognoza.extensions.hasExpired
 import hr.dtakac.prognoza.extensions.toErrorResourceId
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import hr.dtakac.prognoza.uimodel.EmptyForecastUiModel
-import hr.dtakac.prognoza.uimodel.ForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -21,6 +22,7 @@ abstract class ForecastFragmentViewModel<T: ForecastUiModel>(
     protected val preferencesRepository: PreferencesRepository
 ): CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
+    private var currentUnit: MeasurementUnit? = null
 
     protected abstract val _forecast: MutableLiveData<T>
     val forecast: LiveData<T> get() = _forecast
@@ -50,11 +52,13 @@ abstract class ForecastFragmentViewModel<T: ForecastUiModel>(
 
     protected abstract suspend fun getNewForecast(): ForecastResult
 
-    protected abstract suspend fun mapToForecastUiModel(success: Success): T
+    protected abstract suspend fun mapToForecastUiModel(success: Success, unit: MeasurementUnit): T
 
     private suspend fun handleSuccess(success: Success) {
-        _forecast.value = mapToForecastUiModel(success)
+        val selectedUnit = preferencesRepository.getSelectedUnit()
+        _forecast.value = mapToForecastUiModel(success, selectedUnit)
         currentMeta = success.meta
+        currentUnit = selectedUnit
         _emptyScreen.value = null
     }
 
@@ -70,6 +74,7 @@ abstract class ForecastFragmentViewModel<T: ForecastUiModel>(
     private suspend fun isReloadNeeded(): Boolean {
         return currentMeta?.hasExpired() != false ||
                 currentMeta?.placeId != preferencesRepository.getSelectedPlaceId() ||
+                currentUnit != preferencesRepository.getSelectedUnit() ||
                 _forecast.value == null
     }
 }

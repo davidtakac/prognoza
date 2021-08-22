@@ -1,11 +1,12 @@
-package hr.dtakac.prognoza.uimodel
+package hr.dtakac.prognoza.uimodel.cell
 
+import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.time.ZonedDateTime
 
-data class DayUiModel(
+data class DayCellModel(
     val id: String,
     val time: ZonedDateTime,
-    val representativeWeatherIcon: RepresentativeWeatherIcon?,
+    val representativeWeatherDescription: RepresentativeWeatherDescription?,
     val lowTemperature: Float?,
     val highTemperature: Float?,
     val maxWindSpeed: Float?,

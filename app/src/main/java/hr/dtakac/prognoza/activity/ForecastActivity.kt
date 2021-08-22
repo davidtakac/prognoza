@@ -34,6 +34,9 @@ class ForecastActivity :
         viewModel.placeName.observe(this) {
             binding.toolbar.title = it
         }
+        viewModel.unitsChanged.observe(this) {
+            notifyFragmentsUnitsHaveChanged()
+        }
     }
 
     private fun initializeViewPager() {
@@ -49,6 +52,10 @@ class ForecastActivity :
             when (it.itemId) {
                 R.id.search -> {
                     openSearch()
+                    true
+                }
+                R.id.units -> {
+                    viewModel.changeUnits()
                     true
                 }
                 else -> false
@@ -77,6 +84,15 @@ class ForecastActivity :
 
     private fun notifyFragmentsOfNewPlace() {
         val result = Bundle().apply { putBoolean(BUNDLE_KEY_PLACE_PICKED, true) }
+        supportFragmentManager.apply {
+            setFragmentResult(TODAY_REQUEST_KEY, result)
+            setFragmentResult(TOMORROW_REQUEST_KEY, result)
+            setFragmentResult(DAYS_REQUEST_KEY, result)
+        }
+    }
+
+    private fun notifyFragmentsUnitsHaveChanged() {
+        val result = Bundle().apply { putBoolean(BUNDLE_KEY_UNITS_CHANGED, true) }
         supportFragmentManager.apply {
             setFragmentResult(TODAY_REQUEST_KEY, result)
             setFragmentResult(TOMORROW_REQUEST_KEY, result)

@@ -4,11 +4,13 @@ import hr.dtakac.prognoza.dbmodel.ForecastHour
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.uimodel.*
+import hr.dtakac.prognoza.uimodel.cell.DayCellModel
+import hr.dtakac.prognoza.uimodel.cell.HourCellModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
 fun ForecastHour.toHourUiModel() =
-    HourUiModel(
+    HourCellModel(
         id = "$placeId-$time",
         temperature = temperature,
         feelsLike = if (temperature == null) {
@@ -19,14 +21,14 @@ fun ForecastHour.toHourUiModel() =
         precipitation = precipitationAmount,
         windSpeed = windSpeed,
         windIconRotation = windFromDirection?.plus(180f),
-        weatherIcon = WEATHER_ICONS[symbolCode],
+        weatherDescription = WEATHER_ICONS[symbolCode],
         time = time,
         relativeHumidity = relativeHumidity,
         windFromCompassDirection = windFromDirection?.toCompassDirection(),
         pressure = pressure
     )
 
-suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): DayUiModel {
+suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): DayCellModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
     val lowTempAsync = coroutineScope.async { minTemperature() }
     val highTempAsync = coroutineScope.async { maxTemperature() }
@@ -35,10 +37,10 @@ suspend fun List<ForecastHour>.toDayUiModel(coroutineScope: CoroutineScope): Day
     val maxHumidityAsync = coroutineScope.async { maxHumidity() }
     val maxPressureAsync = coroutineScope.async { maxPressure() }
     val firstHour = get(0)
-    return DayUiModel(
+    return DayCellModel(
         id = "${firstHour.placeId}-${firstHour.time}",
         time = firstHour.time,
-        representativeWeatherIcon = weatherIconAsync.await(),
+        representativeWeatherDescription = weatherIconAsync.await(),
         lowTemperature = lowTempAsync.await(),
         highTemperature = highTempAsync.await(),
         totalPrecipitationAmount = precipitationAsync.await(),
@@ -98,7 +100,7 @@ fun List<ForecastHour>.maxPressure(): Float? {
     }
 }
 
-fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
+fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherDescription? {
     val eligibleSymbolCodes = filter { it.symbolCode != null }
         .map { it.symbolCode!! }
         .filter { it !in NIGHT_SYMBOL_CODES }
@@ -107,8 +109,8 @@ fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherIcon? {
     return if (weatherIcon == null) {
         null
     } else {
-        RepresentativeWeatherIcon(
-            weatherIcon = weatherIcon,
+        RepresentativeWeatherDescription(
+            weatherDescription = weatherIcon,
             isMostly = eligibleSymbolCodes.any { it != mostCommonSymbolCode }
         )
     }

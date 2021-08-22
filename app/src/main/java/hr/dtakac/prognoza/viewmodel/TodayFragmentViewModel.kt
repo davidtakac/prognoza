@@ -4,11 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.extensions.toHourUiModel
 import hr.dtakac.prognoza.extensions.totalPrecipitationAmount
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.uimodel.TodayForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.*
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import java.time.ZonedDateTime
@@ -26,7 +27,7 @@ class TodayFragmentViewModel(
         return forecastRepository.getTodayForecastHours(selectedPlaceId)
     }
 
-    override suspend fun mapToForecastUiModel(success: Success): TodayForecastUiModel {
+    override suspend fun mapToForecastUiModel(success: Success, unit: MeasurementUnit): TodayForecastUiModel {
         val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
             success.hours[0].toHourUiModel().copy(time = ZonedDateTime.now())
         }

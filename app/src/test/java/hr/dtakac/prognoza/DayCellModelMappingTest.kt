@@ -4,8 +4,8 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.extensions.toDayUiModel
 import hr.dtakac.prognoza.dbmodel.ForecastHour
-import hr.dtakac.prognoza.uimodel.DayUiModel
-import hr.dtakac.prognoza.uimodel.RepresentativeWeatherIcon
+import hr.dtakac.prognoza.uimodel.cell.DayCellModel
+import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -17,7 +17,7 @@ import java.time.ZonedDateTime
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class DayUiModelMappingTest {
+class DayCellModelMappingTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val coroutineDispatcher = TestCoroutineDispatcher()
@@ -115,12 +115,12 @@ class DayUiModelMappingTest {
         return listOf(nullHour, nullHour, nullHour)
     }
 
-    private fun getExpectedDayUiModel_forNormalValues(start: ZonedDateTime): DayUiModel =
-        DayUiModel(
+    private fun getExpectedDayUiModel_forNormalValues(start: ZonedDateTime): DayCellModel =
+        DayCellModel(
             id = "$TEST_PLACE_ID-$start",
             time = start,
-            representativeWeatherIcon = RepresentativeWeatherIcon(
-                weatherIcon = WEATHER_ICONS["clearsky_day"]!!,
+            representativeWeatherDescription = RepresentativeWeatherDescription(
+                weatherDescription = WEATHER_ICONS["clearsky_day"]!!,
                 isMostly = false
             ),
             lowTemperature = 18f,
@@ -133,10 +133,10 @@ class DayUiModelMappingTest {
             isExpanded = false
         )
 
-    private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) = DayUiModel(
+    private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) = DayCellModel(
         id = "$TEST_PLACE_ID-$start",
         time = start,
-        representativeWeatherIcon = null,
+        representativeWeatherDescription = null,
         lowTemperature = null,
         highTemperature = null,
         maxWindSpeed = null,

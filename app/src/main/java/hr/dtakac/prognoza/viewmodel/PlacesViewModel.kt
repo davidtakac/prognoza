@@ -5,11 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.Event
-import hr.dtakac.prognoza.common.NetworkChecker
+import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.extensions.toPlaceUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.dbmodel.Place
-import hr.dtakac.prognoza.uimodel.PlaceUiModel
+import hr.dtakac.prognoza.uimodel.cell.PlaceCellModel
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import kotlinx.coroutines.CoroutineScope
@@ -25,8 +25,8 @@ class PlacesViewModel(
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var displayedPlaces = listOf<Place>()
 
-    private val _places = MutableLiveData<List<PlaceUiModel>>()
-    val places: LiveData<List<PlaceUiModel>> get() = _places
+    private val _places = MutableLiveData<List<PlaceCellModel>>()
+    val places: LiveData<List<PlaceCellModel>> get() = _places
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading

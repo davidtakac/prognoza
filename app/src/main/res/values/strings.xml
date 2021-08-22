@@ -101,5 +101,6 @@
     <string name="action_ok">OK</string>
     <string name="today">Today</string>
     <string name="error_io">An IO error occurred. Check if you\'re connected to the Internet.</string>
+    <string name="units">Units</string>
 
 </resources>

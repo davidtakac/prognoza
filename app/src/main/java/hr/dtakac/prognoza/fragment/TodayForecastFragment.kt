@@ -6,14 +6,14 @@ import hr.dtakac.prognoza.extensions.formatPrecipitationTwoHours
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.uimodel.TodayForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TodayForecastFragment :
-    BaseForecastFragment<TodayForecastUiModel, FragmentTodayBinding>(FragmentTodayBinding::inflate) {
+    ForecastFragment<TodayForecastUiModel, FragmentTodayBinding>(FragmentTodayBinding::inflate) {
     override val emptyForecastBinding get() = binding.emptyScreen
     override val progressBar get() = binding.progressBar
     override val recyclerView get() = binding.rvHours
@@ -28,7 +28,7 @@ class TodayForecastFragment :
         binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
         binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature)
         binding.ivWeatherIcon.setImageResource(
-            currentHour.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
+            currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitationForecast.text =
             resources.formatPrecipitationTwoHours(uiModel.precipitationForecast)

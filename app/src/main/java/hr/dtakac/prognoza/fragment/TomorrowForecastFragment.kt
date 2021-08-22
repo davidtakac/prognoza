@@ -7,7 +7,7 @@ import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.extensions.formatTotalPrecipitation
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.uimodel.TomorrowForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.TomorrowForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TomorrowFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.ZoneId
@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 class TomorrowForecastFragment :
-    BaseForecastFragment<TomorrowForecastUiModel, FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
+    ForecastFragment<TomorrowForecastUiModel, FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
     override val emptyForecastBinding get() = binding.emptyScreen
     override val progressBar get() = binding.progressBar
     override val recyclerView get() = binding.rvHours
@@ -40,9 +40,9 @@ class TomorrowForecastFragment :
         binding.tvTemperatureLow.text =
             resources.formatTemperatureValue(uiModel.summary.lowTemperature)
         binding.tvDescription.text =
-            resources.formatRepresentativeWeatherIconDescription(uiModel.summary.representativeWeatherIcon)
+            resources.formatRepresentativeWeatherIconDescription(uiModel.summary.representativeWeatherDescription)
         binding.ivWeatherIcon.setImageResource(
-            uiModel.summary.representativeWeatherIcon?.weatherIcon?.iconResourceId
+            uiModel.summary.representativeWeatherDescription?.weatherDescription?.iconResourceId
                 ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitation.text =

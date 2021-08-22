@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
-import hr.dtakac.prognoza.uimodel.PlaceUiModel
+import hr.dtakac.prognoza.uimodel.cell.PlaceCellModel
 
 class PlacesRecyclerViewAdapter(
     private val placeClickListener: (String) -> Unit
-) : ListAdapter<PlaceUiModel, PlaceViewHolder>(PlaceDiffCallback()) {
+) : ListAdapter<PlaceCellModel, PlaceViewHolder>(PlaceDiffCallback()) {
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.bind(getItem(position), placeClickListener)
     }
@@ -26,27 +26,27 @@ class PlacesRecyclerViewAdapter(
 class PlaceViewHolder(
     private val binding: CellPlaceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(uiModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
+    fun bind(cellModel: PlaceCellModel, placeClickListener: (String) -> Unit) {
         binding.ivSaved.setImageResource(R.drawable.ic_history)
-        binding.ivSaved.visibility = if (uiModel.isSaved) {
+        binding.ivSaved.visibility = if (cellModel.isSaved) {
             View.VISIBLE
         } else {
             View.GONE
         }
-        binding.tvName.text = uiModel.name
-        binding.tvFullName.text = uiModel.fullName
+        binding.tvName.text = cellModel.name
+        binding.tvFullName.text = cellModel.fullName
         binding.root.setOnClickListener {
-            placeClickListener.invoke(uiModel.id)
+            placeClickListener.invoke(cellModel.id)
         }
     }
 }
 
-class PlaceDiffCallback : DiffUtil.ItemCallback<PlaceUiModel>() {
-    override fun areContentsTheSame(oldItem: PlaceUiModel, newItem: PlaceUiModel): Boolean {
+class PlaceDiffCallback : DiffUtil.ItemCallback<PlaceCellModel>() {
+    override fun areContentsTheSame(oldItem: PlaceCellModel, newItem: PlaceCellModel): Boolean {
         return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItem: PlaceUiModel, newItem: PlaceUiModel): Boolean {
+    override fun areItemsTheSame(oldItem: PlaceCellModel, newItem: PlaceCellModel): Boolean {
         return oldItem == newItem
     }
 }

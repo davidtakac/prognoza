@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.databinding.CellHourBinding
-import hr.dtakac.prognoza.uimodel.HourUiModel
+import hr.dtakac.prognoza.uimodel.cell.HourCellModel
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-class HoursRecyclerViewAdapter : ListAdapter<HourUiModel, HourViewHolder>(HourDiffCallback()) {
+class HoursRecyclerViewAdapter : ListAdapter<HourCellModel, HourViewHolder>(HourDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
         override fun invoke(position: Int) {
             val itemAtPosition = getItem(position)
@@ -43,47 +43,47 @@ class HourViewHolder(
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
-    fun bind(uiModel: HourUiModel) {
+    fun bind(cellModel: HourCellModel) {
         binding.apply {
             val resources = root.context.resources
             // predefined formatting
-            tvTemperature.text = resources.formatTemperatureValue(uiModel.temperature)
-            tvFeelsLike.text = resources.formatTemperatureValue(uiModel.feelsLike)
+            tvTemperature.text = resources.formatTemperatureValue(cellModel.temperature)
+            tvFeelsLike.text = resources.formatTemperatureValue(cellModel.feelsLike)
             tvPrecipitationAmount.text =
-                resources.formatPrecipitationValue(uiModel.precipitation)
+                resources.formatPrecipitationValue(cellModel.precipitation)
             tvWind.text =
-                resources.formatWindWithDirection(uiModel.windSpeed, uiModel.windFromCompassDirection)
-            tvHumidity.text = resources.formatHumidityValue(uiModel.relativeHumidity)
-            tvPressure.text = resources.formatPressureValue(uiModel.pressure)
+                resources.formatWindWithDirection(cellModel.windSpeed, cellModel.windFromCompassDirection)
+            tvHumidity.text = resources.formatHumidityValue(cellModel.relativeHumidity)
+            tvPressure.text = resources.formatPressureValue(cellModel.pressure)
             tvDescription.text =
-                resources.formatWeatherIconDescription(uiModel.weatherIcon?.descriptionResourceId)
+                resources.formatWeatherIconDescription(cellModel.weatherDescription?.descriptionResourceId)
             tvPrecipitationAmount.text =
-                resources.formatPrecipitationValue(uiModel.precipitation)
+                resources.formatPrecipitationValue(cellModel.precipitation)
             // other, view-specific operations
             tvPrecipitationAmount.apply {
-                visibility = if (uiModel.precipitation.isPrecipitationAmountSignificant()) {
+                visibility = if (cellModel.precipitation.isPrecipitationAmountSignificant()) {
                     View.VISIBLE
                 } else {
                     View.GONE
                 }
             }
             ivWeatherIcon.setImageResource(
-                uiModel.weatherIcon?.iconResourceId ?: R.drawable.ic_cloud
+                cellModel.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
             )
-            tvTime.text = uiModel.time
+            tvTime.text = cellModel.time
                 .withZoneSameInstant(ZoneId.systemDefault())
                 .format(dateTimeFormatter)
-            clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE
+            clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
         }
     }
 }
 
-class HourDiffCallback : DiffUtil.ItemCallback<HourUiModel>() {
-    override fun areContentsTheSame(oldItem: HourUiModel, newItem: HourUiModel): Boolean {
+class HourDiffCallback : DiffUtil.ItemCallback<HourCellModel>() {
+    override fun areContentsTheSame(oldItem: HourCellModel, newItem: HourCellModel): Boolean {
         return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItem: HourUiModel, newItem: HourUiModel): Boolean {
+    override fun areItemsTheSame(oldItem: HourCellModel, newItem: HourCellModel): Boolean {
         return oldItem.id == newItem.id
     }
 }

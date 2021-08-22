@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.databinding.CellDayBinding
-import hr.dtakac.prognoza.uimodel.DayUiModel
+import hr.dtakac.prognoza.uimodel.cell.DayCellModel
 
-class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
+class DaysRecyclerViewAdapter : ListAdapter<DayCellModel, DayViewHolder>(DayDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
         override fun invoke(position: Int) {
             val itemAtPosition = getItem(position)
@@ -38,39 +38,39 @@ class DayViewHolder(
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
-    fun bind(uiModel: DayUiModel) {
+    fun bind(cellModel: DayCellModel) {
         binding.apply {
             val resources = root.context.resources
-            tvDateTime.text = resources.formatDaySummaryTime(uiModel.time)
+            tvDateTime.text = resources.formatDaySummaryTime(cellModel.time)
             tvTemperatureHigh.text =
-                resources.formatTemperatureValue(uiModel.highTemperature)
+                resources.formatTemperatureValue(cellModel.highTemperature)
             tvTemperatureLow.text =
-                resources.formatTemperatureValue(uiModel.lowTemperature)
+                resources.formatTemperatureValue(cellModel.lowTemperature)
             tvDescription.text =
-                resources.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherIcon)
+                resources.formatRepresentativeWeatherIconDescription(cellModel.representativeWeatherDescription)
             ivWeatherIcon.setImageResource(
-                uiModel.representativeWeatherIcon?.weatherIcon?.iconResourceId
+                cellModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
                     ?: R.drawable.ic_cloud
             )
             tvPrecipitation.text =
-                resources.formatTotalPrecipitation(uiModel.totalPrecipitationAmount)
+                resources.formatTotalPrecipitation(cellModel.totalPrecipitationAmount)
             tvWind.text = resources.formatWindWithDirection(
-                uiModel.maxWindSpeed,
-                uiModel.windFromCompassDirection
+                cellModel.maxWindSpeed,
+                cellModel.windFromCompassDirection
             )
-            tvHumidity.text = resources.formatHumidityValue(uiModel.maxHumidity)
-            tvPressure.text = resources.formatPressureValue(uiModel.maxPressure)
-            clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE
+            tvHumidity.text = resources.formatHumidityValue(cellModel.maxHumidity)
+            tvPressure.text = resources.formatPressureValue(cellModel.maxPressure)
+            clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
         }
     }
 }
 
-class DayDiffCallback : DiffUtil.ItemCallback<DayUiModel>() {
-    override fun areContentsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
+class DayDiffCallback : DiffUtil.ItemCallback<DayCellModel>() {
+    override fun areContentsTheSame(oldItem: DayCellModel, newItem: DayCellModel): Boolean {
         return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
+    override fun areItemsTheSame(oldItem: DayCellModel, newItem: DayCellModel): Boolean {
         return oldItem.id == newItem.id
     }
 }
