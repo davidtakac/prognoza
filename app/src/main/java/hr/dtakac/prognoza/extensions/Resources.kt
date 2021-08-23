@@ -18,7 +18,7 @@ import java.util.*
 import kotlin.math.roundToInt
 
 fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit): String {
-    val temperatureFormat = DecimalFormat.getInstance(Locale.getDefault()).apply {
+    val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 0
         isParseIntegerOnly = true
         roundingMode = RoundingMode.HALF_UP
@@ -30,20 +30,20 @@ fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit)
         unit == MeasurementUnit.IMPERIAL -> {
             getString(
                 R.string.template_temperature_universal,
-                temperatureFormat.format(temperature.degreesCelsiusToDegreesFahrenheit())
+                formatter.format(temperature.degreesCelsiusToDegreesFahrenheit())
             )
         }
         else -> {
             getString(
                 R.string.template_temperature_universal,
-                temperatureFormat.format(temperature)
+                formatter.format(temperature)
             )
         }
     }
 }
 
 fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUnit): Spannable {
-    val precipitationFormat = DecimalFormat.getInstance(Locale.getDefault()).apply {
+    val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 2
         roundingMode = RoundingMode.HALF_UP
     }
@@ -59,12 +59,17 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
                     append(
                         getString(
                             R.string.template_precipitation_imperial,
-                            precipitationFormat.format(convertedPrecipitation)
+                            formatter.format(convertedPrecipitation)
                         )
                     )
                 }
         } else {
-            SpannableString(getString(R.string.placeholder_precipitation_insignificant_imperial))
+            SpannableString(
+                getString(
+                    R.string.placeholder_precipitation_insignificant_imperial,
+                    formatter.format(0.01f)
+                )
+            )
         }
     } else {
         if (precipitation.isPrecipitationAmountSignificant()) {
@@ -73,13 +78,18 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
                     append(
                         getString(
                             R.string.template_precipitation_metric,
-                            precipitationFormat.format(precipitation)
+                            formatter.format(precipitation)
                         )
                     )
                 }
                 .toSpannable()
         } else {
-            SpannableString(getString(R.string.placeholder_precipitation_insignificant_metric))
+            SpannableString(
+                getString(
+                    R.string.placeholder_precipitation_insignificant_metric,
+                    formatter.format(0.01f)
+                )
+            )
         }
     }
 }
@@ -93,16 +103,20 @@ fun Resources.formatWeatherIconDescription(descriptionResourceId: Int?): String 
 }
 
 fun Resources.formatWindSpeedValue(windSpeed: Float?, unit: MeasurementUnit): String {
+    val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
+        maximumFractionDigits = 1
+        roundingMode = RoundingMode.HALF_UP
+    }
     return if (windSpeed != null) {
         if (unit == MeasurementUnit.IMPERIAL) {
             getString(
                 R.string.template_wind_imperial,
-                windSpeed.metersPerSecondToMilesPerHour()
+                formatter.format(windSpeed.metersPerSecondToMilesPerHour())
             )
         } else {
             getString(
                 R.string.template_wind_metric,
-                windSpeed.metersPerSecondToKilometresPerHour()
+                formatter.format(windSpeed.metersPerSecondToKilometresPerHour())
             )
         }
     } else {
@@ -123,10 +137,15 @@ fun Resources.formatWindWithDirection(
 }
 
 fun Resources.formatHumidityValue(relativeHumidity: Float?): String {
+    val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
+        maximumFractionDigits = 0
+        isParseIntegerOnly = true
+        roundingMode = RoundingMode.HALF_UP
+    }
     return if (relativeHumidity != null) {
         getString(
             R.string.template_humidity_universal,
-            relativeHumidity.roundToInt()
+            formatter.format(relativeHumidity.roundToInt())
         )
     } else {
         getString(R.string.placeholder_humidity)
@@ -134,16 +153,28 @@ fun Resources.formatHumidityValue(relativeHumidity: Float?): String {
 }
 
 fun Resources.formatPressureValue(pressure: Float?, unit: MeasurementUnit): String {
+    val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
+        when (unit) {
+            MeasurementUnit.IMPERIAL -> {
+                maximumFractionDigits = 2
+            }
+            MeasurementUnit.METRIC -> {
+                maximumFractionDigits = 0
+                isParseIntegerOnly = true
+            }
+        }
+        roundingMode = RoundingMode.HALF_UP
+    }
     return if (pressure != null) {
         if (unit == MeasurementUnit.IMPERIAL) {
             getString(
                 R.string.template_pressure_imperial,
-                pressure.hectoPascalToPsi()
+                formatter.format(pressure.hectoPascalToPsi())
             )
         } else {
             getString(
                 R.string.template_pressure_metric,
-                pressure.roundToInt()
+                formatter.format(pressure)
             )
         }
     } else {
