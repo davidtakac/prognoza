@@ -3,7 +3,10 @@ package hr.dtakac.prognoza.extensions
 import hr.dtakac.prognoza.dbmodel.ForecastHour
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.repomodel.*
-import hr.dtakac.prognoza.uimodel.*
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.NIGHT_SYMBOL_CODES
+import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
+import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import hr.dtakac.prognoza.uimodel.cell.DayCellModel
 import hr.dtakac.prognoza.uimodel.cell.HourCellModel
 import kotlinx.coroutines.CoroutineScope
@@ -56,7 +59,10 @@ suspend fun List<ForecastHour>.toDayUiModel(
     )
 }
 
-fun List<ForecastHour>.toForecastResult(meta: ForecastMeta?, error: ForecastError?): ForecastResult {
+fun List<ForecastHour>.toForecastResult(
+    meta: ForecastMeta?,
+    error: ForecastError?
+): ForecastResult {
     return if (isNullOrEmpty()) {
         Empty(error)
     } else {
@@ -88,7 +94,7 @@ fun List<ForecastHour>.minTemperature(): Float? {
 }
 
 fun List<ForecastHour>.maxHumidity(): Float? {
-    val max =  maxOf { it.relativeHumidity ?: Float.MIN_VALUE }
+    val max = maxOf { it.relativeHumidity ?: Float.MIN_VALUE }
     return if (max == Float.MIN_VALUE) {
         null
     } else {

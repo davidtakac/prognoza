@@ -1,91 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/summary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp">
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_date_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             android:layout_marginEnd="8dp"
-            android:textSize="16sp"
             android:textColor="@color/high_emphasis"
-            tools:text="19 July, 18:32"/>
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="19 July, 18:32" />
 
         <TextView
             android:id="@+id/tv_temperature_high"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/high_emphasis"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
-            app:layout_constraintStart_toStartOf="parent"
             android:layout_marginEnd="8dp"
+            android:textColor="@color/high_emphasis"
             android:textSize="36sp"
-            tools:text="32"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            tools:text="32" />
 
         <TextView
             android:id="@+id/tv_temperature_low"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
             android:layout_marginStart="8dp"
             android:textColor="@color/med_emphasis"
             android:textSize="36sp"
-            tools:text="32"/>
+            app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
+            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+            tools:text="32" />
 
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            tools:text="Precipitation: 40 mm"
-            android:textColor="@color/med_emphasis"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
-            android:textSize="16sp"/>
+            android:textColor="@color/med_emphasis"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
+            tools:text="Precipitation: 40 mm" />
 
         <TextView
             android:id="@+id/tv_precipitation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/tv_description"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:textColor="@color/med_emphasis"
             android:textSize="16sp"
-            tools:text="Mostly light sleet showers and thunder"/>
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_description"
+            tools:text="Mostly light sleet showers and thunder" />
 
         <ImageView
             android:id="@+id/iv_weather_icon"
             android:layout_width="86dp"
             android:layout_height="86dp"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1"
-            tools:src="@drawable/lightsleetandthunder"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/lightsleetandthunder" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -93,27 +92,28 @@
         android:id="@+id/rv_hours"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/summary"
         android:layout_marginTop="8dp"
-        tools:listitem="@layout/cell_hour"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/summary"
+        tools:listitem="@layout/cell_hour" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:indeterminate="true"
-        app:showAnimationBehavior="outward"
         app:hideAnimationBehavior="inward"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:showAnimationBehavior="outward" />
 
-    <include layout="@layout/layout_empty_forecast"
-        android:visibility="gone"
-        android:id="@+id/empty_screen"/>
+    <include
+        android:id="@+id/empty_screen"
+        layout="@layout/layout_empty_forecast"
+        android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

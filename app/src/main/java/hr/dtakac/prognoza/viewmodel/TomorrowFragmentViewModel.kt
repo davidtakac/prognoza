@@ -1,15 +1,15 @@
 package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.extensions.toDayUiModel
 import hr.dtakac.prognoza.extensions.toHourUiModel
-import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.uimodel.forecast.TomorrowForecastUiModel
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
-import hr.dtakac.prognoza.repository.forecast.*
+import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.forecast.TomorrowForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
@@ -26,7 +26,10 @@ class TomorrowFragmentViewModel(
         return forecastRepository.getTomorrowForecastHours(selectedPlaceId)
     }
 
-    override suspend fun mapToForecastUiModel(success: Success, unit: MeasurementUnit): TomorrowForecastUiModel {
+    override suspend fun mapToForecastUiModel(
+        success: Success,
+        unit: MeasurementUnit
+    ): TomorrowForecastUiModel {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
             success.hours.toDayUiModel(this, unit)
         }

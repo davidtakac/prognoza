@@ -1,64 +1,64 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_header"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="?android:attr/selectableItemBackground">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/tv_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
             android:layout_marginEnd="8dp"
-            android:textSize="16sp"
             android:textColor="@color/high_emphasis"
-            tools:text="19:00"/>
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="19:00" />
 
         <TextView
             android:id="@+id/tv_precipitation_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="@id/tv_time"
+            android:layout_marginStart="16dp"
+            android:textColor="@color/med_emphasis"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_time"
             app:layout_constraintStart_toEndOf="@id/tv_time"
-            android:layout_marginStart="16dp"
-            android:textSize="14sp"
-            android:textColor="@color/med_emphasis"
-            tools:textColor="@color/precipitation"
-            tools:text="0.1 mm"/>
+            app:layout_constraintTop_toTopOf="@id/tv_time"
+            tools:text="0.1 mm"
+            tools:textColor="@color/precipitation" />
 
         <ImageView
             android:id="@+id/iv_weather_icon"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            tools:src="@drawable/rain"/>
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/rain" />
 
         <TextView
             android:id="@+id/tv_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="8dp"
-            android:textSize="16sp"
             android:textColor="@color/high_emphasis"
-            tools:text="22C"/>
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="22C" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -66,10 +66,10 @@
         android:id="@+id/cl_details"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_header"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cl_header"
         tools:visibility="visible">
 
         <androidx.constraintlayout.widget.Barrier
@@ -78,7 +78,7 @@
             android:layout_height="wrap_content"
             app:barrierDirection="end"
             app:barrierMargin="8dp"
-            app:constraint_referenced_ids="tv_label_feels_like,tv_label_wind,tv_label_humidity,tv_label_pressure"/>
+            app:constraint_referenced_ids="tv_label_feels_like,tv_label_wind,tv_label_humidity,tv_label_pressure" />
 
         <androidx.constraintlayout.widget.Barrier
             android:id="@+id/barrier_values"
@@ -86,144 +86,144 @@
             android:layout_height="wrap_content"
             app:barrierDirection="end"
             app:barrierMargin="8dp"
-            app:constraint_referenced_ids="tv_feels_like,tv_wind,tv_humidity,tv_pressure"/>
+            app:constraint_referenced_ids="tv_feels_like,tv_wind,tv_humidity,tv_pressure" />
 
         <TextView
             android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            android:gravity="end"
-            app:layout_constraintStart_toEndOf="@id/barrier_values"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:text="Light showers with thunder and sleetsssss"
             android:layout_marginTop="4dp"
-            android:textColor="@color/med_emphasis"
             android:layout_marginEnd="4dp"
-            android:textSize="14sp"/>
+            android:gravity="end"
+            android:textColor="@color/med_emphasis"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/barrier_values"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Light showers with thunder and sleetsssss" />
 
         <ImageView
             android:id="@+id/iv_feels_like"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            app:tint="@color/high_emphasis"
             android:src="@drawable/ic_thermostat"
-            app:layout_constraintTop_toTopOf="@id/tv_feels_like"
             app:layout_constraintBottom_toBottomOf="@id/tv_feels_like"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_feels_like"
+            app:tint="@color/high_emphasis" />
 
         <TextView
             android:id="@+id/tv_label_feels_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_feels_like"
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
+            android:text="@string/feels_like"
             android:textColor="@color/med_emphasis"
-            android:text="@string/feels_like" />
+            app:layout_constraintStart_toEndOf="@id/iv_feels_like"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_feels_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/high_emphasis"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_feels_like"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            android:textColor="@color/high_emphasis"
-            tools:text="18C"/>
+            tools:text="18C" />
 
         <ImageView
             android:id="@+id/iv_wind"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_air"
-            app:tint="@color/high_emphasis"
-            app:layout_constraintTop_toTopOf="@id/tv_label_wind"
             app:layout_constraintBottom_toBottomOf="@id/tv_label_wind"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_label_wind"
+            app:tint="@color/high_emphasis" />
 
         <TextView
             android:id="@+id/tv_label_wind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/wind"
-            app:layout_constraintTop_toBottomOf="@id/tv_feels_like"
-            app:layout_constraintStart_toEndOf="@id/iv_wind"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
+            android:text="@string/wind"
             android:textColor="@color/med_emphasis"
-            android:layout_marginStart="4dp"/>
+            app:layout_constraintStart_toEndOf="@id/iv_wind"
+            app:layout_constraintTop_toBottomOf="@id/tv_feels_like" />
 
         <TextView
             android:id="@+id/tv_wind"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="3 km/h, WSW"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/high_emphasis"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_wind"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            android:textColor="@color/high_emphasis"
-            android:layout_marginTop="4dp" />
+            tools:text="3 km/h, WSW" />
 
         <ImageView
             android:id="@+id/iv_humidity"
             android:layout_width="18dp"
             android:layout_height="18dp"
-            app:tint="@color/high_emphasis"
             android:src="@drawable/ic_water_drop"
-            app:layout_constraintTop_toTopOf="@id/tv_label_humidity"
             app:layout_constraintBottom_toBottomOf="@id/tv_label_humidity"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_label_humidity"
+            app:tint="@color/high_emphasis" />
 
         <TextView
             android:id="@+id/tv_label_humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/humidity"
-            app:layout_constraintTop_toBottomOf="@id/tv_label_wind"
-            app:layout_constraintStart_toEndOf="@id/iv_wind"
-            android:textColor="@color/med_emphasis"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="4dp"/>
+            android:text="@string/humidity"
+            android:textColor="@color/med_emphasis"
+            app:layout_constraintStart_toEndOf="@id/iv_wind"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_wind" />
 
         <TextView
             android:id="@+id/tv_humidity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="40%"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/high_emphasis"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_humidity"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            android:textColor="@color/high_emphasis"
-            android:layout_marginTop="4dp" />
+            tools:text="40%" />
 
         <ImageView
             android:id="@+id/iv_pressure"
             android:layout_width="18dp"
             android:layout_height="18dp"
             android:src="@drawable/ic_speed"
-            app:tint="@color/high_emphasis"
-            app:layout_constraintTop_toTopOf="@id/tv_label_pressure"
             app:layout_constraintBottom_toBottomOf="@id/tv_label_pressure"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_label_pressure"
+            app:tint="@color/high_emphasis" />
 
         <TextView
             android:id="@+id/tv_label_pressure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/pressure"
-            app:layout_constraintTop_toBottomOf="@id/tv_label_humidity"
-            app:layout_constraintStart_toEndOf="@id/iv_pressure"
-            android:textColor="@color/med_emphasis"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
-            android:layout_marginStart="4dp"/>
+            android:text="@string/pressure"
+            android:textColor="@color/med_emphasis"
+            app:layout_constraintStart_toEndOf="@id/iv_pressure"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_humidity" />
 
         <TextView
             android:id="@+id/tv_pressure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="1023 hPa"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/high_emphasis"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_pressure"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            android:textColor="@color/high_emphasis"
-            android:layout_marginTop="4dp" />
+            tools:text="1023 hPa" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

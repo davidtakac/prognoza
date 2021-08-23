@@ -9,11 +9,6 @@ import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
-import hr.dtakac.prognoza.viewmodel.DaysFragmentViewModel
-import hr.dtakac.prognoza.viewmodel.ForecastActivityViewModel
-import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
-import hr.dtakac.prognoza.viewmodel.TomorrowFragmentViewModel
-import hr.dtakac.prognoza.viewmodel.PlacesViewModel
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.meta.DefaultMetaRepository
@@ -22,6 +17,7 @@ import hr.dtakac.prognoza.repository.place.DefaultPlaceRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.viewmodel.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication

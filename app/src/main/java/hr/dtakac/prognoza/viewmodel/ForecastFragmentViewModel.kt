@@ -3,24 +3,24 @@ package hr.dtakac.prognoza.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.common.Event
+import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.extensions.hasExpired
 import hr.dtakac.prognoza.extensions.toErrorResourceId
-import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
-import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-abstract class ForecastFragmentViewModel<T: ForecastUiModel>(
+abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
     coroutineScope: CoroutineScope?,
     protected val preferencesRepository: PreferencesRepository
-): CoroutineScopeViewModel(coroutineScope) {
+) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
     private var currentUnit: MeasurementUnit? = null
 

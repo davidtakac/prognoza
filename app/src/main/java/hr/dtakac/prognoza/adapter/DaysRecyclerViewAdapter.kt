@@ -52,9 +52,15 @@ class DayViewHolder(
                 )
             }
             tvTemperatureHigh.text =
-                resources.formatTemperatureValue(cellModel.highTemperature, cellModel.displayDataInUnit)
+                resources.formatTemperatureValue(
+                    cellModel.highTemperature,
+                    cellModel.displayDataInUnit
+                )
             tvTemperatureLow.text =
-                resources.formatTemperatureValue(cellModel.lowTemperature, cellModel.displayDataInUnit)
+                resources.formatTemperatureValue(
+                    cellModel.lowTemperature,
+                    cellModel.displayDataInUnit
+                )
             tvDescription.text =
                 resources.formatRepresentativeWeatherIconDescription(cellModel.representativeWeatherDescription)
             ivWeatherIcon.setImageResource(
@@ -72,7 +78,8 @@ class DayViewHolder(
                 cellModel.displayDataInUnit
             )
             tvHumidity.text = resources.formatHumidityValue(cellModel.maxHumidity)
-            tvPressure.text = resources.formatPressureValue(cellModel.maxPressure, cellModel.displayDataInUnit)
+            tvPressure.text =
+                resources.formatPressureValue(cellModel.maxPressure, cellModel.displayDataInUnit)
             clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
         }
     }

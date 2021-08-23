@@ -1,7 +1,10 @@
 package hr.dtakac.prognoza.fragment
 
 import android.os.Bundle
-import android.view.*
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.widget.addTextChangedListener
@@ -10,11 +13,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
-import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.PLACE_SEARCH_REQUEST_KEY
-import hr.dtakac.prognoza.extensions.toPx
-import hr.dtakac.prognoza.databinding.FragmentPlaceSearchBinding
 import hr.dtakac.prognoza.adapter.PlacesRecyclerViewAdapter
+import hr.dtakac.prognoza.common.MarginItemDecoration
+import hr.dtakac.prognoza.databinding.FragmentPlaceSearchBinding
+import hr.dtakac.prognoza.extensions.toPx
 import hr.dtakac.prognoza.viewmodel.PlacesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt

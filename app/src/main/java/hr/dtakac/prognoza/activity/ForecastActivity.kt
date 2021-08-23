@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import hr.dtakac.prognoza.*
-import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.adapter.ForecastPagerAdapter
+import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.fragment.PlaceSearchDialogFragment
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.viewmodel.ForecastActivityViewModel
@@ -105,9 +105,11 @@ class ForecastActivity :
     }
 
     private fun updateChangeUnitsMenuItem(newUnit: MeasurementUnit) {
-        binding.toolbar.menu.findItem(R.id.units).title = resources.getString(when (newUnit) {
-            MeasurementUnit.METRIC -> R.string.change_to_imperial
-            MeasurementUnit.IMPERIAL -> R.string.change_to_metric
-        })
+        binding.toolbar.menu.findItem(R.id.units).title = resources.getString(
+            when (newUnit) {
+                MeasurementUnit.METRIC -> R.string.change_to_imperial
+                MeasurementUnit.IMPERIAL -> R.string.change_to_metric
+            }
+        )
     }
 }

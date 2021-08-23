@@ -3,11 +3,11 @@ package hr.dtakac.prognoza.fragment
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TOMORROW_REQUEST_KEY
+import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.extensions.formatRepresentativeWeatherIconDescription
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.extensions.formatTotalPrecipitation
-import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
-import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.uimodel.forecast.TomorrowForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TomorrowFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -47,7 +47,10 @@ class TomorrowForecastFragment :
                 ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitation.text =
-            resources.formatTotalPrecipitation(summary.totalPrecipitationAmount, summary.displayDataInUnit)
+            resources.formatTotalPrecipitation(
+                summary.totalPrecipitationAmount,
+                summary.displayDataInUnit
+            )
         adapter.submitList(uiModel.hours)
     }
 }

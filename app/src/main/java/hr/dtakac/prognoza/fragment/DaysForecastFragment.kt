@@ -1,8 +1,8 @@
 package hr.dtakac.prognoza.fragment
 
 import hr.dtakac.prognoza.DAYS_REQUEST_KEY
-import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.adapter.DaysRecyclerViewAdapter
+import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
 import hr.dtakac.prognoza.viewmodel.DaysFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

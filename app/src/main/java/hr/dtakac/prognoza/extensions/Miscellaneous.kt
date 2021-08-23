@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.extensions
 import android.content.res.Resources
 import android.util.TypedValue
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import java.lang.Exception
 import java.time.ZoneId
 import java.time.ZonedDateTime
 

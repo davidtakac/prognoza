@@ -15,7 +15,10 @@ data class RepresentativeWeatherDescription(
 val WEATHER_ICONS = mapOf(
     "clearsky_day" to WeatherDescription(R.drawable.clearsky_day, R.string.clearsky),
     "clearsky_night" to WeatherDescription(R.drawable.clearsky_night, R.string.clearsky),
-    "clearsky_polartwilight" to WeatherDescription(R.drawable.clearsky_polartwilight, R.string.clearsky),
+    "clearsky_polartwilight" to WeatherDescription(
+        R.drawable.clearsky_polartwilight,
+        R.string.clearsky
+    ),
     "cloudy" to WeatherDescription(R.drawable.cloudy, R.string.cloudy),
     "fair_day" to WeatherDescription(R.drawable.fair_day, R.string.fair),
     "fair_night" to WeatherDescription(R.drawable.fair_night, R.string.fair),
@@ -196,7 +199,10 @@ val WEATHER_ICONS = mapOf(
         R.string.lightssnowshowersandthunder
     ),
     "partlycloudy_day" to WeatherDescription(R.drawable.partlycloudy_day, R.string.partlycloudy),
-    "partlycloudy_night" to WeatherDescription(R.drawable.partlycloudy_night, R.string.partlycloudy),
+    "partlycloudy_night" to WeatherDescription(
+        R.drawable.partlycloudy_night,
+        R.string.partlycloudy
+    ),
     "partlycloudy_polartwilight" to WeatherDescription(
         R.drawable.partlycloudy_polartwilight,
         R.string.partlycloudy
@@ -236,7 +242,10 @@ val WEATHER_ICONS = mapOf(
         R.string.sleetshowersandthunder
     ),
     "sleetshowers_day" to WeatherDescription(R.drawable.sleetshowers_day, R.string.sleetshowers),
-    "sleetshowers_night" to WeatherDescription(R.drawable.sleetshowers_night, R.string.sleetshowers),
+    "sleetshowers_night" to WeatherDescription(
+        R.drawable.sleetshowers_night,
+        R.string.sleetshowers
+    ),
     "sleetshowers_polartwilight" to WeatherDescription(
         R.drawable.sleetshowers_polartwilight,
         R.string.sleetshowers

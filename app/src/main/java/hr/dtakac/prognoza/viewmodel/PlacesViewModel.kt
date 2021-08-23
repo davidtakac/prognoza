@@ -6,12 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.Event
 import hr.dtakac.prognoza.common.network.NetworkChecker
-import hr.dtakac.prognoza.extensions.toPlaceUiModel
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.dbmodel.Place
-import hr.dtakac.prognoza.uimodel.cell.PlaceCellModel
+import hr.dtakac.prognoza.extensions.toPlaceUiModel
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.uimodel.cell.PlaceCellModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

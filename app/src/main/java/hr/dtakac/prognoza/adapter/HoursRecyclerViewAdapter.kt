@@ -45,9 +45,13 @@ class HourViewHolder(
             // predefined formatting
             tvTemperature.text =
                 resources.formatTemperatureValue(cellModel.temperature, cellModel.displayDataInUnit)
-            tvFeelsLike.text = resources.formatTemperatureValue(cellModel.feelsLike, cellModel.displayDataInUnit)
+            tvFeelsLike.text =
+                resources.formatTemperatureValue(cellModel.feelsLike, cellModel.displayDataInUnit)
             tvPrecipitationAmount.text =
-                resources.formatPrecipitationValue(cellModel.precipitation, cellModel.displayDataInUnit)
+                resources.formatPrecipitationValue(
+                    cellModel.precipitation,
+                    cellModel.displayDataInUnit
+                )
             tvWind.text =
                 resources.formatWindWithDirection(
                     cellModel.windSpeed,
@@ -55,7 +59,8 @@ class HourViewHolder(
                     cellModel.displayDataInUnit
                 )
             tvHumidity.text = resources.formatHumidityValue(cellModel.relativeHumidity)
-            tvPressure.text = resources.formatPressureValue(cellModel.pressure, cellModel.displayDataInUnit)
+            tvPressure.text =
+                resources.formatPressureValue(cellModel.pressure, cellModel.displayDataInUnit)
             tvDescription.text =
                 resources.formatWeatherIconDescription(cellModel.weatherDescription?.descriptionResourceId)
             // other, view-specific operations
@@ -71,7 +76,7 @@ class HourViewHolder(
             val time = DateUtils.formatDateTime(
                 binding.root.context,
                 cellModel.time.toInstant().toEpochMilli(),
-                DateUtils.FORMAT_SHOW_TIME
+                DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
             )
             tvTime.text = time
             clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE

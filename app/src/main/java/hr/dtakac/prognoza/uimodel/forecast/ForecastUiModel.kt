@@ -7,14 +7,14 @@ interface ForecastUiModel
 
 data class DaysForecastUiModel(
     val days: List<DayCellModel>
-): ForecastUiModel
+) : ForecastUiModel
 
 data class TodayForecastUiModel(
     val currentConditionsModel: TodayForecastCurrentConditionsModel,
     val otherHours: List<HourCellModel>
-): ForecastUiModel
+) : ForecastUiModel
 
 data class TomorrowForecastUiModel(
     val summary: DayCellModel,
     val hours: List<HourCellModel>
-): ForecastUiModel
+) : ForecastUiModel
