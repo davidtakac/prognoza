@@ -1,10 +1,7 @@
 package hr.dtakac.prognoza.extensions
 
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import kotlin.math.roundToInt
-
-fun Float.isPrecipitationAmountSignificant() = this > 0.01f
 
 fun Float.toCompassDirection() = when (this.roundToInt()) {
     in 0..44 -> R.string.direction_n

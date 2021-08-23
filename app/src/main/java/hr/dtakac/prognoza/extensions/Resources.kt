@@ -7,6 +7,8 @@ import android.text.SpannableStringBuilder
 import androidx.core.text.color
 import androidx.core.text.toSpannable
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_IMPERIAL
+import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_METRIC
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.math.RoundingMode
@@ -50,7 +52,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
         SpannableString(getString(R.string.placeholder_precipitation_none))
     } else if (unit == MeasurementUnit.IMPERIAL) {
         val convertedPrecipitation = precipitation.millimetresToInches()
-        if (convertedPrecipitation.isPrecipitationAmountSignificant()) {
+        if (convertedPrecipitation >= SIGNIFICANT_PRECIPITATION_IMPERIAL) {
             SpannableStringBuilder()
                 .color(getColor(R.color.precipitation, null)) {
                     append(
@@ -69,7 +71,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
             )
         }
     } else {
-        if (precipitation.isPrecipitationAmountSignificant()) {
+        if (precipitation >= SIGNIFICANT_PRECIPITATION_METRIC) {
             SpannableStringBuilder()
                 .color(getColor(R.color.precipitation, null)) {
                     append(
@@ -84,7 +86,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
             SpannableString(
                 getString(
                     R.string.placeholder_precipitation_insignificant_metric,
-                    formatter.format(0.01f)
+                    formatter.format(0.1f)
                 )
             )
         }

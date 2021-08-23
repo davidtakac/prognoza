@@ -69,8 +69,8 @@
     <string name="template_pressure_imperial">%1$s psi</string>
     <string name="placeholder_temperature">-</string>
     <string name="placeholder_description">Unknown</string>
-    <string name="placeholder_precipitation_insignificant_metric">&lt;= %1$s mm</string>
-    <string name="placeholder_precipitation_insignificant_imperial">&lt;= %1$s\"</string>
+    <string name="placeholder_precipitation_insignificant_metric">&lt; %1$s mm</string>
+    <string name="placeholder_precipitation_insignificant_imperial">&lt; %1$s\"</string>
     <string name="placeholder_precipitation_none">-</string>
     <string name="placeholder_wind_speed">-</string>
     <string name="hint_places_search">Search places…</string>

@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.extensions.*
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.HourCellModel
 
 class HoursRecyclerViewAdapter : ListAdapter<HourCellModel, HourViewHolder>(HourDiffCallback()) {
@@ -59,22 +58,13 @@ class HourViewHolder(
             tvPressure.text = resources.formatPressureValue(cellModel.pressure, cellModel.unit)
             tvDescription.text =
                 resources.formatWeatherIconDescription(cellModel.weatherDescription?.descriptionResourceId)
-            tvPrecipitationAmount.text =
-                resources.formatPrecipitationValue(cellModel.precipitation, cellModel.unit)
             // other, view-specific operations
-            tvPrecipitationAmount.apply {
-                val precipitation = if (cellModel.unit == MeasurementUnit.IMPERIAL) {
-                    cellModel.precipitation?.millimetresToInches()
+            tvPrecipitationAmount.visibility =
+                if (cellModel.precipitation != null && cellModel.precipitation > 0f) {
+                    View.VISIBLE
                 } else {
-                    cellModel.precipitation
+                    View.GONE
                 }
-                visibility =
-                    if (precipitation != null && precipitation > 0f && precipitation.isPrecipitationAmountSignificant()) {
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
-            }
             ivWeatherIcon.setImageResource(
                 cellModel.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
             )
