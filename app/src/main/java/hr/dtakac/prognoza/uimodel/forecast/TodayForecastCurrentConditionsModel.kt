@@ -6,5 +6,5 @@ import hr.dtakac.prognoza.uimodel.cell.HourCellModel
 data class TodayForecastCurrentConditionsModel(
     val currentHour: HourCellModel,
     val precipitationForecast: Float?,
-    val unit: MeasurementUnit
+    val displayDataInUnit: MeasurementUnit
 )

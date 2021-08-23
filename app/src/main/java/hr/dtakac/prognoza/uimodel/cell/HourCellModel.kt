@@ -16,6 +16,6 @@ data class HourCellModel(
     val time: ZonedDateTime,
     val relativeHumidity: Float?,
     val pressure: Float?,
-    val unit: MeasurementUnit,
+    val displayDataInUnit: MeasurementUnit,
     var isExpanded: Boolean = false
 )

@@ -44,18 +44,18 @@ class HourViewHolder(
             val resources = root.context.resources
             // predefined formatting
             tvTemperature.text =
-                resources.formatTemperatureValue(cellModel.temperature, cellModel.unit)
-            tvFeelsLike.text = resources.formatTemperatureValue(cellModel.feelsLike, cellModel.unit)
+                resources.formatTemperatureValue(cellModel.temperature, cellModel.displayDataInUnit)
+            tvFeelsLike.text = resources.formatTemperatureValue(cellModel.feelsLike, cellModel.displayDataInUnit)
             tvPrecipitationAmount.text =
-                resources.formatPrecipitationValue(cellModel.precipitation, cellModel.unit)
+                resources.formatPrecipitationValue(cellModel.precipitation, cellModel.displayDataInUnit)
             tvWind.text =
                 resources.formatWindWithDirection(
                     cellModel.windSpeed,
                     cellModel.windFromCompassDirection,
-                    cellModel.unit
+                    cellModel.displayDataInUnit
                 )
             tvHumidity.text = resources.formatHumidityValue(cellModel.relativeHumidity)
-            tvPressure.text = resources.formatPressureValue(cellModel.pressure, cellModel.unit)
+            tvPressure.text = resources.formatPressureValue(cellModel.pressure, cellModel.displayDataInUnit)
             tvDescription.text =
                 resources.formatWeatherIconDescription(cellModel.weatherDescription?.descriptionResourceId)
             // other, view-specific operations

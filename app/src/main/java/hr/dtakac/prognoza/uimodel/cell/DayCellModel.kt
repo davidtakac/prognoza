@@ -16,5 +16,5 @@ data class DayCellModel(
     val maxHumidity: Float?,
     val maxPressure: Float?,
     var isExpanded: Boolean = false,
-    val unit: MeasurementUnit
+    val displayDataInUnit: MeasurementUnit
 )

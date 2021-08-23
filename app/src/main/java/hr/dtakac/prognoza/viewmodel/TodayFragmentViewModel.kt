@@ -43,7 +43,7 @@ class TodayFragmentViewModel(
             currentConditionsModel = TodayForecastCurrentConditionsModel(
                 currentHour = currentHourAsync.await(),
                 precipitationForecast = precipitationForecastAsync.await(),
-                unit = unit
+                displayDataInUnit = unit
             ),
             otherHours = otherHoursAsync.await(),
         )

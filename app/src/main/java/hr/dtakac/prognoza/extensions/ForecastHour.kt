@@ -26,7 +26,7 @@ fun ForecastHour.toHourUiModel(unit: MeasurementUnit) =
         relativeHumidity = relativeHumidity,
         windFromCompassDirection = windFromDirection?.toCompassDirection(),
         pressure = pressure,
-        unit = unit
+        displayDataInUnit = unit
     )
 
 suspend fun List<ForecastHour>.toDayUiModel(
@@ -52,7 +52,7 @@ suspend fun List<ForecastHour>.toDayUiModel(
         windFromCompassDirection = hourWithMaxWindSpeedAsync.await()?.windFromDirection?.toCompassDirection(),
         maxHumidity = maxHumidityAsync.await(),
         maxPressure = maxPressureAsync.await(),
-        unit = unit
+        displayDataInUnit = unit
     )
 }
 

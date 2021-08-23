@@ -37,9 +37,9 @@ class TomorrowForecastFragment :
         )
         binding.tvDateTime.text = time
         binding.tvTemperatureHigh.text =
-            resources.formatTemperatureValue(summary.highTemperature, summary.unit)
+            resources.formatTemperatureValue(summary.highTemperature, summary.displayDataInUnit)
         binding.tvTemperatureLow.text =
-            resources.formatTemperatureValue(summary.lowTemperature, summary.unit)
+            resources.formatTemperatureValue(summary.lowTemperature, summary.displayDataInUnit)
         binding.tvDescription.text =
             resources.formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
         binding.ivWeatherIcon.setImageResource(
@@ -47,7 +47,7 @@ class TomorrowForecastFragment :
                 ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitation.text =
-            resources.formatTotalPrecipitation(summary.totalPrecipitationAmount, summary.unit)
+            resources.formatTotalPrecipitation(summary.totalPrecipitationAmount, summary.displayDataInUnit)
         adapter.submitList(uiModel.hours)
     }
 }

@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.extensions.toDayUiModel
 import hr.dtakac.prognoza.dbmodel.ForecastHour
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.DayCellModel
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
@@ -29,7 +30,7 @@ class DayCellModelMappingTest {
         val start = ZonedDateTime.now()
         val hours = getForecastHours_withNormalValues(start)
         // Act
-        val actual = hours.toDayUiModel(this)
+        val actual = hours.toDayUiModel(this, MeasurementUnit.METRIC)
         // Assert
         val expected = getExpectedDayUiModel_forNormalValues(start)
         assertTrue { actual == expected }
@@ -41,7 +42,7 @@ class DayCellModelMappingTest {
         val start = ZonedDateTime.now()
         val nullHours = getForecastHours_withAllNullValues(start)
         // Act
-        val actual = nullHours.toDayUiModel(this)
+        val actual = nullHours.toDayUiModel(this, MeasurementUnit.METRIC)
         // Assert
         val expected = getExpectedDayUiModel_forAllNullValues(start)
         assertTrue { actual == expected }
@@ -54,7 +55,7 @@ class DayCellModelMappingTest {
         val hours = getForecastHours_withNormalValues(start) +
                 getForecastHours_withAllNullValues(start)
         // Act
-        val actual = hours.toDayUiModel(this)
+        val actual = hours.toDayUiModel(this, MeasurementUnit.METRIC)
         // Assert
         val expected = getExpectedDayUiModel_forNormalValues(start)
         assertTrue { actual == expected }
@@ -130,7 +131,8 @@ class DayCellModelMappingTest {
             totalPrecipitationAmount = 6.3f + 7.87f + 0f,
             maxHumidity = 90f,
             maxPressure = 1020f,
-            isExpanded = false
+            isExpanded = false,
+            displayDataInUnit = MeasurementUnit.METRIC
         )
 
     private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) = DayCellModel(
@@ -144,6 +146,7 @@ class DayCellModelMappingTest {
         totalPrecipitationAmount = 0f,
         maxHumidity = null,
         maxPressure = null,
-        isExpanded = false
+        isExpanded = false,
+        displayDataInUnit = MeasurementUnit.METRIC
     )
 }

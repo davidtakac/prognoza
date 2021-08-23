@@ -31,13 +31,13 @@ class TodayForecastFragment :
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
         )
         binding.tvDateTime.text = time
-        binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature, currentHour.unit)
+        binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature, currentHour.displayDataInUnit)
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitationForecast.text =
-            resources.formatPrecipitationTwoHours(currentConditions.precipitationForecast, currentConditions.unit)
-        binding.tvFeelsLike.text = resources.formatFeelsLike(currentHour.feelsLike, currentHour.unit)
+            resources.formatPrecipitationTwoHours(currentConditions.precipitationForecast, currentConditions.displayDataInUnit)
+        binding.tvFeelsLike.text = resources.formatFeelsLike(currentHour.feelsLike, currentHour.displayDataInUnit)
         adapter.submitList(uiModel.otherHours)
     }
 
