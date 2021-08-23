@@ -19,3 +19,4 @@ fun Float.metersPerSecondToKilometresPerHour() = this * 3.6f
 fun Float.metersPerSecondToMilesPerHour() = this * 2.2369f
 fun Float.degreesCelsiusToDegreesFahrenheit() = this * 1.8f + 32f
 fun Float.hectoPascalToPsi() = this * 0.01450f
+fun Float.degreesFahrenheitToDegreesCelsius() = (this - 32f) / 1.8f

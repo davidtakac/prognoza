@@ -16,12 +16,12 @@ fun calculateFeelsLikeTemperature(
     windSpeed: Float?,
     relativeHumidity: Float?
 ): Float? {
-    val airTemperatureFahrenheit = (temperature * 1.8f) + 32f
+    val airTemperatureFahrenheit = temperature.degreesCelsiusToDegreesFahrenheit()
     val feelsLikeFahrenheit = if (airTemperatureFahrenheit in -50f..50f) {
         if (windSpeed == null) {
             null
         } else {
-            val windSpeedMph = windSpeed * 2.236936f
+            val windSpeedMph = windSpeed.metersPerSecondToMilesPerHour()
             calculateWindChill(airTemperatureFahrenheit, windSpeedMph)
         }
     } else {
@@ -31,7 +31,7 @@ fun calculateFeelsLikeTemperature(
             calculateHeatIndex(airTemperatureFahrenheit, relativeHumidity)
         }
     }
-    return if (feelsLikeFahrenheit == null) null else (feelsLikeFahrenheit - 32f) / 1.8f
+    return feelsLikeFahrenheit?.degreesFahrenheitToDegreesCelsius()
 }
 
 /**
