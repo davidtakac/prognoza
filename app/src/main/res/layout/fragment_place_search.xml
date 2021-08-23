@@ -47,7 +47,7 @@
         android:id="@+id/tv_credit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
+        android:textSize="12sp"
         android:gravity="end"
         android:layout_marginHorizontal="16dp"
         android:text="@string/osm_nominatim_credit"
