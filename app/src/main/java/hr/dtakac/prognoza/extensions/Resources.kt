@@ -9,6 +9,8 @@ import androidx.core.text.toSpannable
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -16,6 +18,11 @@ import java.util.*
 import kotlin.math.roundToInt
 
 fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit): String {
+    val temperatureFormat = DecimalFormat.getInstance(Locale.getDefault()).apply {
+        maximumFractionDigits = 0
+        isParseIntegerOnly = true
+        roundingMode = RoundingMode.HALF_UP
+    }
     return when {
         temperature == null -> {
             getString(R.string.placeholder_temperature)
@@ -23,13 +30,13 @@ fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit)
         unit == MeasurementUnit.IMPERIAL -> {
             getString(
                 R.string.template_temperature_universal,
-                temperature.degreesCelsiusToDegreesFahrenheit().roundToInt()
+                temperatureFormat.format(temperature.degreesCelsiusToDegreesFahrenheit())
             )
         }
         else -> {
             getString(
                 R.string.template_temperature_universal,
-                temperature.roundToInt()
+                temperatureFormat.format(temperature)
             )
         }
     }
