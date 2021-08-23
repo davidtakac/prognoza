@@ -1,7 +1,8 @@
 package hr.dtakac.prognoza.fragment
 
+import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.common.TOMORROW_REQUEST_KEY
+import hr.dtakac.prognoza.TOMORROW_REQUEST_KEY
 import hr.dtakac.prognoza.extensions.formatRepresentativeWeatherIconDescription
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.extensions.formatTotalPrecipitation
@@ -10,9 +11,6 @@ import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.uimodel.forecast.TomorrowForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TomorrowFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class TomorrowForecastFragment :
     ForecastFragment<TomorrowForecastUiModel, FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
@@ -31,11 +29,13 @@ class TomorrowForecastFragment :
 
     override fun showForecast(uiModel: TomorrowForecastUiModel) {
         val resources = binding.root.context.resources
-        val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
         val summary = uiModel.summary
-        binding.tvDateTime.text = summary.time
-            .withZoneSameInstant(ZoneId.systemDefault())
-            .format(dateTimeFormatter)
+        val time = DateUtils.formatDateTime(
+            requireContext(),
+            summary.time.toInstant().toEpochMilli(),
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
+        )
+        binding.tvDateTime.text = time
         binding.tvTemperatureHigh.text =
             resources.formatTemperatureValue(summary.highTemperature, summary.unit)
         binding.tvTemperatureLow.text =

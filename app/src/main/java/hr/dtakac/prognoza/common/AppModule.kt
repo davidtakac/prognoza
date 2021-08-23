@@ -2,6 +2,8 @@ package hr.dtakac.prognoza.common
 
 import android.content.Context
 import androidx.room.Room
+import hr.dtakac.prognoza.MET_NORWAY_BASE_URL
+import hr.dtakac.prognoza.OSM_NOMINATIM_BASE_URL
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.common.network.DefaultNetworkChecker

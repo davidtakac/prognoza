@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.common.TODAY_REQUEST_KEY
+import hr.dtakac.prognoza.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.extensions.formatPrecipitationTwoHours
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding

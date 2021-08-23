@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.adapter
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,7 +42,15 @@ class DayViewHolder(
     fun bind(cellModel: DayCellModel) {
         binding.apply {
             val resources = root.context.resources
-            tvDateTime.text = resources.formatDaySummaryTime(cellModel.time)
+            tvDateTime.text = if (DateUtils.isToday(cellModel.time.toInstant().toEpochMilli())) {
+                resources.getString(R.string.today)
+            } else {
+                DateUtils.formatDateTime(
+                    root.context,
+                    cellModel.time.toInstant().toEpochMilli(),
+                    DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
+                )
+            }
             tvTemperatureHigh.text =
                 resources.formatTemperatureValue(cellModel.highTemperature, cellModel.unit)
             tvTemperatureLow.text =

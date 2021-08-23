@@ -3,8 +3,7 @@ package hr.dtakac.prognoza.activity
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
-import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.common.*
+import hr.dtakac.prognoza.*
 import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.fragment.PlaceSearchDialogFragment

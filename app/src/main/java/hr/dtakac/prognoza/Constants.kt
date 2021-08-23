@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.common
+package hr.dtakac.prognoza
 
 import hr.dtakac.prognoza.BuildConfig
 

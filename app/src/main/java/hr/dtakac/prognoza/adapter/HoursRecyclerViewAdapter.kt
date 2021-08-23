@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.adapter
 
+import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,9 +12,6 @@ import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.HourCellModel
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class HoursRecyclerViewAdapter : ListAdapter<HourCellModel, HourViewHolder>(HourDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
@@ -38,8 +36,6 @@ class HourViewHolder(
     private val binding: CellHourBinding,
     onItemClickCallback: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
-    private val dateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
-
     init {
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
@@ -82,9 +78,12 @@ class HourViewHolder(
             ivWeatherIcon.setImageResource(
                 cellModel.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
             )
-            tvTime.text = cellModel.time
-                .withZoneSameInstant(ZoneId.systemDefault())
-                .format(dateTimeFormatter)
+            val time = DateUtils.formatDateTime(
+                binding.root.context,
+                cellModel.time.toInstant().toEpochMilli(),
+                DateUtils.FORMAT_SHOW_TIME
+            )
+            tvTime.text = time
             clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
         }
     }

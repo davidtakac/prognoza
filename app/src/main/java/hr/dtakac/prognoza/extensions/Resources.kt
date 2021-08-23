@@ -11,9 +11,6 @@ import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.math.RoundingMode
 import java.text.DecimalFormat
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -244,18 +241,4 @@ fun Resources.formatFeelsLike(feelsLike: Float?, unit: MeasurementUnit): String 
             formatTemperatureValue(feelsLike, unit)
         }
     )
-}
-
-fun Resources.formatDaySummaryTime(time: ZonedDateTime): String {
-    val dateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d LLLL", Locale.getDefault())
-    val nowAtStartOfDay = ZonedDateTime.now().atStartOfDay()
-    return when (time.withZoneSameInstant(ZoneId.systemDefault()).atStartOfDay()) {
-        nowAtStartOfDay -> {
-            getString(R.string.today)
-        }
-        else -> {
-            time.withZoneSameInstant(ZoneId.systemDefault())
-                .format(dateTimeFormatter)
-        }
-    }
 }

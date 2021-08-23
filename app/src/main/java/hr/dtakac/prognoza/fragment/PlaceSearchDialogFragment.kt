@@ -9,9 +9,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
+import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.common.MarginItemDecoration
-import hr.dtakac.prognoza.common.PLACE_SEARCH_REQUEST_KEY
+import hr.dtakac.prognoza.PLACE_SEARCH_REQUEST_KEY
 import hr.dtakac.prognoza.extensions.toPx
 import hr.dtakac.prognoza.databinding.FragmentPlaceSearchBinding
 import hr.dtakac.prognoza.adapter.PlacesRecyclerViewAdapter

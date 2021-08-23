@@ -12,8 +12,8 @@ import androidx.viewbinding.ViewBinding
 import com.google.android.material.progressindicator.BaseProgressIndicator
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.common.BUNDLE_KEY_PLACE_PICKED
-import hr.dtakac.prognoza.common.BUNDLE_KEY_UNITS_CHANGED
+import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
+import hr.dtakac.prognoza.BUNDLE_KEY_UNITS_CHANGED
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.extensions.formatEmptyMessage
 import hr.dtakac.prognoza.databinding.LayoutEmptyForecastBinding
