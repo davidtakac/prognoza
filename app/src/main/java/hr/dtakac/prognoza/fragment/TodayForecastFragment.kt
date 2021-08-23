@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.fragment
 
+import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.extensions.formatPrecipitationTwoHours
@@ -10,8 +11,6 @@ import hr.dtakac.prognoza.extensions.formatFeelsLike
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 class TodayForecastFragment :
     ForecastFragment<TodayForecastUiModel, FragmentTodayBinding>(FragmentTodayBinding::inflate) {
@@ -24,10 +23,14 @@ class TodayForecastFragment :
     private val adapter = HoursRecyclerViewAdapter()
 
     override fun showForecast(uiModel: TodayForecastUiModel) {
-        val dateTimeFormatter = DateTimeFormatter.ofPattern("d LLLL, HH:mm", Locale.getDefault())
         val currentConditions = uiModel.currentConditionsModel
         val currentHour = currentConditions.currentHour
-        binding.tvDateTime.text = currentHour.time.format(dateTimeFormatter)
+        val time = DateUtils.formatDateTime(
+            requireContext(),
+            currentHour.time.toInstant().toEpochMilli(),
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME
+        )
+        binding.tvDateTime.text = time
         binding.tvTemperature.text = resources.formatTemperatureValue(currentHour.temperature, currentHour.unit)
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
