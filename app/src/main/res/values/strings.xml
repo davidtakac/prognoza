@@ -106,6 +106,8 @@
     <string name="action_ok">OK</string>
     <string name="today">Today</string>
     <string name="error_io">An IO error occurred. Check if you\'re connected to the Internet.</string>
-    <string name="units">Change units</string>
+    <string name="change_units">Change units</string>
+    <string name="change_to_imperial">Change to imperial units</string>
+    <string name="change_to_metric">Change to metric units</string>
 
 </resources>

@@ -8,5 +8,5 @@
         android:title="@string/title_search"/>
     <item
         android:id="@+id/units"
-        android:title="@string/units"/>
+        android:title="@string/change_units"/>
 </menu>

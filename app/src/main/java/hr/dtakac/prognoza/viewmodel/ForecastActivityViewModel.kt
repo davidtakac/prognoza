@@ -22,8 +22,14 @@ class ForecastActivityViewModel(
     private val _placeName = MutableLiveData<String>()
     val placeName: LiveData<String> get() = _placeName
 
-    private val _unitsChanged = MutableLiveData<Event<Unit>>()
-    val unitsChanged: LiveData<Event<Unit>> get() = _unitsChanged
+    private val _selectedUnits = MutableLiveData<Event<MeasurementUnit>>()
+    val selectedUnits: LiveData<Event<MeasurementUnit>> get() = _selectedUnits
+
+    fun getSelectedUnits() {
+        coroutineScope.launch {
+            _selectedUnits.value = Event(preferencesRepository.getSelectedUnit())
+        }
+    }
 
     fun getPlaceName() {
         coroutineScope.launch {
@@ -44,14 +50,12 @@ class ForecastActivityViewModel(
 
     fun changeUnits() {
         coroutineScope.launch {
-            val selectedUnits = preferencesRepository.getSelectedUnit()
-            preferencesRepository.setSelectedUnit(
-                when (selectedUnits) {
-                    MeasurementUnit.IMPERIAL -> MeasurementUnit.METRIC
-                    MeasurementUnit.METRIC -> MeasurementUnit.IMPERIAL
-                }
-            )
-            _unitsChanged.value = Event(Unit)
+            val newUnit = when (preferencesRepository.getSelectedUnit()) {
+                MeasurementUnit.IMPERIAL -> MeasurementUnit.METRIC
+                MeasurementUnit.METRIC -> MeasurementUnit.IMPERIAL
+            }
+            preferencesRepository.setSelectedUnit(newUnit)
+            _selectedUnits.value = Event(newUnit)
         }
     }
 

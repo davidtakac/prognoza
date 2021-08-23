@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.*
 import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.fragment.PlaceSearchDialogFragment
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.viewmodel.ForecastActivityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -21,11 +22,12 @@ class ForecastActivity :
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
+        viewModel.getPlaceName()
+        viewModel.getSelectedUnits()
     }
 
     override fun onResume() {
         super.onResume()
-        viewModel.getPlaceName()
         viewModel.cleanUpDatabase()
     }
 
@@ -33,8 +35,11 @@ class ForecastActivity :
         viewModel.placeName.observe(this) {
             binding.toolbar.title = it
         }
-        viewModel.unitsChanged.observe(this) {
-            notifyFragmentsUnitsHaveChanged()
+        viewModel.selectedUnits.observe(this) {
+            if (!it.isConsumed) {
+                notifyFragmentsUnitsHaveChanged()
+                updateChangeUnitsMenuItem(it.getValue())
+            }
         }
     }
 
@@ -97,5 +102,12 @@ class ForecastActivity :
             setFragmentResult(TOMORROW_REQUEST_KEY, result)
             setFragmentResult(DAYS_REQUEST_KEY, result)
         }
+    }
+
+    private fun updateChangeUnitsMenuItem(newUnit: MeasurementUnit) {
+        binding.toolbar.menu.findItem(R.id.units).title = resources.getString(when (newUnit) {
+            MeasurementUnit.METRIC -> R.string.change_to_imperial
+            MeasurementUnit.IMPERIAL -> R.string.change_to_metric
+        })
     }
 }
