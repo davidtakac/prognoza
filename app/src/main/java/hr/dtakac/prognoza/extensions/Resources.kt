@@ -43,6 +43,10 @@ fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit)
 }
 
 fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUnit): Spannable {
+    val precipitationFormat = DecimalFormat.getInstance(Locale.getDefault()).apply {
+        maximumFractionDigits = 2
+        roundingMode = RoundingMode.HALF_UP
+    }
     return if (precipitation == null) {
         SpannableString(getString(R.string.placeholder_precipitation_none))
     } else if (precipitation == 0f) {
@@ -55,7 +59,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
                     append(
                         getString(
                             R.string.template_precipitation_imperial,
-                            convertedPrecipitation
+                            precipitationFormat.format(convertedPrecipitation)
                         )
                     )
                 }
@@ -69,7 +73,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
                     append(
                         getString(
                             R.string.template_precipitation_metric,
-                            precipitation
+                            precipitationFormat.format(precipitation)
                         )
                     )
                 }

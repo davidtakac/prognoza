@@ -60,8 +60,8 @@
     </string-array>
 
     <string name="template_temperature_universal">%1$s°</string>
-    <string name="template_precipitation_metric">%1$.1f mm</string>
-    <string name="template_precipitation_imperial">%1$.2f\"</string>
+    <string name="template_precipitation_metric">%1$s mm</string>
+    <string name="template_precipitation_imperial">%1$s\"</string>
     <string name="template_wind_metric">%1$.1f km/h</string>
     <string name="template_wind_imperial">%1$.1f mi/h</string>
     <string name="template_humidity_universal">%1$d%%</string>
