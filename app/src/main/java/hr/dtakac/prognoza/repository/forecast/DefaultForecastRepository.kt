@@ -88,10 +88,10 @@ class DefaultForecastRepository(
                 meta = metaRepository.get(placeId)
             } catch (e: HttpException) {
                 error = handleHttpException(e)
-            } catch (e: IOException) {
-                error = IOError(e)
             } catch (e: SQLiteException) {
                 error = DatabaseError(e)
+            } catch (e: IOException) {
+                error = IOError(e)
             } catch (e: Exception) {
                 error = UnknownError(e)
             }

@@ -91,7 +91,7 @@ class TodayForecastFragmentViewModelTest {
     fun getForecast_whenCached_showsMessageAndForecast() {
         // Arrange
         assertTrue {
-            viewModel.cachedResultsMessage.value == null
+            viewModel.outdatedForecastMessage.value == null
         }
         assertTrue {
             viewModel.forecast.value == null
@@ -104,7 +104,7 @@ class TodayForecastFragmentViewModelTest {
             viewModel.forecast.value != null
         }
         assertTrue("Is cached results notification shown") {
-            viewModel.cachedResultsMessage.value != null
+            viewModel.outdatedForecastMessage.value != null
         }
     }
 }

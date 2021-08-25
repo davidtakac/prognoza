@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.common.Event
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.extensions.hasExpired
 import hr.dtakac.prognoza.extensions.toErrorResourceId
@@ -12,6 +11,7 @@ import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
 import kotlinx.coroutines.CoroutineScope
@@ -30,8 +30,8 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
     private val _emptyScreen = MutableLiveData<EmptyForecastUiModel?>()
     val emptyScreen: LiveData<EmptyForecastUiModel?> get() = _emptyScreen
 
-    private val _cachedResultsMessage = MutableLiveData<Event<Int?>>()
-    val cachedResultsMessage: LiveData<Event<Int?>> get() = _cachedResultsMessage
+    private val _outdatedForecastMessage = MutableLiveData<OutdatedForecastUiModel?>(null)
+    val outdatedForecastMessage: LiveData<OutdatedForecastUiModel?> get() = _outdatedForecastMessage
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
@@ -60,6 +60,7 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
         currentMeta = success.meta
         currentUnit = selectedUnit
         _emptyScreen.value = null
+        _outdatedForecastMessage.value = null
     }
 
     private fun handleEmpty(empty: Empty) {
@@ -68,7 +69,9 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
 
     private suspend fun handleCachedSuccess(cachedResult: CachedSuccess) {
         handleSuccess(cachedResult.success)
-        _cachedResultsMessage.value = Event(cachedResult.reason?.toErrorResourceId())
+        _outdatedForecastMessage.value = OutdatedForecastUiModel(
+            reason = cachedResult.reason?.toErrorResourceId()
+        )
     }
 
     private suspend fun isReloadNeeded(): Boolean {

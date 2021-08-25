@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="?android:selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/iv_cached"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:src="@drawable/ic_cloud_off"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tint="@color/med_emphasis"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/notify_cached_data"
+        app:layout_constraintTop_toTopOf="@id/iv_cached"
+        app:layout_constraintBottom_toBottomOf="@id/iv_cached"
+        app:layout_constraintStart_toEndOf="@id/iv_cached"
+        android:layout_marginStart="4dp"
+        android:textColor="@color/med_emphasis"
+        android:textSize="14sp"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

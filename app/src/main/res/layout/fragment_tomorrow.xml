@@ -60,7 +60,7 @@
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
-            tools:text="Precipitation: 40 mm" />
+            tools:text="Mostly light sleet showers and thunder" />
 
         <TextView
             android:id="@+id/tv_precipitation"
@@ -73,7 +73,7 @@
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_description"
-            tools:text="Mostly light sleet showers and thunder" />
+            tools:text="Precpitation: 40mm" />
 
         <ImageView
             android:id="@+id/iv_weather_icon"
@@ -86,13 +86,22 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/lightsleetandthunder" />
 
+        <include layout="@layout/layout_outdated_forecast"
+            android:id="@+id/cached_data_message"
+            app:layout_constraintTop_toBottomOf="@id/tv_precipitation"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hours"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

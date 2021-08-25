@@ -22,5 +22,8 @@ class MarginItemDecoration : RecyclerView.ItemDecoration() {
         outRect.bottom = verticalOffset
         outRect.left = horizontalOffset
         outRect.right = horizontalOffset
+        if (parent.getChildAdapterPosition(view) == 0) {
+            outRect.top += verticalOffset
+        }
     }
 }

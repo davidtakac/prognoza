@@ -10,12 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.progressindicator.BaseProgressIndicator
-import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.BUNDLE_KEY_UNITS_CHANGED
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.LayoutEmptyForecastBinding
+import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.extensions.formatEmptyMessage
 import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
@@ -29,6 +29,7 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     abstract val requestKey: String
     abstract val emptyForecastBinding: LayoutEmptyForecastBinding
     abstract val progressBar: BaseProgressIndicator<*>
+    abstract val outdatedForecastBinding: LayoutOutdatedForecastBinding?
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -64,9 +65,11 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
                 showEmptyScreen(it)
             }
         }
-        viewModel.cachedResultsMessage.observe(viewLifecycleOwner) {
-            if (!it.isConsumed) {
-                showCachedResultsMessage(it.getValue())
+        viewModel.outdatedForecastMessage.observe(viewLifecycleOwner) {
+            if (it == null) {
+                outdatedForecastBinding?.root?.visibility = View.GONE
+            } else {
+                showCachedResultsMessage(it.reason)
             }
         }
     }
@@ -116,20 +119,18 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     }
 
     private fun showCachedResultsMessage(reason: Int?) {
-        Snackbar.make(
-            binding.root,
-            resources.getString(R.string.notify_cached_result),
-            Snackbar.LENGTH_SHORT
-        )
-            .setAction(R.string.action_why) {
-                showAlertDialog(reason ?: R.string.error_generic)
+        outdatedForecastBinding?.root?.apply {
+            visibility = View.VISIBLE
+            setOnClickListener {
+                showOutdatedForecastDialog(reason ?: R.string.error_generic)
             }
-            .show()
+        }
     }
 
-    private fun showAlertDialog(messageId: Int) {
+    private fun showOutdatedForecastDialog(messageId: Int) {
         AlertDialog.Builder(requireActivity())
-            .setMessage(messageId)
+            .setTitle(R.string.title_outdated_forecast)
+            .setMessage(getString(R.string.template_content_outdated_forecast, getString(messageId)))
             .setPositiveButton(R.string.action_ok, null)
             .show()
     }

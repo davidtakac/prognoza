@@ -78,7 +78,6 @@
     <string name="error_met_server">The server is currently unable to process your request.</string>
     <string name="error_met_throttling">Heavy traffic from other users.</string>
     <string name="error_generic">An unexpected error occurred.</string>
-    <string name="error_forecast_empty">There is no saved forecast data for this place and time.</string>
     <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
@@ -87,11 +86,9 @@
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_wind_with_direction">%1$s, %2$s</string>
-    <string name="template_temperature_high_low">%1$s / %2$s</string>
     <string name="placeholder_wind_direction">-</string>
     <string name="placeholder_humidity">-</string>
     <string name="placeholder_pressure">-</string>
-    <string name="notify_cached_result">Showing cached results.</string>
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
     <string name="amount_of_precipitation_forecast">" in the next two hours"</string>
     <string name="precipitation_forecast_none">No precipitation in the next two hours</string>
@@ -101,13 +98,15 @@
     <string name="pressure">Pressure</string>
     <string name="met_norway_credit">Data from MET Norway</string>
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
-    <string name="error_database">An error occurred when fetching forecast data from the database. Try clearing your app data.</string>
-    <string name="action_why">Why</string>
+    <string name="error_database">An error occurred while fetching forecast data from the database. Try clearing your app data.</string>
     <string name="action_ok">OK</string>
     <string name="today">Today</string>
-    <string name="error_io">An IO error occurred. Check if you\'re connected to the Internet.</string>
+    <string name="error_io">An IO error occurred. You are probably not connected to the Internet. Reconnect and try again.</string>
     <string name="change_units">Change units</string>
-    <string name="change_to_imperial">Change to imperial units</string>
-    <string name="change_to_metric">Change to metric units</string>
+    <string name="change_to_imperial">Change units to: imperial</string>
+    <string name="change_to_metric">Change units to: metric</string>
+    <string name="notify_cached_data">Outdated. Click for more info.</string>
+    <string name="template_content_outdated_forecast">An error occurred when trying to get fresh forecast data, so you\'re being shown old data that may not be as accurate.\n\nThe reason is: %1$s</string>
+    <string name="title_outdated_forecast">Outdated forecast</string>
 
 </resources>

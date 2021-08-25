@@ -5,6 +5,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TOMORROW_REQUEST_KEY
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
+import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.extensions.formatRepresentativeWeatherIconDescription
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.extensions.formatTotalPrecipitation
@@ -16,6 +17,7 @@ class TomorrowForecastFragment :
     ForecastFragment<TomorrowForecastUiModel, FragmentTomorrowBinding>(FragmentTomorrowBinding::inflate) {
     override val emptyForecastBinding get() = binding.emptyScreen
     override val progressBar get() = binding.progressBar
+    override val outdatedForecastBinding: LayoutOutdatedForecastBinding get() = binding.cachedDataMessage
     override val recyclerView get() = binding.rvHours
     override val requestKey get() = TOMORROW_REQUEST_KEY
     override val viewModel by viewModel<TomorrowFragmentViewModel>()
