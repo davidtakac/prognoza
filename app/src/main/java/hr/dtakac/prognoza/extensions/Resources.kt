@@ -66,7 +66,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
             SpannableString(
                 getString(
                     R.string.placeholder_precipitation_insignificant_imperial,
-                    formatter.format(0.01f)
+                    formatter.format(SIGNIFICANT_PRECIPITATION_IMPERIAL)
                 )
             )
         }
@@ -86,7 +86,7 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
             SpannableString(
                 getString(
                     R.string.placeholder_precipitation_insignificant_metric,
-                    formatter.format(0.1f)
+                    formatter.format(SIGNIFICANT_PRECIPITATION_METRIC)
                 )
             )
         }
