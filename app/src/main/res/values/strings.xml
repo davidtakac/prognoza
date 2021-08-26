@@ -103,8 +103,8 @@
     <string name="today">Today</string>
     <string name="error_io">An IO error occurred. You are probably not connected to the Internet. Reconnect and try again.</string>
     <string name="change_units">Change units</string>
-    <string name="change_to_imperial">Change units to: imperial</string>
-    <string name="change_to_metric">Change units to: metric</string>
+    <string name="change_to_imperial">To imperial</string>
+    <string name="change_to_metric">To metric</string>
     <string name="notify_cached_data">Outdated. Click for more info.</string>
     <string name="template_content_outdated_forecast">An error occurred when trying to get fresh forecast data, so you\'re being shown old data that may not be as accurate.\n\nThe reason is: %1$s</string>
     <string name="title_outdated_forecast">Outdated forecast</string>
