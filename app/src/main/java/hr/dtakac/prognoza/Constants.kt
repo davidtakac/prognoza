@@ -15,5 +15,5 @@ const val DAYS_REQUEST_KEY = "days_request_key"
 const val BUNDLE_KEY_PLACE_PICKED = "place_picked_key"
 const val BUNDLE_KEY_UNITS_CHANGED = "units_changed_key"
 
-const val SIGNIFICANT_PRECIPITATION_METRIC = 0.25f
+const val SIGNIFICANT_PRECIPITATION_METRIC = 0.254f
 const val SIGNIFICANT_PRECIPITATION_IMPERIAL = 0.01f

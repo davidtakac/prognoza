@@ -43,7 +43,14 @@ fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit)
 
 fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUnit): Spannable {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
-        maximumFractionDigits = 2
+        maximumFractionDigits = when (unit) {
+            MeasurementUnit.IMPERIAL -> {
+                2
+            }
+            MeasurementUnit.METRIC -> {
+                1
+            }
+        }
         roundingMode = RoundingMode.HALF_UP
     }
     return if (precipitation == null) {
