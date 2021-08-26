@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.extensions.toDayUiModel
 import hr.dtakac.prognoza.dbmodel.ForecastHour
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.cell.DayCellModel
+import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -18,7 +18,7 @@ import java.time.ZonedDateTime
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class DayCellModelMappingTest {
+class DayUiModelMappingTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val coroutineDispatcher = TestCoroutineDispatcher()
@@ -116,8 +116,8 @@ class DayCellModelMappingTest {
         return listOf(nullHour, nullHour, nullHour)
     }
 
-    private fun getExpectedDayUiModel_forNormalValues(start: ZonedDateTime): DayCellModel =
-        DayCellModel(
+    private fun getExpectedDayUiModel_forNormalValues(start: ZonedDateTime): DayUiModel =
+        DayUiModel(
             id = "$TEST_PLACE_ID-$start",
             time = start,
             representativeWeatherDescription = RepresentativeWeatherDescription(
@@ -135,7 +135,7 @@ class DayCellModelMappingTest {
             displayDataInUnit = MeasurementUnit.METRIC
         )
 
-    private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) = DayCellModel(
+    private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) = DayUiModel(
         id = "$TEST_PLACE_ID-$start",
         time = start,
         representativeWeatherDescription = null,

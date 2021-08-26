@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.extensions.*
-import hr.dtakac.prognoza.uimodel.cell.DayCellModel
+import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 
-class DaysRecyclerViewAdapter : ListAdapter<DayCellModel, DayViewHolder>(DayDiffCallback()) {
+class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
         override fun invoke(position: Int) {
             val itemAtPosition = getItem(position)
@@ -39,7 +39,7 @@ class DayViewHolder(
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
-    fun bind(cellModel: DayCellModel) {
+    fun bind(cellModel: DayUiModel) {
         binding.apply {
             val resources = root.context.resources
             tvDateTime.text = if (DateUtils.isToday(cellModel.time.toInstant().toEpochMilli())) {
@@ -85,12 +85,12 @@ class DayViewHolder(
     }
 }
 
-class DayDiffCallback : DiffUtil.ItemCallback<DayCellModel>() {
-    override fun areContentsTheSame(oldItem: DayCellModel, newItem: DayCellModel): Boolean {
+class DayDiffCallback : DiffUtil.ItemCallback<DayUiModel>() {
+    override fun areContentsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
         return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItem: DayCellModel, newItem: DayCellModel): Boolean {
+    override fun areItemsTheSame(oldItem: DayUiModel, newItem: DayUiModel): Boolean {
         return oldItem.id == newItem.id
     }
 }

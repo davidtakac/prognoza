@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.time.ZonedDateTime
 
-data class DayCellModel(
+data class DayUiModel(
     val id: String,
     val time: ZonedDateTime,
     val representativeWeatherDescription: RepresentativeWeatherDescription?,

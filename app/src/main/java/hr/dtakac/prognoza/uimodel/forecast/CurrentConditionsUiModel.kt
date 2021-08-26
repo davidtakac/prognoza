@@ -1,10 +1,10 @@
 package hr.dtakac.prognoza.uimodel.forecast
 
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.cell.HourCellModel
+import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 
-data class TodayForecastCurrentConditionsModel(
-    val currentHour: HourCellModel,
+data class CurrentConditionsUiModel(
+    val currentHour: HourUiModel,
     val precipitationForecast: Float?,
     val displayDataInUnit: MeasurementUnit
 )

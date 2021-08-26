@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.forecast.TodayForecastCurrentConditionsModel
+import hr.dtakac.prognoza.uimodel.forecast.CurrentConditionsUiModel
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -43,7 +43,7 @@ class TodayFragmentViewModel(
             if (total <= 0f) null else total
         }
         return TodayForecastUiModel(
-            currentConditionsModel = TodayForecastCurrentConditionsModel(
+            currentConditionsUiModel = CurrentConditionsUiModel(
                 currentHour = currentHourAsync.await(),
                 precipitationForecast = precipitationForecastAsync.await(),
                 displayDataInUnit = unit

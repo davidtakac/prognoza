@@ -11,7 +11,7 @@ import hr.dtakac.prognoza.dbmodel.Place
 import hr.dtakac.prognoza.extensions.toPlaceUiModel
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.uimodel.cell.PlaceCellModel
+import hr.dtakac.prognoza.uimodel.cell.PlaceUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -25,8 +25,8 @@ class PlacesViewModel(
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var displayedPlaces = listOf<Place>()
 
-    private val _places = MutableLiveData<List<PlaceCellModel>>()
-    val places: LiveData<List<PlaceCellModel>> get() = _places
+    private val _places = MutableLiveData<List<PlaceUiModel>>()
+    val places: LiveData<List<PlaceUiModel>> get() = _places
 
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading

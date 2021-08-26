@@ -8,11 +8,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
-import hr.dtakac.prognoza.uimodel.cell.PlaceCellModel
+import hr.dtakac.prognoza.uimodel.cell.PlaceUiModel
 
 class PlacesRecyclerViewAdapter(
     private val placeClickListener: (String) -> Unit
-) : ListAdapter<PlaceCellModel, PlaceViewHolder>(PlaceDiffCallback()) {
+) : ListAdapter<PlaceUiModel, PlaceViewHolder>(PlaceDiffCallback()) {
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.bind(getItem(position), placeClickListener)
     }
@@ -26,7 +26,7 @@ class PlacesRecyclerViewAdapter(
 class PlaceViewHolder(
     private val binding: CellPlaceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(cellModel: PlaceCellModel, placeClickListener: (String) -> Unit) {
+    fun bind(cellModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
         binding.ivSaved.setImageResource(R.drawable.ic_history)
         binding.ivSaved.visibility = if (cellModel.isSaved) {
             View.VISIBLE
@@ -41,12 +41,12 @@ class PlaceViewHolder(
     }
 }
 
-class PlaceDiffCallback : DiffUtil.ItemCallback<PlaceCellModel>() {
-    override fun areContentsTheSame(oldItem: PlaceCellModel, newItem: PlaceCellModel): Boolean {
+class PlaceDiffCallback : DiffUtil.ItemCallback<PlaceUiModel>() {
+    override fun areContentsTheSame(oldItem: PlaceUiModel, newItem: PlaceUiModel): Boolean {
         return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItem: PlaceCellModel, newItem: PlaceCellModel): Boolean {
+    override fun areItemsTheSame(oldItem: PlaceUiModel, newItem: PlaceUiModel): Boolean {
         return oldItem == newItem
     }
 }

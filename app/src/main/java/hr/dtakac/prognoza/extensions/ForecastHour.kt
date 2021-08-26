@@ -7,13 +7,13 @@ import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.NIGHT_SYMBOL_CODES
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
-import hr.dtakac.prognoza.uimodel.cell.DayCellModel
-import hr.dtakac.prognoza.uimodel.cell.HourCellModel
+import hr.dtakac.prognoza.uimodel.cell.DayUiModel
+import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
 fun ForecastHour.toHourUiModel(unit: MeasurementUnit) =
-    HourCellModel(
+    HourUiModel(
         id = "$placeId-$time",
         temperature = temperature,
         feelsLike = if (temperature == null) {
@@ -35,7 +35,7 @@ fun ForecastHour.toHourUiModel(unit: MeasurementUnit) =
 suspend fun List<ForecastHour>.toDayUiModel(
     coroutineScope: CoroutineScope,
     unit: MeasurementUnit
-): DayCellModel {
+): DayUiModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
     val lowTempAsync = coroutineScope.async { minTemperature() }
     val highTempAsync = coroutineScope.async { maxTemperature() }
@@ -44,7 +44,7 @@ suspend fun List<ForecastHour>.toDayUiModel(
     val maxHumidityAsync = coroutineScope.async { maxHumidity() }
     val maxPressureAsync = coroutineScope.async { maxPressure() }
     val firstHour = get(0)
-    return DayCellModel(
+    return DayUiModel(
         id = "${firstHour.placeId}-${firstHour.time}",
         time = firstHour.time,
         representativeWeatherDescription = weatherIconAsync.await(),

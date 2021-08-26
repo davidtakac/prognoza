@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.uimodel.cell
 
-data class PlaceCellModel(
+data class PlaceUiModel(
     val id: String,
     val name: String,
     val fullName: String,

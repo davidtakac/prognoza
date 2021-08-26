@@ -25,7 +25,7 @@ class TodayForecastFragment :
     private val adapter = HoursRecyclerViewAdapter()
 
     override fun showForecast(uiModel: TodayForecastUiModel) {
-        val currentConditions = uiModel.currentConditionsModel
+        val currentConditions = uiModel.currentConditionsUiModel
         val currentHour = currentConditions.currentHour
         val time = DateUtils.formatDateTime(
             requireContext(),

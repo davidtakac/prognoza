@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.WeatherDescription
 import java.time.ZonedDateTime
 
-data class HourCellModel(
+data class HourUiModel(
     val id: String,
     val temperature: Float?,
     val feelsLike: Float?,

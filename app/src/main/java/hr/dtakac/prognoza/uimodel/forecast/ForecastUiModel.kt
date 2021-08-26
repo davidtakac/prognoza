@@ -1,20 +1,20 @@
 package hr.dtakac.prognoza.uimodel.forecast
 
-import hr.dtakac.prognoza.uimodel.cell.DayCellModel
-import hr.dtakac.prognoza.uimodel.cell.HourCellModel
+import hr.dtakac.prognoza.uimodel.cell.DayUiModel
+import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 
 interface ForecastUiModel
 
 data class DaysForecastUiModel(
-    val days: List<DayCellModel>
+    val days: List<DayUiModel>
 ) : ForecastUiModel
 
 data class TodayForecastUiModel(
-    val currentConditionsModel: TodayForecastCurrentConditionsModel,
-    val otherHours: List<HourCellModel>
+    val currentConditionsUiModel: CurrentConditionsUiModel,
+    val otherHours: List<HourUiModel>
 ) : ForecastUiModel
 
 data class TomorrowForecastUiModel(
-    val summary: DayCellModel,
-    val hours: List<HourCellModel>
+    val summary: DayUiModel,
+    val hours: List<HourUiModel>
 ) : ForecastUiModel

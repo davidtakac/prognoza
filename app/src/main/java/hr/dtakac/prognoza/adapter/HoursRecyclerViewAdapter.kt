@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.extensions.*
-import hr.dtakac.prognoza.uimodel.cell.HourCellModel
+import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 
-class HoursRecyclerViewAdapter : ListAdapter<HourCellModel, HourViewHolder>(HourDiffCallback()) {
+class HoursRecyclerViewAdapter : ListAdapter<HourUiModel, HourViewHolder>(HourDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
         override fun invoke(position: Int) {
             val itemAtPosition = getItem(position)
@@ -39,7 +39,7 @@ class HourViewHolder(
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
-    fun bind(cellModel: HourCellModel) {
+    fun bind(cellModel: HourUiModel) {
         binding.apply {
             val resources = root.context.resources
             // predefined formatting
@@ -84,12 +84,12 @@ class HourViewHolder(
     }
 }
 
-class HourDiffCallback : DiffUtil.ItemCallback<HourCellModel>() {
-    override fun areContentsTheSame(oldItem: HourCellModel, newItem: HourCellModel): Boolean {
+class HourDiffCallback : DiffUtil.ItemCallback<HourUiModel>() {
+    override fun areContentsTheSame(oldItem: HourUiModel, newItem: HourUiModel): Boolean {
         return oldItem == newItem
     }
 
-    override fun areItemsTheSame(oldItem: HourCellModel, newItem: HourCellModel): Boolean {
+    override fun areItemsTheSame(oldItem: HourUiModel, newItem: HourUiModel): Boolean {
         return oldItem.id == newItem.id
     }
 }
