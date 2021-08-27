@@ -5,7 +5,9 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.widget.RemoteViews
+import hr.dtakac.prognoza.BuildConfig
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.activity.ForecastActivity
 import hr.dtakac.prognoza.extensions.calculateFeelsLikeTemperature
@@ -22,10 +24,12 @@ import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
-    private val forecastRepository by inject<ForecastRepository>()
-    private val preferencesRepository by inject<PreferencesRepository>()
-    private val placeRepository by inject<PlaceRepository>()
+abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
+    protected val forecastRepository by inject<ForecastRepository>()
+    protected val preferencesRepository by inject<PreferencesRepository>()
+    protected val placeRepository by inject<PlaceRepository>()
+
+    abstract val widgetLayoutId: Int
 
     override fun onUpdate(
         context: Context?,
@@ -34,46 +38,32 @@ class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
     ) {
         runBlocking {
             appWidgetIds?.forEach { appWidgetId ->
-                // on widget click, open ForecastActivity
-                val pendingIntent: PendingIntent = Intent(context, ForecastActivity::class.java)
-                    .let { intent ->
-                        PendingIntent.getActivity(context, 0, intent, 0)
-                    }
-                val views: RemoteViews = RemoteViews(
+                val uiModel = getCurrentConditionsWidgetUiModel()
+                val remoteViews = RemoteViews(
                     context?.packageName,
-                    R.layout.app_widget_current_conditions
-                ).apply {
-                    setOnClickPendingIntent(R.id.ll_widget_current_conditions, pendingIntent)
+                    widgetLayoutId
+                )
+                if (uiModel != null) {
+                    onSuccess(remoteViews, context, uiModel)
+                } else {
+                    onError(remoteViews, context)
                 }
-                // update views with new info
-                when (val uiModel = getCurrentConditionsWidgetUiModel()) {
-                    null -> TODO()
-                    else -> {
-                        views.setTextViewText(
-                            R.id.tv_temperature,
-                            context?.resources?.formatTemperatureValue(
-                                uiModel.temperature,
-                                uiModel.displayDataInUnit
-                            )
-                        )
-                        views.setTextViewText(R.id.tv_place, uiModel.placeName)
-                        views.setImageViewResource(
-                            R.id.iv_weather_icon,
-                            uiModel.iconResourceId ?: R.drawable.ic_cloud
-                        )
-                        views.setTextViewText(
-                            R.id.tv_feels_like,
-                            context?.resources?.formatFeelsLike(
-                                uiModel.feelsLike,
-                                uiModel.displayDataInUnit
-                            )
-                        )
-                        appWidgetManager?.updateAppWidget(appWidgetId, views)
-                    }
-                }
+                setOnClickOpenApplication(remoteViews, context)
+                appWidgetManager?.updateAppWidget(appWidgetId, remoteViews)
             }
         }
     }
+
+    abstract fun onSuccess(
+        views: RemoteViews,
+        context: Context?,
+        uiModel: CurrentConditionsWidgetUiModel
+    )
+
+    abstract fun onError(
+        views: RemoteViews,
+        context: Context?
+    )
 
     private suspend fun getCurrentConditionsWidgetUiModel(): CurrentConditionsWidgetUiModel? {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
@@ -100,6 +90,19 @@ class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
             )
         } else {
             null
+        }
+    }
+
+    private fun RemoteViews.initialize(context: Context?, uiModel: CurrentConditionsWidgetUiModel) =
+        apply {
+
+        }
+
+    private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {
+        if (BuildConfig.VERSION_CODE < Build.VERSION_CODES.S) {
+            val intent = Intent(context, ForecastActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            views.setOnClickPendingIntent(android.R.id.background, pendingIntent)
         }
     }
 }

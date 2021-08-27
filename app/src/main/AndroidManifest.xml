@@ -19,14 +19,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".widget.CurrentConditionsAppWidgetProvider"
+        <receiver android:name=".widget.TinyCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_info_current_conditions" />
+                android:resource="@xml/app_widget_info_current_conditions_tiny" />
+        </receiver>
+        <receiver android:name=".widget.SmallCurrentConditionsAppWidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/app_widget_info_current_conditions_small" />
         </receiver>
     </application>
 
