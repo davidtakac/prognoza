@@ -17,7 +17,7 @@
             android:id="@+id/tv_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/high_emphasis"
+            android:textColor="?attr/textHighEmphasisColor"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,13 +29,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:textColor="@color/med_emphasis"
+            android:textColor="?attr/textMediumEmphasisColor"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@id/tv_time"
             app:layout_constraintStart_toEndOf="@id/tv_time"
             app:layout_constraintTop_toTopOf="@id/tv_time"
             tools:text="0.1 mm"
-            tools:textColor="@color/precipitation" />
+            tools:textColor="?attr/significantPrecipitationColor" />
 
         <ImageView
             android:id="@+id/iv_weather_icon"
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:textColor="@color/high_emphasis"
+            android:textColor="?attr/textHighEmphasisColor"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
@@ -93,7 +93,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:gravity="end"
-            android:textColor="@color/med_emphasis"
+            android:textColor="?attr/textMediumEmphasisColor"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/barrier_values"
@@ -108,7 +108,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_feels_like"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_feels_like"
-            app:tint="@color/high_emphasis" />
+            app:tint="?attr/textHighEmphasisColor" />
 
         <TextView
             android:id="@+id/tv_label_feels_like"
@@ -117,7 +117,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:text="@string/feels_like"
-            android:textColor="@color/med_emphasis"
+            android:textColor="?attr/textMediumEmphasisColor"
             app:layout_constraintStart_toEndOf="@id/iv_feels_like"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -125,7 +125,7 @@
             android:id="@+id/tv_feels_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/high_emphasis"
+            android:textColor="?attr/textHighEmphasisColor"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_feels_like"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
             tools:text="18C" />
@@ -138,7 +138,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_label_wind"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_label_wind"
-            app:tint="@color/high_emphasis" />
+            app:tint="?attr/textHighEmphasisColor" />
 
         <TextView
             android:id="@+id/tv_label_wind"
@@ -147,7 +147,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:text="@string/wind"
-            android:textColor="@color/med_emphasis"
+            android:textColor="?attr/textMediumEmphasisColor"
             app:layout_constraintStart_toEndOf="@id/iv_wind"
             app:layout_constraintTop_toBottomOf="@id/tv_feels_like" />
 
@@ -156,7 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/high_emphasis"
+            android:textColor="?attr/textHighEmphasisColor"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_wind"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
             tools:text="3 km/h, WSW" />
@@ -169,7 +169,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_label_humidity"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_label_humidity"
-            app:tint="@color/high_emphasis" />
+            app:tint="?attr/textHighEmphasisColor" />
 
         <TextView
             android:id="@+id/tv_label_humidity"
@@ -178,7 +178,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:text="@string/humidity"
-            android:textColor="@color/med_emphasis"
+            android:textColor="?attr/textMediumEmphasisColor"
             app:layout_constraintStart_toEndOf="@id/iv_wind"
             app:layout_constraintTop_toBottomOf="@id/tv_label_wind" />
 
@@ -187,7 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/high_emphasis"
+            android:textColor="?attr/textHighEmphasisColor"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_humidity"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
             tools:text="40%" />
@@ -200,7 +200,7 @@
             app:layout_constraintBottom_toBottomOf="@id/tv_label_pressure"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/tv_label_pressure"
-            app:tint="@color/high_emphasis" />
+            app:tint="?attr/textHighEmphasisColor" />
 
         <TextView
             android:id="@+id/tv_label_pressure"
@@ -209,7 +209,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:text="@string/pressure"
-            android:textColor="@color/med_emphasis"
+            android:textColor="?attr/textMediumEmphasisColor"
             app:layout_constraintStart_toEndOf="@id/iv_pressure"
             app:layout_constraintTop_toBottomOf="@id/tv_label_humidity" />
 
@@ -218,7 +218,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:textColor="@color/high_emphasis"
+            android:textColor="?attr/textHighEmphasisColor"
             app:layout_constraintBaseline_toBaselineOf="@id/tv_label_pressure"
             app:layout_constraintStart_toEndOf="@id/barrier_labels"
             tools:text="1023 hPa" />

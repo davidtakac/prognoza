@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toStartOf="@id/tv_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/med_emphasis" />
+        app:tint="?attr/textMediumEmphasisColor" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/high_emphasis"
+        android:textColor="?attr/textHighEmphasisColor"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_saved"
@@ -35,7 +35,7 @@
         android:id="@+id/tv_full_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/med_emphasis"
+        android:textColor="?attr/textMediumEmphasisColor"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@id/tv_name"
         app:layout_constraintStart_toStartOf="@id/tv_name"

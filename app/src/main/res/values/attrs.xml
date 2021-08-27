@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Widget -->
     <attr name="widgetBackgroundRadius" format="dimension"/>
     <attr name="widgetBackgroundColor" format="color"/>
     <attr name="widgetTextPrimaryColor" format="color"/>
     <attr name="widgetTextSecondaryColor" format="color"/>
+
+    <!-- Text -->
+    <attr name="textHighEmphasisColor" format="color"/>
+    <attr name="textMediumEmphasisColor" format="color"/>
+    <attr name="significantPrecipitationColor" format="color"/>
+    <attr name="errorColor" format="color"/>
 </resources>

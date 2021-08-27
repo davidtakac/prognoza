@@ -38,7 +38,7 @@ class MediumCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetProvi
         )
         views.setTextViewText(
             R.id.tv_precipitation_forecast,
-            context?.resources?.formatPrecipitationTwoHours(uiModel.precipitationTwoHours, uiModel.displayDataInUnit)
+            context?.formatPrecipitationTwoHours(uiModel.precipitationTwoHours, uiModel.displayDataInUnit)
         )
     }
 

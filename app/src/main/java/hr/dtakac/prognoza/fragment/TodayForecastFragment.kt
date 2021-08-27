@@ -39,7 +39,7 @@ class TodayForecastFragment :
             currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitationForecast.text =
-            resources.formatPrecipitationTwoHours(
+            binding.root.context.formatPrecipitationTwoHours(
                 currentConditions.precipitationForecast,
                 currentConditions.displayDataInUnit
             )

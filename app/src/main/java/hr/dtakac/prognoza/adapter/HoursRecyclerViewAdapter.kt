@@ -48,7 +48,7 @@ class HourViewHolder(
             tvFeelsLike.text =
                 resources.formatTemperatureValue(cellModel.feelsLike, cellModel.displayDataInUnit)
             tvPrecipitationAmount.text =
-                resources.formatPrecipitationValue(
+                root.context.formatPrecipitationValue(
                     cellModel.precipitation,
                     cellModel.displayDataInUnit
                 )

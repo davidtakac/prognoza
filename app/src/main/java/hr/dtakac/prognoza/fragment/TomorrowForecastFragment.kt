@@ -49,7 +49,7 @@ class TomorrowForecastFragment :
                 ?: R.drawable.ic_cloud
         )
         binding.tvPrecipitation.text =
-            resources.formatTotalPrecipitation(
+            binding.root.context.formatTotalPrecipitation(
                 summary.totalPrecipitationAmount,
                 summary.displayDataInUnit
             )

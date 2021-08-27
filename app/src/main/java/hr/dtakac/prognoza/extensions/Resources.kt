@@ -1,11 +1,13 @@
 package hr.dtakac.prognoza.extensions
 
+import android.content.Context
 import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import androidx.core.text.color
 import androidx.core.text.toSpannable
+import com.google.android.material.color.MaterialColors
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_IMPERIAL
 import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_METRIC
@@ -41,7 +43,7 @@ fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit)
     }
 }
 
-fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUnit): Spannable {
+fun Context.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUnit): Spannable {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = when (unit) {
             MeasurementUnit.IMPERIAL -> {
@@ -61,7 +63,13 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
         val convertedPrecipitation = precipitation.millimetresToInches()
         if (convertedPrecipitation >= SIGNIFICANT_PRECIPITATION_IMPERIAL) {
             SpannableStringBuilder()
-                .color(getColor(R.color.precipitation, null)) {
+                .color(
+                    MaterialColors.getColor(
+                        this,
+                        R.attr.significantPrecipitationColor,
+                        getColor(R.color.blue_700)
+                    )
+                ) {
                     append(
                         getString(
                             R.string.template_precipitation_imperial,
@@ -80,7 +88,13 @@ fun Resources.formatPrecipitationValue(precipitation: Float?, unit: MeasurementU
     } else {
         if (precipitation >= SIGNIFICANT_PRECIPITATION_METRIC) {
             SpannableStringBuilder()
-                .color(getColor(R.color.precipitation, null)) {
+                .color(
+                    MaterialColors.getColor(
+                        this,
+                        R.attr.significantPrecipitationColor,
+                        getColor(R.color.blue_700)
+                    )
+                ) {
                     append(
                         getString(
                             R.string.template_precipitation_metric,
@@ -203,7 +217,7 @@ fun Resources.formatRepresentativeWeatherIconDescription(
     }
 }
 
-fun Resources.formatTotalPrecipitation(
+fun Context.formatTotalPrecipitation(
     precipitation: Float?,
     unit: MeasurementUnit
 ): Spannable {
@@ -224,7 +238,7 @@ fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
     return getString(reasonResourceId ?: R.string.error_generic)
 }
 
-fun Resources.formatPrecipitationTwoHours(
+fun Context.formatPrecipitationTwoHours(
     precipitationForecast: Float?,
     unit: MeasurementUnit
 ): Spannable {

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Theme.Prognoza.Widget">
-        <item name="widgetBackgroundRadius">8dp</item>
-        <item name="widgetBackgroundColor">?attr/colorSurface</item>
-        <item name="widgetTextPrimaryColor">@color/high_emphasis</item>
-        <item name="widgetTextSecondaryColor">@color/med_emphasis</item>
-    </style>
-</resources>

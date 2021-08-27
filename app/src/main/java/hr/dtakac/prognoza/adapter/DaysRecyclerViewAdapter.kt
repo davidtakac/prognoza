@@ -68,7 +68,7 @@ class DayViewHolder(
                     ?: R.drawable.ic_cloud
             )
             tvPrecipitation.text =
-                resources.formatTotalPrecipitation(
+                root.context.formatTotalPrecipitation(
                     cellModel.totalPrecipitationAmount,
                     cellModel.displayDataInUnit
                 )

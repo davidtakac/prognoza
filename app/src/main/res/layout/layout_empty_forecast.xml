@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:tint="@color/error" />
+        app:tint="?attr/errorColor" />
 
     <TextView
         android:id="@+id/tv_error_message"
@@ -25,7 +25,7 @@
         android:layout_marginHorizontal="48dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:textColor="@color/med_emphasis"
+        android:textColor="?attr/textMediumEmphasisColor"
         app:layout_constraintBottom_toTopOf="@id/btn_try_again"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

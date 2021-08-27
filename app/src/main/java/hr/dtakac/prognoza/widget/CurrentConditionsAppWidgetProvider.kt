@@ -91,11 +91,6 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         }
     }
 
-    private fun RemoteViews.initialize(context: Context?, uiModel: CurrentConditionsWidgetUiModel) =
-        apply {
-
-        }
-
     private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {
         if (BuildConfig.VERSION_CODE < Build.VERSION_CODES.S) {
             val intent = Intent(context, ForecastActivity::class.java)
