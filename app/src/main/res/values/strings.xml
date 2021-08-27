@@ -71,7 +71,7 @@
     <string name="placeholder_description">Unknown</string>
     <string name="placeholder_precipitation_insignificant_metric">&lt; %1$s mm</string>
     <string name="placeholder_precipitation_insignificant_imperial">&lt; %1$s\"</string>
-    <string name="placeholder_precipitation_none">-</string>
+    <string name="placeholder_precipitation">-</string>
     <string name="placeholder_wind_speed">-</string>
     <string name="hint_places_search">Search places…</string>
     <string name="error_met_client">Something is wrong with your request.</string>
@@ -81,8 +81,8 @@
     <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
-    <string name="amount_of_precipitation">" of precipitation"</string>
-    <string name="placeholder_total_precipitation_none">No precipitation</string>
+    <string name="amount_of_precipitation">" of precip."</string>
+    <string name="placeholder_precipitation_text">No precip.</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_wind_with_direction">%1$s, %2$s</string>
@@ -90,8 +90,7 @@
     <string name="placeholder_humidity">-</string>
     <string name="placeholder_pressure">-</string>
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
-    <string name="amount_of_precipitation_forecast">" in the next two hours"</string>
-    <string name="precipitation_forecast_none">No precipitation in the next two hours</string>
+    <string name="in_two_hours">" in two hours"</string>
     <string name="feels_like">Feels like</string>
     <string name="wind">Wind</string>
     <string name="humidity">Humidity</string>

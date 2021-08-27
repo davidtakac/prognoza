@@ -56,9 +56,9 @@ fun Context.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUni
         roundingMode = RoundingMode.HALF_UP
     }
     return if (precipitation == null) {
-        SpannableString(getString(R.string.placeholder_precipitation_none))
+        SpannableString(getString(R.string.placeholder_precipitation))
     } else if (precipitation == 0f) {
-        SpannableString(getString(R.string.placeholder_precipitation_none))
+        SpannableString(getString(R.string.placeholder_precipitation))
     } else if (unit == MeasurementUnit.IMPERIAL) {
         val convertedPrecipitation = precipitation.millimetresToInches()
         if (convertedPrecipitation >= SIGNIFICANT_PRECIPITATION_IMPERIAL) {
@@ -223,7 +223,7 @@ fun Context.formatTotalPrecipitation(
 ): Spannable {
     return when (precipitation) {
         null, 0f -> {
-            SpannableString(getString(R.string.placeholder_total_precipitation_none))
+            SpannableString(getString(R.string.placeholder_precipitation_text))
         }
         else -> {
             SpannableStringBuilder()
@@ -242,17 +242,15 @@ fun Context.formatPrecipitationTwoHours(
     precipitationForecast: Float?,
     unit: MeasurementUnit
 ): Spannable {
-    return when (precipitationForecast) {
-        null, 0f -> {
-            SpannableString(getString(R.string.precipitation_forecast_none))
-        }
-        else -> {
-            SpannableStringBuilder()
-                .append(formatPrecipitationValue(precipitationForecast, unit))
-                .append(getString(R.string.amount_of_precipitation_forecast))
-                .toSpannable()
-        }
-    }
+    return SpannableStringBuilder()
+        .append(
+            when (precipitationForecast) {
+                null, 0f -> getString(R.string.placeholder_precipitation_text)
+                else -> formatPrecipitationValue(precipitationForecast, unit)
+            }
+        )
+        .append(getString(R.string.in_two_hours))
+        .toSpannable()
 }
 
 fun Resources.formatFeelsLike(feelsLike: Float?, unit: MeasurementUnit): String {
