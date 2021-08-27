@@ -110,5 +110,6 @@
     <string name="title_outdated_forecast">Outdated forecast</string>
     <string name="app_widget_current_conditions_tiny_description">Tiny widget that displays current air temperature and weather icon.</string>
     <string name="app_widget_current_conditions_small_description">Small widget with current air and feels like temperature, place name and weather icon.</string>
+    <string name="app_widget_current_conditions_medium_description">Medium widget with temperature, feels like, place, weather icon and two hour precipitation forecast.</string>
 
 </resources>

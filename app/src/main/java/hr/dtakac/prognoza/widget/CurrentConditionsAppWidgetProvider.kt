@@ -8,12 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import hr.dtakac.prognoza.BuildConfig
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.activity.ForecastActivity
-import hr.dtakac.prognoza.extensions.calculateFeelsLikeTemperature
-import hr.dtakac.prognoza.extensions.formatFeelsLike
-import hr.dtakac.prognoza.extensions.formatTemperatureValue
-import hr.dtakac.prognoza.extensions.shortenedName
+import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
@@ -72,6 +68,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             val selectedPlace =
                 placeRepository.get(selectedPlaceId) ?: placeRepository.getDefaultPlace()
             val selectedUnit = preferencesRepository.getSelectedUnit()
+            val precipitationTwoHours = result.hours.subList(0, 2).totalPrecipitationAmount()
             val currentHour = result.hours[0]
             CurrentConditionsWidgetUiModel(
                 temperature = currentHour.temperature,
@@ -86,7 +83,8 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
                 },
                 placeName = selectedPlace.shortenedName,
                 iconResourceId = WEATHER_ICONS[currentHour.symbolCode]?.iconResourceId,
-                displayDataInUnit = selectedUnit
+                displayDataInUnit = selectedUnit,
+                precipitationTwoHours = if (precipitationTwoHours <= 0f) null else precipitationTwoHours
             )
         } else {
             null

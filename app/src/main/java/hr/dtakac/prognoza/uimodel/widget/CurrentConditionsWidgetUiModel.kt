@@ -7,5 +7,6 @@ data class CurrentConditionsWidgetUiModel(
     val feelsLike: Float?,
     val placeName: String?,
     val iconResourceId: Int?,
+    val precipitationTwoHours: Float?,
     val displayDataInUnit: MeasurementUnit
 )
