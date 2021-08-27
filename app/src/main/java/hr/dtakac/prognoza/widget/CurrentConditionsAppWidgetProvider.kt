@@ -41,7 +41,7 @@ class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
                     }
                 val views: RemoteViews = RemoteViews(
                     context?.packageName,
-                    R.layout.widget_current_conditions
+                    R.layout.app_widget_current_conditions
                 ).apply {
                     setOnClickPendingIntent(R.id.ll_widget_current_conditions, pendingIntent)
                 }

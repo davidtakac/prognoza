@@ -5,9 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/widget_background"
     android:orientation="vertical"
-    android:padding="8dp"
+    android:padding="16dp"
     android:theme="@style/Theme.Prognoza.Widget"
-    tools:layout_height="110dp"
     android:id="@+id/ll_widget_current_conditions">
 
     <LinearLayout
@@ -39,6 +38,9 @@
         android:layout_height="wrap_content"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
+        android:layout_marginTop="4dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         tools:text="Osijek" />
 
     <TextView
@@ -47,6 +49,8 @@
         android:layout_height="wrap_content"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
+        android:maxLines="1"
+        android:ellipsize="end"
         tools:text="Feels like 18°" />
 
 </LinearLayout>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--TODO: update with alarm manager, instructions: https://developer.android.com/guide/topics/appwidgets#MetaData-->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/widget_current_conditions"
+    android:initialLayout="@layout/app_widget_current_conditions"
     android:minWidth="110dp"
     android:minHeight="40dp"
     android:minResizeWidth="110dp"
     android:minResizeHeight="40dp"
     android:previewImage="@drawable/clearsky_day"
-    android:resizeMode="horizontal"
+    android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"
     android:widgetCategory="home_screen" />
