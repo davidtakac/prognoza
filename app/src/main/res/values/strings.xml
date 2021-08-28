@@ -81,8 +81,8 @@
     <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
-    <string name="amount_of_precipitation">" of precip."</string>
-    <string name="placeholder_precipitation_text">No precip.</string>
+    <string name="precipitation_total">" of precipitation"</string>
+    <string name="placeholder_precipitation_text">No precipitation</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_wind_with_direction">%1$s, %2$s</string>
@@ -90,7 +90,7 @@
     <string name="placeholder_humidity">-</string>
     <string name="placeholder_pressure">-</string>
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
-    <string name="in_two_hours">" in two hours"</string>
+    <string name="in_two_hours">" next two hours"</string>
     <string name="feels_like">Feels like</string>
     <string name="wind">Wind</string>
     <string name="humidity">Humidity</string>

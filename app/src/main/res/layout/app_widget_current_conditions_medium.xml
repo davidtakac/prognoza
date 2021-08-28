@@ -42,6 +42,7 @@
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
         tools:text="Osijek"
+        android:layout_marginTop="8dp"
         android:maxLines="1"
         android:ellipsize="end"/>
 
@@ -50,18 +51,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="?attr/widgetTextSecondaryColor"
-        android:textSize="14sp"
+        android:textSize="16sp"
         tools:text="Feels like 225°"
         android:maxLines="1"
-        android:ellipsize="end"
-        android:layout_marginTop="8dp"/>
+        android:ellipsize="end" />
 
     <TextView
         android:id="@+id/tv_precipitation_forecast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="?attr/widgetTextSecondaryColor"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        android:maxLines="2"
         tools:text="No precipitation in the next two hours"
         android:ellipsize="end"/>
 

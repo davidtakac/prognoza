@@ -228,7 +228,7 @@ fun Context.formatTotalPrecipitation(
         else -> {
             SpannableStringBuilder()
                 .append(formatPrecipitationValue(precipitation, unit))
-                .append(getString(R.string.amount_of_precipitation))
+                .append(getString(R.string.precipitation_total))
                 .toSpannable()
         }
     }
