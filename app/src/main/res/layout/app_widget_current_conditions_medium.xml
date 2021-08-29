@@ -39,12 +39,12 @@
         android:id="@+id/tv_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
-        tools:text="Osijek"
-        android:layout_marginTop="8dp"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        tools:text="Osijek" />
 
     <TextView
         android:id="@+id/tv_feels_like"

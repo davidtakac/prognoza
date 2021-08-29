@@ -43,7 +43,11 @@ fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit)
     }
 }
 
-fun Context.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUnit): Spannable {
+fun Context.formatPrecipitationValue(
+    precipitation: Float?,
+    unit: MeasurementUnit,
+    significantPrecipitationColor: Boolean = true
+): Spannable {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = when (unit) {
             MeasurementUnit.IMPERIAL -> {
@@ -62,54 +66,55 @@ fun Context.formatPrecipitationValue(precipitation: Float?, unit: MeasurementUni
     } else if (unit == MeasurementUnit.IMPERIAL) {
         val convertedPrecipitation = precipitation.millimetresToInches()
         if (convertedPrecipitation >= SIGNIFICANT_PRECIPITATION_IMPERIAL) {
-            SpannableStringBuilder()
-                .color(
+            val builder = SpannableStringBuilder()
+            val precipitationString = getString(
+                R.string.template_precipitation_imperial,
+                formatter.format(convertedPrecipitation)
+            )
+            if (significantPrecipitationColor) {
+                builder.color(
                     MaterialColors.getColor(
                         this,
                         R.attr.significantPrecipitationColor,
                         getColor(R.color.blue_700)
                     )
                 ) {
-                    append(
-                        getString(
-                            R.string.template_precipitation_imperial,
-                            formatter.format(convertedPrecipitation)
-                        )
-                    )
+                    append(precipitationString)
                 }
+            } else {
+                precipitationString.toSpannable()
+            }
         } else {
-            SpannableString(
-                getString(
-                    R.string.placeholder_precipitation_insignificant_imperial,
-                    formatter.format(SIGNIFICANT_PRECIPITATION_IMPERIAL)
-                )
-            )
+            getString(
+                R.string.placeholder_precipitation_insignificant_imperial,
+                formatter.format(SIGNIFICANT_PRECIPITATION_IMPERIAL)
+            ).toSpannable()
         }
     } else {
         if (precipitation >= SIGNIFICANT_PRECIPITATION_METRIC) {
-            SpannableStringBuilder()
-                .color(
+            val builder = SpannableStringBuilder()
+            val precipitationString = getString(
+                R.string.template_precipitation_metric,
+                formatter.format(precipitation)
+            )
+            if (significantPrecipitationColor) {
+                builder.color(
                     MaterialColors.getColor(
                         this,
                         R.attr.significantPrecipitationColor,
                         getColor(R.color.blue_700)
                     )
                 ) {
-                    append(
-                        getString(
-                            R.string.template_precipitation_metric,
-                            formatter.format(precipitation)
-                        )
-                    )
+                    append(precipitationString)
                 }
-                .toSpannable()
+            } else {
+                precipitationString.toSpannable()
+            }
         } else {
-            SpannableString(
-                getString(
-                    R.string.placeholder_precipitation_insignificant_metric,
-                    formatter.format(SIGNIFICANT_PRECIPITATION_METRIC)
-                )
-            )
+            getString(
+                R.string.placeholder_precipitation_insignificant_metric,
+                formatter.format(SIGNIFICANT_PRECIPITATION_METRIC)
+            ).toSpannable()
         }
     }
 }
@@ -219,7 +224,8 @@ fun Resources.formatRepresentativeWeatherIconDescription(
 
 fun Context.formatTotalPrecipitation(
     precipitation: Float?,
-    unit: MeasurementUnit
+    unit: MeasurementUnit,
+    significantPrecipitationColor: Boolean = true
 ): Spannable {
     return when (precipitation) {
         null, 0f -> {
@@ -227,7 +233,7 @@ fun Context.formatTotalPrecipitation(
         }
         else -> {
             SpannableStringBuilder()
-                .append(formatPrecipitationValue(precipitation, unit))
+                .append(formatPrecipitationValue(precipitation, unit, significantPrecipitationColor))
                 .append(getString(R.string.precipitation_total))
                 .toSpannable()
         }
@@ -240,15 +246,17 @@ fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
 
 fun Context.formatPrecipitationTwoHours(
     precipitationForecast: Float?,
-    unit: MeasurementUnit
+    unit: MeasurementUnit,
+    significantPrecipitationColor: Boolean = true
 ): Spannable {
     return SpannableStringBuilder()
         .append(
             when (precipitationForecast) {
                 null, 0f -> getString(R.string.placeholder_precipitation_text)
-                else -> formatPrecipitationValue(precipitationForecast, unit)
+                else -> formatPrecipitationValue(precipitationForecast, unit, significantPrecipitationColor)
             }
         )
+        .append(" ")
         .append(getString(R.string.in_two_hours))
         .toSpannable()
 }

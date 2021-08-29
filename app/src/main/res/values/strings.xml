@@ -90,7 +90,7 @@
     <string name="placeholder_humidity">-</string>
     <string name="placeholder_pressure">-</string>
     <string name="notify_no_internet">You\'re not connected to the Internet.</string>
-    <string name="in_two_hours">" next two hours"</string>
+    <string name="in_two_hours">next two hours</string>
     <string name="feels_like">Feels like</string>
     <string name="wind">Wind</string>
     <string name="humidity">Humidity</string>
