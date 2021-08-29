@@ -17,6 +17,5 @@
         <item name="textMediumEmphasisColor">@color/white_60</item>
         <item name="significantPrecipitationColor">@color/blue_300</item>
         <item name="errorColor">@color/red_900</item>
-
     </style>
 </resources>

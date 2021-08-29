@@ -107,8 +107,8 @@
     <string name="notify_cached_data">Outdated. Click for more info.</string>
     <string name="template_content_outdated_forecast">An error occurred when trying to get fresh forecast data, so you\'re being shown old data that may not be as accurate.\n\nThe reason is: %1$s</string>
     <string name="title_outdated_forecast">Outdated forecast</string>
-    <string name="app_widget_current_conditions_tiny_description">Tiny widget that displays current air temperature and weather icon.</string>
-    <string name="app_widget_current_conditions_small_description">Small widget with current air and feels like temperature, place name and weather icon.</string>
-    <string name="app_widget_current_conditions_medium_description">Medium widget with temperature, feels like, place, weather icon and two hour precipitation forecast.</string>
+    <string name="app_widget_current_conditions_tiny_description">Current weather icon and temperature</string>
+    <string name="app_widget_current_conditions_small_description">Current weather icon, temperature and feels like temperature</string>
+    <string name="app_widget_current_conditions_medium_description">Current weather icon, temperature, feels like temperature and two hour precipitation forecast</string>
 
 </resources>
