@@ -18,25 +18,35 @@ class ForecastActivityViewModel(
     private val preferencesRepository: PreferencesRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentPlaceId: String? = null
+    private var currentUnit: MeasurementUnit? = null
 
     private val _placeName = MutableLiveData<String>()
     val placeName: LiveData<String> get() = _placeName
 
-    private val _selectedUnits = MutableLiveData<Event<MeasurementUnit>>()
-    val selectedUnits: LiveData<Event<MeasurementUnit>> get() = _selectedUnits
+    private val _selectedUnit = MutableLiveData<MeasurementUnit>()
+    val selectedUnit: LiveData<MeasurementUnit> get() = _selectedUnit
 
-    fun getSelectedUnits() {
+    private val _placeChangedEvent = MutableLiveData<Event<Unit>>()
+    val placeChangedEvent: LiveData<Event<Unit>> get() = _placeChangedEvent
+
+    private val _unitChangedEvent = MutableLiveData<Event<Unit>>()
+    val unitChangedEvent: LiveData<Event<Unit>> get() = _unitChangedEvent
+
+    fun getSelectedUnit() {
         coroutineScope.launch {
-            _selectedUnits.value = Event(preferencesRepository.getSelectedUnit())
+            if (isUnitsReloadNeeded()) {
+                _selectedUnit.value = preferencesRepository.getSelectedUnit()
+            }
         }
     }
 
-    fun getPlaceName() {
+    fun getSelectedPlaceName() {
         coroutineScope.launch {
-            if (isReloadNeeded()) {
+            if (isPlaceReloadNeeded()) {
                 val selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
                     ?: placeRepository.getDefaultPlace()
                 _placeName.value = selectedPlace.shortenedName
+                _placeChangedEvent.value = Event(Unit)
                 currentPlaceId = selectedPlace.id
             }
         }
@@ -48,18 +58,25 @@ class ForecastActivityViewModel(
         }
     }
 
-    fun changeUnits() {
+    fun changeSelectedUnit() {
         coroutineScope.launch {
             val newUnit = when (preferencesRepository.getSelectedUnit()) {
                 MeasurementUnit.IMPERIAL -> MeasurementUnit.METRIC
                 MeasurementUnit.METRIC -> MeasurementUnit.IMPERIAL
             }
             preferencesRepository.setSelectedUnit(newUnit)
-            _selectedUnits.value = Event(newUnit)
+            _selectedUnit.value = newUnit
+            _unitChangedEvent.value = Event(Unit)
         }
     }
 
-    private suspend fun isReloadNeeded(): Boolean {
-        return currentPlaceId != preferencesRepository.getSelectedPlaceId()
+    private suspend fun isPlaceReloadNeeded(): Boolean {
+        return currentPlaceId != preferencesRepository.getSelectedPlaceId() ||
+                _placeName.value == null
+    }
+
+    private suspend fun isUnitsReloadNeeded(): Boolean {
+        return currentUnit != preferencesRepository.getSelectedUnit() ||
+                _selectedUnit.value == null
     }
 }

@@ -17,6 +17,7 @@ import hr.dtakac.prognoza.widget.TinyCurrentConditionsAppWidgetProvider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val SEARCH_FRAGMENT_TAG = "search"
+
 class ForecastActivity :
     ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
     private val viewModel by viewModel<ForecastActivityViewModel>()
@@ -26,8 +27,8 @@ class ForecastActivity :
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
-        viewModel.getPlaceName()
-        viewModel.getSelectedUnits()
+        viewModel.getSelectedPlaceName()
+        viewModel.getSelectedUnit()
     }
 
     override fun onResume() {
@@ -39,11 +40,26 @@ class ForecastActivity :
         viewModel.placeName.observe(this) {
             binding.toolbar.title = it
         }
-        viewModel.selectedUnits.observe(this) {
+        viewModel.selectedUnit.observe(this) {
+            binding.toolbar.menu.findItem(R.id.units).title = resources.getString(
+                when (it) {
+                    MeasurementUnit.METRIC -> R.string.change_to_imperial
+                    MeasurementUnit.IMPERIAL -> R.string.change_to_metric
+                }
+            )
+        }
+        viewModel.placeChangedEvent.observe(this) {
+            if (!it.isConsumed) {
+                notifyFragmentsOfNewPlace()
+                updateWidgets()
+                it.consume()
+            }
+        }
+        viewModel.unitChangedEvent.observe(this) {
             if (!it.isConsumed) {
                 notifyFragmentsOfChangedUnits()
-                updateChangeUnitsMenuItem(it.getValue())
                 updateWidgets()
+                it.consume()
             }
         }
     }
@@ -64,7 +80,7 @@ class ForecastActivity :
                     true
                 }
                 R.id.units -> {
-                    viewModel.changeUnits()
+                    viewModel.changeSelectedUnit()
                     true
                 }
                 else -> false
@@ -75,10 +91,8 @@ class ForecastActivity :
             this,
             { _, bundle ->
                 if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
-                    viewModel.getPlaceName()
-                    notifyFragmentsOfNewPlace()
+                    viewModel.getSelectedPlaceName()
                     closeSearch()
-                    updateWidgets()
                 }
             }
         )
@@ -108,15 +122,6 @@ class ForecastActivity :
             setFragmentResult(TOMORROW_REQUEST_KEY, result)
             setFragmentResult(DAYS_REQUEST_KEY, result)
         }
-    }
-
-    private fun updateChangeUnitsMenuItem(newUnit: MeasurementUnit) {
-        binding.toolbar.menu.findItem(R.id.units).title = resources.getString(
-            when (newUnit) {
-                MeasurementUnit.METRIC -> R.string.change_to_imperial
-                MeasurementUnit.IMPERIAL -> R.string.change_to_metric
-            }
-        )
     }
 
     private fun updateWidgets() {

@@ -12,6 +12,7 @@ import android.os.SystemClock
 import android.widget.RemoteViews
 import hr.dtakac.prognoza.ACTION_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.BuildConfig
+import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.activity.ForecastActivity
 import hr.dtakac.prognoza.dbmodel.ForecastHour
@@ -118,7 +119,12 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {
         if (BuildConfig.VERSION_CODE < Build.VERSION_CODES.S) {
             val intent = Intent(context, ForecastActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            )
             views.setOnClickPendingIntent(android.R.id.background, pendingIntent)
         }
     }

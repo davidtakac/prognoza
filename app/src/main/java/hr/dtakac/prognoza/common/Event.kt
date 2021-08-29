@@ -6,7 +6,7 @@ class Event<T>(
     var isConsumed: Boolean = false
         private set
 
-    fun getValue(): T {
+    fun consume(): T {
         isConsumed = true
         return value
     }

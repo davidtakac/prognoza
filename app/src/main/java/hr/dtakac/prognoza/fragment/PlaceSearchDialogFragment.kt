@@ -66,7 +66,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
             if (!it.isConsumed) {
                 Snackbar.make(
                     binding.root,
-                    resources.getString(it.getValue()),
+                    resources.getString(it.consume()),
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
