@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.extensions
 
 import android.content.Context
-import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -18,7 +17,7 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-fun Resources.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit): String {
+fun Context.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 0
         isParseIntegerOnly = true
@@ -119,7 +118,7 @@ fun Context.formatPrecipitationValue(
     }
 }
 
-fun Resources.formatWeatherIconDescription(descriptionResourceId: Int?): String {
+fun Context.formatWeatherIconDescription(descriptionResourceId: Int?): String {
     return if (descriptionResourceId == null) {
         getString(R.string.placeholder_description)
     } else {
@@ -127,7 +126,7 @@ fun Resources.formatWeatherIconDescription(descriptionResourceId: Int?): String 
     }
 }
 
-fun Resources.formatWindSpeedValue(windSpeed: Float?, unit: MeasurementUnit): String {
+fun Context.formatWindSpeedValue(windSpeed: Float?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 1
         roundingMode = RoundingMode.HALF_UP
@@ -149,7 +148,7 @@ fun Resources.formatWindSpeedValue(windSpeed: Float?, unit: MeasurementUnit): St
     }
 }
 
-fun Resources.formatWindWithDirection(
+fun Context.formatWindWithDirection(
     windSpeed: Float?,
     windFromCompassDirection: Int?,
     windSpeedUnit: MeasurementUnit
@@ -161,7 +160,7 @@ fun Resources.formatWindWithDirection(
     )
 }
 
-fun Resources.formatHumidityValue(relativeHumidity: Float?): String {
+fun Context.formatHumidityValue(relativeHumidity: Float?): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 0
         isParseIntegerOnly = true
@@ -177,7 +176,7 @@ fun Resources.formatHumidityValue(relativeHumidity: Float?): String {
     }
 }
 
-fun Resources.formatPressureValue(pressure: Float?, unit: MeasurementUnit): String {
+fun Context.formatPressureValue(pressure: Float?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         when (unit) {
             MeasurementUnit.IMPERIAL -> {
@@ -207,7 +206,7 @@ fun Resources.formatPressureValue(pressure: Float?, unit: MeasurementUnit): Stri
     }
 }
 
-fun Resources.formatRepresentativeWeatherIconDescription(
+fun Context.formatRepresentativeWeatherIconDescription(
     representativeWeatherDescription: RepresentativeWeatherDescription?
 ): String {
     val weatherIconDescriptionString =
@@ -234,13 +233,14 @@ fun Context.formatTotalPrecipitation(
         else -> {
             SpannableStringBuilder()
                 .append(formatPrecipitationValue(precipitation, unit, significantPrecipitationColor))
+                .append(" ")
                 .append(getString(R.string.precipitation_total))
                 .toSpannable()
         }
     }
 }
 
-fun Resources.formatEmptyMessage(reasonResourceId: Int?): String {
+fun Context.formatEmptyMessage(reasonResourceId: Int?): String {
     return getString(reasonResourceId ?: R.string.error_generic)
 }
 
@@ -261,7 +261,7 @@ fun Context.formatPrecipitationTwoHours(
         .toSpannable()
 }
 
-fun Resources.formatFeelsLike(feelsLike: Float?, unit: MeasurementUnit): String {
+fun Context.formatFeelsLike(feelsLike: Float?, unit: MeasurementUnit): String {
     return getString(
         R.string.template_feels_like,
         if (feelsLike == null) {

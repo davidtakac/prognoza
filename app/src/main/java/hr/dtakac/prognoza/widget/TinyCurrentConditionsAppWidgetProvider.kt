@@ -17,7 +17,7 @@ open class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetPr
     ) {
         views.setTextViewText(
             R.id.tv_temperature,
-            context?.resources?.formatTemperatureValue(
+            context?.formatTemperatureValue(
                 uiModel.temperature,
                 uiModel.displayDataInUnit
             )

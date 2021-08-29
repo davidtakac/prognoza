@@ -22,7 +22,7 @@ open class SmallCurrentConditionsAppWidgetProvider : TinyCurrentConditionsAppWid
         )
         views.setTextViewText(
             R.id.tv_feels_like,
-            context?.resources?.formatFeelsLike(uiModel.feelsLike, uiModel.displayDataInUnit)
+            context?.formatFeelsLike(uiModel.feelsLike, uiModel.displayDataInUnit)
         )
     }
 }

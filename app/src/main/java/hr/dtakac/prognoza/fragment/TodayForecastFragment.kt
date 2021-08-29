@@ -34,7 +34,7 @@ class TodayForecastFragment :
         )
         binding.tvDateTime.text = time
         binding.tvTemperature.text =
-            resources.formatTemperatureValue(currentHour.temperature, currentHour.displayDataInUnit)
+            requireContext().formatTemperatureValue(currentHour.temperature, currentHour.displayDataInUnit)
         binding.ivWeatherIcon.setImageResource(
             currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
         )
@@ -44,7 +44,7 @@ class TodayForecastFragment :
                 currentConditions.displayDataInUnit
             )
         binding.tvFeelsLike.text =
-            resources.formatFeelsLike(currentHour.feelsLike, currentHour.displayDataInUnit)
+            requireContext().formatFeelsLike(currentHour.feelsLike, currentHour.displayDataInUnit)
         adapter.submitList(uiModel.otherHours)
     }
 

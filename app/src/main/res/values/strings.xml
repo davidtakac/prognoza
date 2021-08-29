@@ -81,7 +81,7 @@
     <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
-    <string name="precipitation_total">" of precipitation"</string>
+    <string name="precipitation_total">of precipitation</string>
     <string name="placeholder_precipitation_text">No precipitation</string>
     <string name="template_mostly">Mostly %1$s</string>
     <string name="template_feels_like">Feels like %1$s</string>

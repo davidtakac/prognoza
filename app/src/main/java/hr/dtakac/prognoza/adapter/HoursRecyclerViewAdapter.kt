@@ -41,28 +41,28 @@ class HourViewHolder(
 
     fun bind(uiModel: HourUiModel) {
         binding.apply {
-            val resources = root.context.resources
+            val context = root.context
             // predefined formatting
             tvTemperature.text =
-                resources.formatTemperatureValue(uiModel.temperature, uiModel.displayDataInUnit)
+                context.formatTemperatureValue(uiModel.temperature, uiModel.displayDataInUnit)
             tvFeelsLike.text =
-                resources.formatTemperatureValue(uiModel.feelsLike, uiModel.displayDataInUnit)
+                context.formatTemperatureValue(uiModel.feelsLike, uiModel.displayDataInUnit)
             tvPrecipitationAmount.text =
                 root.context.formatPrecipitationValue(
                     uiModel.precipitation,
                     uiModel.displayDataInUnit
                 )
             tvWind.text =
-                resources.formatWindWithDirection(
+                context.formatWindWithDirection(
                     uiModel.windSpeed,
                     uiModel.windFromCompassDirection,
                     uiModel.displayDataInUnit
                 )
-            tvHumidity.text = resources.formatHumidityValue(uiModel.relativeHumidity)
+            tvHumidity.text = context.formatHumidityValue(uiModel.relativeHumidity)
             tvPressure.text =
-                resources.formatPressureValue(uiModel.pressure, uiModel.displayDataInUnit)
+                context.formatPressureValue(uiModel.pressure, uiModel.displayDataInUnit)
             tvDescription.text =
-                resources.formatWeatherIconDescription(uiModel.weatherDescription?.descriptionResourceId)
+                context.formatWeatherIconDescription(uiModel.weatherDescription?.descriptionResourceId)
             // other, view-specific operations
             tvPrecipitationAmount.visibility =
                 if (uiModel.precipitation != null && uiModel.precipitation > 0f) {

@@ -39,11 +39,11 @@ class TomorrowForecastFragment :
         )
         binding.tvDateTime.text = time
         binding.tvTemperatureHigh.text =
-            resources.formatTemperatureValue(summary.highTemperature, summary.displayDataInUnit)
+            requireContext().formatTemperatureValue(summary.highTemperature, summary.displayDataInUnit)
         binding.tvTemperatureLow.text =
-            resources.formatTemperatureValue(summary.lowTemperature, summary.displayDataInUnit)
+            requireContext().formatTemperatureValue(summary.lowTemperature, summary.displayDataInUnit)
         binding.tvDescription.text =
-            resources.formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
+            requireContext().formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
         binding.ivWeatherIcon.setImageResource(
             summary.representativeWeatherDescription?.weatherDescription?.iconResourceId
                 ?: R.drawable.ic_cloud

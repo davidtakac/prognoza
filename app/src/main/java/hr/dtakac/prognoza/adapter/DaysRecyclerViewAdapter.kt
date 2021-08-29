@@ -41,9 +41,9 @@ class DayViewHolder(
 
     fun bind(uiModel: DayUiModel) {
         binding.apply {
-            val resources = root.context.resources
+            val context = root.context
             tvDateTime.text = if (DateUtils.isToday(uiModel.time.toInstant().toEpochMilli())) {
-                resources.getString(R.string.today)
+                context.getString(R.string.today)
             } else {
                 DateUtils.formatDateTime(
                     root.context,
@@ -52,17 +52,17 @@ class DayViewHolder(
                 )
             }
             tvTemperatureHigh.text =
-                resources.formatTemperatureValue(
+                context.formatTemperatureValue(
                     uiModel.highTemperature,
                     uiModel.displayDataInUnit
                 )
             tvTemperatureLow.text =
-                resources.formatTemperatureValue(
+                context.formatTemperatureValue(
                     uiModel.lowTemperature,
                     uiModel.displayDataInUnit
                 )
             tvDescription.text =
-                resources.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherDescription)
+                context.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherDescription)
             ivWeatherIcon.setImageResource(
                 uiModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
                     ?: R.drawable.ic_cloud
@@ -72,14 +72,14 @@ class DayViewHolder(
                     uiModel.totalPrecipitationAmount,
                     uiModel.displayDataInUnit
                 )
-            tvWind.text = resources.formatWindWithDirection(
+            tvWind.text = context.formatWindWithDirection(
                 uiModel.maxWindSpeed,
                 uiModel.windFromCompassDirection,
                 uiModel.displayDataInUnit
             )
-            tvHumidity.text = resources.formatHumidityValue(uiModel.maxHumidity)
+            tvHumidity.text = context.formatHumidityValue(uiModel.maxHumidity)
             tvPressure.text =
-                resources.formatPressureValue(uiModel.maxPressure, uiModel.displayDataInUnit)
+                context.formatPressureValue(uiModel.maxPressure, uiModel.displayDataInUnit)
             clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE
         }
     }

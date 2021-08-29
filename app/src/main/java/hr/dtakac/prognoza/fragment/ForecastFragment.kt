@@ -115,7 +115,7 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     private fun showEmptyScreen(uiModel: EmptyForecastUiModel) {
         emptyForecastBinding.root.visibility = View.VISIBLE
         emptyForecastBinding.tvErrorMessage.text =
-            resources.formatEmptyMessage(uiModel.reasonResourceId)
+            requireContext().formatEmptyMessage(uiModel.reasonResourceId)
     }
 
     private fun showCachedResultsMessage(reason: Int?) {
