@@ -82,15 +82,15 @@ val prognozaAppModule = module {
         )
     }
 
-    factory<MetaRepository> {
+    single<MetaRepository> {
         DefaultMetaRepository(get<AppDatabase>().metaDao())
     }
 
-    factory<PlaceRepository> {
+    single<PlaceRepository> {
         DefaultPlaceRepository(get<AppDatabase>().placeDao(), get(), get())
     }
 
-    factory<ForecastRepository> {
+    single<ForecastRepository> {
         DefaultForecastRepository(
             dispatcherProvider = get(),
             forecastService = get(),
