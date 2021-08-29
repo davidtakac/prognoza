@@ -9,6 +9,8 @@ import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
 open class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetProvider() {
     override val widgetLayoutId: Int
         get() = R.layout.app_widget_current_conditions_tiny
+    override val widgetErrorLayoutId: Int
+        get() = R.layout.app_widget_current_conditions_tiny_empty
 
     override fun onSuccess(
         views: RemoteViews,
@@ -26,9 +28,5 @@ open class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetPr
             R.id.iv_weather_icon,
             uiModel.iconResourceId ?: R.drawable.ic_cloud
         )
-    }
-
-    override fun onError(views: RemoteViews, context: Context?) {
-        TODO("Not yet implemented")
     }
 }

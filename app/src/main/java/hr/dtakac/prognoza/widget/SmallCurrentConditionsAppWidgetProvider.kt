@@ -9,6 +9,8 @@ import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
 open class SmallCurrentConditionsAppWidgetProvider : TinyCurrentConditionsAppWidgetProvider() {
     override val widgetLayoutId: Int
         get() = R.layout.app_widget_current_conditions_small
+    override val widgetErrorLayoutId: Int
+        get() = R.layout.app_widget_current_conditions_small_empty
 
     override fun onSuccess(
         views: RemoteViews,

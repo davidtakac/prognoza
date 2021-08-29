@@ -35,6 +35,7 @@ import kotlin.random.Random
 
 abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
     abstract val widgetLayoutId: Int
+    abstract val widgetErrorLayoutId: Int
 
     private val forecastRepository by inject<ForecastRepository>()
     private val preferencesRepository by inject<PreferencesRepository>()
@@ -46,10 +47,11 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         uiModel: CurrentConditionsWidgetUiModel
     )
 
-    abstract fun onError(
+    protected open fun onError(
         views: RemoteViews,
         context: Context?
-    )
+    ) {
+    }
 
     override fun onEnabled(context: Context?) {
         super.onEnabled(context)
@@ -79,13 +81,18 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         setOnUpdateAlarm(context)
         val uiModel = runBlocking { getCurrentConditionsWidgetUiModel() }
         appWidgetIds?.forEach { appWidgetId ->
-            val remoteViews = RemoteViews(
-                context?.packageName,
-                widgetLayoutId
-            )
+            val remoteViews: RemoteViews?
             if (uiModel != null) {
+                remoteViews = RemoteViews(
+                    context?.packageName,
+                    widgetLayoutId
+                )
                 onSuccess(remoteViews, context, uiModel)
             } else {
+                remoteViews = RemoteViews(
+                    context?.packageName,
+                    widgetErrorLayoutId
+                )
                 onError(remoteViews, context)
             }
             setOnClickOpenApplication(remoteViews, context)
