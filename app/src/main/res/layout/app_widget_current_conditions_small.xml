@@ -21,7 +21,7 @@
             android:id="@+id/iv_weather_icon"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            tools:src="@drawable/clearsky_day" />
+            tools:src="@drawable/rain" />
 
         <TextView
             android:id="@+id/tv_temperature"
@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="12sp"
+        android:layout_marginTop="4dp"
         tools:text="Osijek"
         android:maxLines="1"
         android:ellipsize="end"/>

@@ -20,7 +20,7 @@
             android:id="@+id/iv_weather_icon"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            tools:src="@drawable/clearsky_day" />
+            tools:src="@drawable/rainshowers_day" />
 
         <TextView
             android:id="@+id/tv_temperature"

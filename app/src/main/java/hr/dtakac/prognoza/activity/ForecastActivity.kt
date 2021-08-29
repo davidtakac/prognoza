@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.activity
 
+import android.app.PendingIntent
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
@@ -9,10 +11,12 @@ import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.fragment.PlaceSearchDialogFragment
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.viewmodel.ForecastActivityViewModel
+import hr.dtakac.prognoza.widget.MediumCurrentConditionsAppWidgetProvider
+import hr.dtakac.prognoza.widget.SmallCurrentConditionsAppWidgetProvider
+import hr.dtakac.prognoza.widget.TinyCurrentConditionsAppWidgetProvider
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 private const val SEARCH_FRAGMENT_TAG = "search"
-
 class ForecastActivity :
     ViewBindingActivity<ActivityForecastBinding>(ActivityForecastBinding::inflate) {
     private val viewModel by viewModel<ForecastActivityViewModel>()
@@ -37,8 +41,9 @@ class ForecastActivity :
         }
         viewModel.selectedUnits.observe(this) {
             if (!it.isConsumed) {
-                notifyFragmentsUnitsHaveChanged()
+                notifyFragmentsOfChangedUnits()
                 updateChangeUnitsMenuItem(it.getValue())
+                updateWidgets()
             }
         }
     }
@@ -73,6 +78,7 @@ class ForecastActivity :
                     viewModel.getPlaceName()
                     notifyFragmentsOfNewPlace()
                     closeSearch()
+                    updateWidgets()
                 }
             }
         )
@@ -95,7 +101,7 @@ class ForecastActivity :
         }
     }
 
-    private fun notifyFragmentsUnitsHaveChanged() {
+    private fun notifyFragmentsOfChangedUnits() {
         val result = Bundle().apply { putBoolean(BUNDLE_KEY_UNITS_CHANGED, true) }
         supportFragmentManager.apply {
             setFragmentResult(TODAY_REQUEST_KEY, result)
@@ -111,5 +117,23 @@ class ForecastActivity :
                 MeasurementUnit.IMPERIAL -> R.string.change_to_metric
             }
         )
+    }
+
+    private fun updateWidgets() {
+        val widgetProviders = listOf(
+            TinyCurrentConditionsAppWidgetProvider::class.java,
+            SmallCurrentConditionsAppWidgetProvider::class.java,
+            MediumCurrentConditionsAppWidgetProvider::class.java
+        )
+        widgetProviders.forEach {
+            val intent = Intent(this, it)
+            intent.action = ACTION_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
+            PendingIntent.getBroadcast(
+                this,
+                REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+            ).send()
+        }
     }
 }
