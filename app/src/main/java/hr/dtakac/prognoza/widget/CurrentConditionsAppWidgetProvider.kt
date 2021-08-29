@@ -99,10 +99,10 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     private fun List<ForecastHour>.toCurrentConditionsWidgetUiModel(
         selectedUnit: MeasurementUnit,
         selectedPlace: Place
-    ): CurrentConditionsWidgetUiModel = runBlocking {
+    ): CurrentConditionsWidgetUiModel {
         val precipitationTwoHours = subList(0, 2).totalPrecipitationAmount()
         val currentHour = get(0)
-        CurrentConditionsWidgetUiModel(
+        return CurrentConditionsWidgetUiModel(
             temperature = currentHour.temperature,
             feelsLike = if (currentHour.temperature == null) {
                 null
