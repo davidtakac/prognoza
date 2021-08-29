@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--TODO: proper widget image-->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/app_widget_current_conditions_tiny"
     android:minWidth="110dp"
     android:minHeight="40dp"
     android:minResizeWidth="110dp"
     android:minResizeHeight="40dp"
-    android:previewImage="@drawable/clearsky_day"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen"
