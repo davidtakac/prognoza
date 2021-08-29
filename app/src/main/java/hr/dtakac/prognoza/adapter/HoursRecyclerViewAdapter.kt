@@ -39,47 +39,47 @@ class HourViewHolder(
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
-    fun bind(cellModel: HourUiModel) {
+    fun bind(uiModel: HourUiModel) {
         binding.apply {
             val resources = root.context.resources
             // predefined formatting
             tvTemperature.text =
-                resources.formatTemperatureValue(cellModel.temperature, cellModel.displayDataInUnit)
+                resources.formatTemperatureValue(uiModel.temperature, uiModel.displayDataInUnit)
             tvFeelsLike.text =
-                resources.formatTemperatureValue(cellModel.feelsLike, cellModel.displayDataInUnit)
+                resources.formatTemperatureValue(uiModel.feelsLike, uiModel.displayDataInUnit)
             tvPrecipitationAmount.text =
                 root.context.formatPrecipitationValue(
-                    cellModel.precipitation,
-                    cellModel.displayDataInUnit
+                    uiModel.precipitation,
+                    uiModel.displayDataInUnit
                 )
             tvWind.text =
                 resources.formatWindWithDirection(
-                    cellModel.windSpeed,
-                    cellModel.windFromCompassDirection,
-                    cellModel.displayDataInUnit
+                    uiModel.windSpeed,
+                    uiModel.windFromCompassDirection,
+                    uiModel.displayDataInUnit
                 )
-            tvHumidity.text = resources.formatHumidityValue(cellModel.relativeHumidity)
+            tvHumidity.text = resources.formatHumidityValue(uiModel.relativeHumidity)
             tvPressure.text =
-                resources.formatPressureValue(cellModel.pressure, cellModel.displayDataInUnit)
+                resources.formatPressureValue(uiModel.pressure, uiModel.displayDataInUnit)
             tvDescription.text =
-                resources.formatWeatherIconDescription(cellModel.weatherDescription?.descriptionResourceId)
+                resources.formatWeatherIconDescription(uiModel.weatherDescription?.descriptionResourceId)
             // other, view-specific operations
             tvPrecipitationAmount.visibility =
-                if (cellModel.precipitation != null && cellModel.precipitation > 0f) {
+                if (uiModel.precipitation != null && uiModel.precipitation > 0f) {
                     View.VISIBLE
                 } else {
                     View.GONE
                 }
             ivWeatherIcon.setImageResource(
-                cellModel.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
+                uiModel.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
             )
             val time = DateUtils.formatDateTime(
                 binding.root.context,
-                cellModel.time.toInstant().toEpochMilli(),
+                uiModel.time.toInstant().toEpochMilli(),
                 DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
             )
             tvTime.text = time
-            clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
+            clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE
         }
     }
 }

@@ -26,17 +26,20 @@ class PlacesRecyclerViewAdapter(
 class PlaceViewHolder(
     private val binding: CellPlaceBinding
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(cellModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
-        binding.ivSaved.setImageResource(R.drawable.ic_history)
-        binding.ivSaved.visibility = if (cellModel.isSaved) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-        binding.tvName.text = cellModel.name
-        binding.tvFullName.text = cellModel.fullName
-        binding.root.setOnClickListener {
-            placeClickListener.invoke(cellModel.id)
+
+    fun bind(uiModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
+        binding.apply {
+            ivSaved.setImageResource(R.drawable.ic_history)
+            ivSaved.visibility = if (uiModel.isSaved) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+            tvName.text = uiModel.name
+            tvFullName.text = uiModel.fullName
+            root.setOnClickListener {
+                placeClickListener.invoke(uiModel.id)
+            }
         }
     }
 }

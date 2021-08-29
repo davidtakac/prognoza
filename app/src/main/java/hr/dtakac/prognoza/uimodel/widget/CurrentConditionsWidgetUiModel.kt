@@ -8,5 +8,5 @@ data class CurrentConditionsWidgetUiModel(
     val placeName: String?,
     val iconResourceId: Int?,
     val precipitationTwoHours: Float?,
-    val displayDataInUnit: MeasurementUnit
+    val displayDataInUnit: MeasurementUnit,
 )

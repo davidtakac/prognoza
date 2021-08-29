@@ -26,7 +26,6 @@
         android:textColor="?attr/widgetTextPrimaryColor"
         android:textSize="18sp"
         android:maxLines="1"
-        android:layout_marginStart="4dp"
         android:gravity="center_vertical|start"
         tools:text="180°" />
 

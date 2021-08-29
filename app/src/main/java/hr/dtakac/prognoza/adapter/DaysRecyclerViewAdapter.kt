@@ -39,48 +39,48 @@ class DayViewHolder(
         binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
-    fun bind(cellModel: DayUiModel) {
+    fun bind(uiModel: DayUiModel) {
         binding.apply {
             val resources = root.context.resources
-            tvDateTime.text = if (DateUtils.isToday(cellModel.time.toInstant().toEpochMilli())) {
+            tvDateTime.text = if (DateUtils.isToday(uiModel.time.toInstant().toEpochMilli())) {
                 resources.getString(R.string.today)
             } else {
                 DateUtils.formatDateTime(
                     root.context,
-                    cellModel.time.toInstant().toEpochMilli(),
+                    uiModel.time.toInstant().toEpochMilli(),
                     DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
                 )
             }
             tvTemperatureHigh.text =
                 resources.formatTemperatureValue(
-                    cellModel.highTemperature,
-                    cellModel.displayDataInUnit
+                    uiModel.highTemperature,
+                    uiModel.displayDataInUnit
                 )
             tvTemperatureLow.text =
                 resources.formatTemperatureValue(
-                    cellModel.lowTemperature,
-                    cellModel.displayDataInUnit
+                    uiModel.lowTemperature,
+                    uiModel.displayDataInUnit
                 )
             tvDescription.text =
-                resources.formatRepresentativeWeatherIconDescription(cellModel.representativeWeatherDescription)
+                resources.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherDescription)
             ivWeatherIcon.setImageResource(
-                cellModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
+                uiModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
                     ?: R.drawable.ic_cloud
             )
             tvPrecipitation.text =
                 root.context.formatTotalPrecipitation(
-                    cellModel.totalPrecipitationAmount,
-                    cellModel.displayDataInUnit
+                    uiModel.totalPrecipitationAmount,
+                    uiModel.displayDataInUnit
                 )
             tvWind.text = resources.formatWindWithDirection(
-                cellModel.maxWindSpeed,
-                cellModel.windFromCompassDirection,
-                cellModel.displayDataInUnit
+                uiModel.maxWindSpeed,
+                uiModel.windFromCompassDirection,
+                uiModel.displayDataInUnit
             )
-            tvHumidity.text = resources.formatHumidityValue(cellModel.maxHumidity)
+            tvHumidity.text = resources.formatHumidityValue(uiModel.maxHumidity)
             tvPressure.text =
-                resources.formatPressureValue(cellModel.maxPressure, cellModel.displayDataInUnit)
-            clDetails.visibility = if (cellModel.isExpanded) View.VISIBLE else View.GONE
+                resources.formatPressureValue(uiModel.maxPressure, uiModel.displayDataInUnit)
+            clDetails.visibility = if (uiModel.isExpanded) View.VISIBLE else View.GONE
         }
     }
 }

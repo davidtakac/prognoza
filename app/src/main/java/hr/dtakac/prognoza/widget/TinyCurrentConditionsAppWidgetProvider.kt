@@ -6,7 +6,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
 import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
 
-class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetProvider() {
+open class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetProvider() {
     override val widgetLayoutId: Int
         get() = R.layout.app_widget_current_conditions_tiny
 
