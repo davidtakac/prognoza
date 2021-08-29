@@ -14,7 +14,8 @@
         android:theme="@style/Theme.Prognoza">
         <activity
             android:name=".activity.ForecastActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
