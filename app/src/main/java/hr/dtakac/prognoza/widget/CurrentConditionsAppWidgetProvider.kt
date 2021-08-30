@@ -53,11 +53,6 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     ) {
     }
 
-    override fun onEnabled(context: Context?) {
-        super.onEnabled(context)
-        setOnUpdateAlarm(context)
-    }
-
     override fun onDisabled(context: Context?) {
         super.onDisabled(context)
         cancelOnUpdateAlarm(context)
@@ -78,7 +73,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         appWidgetManager: AppWidgetManager?,
         appWidgetIds: IntArray?
     ) {
-        setOnUpdateAlarm(context)
+        setNextUpdateAlarm(context)
         val uiModel = runBlocking { getCurrentConditionsWidgetUiModel() }
         appWidgetIds?.forEach { appWidgetId ->
             val remoteViews: RemoteViews?
@@ -160,15 +155,14 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         )
     }
 
-    private fun setOnUpdateAlarm(context: Context?) {
+    private fun setNextUpdateAlarm(context: Context?) {
         val jitter = Random.nextLong(
             0L, 1000L * 60L * 5
         )
         val interval = AlarmManager.INTERVAL_HOUR + AlarmManager.INTERVAL_HALF_HOUR + jitter
-        (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.setInexactRepeating(
+        (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.set(
             AlarmManager.ELAPSED_REALTIME,
             SystemClock.elapsedRealtime() + interval,
-            interval,
             getAlarmPendingIntent(context)
         )
     }
