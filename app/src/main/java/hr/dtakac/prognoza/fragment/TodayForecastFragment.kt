@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
+import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
@@ -32,19 +33,22 @@ class TodayForecastFragment :
             currentHour.time.toInstant().toEpochMilli(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
         )
-        binding.tvDateTime.text = time
-        binding.tvTemperature.text =
-            requireContext().formatTemperatureValue(currentHour.temperature, currentHour.displayDataInUnit)
-        binding.ivWeatherIcon.setImageResource(
-            currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
-        )
-        binding.tvPrecipitationForecast.text =
-            binding.root.context.formatPrecipitationTwoHours(
-                currentConditions.precipitationForecast,
-                currentConditions.displayDataInUnit
-            )
-        binding.tvFeelsLike.text =
-            requireContext().formatFeelsLike(currentHour.feelsLike, currentHour.displayDataInUnit)
+        with(binding) {
+            tvDateTime.text = time
+            tvTemperature.text =
+                requireContext().formatTemperatureValue(currentHour.temperature, currentHour.displayDataInUnit)
+            Glide.with(this@TodayForecastFragment)
+                .load(currentHour.weatherDescription?.iconResourceId)
+                .fallback(R.drawable.ic_cloud_off)
+                .into(ivWeatherIcon)
+            tvPrecipitationForecast.text =
+                binding.root.context.formatPrecipitationTwoHours(
+                    currentConditions.precipitationForecast,
+                    currentConditions.displayDataInUnit
+                )
+            tvFeelsLike.text =
+                requireContext().formatFeelsLike(currentHour.feelsLike, currentHour.displayDataInUnit)
+        }
         adapter.submitList(uiModel.otherHours)
     }
 

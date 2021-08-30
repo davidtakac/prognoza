@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
 import hr.dtakac.prognoza.extensions.*
@@ -40,7 +41,7 @@ class HourViewHolder(
     }
 
     fun bind(uiModel: HourUiModel) {
-        binding.apply {
+        with(binding) {
             val context = root.context
             // predefined formatting
             tvTemperature.text =
@@ -70,9 +71,10 @@ class HourViewHolder(
                 } else {
                     View.GONE
                 }
-            ivWeatherIcon.setImageResource(
-                uiModel.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud
-            )
+            Glide.with(binding.root)
+                .load(uiModel.weatherDescription?.iconResourceId)
+                .fallback(R.drawable.ic_cloud_off)
+                .into(ivWeatherIcon)
             val time = DateUtils.formatDateTime(
                 binding.root.context,
                 uiModel.time.toInstant().toEpochMilli(),

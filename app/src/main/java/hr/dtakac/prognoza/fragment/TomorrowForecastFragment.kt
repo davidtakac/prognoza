@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
+import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TOMORROW_REQUEST_KEY
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
@@ -30,29 +31,30 @@ class TomorrowForecastFragment :
     }
 
     override fun showForecast(uiModel: TomorrowForecastUiModel) {
-        val resources = binding.root.context.resources
         val summary = uiModel.summary
         val time = DateUtils.formatDateTime(
             requireContext(),
             summary.time.toInstant().toEpochMilli(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
         )
-        binding.tvDateTime.text = time
-        binding.tvTemperatureHigh.text =
-            requireContext().formatTemperatureValue(summary.highTemperature, summary.displayDataInUnit)
-        binding.tvTemperatureLow.text =
-            requireContext().formatTemperatureValue(summary.lowTemperature, summary.displayDataInUnit)
-        binding.tvDescription.text =
-            requireContext().formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
-        binding.ivWeatherIcon.setImageResource(
-            summary.representativeWeatherDescription?.weatherDescription?.iconResourceId
-                ?: R.drawable.ic_cloud
-        )
-        binding.tvPrecipitation.text =
-            binding.root.context.formatTotalPrecipitation(
-                summary.totalPrecipitationAmount,
-                summary.displayDataInUnit
-            )
+        with(binding) {
+            tvDateTime.text = time
+            tvTemperatureHigh.text =
+                requireContext().formatTemperatureValue(summary.highTemperature, summary.displayDataInUnit)
+            tvTemperatureLow.text =
+                requireContext().formatTemperatureValue(summary.lowTemperature, summary.displayDataInUnit)
+            tvDescription.text =
+                requireContext().formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
+            Glide.with(this@TomorrowForecastFragment)
+                .load(summary.representativeWeatherDescription?.weatherDescription?.iconResourceId)
+                .fallback(R.drawable.ic_cloud_off)
+                .into(ivWeatherIcon)
+            tvPrecipitation.text =
+                binding.root.context.formatTotalPrecipitation(
+                    summary.totalPrecipitationAmount,
+                    summary.displayDataInUnit
+                )
+        }
         adapter.submitList(uiModel.hours)
     }
 }

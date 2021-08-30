@@ -25,9 +25,9 @@ ext {
     versions = [
             // base
             core_ktx: '1.6.0',
-            appcompat: '1.3.0',
+            appcompat: '1.3.1',
             material: '1.5.0-alpha01',
-            constraintlayout: '2.0.4',
+            constraintlayout: '2.1.0',
             // testing
             junit: '4.13.2',
             // networking
@@ -41,6 +41,8 @@ ext {
             arch: '2.1.0',
             // coroutines
             coroutines: '1.5.0',
+            // images
+            glide: '4.12.0',
             // desugar
             desugar: '1.1.0',
             // dependency injection

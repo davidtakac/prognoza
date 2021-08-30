@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.extensions.*
@@ -40,7 +41,7 @@ class DayViewHolder(
     }
 
     fun bind(uiModel: DayUiModel) {
-        binding.apply {
+        with(binding) {
             val context = root.context
             tvDateTime.text = if (DateUtils.isToday(uiModel.time.toInstant().toEpochMilli())) {
                 context.getString(R.string.today)
@@ -63,10 +64,10 @@ class DayViewHolder(
                 )
             tvDescription.text =
                 context.formatRepresentativeWeatherIconDescription(uiModel.representativeWeatherDescription)
-            ivWeatherIcon.setImageResource(
-                uiModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
-                    ?: R.drawable.ic_cloud
-            )
+            Glide.with(binding.root)
+                .load(uiModel.representativeWeatherDescription?.weatherDescription?.iconResourceId)
+                .fallback(R.drawable.ic_cloud_off)
+                .into(ivWeatherIcon)
             tvPrecipitation.text =
                 root.context.formatTotalPrecipitation(
                     uiModel.totalPrecipitationAmount,

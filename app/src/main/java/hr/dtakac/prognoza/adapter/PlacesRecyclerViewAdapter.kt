@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
 import hr.dtakac.prognoza.uimodel.cell.PlaceUiModel
 
@@ -28,8 +27,7 @@ class PlaceViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(uiModel: PlaceUiModel, placeClickListener: (String) -> Unit) {
-        binding.apply {
-            ivSaved.setImageResource(R.drawable.ic_history)
+        with(binding) {
             ivSaved.visibility = if (uiModel.isSaved) {
                 View.VISIBLE
             } else {
