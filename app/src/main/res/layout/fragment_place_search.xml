@@ -50,6 +50,7 @@
         android:gravity="end"
         android:text="@string/osm_nominatim_credit"
         android:textSize="12sp"
+        android:textColor="?attr/textMediumEmphasisColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
