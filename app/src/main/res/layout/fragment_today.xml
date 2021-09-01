@@ -5,87 +5,95 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_current_hour"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cv_current_hour"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginTop="8dp"
+        app:cardElevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_date_time"
-            android:layout_width="0dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textHighEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="19 July, 18:32" />
+            android:layout_margin="16dp">
 
-        <TextView
-            android:id="@+id/tv_temperature"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textHighEmphasisColor"
-            android:textSize="48sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
-            tools:text="23 C" />
+            <TextView
+                android:id="@+id/tv_date_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textHighEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19 July, 18:32" />
 
-        <TextView
-            android:id="@+id/tv_feels_like"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textMediumEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_temperature"
-            tools:text="Feels like 18C" />
+            <TextView
+                android:id="@+id/tv_temperature"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textHighEmphasisColor"
+                android:textSize="48sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+                tools:text="23 C" />
 
-        <ImageView
-            android:id="@+id/iv_weather_icon"
-            android:layout_width="86dp"
-            android:layout_height="86dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/tv_feels_like"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/lightsleetandthunder" />
+            <TextView
+                android:id="@+id/tv_feels_like"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textMediumEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_temperature"
+                tools:text="Feels like 18C" />
 
-        <TextView
-            android:id="@+id/tv_precipitation_forecast"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textMediumEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_feels_like"
-            tools:text="No precipitation in the next two hours" />
+            <ImageView
+                android:id="@+id/iv_weather_icon"
+                android:layout_width="86dp"
+                android:layout_height="86dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_feels_like"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/lightsleetandthunder" />
 
-        <include layout="@layout/layout_outdated_forecast"
-            android:id="@+id/cached_data_message"
-            app:layout_constraintTop_toBottomOf="@id/tv_precipitation_forecast"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/tv_precipitation_forecast"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textMediumEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_feels_like"
+                tools:text="No precipitation in the next two hours" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <include
+                android:id="@+id/cached_data_message"
+                layout="@layout/layout_outdated_forecast"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_precipitation_forecast" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hours"
@@ -94,7 +102,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_current_hour"
+        app:layout_constraintTop_toBottomOf="@id/cv_current_hour"
         tools:listitem="@layout/cell_hour" />
 
     <com.google.android.material.progressindicator.CircularProgressIndicator
