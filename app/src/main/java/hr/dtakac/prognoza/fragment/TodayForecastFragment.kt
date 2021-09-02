@@ -1,10 +1,13 @@
 package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.extensions.formatFeelsLike
@@ -36,7 +39,10 @@ class TodayForecastFragment :
         with(binding) {
             tvDateTime.text = time
             tvTemperature.text =
-                requireContext().formatTemperatureValue(currentHour.temperature, currentHour.displayDataInUnit)
+                requireContext().formatTemperatureValue(
+                    currentHour.temperature,
+                    currentHour.displayDataInUnit
+                )
             Glide.with(this@TodayForecastFragment)
                 .load(currentHour.weatherDescription?.iconResourceId)
                 .fallback(R.drawable.ic_cloud_off)
@@ -47,7 +53,10 @@ class TodayForecastFragment :
                     currentConditions.displayDataInUnit
                 )
             tvFeelsLike.text =
-                requireContext().formatFeelsLike(currentHour.feelsLike, currentHour.displayDataInUnit)
+                requireContext().formatFeelsLike(
+                    currentHour.feelsLike,
+                    currentHour.displayDataInUnit
+                )
         }
         adapter.submitList(uiModel.otherHours)
     }
@@ -55,5 +64,12 @@ class TodayForecastFragment :
     override fun initializeRecyclerView() {
         super.initializeRecyclerView()
         recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(MarginItemDecoration())
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 }

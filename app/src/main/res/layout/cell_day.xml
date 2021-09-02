@@ -1,220 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardElevation="3dp"
+    app:rippleColor="#00000000">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_header"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_margin="16dp">
 
-        <TextView
-            android:id="@+id/tv_date_time"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textHighEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="19 July, 18:32" />
-
-        <TextView
-            android:id="@+id/tv_precipitation"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textMediumEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_date_time"
-            tools:text="Precipitation: 40 mm" />
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/textMediumEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_precipitation"
-            tools:text="Mostly light sleet showers and thunder" />
-
-        <ImageView
-            android:id="@+id/iv_weather_icon"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="1:1"
-            app:layout_constraintEnd_toStartOf="@id/barrier_temperature"
-            app:layout_constraintHorizontal_bias="1"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/lightsleetandthunder" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_temperature"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="start"
-            app:constraint_referenced_ids="tv_temperature_low,tv_temperature_high" />
-
-        <TextView
-            android:id="@+id/tv_temperature_high"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/textHighEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/tv_temperature_low"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed"
-            tools:text="32" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_temperature_low"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/tv_date_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textHighEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="19 July, 18:32" />
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textMediumEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_date_time"
+                tools:text="Mostly light sleet showers and thunder" />
+
+            <TextView
+                android:id="@+id/tv_precipitation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp"
+                android:textColor="?attr/textMediumEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_description"
+                tools:text="Precipitation: 40 mm" />
+
+            <ImageView
+                android:id="@+id/iv_weather_icon"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginEnd="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toStartOf="@id/barrier_temperature"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/lightsleetandthunder" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_temperature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="start"
+                app:constraint_referenced_ids="tv_temperature_low,tv_temperature_high" />
+
+            <TextView
+                android:id="@+id/tv_temperature_high"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textHighEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/tv_temperature_low"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="32" />
+
+            <TextView
+                android:id="@+id/tv_temperature_low"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="?attr/textMediumEmphasisColor"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
+                tools:text="23" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_details"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="?attr/textMediumEmphasisColor"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_temperature_high"
-            tools:text="23" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_details"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_header"
-        tools:visibility="visible">
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_labels"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:barrierMargin="8dp"
-            app:constraint_referenced_ids="tv_label_wind,tv_label_humidity,tv_label_pressure" />
-
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_values"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:barrierMargin="8dp"
-            app:constraint_referenced_ids="tv_wind,tv_humidity,tv_pressure" />
-
-        <ImageView
-            android:id="@+id/iv_wind"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@drawable/ic_air"
-            app:layout_constraintBottom_toBottomOf="@id/tv_label_wind"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_label_wind"
-            app:tint="?attr/textHighEmphasisColor" />
+            app:layout_constraintTop_toBottomOf="@id/cl_header"
+            tools:visibility="visible">
 
-        <TextView
-            android:id="@+id/tv_label_wind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/wind"
-            android:textColor="?attr/textMediumEmphasisColor"
-            app:layout_constraintStart_toEndOf="@id/iv_wind"
-            app:layout_constraintTop_toTopOf="parent" />
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_labels"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:barrierMargin="8dp"
+                app:constraint_referenced_ids="tv_label_wind,tv_label_humidity,tv_label_pressure" />
 
-        <TextView
-            android:id="@+id/tv_wind"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="?attr/textHighEmphasisColor"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_label_wind"
-            app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            tools:text="3 km/h, WSW" />
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/barrier_values"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:barrierMargin="8dp"
+                app:constraint_referenced_ids="tv_wind,tv_humidity,tv_pressure" />
 
-        <ImageView
-            android:id="@+id/iv_humidity"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@drawable/ic_water_drop"
-            app:layout_constraintBottom_toBottomOf="@id/tv_label_humidity"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_label_humidity"
-            app:tint="?attr/textHighEmphasisColor" />
+            <ImageView
+                android:id="@+id/iv_wind"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_air"
+                app:layout_constraintBottom_toBottomOf="@id/tv_label_wind"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_label_wind"
+                app:tint="?attr/textHighEmphasisColor" />
 
-        <TextView
-            android:id="@+id/tv_label_humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/humidity"
-            android:textColor="?attr/textMediumEmphasisColor"
-            app:layout_constraintStart_toEndOf="@id/iv_wind"
-            app:layout_constraintTop_toBottomOf="@id/tv_label_wind" />
+            <TextView
+                android:id="@+id/tv_label_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/wind"
+                android:textColor="?attr/textMediumEmphasisColor"
+                app:layout_constraintStart_toEndOf="@id/iv_wind"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_humidity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="?attr/textHighEmphasisColor"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_label_humidity"
-            app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            tools:text="40%" />
+            <TextView
+                android:id="@+id/tv_wind"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="?attr/textHighEmphasisColor"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_wind"
+                app:layout_constraintStart_toEndOf="@id/barrier_labels"
+                tools:text="3 km/h, WSW" />
 
-        <ImageView
-            android:id="@+id/iv_pressure"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:src="@drawable/ic_speed"
-            app:layout_constraintBottom_toBottomOf="@id/tv_label_pressure"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/tv_label_pressure"
-            app:tint="?attr/textHighEmphasisColor" />
+            <ImageView
+                android:id="@+id/iv_humidity"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_water_drop"
+                app:layout_constraintBottom_toBottomOf="@id/tv_label_humidity"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_label_humidity"
+                app:tint="?attr/textHighEmphasisColor" />
 
-        <TextView
-            android:id="@+id/tv_label_pressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/pressure"
-            android:textColor="?attr/textMediumEmphasisColor"
-            app:layout_constraintStart_toEndOf="@id/iv_pressure"
-            app:layout_constraintTop_toBottomOf="@id/tv_label_humidity" />
+            <TextView
+                android:id="@+id/tv_label_humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/humidity"
+                android:textColor="?attr/textMediumEmphasisColor"
+                app:layout_constraintStart_toEndOf="@id/iv_wind"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_wind" />
 
-        <TextView
-            android:id="@+id/tv_pressure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textColor="?attr/textHighEmphasisColor"
-            app:layout_constraintBaseline_toBaselineOf="@id/tv_label_pressure"
-            app:layout_constraintStart_toEndOf="@id/barrier_labels"
-            tools:text="1023 hPa" />
+            <TextView
+                android:id="@+id/tv_humidity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="?attr/textHighEmphasisColor"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_humidity"
+                app:layout_constraintStart_toEndOf="@id/barrier_labels"
+                tools:text="40%" />
+
+            <ImageView
+                android:id="@+id/iv_pressure"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_speed"
+                app:layout_constraintBottom_toBottomOf="@id/tv_label_pressure"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/tv_label_pressure"
+                app:tint="?attr/textHighEmphasisColor" />
+
+            <TextView
+                android:id="@+id/tv_label_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/pressure"
+                android:textColor="?attr/textMediumEmphasisColor"
+                app:layout_constraintStart_toEndOf="@id/iv_pressure"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_humidity" />
+
+            <TextView
+                android:id="@+id/tv_pressure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="?attr/textHighEmphasisColor"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_label_pressure"
+                app:layout_constraintStart_toEndOf="@id/barrier_labels"
+                tools:text="1023 hPa" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

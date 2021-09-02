@@ -37,7 +37,7 @@ class DayViewHolder(
     onItemClickCallback: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
     init {
-        binding.clHeader.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
+        binding.root.setOnClickListener { onItemClickCallback.invoke(adapterPosition) }
     }
 
     fun bind(uiModel: DayUiModel) {

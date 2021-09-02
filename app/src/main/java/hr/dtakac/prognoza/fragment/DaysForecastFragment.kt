@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.fragment
 
 import hr.dtakac.prognoza.DAYS_REQUEST_KEY
 import hr.dtakac.prognoza.adapter.DaysRecyclerViewAdapter
+import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
@@ -22,6 +23,7 @@ class DaysForecastFragment :
     override fun initializeRecyclerView() {
         super.initializeRecyclerView()
         recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(MarginItemDecoration())
     }
 
     override fun showForecast(uiModel: DaysForecastUiModel) {

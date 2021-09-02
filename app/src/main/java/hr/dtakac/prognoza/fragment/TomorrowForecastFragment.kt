@@ -1,10 +1,13 @@
 package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TOMORROW_REQUEST_KEY
 import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
+import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.extensions.formatRepresentativeWeatherIconDescription
@@ -28,6 +31,13 @@ class TomorrowForecastFragment :
     override fun initializeRecyclerView() {
         super.initializeRecyclerView()
         recyclerView.adapter = adapter
+        recyclerView.addItemDecoration(MarginItemDecoration())
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                requireContext(),
+                LinearLayoutManager.VERTICAL
+            )
+        )
     }
 
     override fun showForecast(uiModel: TomorrowForecastUiModel) {
@@ -40,9 +50,15 @@ class TomorrowForecastFragment :
         with(binding) {
             tvDateTime.text = time
             tvTemperatureHigh.text =
-                requireContext().formatTemperatureValue(summary.highTemperature, summary.displayDataInUnit)
+                requireContext().formatTemperatureValue(
+                    summary.highTemperature,
+                    summary.displayDataInUnit
+                )
             tvTemperatureLow.text =
-                requireContext().formatTemperatureValue(summary.lowTemperature, summary.displayDataInUnit)
+                requireContext().formatTemperatureValue(
+                    summary.lowTemperature,
+                    summary.displayDataInUnit
+                )
             tvDescription.text =
                 requireContext().formatRepresentativeWeatherIconDescription(summary.representativeWeatherDescription)
             Glide.with(this@TomorrowForecastFragment)

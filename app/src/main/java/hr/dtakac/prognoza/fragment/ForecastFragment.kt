@@ -80,13 +80,6 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
             LinearLayoutManager.VERTICAL,
             false
         )
-        recyclerView.addItemDecoration(MarginItemDecoration())
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            )
-        )
     }
 
     private fun initializeTryAgain() {
