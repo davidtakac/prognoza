@@ -12,6 +12,7 @@
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="8dp"
         app:cardElevation="3dp"
+        app:cardCornerRadius="8dp"
         android:visibility="invisible"
         tools:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +29,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:textColor="?attr/textHighEmphasisColor"
+                android:textColor="?attr/colorHighEmphasis"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,7 +41,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:textColor="?attr/textHighEmphasisColor"
+                android:textColor="?attr/colorHighEmphasis"
                 android:textSize="42sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_date_time"
@@ -51,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:textColor="?attr/textMediumEmphasisColor"
+                android:textColor="?attr/colorMediumEmphasis"
                 android:textSize="42sp"
                 app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
                 app:layout_constraintBaseline_toBaselineOf="@id/tv_temperature_high"
@@ -65,7 +66,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="?attr/textMediumEmphasisColor"
+                android:textColor="?attr/colorMediumEmphasis"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
-                android:textColor="?attr/textMediumEmphasisColor"
+                android:textColor="?attr/colorMediumEmphasis"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
                 app:layout_constraintStart_toStartOf="parent"
@@ -98,7 +99,7 @@
 
             <include
                 android:id="@+id/cached_data_message"
-                layout="@layout/layout_outdated_forecast"
+                layout="@layout/layout_forecast_outdated"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
@@ -135,7 +136,7 @@
 
     <include
         android:id="@+id/empty_screen"
-        layout="@layout/layout_empty_forecast"
+        layout="@layout/layout_forecast_empty"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

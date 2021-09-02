@@ -7,8 +7,7 @@
     <attr name="widgetTextSecondaryColor" format="color"/>
 
     <!-- Text -->
-    <attr name="textHighEmphasisColor" format="color"/>
-    <attr name="textMediumEmphasisColor" format="color"/>
-    <attr name="significantPrecipitationColor" format="color"/>
-    <attr name="errorColor" format="color"/>
+    <attr name="colorHighEmphasis" format="color"/>
+    <attr name="colorMediumEmphasis" format="color"/>
+    <attr name="colorSignificantPrecipitation" format="color"/>
 </resources>

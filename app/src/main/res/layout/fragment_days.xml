@@ -25,7 +25,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:showAnimationBehavior="outward" />
 
-    <include layout="@layout/layout_outdated_forecast"
+    <include layout="@layout/layout_forecast_outdated"
         android:id="@+id/cached_data_message"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +38,7 @@
 
     <include
         android:id="@+id/empty_screen"
-        layout="@layout/layout_empty_forecast"
+        layout="@layout/layout_forecast_empty"
         android:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

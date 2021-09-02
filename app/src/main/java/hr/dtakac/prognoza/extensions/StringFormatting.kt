@@ -74,7 +74,7 @@ fun Context.formatPrecipitationValue(
                 builder.color(
                     MaterialColors.getColor(
                         this,
-                        R.attr.significantPrecipitationColor,
+                        R.attr.colorSignificantPrecipitation,
                         getColor(R.color.blue_700)
                     )
                 ) {
@@ -100,7 +100,7 @@ fun Context.formatPrecipitationValue(
                 builder.color(
                     MaterialColors.getColor(
                         this,
-                        R.attr.significantPrecipitationColor,
+                        R.attr.colorSignificantPrecipitation,
                         getColor(R.color.blue_700)
                     )
                 ) {

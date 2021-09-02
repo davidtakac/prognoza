@@ -10,8 +10,8 @@ import com.google.android.material.progressindicator.BaseProgressIndicator
 import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.BUNDLE_KEY_UNITS_CHANGED
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.databinding.LayoutEmptyForecastBinding
-import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
+import hr.dtakac.prognoza.databinding.LayoutForecastEmptyBinding
+import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
 import hr.dtakac.prognoza.extensions.formatEmptyMessage
 import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
@@ -22,9 +22,9 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
 ) : ViewBindingFragment<VB>(bindingInflater) {
     abstract val viewModel: ForecastFragmentViewModel<UI_MODEL>
     abstract val requestKey: String
-    abstract val emptyForecastBinding: LayoutEmptyForecastBinding
+    abstract val emptyForecastBinding: LayoutForecastEmptyBinding
     abstract val progressBar: BaseProgressIndicator<*>
-    abstract val outdatedForecastBinding: LayoutOutdatedForecastBinding?
+    abstract val outdatedForecastBinding: LayoutForecastOutdatedBinding?
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

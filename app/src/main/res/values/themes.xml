@@ -12,16 +12,15 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="textHighEmphasisColor">@color/black_87</item>
-        <item name="textMediumEmphasisColor">@color/black_60</item>
-        <item name="significantPrecipitationColor">@color/blue_700</item>
-        <item name="errorColor">@color/red_600</item>
+        <item name="colorHighEmphasis">@color/black_87</item>
+        <item name="colorMediumEmphasis">@color/black_60</item>
+        <item name="colorSignificantPrecipitation">@color/blue_700</item>
     </style>
 
     <style name="Theme.Prognoza.Widget">
         <item name="widgetBackgroundRadius">16dp</item>
         <item name="widgetBackgroundColor">?attr/colorSurface</item>
-        <item name="widgetTextPrimaryColor">?attr/textHighEmphasisColor</item>
-        <item name="widgetTextSecondaryColor">?attr/textMediumEmphasisColor</item>
+        <item name="widgetTextPrimaryColor">?attr/colorHighEmphasis</item>
+        <item name="widgetTextSecondaryColor">?attr/colorMediumEmphasis</item>
     </style>
 </resources>
