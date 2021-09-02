@@ -62,7 +62,7 @@
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
         android:maxLines="2"
-        tools:text="No precipitation in the next two hours"
+        tools:text="No precipitation next two hours"
         android:ellipsize="end"/>
 
 </LinearLayout>

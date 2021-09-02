@@ -78,28 +78,6 @@
             app:barrierMargin="8dp"
             app:constraint_referenced_ids="tv_label_feels_like,tv_label_wind,tv_label_humidity,tv_label_pressure" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/barrier_values"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierDirection="end"
-            app:barrierMargin="8dp"
-            app:constraint_referenced_ids="tv_feels_like,tv_wind,tv_humidity,tv_pressure" />
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
-            android:gravity="end"
-            android:textColor="?attr/textMediumEmphasisColor"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/barrier_values"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Light showers with thunder and sleetsssss" />
-
         <ImageView
             android:id="@+id/iv_feels_like"
             android:layout_width="18dp"
@@ -115,7 +93,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
             android:text="@string/feels_like"
             android:textColor="?attr/textMediumEmphasisColor"
             app:layout_constraintStart_toEndOf="@id/iv_feels_like"
@@ -211,7 +188,8 @@
             android:text="@string/pressure"
             android:textColor="?attr/textMediumEmphasisColor"
             app:layout_constraintStart_toEndOf="@id/iv_pressure"
-            app:layout_constraintTop_toBottomOf="@id/tv_label_humidity" />
+            app:layout_constraintTop_toBottomOf="@id/tv_label_humidity"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
         <TextView
             android:id="@+id/tv_pressure"

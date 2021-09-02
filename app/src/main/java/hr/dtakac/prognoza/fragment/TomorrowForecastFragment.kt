@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.fragment
 
+import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -23,22 +24,14 @@ class TomorrowForecastFragment :
     override val emptyForecastBinding get() = binding.emptyScreen
     override val progressBar get() = binding.progressBar
     override val outdatedForecastBinding: LayoutOutdatedForecastBinding get() = binding.cachedDataMessage
-    override val recyclerView get() = binding.rvHours
     override val requestKey get() = TOMORROW_REQUEST_KEY
     override val viewModel by viewModel<TomorrowFragmentViewModel>()
 
     private val adapter = HoursRecyclerViewAdapter()
 
-    override fun initializeRecyclerView() {
-        super.initializeRecyclerView()
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(MarginItemDecoration())
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                requireContext(),
-                LinearLayoutManager.VERTICAL
-            )
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeRecyclerView()
     }
 
     override fun showForecast(uiModel: TomorrowForecastUiModel) {
@@ -74,5 +67,23 @@ class TomorrowForecastFragment :
             cvSummary.visibility = View.VISIBLE
         }
         adapter.submitList(uiModel.hours)
+    }
+
+    private fun initializeRecyclerView() {
+        with(binding.rvHours) {
+            layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
+            )
+            adapter = this@TomorrowForecastFragment.adapter
+            addItemDecoration(MarginItemDecoration())
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+        }
     }
 }

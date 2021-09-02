@@ -5,15 +5,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.google.android.material.progressindicator.BaseProgressIndicator
 import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.BUNDLE_KEY_UNITS_CHANGED
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.LayoutEmptyForecastBinding
 import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.extensions.formatEmptyMessage
@@ -24,7 +20,6 @@ import hr.dtakac.prognoza.viewmodel.ForecastFragmentViewModel
 abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : ViewBindingFragment<VB>(bindingInflater) {
-    abstract val recyclerView: RecyclerView
     abstract val viewModel: ForecastFragmentViewModel<UI_MODEL>
     abstract val requestKey: String
     abstract val emptyForecastBinding: LayoutEmptyForecastBinding
@@ -34,7 +29,6 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-        initializeRecyclerView()
         initializeTryAgain()
         initializeFragmentResultListener()
     }
@@ -72,14 +66,6 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
                 showCachedResultsMessage(it.reason)
             }
         }
-    }
-
-    protected open fun initializeRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL,
-            false
-        )
     }
 
     private fun initializeTryAgain() {

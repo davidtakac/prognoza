@@ -109,8 +109,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_header"
-            tools:visibility="visible">
+            app:layout_constraintTop_toBottomOf="@id/cl_header">
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier_labels"

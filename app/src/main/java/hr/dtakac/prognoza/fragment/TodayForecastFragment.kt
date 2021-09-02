@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.fragment
 
+import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -12,8 +13,8 @@ import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.databinding.LayoutOutdatedForecastBinding
 import hr.dtakac.prognoza.extensions.formatFeelsLike
-import hr.dtakac.prognoza.extensions.formatPrecipitationTwoHours
 import hr.dtakac.prognoza.extensions.formatTemperatureValue
+import hr.dtakac.prognoza.extensions.formatWeatherIconDescription
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,11 +24,15 @@ class TodayForecastFragment :
     override val emptyForecastBinding get() = binding.emptyScreen
     override val progressBar get() = binding.progressBar
     override val outdatedForecastBinding: LayoutOutdatedForecastBinding get() = binding.cachedDataMessage
-    override val recyclerView get() = binding.rvHours
     override val requestKey get() = TODAY_REQUEST_KEY
     override val viewModel by viewModel<TodayFragmentViewModel>()
 
     private val adapter = HoursRecyclerViewAdapter()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initializeRecyclerView()
+    }
 
     override fun showForecast(uiModel: TodayForecastUiModel) {
         val currentConditions = uiModel.currentConditionsUiModel
@@ -48,11 +53,8 @@ class TodayForecastFragment :
                 .load(currentHour.weatherDescription?.iconResourceId)
                 .fallback(R.drawable.ic_cloud_off)
                 .into(ivWeatherIcon)
-            tvPrecipitationForecast.text =
-                binding.root.context.formatPrecipitationTwoHours(
-                    currentConditions.precipitationForecast,
-                    currentConditions.displayDataInUnit
-                )
+            tvDescription.text =
+                requireContext().formatWeatherIconDescription(currentHour.weatherDescription?.descriptionResourceId)
             tvFeelsLike.text =
                 requireContext().formatFeelsLike(
                     currentHour.feelsLike,
@@ -63,15 +65,21 @@ class TodayForecastFragment :
         adapter.submitList(uiModel.otherHours)
     }
 
-    override fun initializeRecyclerView() {
-        super.initializeRecyclerView()
-        recyclerView.adapter = adapter
-        recyclerView.addItemDecoration(MarginItemDecoration())
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
+    private fun initializeRecyclerView() {
+        with(binding.rvHours) {
+            layoutManager = LinearLayoutManager(
                 requireContext(),
-                LinearLayoutManager.VERTICAL
+                LinearLayoutManager.VERTICAL,
+                false
             )
-        )
+            adapter = this@TodayForecastFragment.adapter
+            addItemDecoration(MarginItemDecoration())
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+        }
     }
 }
