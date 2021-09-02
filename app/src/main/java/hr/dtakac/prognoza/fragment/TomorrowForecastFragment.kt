@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
+import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -70,6 +71,7 @@ class TomorrowForecastFragment :
                     summary.totalPrecipitationAmount,
                     summary.displayDataInUnit
                 )
+            cvSummary.visibility = View.VISIBLE
         }
         adapter.submitList(uiModel.hours)
     }
