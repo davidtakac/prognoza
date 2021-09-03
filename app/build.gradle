@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdk 31
 
     defaultConfig {
         applicationId "hr.dtakac.prognoza"
-        minSdkVersion 24
-        targetSdkVersion 31
+        minSdk 24
+        targetSdk 31
         versionCode 1
         versionName "1.0"
 
@@ -25,20 +25,16 @@ android {
     }
     compileOptions {
         coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
-        viewBinding = true
+        viewBinding true
     }
 }
 
 dependencies {
     // base
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation "androidx.core:core-ktx:$versions.core_ktx"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "com.google.android.material:material:$versions.material"
