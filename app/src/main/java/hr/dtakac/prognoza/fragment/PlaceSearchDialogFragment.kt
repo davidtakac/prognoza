@@ -1,6 +1,10 @@
 package hr.dtakac.prognoza.fragment
 
+import android.content.res.ColorStateList
+import android.os.Build
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +15,12 @@ import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.snackbar.Snackbar
 import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.PLACE_SEARCH_REQUEST_KEY
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.adapter.PlacesRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentPlaceSearchBinding
@@ -35,6 +42,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
     ): View {
         _binding = FragmentPlaceSearchBinding.inflate(inflater)
         setDialogPosition()
+        setElevatedBackground()
         return binding.root
     }
 
@@ -122,5 +130,37 @@ class PlaceSearchDialogFragment : DialogFragment() {
     private fun setDialogPosition() {
         val window = dialog?.window
         window?.setGravity(Gravity.TOP or Gravity.START)
+    }
+
+    // copied from com.google.android.material.dialog.MaterialAlertDialogBuilder constructor
+    private fun setElevatedBackground() {
+        // set elevated surface color
+        val surfaceColor =
+            MaterialColors.getColor(requireContext(), R.attr.colorSurface, javaClass.canonicalName)
+        val materialShapeDrawable = MaterialShapeDrawable(
+            requireContext(),
+            null,
+            R.attr.alertDialogStyle,
+            R.style.MaterialAlertDialog_MaterialComponents
+        )
+        materialShapeDrawable.elevation = 24.toPx
+        materialShapeDrawable.initializeElevationOverlay(requireContext())
+        materialShapeDrawable.fillColor = ColorStateList.valueOf(surfaceColor)
+        // set dialog corner radius
+        if (Build.VERSION.SDK_INT >= VERSION_CODES.P) {
+            val dialogCornerRadiusValue = TypedValue()
+            requireContext().theme.resolveAttribute(
+                android.R.attr.dialogCornerRadius,
+                dialogCornerRadiusValue,
+                true
+            )
+            val dialogCornerRadius =
+                dialogCornerRadiusValue.getDimension(requireContext().resources.displayMetrics)
+            if (dialogCornerRadiusValue.type == TypedValue.TYPE_DIMENSION && dialogCornerRadius >= 0) {
+                materialShapeDrawable.setCornerSize(dialogCornerRadius)
+            }
+        }
+        // apply background
+        binding.root.background = materialShapeDrawable
     }
 }

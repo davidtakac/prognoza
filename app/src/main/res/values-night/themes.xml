@@ -13,7 +13,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
 
         <!-- Customize your theme here. -->
-        <item name="colorSurface">@color/purple_500_on_top_of_almost_black</item>
+        <item name="colorSurface">@color/purple_500_surface</item>
         <item name="colorHighEmphasis">@color/white_87</item>
         <item name="colorMediumEmphasis">@color/white_60</item>
         <item name="colorSignificantPrecipitation">@color/blue_300</item>
