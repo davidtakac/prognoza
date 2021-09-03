@@ -1,11 +1,11 @@
 package hr.dtakac.prognoza.fragment
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.progressindicator.BaseProgressIndicator
 import hr.dtakac.prognoza.BUNDLE_KEY_PLACE_PICKED
 import hr.dtakac.prognoza.BUNDLE_KEY_UNITS_CHANGED
@@ -107,7 +107,7 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     }
 
     private fun showOutdatedForecastDialog(messageId: Int) {
-        AlertDialog.Builder(requireActivity())
+        MaterialAlertDialogBuilder(requireActivity())
             .setTitle(R.string.title_outdated_forecast)
             .setMessage(getString(R.string.template_content_outdated_forecast, getString(messageId)))
             .setPositiveButton(R.string.action_ok, null)
