@@ -23,7 +23,7 @@ class TomorrowFragmentViewModel(
 
     override suspend fun getNewForecast(): ForecastResult {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-        return forecastRepository.getTomorrowForecastHours(selectedPlaceId)
+        return forecastRepository.getTomorrowForecastTimeSpans(selectedPlaceId)
     }
 
     override suspend fun mapToForecastUiModel(
@@ -31,10 +31,10 @@ class TomorrowFragmentViewModel(
         unit: MeasurementUnit
     ): TomorrowForecastUiModel {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours.toDayUiModel(this, unit)
+            success.timeSpans.toDayUiModel(this, unit)
         }
         val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours.map { it.toHourUiModel(unit) }
+            success.timeSpans.map { it.toHourUiModel(unit) }
         }
         return TomorrowForecastUiModel(
             summary = summaryAsync.await(),

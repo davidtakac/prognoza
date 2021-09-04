@@ -8,14 +8,13 @@ data class HourUiModel(
     val id: String,
     val temperature: Float?,
     val feelsLike: Float?,
-    val precipitation: Float?,
+    val precipitationAmount: Float?,
     val windSpeed: Float?,
-    val windIconRotation: Float?,
     val windFromCompassDirection: Int?,
     val weatherDescription: WeatherDescription?,
     val time: ZonedDateTime,
     val relativeHumidity: Float?,
-    val pressure: Float?,
+    val airPressureAtSeaLevel: Float?,
     val displayDataInUnit: MeasurementUnit,
     var isExpanded: Boolean = false
 )

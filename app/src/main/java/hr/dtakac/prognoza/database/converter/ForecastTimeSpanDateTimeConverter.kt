@@ -6,7 +6,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-object ForecastHourDateTimeConverter {
+object ForecastTimeSpanDateTimeConverter {
     private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
     private val zoneId = ZoneId.of("Etc/GMT")
 

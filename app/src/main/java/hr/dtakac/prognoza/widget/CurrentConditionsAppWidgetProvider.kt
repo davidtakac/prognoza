@@ -15,7 +15,7 @@ import hr.dtakac.prognoza.BuildConfig
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.activity.ForecastActivity
-import hr.dtakac.prognoza.dbmodel.ForecastHour
+import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.dbmodel.Place
 import hr.dtakac.prognoza.extensions.calculateFeelsLikeTemperature
 import hr.dtakac.prognoza.extensions.shortenedName
@@ -98,15 +98,15 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     private suspend fun getCurrentConditionsWidgetUiModel(): CurrentConditionsWidgetUiModel? {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
         val selectedUnit = preferencesRepository.getSelectedUnit()
-        val result = forecastRepository.getTodayForecastHours(selectedPlaceId)
+        val result = forecastRepository.getTodayForecastTimeSpans(selectedPlaceId)
         val selectedPlace = placeRepository.get(selectedPlaceId)
         return if (selectedPlace != null) {
             val hours = when (result) {
                 is Success -> {
-                    result.hours
+                    result.timeSpans
                 }
                 is CachedSuccess -> {
-                    result.success.hours
+                    result.success.timeSpans
                 }
                 else -> {
                     null
@@ -131,21 +131,21 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         }
     }
 
-    private fun List<ForecastHour>.toCurrentConditionsWidgetUiModel(
+    private fun List<ForecastTimeSpan>.toCurrentConditionsWidgetUiModel(
         selectedUnit: MeasurementUnit,
         selectedPlace: Place
     ): CurrentConditionsWidgetUiModel {
         val precipitationTwoHours = subList(0, 2).totalPrecipitationAmount()
         val currentHour = get(0)
         return CurrentConditionsWidgetUiModel(
-            temperature = currentHour.temperature,
-            feelsLike = if (currentHour.temperature == null) {
+            temperature = currentHour.instantTemperature,
+            feelsLike = if (currentHour.instantTemperature == null) {
                 null
             } else {
                 calculateFeelsLikeTemperature(
-                    currentHour.temperature,
-                    currentHour.windSpeed,
-                    currentHour.relativeHumidity
+                    currentHour.instantTemperature,
+                    currentHour.instantWindSpeed,
+                    currentHour.instantRelativeHumidity
                 )
             },
             placeName = selectedPlace.shortenedName,

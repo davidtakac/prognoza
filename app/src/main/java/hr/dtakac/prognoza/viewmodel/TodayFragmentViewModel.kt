@@ -3,13 +3,11 @@ package hr.dtakac.prognoza.viewmodel
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.extensions.toHourUiModel
-import hr.dtakac.prognoza.extensions.totalPrecipitationAmount
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.forecast.CurrentConditionsUiModel
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -25,7 +23,7 @@ class TodayFragmentViewModel(
 
     override suspend fun getNewForecast(): ForecastResult {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-        return forecastRepository.getTodayForecastHours(selectedPlaceId)
+        return forecastRepository.getTodayForecastTimeSpans(selectedPlaceId)
     }
 
     override suspend fun mapToForecastUiModel(
@@ -33,21 +31,13 @@ class TodayFragmentViewModel(
         unit: MeasurementUnit
     ): TodayForecastUiModel {
         val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours[0].toHourUiModel(unit).copy(time = ZonedDateTime.now())
+            success.timeSpans[0].toHourUiModel(unit).copy(time = ZonedDateTime.now())
         }
         val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.hours.map { it.toHourUiModel(unit) }
-        }
-        val precipitationForecastAsync = coroutineScope.async(dispatcherProvider.default) {
-            val total = success.hours.subList(0, 2).totalPrecipitationAmount()
-            if (total <= 0f) null else total
+            success.timeSpans.map { it.toHourUiModel(unit) }
         }
         return TodayForecastUiModel(
-            currentConditionsUiModel = CurrentConditionsUiModel(
-                currentHour = currentHourAsync.await(),
-                precipitationForecast = precipitationForecastAsync.await(),
-                displayDataInUnit = unit
-            ),
+            currentHour = currentHourAsync.await(),
             otherHours = otherHoursAsync.await(),
         )
     }

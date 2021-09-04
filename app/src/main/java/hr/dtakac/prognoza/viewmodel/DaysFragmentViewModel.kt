@@ -23,7 +23,7 @@ class DaysFragmentViewModel(
 
     override suspend fun getNewForecast(): ForecastResult {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-        return forecastRepository.getOtherDaysForecastHours(selectedPlaceId)
+        return forecastRepository.getOtherDaysForecastTimeSpans(selectedPlaceId)
     }
 
     override suspend fun mapToForecastUiModel(
@@ -31,8 +31,8 @@ class DaysFragmentViewModel(
         unit: MeasurementUnit
     ): DaysForecastUiModel {
         val daySummaries = withContext(dispatcherProvider.default) {
-            success.hours
-                .groupBy { it.time.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
+            success.timeSpans
+                .groupBy { it.startTime.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate() }
                 .map { it.value }
                 .filter { it.isNotEmpty() }
                 .map { it.toDayUiModel(this, unit) }

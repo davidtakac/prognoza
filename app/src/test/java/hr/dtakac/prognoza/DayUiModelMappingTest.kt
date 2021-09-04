@@ -3,7 +3,7 @@ package hr.dtakac.prognoza
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.extensions.toDayUiModel
-import hr.dtakac.prognoza.dbmodel.ForecastHour
+import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
@@ -28,7 +28,7 @@ class DayUiModelMappingTest {
     fun toDayUiModel_mapsNormalValues() = coroutineScope.runBlockingTest {
         // Arrange
         val start = ZonedDateTime.now()
-        val hours = getForecastHours_withNormalValues(start)
+        val hours = getForecastTimeSpans_withNormalValues(start)
         // Act
         val actual = hours.toDayUiModel(this, MeasurementUnit.METRIC)
         // Assert
@@ -40,7 +40,7 @@ class DayUiModelMappingTest {
     fun toDayUiModel_mapsNullValues() = coroutineScope.runBlockingTest {
         // Arrange
         val start = ZonedDateTime.now()
-        val nullHours = getForecastHours_withAllNullValues(start)
+        val nullHours = getForecastTimeSpans_withAllNullValues(start)
         // Act
         val actual = nullHours.toDayUiModel(this, MeasurementUnit.METRIC)
         // Assert
@@ -52,8 +52,8 @@ class DayUiModelMappingTest {
     fun toDayUiModel_isResistantToNullValues() = coroutineScope.runBlockingTest {
         // Arrange
         val start = ZonedDateTime.now()
-        val hours = getForecastHours_withNormalValues(start) +
-                getForecastHours_withAllNullValues(start)
+        val hours = getForecastTimeSpans_withNormalValues(start) +
+                getForecastTimeSpans_withAllNullValues(start)
         // Act
         val actual = hours.toDayUiModel(this, MeasurementUnit.METRIC)
         // Assert
@@ -61,57 +61,57 @@ class DayUiModelMappingTest {
         assertTrue { actual == expected }
     }
 
-    private fun getForecastHours_withNormalValues(start: ZonedDateTime) = listOf(
-        ForecastHour(
-            time = start,
+    private fun getForecastTimeSpans_withNormalValues(start: ZonedDateTime) = listOf(
+        ForecastTimeSpan(
+            startTime = start,
             placeId = TEST_PLACE_ID,
-            temperature = 18f,
+            instantTemperature = 18f,
             symbolCode = "clearsky_day",
             precipitationProbability = null,
             precipitationAmount = 0f,
-            windSpeed = 15.4f,
-            windFromDirection = 230f,
-            relativeHumidity = 90f,
-            pressure = 1020f
+            instantWindSpeed = 15.4f,
+            instantWindFromDirection = 230f,
+            instantRelativeHumidity = 90f,
+            instantAirPressureAtSeaLevel = 1020f
         ),
-        ForecastHour(
-            time = start.plusHours(1L),
+        ForecastTimeSpan(
+            startTime = start.plusHours(1L),
             placeId = TEST_PLACE_ID,
-            temperature = 23.56f,
+            instantTemperature = 23.56f,
             symbolCode = "clearsky_night",
             precipitationProbability = null,
             precipitationAmount = 7.87f,
-            windSpeed = 1.2f,
-            windFromDirection = 100f,
-            relativeHumidity = 10f,
-            pressure = 1019f
+            instantWindSpeed = 1.2f,
+            instantWindFromDirection = 100f,
+            instantRelativeHumidity = 10f,
+            instantAirPressureAtSeaLevel = 1019f
         ),
-        ForecastHour(
-            time = start.plusHours(2L),
+        ForecastTimeSpan(
+            startTime = start.plusHours(2L),
             placeId = TEST_PLACE_ID,
-            temperature = 33f,
+            instantTemperature = 33f,
             symbolCode = "clearsky_day",
             precipitationProbability = null,
             precipitationAmount = 6.3f,
-            windSpeed = 13.3f,
-            windFromDirection = 200f,
-            relativeHumidity = 50f,
-            pressure = 1000f
+            instantWindSpeed = 13.3f,
+            instantWindFromDirection = 200f,
+            instantRelativeHumidity = 50f,
+            instantAirPressureAtSeaLevel = 1000f
         ),
     )
 
-    private fun getForecastHours_withAllNullValues(time: ZonedDateTime): List<ForecastHour> {
-        val nullHour = ForecastHour(
-            time = time,
+    private fun getForecastTimeSpans_withAllNullValues(time: ZonedDateTime): List<ForecastTimeSpan> {
+        val nullHour = ForecastTimeSpan(
+            startTime = time,
             placeId = TEST_PLACE_ID,
-            temperature = null,
+            instantTemperature = null,
             symbolCode = null,
             precipitationProbability = null,
             precipitationAmount = null,
-            windSpeed = null,
-            windFromDirection = null,
-            relativeHumidity = null,
-            pressure = null
+            instantWindSpeed = null,
+            instantWindFromDirection = null,
+            instantRelativeHumidity = null,
+            instantAirPressureAtSeaLevel = null
         )
         return listOf(nullHour, nullHour, nullHour)
     }

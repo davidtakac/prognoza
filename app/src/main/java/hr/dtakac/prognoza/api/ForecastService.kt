@@ -14,4 +14,12 @@ interface ForecastService {
         @Query("lat") latitude: String,
         @Query("lon") longitude: String
     ): Response<LocationForecastResponse>
+
+    @GET("locationforecast/2.0/complete")
+    suspend fun getCompleteLocationForecast(
+        @Header("User-Agent") userAgent: String,
+        @Header("If-Modified-Since") ifModifiedSince: String?,
+        @Query("lat") latitude: String,
+        @Query("lon") longitude: String
+    ): Response<LocationForecastResponse>
 }

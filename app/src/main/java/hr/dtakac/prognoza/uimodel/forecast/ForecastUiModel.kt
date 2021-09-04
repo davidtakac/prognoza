@@ -10,7 +10,7 @@ data class DaysForecastUiModel(
 ) : ForecastUiModel
 
 data class TodayForecastUiModel(
-    val currentConditionsUiModel: CurrentConditionsUiModel,
+    val currentHour: HourUiModel,
     val otherHours: List<HourUiModel>
 ) : ForecastUiModel
 

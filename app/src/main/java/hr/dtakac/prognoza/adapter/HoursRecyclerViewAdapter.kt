@@ -50,7 +50,7 @@ class HourViewHolder(
                 context.formatTemperatureValue(uiModel.feelsLike, uiModel.displayDataInUnit)
             tvPrecipitationAmount.text =
                 root.context.formatPrecipitationValue(
-                    uiModel.precipitation,
+                    uiModel.precipitationAmount,
                     uiModel.displayDataInUnit
                 )
             tvWind.text =
@@ -61,10 +61,10 @@ class HourViewHolder(
                 )
             tvHumidity.text = context.formatHumidityValue(uiModel.relativeHumidity)
             tvPressure.text =
-                context.formatPressureValue(uiModel.pressure, uiModel.displayDataInUnit)
+                context.formatPressureValue(uiModel.airPressureAtSeaLevel, uiModel.displayDataInUnit)
             // other, view-specific operations
             tvPrecipitationAmount.visibility =
-                if (uiModel.precipitation != null && uiModel.precipitation > 0f) {
+                if (uiModel.precipitationAmount != null && uiModel.precipitationAmount > 0f) {
                     View.VISIBLE
                 } else {
                     View.GONE

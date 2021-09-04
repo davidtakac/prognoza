@@ -6,8 +6,8 @@ import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
-import hr.dtakac.prognoza.database.dao.ForecastHourDao
-import hr.dtakac.prognoza.dbmodel.ForecastHour
+import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
+import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.repository.meta.MetaRepository
@@ -21,41 +21,41 @@ import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
     private val forecastService: ForecastService,
-    private val forecastDao: ForecastHourDao,
+    private val forecastDao: ForecastTimeSpanDao,
     private val placeRepository: PlaceRepository,
     private val metaRepository: MetaRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
     private val hoursAfterMidnightToShow = 6L
 
-    override suspend fun getTodayForecastHours(placeId: String): ForecastResult {
+    override suspend fun getTodayForecastTimeSpans(placeId: String): ForecastResult {
         val anHourAgo = ZonedDateTime
             .now()
             .minusHours(1) // to get the current hour as well
         val hoursLeftInTheDay = 24 - anHourAgo.hour
         val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
-        return getForecastHours(
+        return getForecastTimeSpans(
             start = anHourAgo,
             end = anHourAgo.plusHours(hoursToShow),
             placeId
         )
     }
 
-    override suspend fun getTomorrowForecastHours(placeId: String): ForecastResult {
+    override suspend fun getTomorrowForecastTimeSpans(placeId: String): ForecastResult {
         val tomorrow = ZonedDateTime
             .now()
             .atStartOfDay()
             .plusDays(1)
-        return getForecastHours(
+        return getForecastTimeSpans(
             start = tomorrow.plusHours(hoursAfterMidnightToShow + 1L /* start where today left off */),
             end = tomorrow.plusDays(1).plusHours(hoursAfterMidnightToShow),
             placeId
         )
     }
 
-    override suspend fun getOtherDaysForecastHours(placeId: String): ForecastResult {
+    override suspend fun getOtherDaysForecastTimeSpans(placeId: String): ForecastResult {
         val now = ZonedDateTime.now().atStartOfDay()
-        return getForecastHours(
+        return getForecastTimeSpans(
             start = now,
             end = now.plusDays(7L),
             placeId
@@ -64,14 +64,14 @@ class DefaultForecastRepository(
 
     override suspend fun deleteExpiredData() {
         try {
-            forecastDao.deleteExpiredForecastHours()
+            forecastDao.deleteExpiredForecastTimeSpans()
         } catch (e: Exception) {
             // intentionally ignored
             e.printStackTrace()
         }
     }
 
-    private suspend fun getForecastHours(
+    private suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
         placeId: String
@@ -97,7 +97,7 @@ class DefaultForecastRepository(
             }
         }
         return try {
-            val hours = forecastDao.getForecastHours(start, end, placeId)
+            val hours = forecastDao.getForecastTimeSpans(start, end, placeId)
             hours.toForecastResult(meta, error)
         } catch (e: SQLiteException) {
             Empty(DatabaseError(e))
@@ -118,14 +118,14 @@ class DefaultForecastRepository(
     private suspend fun updateForecastDatabase(placeId: String, lastModified: ZonedDateTime?) {
         val forecastPlace = placeRepository.get(placeId) ?: placeRepository.getDefaultPlace()
         val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
-        val forecastResponse = forecastService.getCompactLocationForecast(
+        val forecastResponse = forecastService.getCompleteLocationForecast(
             userAgent = USER_AGENT,
             ifModifiedSince = lastModifiedTimestamp,
             latitude = format("%.2f", forecastPlace.latitude),
             longitude = format("%.2f", forecastPlace.longitude)
         )
         updateForecastMeta(forecastResponse.headers(), forecastPlace.id)
-        updateForecastHours(forecastResponse.body(), forecastPlace.id)
+        updateForecastTimeSpans(forecastResponse.body(), forecastPlace.id)
     }
 
     private suspend fun updateForecastMeta(forecastResponseHeaders: Headers, placeId: String) {
@@ -136,26 +136,21 @@ class DefaultForecastRepository(
         )
     }
 
-    private suspend fun updateForecastHours(
+    private suspend fun updateForecastTimeSpans(
         locationForecastResponse: LocationForecastResponse?,
         placeId: String
     ) {
-        val forecastHours = withContext(dispatcherProvider.default) {
-            locationForecastResponse?.forecast?.forecastTimeSteps?.map {
-                ForecastHour(
-                    time = ZonedDateTime.parse(it.time),
-                    placeId = placeId,
-                    temperature = it.data?.instant?.data?.airTemperature,
-                    symbolCode = it.data?.findSymbolCode(),
-                    precipitationProbability = it.data?.findPrecipitationProbability(),
-                    precipitationAmount = it.data?.findPrecipitationAmount(),
-                    windSpeed = it.data?.instant?.data?.windSpeed,
-                    windFromDirection = it.data?.instant?.data?.windFromDirection,
-                    relativeHumidity = it.data?.instant?.data?.relativeHumidity,
-                    pressure = it.data?.instant?.data?.airPressureAtSeaLevel
-                )
+        val forecastTimeSpans = withContext(dispatcherProvider.default) {
+            locationForecastResponse?.forecast?.forecastTimeSteps?.let {
+                val result = mutableListOf<ForecastTimeSpan>()
+                for (i in it.indices) {
+                    val current = it[i]
+                    val next = it.getOrNull(i + 1)
+                    result.add(current.toForecastTimeSpan(placeId, next))
+                }
+                result
             }
         } ?: return
-        forecastDao.insertOrUpdateAll(forecastHours)
+        forecastDao.insertOrUpdateAll(forecastTimeSpans)
     }
 }

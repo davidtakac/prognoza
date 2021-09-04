@@ -35,8 +35,7 @@ class TodayForecastFragment :
     }
 
     override fun showForecast(uiModel: TodayForecastUiModel) {
-        val currentConditions = uiModel.currentConditionsUiModel
-        val currentHour = currentConditions.currentHour
+        val currentHour = uiModel.currentHour
         val time = DateUtils.formatDateTime(
             requireContext(),
             currentHour.time.toInstant().toEpochMilli(),

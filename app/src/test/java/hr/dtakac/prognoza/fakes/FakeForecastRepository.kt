@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.extensions.atStartOfDay
-import hr.dtakac.prognoza.extensions.toForecastHour
+import hr.dtakac.prognoza.extensions.toForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult
@@ -30,48 +30,48 @@ class FakeForecastRepository : ForecastRepository {
         // do nothing
     }
 
-    override suspend fun getOtherDaysForecastHours(placeId: String): ForecastResult {
+    override suspend fun getOtherDaysForecastTimeSpans(placeId: String): ForecastResult {
         val start = now.atStartOfDay()
-        return getForecastHours(
+        return getForecastTimeSpans(
             start,
             start.plusDays(7L),
             TEST_PLACE_ID
         )
     }
 
-    override suspend fun getTodayForecastHours(placeId: String): ForecastResult {
+    override suspend fun getTodayForecastTimeSpans(placeId: String): ForecastResult {
         val anHourAgo = now
             .minusHours(1)
         val hoursLeftInTheDay = 24 - anHourAgo.hour
         val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
-        return getForecastHours(anHourAgo, anHourAgo.plusHours(hoursToShow), TEST_PLACE_ID)
+        return getForecastTimeSpans(anHourAgo, anHourAgo.plusHours(hoursToShow), TEST_PLACE_ID)
     }
 
-    override suspend fun getTomorrowForecastHours(placeId: String): ForecastResult {
+    override suspend fun getTomorrowForecastTimeSpans(placeId: String): ForecastResult {
         val tomorrow = now
             .atStartOfDay()
             .plusDays(1)
-        return getForecastHours(
+        return getForecastTimeSpans(
             tomorrow.plusHours(hoursAfterMidnightToShow + 1L),
             tomorrow.plusDays(1L).plusHours(hoursAfterMidnightToShow),
             TEST_PLACE_ID
         )
     }
 
-    private suspend fun getForecastHours(
+    private suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
         placeId: String
     ): ForecastResult {
         val response = getData()
-        // filter data according to start and end times then map to ForecastHour
+        // filter data according to start and end times then map to ForecastTimeSpan
         val hours = response.body()!!.forecast.forecastTimeSteps
             .filter {
                 val time = ZonedDateTime.parse(it.time)
                 time in start..end
             }
             .map {
-                it.toForecastHour(TEST_PLACE_ID)
+                it.toForecastTimeSpan(TEST_PLACE_ID)
             }
         val success = Success(null, hours)
         return when(typeOfResultToReturn) {

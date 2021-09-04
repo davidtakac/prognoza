@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.extensions
 
-import hr.dtakac.prognoza.dbmodel.ForecastHour
+import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
@@ -12,54 +12,53 @@ import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
-fun ForecastHour.toHourUiModel(unit: MeasurementUnit) =
+fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
     HourUiModel(
-        id = "$placeId-$time",
-        temperature = temperature,
-        feelsLike = if (temperature == null) {
+        id = "$placeId-$startTime",
+        temperature = instantTemperature,
+        feelsLike = if (instantTemperature == null) {
             null
         } else {
-            calculateFeelsLikeTemperature(temperature, windSpeed, relativeHumidity)
+            calculateFeelsLikeTemperature(instantTemperature, instantWindSpeed, instantRelativeHumidity)
         },
-        precipitation = precipitationAmount,
-        windSpeed = windSpeed,
-        windIconRotation = windFromDirection?.plus(180f),
+        precipitationAmount = precipitationAmount,
+        windSpeed = instantWindSpeed,
         weatherDescription = WEATHER_ICONS[symbolCode],
-        time = time,
-        relativeHumidity = relativeHumidity,
-        windFromCompassDirection = windFromDirection?.toCompassDirection(),
-        pressure = pressure,
+        time = startTime,
+        relativeHumidity = instantRelativeHumidity,
+        windFromCompassDirection = instantWindFromDirection?.toCompassDirection(),
+        airPressureAtSeaLevel = instantAirPressureAtSeaLevel,
         displayDataInUnit = unit
     )
 
-suspend fun List<ForecastHour>.toDayUiModel(
+suspend fun List<ForecastTimeSpan>.toDayUiModel(
     coroutineScope: CoroutineScope,
     unit: MeasurementUnit
 ): DayUiModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
-    val lowTempAsync = coroutineScope.async { minTemperature() }
-    val highTempAsync = coroutineScope.async { maxTemperature() }
+    val lowTempAsync = coroutineScope.async { lowestTemperature() }
+    val highTempAsync = coroutineScope.async { highestTemperature() }
     val precipitationAsync = coroutineScope.async { totalPrecipitationAmount() }
     val hourWithMaxWindSpeedAsync = coroutineScope.async { hourWithMaxWindSpeed() }
-    val maxHumidityAsync = coroutineScope.async { maxHumidity() }
-    val maxPressureAsync = coroutineScope.async { maxPressure() }
+    val maxHumidityAsync = coroutineScope.async { highestRelativeHumidity() }
+    val maxPressureAsync = coroutineScope.async { highestPressure() }
     val firstHour = get(0)
     return DayUiModel(
-        id = "${firstHour.placeId}-${firstHour.time}",
-        time = firstHour.time,
+        id = "${firstHour.placeId}-${firstHour.startTime}",
+        time = firstHour.startTime,
         representativeWeatherDescription = weatherIconAsync.await(),
         lowTemperature = lowTempAsync.await(),
         highTemperature = highTempAsync.await(),
         totalPrecipitationAmount = precipitationAsync.await(),
-        maxWindSpeed = hourWithMaxWindSpeedAsync.await()?.windSpeed,
-        windFromCompassDirection = hourWithMaxWindSpeedAsync.await()?.windFromDirection?.toCompassDirection(),
+        maxWindSpeed = hourWithMaxWindSpeedAsync.await()?.instantWindSpeed,
+        windFromCompassDirection = hourWithMaxWindSpeedAsync.await()?.instantWindFromDirection?.toCompassDirection(),
         maxHumidity = maxHumidityAsync.await(),
         maxPressure = maxPressureAsync.await(),
         displayDataInUnit = unit
     )
 }
 
-fun List<ForecastHour>.toForecastResult(
+fun List<ForecastTimeSpan>.toForecastResult(
     meta: ForecastMeta?,
     error: ForecastError?
 ): ForecastResult {
@@ -75,8 +74,8 @@ fun List<ForecastHour>.toForecastResult(
     }
 }
 
-fun List<ForecastHour>.maxTemperature(): Float? {
-    val max = maxOf { it.temperature ?: Float.MIN_VALUE }
+fun List<ForecastTimeSpan>.highestTemperature(): Float? {
+    val max = maxOf { it.airTemperatureMax ?: Float.MIN_VALUE }
     return if (max == Float.MIN_VALUE) {
         null
     } else {
@@ -84,8 +83,8 @@ fun List<ForecastHour>.maxTemperature(): Float? {
     }
 }
 
-fun List<ForecastHour>.minTemperature(): Float? {
-    val min = minOf { it.temperature ?: Float.MAX_VALUE }
+fun List<ForecastTimeSpan>.lowestTemperature(): Float? {
+    val min = minOf { it.airTemperatureMin ?: Float.MAX_VALUE }
     return if (min == Float.MAX_VALUE) {
         null
     } else {
@@ -93,8 +92,8 @@ fun List<ForecastHour>.minTemperature(): Float? {
     }
 }
 
-fun List<ForecastHour>.maxHumidity(): Float? {
-    val max = maxOf { it.relativeHumidity ?: Float.MIN_VALUE }
+fun List<ForecastTimeSpan>.highestRelativeHumidity(): Float? {
+    val max = maxOf { it.instantRelativeHumidity ?: Float.MIN_VALUE }
     return if (max == Float.MIN_VALUE) {
         null
     } else {
@@ -102,8 +101,8 @@ fun List<ForecastHour>.maxHumidity(): Float? {
     }
 }
 
-fun List<ForecastHour>.maxPressure(): Float? {
-    val max = maxOf { it.pressure ?: Float.MIN_VALUE }
+fun List<ForecastTimeSpan>.highestPressure(): Float? {
+    val max = maxOf { it.instantAirPressureAtSeaLevel ?: Float.MIN_VALUE }
     return if (max == Float.MIN_VALUE) {
         null
     } else {
@@ -111,9 +110,10 @@ fun List<ForecastHour>.maxPressure(): Float? {
     }
 }
 
-fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherDescription? {
+fun List<ForecastTimeSpan>.representativeWeatherIcon(): RepresentativeWeatherDescription? {
     val eligibleSymbolCodes = filter { it.symbolCode != null }
         .map { it.symbolCode!! }
+        // todo: more robust filtering based on actual sunrise and sunset times
         .filter { it !in NIGHT_SYMBOL_CODES }
     val mostCommonSymbolCode = eligibleSymbolCodes.mostCommon()
     val weatherIcon = WEATHER_ICONS[mostCommonSymbolCode]
@@ -127,12 +127,12 @@ fun List<ForecastHour>.representativeWeatherIcon(): RepresentativeWeatherDescrip
     }
 }
 
-fun List<ForecastHour>.totalPrecipitationAmount(): Float {
+fun List<ForecastTimeSpan>.totalPrecipitationAmount(): Float {
     return sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
 }
 
-fun List<ForecastHour>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
-    val difference = (o1.windSpeed ?: Float.MIN_VALUE) - (o2.windSpeed ?: Float.MIN_VALUE)
+fun List<ForecastTimeSpan>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
+    val difference = (o1.instantWindSpeed ?: Float.MIN_VALUE) - (o2.instantWindSpeed ?: Float.MIN_VALUE)
     when {
         difference < 0f -> -1
         difference > 0f -> 1
