@@ -11,9 +11,9 @@ import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
+import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.extensions
 
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
+import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.NIGHT_SYMBOL_CODES
@@ -19,7 +19,11 @@ fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
         feelsLike = if (instantTemperature == null) {
             null
         } else {
-            calculateFeelsLikeTemperature(instantTemperature, instantWindSpeed, instantRelativeHumidity)
+            calculateFeelsLikeTemperature(
+                instantTemperature,
+                instantWindSpeed,
+                instantRelativeHumidity
+            )
         },
         precipitationAmount = precipitationAmount,
         windSpeed = instantWindSpeed,
@@ -132,7 +136,8 @@ fun List<ForecastTimeSpan>.totalPrecipitationAmount(): Float {
 }
 
 fun List<ForecastTimeSpan>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
-    val difference = (o1.instantWindSpeed ?: Float.MIN_VALUE) - (o2.instantWindSpeed ?: Float.MIN_VALUE)
+    val difference =
+        (o1.instantWindSpeed ?: Float.MIN_VALUE) - (o2.instantWindSpeed ?: Float.MIN_VALUE)
     when {
         difference < 0f -> -1
         difference > 0f -> 1

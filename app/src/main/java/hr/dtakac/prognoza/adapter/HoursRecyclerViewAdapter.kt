@@ -61,7 +61,10 @@ class HourViewHolder(
                 )
             tvHumidity.text = context.formatHumidityValue(uiModel.relativeHumidity)
             tvPressure.text =
-                context.formatPressureValue(uiModel.airPressureAtSeaLevel, uiModel.displayDataInUnit)
+                context.formatPressureValue(
+                    uiModel.airPressureAtSeaLevel,
+                    uiModel.displayDataInUnit
+                )
             // other, view-specific operations
             tvPrecipitationAmount.visibility =
                 if (uiModel.precipitationAmount != null && uiModel.precipitationAmount > 0f) {

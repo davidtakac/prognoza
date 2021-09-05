@@ -109,7 +109,12 @@ abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     private fun showOutdatedForecastDialog(messageId: Int) {
         MaterialAlertDialogBuilder(requireActivity())
             .setTitle(R.string.title_outdated_forecast)
-            .setMessage(getString(R.string.template_content_outdated_forecast, getString(messageId)))
+            .setMessage(
+                getString(
+                    R.string.template_content_outdated_forecast,
+                    getString(messageId)
+                )
+            )
             .setPositiveButton(R.string.action_ok, null)
             .show()
     }

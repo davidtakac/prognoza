@@ -232,7 +232,13 @@ fun Context.formatTotalPrecipitation(
         }
         else -> {
             SpannableStringBuilder()
-                .append(formatPrecipitationValue(precipitation, unit, significantPrecipitationColor))
+                .append(
+                    formatPrecipitationValue(
+                        precipitation,
+                        unit,
+                        significantPrecipitationColor
+                    )
+                )
                 .append(" ")
                 .append(getString(R.string.precipitation_total))
                 .toSpannable()
@@ -253,7 +259,11 @@ fun Context.formatPrecipitationTwoHours(
         .append(
             when (precipitationForecast) {
                 null, 0f -> getString(R.string.placeholder_precipitation_text)
-                else -> formatPrecipitationValue(precipitationForecast, unit, significantPrecipitationColor)
+                else -> formatPrecipitationValue(
+                    precipitationForecast,
+                    unit,
+                    significantPrecipitationColor
+                )
             }
         )
         .append(" ")

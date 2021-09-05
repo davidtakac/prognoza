@@ -8,7 +8,10 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
-import hr.dtakac.prognoza.extensions.*
+import hr.dtakac.prognoza.extensions.atStartOfDay
+import hr.dtakac.prognoza.extensions.hasExpired
+import hr.dtakac.prognoza.extensions.toForecastResult
+import hr.dtakac.prognoza.extensions.toForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository

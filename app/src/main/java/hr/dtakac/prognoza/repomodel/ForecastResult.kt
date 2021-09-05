@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.repomodel
 
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
+import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 
 sealed interface ForecastResult
 
