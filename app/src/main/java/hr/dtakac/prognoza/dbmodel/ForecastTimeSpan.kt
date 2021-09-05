@@ -9,6 +9,7 @@ import java.time.ZonedDateTime
 @TypeConverters(ForecastTimeSpanDateTimeConverter::class)
 data class ForecastTimeSpan(
     val startTime: ZonedDateTime,
+    val endTime: ZonedDateTime?,
     val placeId: String,
     val instantTemperature: Float?,
     val symbolCode: String?,

@@ -9,7 +9,8 @@ fun ForecastTimeStep.toForecastTimeSpan(
     next: ForecastTimeStep?
 ): ForecastTimeSpan {
     val startTime = ZonedDateTime.parse(time)
-    val priorityDetails = when (ZonedDateTime.parse(next?.time)) {
+    val endTime = next?.time?.let { ZonedDateTime.parse(it) }
+    val priorityDetails = when (endTime) {
         startTime.plusHours(1) -> {
             data?.next1Hours
         }
@@ -26,6 +27,7 @@ fun ForecastTimeStep.toForecastTimeSpan(
     val instantAirTemperature = data?.instant?.data?.airTemperature
     return ForecastTimeSpan(
         startTime = startTime,
+        endTime = endTime,
         placeId = placeId,
         instantTemperature = instantAirTemperature,
         symbolCode = priorityDetails?.summary?.symbolCode,

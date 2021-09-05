@@ -124,8 +124,8 @@ class DefaultForecastRepository(
             latitude = format("%.2f", forecastPlace.latitude),
             longitude = format("%.2f", forecastPlace.longitude)
         )
-        updateForecastMeta(forecastResponse.headers(), forecastPlace.id)
         updateForecastTimeSpans(forecastResponse.body(), forecastPlace.id)
+        updateForecastMeta(forecastResponse.headers(), forecastPlace.id)
     }
 
     private suspend fun updateForecastMeta(forecastResponseHeaders: Headers, placeId: String) {
@@ -140,8 +140,8 @@ class DefaultForecastRepository(
         locationForecastResponse: LocationForecastResponse?,
         placeId: String
     ) {
-        val forecastTimeSpans = withContext(dispatcherProvider.default) {
-            locationForecastResponse?.forecast?.forecastTimeSteps?.let {
+        val forecastTimeSpans = locationForecastResponse?.forecast?.forecastTimeSteps?.let {
+            withContext(dispatcherProvider.default) {
                 val result = mutableListOf<ForecastTimeSpan>()
                 for (i in it.indices) {
                     val current = it[i]
