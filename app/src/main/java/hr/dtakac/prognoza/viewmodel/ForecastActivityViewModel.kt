@@ -48,6 +48,7 @@ class ForecastActivityViewModel(
         coroutineScope.launch {
             changeSelectedUnitActual()
             getSelectedUnitActual()
+            _unitChangedEvent.value = Event(Unit)
         }
     }
 
