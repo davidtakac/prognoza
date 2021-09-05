@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.extensions
 import hr.dtakac.prognoza.R
 import kotlin.math.roundToInt
 
-fun Float.toCompassDirection() = when (this.roundToInt()) {
+fun Double.toCompassDirection() = when (this.roundToInt()) {
     in 0..44 -> R.string.direction_n
     in 45..89 -> R.string.direction_ne
     in 90..134 -> R.string.direction_e
@@ -14,9 +14,9 @@ fun Float.toCompassDirection() = when (this.roundToInt()) {
     else -> R.string.direction_n
 }
 
-fun Float.millimetresToInches() = this * 0.03937f
-fun Float.metersPerSecondToKilometresPerHour() = this * 3.6f
-fun Float.metersPerSecondToMilesPerHour() = this * 2.2369f
-fun Float.degreesCelsiusToDegreesFahrenheit() = this * 1.8f + 32f
-fun Float.hectoPascalToPsi() = this * 0.01450f
-fun Float.degreesFahrenheitToDegreesCelsius() = (this - 32f) / 1.8f
+fun Double.millimetresToInches() = this * 0.03937
+fun Double.metersPerSecondToKilometresPerHour() = this * 3.6
+fun Double.metersPerSecondToMilesPerHour() = this * 2.2369
+fun Double.degreesCelsiusToDegreesFahrenheit() = this * 1.8 + 32
+fun Double.hectoPascalToPsi() = this * 0.01450
+fun Double.degreesFahrenheitToDegreesCelsius() = (this - 32) / 1.8

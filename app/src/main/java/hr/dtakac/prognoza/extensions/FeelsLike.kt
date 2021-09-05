@@ -12,12 +12,12 @@ import kotlin.math.sqrt
  * the provided parameters.
  */
 fun calculateFeelsLikeTemperature(
-    temperature: Float,
-    windSpeed: Float?,
-    relativeHumidity: Float?
-): Float? {
+    temperature: Double,
+    windSpeed: Double?,
+    relativeHumidity: Double?
+): Double? {
     val airTemperatureFahrenheit = temperature.degreesCelsiusToDegreesFahrenheit()
-    val feelsLikeFahrenheit = if (airTemperatureFahrenheit in -50f..50f) {
+    val feelsLikeFahrenheit = if (airTemperatureFahrenheit in -50.0..50.0) {
         if (windSpeed == null) {
             null
         } else {
@@ -42,11 +42,11 @@ fun calculateFeelsLikeTemperature(
  * @return Wind chill temperature in degrees Fahrenheit
  */
 private fun calculateWindChill(
-    temperature: Float,
-    windSpeed: Float
-): Float {
-    return 35.74f + (0.6215f * temperature) - (35.75f * windSpeed.pow(0.16f)) +
-            (0.4275f * temperature * windSpeed.pow(0.16f))
+    temperature: Double,
+    windSpeed: Double
+): Double {
+    return 35.74 + (0.6215 * temperature) - (35.75 * windSpeed.pow(0.16)) +
+            (0.4275 * temperature * windSpeed.pow(0.16))
 }
 
 /**
@@ -57,23 +57,23 @@ private fun calculateWindChill(
  * @return Heat index temperature in degrees Fahrenheit
  */
 private fun calculateHeatIndex(
-    temperature: Float,
-    humidity: Float
-): Float {
-    val simpleHeatIndex = 0.5f * (temperature + 61 + (temperature - 68) * 1.2f + humidity * 0.094f)
-    return if (simpleHeatIndex < 80f) {
+    temperature: Double,
+    humidity: Double
+): Double {
+    val simpleHeatIndex = 0.5 * (temperature + 61 + (temperature - 68) * 1.2 + humidity * 0.094)
+    return if (simpleHeatIndex < 80) {
         simpleHeatIndex
     } else {
-        val rothfuszHeatIndex = -42.379f + 2.04901523f * temperature + 10.14333127f * humidity -
-                0.22475541f * temperature * humidity - 0.00683783f * temperature * temperature -
-                0.05481717f * humidity * humidity + 0.00122874f * temperature * temperature * humidity +
-                0.00085282f * temperature * humidity * humidity - 0.00000199f * temperature * temperature * humidity * humidity
+        val rothfuszHeatIndex = -42.379 + 2.04901523 * temperature + 10.14333127 * humidity -
+                0.22475541 * temperature * humidity - 0.00683783 * temperature * temperature -
+                0.05481717 * humidity * humidity + 0.00122874 * temperature * temperature * humidity +
+                0.00085282 * temperature * humidity * humidity - 0.00000199 * temperature * temperature * humidity * humidity
 
-        if (humidity < 13f && temperature in 80f..112f) {
-            val adjustment = ((13f - humidity) / 4) * sqrt((17f - abs(temperature - 95f)) / 17f)
+        if (humidity < 13 && temperature in 80.0..112.0) {
+            val adjustment = ((13 - humidity) / 4) * sqrt((17 - abs(temperature - 95)) / 17)
             rothfuszHeatIndex - adjustment
-        } else if (humidity > 85f && temperature in 80f..87f) {
-            val adjustment = ((humidity - 85f) / 10f) * ((87f - temperature) / 5f)
+        } else if (humidity > 85 && temperature in 80.0..87.0) {
+            val adjustment = ((humidity - 85) / 10) * ((87 - temperature) / 5)
             rothfuszHeatIndex + adjustment
         } else {
             rothfuszHeatIndex

@@ -81,36 +81,36 @@ fun List<ForecastTimeSpan>.toForecastResult(
     }
 }
 
-fun List<ForecastTimeSpan>.highestTemperature(): Float? {
-    val max = maxOf { it.airTemperatureMax ?: Float.MIN_VALUE }
-    return if (max == Float.MIN_VALUE) {
+fun List<ForecastTimeSpan>.highestTemperature(): Double? {
+    val max = maxOf { it.airTemperatureMax ?: Double.MIN_VALUE }
+    return if (max == Double.MIN_VALUE) {
         null
     } else {
         max
     }
 }
 
-fun List<ForecastTimeSpan>.lowestTemperature(): Float? {
-    val min = minOf { it.airTemperatureMin ?: Float.MAX_VALUE }
-    return if (min == Float.MAX_VALUE) {
+fun List<ForecastTimeSpan>.lowestTemperature(): Double? {
+    val min = minOf { it.airTemperatureMin ?: Double.MAX_VALUE }
+    return if (min == Double.MAX_VALUE) {
         null
     } else {
         min
     }
 }
 
-fun List<ForecastTimeSpan>.highestRelativeHumidity(): Float? {
-    val max = maxOf { it.instantRelativeHumidity ?: Float.MIN_VALUE }
-    return if (max == Float.MIN_VALUE) {
+fun List<ForecastTimeSpan>.highestRelativeHumidity(): Double? {
+    val max = maxOf { it.instantRelativeHumidity ?: Double.MIN_VALUE }
+    return if (max == Double.MIN_VALUE) {
         null
     } else {
         max
     }
 }
 
-fun List<ForecastTimeSpan>.highestPressure(): Float? {
-    val max = maxOf { it.instantAirPressureAtSeaLevel ?: Float.MIN_VALUE }
-    return if (max == Float.MIN_VALUE) {
+fun List<ForecastTimeSpan>.highestPressure(): Double? {
+    val max = maxOf { it.instantAirPressureAtSeaLevel ?: Double.MIN_VALUE }
+    return if (max == Double.MIN_VALUE) {
         null
     } else {
         max
@@ -133,16 +133,16 @@ fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): Representati
     }
 }
 
-fun List<ForecastTimeSpan>.totalPrecipitationAmount(): Float {
-    return sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toFloat()
+fun List<ForecastTimeSpan>.totalPrecipitationAmount(): Double {
+    return sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toDouble()
 }
 
 fun List<ForecastTimeSpan>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
     val difference =
-        (o1.instantWindSpeed ?: Float.MIN_VALUE) - (o2.instantWindSpeed ?: Float.MIN_VALUE)
+        (o1.instantWindSpeed ?: Double.MIN_VALUE) - (o2.instantWindSpeed ?: Double.MIN_VALUE)
     when {
-        difference < 0f -> -1
-        difference > 0f -> 1
+        difference < 0 -> -1
+        difference > 0 -> 1
         else -> 0
     }
 }

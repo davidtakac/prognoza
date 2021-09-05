@@ -8,6 +8,6 @@ data class Place(
     @PrimaryKey
     val id: String,
     val fullName: String,
-    val latitude: Float,
-    val longitude: Float,
+    val latitude: Double,
+    val longitude: Double,
 )

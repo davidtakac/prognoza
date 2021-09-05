@@ -39,29 +39,29 @@ data class ForecastTimeInstant(
 
 data class ForecastInstantData(
     @SerializedName("air_temperature")
-    val airTemperature: Float?,
+    val airTemperature: Double?,
     @SerializedName("cloud_area_fraction_low")
-    val cloudAreaFractionLow: Float?,
+    val cloudAreaFractionLow: Double?,
     @SerializedName("cloud_area_fraction_high")
-    val cloudAreaFractionHigh: Float?,
+    val cloudAreaFractionHigh: Double?,
     @SerializedName("cloud_area_fraction_medium")
-    val cloudAreaFractionMedium: Float?,
+    val cloudAreaFractionMedium: Double?,
     @SerializedName("wind_from_direction")
-    val windFromDirection: Float?,
+    val windFromDirection: Double?,
     @SerializedName("air_pressure_at_sea_level")
-    val airPressureAtSeaLevel: Float?,
+    val airPressureAtSeaLevel: Double?,
     @SerializedName("cloud_area_fraction")
-    val cloudAreaFraction: Float?,
+    val cloudAreaFraction: Double?,
     @SerializedName("wind_speed_of_gust")
-    val windSpeedOfGust: Float?,
+    val windSpeedOfGust: Double?,
     @SerializedName("relative_humidity")
-    val relativeHumidity: Float?,
+    val relativeHumidity: Double?,
     @SerializedName("dew_point_temperature")
-    val dewPointTemperature: Float?,
+    val dewPointTemperature: Double?,
     @SerializedName("wind_speed")
-    val windSpeed: Float?,
+    val windSpeed: Double?,
     @SerializedName("fog_area_fraction")
-    val fogAreaFraction: Float?
+    val fogAreaFraction: Double?
 )
 
 data class ForecastTimePeriod(
@@ -78,21 +78,21 @@ data class ForecastTimePeriodSummary(
 
 data class ForecastTimePeriodData(
     @SerializedName("probability_of_thunder")
-    val probabilityOfThunder: Float?,
+    val probabilityOfThunder: Double?,
     @SerializedName("ultraviolet_index_clear_sky_max")
-    val ultravioletIndexClearSkyMax: Float?,
+    val ultravioletIndexClearSkyMax: Double?,
     @SerializedName("air_temperature_min")
-    val airTemperatureMin: Float?,
+    val airTemperatureMin: Double?,
     @SerializedName("precipitation_amount_min")
-    val precipitationAmountMin: Float?,
+    val precipitationAmountMin: Double?,
     @SerializedName("precipitation_amount_max")
-    val precipitationAmountMax: Float?,
+    val precipitationAmountMax: Double?,
     @SerializedName("precipitation_amount")
-    val precipitationAmount: Float?,
+    val precipitationAmount: Double?,
     @SerializedName("air_temperature_max")
-    val airTemperatureMax: Float?,
+    val airTemperatureMax: Double?,
     @SerializedName("probability_of_precipitation")
-    val probabilityOfPrecipitation: Float?
+    val probabilityOfPrecipitation: Double?
 )
 
 data class ForecastMeta(

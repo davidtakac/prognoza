@@ -151,7 +151,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             placeName = selectedPlace.shortenedName,
             iconResourceId = WEATHER_ICONS[currentHour.symbolCode]?.iconResourceId,
             displayDataInUnit = selectedUnit,
-            precipitationTwoHours = if (precipitationTwoHours <= 0f) null else precipitationTwoHours,
+            precipitationTwoHours = if (precipitationTwoHours <= 0) null else precipitationTwoHours,
         )
     }
 

@@ -24,8 +24,8 @@ class DefaultPlaceRepository(
             defaultPlace = Place(
                 id = DEFAULT_PLACE_ID,
                 fullName = "Osijek, Grad Osijek, Osijek-Baranja County, Croatia",
-                latitude = 45.55f,
-                longitude = 18.69f
+                latitude = 45.55,
+                longitude = 18.69
             )
             placeDao.insertOrUpdate(defaultPlace)
             defaultPlace

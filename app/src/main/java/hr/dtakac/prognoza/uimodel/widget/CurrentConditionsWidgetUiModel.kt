@@ -3,10 +3,10 @@ package hr.dtakac.prognoza.uimodel.widget
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 
 data class CurrentConditionsWidgetUiModel(
-    val temperature: Float?,
-    val feelsLike: Float?,
+    val temperature: Double?,
+    val feelsLike: Double?,
     val placeName: String?,
     val iconResourceId: Int?,
-    val precipitationTwoHours: Float?,
+    val precipitationTwoHours: Double?,
     val displayDataInUnit: MeasurementUnit,
 )

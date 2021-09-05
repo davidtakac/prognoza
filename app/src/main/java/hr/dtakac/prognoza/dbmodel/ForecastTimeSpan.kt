@@ -11,14 +11,14 @@ data class ForecastTimeSpan(
     val startTime: ZonedDateTime,
     val endTime: ZonedDateTime?,
     val placeId: String,
-    val instantTemperature: Float?,
+    val instantTemperature: Double?,
     val symbolCode: String?,
-    val precipitationProbability: Float?,
-    val precipitationAmount: Float?,
-    val instantWindSpeed: Float?,
-    val instantWindFromDirection: Float?,
-    val instantRelativeHumidity: Float?,
-    val instantAirPressureAtSeaLevel: Float?,
-    val airTemperatureMax: Float?,
-    val airTemperatureMin: Float?
+    val precipitationProbability: Double?,
+    val precipitationAmount: Double?,
+    val instantWindSpeed: Double?,
+    val instantWindFromDirection: Double?,
+    val instantRelativeHumidity: Double?,
+    val instantAirPressureAtSeaLevel: Double?,
+    val airTemperatureMax: Double?,
+    val airTemperatureMin: Double?
 )

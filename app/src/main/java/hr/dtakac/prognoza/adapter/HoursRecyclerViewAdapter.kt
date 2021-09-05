@@ -67,7 +67,7 @@ class HourViewHolder(
                 )
             // other, view-specific operations
             tvPrecipitationAmount.visibility =
-                if (uiModel.precipitationAmount != null && uiModel.precipitationAmount > 0f) {
+                if (uiModel.precipitationAmount != null && uiModel.precipitationAmount > 0) {
                     View.VISIBLE
                 } else {
                     View.GONE

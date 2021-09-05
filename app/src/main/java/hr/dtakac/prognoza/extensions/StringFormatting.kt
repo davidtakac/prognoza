@@ -17,7 +17,7 @@ import java.text.DecimalFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-fun Context.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit): String {
+fun Context.formatTemperatureValue(temperature: Double?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 0
         isParseIntegerOnly = true
@@ -43,7 +43,7 @@ fun Context.formatTemperatureValue(temperature: Float?, unit: MeasurementUnit): 
 }
 
 fun Context.formatPrecipitationValue(
-    precipitation: Float?,
+    precipitation: Double?,
     unit: MeasurementUnit,
     significantPrecipitationColor: Boolean = true
 ): Spannable {
@@ -60,7 +60,7 @@ fun Context.formatPrecipitationValue(
     }
     return if (precipitation == null) {
         SpannableString(getString(R.string.placeholder_precipitation))
-    } else if (precipitation == 0f) {
+    } else if (precipitation == 0.0) {
         SpannableString(getString(R.string.placeholder_precipitation))
     } else if (unit == MeasurementUnit.IMPERIAL) {
         val convertedPrecipitation = precipitation.millimetresToInches()
@@ -126,7 +126,7 @@ fun Context.formatWeatherIconDescription(descriptionResourceId: Int?): String {
     }
 }
 
-fun Context.formatWindSpeedValue(windSpeed: Float?, unit: MeasurementUnit): String {
+fun Context.formatWindSpeedValue(windSpeed: Double?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 1
         roundingMode = RoundingMode.HALF_UP
@@ -149,7 +149,7 @@ fun Context.formatWindSpeedValue(windSpeed: Float?, unit: MeasurementUnit): Stri
 }
 
 fun Context.formatWindWithDirection(
-    windSpeed: Float?,
+    windSpeed: Double?,
     windFromCompassDirection: Int?,
     windSpeedUnit: MeasurementUnit
 ): String {
@@ -160,7 +160,7 @@ fun Context.formatWindWithDirection(
     )
 }
 
-fun Context.formatHumidityValue(relativeHumidity: Float?): String {
+fun Context.formatHumidityValue(relativeHumidity: Double?): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 0
         isParseIntegerOnly = true
@@ -176,7 +176,7 @@ fun Context.formatHumidityValue(relativeHumidity: Float?): String {
     }
 }
 
-fun Context.formatPressureValue(pressure: Float?, unit: MeasurementUnit): String {
+fun Context.formatPressureValue(pressure: Double?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         when (unit) {
             MeasurementUnit.IMPERIAL -> {
@@ -222,12 +222,12 @@ fun Context.formatRepresentativeWeatherIconDescription(
 }
 
 fun Context.formatTotalPrecipitation(
-    precipitation: Float?,
+    precipitation: Double?,
     unit: MeasurementUnit,
     significantPrecipitationColor: Boolean = true
 ): Spannable {
     return when (precipitation) {
-        null, 0f -> {
+        null, 0.0 -> {
             SpannableString(getString(R.string.placeholder_precipitation_text))
         }
         else -> {
@@ -251,14 +251,14 @@ fun Context.formatEmptyMessage(reasonResourceId: Int?): String {
 }
 
 fun Context.formatPrecipitationTwoHours(
-    precipitationForecast: Float?,
+    precipitationForecast: Double?,
     unit: MeasurementUnit,
     significantPrecipitationColor: Boolean = true
 ): Spannable {
     return SpannableStringBuilder()
         .append(
             when (precipitationForecast) {
-                null, 0f -> getString(R.string.placeholder_precipitation_text)
+                null, 0.0 -> getString(R.string.placeholder_precipitation_text)
                 else -> formatPrecipitationValue(
                     precipitationForecast,
                     unit,
@@ -271,7 +271,7 @@ fun Context.formatPrecipitationTwoHours(
         .toSpannable()
 }
 
-fun Context.formatFeelsLike(feelsLike: Float?, unit: MeasurementUnit): String {
+fun Context.formatFeelsLike(feelsLike: Double?, unit: MeasurementUnit): String {
     return getString(
         R.string.template_feels_like,
         if (feelsLike == null) {

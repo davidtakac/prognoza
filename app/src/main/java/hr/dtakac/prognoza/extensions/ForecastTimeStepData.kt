@@ -19,7 +19,7 @@ fun ForecastTimeStepData.findSymbolCode(): String? {
     }
 }
 
-fun ForecastTimeStepData.findPrecipitationProbability(): Float? {
+fun ForecastTimeStepData.findPrecipitationProbability(): Double? {
     return when {
         next1Hours != null -> {
             next1Hours.data?.probabilityOfPrecipitation
@@ -36,7 +36,7 @@ fun ForecastTimeStepData.findPrecipitationProbability(): Float? {
     }
 }
 
-fun ForecastTimeStepData.findPrecipitationAmount(): Float? {
+fun ForecastTimeStepData.findPrecipitationAmount(): Double? {
     return when {
         next1Hours != null -> {
             next1Hours.data?.precipitationAmount
