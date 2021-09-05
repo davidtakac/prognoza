@@ -27,6 +27,7 @@ class ForecastActivity :
         observeViewModel()
         initializeViewPager()
         initializeToolbar()
+        initializeChangedPlaceFragmentResultListener()
         viewModel.getSelectedPlaceName()
         viewModel.getSelectedUnit()
     }
@@ -40,9 +41,9 @@ class ForecastActivity :
         viewModel.placeName.observe(this) {
             binding.toolbar.title = it
         }
-        viewModel.selectedUnit.observe(this) {
+        viewModel.selectedUnit.observe(this) { unit ->
             binding.toolbar.menu.findItem(R.id.units).title = resources.getString(
-                when (it) {
+                when (unit) {
                     MeasurementUnit.METRIC -> R.string.change_to_imperial
                     MeasurementUnit.IMPERIAL -> R.string.change_to_metric
                 }
@@ -86,12 +87,15 @@ class ForecastActivity :
                 else -> false
             }
         }
+    }
+
+    private fun initializeChangedPlaceFragmentResultListener() {
         supportFragmentManager.setFragmentResultListener(
             PLACE_SEARCH_REQUEST_KEY,
             this,
             { _, bundle ->
                 if (bundle.getBoolean(BUNDLE_KEY_PLACE_PICKED)) {
-                    viewModel.getSelectedPlaceName()
+                    viewModel.changeSelectedPlace()
                     closeSearch()
                 }
             }

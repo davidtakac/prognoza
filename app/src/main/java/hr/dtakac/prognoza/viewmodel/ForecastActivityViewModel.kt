@@ -34,21 +34,27 @@ class ForecastActivityViewModel(
 
     fun getSelectedUnit() {
         coroutineScope.launch {
-            if (isUnitsReloadNeeded()) {
-                _selectedUnit.value = preferencesRepository.getSelectedUnit()
-            }
+            getSelectedUnitActual()
         }
     }
 
     fun getSelectedPlaceName() {
         coroutineScope.launch {
-            if (isPlaceReloadNeeded()) {
-                val selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
-                    ?: placeRepository.getDefaultPlace()
-                _placeName.value = selectedPlace.shortenedName
-                _placeChangedEvent.value = Event(Unit)
-                currentPlaceId = selectedPlace.id
-            }
+            getSelectedPlaceNameActual()
+        }
+    }
+
+    fun changeSelectedUnit() {
+        coroutineScope.launch {
+            changeSelectedUnitActual()
+            getSelectedUnitActual()
+        }
+    }
+
+    fun changeSelectedPlace() {
+        coroutineScope.launch {
+            getSelectedPlaceNameActual()
+            _placeChangedEvent.value = Event(Unit)
         }
     }
 
@@ -58,15 +64,29 @@ class ForecastActivityViewModel(
         }
     }
 
-    fun changeSelectedUnit() {
-        coroutineScope.launch {
-            val newUnit = when (preferencesRepository.getSelectedUnit()) {
-                MeasurementUnit.IMPERIAL -> MeasurementUnit.METRIC
-                MeasurementUnit.METRIC -> MeasurementUnit.IMPERIAL
-            }
-            preferencesRepository.setSelectedUnit(newUnit)
-            _selectedUnit.value = newUnit
-            _unitChangedEvent.value = Event(Unit)
+    private suspend fun changeSelectedUnitActual() {
+        val newUnit = when (preferencesRepository.getSelectedUnit()) {
+            MeasurementUnit.IMPERIAL -> MeasurementUnit.METRIC
+            MeasurementUnit.METRIC -> MeasurementUnit.IMPERIAL
+        }
+        preferencesRepository.setSelectedUnit(newUnit)
+    }
+
+    private suspend fun getSelectedUnitActual() {
+        if (isUnitReloadNeeded()) {
+            val selectedUnit = preferencesRepository.getSelectedUnit()
+            _selectedUnit.value = selectedUnit
+            currentUnit = selectedUnit
+        }
+    }
+
+    private suspend fun getSelectedPlaceNameActual() {
+        if (isPlaceReloadNeeded()) {
+            val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
+            val selectedPlace = placeRepository.get(selectedPlaceId)
+                ?: placeRepository.getDefaultPlace()
+            _placeName.value = selectedPlace.shortenedName
+            currentPlaceId = selectedPlace.id
         }
     }
 
@@ -75,7 +95,7 @@ class ForecastActivityViewModel(
                 _placeName.value == null
     }
 
-    private suspend fun isUnitsReloadNeeded(): Boolean {
+    private suspend fun isUnitReloadNeeded(): Boolean {
         return currentUnit != preferencesRepository.getSelectedUnit() ||
                 _selectedUnit.value == null
     }

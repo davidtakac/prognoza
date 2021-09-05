@@ -68,6 +68,7 @@ class PlaceSearchDialogFragment : DialogFragment() {
         viewModel.placeSelectedEvent.observe(viewLifecycleOwner) {
             if (!it.isConsumed) {
                 notifyParentPlaceWasPicked()
+                it.consume()
             }
         }
         viewModel.message.observe(viewLifecycleOwner) {

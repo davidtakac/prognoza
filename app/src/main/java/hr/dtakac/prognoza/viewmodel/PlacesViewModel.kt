@@ -31,8 +31,8 @@ class PlacesViewModel(
     private val _isLoading = MutableLiveData(false)
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    private val _placeSelectedEvent = MutableLiveData<Event<Boolean>>()
-    val placeSelectedEvent: LiveData<Event<Boolean>> get() = _placeSelectedEvent
+    private val _placeSelectedEvent = MutableLiveData<Event<Unit>>()
+    val placeSelectedEvent: LiveData<Event<Unit>> get() = _placeSelectedEvent
 
     private val _message = MutableLiveData<Event<Int>>()
     val message: LiveData<Event<Int>> get() = _message
@@ -77,7 +77,7 @@ class PlacesViewModel(
             placeRepository.save(selectedPlace)
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
             _isLoading.value = false
-            _placeSelectedEvent.value = Event(true)
+            _placeSelectedEvent.value = Event(Unit)
         }
     }
 
