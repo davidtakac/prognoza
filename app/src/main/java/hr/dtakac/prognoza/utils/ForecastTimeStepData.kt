@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.extensions
+package hr.dtakac.prognoza.utils
 
 import hr.dtakac.prognoza.apimodel.ForecastTimeStepData
 

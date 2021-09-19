@@ -17,9 +17,6 @@ import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.activity.ForecastActivity
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.dbmodel.Place
-import hr.dtakac.prognoza.extensions.calculateFeelsLikeTemperature
-import hr.dtakac.prognoza.extensions.shortenedName
-import hr.dtakac.prognoza.extensions.totalPrecipitationAmount
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
@@ -28,6 +25,7 @@ import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
+import hr.dtakac.prognoza.utils.*
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -98,9 +96,13 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     private suspend fun getCurrentConditionsWidgetUiModel(): CurrentConditionsWidgetUiModel? {
         val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
         val selectedUnit = preferencesRepository.getSelectedUnit()
-        val result = forecastRepository.getTodayForecastTimeSpans(selectedPlaceId)
         val selectedPlace = placeRepository.get(selectedPlaceId)
         return if (selectedPlace != null) {
+            val result = forecastRepository.getForecastTimeSpans(
+                forecastStartOfToday,
+                forecastEndOfToday,
+                selectedPlace
+            )
             val hours = when (result) {
                 is Success -> {
                     result.timeSpans
@@ -125,7 +127,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
                 context,
                 REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE,
                 intent,
-                PendingIntent.FLAG_UPDATE_CURRENT
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
             views.setOnClickPendingIntent(android.R.id.background, pendingIntent)
         }
@@ -181,7 +183,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             context,
             REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE,
             alarmIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
     }
 }

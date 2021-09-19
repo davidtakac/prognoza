@@ -1,18 +1,17 @@
 package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.HOURS_AFTER_MIDNIGHT
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
-import hr.dtakac.prognoza.extensions.atStartOfDay
-import hr.dtakac.prognoza.extensions.toDayUiModel
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
+import hr.dtakac.prognoza.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
@@ -21,21 +20,17 @@ class DaysFragmentViewModel(
     coroutineScope: CoroutineScope?,
     private val dispatcherProvider: DispatcherProvider,
     private val forecastRepository: ForecastRepository,
-    preferencesRepository: PreferencesRepository
-) : ForecastFragmentViewModel<DaysForecastUiModel>(coroutineScope, preferencesRepository) {
+    preferencesRepository: PreferencesRepository,
+    placeRepository: PlaceRepository
+) : ForecastFragmentViewModel<DaysForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
     override val _forecast = MutableLiveData<DaysForecastUiModel>()
 
-    private val start = ZonedDateTime
-        .now()
-        .atStartOfDay()
-        .plusDays(1L)
-        .plusHours(HOURS_AFTER_MIDNIGHT + 1L)
-
     override suspend fun getNewForecast(): ForecastResult {
-        val end = start
-            .plusDays(7L)
-            .minusHours(1L)
-        return forecastRepository.getForecastTimeSpans(start, end, selectedPlace)
+        return forecastRepository.getForecastTimeSpans(
+            forecastStartOfComing,
+            forecastEndOfComing,
+            selectedPlace
+        )
     }
 
     override suspend fun mapToForecastUiModel(
@@ -44,10 +39,7 @@ class DaysFragmentViewModel(
     ): DaysForecastUiModel {
         return DaysForecastUiModel(
             days = withContext(dispatcherProvider.default) {
-                var endOfDay: ZonedDateTime = start
-                    .plusDays(1L)
-                    .atStartOfDay()
-                    .plusHours(HOURS_AFTER_MIDNIGHT)
+                var endOfDay: ZonedDateTime = forecastEndOfTomorrow
                 val dayHours: MutableList<ForecastTimeSpan> = mutableListOf()
                 val summaries: MutableList<DayUiModel> = mutableListOf()
                 for (i in success.timeSpans.indices) {

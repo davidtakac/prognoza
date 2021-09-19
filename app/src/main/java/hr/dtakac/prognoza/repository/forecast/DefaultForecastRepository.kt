@@ -9,10 +9,9 @@ import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.dbmodel.Place
-import hr.dtakac.prognoza.extensions.atStartOfDay
-import hr.dtakac.prognoza.extensions.hasExpired
-import hr.dtakac.prognoza.extensions.toForecastResult
-import hr.dtakac.prognoza.extensions.toForecastTimeSpan
+import hr.dtakac.prognoza.utils.hasExpired
+import hr.dtakac.prognoza.utils.toForecastResult
+import hr.dtakac.prognoza.utils.toForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import kotlinx.coroutines.withContext
@@ -28,32 +27,6 @@ class DefaultForecastRepository(
     private val metaRepository: MetaRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
-    private val hoursAfterMidnightToShow = 6L
-
-    override suspend fun getTodayForecastTimeSpans(placeId: String): ForecastResult {
-        val anHourAgo = ZonedDateTime
-            .now()
-            .minusHours(1) // to get the current hour as well
-        val hoursLeftInTheDay = 24 - anHourAgo.hour
-        val hoursToShow = hoursLeftInTheDay + hoursAfterMidnightToShow
-        return getForecastTimeSpans(
-            start = anHourAgo,
-            end = anHourAgo.plusHours(hoursToShow),
-            placeId
-        )
-    }
-
-    override suspend fun getTomorrowForecastTimeSpans(placeId: String): ForecastResult {
-        val tomorrow = ZonedDateTime
-            .now()
-            .atStartOfDay()
-            .plusDays(1)
-        return getForecastTimeSpans(
-            start = tomorrow.plusHours(hoursAfterMidnightToShow + 1L /* start where today left off */),
-            end = tomorrow.plusDays(1L).plusHours(hoursAfterMidnightToShow),
-            placeId
-        )
-    }
 
     override suspend fun deleteExpiredData() {
         try {
@@ -70,7 +43,7 @@ class DefaultForecastRepository(
         place: Place
     ): ForecastResult {
         var meta = try {
-            metaRepository.get(placeId)
+            metaRepository.get(place.id)
         } catch (e: Exception) {
             null
         }
@@ -78,7 +51,7 @@ class DefaultForecastRepository(
         if (meta?.hasExpired() != false) {
             try {
                 updateForecastDatabase(place, meta?.lastModified)
-                meta = metaRepository.get(placeId)
+                meta = metaRepository.get(place.id)
             } catch (e: HttpException) {
                 error = handleHttpException(e)
             } catch (e: SQLiteException) {
@@ -90,7 +63,7 @@ class DefaultForecastRepository(
             }
         }
         return try {
-            val hours = forecastDao.getForecastTimeSpans(start, end, placeId)
+            val hours = forecastDao.getForecastTimeSpans(start, end, place.id)
             hours.toForecastResult(meta, error)
         } catch (e: SQLiteException) {
             Empty(DatabaseError(e))

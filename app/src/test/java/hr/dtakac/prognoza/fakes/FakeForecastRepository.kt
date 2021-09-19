@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.fakes
 import com.google.gson.Gson
 import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
-import hr.dtakac.prognoza.extensions.atStartOfDay
-import hr.dtakac.prognoza.extensions.toForecastTimeSpan
+import hr.dtakac.prognoza.utils.atStartOfDay
+import hr.dtakac.prognoza.utils.toForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult

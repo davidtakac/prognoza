@@ -1,9 +1,8 @@
-package hr.dtakac.prognoza.extensions
+package hr.dtakac.prognoza.utils
 
 import android.content.res.Resources
 import android.util.TypedValue
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 fun <T> List<T>.mostCommon(): T? =
@@ -16,9 +15,6 @@ val Number.toPx
         this.toFloat(),
         Resources.getSystem().displayMetrics
     )
-
-fun ZonedDateTime.atStartOfDay(): ZonedDateTime =
-    toLocalDate().atStartOfDay(ZoneId.systemDefault())
 
 fun ForecastMeta.hasExpired(): Boolean = try {
     ZonedDateTime.now() > expires

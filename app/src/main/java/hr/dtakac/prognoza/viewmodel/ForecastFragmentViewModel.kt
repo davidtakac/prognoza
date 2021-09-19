@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.dbmodel.Place
-import hr.dtakac.prognoza.extensions.hasExpired
-import hr.dtakac.prognoza.extensions.toErrorResourceId
+import hr.dtakac.prognoza.utils.hasExpired
+import hr.dtakac.prognoza.utils.toErrorResourceId
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult

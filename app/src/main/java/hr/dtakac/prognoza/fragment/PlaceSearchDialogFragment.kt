@@ -24,7 +24,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.adapter.PlacesRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentPlaceSearchBinding
-import hr.dtakac.prognoza.extensions.toPx
+import hr.dtakac.prognoza.utils.toPx
 import hr.dtakac.prognoza.viewmodel.PlacesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.math.roundToInt

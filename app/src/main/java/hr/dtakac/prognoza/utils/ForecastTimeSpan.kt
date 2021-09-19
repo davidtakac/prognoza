@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.extensions
+package hr.dtakac.prognoza.utils
 
 import ca.rmen.sunrisesunset.SunriseSunset
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
@@ -143,7 +143,7 @@ fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): Representati
 }
 
 fun List<ForecastTimeSpan>.totalPrecipitationAmount(): Double {
-    return sumOf { it.precipitationAmount?.toDouble() ?: 0.0 }.toDouble()
+    return sumOf { it.precipitationAmount ?: 0.0 }
 }
 
 fun List<ForecastTimeSpan>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->

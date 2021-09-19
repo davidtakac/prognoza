@@ -12,9 +12,9 @@ import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentTomorrowBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
-import hr.dtakac.prognoza.extensions.formatRepresentativeWeatherIconDescription
-import hr.dtakac.prognoza.extensions.formatTemperatureValue
-import hr.dtakac.prognoza.extensions.formatTotalPrecipitation
+import hr.dtakac.prognoza.utils.formatRepresentativeWeatherIconDescription
+import hr.dtakac.prognoza.utils.formatTemperatureValue
+import hr.dtakac.prognoza.utils.formatTotalPrecipitation
 import hr.dtakac.prognoza.uimodel.forecast.TomorrowForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TomorrowFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel

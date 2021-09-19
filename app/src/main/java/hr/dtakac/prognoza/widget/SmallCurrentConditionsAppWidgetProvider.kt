@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.widget
 import android.content.Context
 import android.widget.RemoteViews
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.extensions.formatFeelsLike
+import hr.dtakac.prognoza.utils.formatFeelsLike
 import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
 
 open class SmallCurrentConditionsAppWidgetProvider : TinyCurrentConditionsAppWidgetProvider() {

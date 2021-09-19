@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.common.Event
-import hr.dtakac.prognoza.extensions.shortenedName
+import hr.dtakac.prognoza.utils.shortenedName
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository

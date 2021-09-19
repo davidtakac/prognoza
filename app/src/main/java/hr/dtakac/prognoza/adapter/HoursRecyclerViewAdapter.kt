@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
-import hr.dtakac.prognoza.extensions.*
+import hr.dtakac.prognoza.utils.*
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 
 class HoursRecyclerViewAdapter : ListAdapter<HourUiModel, HourViewHolder>(HourDiffCallback()) {

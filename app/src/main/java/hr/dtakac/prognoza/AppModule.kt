@@ -95,7 +95,6 @@ val prognozaAppModule = module {
             dispatcherProvider = get(),
             forecastService = get(),
             forecastDao = get<AppDatabase>().hourDao(),
-            placeRepository = get(),
             metaRepository = get()
         )
     }
@@ -105,7 +104,7 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        DaysFragmentViewModel(null, get(), get(), get())
+        DaysFragmentViewModel(null, get(), get(), get(), get())
     }
 
     viewModel {
@@ -113,11 +112,11 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        TodayFragmentViewModel(null, get(), get(), get())
+        TodayFragmentViewModel(null, get(), get(), get(), get())
     }
 
     viewModel {
-        TomorrowFragmentViewModel(null, get(), get(), get())
+        TomorrowFragmentViewModel(null, get(), get(), get(), get())
     }
 
     viewModel {
