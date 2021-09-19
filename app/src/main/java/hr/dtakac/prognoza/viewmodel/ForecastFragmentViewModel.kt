@@ -3,12 +3,14 @@ package hr.dtakac.prognoza.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
+import hr.dtakac.prognoza.dbmodel.Place
 import hr.dtakac.prognoza.extensions.hasExpired
 import hr.dtakac.prognoza.extensions.toErrorResourceId
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
+import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
@@ -19,13 +21,16 @@ import kotlinx.coroutines.launch
 
 abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
     coroutineScope: CoroutineScope?,
-    protected val preferencesRepository: PreferencesRepository
+    protected val preferencesRepository: PreferencesRepository,
+    protected val placeRepository: PlaceRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
     private var currentUnit: MeasurementUnit? = null
 
     protected abstract val _forecast: MutableLiveData<T>
     val forecast: LiveData<T> get() = _forecast
+
+    protected lateinit var selectedPlace: Place
 
     private val _emptyScreen = MutableLiveData<EmptyForecastUiModel?>()
     val emptyScreen: LiveData<EmptyForecastUiModel?> get() = _emptyScreen
@@ -40,6 +45,8 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 _isLoading.value = true
+                selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
+                    ?: placeRepository.getDefaultPlace()
                 when (val result = getNewForecast()) {
                     is Success -> handleSuccess(result)
                     is CachedSuccess -> handleCachedSuccess(result)

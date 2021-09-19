@@ -8,13 +8,13 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
+import hr.dtakac.prognoza.dbmodel.Place
 import hr.dtakac.prognoza.extensions.atStartOfDay
 import hr.dtakac.prognoza.extensions.hasExpired
 import hr.dtakac.prognoza.extensions.toForecastResult
 import hr.dtakac.prognoza.extensions.toForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.repository.meta.MetaRepository
-import hr.dtakac.prognoza.repository.place.PlaceRepository
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
@@ -25,7 +25,6 @@ import java.time.ZonedDateTime
 class DefaultForecastRepository(
     private val forecastService: ForecastService,
     private val forecastDao: ForecastTimeSpanDao,
-    private val placeRepository: PlaceRepository,
     private val metaRepository: MetaRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
@@ -68,7 +67,7 @@ class DefaultForecastRepository(
     override suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
-        placeId: String
+        place: Place
     ): ForecastResult {
         var meta = try {
             metaRepository.get(placeId)
@@ -78,7 +77,7 @@ class DefaultForecastRepository(
         var error: ForecastError? = null
         if (meta?.hasExpired() != false) {
             try {
-                updateForecastDatabase(placeId, meta?.lastModified)
+                updateForecastDatabase(place, meta?.lastModified)
                 meta = metaRepository.get(placeId)
             } catch (e: HttpException) {
                 error = handleHttpException(e)
@@ -109,17 +108,16 @@ class DefaultForecastRepository(
         }
     }
 
-    private suspend fun updateForecastDatabase(placeId: String, lastModified: ZonedDateTime?) {
-        val forecastPlace = placeRepository.get(placeId) ?: placeRepository.getDefaultPlace()
+    private suspend fun updateForecastDatabase(place: Place, lastModified: ZonedDateTime?) {
         val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
         val forecastResponse = forecastService.getCompleteLocationForecast(
             userAgent = USER_AGENT,
             ifModifiedSince = lastModifiedTimestamp,
-            latitude = format("%.2f", forecastPlace.latitude),
-            longitude = format("%.2f", forecastPlace.longitude)
+            latitude = format("%.2f", place.latitude),
+            longitude = format("%.2f", place.longitude)
         )
-        updateForecastTimeSpans(forecastResponse.body(), forecastPlace.id)
-        updateForecastMeta(forecastResponse.headers(), forecastPlace.id)
+        updateForecastTimeSpans(forecastResponse.body(), place.id)
+        updateForecastMeta(forecastResponse.headers(), place.id)
     }
 
     private suspend fun updateForecastMeta(forecastResponseHeaders: Headers, placeId: String) {

@@ -32,11 +32,10 @@ class DaysFragmentViewModel(
         .plusHours(HOURS_AFTER_MIDNIGHT + 1L)
 
     override suspend fun getNewForecast(): ForecastResult {
-        val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
         val end = start
             .plusDays(7L)
             .minusHours(1L)
-        return forecastRepository.getForecastTimeSpans(start, end, selectedPlaceId)
+        return forecastRepository.getForecastTimeSpans(start, end, selectedPlace)
     }
 
     override suspend fun mapToForecastUiModel(
@@ -56,7 +55,7 @@ class DaysFragmentViewModel(
                     if (currentTimeSpan.startTime < endOfDay) {
                         dayHours.add(currentTimeSpan)
                     } else {
-                        summaries.add(dayHours.toDayUiModel(this, unit))
+                        summaries.add(dayHours.toDayUiModel(this, unit, selectedPlace))
                         dayHours.clear()
                         dayHours.add(currentTimeSpan)
                         endOfDay = currentTimeSpan.startTime

@@ -3,9 +3,9 @@ package hr.dtakac.prognoza.extensions
 import ca.rmen.sunrisesunset.SunriseSunset
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
+import hr.dtakac.prognoza.dbmodel.Place
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.NIGHT_SYMBOL_CODES
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
@@ -39,7 +39,8 @@ fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
 
 suspend fun List<ForecastTimeSpan>.toDayUiModel(
     coroutineScope: CoroutineScope,
-    unit: MeasurementUnit
+    unit: MeasurementUnit,
+    place: Place
 ): DayUiModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
     val lowTempAsync = coroutineScope.async { lowestTemperature() }
@@ -116,10 +117,10 @@ fun List<ForecastTimeSpan>.highestPressure(): Float? {
     }
 }
 
-fun List<ForecastTimeSpan>.representativeWeatherIcon(): RepresentativeWeatherDescription? {
+fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): RepresentativeWeatherDescription? {
     val eligibleSymbolCodes = filter {
-        SunriseSunset.isDay(GregorianCalendar.from(it.startTime), 45.0, 18.0)
-    }
+        SunriseSunset.isDay(GregorianCalendar.from(it.startTime), place.latitude, place.longitude)
+    }.map { it.symbolCode }
     val mostCommonSymbolCode = eligibleSymbolCodes.mostCommon()
     val weatherIcon = WEATHER_ICONS[mostCommonSymbolCode]
     return if (weatherIcon == null) {
