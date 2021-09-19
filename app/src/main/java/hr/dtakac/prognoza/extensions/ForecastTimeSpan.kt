@@ -42,7 +42,7 @@ suspend fun List<ForecastTimeSpan>.toDayUiModel(
     unit: MeasurementUnit,
     place: Place
 ): DayUiModel {
-    val weatherIconAsync = coroutineScope.async { representativeWeatherIcon() }
+    val weatherIconAsync = coroutineScope.async { representativeWeatherIcon(place) }
     val lowTempAsync = coroutineScope.async { lowestTemperature() }
     val highTempAsync = coroutineScope.async { highestTemperature() }
     val precipitationAsync = coroutineScope.async { totalPrecipitationAmount() }
@@ -118,17 +118,26 @@ fun List<ForecastTimeSpan>.highestPressure(): Double? {
 }
 
 fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): RepresentativeWeatherDescription? {
-    val eligibleSymbolCodes = filter {
-        SunriseSunset.isDay(GregorianCalendar.from(it.startTime), place.latitude, place.longitude)
-    }.map { it.symbolCode }
-    val mostCommonSymbolCode = eligibleSymbolCodes.mostCommon()
+    val daySymbolCodes = filter {
+        SunriseSunset.isDay(
+            GregorianCalendar.from(it.startTime),
+            place.latitude,
+            place.longitude
+        )
+    }
+        .map { it.symbolCode }
+    val mostCommonSymbolCode = if (daySymbolCodes.isEmpty()) {
+        map { it.symbolCode }.mostCommon()
+    } else {
+        daySymbolCodes.mostCommon()
+    }
     val weatherIcon = WEATHER_ICONS[mostCommonSymbolCode]
     return if (weatherIcon == null) {
         null
     } else {
         RepresentativeWeatherDescription(
             weatherDescription = weatherIcon,
-            isMostly = eligibleSymbolCodes.any { it != mostCommonSymbolCode }
+            isMostly = daySymbolCodes.any { it != mostCommonSymbolCode }
         )
     }
 }
