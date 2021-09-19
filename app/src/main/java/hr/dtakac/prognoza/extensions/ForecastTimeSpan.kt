@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.extensions
 
+import ca.rmen.sunrisesunset.SunriseSunset
 import hr.dtakac.prognoza.dbmodel.ForecastMeta
 import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.*
@@ -11,6 +12,7 @@ import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import java.util.*
 
 fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
     HourUiModel(
@@ -115,10 +117,9 @@ fun List<ForecastTimeSpan>.highestPressure(): Float? {
 }
 
 fun List<ForecastTimeSpan>.representativeWeatherIcon(): RepresentativeWeatherDescription? {
-    val eligibleSymbolCodes = filter { it.symbolCode != null }
-        .map { it.symbolCode!! }
-        // todo: more robust filtering based on actual sunrise and sunset times
-        .filter { it !in NIGHT_SYMBOL_CODES }
+    val eligibleSymbolCodes = filter {
+        SunriseSunset.isDay(GregorianCalendar.from(it.startTime), 45.0, 18.0)
+    }
     val mostCommonSymbolCode = eligibleSymbolCodes.mostCommon()
     val weatherIcon = WEATHER_ICONS[mostCommonSymbolCode]
     return if (weatherIcon == null) {
