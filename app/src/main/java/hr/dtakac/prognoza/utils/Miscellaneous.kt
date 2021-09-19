@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.utils
 
 import android.content.res.Resources
 import android.util.TypedValue
-import hr.dtakac.prognoza.dbmodel.ForecastMeta
+import hr.dtakac.prognoza.entity.ForecastMeta
 import java.time.ZonedDateTime
 
 fun <T> List<T>.mostCommon(): T? =

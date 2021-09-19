@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.PlaceDao
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.Place
 import kotlinx.coroutines.withContext
 import java.util.*
 

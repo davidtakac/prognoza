@@ -2,8 +2,8 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.ForecastMeta
+import hr.dtakac.prognoza.entity.Place
 import hr.dtakac.prognoza.utils.hasExpired
 import hr.dtakac.prognoza.utils.toErrorResourceId
 import hr.dtakac.prognoza.repomodel.CachedSuccess

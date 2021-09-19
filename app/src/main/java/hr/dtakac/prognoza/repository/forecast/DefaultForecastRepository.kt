@@ -7,8 +7,8 @@ import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.Place
 import hr.dtakac.prognoza.utils.hasExpired
 import hr.dtakac.prognoza.utils.toForecastResult
 import hr.dtakac.prognoza.utils.toForecastTimeSpan

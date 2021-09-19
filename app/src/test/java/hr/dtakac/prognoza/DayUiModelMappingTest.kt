@@ -3,7 +3,7 @@ package hr.dtakac.prognoza
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE_ID
 import hr.dtakac.prognoza.utils.toDayUiModel
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription

@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.Place
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import java.time.ZonedDateTime
 

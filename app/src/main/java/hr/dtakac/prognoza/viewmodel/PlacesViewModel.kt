@@ -8,7 +8,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.Event
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.Place
 import hr.dtakac.prognoza.utils.toPlaceUiModel
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository

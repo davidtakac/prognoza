@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository

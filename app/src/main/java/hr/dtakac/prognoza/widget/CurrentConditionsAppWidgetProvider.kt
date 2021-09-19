@@ -15,8 +15,8 @@ import hr.dtakac.prognoza.BuildConfig
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.activity.ForecastActivity
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.Place
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository

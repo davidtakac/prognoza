@@ -1,9 +1,9 @@
 package hr.dtakac.prognoza.utils
 
 import ca.rmen.sunrisesunset.SunriseSunset
-import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.ForecastMeta
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.Place
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription

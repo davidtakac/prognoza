@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.dbmodel
+package hr.dtakac.prognoza.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

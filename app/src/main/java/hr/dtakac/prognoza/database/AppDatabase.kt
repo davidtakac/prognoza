@@ -5,9 +5,9 @@ import androidx.room.RoomDatabase
 import hr.dtakac.prognoza.database.dao.ForecastMetaDao
 import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
 import hr.dtakac.prognoza.database.dao.PlaceDao
-import hr.dtakac.prognoza.dbmodel.ForecastMeta
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
-import hr.dtakac.prognoza.dbmodel.Place
+import hr.dtakac.prognoza.entity.ForecastMeta
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.Place
 
 @Database(
     entities = [

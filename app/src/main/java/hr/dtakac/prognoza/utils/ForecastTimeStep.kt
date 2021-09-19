@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.utils
 
 import hr.dtakac.prognoza.apimodel.ForecastTimeStep
-import hr.dtakac.prognoza.dbmodel.ForecastTimeSpan
+import hr.dtakac.prognoza.entity.ForecastTimeSpan
 import java.time.ZonedDateTime
 
 fun ForecastTimeStep.toForecastTimeSpan(
