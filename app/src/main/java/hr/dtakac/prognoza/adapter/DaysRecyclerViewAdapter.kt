@@ -12,6 +12,8 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
 import hr.dtakac.prognoza.extensions.*
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
@@ -43,8 +45,10 @@ class DayViewHolder(
     fun bind(uiModel: DayUiModel) {
         with(binding) {
             val context = root.context
-            tvDateTime.text = if (DateUtils.isToday(uiModel.time.toInstant().toEpochMilli())) {
-                context.getString(R.string.today)
+            val isTomorrow = uiModel.time.withZoneSameInstant(ZoneId.systemDefault())
+                .atStartOfDay() == ZonedDateTime.now().plusDays(1L).atStartOfDay()
+            tvDateTime.text = if (isTomorrow) {
+                context.getString(R.string.tomorrow)
             } else {
                 DateUtils.formatDateTime(
                     root.context,

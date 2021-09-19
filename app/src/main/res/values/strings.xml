@@ -56,7 +56,7 @@
     <string-array name="forecast_tab_names">
         <item>Today</item>
         <item>Tomorrow</item>
-        <item>Upcoming</item>
+        <item>Coming</item>
     </string-array>
 
     <string name="template_temperature_universal">%1$s°</string>
@@ -99,7 +99,7 @@
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
     <string name="error_database">An error occurred while fetching forecast data from the database. Try clearing your app data.</string>
     <string name="action_ok">OK</string>
-    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
     <string name="error_io">An IO error occurred. You are probably not connected to the Internet. Reconnect and try again.</string>
     <string name="change_units">Change units</string>
     <string name="change_to_imperial">To imperial</string>

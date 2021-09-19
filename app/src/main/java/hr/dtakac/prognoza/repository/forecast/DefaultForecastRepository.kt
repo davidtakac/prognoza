@@ -51,16 +51,7 @@ class DefaultForecastRepository(
             .plusDays(1)
         return getForecastTimeSpans(
             start = tomorrow.plusHours(hoursAfterMidnightToShow + 1L /* start where today left off */),
-            end = tomorrow.plusDays(1).plusHours(hoursAfterMidnightToShow),
-            placeId
-        )
-    }
-
-    override suspend fun getOtherDaysForecastTimeSpans(placeId: String): ForecastResult {
-        val now = ZonedDateTime.now().atStartOfDay()
-        return getForecastTimeSpans(
-            start = now,
-            end = now.plusDays(7L),
+            end = tomorrow.plusDays(1L).plusHours(hoursAfterMidnightToShow),
             placeId
         )
     }
@@ -74,7 +65,7 @@ class DefaultForecastRepository(
         }
     }
 
-    private suspend fun getForecastTimeSpans(
+    override suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
         placeId: String
