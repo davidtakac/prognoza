@@ -10,25 +10,25 @@ import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
-import hr.dtakac.prognoza.utils.forecastEndOfToday
-import hr.dtakac.prognoza.utils.forecastStartOfToday
+import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import java.time.ZonedDateTime
 
 class TodayFragmentViewModel(
     coroutineScope: CoroutineScope?,
-    private val forecastRepository: ForecastRepository,
-    private val dispatcherProvider: DispatcherProvider,
     preferencesRepository: PreferencesRepository,
-    placeRepository: PlaceRepository
+    placeRepository: PlaceRepository,
+    private val forecastRepository: ForecastRepository,
+    private val forecastTimeProvider: ForecastTimeProvider,
+    private val dispatcherProvider: DispatcherProvider,
 ) : ForecastFragmentViewModel<TodayForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
     override val _forecast = MutableLiveData<TodayForecastUiModel>()
 
     override suspend fun getNewForecast(): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
-            forecastStartOfToday,
-            forecastEndOfToday,
+            forecastTimeProvider.todayStart,
+            forecastTimeProvider.todayEnd,
             selectedPlace
         )
     }

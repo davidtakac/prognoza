@@ -1,13 +1,11 @@
 package hr.dtakac.prognoza
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import hr.dtakac.prognoza.fakes.FakeDispatcherProvider
-import hr.dtakac.prognoza.fakes.FakeForecastRepository
-import hr.dtakac.prognoza.fakes.FakePreferencesRepository
-import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
+import hr.dtakac.prognoza.fakes.*
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.Success
+import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -15,6 +13,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.time.ZoneId
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
@@ -26,6 +25,8 @@ class TodayForecastFragmentViewModelTest {
     private val forecastRepository = FakeForecastRepository()
     private val preferencesRepository = FakePreferencesRepository()
     private val dispatcherProvider = FakeDispatcherProvider(coroutineDispatcher)
+    private val placeRepository = FakePlaceRepository()
+    private val timeProvider = FakeForecastTimeProvider()
 
     // class under test
     private lateinit var viewModel: TodayFragmentViewModel
@@ -34,9 +35,11 @@ class TodayForecastFragmentViewModelTest {
     fun setup() {
         viewModel = TodayFragmentViewModel(
             coroutineScope,
+            preferencesRepository,
+            placeRepository,
             forecastRepository,
-            dispatcherProvider,
-            preferencesRepository
+            timeProvider,
+            dispatcherProvider
         )
     }
 
@@ -55,17 +58,17 @@ class TodayForecastFragmentViewModelTest {
         // Act
         viewModel.getForecast()
         // Assert
-        val now = FakeForecastRepository.now
         val hours = viewModel.forecast.value?.otherHours
         val firstHour = hours?.getOrNull(0)
         val lastHour = hours?.getOrNull(hours.lastIndex)
-        assertTrue("First hour is start of now") {
-            firstHour?.time == now.withMinute(0)
+        assertTrue("First hour is start of today") {
+            firstHour?.time == timeProvider.todayStart
         }
-        assertTrue("Last hour is tomorrow at 6AM") {
-            val isTomorrow = lastHour?.time?.minusDays(1)?.toLocalDate() == now.toLocalDate()
-            val is6Am = lastHour?.time?.hour == 6
-            isTomorrow && is6Am
+        assertTrue("Last hour is tomorrow") {
+            lastHour?.time?.dayOfYear == timeProvider.tomorrowStart.dayOfYear
+        }
+        assertTrue("Last hour is at 6AM") {
+            lastHour?.time?.withZoneSameInstant(ZoneId.systemDefault())?.hour == 6
         }
     }
 

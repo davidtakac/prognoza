@@ -1,3 +1,10 @@
 package hr.dtakac.prognoza.common
 
-const val TEST_PLACE_ID = "123456"
+import hr.dtakac.prognoza.entity.Place
+
+val TEST_PLACE = Place(
+    id = "123456",
+    fullName = "Atlantis",
+    latitude = 48.0,
+    longitude = 15.0
+)

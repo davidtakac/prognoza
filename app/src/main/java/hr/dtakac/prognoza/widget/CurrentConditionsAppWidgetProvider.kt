@@ -26,6 +26,7 @@ import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
 import hr.dtakac.prognoza.utils.*
+import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -36,6 +37,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     abstract val widgetErrorLayoutId: Int
 
     private val forecastRepository by inject<ForecastRepository>()
+    private val forecastTimeProvider by inject<ForecastTimeProvider>()
     private val preferencesRepository by inject<PreferencesRepository>()
     private val placeRepository by inject<PlaceRepository>()
 
@@ -99,8 +101,8 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         val selectedPlace = placeRepository.get(selectedPlaceId)
         return if (selectedPlace != null) {
             val result = forecastRepository.getForecastTimeSpans(
-                forecastStartOfToday,
-                forecastEndOfToday,
+                forecastTimeProvider.todayStart,
+                forecastTimeProvider.todayEnd,
                 selectedPlace
             )
             val hours = when (result) {

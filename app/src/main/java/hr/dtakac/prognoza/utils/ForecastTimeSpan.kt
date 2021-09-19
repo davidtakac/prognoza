@@ -118,26 +118,28 @@ fun List<ForecastTimeSpan>.highestPressure(): Double? {
 }
 
 fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): RepresentativeWeatherDescription? {
-    val daySymbolCodes = filter {
+    val timeSpansGroupedByIsDay = groupBy {
         SunriseSunset.isDay(
             GregorianCalendar.from(it.startTime),
             place.latitude,
             place.longitude
         )
     }
-        .map { it.symbolCode }
-    val mostCommonSymbolCode = if (daySymbolCodes.isEmpty()) {
-        map { it.symbolCode }.mostCommon()
+    val dayTimeSpans = timeSpansGroupedByIsDay[true] ?: listOf()
+    val nightTimeSpans = timeSpansGroupedByIsDay[false] ?: listOf()
+    val eligibleSymbolCodes = if (dayTimeSpans.isEmpty()) {
+        nightTimeSpans
     } else {
-        daySymbolCodes.mostCommon()
-    }
-    val weatherIcon = WEATHER_ICONS[mostCommonSymbolCode]
+        dayTimeSpans
+    }.mapNotNull { it.symbolCode }
+    val representativeSymbolCode = eligibleSymbolCodes.mostCommon()
+    val weatherIcon = WEATHER_ICONS[representativeSymbolCode]
     return if (weatherIcon == null) {
         null
     } else {
         RepresentativeWeatherDescription(
             weatherDescription = weatherIcon,
-            isMostly = daySymbolCodes.any { it != mostCommonSymbolCode }
+            isMostly = eligibleSymbolCodes.any { it != representativeSymbolCode }
         )
     }
 }

@@ -45,9 +45,7 @@ class DayViewHolder(
     fun bind(uiModel: DayUiModel) {
         with(binding) {
             val context = root.context
-            val isTomorrow = uiModel.time.withZoneSameInstant(ZoneId.systemDefault())
-                .atStartOfDay() == ZonedDateTime.now().plusDays(1L).atStartOfDay()
-            tvDateTime.text = if (isTomorrow) {
+            tvDateTime.text = if (uiModel.time.isTomorrow()) {
                 context.getString(R.string.tomorrow)
             } else {
                 DateUtils.formatDateTime(

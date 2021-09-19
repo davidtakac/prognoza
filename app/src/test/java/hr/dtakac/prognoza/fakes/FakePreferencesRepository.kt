@@ -1,12 +1,12 @@
 package hr.dtakac.prognoza.fakes
 
-import hr.dtakac.prognoza.common.TEST_PLACE_ID
+import hr.dtakac.prognoza.common.TEST_PLACE
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 
 class FakePreferencesRepository : PreferencesRepository {
     override suspend fun getSelectedPlaceId(): String {
-        return TEST_PLACE_ID
+        return TEST_PLACE.id
     }
 
     override suspend fun setSelectedPlaceId(placeId: String) {

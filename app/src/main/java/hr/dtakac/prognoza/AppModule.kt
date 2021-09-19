@@ -17,6 +17,8 @@ import hr.dtakac.prognoza.repository.place.DefaultPlaceRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.utils.timeprovider.DefaultForecastTimeProvider
+import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.viewmodel.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -99,12 +101,16 @@ val prognozaAppModule = module {
         )
     }
 
+    single<ForecastTimeProvider> {
+        DefaultForecastTimeProvider()
+    }
+
     factory<NetworkChecker> {
         DefaultNetworkChecker(androidContext())
     }
 
     viewModel {
-        DaysFragmentViewModel(null, get(), get(), get(), get())
+        DaysFragmentViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {
@@ -112,11 +118,11 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        TodayFragmentViewModel(null, get(), get(), get(), get())
+        TodayFragmentViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {
-        TomorrowFragmentViewModel(null, get(), get(), get(), get())
+        TomorrowFragmentViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {
