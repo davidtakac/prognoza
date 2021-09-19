@@ -4,9 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
+        <entry key="app/src/main/res/layout/cell_day.xml" value="0.75" />
+        <entry key="app/src/main/res/layout/cell_hour.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_days.xml" value="0.159375" />
+        <entry key="app/src/main/res/layout/fragment_place_search.xml" value="0.15069444444444444" />
         <entry key="app/src/main/res/layout/fragment_today.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/fragment_tomorrow.xml" value="0.159375" />
+        <entry key="app/src/main/res/layout/layout_place_search_empty.xml" value="0.15069444444444444" />
       </map>
     </option>
   </component>

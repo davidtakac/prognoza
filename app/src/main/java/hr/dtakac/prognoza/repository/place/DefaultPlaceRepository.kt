@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.dao.PlaceDao
 import hr.dtakac.prognoza.dbmodel.Place
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class DefaultPlaceRepository(
     private val placeDao: PlaceDao,
@@ -43,7 +44,8 @@ class DefaultPlaceRepository(
             placeService.search(
                 userAgent = USER_AGENT,
                 query = query,
-                format = "jsonv2"
+                format = "jsonv2",
+                acceptLanguage = Locale.getDefault().language
             )
         } catch (e: Exception) {
             listOf()

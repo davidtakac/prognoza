@@ -9,6 +9,7 @@ interface PlaceService {
     @GET("search")
     suspend fun search(
         @Header("User-Agent") userAgent: String,
+        @Header("Accept-Language") acceptLanguage: String,
         @Query("q") query: String,
         @Query("format") format: String
     ): List<PlaceResponse>

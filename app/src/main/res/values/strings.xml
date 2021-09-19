@@ -111,5 +111,6 @@
     <string name="app_widget_current_conditions_small_description">Current weather icon, temperature and feels like temperature</string>
     <string name="app_widget_current_conditions_medium_description">Current weather icon, temperature, feels like temperature and two hour precipitation forecast</string>
     <string name="no_data">No data</string>
+    <string name="place_search_empty">No places match the entered query.</string>
 
 </resources>

@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.viewmodel
 import android.annotation.SuppressLint
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.Event
 import hr.dtakac.prognoza.common.network.NetworkChecker
@@ -36,6 +37,8 @@ class PlacesViewModel(
 
     private val _message = MutableLiveData<Event<Int>>()
     val message: LiveData<Event<Int>> get() = _message
+
+    val empty = Transformations.map(_places) { it.isEmpty() }
 
     fun showPlaces(query: String = "") {
         when {

@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -79,6 +80,9 @@ class PlaceSearchDialogFragment : DialogFragment() {
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+        }
+        viewModel.empty.observe(viewLifecycleOwner) {
+            binding.tvLabelEmpty.isGone = !it
         }
     }
 

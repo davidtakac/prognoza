@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <EditText
         android:id="@+id/et_search"
@@ -54,5 +55,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_label_empty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/place_search_empty"
+        android:textSize="14sp"
+        android:textColor="?attr/colorMediumEmphasis"
+        app:layout_constraintTop_toBottomOf="@id/et_search"
+        app:layout_constraintStart_toStartOf="@id/et_search"
+        app:layout_constraintEnd_toEndOf="@id/et_search"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
