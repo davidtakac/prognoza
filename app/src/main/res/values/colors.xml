@@ -5,9 +5,9 @@
     <color name="purple_700">#FF3700B3</color>
     <!--
         Generated according to material design guidelines by overlaying 8% purple_500
-        over #121212 (default dark surface background) using https://borderleft.com/toolbox/rgba/
+        over surface color using https://borderleft.com/toolbox/rgba/
     -->
-    <color name="purple_500_surface">#181124</color>
+    <color name="purple_500_dark_surface">#181124</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
