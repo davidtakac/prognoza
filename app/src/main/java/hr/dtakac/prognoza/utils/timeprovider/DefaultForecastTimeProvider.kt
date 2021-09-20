@@ -1,20 +1,23 @@
 package hr.dtakac.prognoza.utils.timeprovider
 
 import hr.dtakac.prognoza.HOURS_AFTER_MIDNIGHT
-import hr.dtakac.prognoza.utils.atStartOfDay
 import java.time.ZonedDateTime
 
 class DefaultForecastTimeProvider : ForecastTimeProvider {
     override val todayStart: ZonedDateTime
         get() = ZonedDateTime
             .now()
-            .minusHours(1L)
+            .withMinute(0)
+            .withSecond(0)
+            .withNano(0)
 
     override val todayEnd: ZonedDateTime
-        get() = todayStart
-            .plusDays(1L)
-            .atStartOfDay()
-            .plusHours(HOURS_AFTER_MIDNIGHT)
+        get() {
+            val hoursLeftInToday = 24 - todayStart.hour
+            return todayStart.plusHours(
+                hoursLeftInToday + HOURS_AFTER_MIDNIGHT
+            )
+        }
 
     override val tomorrowStart: ZonedDateTime
         get() = todayEnd
@@ -22,7 +25,7 @@ class DefaultForecastTimeProvider : ForecastTimeProvider {
 
     override val tomorrowEnd: ZonedDateTime
         get() = tomorrowStart
-            .plusHours(24L)
+            .plusHours(23L)
 
     override val comingStart: ZonedDateTime
         get() = tomorrowStart

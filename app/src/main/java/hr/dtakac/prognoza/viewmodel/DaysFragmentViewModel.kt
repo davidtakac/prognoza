@@ -12,8 +12,8 @@ import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
-import hr.dtakac.prognoza.utils.*
 import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.utils.toDayUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
@@ -25,7 +25,11 @@ class DaysFragmentViewModel(
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastFragmentViewModel<DaysForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
+) : ForecastFragmentViewModel<DaysForecastUiModel>(
+    coroutineScope,
+    preferencesRepository,
+    placeRepository
+) {
     override val _forecast = MutableLiveData<DaysForecastUiModel>()
 
     override suspend fun getNewForecast(): ForecastResult {
@@ -53,10 +57,9 @@ class DaysFragmentViewModel(
                         summaries.add(dayHours.toDayUiModel(this, unit, selectedPlace))
                         dayHours.clear()
                         dayHours.add(currentTimeSpan)
-                        endOfDay = currentTimeSpan.startTime
-                            .plusDays(1L)
-                            .atStartOfDay()
-                            .plusHours(HOURS_AFTER_MIDNIGHT)
+                        val hoursLeftInDay = 24 - currentTimeSpan.startTime.hour
+                        endOfDay =
+                            currentTimeSpan.startTime.plusHours(hoursLeftInDay + HOURS_AFTER_MIDNIGHT)
                     }
                 }
                 summaries
