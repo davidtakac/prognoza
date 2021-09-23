@@ -18,4 +18,5 @@
     <color name="white_60">#99FFFFFF</color>
     <color name="blue_700">#1976D2</color>
     <color name="blue_300">#64B5F6</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

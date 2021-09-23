@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.adapter
 
+import android.icu.text.RelativeDateTimeFormatter
 import android.text.format.DateUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -10,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
-import hr.dtakac.prognoza.utils.*
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
+import hr.dtakac.prognoza.utils.*
 
 class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {
@@ -44,10 +45,13 @@ class DayViewHolder(
         with(binding) {
             val context = root.context
             tvDateTime.text = if (isTomorrow) {
-                context.getString(R.string.tomorrow)
+                RelativeDateTimeFormatter.getInstance().format(
+                    RelativeDateTimeFormatter.Direction.NEXT,
+                    RelativeDateTimeFormatter.AbsoluteUnit.DAY
+                ).replaceFirstChar { it.uppercaseChar() }
             } else {
                 DateUtils.formatDateTime(
-                    root.context,
+                    context,
                     uiModel.time.toInstant().toEpochMilli(),
                     DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
                 )
