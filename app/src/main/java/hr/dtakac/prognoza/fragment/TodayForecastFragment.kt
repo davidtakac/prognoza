@@ -12,10 +12,11 @@ import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
+import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.utils.formatFeelsLike
+import hr.dtakac.prognoza.utils.formatPrecipitationValue
 import hr.dtakac.prognoza.utils.formatTemperatureValue
 import hr.dtakac.prognoza.utils.formatWeatherIconDescription
-import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -59,6 +60,18 @@ class TodayForecastFragment :
                     currentHour.feelsLike,
                     currentHour.displayDataInUnit
                 )
+            with(tvPrecipitation) {
+                visibility =
+                    if (uiModel.currentHour.precipitationAmount != null && uiModel.currentHour.precipitationAmount > 0) {
+                        View.VISIBLE
+                    } else {
+                        View.GONE
+                    }
+                text = requireContext().formatPrecipitationValue(
+                    uiModel.currentHour.precipitationAmount,
+                    currentHour.displayDataInUnit
+                )
+            }
             cvCurrentHour.visibility = View.VISIBLE
         }
         adapter.submitList(uiModel.otherHours)
