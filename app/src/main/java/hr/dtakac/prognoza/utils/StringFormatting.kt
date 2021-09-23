@@ -231,17 +231,11 @@ fun Context.formatTotalPrecipitation(
             SpannableString(getString(R.string.placeholder_precipitation_text))
         }
         else -> {
-            SpannableStringBuilder()
-                .append(
-                    formatPrecipitationValue(
-                        precipitation,
-                        unit,
-                        significantPrecipitationColor
-                    )
-                )
-                .append(" ")
-                .append(getString(R.string.precipitation_total))
-                .toSpannable()
+            formatPrecipitationValue(
+                precipitation,
+                unit,
+                significantPrecipitationColor
+            )
         }
     }
 }

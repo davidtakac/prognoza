@@ -11,13 +11,13 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:layout_marginTop="16dp"
-        app:cardElevation="3dp"
-        app:cardCornerRadius="8dp"
         android:visibility="invisible"
-        tools:visibility="visible"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="3dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:textColor="?attr/colorHighEmphasis"
-                android:textSize="42sp"
+                android:textSize="36sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_date_time"
                 tools:text="32" />
@@ -52,19 +52,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:textColor="?attr/colorMediumEmphasis"
-                android:textSize="42sp"
-                app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
+                android:textSize="36sp"
                 app:layout_constraintBaseline_toBaselineOf="@id/tv_temperature_high"
                 app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
-                android:layout_marginEnd="8dp"
+                app:layout_constraintStart_toEndOf="@id/tv_temperature_high"
                 tools:text="32" />
 
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginEnd="8dp"
                 android:textColor="?attr/colorMediumEmphasis"
                 android:textSize="16sp"
@@ -84,16 +84,14 @@
                 app:layout_constraintEnd_toStartOf="@id/iv_weather_icon"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_description"
-                tools:text="Precpitation: 40mm" />
+                tools:text="40mm" />
 
             <ImageView
                 android:id="@+id/iv_weather_icon"
                 android:layout_width="86dp"
                 android:layout_height="86dp"
                 app:layout_constraintBottom_toTopOf="@id/tv_precipitation"
-                app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:src="@drawable/lightsleetandthunder" />
 
@@ -141,8 +139,8 @@
         android:layout_marginHorizontal="16dp"
         android:gravity="end"
         android:text="@string/met_norway_credit"
-        android:textSize="12sp"
         android:textColor="?attr/colorMediumEmphasis"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
