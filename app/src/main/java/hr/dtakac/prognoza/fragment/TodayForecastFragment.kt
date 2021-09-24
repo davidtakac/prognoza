@@ -53,25 +53,23 @@ class TodayForecastFragment :
                 .load(currentHour.weatherDescription?.iconResourceId)
                 .fallback(R.drawable.ic_cloud_off)
                 .into(ivWeatherIcon)
-            tvDescription.text =
-                requireContext().formatWeatherIconDescription(currentHour.weatherDescription?.descriptionResourceId)
             tvFeelsLike.text =
                 requireContext().formatFeelsLike(
                     currentHour.feelsLike,
                     currentHour.displayDataInUnit
                 )
-            with(tvPrecipitation) {
-                visibility =
-                    if (uiModel.currentHour.precipitationAmount != null && uiModel.currentHour.precipitationAmount > 0) {
-                        View.VISIBLE
-                    } else {
-                        View.GONE
-                    }
-                text = requireContext().formatPrecipitationValue(
-                    uiModel.currentHour.precipitationAmount,
-                    currentHour.displayDataInUnit
-                )
-            }
+            tvDescription.text =
+                if (uiModel.currentHour.precipitationAmount != null && uiModel.currentHour.precipitationAmount > 0) {
+                    requireContext().formatPrecipitationValue(
+                        uiModel.currentHour.precipitationAmount,
+                        currentHour.displayDataInUnit
+                    )
+                } else {
+                    requireContext()
+                        .formatWeatherIconDescription(
+                            currentHour.weatherDescription?.descriptionResourceId
+                        )
+                }
             cvCurrentHour.visibility = View.VISIBLE
         }
         adapter.submitList(uiModel.otherHours)
