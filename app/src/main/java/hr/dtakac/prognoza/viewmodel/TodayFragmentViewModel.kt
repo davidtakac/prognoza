@@ -48,24 +48,22 @@ class TodayFragmentViewModel(
             success.timeSpans[0].toHourUiModel(unit).copy(time = ZonedDateTime.now())
         }
         val temperatureDataAsync = coroutineScope.async(dispatcherProvider.default) {
-            mutableMapOf<ZonedDateTime, TemperatureUiModel>().apply {
-                success.timeSpans.forEach {
-                    set(
-                        it.startTime, TemperatureUiModel(
-                            weatherDescription = WEATHER_ICONS[it.symbolCode],
-                            airTemperature = it.instantTemperature,
-                            feelsLike = if (it.instantTemperature == null) {
-                                null
-                            } else {
-                                calculateFeelsLikeTemperature(
-                                    it.instantTemperature,
-                                    it.instantWindSpeed,
-                                    it.instantRelativeHumidity
-                                )
-                            }
+            success.timeSpans.map {
+                TemperatureUiModel(
+                    startTime = it.startTime,
+                    endTime = it.endTime,
+                    weatherDescription = WEATHER_ICONS[it.symbolCode],
+                    instantTemperature = it.instantTemperature,
+                    feelsLike = if (it.instantTemperature == null) {
+                        null
+                    } else {
+                        calculateFeelsLikeTemperature(
+                            it.instantTemperature,
+                            it.instantWindSpeed,
+                            it.instantRelativeHumidity
                         )
-                    )
-                }
+                    }
+                )
             }
         }
         return TodayForecastUiModel(

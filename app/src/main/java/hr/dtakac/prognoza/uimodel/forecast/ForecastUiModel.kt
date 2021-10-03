@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.uimodel.forecast
 
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
-import java.time.ZonedDateTime
 
 interface ForecastUiModel
 
@@ -12,7 +11,7 @@ data class DaysForecastUiModel(
 
 data class TodayForecastUiModel(
     val currentHour: HourUiModel,
-    val temperatureData: Map<ZonedDateTime, TemperatureUiModel>
+    val temperatureData: List<TemperatureUiModel>
 ) : ForecastUiModel
 
 data class TomorrowForecastUiModel(

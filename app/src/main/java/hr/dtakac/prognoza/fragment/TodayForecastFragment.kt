@@ -2,11 +2,14 @@ package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
@@ -20,7 +23,6 @@ import hr.dtakac.prognoza.utils.formatTemperatureValue
 import hr.dtakac.prognoza.utils.formatWeatherIconDescription
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.time.ZonedDateTime
 
 class TodayForecastFragment :
     ForecastFragment<TodayForecastUiModel, FragmentTodayBinding>(FragmentTodayBinding::inflate) {
@@ -71,21 +73,39 @@ class TodayForecastFragment :
         cvCurrentHour.visibility = View.VISIBLE
     }
 
-    private fun FragmentTodayBinding.bindTemperatureChart(temperatureData: Map<ZonedDateTime, TemperatureUiModel>) {
-        val airTemperatureEntries = mutableListOf<Entry>()
-        temperatureData.forEach {
-            airTemperatureEntries.add(
+    private fun FragmentTodayBinding.bindTemperatureChart(temperatureData: List<TemperatureUiModel>) {
+        val airTemperatureEntries = temperatureData.mapIndexed { index, temperatureUiModel ->
+            temperatureUiModel.instantTemperature?.let {
                 Entry(
-                    it.key.toInstant().toEpochMilli().toFloat(),
-                    it.value.airTemperature!!.toFloat()
+                    index.toFloat(),
+                    it.toFloat(),
+                    /*ResourcesCompat.getDrawable(
+                        requireContext().resources,
+                        temperatureUiModel.weatherDescription!!.iconResourceId,
+                        null
+                    )*/
                 )
-            )
+            }
         }
-        val airTemperatureLineSetData = LineDataSet(airTemperatureEntries, "Air temperature")
+        val airTemperatureLineSetData = LineDataSet(
+            airTemperatureEntries,
+            "Air temperature"
+        )
+        airTemperatureLineSetData.setDrawIcons(true)
         airTemperatureLineSetData.axisDependency = YAxis.AxisDependency.LEFT
         val dataSets = listOf(airTemperatureLineSetData)
         val lineData = LineData(dataSets)
+        val xAxisFormatter = object : ValueFormatter() {
+            override fun getAxisLabel(value: Float, axis: AxisBase?): String {
+                return DateUtils.formatDateTime(
+                    requireContext(),
+                    temperatureData[value.toInt()].startTime.toInstant().toEpochMilli(),
+                    DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
+                )
+            }
+        }
         lcTemperature.data = lineData
+        lcTemperature.xAxis.valueFormatter = xAxisFormatter
         lcTemperature.invalidate()
         cvChartTemperature.visibility = View.VISIBLE
     }
