@@ -2,15 +2,18 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.utils.toHourUiModel
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
+import hr.dtakac.prognoza.uimodel.forecast.TemperatureUiModel
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
+import hr.dtakac.prognoza.utils.calculateFeelsLikeTemperature
 import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.utils.toHourUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import java.time.ZonedDateTime
@@ -22,7 +25,11 @@ class TodayFragmentViewModel(
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastFragmentViewModel<TodayForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
+) : ForecastFragmentViewModel<TodayForecastUiModel>(
+    coroutineScope,
+    preferencesRepository,
+    placeRepository
+) {
     override val _forecast = MutableLiveData<TodayForecastUiModel>()
 
     override suspend fun getNewForecast(): ForecastResult {
@@ -40,12 +47,30 @@ class TodayFragmentViewModel(
         val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
             success.timeSpans[0].toHourUiModel(unit).copy(time = ZonedDateTime.now())
         }
-        val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans.map { it.toHourUiModel(unit) }
+        val temperatureDataAsync = coroutineScope.async(dispatcherProvider.default) {
+            mutableMapOf<ZonedDateTime, TemperatureUiModel>().apply {
+                success.timeSpans.forEach {
+                    set(
+                        it.startTime, TemperatureUiModel(
+                            weatherDescription = WEATHER_ICONS[it.symbolCode],
+                            airTemperature = it.instantTemperature,
+                            feelsLike = if (it.instantTemperature == null) {
+                                null
+                            } else {
+                                calculateFeelsLikeTemperature(
+                                    it.instantTemperature,
+                                    it.instantWindSpeed,
+                                    it.instantRelativeHumidity
+                                )
+                            }
+                        )
+                    )
+                }
+            }
         }
         return TodayForecastUiModel(
             currentHour = currentHourAsync.await(),
-            otherHours = otherHoursAsync.await(),
+            temperatureData = temperatureDataAsync.await(),
         )
     }
 }

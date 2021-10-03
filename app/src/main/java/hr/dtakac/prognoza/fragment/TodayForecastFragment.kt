@@ -1,17 +1,18 @@
 package hr.dtakac.prognoza.fragment
 
-import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.View
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TODAY_REQUEST_KEY
-import hr.dtakac.prognoza.adapter.HoursRecyclerViewAdapter
-import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
+import hr.dtakac.prognoza.uimodel.cell.HourUiModel
+import hr.dtakac.prognoza.uimodel.forecast.TemperatureUiModel
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.utils.formatFeelsLike
 import hr.dtakac.prognoza.utils.formatPrecipitationValue
@@ -19,6 +20,7 @@ import hr.dtakac.prognoza.utils.formatTemperatureValue
 import hr.dtakac.prognoza.utils.formatWeatherIconDescription
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.ZonedDateTime
 
 class TodayForecastFragment :
     ForecastFragment<TodayForecastUiModel, FragmentTodayBinding>(FragmentTodayBinding::inflate) {
@@ -28,68 +30,63 @@ class TodayForecastFragment :
     override val requestKey get() = TODAY_REQUEST_KEY
     override val viewModel by viewModel<TodayFragmentViewModel>()
 
-    private val adapter = HoursRecyclerViewAdapter()
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initializeRecyclerView()
+    override fun showForecast(uiModel: TodayForecastUiModel) {
+        binding.bindCurrentHour(uiModel.currentHour)
+        binding.bindTemperatureChart(uiModel.temperatureData)
     }
 
-    override fun showForecast(uiModel: TodayForecastUiModel) {
-        val currentHour = uiModel.currentHour
+    private fun FragmentTodayBinding.bindCurrentHour(currentHour: HourUiModel) {
         val time = DateUtils.formatDateTime(
             requireContext(),
             currentHour.time.toInstant().toEpochMilli(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
         )
-        with(binding) {
-            tvDateTime.text = time
-            tvTemperature.text =
-                requireContext().formatTemperatureValue(
-                    currentHour.temperature,
+        tvDateTime.text = time
+        tvTemperature.text =
+            requireContext().formatTemperatureValue(
+                currentHour.temperature,
+                currentHour.displayDataInUnit
+            )
+        Glide.with(this@TodayForecastFragment)
+            .load(currentHour.weatherDescription?.iconResourceId)
+            .fallback(R.drawable.ic_cloud_off)
+            .into(ivWeatherIcon)
+        tvFeelsLike.text =
+            requireContext().formatFeelsLike(
+                currentHour.feelsLike,
+                currentHour.displayDataInUnit
+            )
+        tvDescription.text =
+            if (currentHour.precipitationAmount != null && currentHour.precipitationAmount > 0) {
+                requireContext().formatPrecipitationValue(
+                    currentHour.precipitationAmount,
                     currentHour.displayDataInUnit
                 )
-            Glide.with(this@TodayForecastFragment)
-                .load(currentHour.weatherDescription?.iconResourceId)
-                .fallback(R.drawable.ic_cloud_off)
-                .into(ivWeatherIcon)
-            tvFeelsLike.text =
-                requireContext().formatFeelsLike(
-                    currentHour.feelsLike,
-                    currentHour.displayDataInUnit
-                )
-            tvDescription.text =
-                if (uiModel.currentHour.precipitationAmount != null && uiModel.currentHour.precipitationAmount > 0) {
-                    requireContext().formatPrecipitationValue(
-                        uiModel.currentHour.precipitationAmount,
-                        currentHour.displayDataInUnit
+            } else {
+                requireContext()
+                    .formatWeatherIconDescription(
+                        currentHour.weatherDescription?.descriptionResourceId
                     )
-                } else {
-                    requireContext()
-                        .formatWeatherIconDescription(
-                            currentHour.weatherDescription?.descriptionResourceId
-                        )
-                }
-            cvCurrentHour.visibility = View.VISIBLE
-        }
-        adapter.submitList(uiModel.otherHours)
+            }
+        cvCurrentHour.visibility = View.VISIBLE
     }
 
-    private fun initializeRecyclerView() {
-        with(binding.rvHours) {
-            layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.VERTICAL,
-                false
-            )
-            adapter = this@TodayForecastFragment.adapter
-            addItemDecoration(MarginItemDecoration())
-            addItemDecoration(
-                DividerItemDecoration(
-                    requireContext(),
-                    LinearLayoutManager.VERTICAL
+    private fun FragmentTodayBinding.bindTemperatureChart(temperatureData: Map<ZonedDateTime, TemperatureUiModel>) {
+        val airTemperatureEntries = mutableListOf<Entry>()
+        temperatureData.forEach {
+            airTemperatureEntries.add(
+                Entry(
+                    it.key.toInstant().toEpochMilli().toFloat(),
+                    it.value.airTemperature!!.toFloat()
                 )
             )
         }
+        val airTemperatureLineSetData = LineDataSet(airTemperatureEntries, "Air temperature")
+        airTemperatureLineSetData.axisDependency = YAxis.AxisDependency.LEFT
+        val dataSets = listOf(airTemperatureLineSetData)
+        val lineData = LineData(dataSets)
+        lcTemperature.data = lineData
+        lcTemperature.invalidate()
+        cvChartTemperature.visibility = View.VISIBLE
     }
 }
