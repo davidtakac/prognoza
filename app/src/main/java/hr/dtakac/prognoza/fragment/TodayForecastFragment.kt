@@ -12,6 +12,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TODAY_REQUEST_KEY
+import hr.dtakac.prognoza.chart.FloatingDrawableEntry
+import hr.dtakac.prognoza.chart.FloatingDrawableLineChartRenderer
 import hr.dtakac.prognoza.databinding.FragmentTodayBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
@@ -74,24 +76,21 @@ class TodayForecastFragment :
     }
 
     private fun FragmentTodayBinding.bindTemperatureChart(temperatureData: List<TemperatureUiModel>) {
-        val airTemperatureEntries = temperatureData.mapIndexed { index, temperatureUiModel ->
-            temperatureUiModel.instantTemperature?.let {
-                Entry(
-                    index.toFloat(),
-                    it.toFloat(),
-                    /*ResourcesCompat.getDrawable(
-                        requireContext().resources,
-                        temperatureUiModel.weatherDescription!!.iconResourceId,
-                        null
-                    )*/
+        val airTemperatureEntries = temperatureData
+            .filter { it.instantTemperature != null && it.weatherDescription != null }
+            .mapIndexed { idx, uiModel ->
+                FloatingDrawableEntry(
+                    uiModel.weatherDescription!!.iconResourceId,
+                    idx.toFloat(),
+                    uiModel.instantTemperature!!.toFloat()
                 )
             }
-        }
         val airTemperatureLineSetData = LineDataSet(
             airTemperatureEntries,
             "Air temperature"
         )
         airTemperatureLineSetData.setDrawIcons(true)
+        airTemperatureLineSetData.setDrawValues(false)
         airTemperatureLineSetData.axisDependency = YAxis.AxisDependency.LEFT
         val dataSets = listOf(airTemperatureLineSetData)
         val lineData = LineData(dataSets)
@@ -104,8 +103,10 @@ class TodayForecastFragment :
                 )
             }
         }
+        lcTemperature.renderer = FloatingDrawableLineChartRenderer(requireContext(), lcTemperature)
         lcTemperature.data = lineData
         lcTemperature.xAxis.valueFormatter = xAxisFormatter
+        lcTemperature.axisRight.setDrawLabels(false)
         lcTemperature.invalidate()
         cvChartTemperature.visibility = View.VISIBLE
     }
