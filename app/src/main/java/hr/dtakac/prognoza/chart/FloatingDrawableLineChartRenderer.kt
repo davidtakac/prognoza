@@ -8,6 +8,7 @@ import androidx.annotation.DrawableRes
 import androidx.core.content.res.ResourcesCompat
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.renderer.LineChartRenderer
+import hr.dtakac.prognoza.utils.toPx
 import kotlin.math.roundToInt
 
 class FloatingDrawableLineChartRenderer(
@@ -16,13 +17,18 @@ class FloatingDrawableLineChartRenderer(
 
     private val circleCoordinates = FloatArray(2)
     private val drawablesCache = SparseArray<Drawable>()
+    private val drawableDimen = 32.toPx
+    private val drawableMarginBottom = 8.toPx
 
     override fun drawExtras(c: Canvas) {
         super.drawExtras(c)
         mChart.lineData.dataSets.forEach { dataset ->
             val transformer = mChart.getTransformer(dataset.axisDependency)
-            for (i in mXBounds.min..(mXBounds.min + mXBounds.range)) {
+            val endOfXBounds = (mXBounds.min + mXBounds.range)
+            for (i in mXBounds.min..endOfXBounds) {
                 val entry = dataset.getEntryForIndex(i) as? FloatingDrawableEntry ?: continue
+                if (i == 0 || i == endOfXBounds || i % 2 == 0) continue
+
                 circleCoordinates[0] = entry.x
                 circleCoordinates[1] = entry.y * mAnimator.phaseY
 
@@ -31,13 +37,11 @@ class FloatingDrawableLineChartRenderer(
                 if (!mViewPortHandler.isInBoundsRight(circleCoordinates[0])) break
                 if (!mViewPortHandler.isInBoundsLeft(circleCoordinates[0]) || !mViewPortHandler.isInBoundsY(circleCoordinates[1])) continue
 
-                val drawableDimen = dataset.circleRadius * 8
                 getDrawable(entry.floatingDrawableRes)?.run {
-                    val marginBottom = drawableDimen/4
                     val left = (circleCoordinates[0] - drawableDimen/2).roundToInt()
                     val right = (circleCoordinates[0] + drawableDimen/2).roundToInt()
-                    val bottom = (circleCoordinates[1] - marginBottom).roundToInt()
-                    val top = (circleCoordinates[1] - marginBottom - drawableDimen).roundToInt()
+                    val bottom = (circleCoordinates[1] - drawableMarginBottom).roundToInt()
+                    val top = (circleCoordinates[1] - drawableMarginBottom - drawableDimen).roundToInt()
                     setBounds(left, top, right, bottom)
                     draw(c)
                 }

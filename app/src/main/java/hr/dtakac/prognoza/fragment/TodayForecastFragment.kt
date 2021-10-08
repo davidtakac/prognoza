@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.fragment
 
 import android.text.format.DateUtils
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.bumptech.glide.Glide
 import com.github.mikephil.charting.components.AxisBase
@@ -10,6 +11,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.google.android.material.color.MaterialColors
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.TODAY_REQUEST_KEY
 import hr.dtakac.prognoza.chart.FloatingDrawableEntry
@@ -19,10 +21,7 @@ import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import hr.dtakac.prognoza.uimodel.forecast.TemperatureUiModel
 import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
-import hr.dtakac.prognoza.utils.formatFeelsLike
-import hr.dtakac.prognoza.utils.formatPrecipitationValue
-import hr.dtakac.prognoza.utils.formatTemperatureValue
-import hr.dtakac.prognoza.utils.formatWeatherIconDescription
+import hr.dtakac.prognoza.utils.*
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -92,6 +91,9 @@ class TodayForecastFragment :
         airTemperatureLineSetData.setDrawIcons(true)
         airTemperatureLineSetData.setDrawValues(false)
         airTemperatureLineSetData.axisDependency = YAxis.AxisDependency.LEFT
+        airTemperatureLineSetData.lineWidth = 1.toPx
+        airTemperatureLineSetData.color = MaterialColors.getColor(requireContext(), R.attr.colorAirTemperatureLine, null)
+        airTemperatureLineSetData.setCircleColor(MaterialColors.getColor(requireContext(), R.attr.colorAirTemperatureLine, null))
         val dataSets = listOf(airTemperatureLineSetData)
         val lineData = LineData(dataSets)
         val xAxisFormatter = object : ValueFormatter() {
@@ -107,6 +109,7 @@ class TodayForecastFragment :
         lcTemperature.data = lineData
         lcTemperature.xAxis.valueFormatter = xAxisFormatter
         lcTemperature.axisRight.setDrawLabels(false)
+        lcTemperature.xAxis.setDrawGridLines(false)
         lcTemperature.invalidate()
         cvChartTemperature.visibility = View.VISIBLE
     }

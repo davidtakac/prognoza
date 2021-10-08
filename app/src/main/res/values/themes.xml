@@ -15,6 +15,7 @@
         <item name="colorHighEmphasis">@color/black_87</item>
         <item name="colorMediumEmphasis">@color/black_60</item>
         <item name="colorSignificantPrecipitation">@color/blue_700</item>
+        <item name="colorAirTemperatureLine">?colorPrimary</item>
     </style>
 
     <style name="Theme.Prognoza.Widget">

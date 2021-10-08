@@ -17,5 +17,6 @@
         <item name="colorHighEmphasis">@color/white_87</item>
         <item name="colorMediumEmphasis">@color/white_60</item>
         <item name="colorSignificantPrecipitation">@color/blue_300</item>
+        <item name="colorAirTemperatureLine">?colorPrimary</item>
     </style>
 </resources>

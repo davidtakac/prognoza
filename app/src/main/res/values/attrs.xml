@@ -10,4 +10,8 @@
     <attr name="colorHighEmphasis" format="color"/>
     <attr name="colorMediumEmphasis" format="color"/>
     <attr name="colorSignificantPrecipitation" format="color"/>
+
+    <!-- Chart -->
+    <attr name="colorAirTemperatureLine" format="color"/>
+    <attr name="colorFeelsLikeLine" format="color"/>
 </resources>
