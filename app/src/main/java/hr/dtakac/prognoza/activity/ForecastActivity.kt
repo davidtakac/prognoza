@@ -66,6 +66,7 @@ class ForecastActivity :
     }
 
     private fun initializeViewPager() {
+        binding.viewPager.isUserInputEnabled = false
         binding.viewPager.adapter = ForecastPagerAdapter(this)
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = resources.getStringArray(R.array.forecast_tab_names)[position]

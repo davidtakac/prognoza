@@ -27,7 +27,6 @@ class FloatingDrawableLineChartRenderer(
             val endOfXBounds = (mXBounds.min + mXBounds.range)
             for (i in mXBounds.min..endOfXBounds) {
                 val entry = dataset.getEntryForIndex(i) as? FloatingDrawableEntry ?: continue
-                if (i == 0 || i == endOfXBounds || i % 2 == 0) continue
 
                 circleCoordinates[0] = entry.x
                 circleCoordinates[1] = entry.y * mAnimator.phaseY
