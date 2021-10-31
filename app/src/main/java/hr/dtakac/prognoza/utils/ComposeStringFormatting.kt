@@ -4,9 +4,14 @@ import android.text.format.DateUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_IMPERIAL
 import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_METRIC
+import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import java.math.RoundingMode
 import java.text.DecimalFormat
@@ -53,7 +58,7 @@ object ComposeStringFormatting {
     fun formatPrecipitationValue(
         precipitation: Double?,
         unit: MeasurementUnit
-    ): String {
+    ): AnnotatedString {
         val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
             maximumFractionDigits = when (unit) {
                 MeasurementUnit.IMPERIAL -> {
@@ -66,7 +71,11 @@ object ComposeStringFormatting {
             roundingMode = RoundingMode.HALF_UP
         }
         return if (precipitation == null || precipitation == 0.0) {
-            stringResource(id = R.string.placeholder_precipitation)
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(color = AppTheme.precipitationColors.insignificant)) {
+                    append(text = stringResource(id = R.string.placeholder_precipitation))
+                }
+            }
         } else {
             val significantPrecipitation = if (unit == MeasurementUnit.IMPERIAL) {
                 SIGNIFICANT_PRECIPITATION_IMPERIAL
@@ -88,16 +97,33 @@ object ComposeStringFormatting {
             } else {
                 R.string.placeholder_precipitation_insignificant_metric
             }
-            if (convertedPrecipitation >= significantPrecipitation) {
-                stringResource(
-                    id = template,
-                    formatter.format(convertedPrecipitation)
-                )
+            val precipitationColor = if (convertedPrecipitation >= significantPrecipitation) {
+                AppTheme.precipitationColors.significant
             } else {
-                stringResource(
-                    id = insignificantTemplate,
-                    formatter.format(significantPrecipitation)
-                )
+                AppTheme.precipitationColors.insignificant
+            }
+            if (convertedPrecipitation >= significantPrecipitation) {
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = precipitationColor)) {
+                        append(
+                            text = stringResource(
+                                id = template,
+                                formatter.format(convertedPrecipitation)
+                            )
+                        )
+                    }
+                }
+            } else {
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = precipitationColor)) {
+                        append(
+                            text = stringResource(
+                                id = insignificantTemplate,
+                                formatter.format(significantPrecipitation)
+                            )
+                        )
+                    }
+                }
             }
         }
     }

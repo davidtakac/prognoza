@@ -115,6 +115,7 @@ dependencies {
     // Other
     implementation "com.google.accompanist:accompanist-pager:$versions.accompanist_pager"
     implementation "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager"
+    implementation "com.android.support:support-annotations:$versions.support_annotations"
 
     // endregion
 }

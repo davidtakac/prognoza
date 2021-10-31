@@ -3,27 +3,41 @@ package hr.dtakac.prognoza.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.theme.AppTheme
+import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.uimodel.WeatherDescription
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
 import hr.dtakac.prognoza.utils.ComposeStringFormatting
 import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.time.ZonedDateTime
 
 class ComposeForecastActivity : ComponentActivity() {
     private val todayViewModel by viewModel<TodayFragmentViewModel>()
@@ -33,7 +47,9 @@ class ComposeForecastActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         todayViewModel.getForecast()
         setContent {
-            Screen()
+            AppTheme {
+                Screen()
+            }
         }
     }
 
@@ -53,26 +69,36 @@ class ComposeForecastActivity : ComponentActivity() {
             val scope = rememberCoroutineScope()
             val pages = stringArrayResource(id = R.array.forecast_tab_names)
 
-            TabRow(
-                selectedTabIndex = pagerState.currentPage,
-                indicator = { tabPositions ->
-                    TabRowDefaults.Indicator(
-                        modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                    )
-                }
+            Surface(
+                shape = AppTheme.shapes.large,
+                color = AppTheme.colors.surface,
+                contentColor = AppTheme.colors.onSurface,
+                elevation = 4.dp
             ) {
-                pages.forEachIndexed { index, title ->
-                    Tab(
-                        text = { Text(title) },
-                        selected = pagerState.currentPage == index,
-                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
-                    )
+                TabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                    indicator = { tabPositions ->
+                        TabRowDefaults.Indicator(
+                            modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
+                        )
+                    }
+                ) {
+                    pages.forEachIndexed { index, title ->
+                        Tab(
+                            text = { Text(title) },
+                            selected = pagerState.currentPage == index,
+                            onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                        )
+                    }
                 }
             }
 
             HorizontalPager(
                 count = pages.size,
-                state = pagerState
+                state = pagerState,
+                modifier = Modifier.background(
+                    color = AppTheme.colors.background
+                )
             ) { page ->
                 when (page) {
                     0 -> TodayForecast()
@@ -86,7 +112,9 @@ class ComposeForecastActivity : ComponentActivity() {
     fun TodayForecast() {
         val todayForecast by todayViewModel.forecast.observeAsState()
 
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier.fillMaxHeight()
+        ) {
             todayForecast?.let {
                 item {
                     CurrentHourHeader(currentHour = it.currentHour)
@@ -97,47 +125,114 @@ class ComposeForecastActivity : ComponentActivity() {
 
     @Composable
     fun CurrentHourHeader(currentHour: HourUiModel) {
-        Row {
-            Column {
-                Text(
-                    text = ComposeStringFormatting.formatCurrentHourHeaderTime(
-                        time = currentHour.time
-                    )
-                )
-
-                Text(
-                    text = ComposeStringFormatting.formatTemperatureValue(
+        Surface(
+            shape = AppTheme.shapes.small,
+            color = AppTheme.colors.surface,
+            contentColor = AppTheme.colors.onSurface,
+            elevation = 2.dp,
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(modifier = Modifier.padding(16.dp)) {
+                Column(horizontalAlignment = Alignment.Start) {
+                    CurrentHourHeaderTime(time = currentHour.time)
+                    CurrentHourHeaderTemperature(
                         temperature = currentHour.temperature,
                         unit = currentHour.displayDataInUnit
                     )
-                )
-
-                Text(
-                    text = if (currentHour.precipitationAmount != null && currentHour.precipitationAmount > 0) {
-                        ComposeStringFormatting.formatPrecipitationValue(
-                            precipitation = currentHour.precipitationAmount,
-                            unit = currentHour.displayDataInUnit
-                        )
-                    } else {
-                        ComposeStringFormatting.formatWeatherIconDescription(
-                            id = currentHour.weatherDescription?.descriptionResourceId
-                        )
-                    }
-                )
-
-                Text(
-                    text = ComposeStringFormatting.formatFeelsLike(
+                    CurrentHourHeaderDescription(
+                        precipitation = currentHour.precipitationAmount,
+                        weatherDescription = currentHour.weatherDescription,
+                        unit = currentHour.displayDataInUnit
+                    )
+                    CurrentHourFeelsLikeTemperature(
                         feelsLike = currentHour.feelsLike,
                         unit = currentHour.displayDataInUnit
                     )
-                )
 
-                val outdatedForecast by todayViewModel.outdatedForecastMessage.observeAsState()
-                OutdatedForecastMessage(
-                    outdatedForecastUiModel = outdatedForecast
-                )
+                    val outdatedForecast by todayViewModel.outdatedForecastMessage.observeAsState()
+                    OutdatedForecastMessage(
+                        outdatedForecastUiModel = outdatedForecast
+                    )
+                }
+                Column(horizontalAlignment = Alignment.End) {
+                    Image(
+                        painter = rememberImagePainter(
+                            data = currentHour.weatherDescription?.iconResourceId
+                                ?: R.drawable.ic_cloud_off
+                        ),
+                        contentDescription = "Weather icon",
+                        modifier = Modifier.size(size = 86.dp),
+                    )
+                }
             }
         }
+    }
+
+
+    @Composable
+    fun CurrentHourHeaderTime(time: ZonedDateTime) {
+        Text(
+            text = ComposeStringFormatting.formatCurrentHourHeaderTime(
+                time = time
+            ),
+            style = AppTheme.typography.subtitle1,
+            color = AppTheme.textColors.highEmphasis
+        )
+    }
+
+    @Composable
+    fun CurrentHourHeaderTemperature(
+        temperature: Double?,
+        unit: MeasurementUnit
+    ) {
+        Text(
+            text = ComposeStringFormatting.formatTemperatureValue(
+                temperature = temperature,
+                unit = unit
+            ),
+            style = AppTheme.typography.h3,
+            color = AppTheme.textColors.highEmphasis
+        )
+    }
+
+    @Composable
+    fun CurrentHourHeaderDescription(
+        precipitation: Double?,
+        weatherDescription: WeatherDescription?,
+        unit: MeasurementUnit
+    ) {
+        val isShowingPrecipitation = precipitation != null && precipitation > 0
+        Text(
+            text = if (isShowingPrecipitation) {
+                ComposeStringFormatting.formatPrecipitationValue(
+                    precipitation = precipitation,
+                    unit = unit
+                )
+            } else {
+                AnnotatedString(
+                    text = ComposeStringFormatting.formatWeatherIconDescription(
+                        id = weatherDescription?.descriptionResourceId
+                    )
+                )
+            },
+            style = AppTheme.typography.subtitle1,
+            color = AppTheme.textColors.mediumEmphasis
+        )
+    }
+
+    @Composable
+    fun CurrentHourFeelsLikeTemperature(
+        feelsLike: Double?,
+        unit: MeasurementUnit
+    ) {
+        Text(
+            text = ComposeStringFormatting.formatFeelsLike(
+                feelsLike = feelsLike,
+                unit = unit
+            ),
+            style = AppTheme.typography.subtitle1,
+            color = AppTheme.textColors.mediumEmphasis
+        )
     }
 
     @Composable
@@ -145,10 +240,27 @@ class ComposeForecastActivity : ComponentActivity() {
         val openDialog = remember { mutableStateOf(false) }
 
         outdatedForecastUiModel?.let {
-            ClickableText(
-                text = AnnotatedString(text = stringResource(id = R.string.title_outdated_forecast)),
-                onClick = { openDialog.value = true }
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_cloud_off),
+                    contentDescription = "Outdated forecast icon",
+                    modifier = Modifier.size(size = 18.dp),
+                    colorFilter = ColorFilter.tint(color = AppTheme.textColors.mediumEmphasis)
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                ClickableText(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = AppTheme.textColors.mediumEmphasis)) {
+                            append(text = stringResource(id = R.string.title_outdated_forecast))
+                        }
+                    },
+                    onClick = { openDialog.value = true },
+                    style = AppTheme.typography.subtitle1,
+                )
+            }
             OutdatedForecastDialog(
                 openDialog = openDialog,
                 reasonId = it.reason ?: R.string.error_generic

@@ -5,9 +5,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 @Immutable
-data class TextColor(
+data class TextColors(
     val highEmphasis: Color = Black87,
     val mediumEmphasis: Color = Black60
 )
 
-val LocalTextColor = staticCompositionLocalOf { TextColor() }
+val LocalTextColors = staticCompositionLocalOf { TextColors() }

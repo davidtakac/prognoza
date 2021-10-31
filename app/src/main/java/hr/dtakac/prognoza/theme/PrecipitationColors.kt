@@ -5,9 +5,9 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 @Immutable
-data class PrecipitationColor(
+data class PrecipitationColors(
     val significant: Color = Blue700,
     val insignificant: Color = Black60
 )
 
-internal val LocalPrecipitationColor = staticCompositionLocalOf { PrecipitationColor() }
+internal val LocalPrecipitationColors = staticCompositionLocalOf { PrecipitationColors() }

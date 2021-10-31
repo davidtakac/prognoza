@@ -1,9 +1,10 @@
 package hr.dtakac.prognoza.uimodel
 
+import androidx.annotation.DrawableRes
 import hr.dtakac.prognoza.R
 
 data class WeatherDescription(
-    val iconResourceId: Int,
+    @DrawableRes val iconResourceId: Int,
     val descriptionResourceId: Int
 )
 

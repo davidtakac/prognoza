@@ -13,19 +13,19 @@ fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val precipitationColor = PrecipitationColor(
+    val precipitationColors = PrecipitationColors(
         significant = if (darkTheme) Blue300 else Blue700,
         insignificant = if (darkTheme) White60 else Black60
     )
 
-    val textColor = TextColor(
+    val textColors = TextColors(
         highEmphasis = if (darkTheme) White87 else Black87,
-        mediumEmphasis = if (darkTheme) White60 else White87
+        mediumEmphasis = if (darkTheme) White60 else Black60
     )
 
     CompositionLocalProvider(
-        LocalPrecipitationColor provides precipitationColor,
-        LocalTextColor provides textColor
+        LocalPrecipitationColors provides precipitationColors,
+        LocalTextColors provides textColors
     ) {
         MaterialTheme(
             colors = if (darkTheme) DarkColors else LightColors,
@@ -47,11 +47,11 @@ object AppTheme {
         @Composable
         get() = MaterialTheme.shapes
 
-    val precipitationColor: PrecipitationColor
+    val precipitationColors: PrecipitationColors
         @Composable
-        get() = LocalPrecipitationColor.current
+        get() = LocalPrecipitationColors.current
 
-    val textColor: TextColor
+    val textColors: TextColors
         @Composable
-        get() = LocalTextColor.current
+        get() = LocalTextColors.current
 }
