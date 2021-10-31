@@ -29,47 +29,92 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
+        compose true
         viewBinding true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.4'
     }
 }
 
 dependencies {
-    // base
-    implementation "androidx.core:core-ktx:$versions.core_ktx"
-    implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "com.google.android.material:material:$versions.material"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
-    // testing
+    // region Common dependencies
+
+    // Testing
     testImplementation "junit:junit:$versions.junit"
     testImplementation "androidx.room:room-testing:$versions.room"
     testImplementation "androidx.arch.core:core-testing:$versions.arch"
     testImplementation "io.insert-koin:koin-test-junit4:$versions.koin"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
-    // networking
+
+    // Networking
     implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
     implementation "com.google.code.gson:gson:$versions.gson"
     implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
-    // database
+
+    // Database
     implementation "androidx.room:room-runtime:$versions.room"
     implementation "androidx.room:room-ktx:$versions.room"
     kapt "androidx.room:room-compiler:$versions.room"
-    // lifecycle
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+
+    // Desugar
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
+
+    // Dependency injection
+    implementation "io.insert-koin:koin-core:$versions.koin"
+    implementation "io.insert-koin:koin-android:$versions.koin"
+
+    // Other
+    implementation "ca.rmen:lib-sunrise-sunset:$versions.lib_sunrise_sunset"
+
+    // endregion
+
+    // region View-based UI toolkit
+
+    // Base
+    implementation "androidx.core:core-ktx:$versions.core_ktx"
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
+    implementation "com.google.android.material:material:$versions.material"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
+
+    // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle"
-    // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
-    // images
+
+    // Images
     implementation "com.github.bumptech.glide:glide:$versions.glide"
     kapt "com.github.bumptech.glide:compiler:$versions.glide"
-    // desugar
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
-    // dependency injection
-    implementation "io.insert-koin:koin-core:$versions.koin"
-    implementation "io.insert-koin:koin-android:$versions.koin"
-    // other
+
+    // Other
     implementation "androidx.viewpager2:viewpager2:$versions.viewpager2"
-    implementation "ca.rmen:lib-sunrise-sunset:$versions.lib_sunrise_sunset"
+
+    // endregion
+
+    // region Compose-based UI toolkit
+
+    // Compose
+    implementation "androidx.compose.ui:ui:$versions.compose"
+    implementation "androidx.activity:activity-compose:$versions.compose_activity"
+    implementation "androidx.compose.material:material:$versions.compose"
+    implementation "androidx.compose.animation:animation:$versions.compose"
+    implementation "androidx.compose.ui:ui-tooling:$versions.compose"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$versions.compose_viewmodel"
+
+    // View toolkit interop
+    implementation "androidx.compose.runtime:runtime-livedata:$versions.compose"
+
+    // Images
+    implementation "io.coil-kt:coil-compose:$versions.coil"
+
+    // Other
+    implementation "com.google.accompanist:accompanist-pager:$versions.accompanist_pager"
+    implementation "com.google.accompanist:accompanist-pager-indicators:$versions.accompanist_pager"
+
+    // endregion
 }

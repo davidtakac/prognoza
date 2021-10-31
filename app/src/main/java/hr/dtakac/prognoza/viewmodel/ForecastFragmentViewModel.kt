@@ -67,7 +67,8 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
         currentMeta = success.meta
         currentUnit = selectedUnit
         _emptyScreen.value = null
-        _outdatedForecastMessage.value = null
+        //_outdatedForecastMessage.value = null
+        _outdatedForecastMessage.value = OutdatedForecastUiModel(null)
     }
 
     private fun handleEmpty(empty: Empty) {

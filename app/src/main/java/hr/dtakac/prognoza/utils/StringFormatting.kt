@@ -4,6 +4,9 @@ import android.content.Context
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
+import android.text.format.DateUtils
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.text.color
 import androidx.core.text.toSpannable
 import com.google.android.material.color.MaterialColors
@@ -14,6 +17,7 @@ import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.time.ZonedDateTime
 import java.util.*
 import kotlin.math.roundToInt
 
