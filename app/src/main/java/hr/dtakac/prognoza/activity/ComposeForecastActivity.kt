@@ -115,9 +115,14 @@ class ComposeForecastActivity : ComponentActivity() {
         LazyColumn(
             modifier = Modifier.fillMaxHeight()
         ) {
-            todayForecast?.let {
+            todayForecast?.let { today ->
                 item {
-                    CurrentHourHeader(currentHour = it.currentHour)
+                    CurrentHourHeader(currentHour = today.currentHour)
+                }
+                today.otherHours.forEach {
+                    item {
+                        ExpandableHour(hour = it)
+                    }
                 }
             }
         }
@@ -126,13 +131,18 @@ class ComposeForecastActivity : ComponentActivity() {
     @Composable
     fun CurrentHourHeader(currentHour: HourUiModel) {
         Surface(
-            shape = AppTheme.shapes.small,
+            shape = AppTheme.shapes.medium,
             color = AppTheme.colors.surface,
             contentColor = AppTheme.colors.onSurface,
             elevation = 2.dp,
             modifier = Modifier.padding(16.dp)
         ) {
-            Row(modifier = Modifier.padding(16.dp)) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Column(horizontalAlignment = Alignment.Start) {
                     CurrentHourHeaderTime(time = currentHour.time)
                     CurrentHourHeaderTemperature(
@@ -154,27 +164,27 @@ class ComposeForecastActivity : ComponentActivity() {
                         outdatedForecastUiModel = outdatedForecast
                     )
                 }
-                Column(horizontalAlignment = Alignment.End) {
-                    Image(
-                        painter = rememberImagePainter(
-                            data = currentHour.weatherDescription?.iconResourceId
-                                ?: R.drawable.ic_cloud_off
-                        ),
-                        contentDescription = "Weather icon",
-                        modifier = Modifier.size(size = 86.dp),
-                    )
-                }
+                Image(
+                    painter = rememberImagePainter(
+                        data = currentHour.weatherDescription?.iconResourceId
+                            ?: R.drawable.ic_cloud_off
+                    ),
+                    contentDescription = "Weather icon",
+                    modifier = Modifier.size(size = 86.dp)
+                )
             }
         }
     }
 
+    @Composable
+    fun ExpandableHour(hour: HourUiModel) {
+
+    }
 
     @Composable
     fun CurrentHourHeaderTime(time: ZonedDateTime) {
         Text(
-            text = ComposeStringFormatting.formatCurrentHourHeaderTime(
-                time = time
-            ),
+            text = ComposeStringFormatting.formatCurrentHourHeaderTime(time = time),
             style = AppTheme.typography.subtitle1,
             color = AppTheme.textColors.highEmphasis
         )
@@ -240,10 +250,7 @@ class ComposeForecastActivity : ComponentActivity() {
         val openDialog = remember { mutableStateOf(false) }
 
         outdatedForecastUiModel?.let {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_cloud_off),
                     contentDescription = "Outdated forecast icon",
@@ -254,7 +261,7 @@ class ComposeForecastActivity : ComponentActivity() {
                 ClickableText(
                     text = buildAnnotatedString {
                         withStyle(style = SpanStyle(color = AppTheme.textColors.mediumEmphasis)) {
-                            append(text = stringResource(id = R.string.title_outdated_forecast))
+                            append(text = stringResource(id = R.string.notify_cached_data))
                         }
                     },
                     onClick = { openDialog.value = true },

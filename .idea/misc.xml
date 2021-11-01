@@ -9,7 +9,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/cell_day.xml" value="0.75" />
-        <entry key="app/src/main/res/layout/cell_hour.xml" value="0.13125" />
+        <entry key="app/src/main/res/layout/cell_hour.xml" value="0.33" />
         <entry key="app/src/main/res/layout/fragment_days.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/fragment_place_search.xml" value="0.15069444444444444" />
         <entry key="app/src/main/res/layout/fragment_today.xml" value="0.25" />

@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.theme
 
-import androidx.compose.material.Colors
 import androidx.compose.ui.graphics.Color
 
 val Purple200 = Color(0xFFCE93D8)
