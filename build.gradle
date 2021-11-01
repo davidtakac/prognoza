@@ -54,6 +54,7 @@ ext {
             // other
             viewpager2: '1.0.0',
             accompanist_pager: '0.21.0-beta',
+            accompanist_flowlayout: '0.21.0-beta',
             lib_sunrise_sunset: '1.1.1',
             support_annotations: '28.0.0'
     ]

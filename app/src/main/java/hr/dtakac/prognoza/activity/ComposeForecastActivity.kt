@@ -27,6 +27,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
@@ -297,7 +298,10 @@ class ComposeForecastActivity : ComponentActivity() {
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Column {
+            FlowRow(
+                mainAxisSpacing = 4.dp,
+                crossAxisSpacing = 4.dp
+            ) {
                 DetailsItem(
                     iconId = R.drawable.ic_thermostat,
                     labelId = R.string.feels_like,
@@ -306,7 +310,6 @@ class ComposeForecastActivity : ComponentActivity() {
                         unit = unit
                     )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
                 DetailsItem(
                     iconId = R.drawable.ic_air,
                     labelId = R.string.wind,
@@ -316,9 +319,6 @@ class ComposeForecastActivity : ComponentActivity() {
                         windSpeedUnit = unit
                     )
                 )
-            }
-            Spacer(modifier = Modifier.width(8.dp))
-            Column {
                 DetailsItem(
                     iconId = R.drawable.ic_water_drop,
                     labelId = R.string.humidity,
@@ -326,7 +326,6 @@ class ComposeForecastActivity : ComponentActivity() {
                         relativeHumidity = humidity
                     )
                 )
-                Spacer(modifier = Modifier.height(4.dp))
                 DetailsItem(
                     iconId = R.drawable.ic_speed,
                     labelId = R.string.pressure,
@@ -337,44 +336,6 @@ class ComposeForecastActivity : ComponentActivity() {
                 )
             }
         }
-        /*Column {
-            DetailsItem(
-                iconId = R.drawable.ic_thermostat,
-                labelId = R.string.feels_like,
-                text = ComposeStringFormatting.formatTemperatureValue(
-                    temperature = feelsLike,
-                    unit = unit
-                )
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            DetailsItem(
-                iconId = R.drawable.ic_air,
-                labelId = R.string.wind,
-                text = ComposeStringFormatting.formatWindWithDirection(
-                    windSpeed = windSpeed,
-                    windFromCompassDirection = windFromCompassDirection,
-                    windSpeedUnit = unit
-                )
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            DetailsItem(
-                iconId = R.drawable.ic_water_drop,
-                labelId = R.string.humidity,
-                text = ComposeStringFormatting.formatHumidityValue(
-                    relativeHumidity = humidity
-                )
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            DetailsItem(
-                iconId = R.drawable.ic_speed,
-                labelId = R.string.pressure,
-                text = ComposeStringFormatting.formatPressureValue(
-                    pressure = pressure,
-                    unit = unit
-                )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }*/
     }
 
     @Composable
@@ -383,18 +344,28 @@ class ComposeForecastActivity : ComponentActivity() {
         @StringRes labelId: Int,
         text: String
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                DetailsIcon(id = iconId)
+        Surface(
+            shape = AppTheme.shapes.small,
+            color = AppTheme.colors.surface,
+            contentColor = AppTheme.colors.onSurface,
+            elevation = 2.dp
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    DetailsIcon(id = iconId)
+                    Spacer(modifier = Modifier.width(4.dp))
+                    DetailsLabel(id = labelId)
+                }
                 Spacer(modifier = Modifier.width(4.dp))
-                DetailsLabel(id = labelId)
+                Text(
+                    text = text,
+                    style = AppTheme.typography.subtitle2,
+                    color = AppTheme.textColors.highEmphasis
+                )
             }
-            Spacer(modifier = Modifier.width(4.dp))
-            Text(
-                text = text,
-                style = AppTheme.typography.subtitle2,
-                color = AppTheme.textColors.highEmphasis
-            )
         }
     }
 
