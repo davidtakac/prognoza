@@ -23,9 +23,12 @@ fun AppTheme(
         mediumEmphasis = if (darkTheme) White60 else Black60
     )
 
+    val shapes = AppShapes
+
     CompositionLocalProvider(
         LocalPrecipitationColors provides precipitationColors,
-        LocalTextColors provides textColors
+        LocalTextColors provides textColors,
+        LocalShapes provides shapes
     ) {
         MaterialTheme(
             colors = if (darkTheme) DarkColors else LightColors,
@@ -45,7 +48,7 @@ object AppTheme {
 
     val shapes: Shapes
         @Composable
-        get() = MaterialTheme.shapes
+        get() = LocalShapes.current
 
     val precipitationColors: PrecipitationColors
         @Composable

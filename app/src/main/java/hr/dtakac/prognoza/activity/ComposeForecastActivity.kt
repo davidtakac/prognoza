@@ -299,8 +299,8 @@ class ComposeForecastActivity : ComponentActivity() {
             modifier = Modifier.fillMaxWidth()
         ) {
             FlowRow(
-                mainAxisSpacing = 4.dp,
-                crossAxisSpacing = 4.dp
+                mainAxisSpacing = 8.dp,
+                crossAxisSpacing = 8.dp
             ) {
                 DetailsItem(
                     iconId = R.drawable.ic_thermostat,
@@ -352,7 +352,12 @@ class ComposeForecastActivity : ComponentActivity() {
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(8.dp)
+                modifier = Modifier.padding(
+                    top = 8.dp,
+                    bottom = 8.dp,
+                    start = 12.dp,
+                    end = 12.dp
+                )
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     DetailsIcon(id = iconId)
