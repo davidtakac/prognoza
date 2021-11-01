@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.utils.toHourUiModel
@@ -13,17 +15,21 @@ import hr.dtakac.prognoza.uimodel.forecast.TodayForecastUiModel
 import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 
-class TodayFragmentViewModel(
+class TodayForecastViewModel(
     coroutineScope: CoroutineScope?,
     preferencesRepository: PreferencesRepository,
     placeRepository: PlaceRepository,
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastFragmentViewModel<TodayForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
+) : ForecastViewModel<TodayForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
     override val _forecast = MutableLiveData<TodayForecastUiModel>()
+
+    private val _expandedHourIndices = mutableStateListOf<Int>()
+    val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
     override suspend fun getNewForecast(): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
@@ -47,5 +53,15 @@ class TodayFragmentViewModel(
             currentHour = currentHourAsync.await(),
             otherHours = otherHoursAsync.await(),
         )
+    }
+
+    fun toggleHour(index: Int) {
+        coroutineScope.launch(dispatcherProvider.default) {
+            if (index in _expandedHourIndices) {
+                _expandedHourIndices.remove(index)
+            } else {
+                _expandedHourIndices.add(index)
+            }
+        }
     }
 }

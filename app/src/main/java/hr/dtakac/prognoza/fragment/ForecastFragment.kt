@@ -15,12 +15,12 @@ import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
 import hr.dtakac.prognoza.utils.formatEmptyMessage
 import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
-import hr.dtakac.prognoza.viewmodel.ForecastFragmentViewModel
+import hr.dtakac.prognoza.viewmodel.ForecastViewModel
 
 abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
     bindingInflater: (LayoutInflater, ViewGroup?, Boolean) -> VB
 ) : ViewBindingFragment<VB>(bindingInflater) {
-    abstract val viewModel: ForecastFragmentViewModel<UI_MODEL>
+    abstract val viewModel: ForecastViewModel<UI_MODEL>
     abstract val requestKey: String
     abstract val emptyForecastBinding: LayoutForecastEmptyBinding
     abstract val progressBar: BaseProgressIndicator<*>

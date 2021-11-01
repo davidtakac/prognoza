@@ -18,14 +18,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 
-class DaysFragmentViewModel(
+class DaysViewModel(
     coroutineScope: CoroutineScope?,
     preferencesRepository: PreferencesRepository,
     placeRepository: PlaceRepository,
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastFragmentViewModel<DaysForecastUiModel>(
+) : ForecastViewModel<DaysForecastUiModel>(
     coroutineScope,
     preferencesRepository,
     placeRepository

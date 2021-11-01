@@ -3,8 +3,12 @@ package hr.dtakac.prognoza.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
@@ -34,13 +38,13 @@ import hr.dtakac.prognoza.uimodel.WeatherDescription
 import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
 import hr.dtakac.prognoza.utils.ComposeStringFormatting
-import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
+import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.time.ZonedDateTime
 
 class ComposeForecastActivity : ComponentActivity() {
-    private val todayViewModel by viewModel<TodayFragmentViewModel>()
+    private val todayViewModel by viewModel<TodayForecastViewModel>()
 
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -111,17 +115,29 @@ class ComposeForecastActivity : ComponentActivity() {
     @Composable
     fun TodayForecast() {
         val todayForecast by todayViewModel.forecast.observeAsState()
+        val outdatedForecast by todayViewModel.outdatedForecastMessage.observeAsState()
+        val expandedHourIndices = todayViewModel.expandedHourIndices
 
         LazyColumn(
             modifier = Modifier.fillMaxHeight()
         ) {
             todayForecast?.let { today ->
                 item {
-                    CurrentHourHeader(currentHour = today.currentHour)
+                    CurrentHourHeader(
+                        currentHour = today.currentHour,
+                        outdatedForecast = outdatedForecast
+                    )
                 }
-                today.otherHours.forEach {
+                today.otherHours.forEachIndexed { index, hour ->
                     item {
-                        ExpandableHour(hour = it)
+                        ExpandableHour(
+                            hour = hour,
+                            isExpanded = index in expandedHourIndices,
+                            onClick = { todayViewModel.toggleHour(index) }
+                        )
+                    }
+                    item {
+                        Divider()
                     }
                 }
             }
@@ -129,7 +145,10 @@ class ComposeForecastActivity : ComponentActivity() {
     }
 
     @Composable
-    fun CurrentHourHeader(currentHour: HourUiModel) {
+    fun CurrentHourHeader(
+        currentHour: HourUiModel,
+        outdatedForecast: OutdatedForecastUiModel?
+    ) {
         Surface(
             shape = AppTheme.shapes.medium,
             color = AppTheme.colors.surface,
@@ -158,8 +177,6 @@ class ComposeForecastActivity : ComponentActivity() {
                         feelsLike = currentHour.feelsLike,
                         unit = currentHour.displayDataInUnit
                     )
-
-                    val outdatedForecast by todayViewModel.outdatedForecastMessage.observeAsState()
                     OutdatedForecastMessage(
                         outdatedForecastUiModel = outdatedForecast
                     )
@@ -169,7 +186,7 @@ class ComposeForecastActivity : ComponentActivity() {
                         data = currentHour.weatherDescription?.iconResourceId
                             ?: R.drawable.ic_cloud_off
                     ),
-                    contentDescription = "Weather icon",
+                    contentDescription = null,
                     modifier = Modifier.size(size = 86.dp)
                 )
             }
@@ -177,8 +194,227 @@ class ComposeForecastActivity : ComponentActivity() {
     }
 
     @Composable
-    fun ExpandableHour(hour: HourUiModel) {
+    fun ExpandableHour(
+        isExpanded: Boolean,
+        hour: HourUiModel,
+        onClick: () -> Unit
+    ) {
+        Column(
+            modifier = Modifier
+                .animateContentSize()
+                .clickable { onClick.invoke() }
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 8.dp
+                )
+        ) {
+            HourSummary(
+                modifier = Modifier.fillMaxWidth(),
+                time = hour.time,
+                precipitation = hour.precipitationAmount,
+                temperature = hour.temperature,
+                weatherDescription = hour.weatherDescription,
+                unit = hour.displayDataInUnit
+            )
+            if (isExpanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+                HourDetails(
+                    feelsLike = hour.feelsLike,
+                    windSpeed = hour.windSpeed,
+                    windFromCompassDirection = hour.windFromCompassDirection,
+                    pressure = hour.airPressureAtSeaLevel,
+                    humidity = hour.relativeHumidity,
+                    unit = hour.displayDataInUnit
+                )
+            }
+        }
+    }
 
+    @Composable
+    fun HourSummary(
+        modifier: Modifier,
+        time: ZonedDateTime,
+        precipitation: Double?,
+        temperature: Double?,
+        weatherDescription: WeatherDescription?,
+        unit: MeasurementUnit
+    ) {
+        Row(
+            modifier = modifier,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = ComposeStringFormatting.formatHourTime(time = time),
+                    style = AppTheme.typography.subtitle1,
+                    color = AppTheme.textColors.highEmphasis
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(
+                    text = ComposeStringFormatting.formatPrecipitationValue(
+                        precipitation = precipitation,
+                        unit = unit
+                    ),
+                    style = AppTheme.typography.subtitle2
+                )
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = ComposeStringFormatting.formatTemperatureValue(
+                        temperature = temperature,
+                        unit = unit
+                    ),
+                    style = AppTheme.typography.subtitle1,
+                    color = AppTheme.textColors.highEmphasis
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Image(
+                    painter = rememberImagePainter(
+                        data = weatherDescription?.iconResourceId
+                            ?: R.drawable.ic_cloud_off
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.size(size = 36.dp)
+                )
+            }
+        }
+    }
+
+    @Composable
+    fun HourDetails(
+        feelsLike: Double?,
+        windSpeed: Double?,
+        windFromCompassDirection: Int?,
+        pressure: Double?,
+        humidity: Double?,
+        unit: MeasurementUnit
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column {
+                DetailsItem(
+                    iconId = R.drawable.ic_thermostat,
+                    labelId = R.string.feels_like,
+                    text = ComposeStringFormatting.formatTemperatureValue(
+                        temperature = feelsLike,
+                        unit = unit
+                    )
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                DetailsItem(
+                    iconId = R.drawable.ic_air,
+                    labelId = R.string.wind,
+                    text = ComposeStringFormatting.formatWindWithDirection(
+                        windSpeed = windSpeed,
+                        windFromCompassDirection = windFromCompassDirection,
+                        windSpeedUnit = unit
+                    )
+                )
+            }
+            Spacer(modifier = Modifier.width(8.dp))
+            Column {
+                DetailsItem(
+                    iconId = R.drawable.ic_water_drop,
+                    labelId = R.string.humidity,
+                    text = ComposeStringFormatting.formatHumidityValue(
+                        relativeHumidity = humidity
+                    )
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                DetailsItem(
+                    iconId = R.drawable.ic_speed,
+                    labelId = R.string.pressure,
+                    text = ComposeStringFormatting.formatPressureValue(
+                        pressure = pressure,
+                        unit = unit
+                    )
+                )
+            }
+        }
+        /*Column {
+            DetailsItem(
+                iconId = R.drawable.ic_thermostat,
+                labelId = R.string.feels_like,
+                text = ComposeStringFormatting.formatTemperatureValue(
+                    temperature = feelsLike,
+                    unit = unit
+                )
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            DetailsItem(
+                iconId = R.drawable.ic_air,
+                labelId = R.string.wind,
+                text = ComposeStringFormatting.formatWindWithDirection(
+                    windSpeed = windSpeed,
+                    windFromCompassDirection = windFromCompassDirection,
+                    windSpeedUnit = unit
+                )
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            DetailsItem(
+                iconId = R.drawable.ic_water_drop,
+                labelId = R.string.humidity,
+                text = ComposeStringFormatting.formatHumidityValue(
+                    relativeHumidity = humidity
+                )
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            DetailsItem(
+                iconId = R.drawable.ic_speed,
+                labelId = R.string.pressure,
+                text = ComposeStringFormatting.formatPressureValue(
+                    pressure = pressure,
+                    unit = unit
+                )
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }*/
+    }
+
+    @Composable
+    fun DetailsItem(
+        @DrawableRes iconId: Int,
+        @StringRes labelId: Int,
+        text: String
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                DetailsIcon(id = iconId)
+                Spacer(modifier = Modifier.width(4.dp))
+                DetailsLabel(id = labelId)
+            }
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = text,
+                style = AppTheme.typography.subtitle2,
+                color = AppTheme.textColors.highEmphasis
+            )
+        }
+    }
+
+    @Composable
+    fun DetailsIcon(@DrawableRes id: Int) {
+        Image(
+            painter = rememberImagePainter(data = id),
+            contentDescription = null,
+            modifier = Modifier.size(size = 18.dp),
+            colorFilter = ColorFilter.tint(color = AppTheme.textColors.highEmphasis)
+        )
+    }
+
+    @Composable
+    fun DetailsLabel(@StringRes id: Int) {
+        Text(
+            text = stringResource(id = id),
+            style = AppTheme.typography.subtitle2,
+            color = AppTheme.textColors.mediumEmphasis
+        )
     }
 
     @Composable
@@ -247,13 +483,13 @@ class ComposeForecastActivity : ComponentActivity() {
 
     @Composable
     fun OutdatedForecastMessage(outdatedForecastUiModel: OutdatedForecastUiModel?) {
-        val openDialog = remember { mutableStateOf(false) }
+        var showDialog by remember { mutableStateOf(false) }
 
         outdatedForecastUiModel?.let {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_cloud_off),
-                    contentDescription = "Outdated forecast icon",
+                    contentDescription = null,
                     modifier = Modifier.size(size = 18.dp),
                     colorFilter = ColorFilter.tint(color = AppTheme.textColors.mediumEmphasis)
                 )
@@ -264,26 +500,34 @@ class ComposeForecastActivity : ComponentActivity() {
                             append(text = stringResource(id = R.string.notify_cached_data))
                         }
                     },
-                    onClick = { openDialog.value = true },
+                    onClick = { showDialog = true },
                     style = AppTheme.typography.subtitle1,
                 )
             }
             OutdatedForecastDialog(
-                openDialog = openDialog,
-                reasonId = it.reason ?: R.string.error_generic
+                showDialog = showDialog,
+                reasonId = it.reason ?: R.string.error_generic,
+                onConfirmRequest = { showDialog = false },
+                onDismissRequest = { showDialog = false }
             )
         }
     }
 
     @Composable
     fun OutdatedForecastDialog(
-        openDialog: MutableState<Boolean>,
-        reasonId: Int
+        showDialog: Boolean,
+        reasonId: Int,
+        onDismissRequest: () -> Unit,
+        onConfirmRequest: () -> Unit
     ) {
-        if (openDialog.value) {
+        if (showDialog) {
             AlertDialog(
-                onDismissRequest = { openDialog.value = false },
-                title = { Text(text = stringResource(id = R.string.title_outdated_forecast)) },
+                onDismissRequest = onDismissRequest,
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.title_outdated_forecast)
+                    )
+                },
                 text = {
                     Text(
                         text = stringResource(
@@ -299,7 +543,7 @@ class ComposeForecastActivity : ComponentActivity() {
                     ) {
                         TextButton(
                             modifier = Modifier.wrapContentSize(),
-                            onClick = { openDialog.value = false }
+                            onClick = { onConfirmRequest.invoke() }
                         ) {
                             Text(stringResource(id = R.string.action_ok))
                         }

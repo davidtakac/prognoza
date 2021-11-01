@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
 import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
-import hr.dtakac.prognoza.viewmodel.DaysFragmentViewModel
+import hr.dtakac.prognoza.viewmodel.DaysViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DaysForecastFragment :
@@ -18,7 +18,7 @@ class DaysForecastFragment :
     override val progressBar get() = binding.progressBar
     override val outdatedForecastBinding: LayoutForecastOutdatedBinding get() = binding.cachedDataMessage
     override val requestKey get() = DAYS_REQUEST_KEY
-    override val viewModel by viewModel<DaysFragmentViewModel>()
+    override val viewModel by viewModel<DaysViewModel>()
 
     private val adapter = DaysRecyclerViewAdapter()
 

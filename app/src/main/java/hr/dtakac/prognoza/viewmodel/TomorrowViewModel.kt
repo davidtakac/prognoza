@@ -14,14 +14,14 @@ import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 
-class TomorrowFragmentViewModel(
+class TomorrowViewModel(
     coroutineScope: CoroutineScope?,
     preferencesRepository: PreferencesRepository,
     placeRepository: PlaceRepository,
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastFragmentViewModel<TomorrowForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
+) : ForecastViewModel<TomorrowForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
     override val _forecast = MutableLiveData<TomorrowForecastUiModel>()
 
     override suspend fun getNewForecast(): ForecastResult {

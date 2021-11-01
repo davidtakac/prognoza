@@ -110,7 +110,7 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        DaysFragmentViewModel(null, get(), get(), get(), get(), get())
+        DaysViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {
@@ -118,11 +118,11 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        TodayFragmentViewModel(null, get(), get(), get(), get(), get())
+        TodayForecastViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {
-        TomorrowFragmentViewModel(null, get(), get(), get(), get(), get())
+        TomorrowViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {

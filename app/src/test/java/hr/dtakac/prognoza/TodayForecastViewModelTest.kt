@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.fakes.*
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.Success
-import hr.dtakac.prognoza.viewmodel.TodayFragmentViewModel
+import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -17,7 +17,7 @@ import java.time.ZoneId
 import kotlin.test.assertTrue
 
 @ExperimentalCoroutinesApi
-class TodayForecastFragmentViewModelTest {
+class TodayForecastViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
     private val coroutineDispatcher = TestCoroutineDispatcher()
@@ -29,11 +29,11 @@ class TodayForecastFragmentViewModelTest {
     private val timeProvider = FakeForecastTimeProvider()
 
     // class under test
-    private lateinit var viewModel: TodayFragmentViewModel
+    private lateinit var viewModel: TodayForecastViewModel
 
     @Before
     fun setup() {
-        viewModel = TodayFragmentViewModel(
+        viewModel = TodayForecastViewModel(
             coroutineScope,
             preferencesRepository,
             placeRepository,

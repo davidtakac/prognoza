@@ -19,7 +19,7 @@ import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
+abstract class ForecastViewModel<T : ForecastUiModel>(
     coroutineScope: CoroutineScope?,
     protected val preferencesRepository: PreferencesRepository,
     protected val placeRepository: PlaceRepository
@@ -67,8 +67,7 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
         currentMeta = success.meta
         currentUnit = selectedUnit
         _emptyScreen.value = null
-        //_outdatedForecastMessage.value = null
-        _outdatedForecastMessage.value = OutdatedForecastUiModel(null)
+        _outdatedForecastMessage.value = null
     }
 
     private fun handleEmpty(empty: Empty) {
