@@ -2,18 +2,18 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.HOURS_AFTER_MIDNIGHT
-import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import hr.dtakac.prognoza.repomodel.ForecastResult
-import hr.dtakac.prognoza.repomodel.Success
+import hr.dtakac.prognoza.common.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.model.database.ForecastTimeSpan
+import hr.dtakac.prognoza.model.repository.ForecastResult
+import hr.dtakac.prognoza.model.repository.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.cell.DayUiModel
-import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
-import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
-import hr.dtakac.prognoza.utils.toDayUiModel
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.model.ui.cell.DayUiModel
+import hr.dtakac.prognoza.model.ui.forecast.DaysForecastUiModel
+import hr.dtakac.prognoza.common.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.common.utils.toDayUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime

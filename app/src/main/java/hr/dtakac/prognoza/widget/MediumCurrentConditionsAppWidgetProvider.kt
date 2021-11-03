@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.widget
 import android.content.Context
 import android.widget.RemoteViews
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.utils.formatPrecipitationTwoHours
-import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
+import hr.dtakac.prognoza.common.utils.formatPrecipitationTwoHours
+import hr.dtakac.prognoza.model.ui.widget.CurrentConditionsWidgetUiModel
 
 open class MediumCurrentConditionsAppWidgetProvider : SmallCurrentConditionsAppWidgetProvider() {
     override val widgetLayoutId: Int

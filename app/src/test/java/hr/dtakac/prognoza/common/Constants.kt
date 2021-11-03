@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.common
 
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.model.database.Place
 
 val TEST_PLACE = Place(
     id = "123456",

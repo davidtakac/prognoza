@@ -1,9 +1,8 @@
 package hr.dtakac.prognoza.fakes
 
 import hr.dtakac.prognoza.HOURS_AFTER_MIDNIGHT
-import hr.dtakac.prognoza.utils.atStartOfDay
-import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
-import java.time.ZoneId
+import hr.dtakac.prognoza.common.utils.atStartOfDay
+import hr.dtakac.prognoza.common.timeprovider.ForecastTimeProvider
 import java.time.ZonedDateTime
 
 class FakeForecastTimeProvider : ForecastTimeProvider {

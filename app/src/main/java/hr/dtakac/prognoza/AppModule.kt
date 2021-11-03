@@ -6,8 +6,8 @@ import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.common.network.DefaultNetworkChecker
 import hr.dtakac.prognoza.common.network.NetworkChecker
-import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
-import hr.dtakac.prognoza.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.common.coroutines.DefaultDispatcherProvider
+import hr.dtakac.prognoza.common.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.database.AppDatabase
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
@@ -17,8 +17,8 @@ import hr.dtakac.prognoza.repository.place.DefaultPlaceRepository
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.utils.timeprovider.DefaultForecastTimeProvider
-import hr.dtakac.prognoza.utils.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.common.timeprovider.DefaultForecastTimeProvider
+import hr.dtakac.prognoza.common.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.viewmodel.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

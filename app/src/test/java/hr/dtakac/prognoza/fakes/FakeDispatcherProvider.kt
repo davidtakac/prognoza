@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.fakes
 
-import hr.dtakac.prognoza.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.common.coroutines.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
 
 class FakeDispatcherProvider(

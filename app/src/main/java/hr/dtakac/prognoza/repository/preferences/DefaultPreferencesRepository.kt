@@ -2,8 +2,8 @@ package hr.dtakac.prognoza.repository.preferences
 
 import android.content.SharedPreferences
 import hr.dtakac.prognoza.DEFAULT_PLACE_ID
-import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.common.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import kotlinx.coroutines.withContext
 
 private const val PLACE_ID_KEY = "place_id"

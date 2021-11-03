@@ -4,7 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.model.database.Place
 
 @Dao
 interface PlaceDao {

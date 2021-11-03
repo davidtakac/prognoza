@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.widget
 import android.content.Context
 import android.widget.RemoteViews
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.utils.formatFeelsLike
-import hr.dtakac.prognoza.uimodel.widget.CurrentConditionsWidgetUiModel
+import hr.dtakac.prognoza.common.utils.formatFeelsLike
+import hr.dtakac.prognoza.model.ui.widget.CurrentConditionsWidgetUiModel
 
 open class SmallCurrentConditionsAppWidgetProvider : TinyCurrentConditionsAppWidgetProvider() {
     override val widgetLayoutId: Int

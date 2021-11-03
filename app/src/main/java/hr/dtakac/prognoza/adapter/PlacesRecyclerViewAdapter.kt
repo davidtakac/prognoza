@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import hr.dtakac.prognoza.databinding.CellPlaceBinding
-import hr.dtakac.prognoza.uimodel.cell.PlaceUiModel
+import hr.dtakac.prognoza.model.ui.cell.PlaceUiModel
 
 class PlacesRecyclerViewAdapter(
     private val placeClickListener: (String) -> Unit

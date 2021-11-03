@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.common
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import hr.dtakac.prognoza.utils.toPx
+import hr.dtakac.prognoza.common.utils.toPx
 import kotlin.math.roundToInt
 
 class MarginItemDecoration : RecyclerView.ItemDecoration() {

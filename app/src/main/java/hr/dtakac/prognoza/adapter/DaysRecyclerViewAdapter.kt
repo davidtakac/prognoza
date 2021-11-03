@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellDayBinding
-import hr.dtakac.prognoza.uimodel.cell.DayUiModel
-import hr.dtakac.prognoza.utils.*
+import hr.dtakac.prognoza.model.ui.cell.DayUiModel
+import hr.dtakac.prognoza.common.utils.*
 
 class DaysRecyclerViewAdapter : ListAdapter<DayUiModel, DayViewHolder>(DayDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {

@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.repository.forecast
 
-import hr.dtakac.prognoza.entity.Place
-import hr.dtakac.prognoza.repomodel.ForecastResult
+import hr.dtakac.prognoza.model.database.Place
+import hr.dtakac.prognoza.model.repository.ForecastResult
 import java.time.ZonedDateTime
 
 interface ForecastRepository {

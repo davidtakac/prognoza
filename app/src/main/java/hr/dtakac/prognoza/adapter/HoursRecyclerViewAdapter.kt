@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.CellHourBinding
-import hr.dtakac.prognoza.utils.*
-import hr.dtakac.prognoza.uimodel.cell.HourUiModel
+import hr.dtakac.prognoza.common.utils.*
+import hr.dtakac.prognoza.model.ui.cell.HourUiModel
 
 class HoursRecyclerViewAdapter : ListAdapter<HourUiModel, HourViewHolder>(HourDiffCallback()) {
     private val onItemClickCallback = object : (Int) -> Unit {

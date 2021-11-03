@@ -2,12 +2,12 @@ package hr.dtakac.prognoza
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.utils.toDayUiModel
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.cell.DayUiModel
-import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
-import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
+import hr.dtakac.prognoza.common.utils.toDayUiModel
+import hr.dtakac.prognoza.model.database.ForecastTimeSpan
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.model.ui.cell.DayUiModel
+import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
+import hr.dtakac.prognoza.model.ui.WEATHER_ICONS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope

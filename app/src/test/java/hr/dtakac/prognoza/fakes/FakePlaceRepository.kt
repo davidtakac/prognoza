@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.fakes
 
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.model.database.Place
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 
 class FakePlaceRepository : PlaceRepository {

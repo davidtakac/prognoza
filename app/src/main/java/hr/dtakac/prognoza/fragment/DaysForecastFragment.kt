@@ -8,7 +8,7 @@ import hr.dtakac.prognoza.adapter.DaysRecyclerViewAdapter
 import hr.dtakac.prognoza.common.MarginItemDecoration
 import hr.dtakac.prognoza.databinding.FragmentDaysBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
-import hr.dtakac.prognoza.uimodel.forecast.DaysForecastUiModel
+import hr.dtakac.prognoza.model.ui.forecast.DaysForecastUiModel
 import hr.dtakac.prognoza.viewmodel.DaysViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

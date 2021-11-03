@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.*
 import hr.dtakac.prognoza.adapter.ForecastPagerAdapter
 import hr.dtakac.prognoza.databinding.ActivityForecastBinding
 import hr.dtakac.prognoza.fragment.PlaceSearchDialogFragment
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.viewmodel.ForecastActivityViewModel
 import hr.dtakac.prognoza.widget.MediumCurrentConditionsAppWidgetProvider
 import hr.dtakac.prognoza.widget.SmallCurrentConditionsAppWidgetProvider

@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.preferences
 
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
 
 interface PreferencesRepository {
     suspend fun setSelectedPlaceId(placeId: String)

@@ -2,20 +2,20 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.entity.ForecastMeta
-import hr.dtakac.prognoza.entity.Place
-import hr.dtakac.prognoza.utils.hasExpired
-import hr.dtakac.prognoza.utils.toErrorResourceId
-import hr.dtakac.prognoza.repomodel.CachedSuccess
-import hr.dtakac.prognoza.repomodel.Empty
-import hr.dtakac.prognoza.repomodel.ForecastResult
-import hr.dtakac.prognoza.repomodel.Success
+import hr.dtakac.prognoza.model.database.ForecastMeta
+import hr.dtakac.prognoza.model.database.Place
+import hr.dtakac.prognoza.common.utils.hasExpired
+import hr.dtakac.prognoza.common.utils.toErrorResourceId
+import hr.dtakac.prognoza.model.repository.CachedSuccess
+import hr.dtakac.prognoza.model.repository.Empty
+import hr.dtakac.prognoza.model.repository.ForecastResult
+import hr.dtakac.prognoza.model.repository.Success
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.uimodel.MeasurementUnit
-import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
-import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
-import hr.dtakac.prognoza.uimodel.forecast.OutdatedForecastUiModel
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.model.ui.forecast.EmptyForecastUiModel
+import hr.dtakac.prognoza.model.ui.forecast.ForecastUiModel
+import hr.dtakac.prognoza.model.ui.forecast.OutdatedForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -67,7 +67,7 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
         currentMeta = success.meta
         currentUnit = selectedUnit
         _emptyScreen.value = null
-        _outdatedForecastMessage.value = null
+        _outdatedForecastMessage.value = OutdatedForecastUiModel(null)
     }
 
     private fun handleEmpty(empty: Empty) {

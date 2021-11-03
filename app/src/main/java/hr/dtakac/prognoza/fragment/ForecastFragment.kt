@@ -12,9 +12,9 @@ import hr.dtakac.prognoza.BUNDLE_KEY_UNITS_CHANGED
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.databinding.LayoutForecastEmptyBinding
 import hr.dtakac.prognoza.databinding.LayoutForecastOutdatedBinding
-import hr.dtakac.prognoza.utils.formatEmptyMessage
-import hr.dtakac.prognoza.uimodel.forecast.EmptyForecastUiModel
-import hr.dtakac.prognoza.uimodel.forecast.ForecastUiModel
+import hr.dtakac.prognoza.common.utils.formatEmptyMessage
+import hr.dtakac.prognoza.model.ui.forecast.EmptyForecastUiModel
+import hr.dtakac.prognoza.model.ui.forecast.ForecastUiModel
 import hr.dtakac.prognoza.viewmodel.ForecastViewModel
 
 abstract class ForecastFragment<UI_MODEL : ForecastUiModel, VB : ViewBinding>(
