@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.utils.ComposeStringFormatting
+import hr.dtakac.prognoza.common.utils.shouldShowPrecipitation
 import hr.dtakac.prognoza.composable.common.ExpandableHour
 import hr.dtakac.prognoza.composable.common.OutdatedForecastMessage
 import hr.dtakac.prognoza.model.ui.MeasurementUnit
@@ -142,9 +143,8 @@ fun CurrentHourHeaderDescription(
     weatherDescription: WeatherDescription?,
     unit: MeasurementUnit
 ) {
-    val isShowingPrecipitation = precipitation != null && precipitation > 0
     Text(
-        text = if (isShowingPrecipitation) {
+        text = if (shouldShowPrecipitation(precipitation)) {
             ComposeStringFormatting.formatPrecipitationValue(
                 precipitation = precipitation,
                 unit = unit

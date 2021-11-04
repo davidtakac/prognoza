@@ -13,6 +13,7 @@ import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_IMPERIAL
 import hr.dtakac.prognoza.SIGNIFICANT_PRECIPITATION_METRIC
 import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.time.ZonedDateTime
@@ -248,6 +249,22 @@ object ComposeStringFormatting {
             }
         } else {
             stringResource(id = R.string.placeholder_pressure)
+        }
+    }
+
+    @Composable
+    fun formatRepresentativeWeatherIconDescription(
+        representativeWeatherDescription: RepresentativeWeatherDescription?
+    ): String {
+        val weatherIconDescriptionString =
+            formatWeatherIconDescription(representativeWeatherDescription?.weatherDescription?.descriptionResourceId)
+        return if (representativeWeatherDescription?.isMostly == true) {
+            stringResource(
+                id = R.string.template_mostly,
+                weatherIconDescriptionString.lowercase()
+            )
+        } else {
+            weatherIconDescriptionString
         }
     }
 }

@@ -30,6 +30,7 @@ class ComposeForecastActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         todayViewModel.getForecast()
+        tomorrowViewModel.getForecast()
     }
 
     @ExperimentalPagerApi
