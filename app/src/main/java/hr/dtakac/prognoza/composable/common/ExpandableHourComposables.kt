@@ -8,7 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -123,48 +123,43 @@ fun HourDetails(
     humidity: Double?,
     unit: MeasurementUnit
 ) {
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+    FlowRow(
+        mainAxisSpacing = 8.dp,
+        crossAxisSpacing = 8.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
-        FlowRow(
-            mainAxisSpacing = 8.dp,
-            crossAxisSpacing = 8.dp
-        ) {
-            DetailsItem(
-                iconId = R.drawable.ic_thermostat,
-                labelId = R.string.feels_like,
-                text = ComposeStringFormatting.formatTemperatureValue(
-                    temperature = feelsLike,
-                    unit = unit
-                )
+        DetailsItem(
+            iconId = R.drawable.ic_thermostat,
+            labelId = R.string.feels_like,
+            text = ComposeStringFormatting.formatTemperatureValue(
+                temperature = feelsLike,
+                unit = unit
             )
-            DetailsItem(
-                iconId = R.drawable.ic_air,
-                labelId = R.string.wind,
-                text = ComposeStringFormatting.formatWindWithDirection(
-                    windSpeed = windSpeed,
-                    windFromCompassDirection = windFromCompassDirection,
-                    windSpeedUnit = unit
-                )
+        )
+        DetailsItem(
+            iconId = R.drawable.ic_air,
+            labelId = R.string.wind,
+            text = ComposeStringFormatting.formatWindWithDirection(
+                windSpeed = windSpeed,
+                windFromCompassDirection = windFromCompassDirection,
+                windSpeedUnit = unit
             )
-            DetailsItem(
-                iconId = R.drawable.ic_water_drop,
-                labelId = R.string.humidity,
-                text = ComposeStringFormatting.formatHumidityValue(
-                    relativeHumidity = humidity
-                )
+        )
+        DetailsItem(
+            iconId = R.drawable.ic_water_drop,
+            labelId = R.string.humidity,
+            text = ComposeStringFormatting.formatHumidityValue(
+                relativeHumidity = humidity
             )
-            DetailsItem(
-                iconId = R.drawable.ic_speed,
-                labelId = R.string.pressure,
-                text = ComposeStringFormatting.formatPressureValue(
-                    pressure = pressure,
-                    unit = unit
-                )
+        )
+        DetailsItem(
+            iconId = R.drawable.ic_speed,
+            labelId = R.string.pressure,
+            text = ComposeStringFormatting.formatPressureValue(
+                pressure = pressure,
+                unit = unit
             )
-        }
+        )
     }
 }
 

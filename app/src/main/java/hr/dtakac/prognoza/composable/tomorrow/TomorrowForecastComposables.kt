@@ -86,9 +86,6 @@ fun TomorrowSummaryHeader(
                 RepresentativeWeatherDescription(
                     representativeWeatherDescription = dayUiModel.representativeWeatherDescription
                 )
-                RepresentativeWeatherDescription(
-                    representativeWeatherDescription = dayUiModel.representativeWeatherDescription
-                )
             }
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,

@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.composable.forecast.TabbedForecastPager
+import hr.dtakac.prognoza.viewmodel.ComingForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -15,6 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class ComposeForecastActivity : ComponentActivity() {
     private val todayViewModel by viewModel<TodayForecastViewModel>()
     private val tomorrowViewModel by viewModel<TomorrowForecastViewModel>()
+    private val comingViewModel by viewModel<ComingForecastViewModel>()
 
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +33,7 @@ class ComposeForecastActivity : ComponentActivity() {
         super.onResume()
         todayViewModel.getForecast()
         tomorrowViewModel.getForecast()
+        comingViewModel.getForecast()
     }
 
     @ExperimentalPagerApi
@@ -39,7 +42,8 @@ class ComposeForecastActivity : ComponentActivity() {
         Box {
             TabbedForecastPager(
                 todayForecastViewModel = todayViewModel,
-                tomorrowForecastViewModel = tomorrowViewModel
+                tomorrowForecastViewModel = tomorrowViewModel,
+                comingForecastViewModel = comingViewModel
             )
         }
     }

@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.common.utils
 
+import android.icu.text.RelativeDateTimeFormatter
 import android.text.format.DateUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
@@ -37,6 +38,14 @@ object ComposeStringFormatting {
             time.toInstant().toEpochMilli(),
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
         )
+    }
+
+    @Composable
+    fun getTomorrowTime(): String {
+        return RelativeDateTimeFormatter.getInstance().format(
+            RelativeDateTimeFormatter.Direction.NEXT,
+            RelativeDateTimeFormatter.AbsoluteUnit.DAY
+        ).replaceFirstChar { it.uppercaseChar() }
     }
 
     @Composable
