@@ -30,6 +30,15 @@ object ComposeStringFormatting {
     }
 
     @Composable
+    fun formatDaySummaryTime(time: ZonedDateTime): String {
+        return DateUtils.formatDateTime(
+            LocalContext.current,
+            time.toInstant().toEpochMilli(),
+            DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
+        )
+    }
+
+    @Composable
     fun formatTemperatureValue(temperature: Double?, unit: MeasurementUnit): String {
         val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
             maximumFractionDigits = 0

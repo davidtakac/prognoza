@@ -122,7 +122,7 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        TomorrowViewModel(null, get(), get(), get(), get(), get())
+        TomorrowForecastViewModel(null, get(), get(), get(), get(), get())
     }
 
     viewModel {

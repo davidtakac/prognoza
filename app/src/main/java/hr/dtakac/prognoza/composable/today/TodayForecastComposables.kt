@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.composable.today
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Divider
@@ -28,28 +27,28 @@ import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import java.time.ZonedDateTime
 
 @Composable
-fun TodayForecast(todayForecastViewModel: TodayForecastViewModel) {
+fun TodayForecast(viewModel: TodayForecastViewModel) {
 
-    val todayForecast by todayForecastViewModel.forecast.observeAsState()
-    val outdatedForecast by todayForecastViewModel.outdatedForecastMessage.observeAsState()
-    val expandedHourIndices = todayForecastViewModel.expandedHourIndices
+    val forecast by viewModel.forecast.observeAsState()
+    val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
+    val expandedHourIndices = viewModel.expandedHourIndices
 
     LazyColumn(
         modifier = Modifier.fillMaxHeight()
     ) {
-        todayForecast?.let { today ->
+        forecast?.let { forecast ->
             item {
                 CurrentHourHeader(
-                    currentHour = today.currentHour,
+                    currentHour = forecast.currentHour,
                     outdatedForecastUiModel = outdatedForecast
                 )
             }
-            today.otherHours.forEachIndexed { index, hour ->
+            forecast.otherHours.forEachIndexed { index, hour ->
                 item {
                     ExpandableHour(
                         hour = hour,
                         isExpanded = index in expandedHourIndices,
-                        onClick = { todayForecastViewModel.toggleHour(index) }
+                        onClick = { viewModel.toggleHour(index) }
                     )
                 }
                 item {

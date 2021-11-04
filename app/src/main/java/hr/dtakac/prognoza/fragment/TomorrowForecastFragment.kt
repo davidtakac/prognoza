@@ -16,7 +16,7 @@ import hr.dtakac.prognoza.common.utils.formatRepresentativeWeatherIconDescriptio
 import hr.dtakac.prognoza.common.utils.formatTemperatureValue
 import hr.dtakac.prognoza.common.utils.formatTotalPrecipitation
 import hr.dtakac.prognoza.model.ui.forecast.TomorrowForecastUiModel
-import hr.dtakac.prognoza.viewmodel.TomorrowViewModel
+import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class TomorrowForecastFragment :
@@ -25,7 +25,7 @@ class TomorrowForecastFragment :
     override val progressBar get() = binding.progressBar
     override val outdatedForecastBinding: LayoutForecastOutdatedBinding get() = binding.cachedDataMessage
     override val requestKey get() = TOMORROW_REQUEST_KEY
-    override val viewModel by viewModel<TomorrowViewModel>()
+    override val viewModel by viewModel<TomorrowForecastViewModel>()
 
     private val adapter = HoursRecyclerViewAdapter()
 

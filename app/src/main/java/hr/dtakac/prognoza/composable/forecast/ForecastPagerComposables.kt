@@ -14,14 +14,17 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.composable.today.TodayForecast
+import hr.dtakac.prognoza.composable.tomorrow.TomorrowForecast
 import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
+import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel
 import kotlinx.coroutines.launch
 
 @ExperimentalPagerApi
 @Composable
 fun TabbedForecastPager(
-    todayForecastViewModel: TodayForecastViewModel
+    todayForecastViewModel: TodayForecastViewModel,
+    tomorrowForecastViewModel: TomorrowForecastViewModel
 ) {
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
@@ -60,8 +63,9 @@ fun TabbedForecastPager(
             )
         ) { page ->
             when (page) {
-                0 -> TodayForecast(todayForecastViewModel = todayForecastViewModel)
-                else -> Text("Page ${pages[page]}")
+                0 -> TodayForecast(viewModel = todayForecastViewModel)
+                1 -> TomorrowForecast(viewModel = tomorrowForecastViewModel)
+                else -> Text("Test boi")
             }
         }
     }
