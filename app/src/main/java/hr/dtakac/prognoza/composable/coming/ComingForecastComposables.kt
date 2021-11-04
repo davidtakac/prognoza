@@ -168,7 +168,7 @@ fun DaySummaryLowestAndHighestTemperature(
     highestTemperature: Double?,
     unit: MeasurementUnit
 ) {
-    val typography = AppTheme.typography.h6
+    val typography = AppTheme.typography.subtitle1
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End
