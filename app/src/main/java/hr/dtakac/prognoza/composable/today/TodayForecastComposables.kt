@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.composable.today
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -44,17 +45,13 @@ fun TodayForecast(viewModel: TodayForecastViewModel) {
                     outdatedForecastUiModel = outdatedForecast
                 )
             }
-            forecast.otherHours.forEachIndexed { index, hour ->
-                item {
-                    ExpandableHour(
-                        hour = hour,
-                        isExpanded = index in expandedHourIndices,
-                        onClick = { viewModel.toggleHour(index) }
-                    )
-                }
-                item {
-                    Divider()
-                }
+            itemsIndexed(forecast.otherHours) { index, hour ->
+                ExpandableHour(
+                    hour = hour,
+                    isExpanded = index in expandedHourIndices,
+                    onClick = { viewModel.toggleExpanded(index) }
+                )
+                Divider()
             }
         }
     }

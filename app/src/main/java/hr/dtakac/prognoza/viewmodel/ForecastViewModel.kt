@@ -68,6 +68,7 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
         currentUnit = selectedUnit
         _emptyScreen.value = null
         _outdatedForecastMessage.value = null
+        //_outdatedForecastMessage.value = OutdatedForecastUiModel(null)
     }
 
     private fun handleEmpty(empty: Empty) {

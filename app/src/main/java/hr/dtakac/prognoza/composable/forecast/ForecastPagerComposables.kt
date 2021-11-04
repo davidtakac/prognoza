@@ -43,13 +43,14 @@ fun TabbedForecastPager(
                     TabRowDefaults.Indicator(
                         modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
                     )
-                }
+                },
+
             ) {
                 pages.forEachIndexed { index, title ->
                     Tab(
                         text = { Text(title) },
                         selected = pagerState.currentPage == index,
-                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                        onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
                     )
                 }
             }

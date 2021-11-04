@@ -54,7 +54,7 @@ class TomorrowForecastViewModel(
         )
     }
 
-    fun toggleHour(index: Int) {
+    fun toggleExpanded(index: Int) {
         coroutineScope.launch(dispatcherProvider.default) {
             if (index in _expandedHourIndices) {
                 _expandedHourIndices.remove(index)

@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.HOURS_AFTER_MIDNIGHT
 import hr.dtakac.prognoza.common.coroutines.DispatcherProvider
@@ -15,10 +17,11 @@ import hr.dtakac.prognoza.model.ui.forecast.DaysForecastUiModel
 import hr.dtakac.prognoza.common.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.common.utils.toDayUiModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 
-class DaysViewModel(
+class ComingForecastViewModel(
     coroutineScope: CoroutineScope?,
     preferencesRepository: PreferencesRepository,
     placeRepository: PlaceRepository,
@@ -31,6 +34,9 @@ class DaysViewModel(
     placeRepository
 ) {
     override val _forecast = MutableLiveData<DaysForecastUiModel>()
+
+    private val _expandedHourIndices = mutableStateListOf<Int>()
+    val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
     override suspend fun getNewForecast(): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
@@ -65,5 +71,15 @@ class DaysViewModel(
                 summaries
             }
         )
+    }
+
+    fun toggleExpanded(index: Int) {
+        coroutineScope.launch(dispatcherProvider.default) {
+            if (index in _expandedHourIndices) {
+                _expandedHourIndices.remove(index)
+            } else {
+                _expandedHourIndices.add(index)
+            }
+        }
     }
 }

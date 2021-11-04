@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.composable.tomorrow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -11,18 +12,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.utils.ComposeStringFormatting
-import hr.dtakac.prognoza.common.utils.shouldShowPrecipitation
-import hr.dtakac.prognoza.composable.common.DaySummaryTime
-import hr.dtakac.prognoza.composable.common.ExpandableHour
-import hr.dtakac.prognoza.composable.common.OutdatedForecastMessage
+import hr.dtakac.prognoza.composable.common.*
 import hr.dtakac.prognoza.model.ui.MeasurementUnit
-import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
+import hr.dtakac.prognoza.composable.common.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.model.ui.cell.DayUiModel
 import hr.dtakac.prognoza.model.ui.forecast.OutdatedForecastUiModel
 import hr.dtakac.prognoza.theme.AppTheme
@@ -45,17 +41,13 @@ fun TomorrowForecast(viewModel: TomorrowForecastViewModel) {
                     outdatedForecastUiModel = outdatedForecast
                 )
             }
-            forecast.hours.forEachIndexed { index, hour ->
-                item {
-                    ExpandableHour(
-                        hour = hour,
-                        isExpanded = index in expandedHourIndices,
-                        onClick = { viewModel.toggleHour(index) }
-                    )
-                }
-                item {
-                    Divider()
-                }
+            itemsIndexed(forecast.hours) { index, hour ->
+                ExpandableHour(
+                    hour = hour,
+                    isExpanded = index in expandedHourIndices,
+                    onClick = { viewModel.toggleExpanded(index) }
+                )
+                Divider()
             }
         }
     }
@@ -82,7 +74,7 @@ fun TomorrowSummaryHeader(
         ) {
             Column(horizontalAlignment = Alignment.Start) {
                 DaySummaryTime(time = dayUiModel.time)
-                LowestAndHighestTemperature(
+                TomorrowLowestAndHighestTemperature(
                     lowestTemperature = dayUiModel.lowTemperature,
                     highestTemperature = dayUiModel.highTemperature,
                     unit = dayUiModel.displayDataInUnit
@@ -90,6 +82,9 @@ fun TomorrowSummaryHeader(
                 TotalPrecipitation(
                     totalPrecipitation = dayUiModel.totalPrecipitationAmount,
                     unit = dayUiModel.displayDataInUnit
+                )
+                RepresentativeWeatherDescription(
+                    representativeWeatherDescription = dayUiModel.representativeWeatherDescription
                 )
                 RepresentativeWeatherDescription(
                     representativeWeatherDescription = dayUiModel.representativeWeatherDescription
@@ -114,7 +109,7 @@ fun TomorrowSummaryHeader(
 }
 
 @Composable
-fun LowestAndHighestTemperature(
+fun TomorrowLowestAndHighestTemperature(
     lowestTemperature: Double?,
     highestTemperature: Double?,
     unit: MeasurementUnit
@@ -138,36 +133,4 @@ fun LowestAndHighestTemperature(
             color = AppTheme.textColors.mediumEmphasis
         )
     }
-}
-
-@Composable
-fun TotalPrecipitation(
-    totalPrecipitation: Double?,
-    unit: MeasurementUnit
-) {
-    Text(
-        text = if (shouldShowPrecipitation(totalPrecipitation)) {
-            ComposeStringFormatting.formatPrecipitationValue(
-                precipitation = totalPrecipitation,
-                unit = unit
-            )
-        } else {
-            AnnotatedString(text = stringResource(id = R.string.placeholder_precipitation_text))
-        },
-        style = AppTheme.typography.subtitle1,
-        color = AppTheme.textColors.mediumEmphasis
-    )
-}
-
-@Composable
-fun RepresentativeWeatherDescription(
-    representativeWeatherDescription: RepresentativeWeatherDescription?
-) {
-    Text(
-        text = ComposeStringFormatting.formatRepresentativeWeatherIconDescription(
-            representativeWeatherDescription = representativeWeatherDescription
-        ),
-        style = AppTheme.typography.subtitle1,
-        color = AppTheme.textColors.mediumEmphasis
-    )
 }
