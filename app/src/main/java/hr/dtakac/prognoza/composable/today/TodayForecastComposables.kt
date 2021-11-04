@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -34,25 +35,34 @@ fun TodayForecast(viewModel: TodayForecastViewModel) {
     val forecast by viewModel.forecast.observeAsState()
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
     val expandedHourIndices = viewModel.expandedHourIndices
+    val isLoading by viewModel.isLoading.observeAsState()
 
-    LazyColumn(
-        modifier = Modifier.fillMaxHeight()
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        forecast?.let { forecast ->
-            item {
-                CurrentHourHeader(
-                    currentHour = forecast.currentHour,
-                    outdatedForecastUiModel = outdatedForecast
-                )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            forecast?.let { forecast ->
+                item {
+                    CurrentHourHeader(
+                        currentHour = forecast.currentHour,
+                        outdatedForecastUiModel = outdatedForecast
+                    )
+                }
+                itemsIndexed(forecast.otherHours) { index, hour ->
+                    ExpandableHour(
+                        hour = hour,
+                        isExpanded = index in expandedHourIndices,
+                        onClick = { viewModel.toggleExpanded(index) }
+                    )
+                    Divider()
+                }
             }
-            itemsIndexed(forecast.otherHours) { index, hour ->
-                ExpandableHour(
-                    hour = hour,
-                    isExpanded = index in expandedHourIndices,
-                    onClick = { viewModel.toggleExpanded(index) }
-                )
-                Divider()
-            }
+        }
+        if (isLoading == true) {
+            CircularProgressIndicator()
         }
     }
 }

@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import hr.dtakac.prognoza.theme.AppTheme
-import hr.dtakac.prognoza.composable.forecast.TabbedForecastPager
+import hr.dtakac.prognoza.composable.forecast.ForecastTabbedPager
 import hr.dtakac.prognoza.viewmodel.ComingForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel
@@ -29,18 +29,11 @@ class ComposeForecastActivity : ComponentActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        todayViewModel.getForecast()
-        tomorrowViewModel.getForecast()
-        comingViewModel.getForecast()
-    }
-
     @ExperimentalPagerApi
     @Composable
     fun Screen() {
         Box {
-            TabbedForecastPager(
+            ForecastTabbedPager(
                 todayForecastViewModel = todayViewModel,
                 tomorrowForecastViewModel = tomorrowViewModel,
                 comingForecastViewModel = comingViewModel

@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -36,25 +37,34 @@ fun ComingForecast(viewModel: ComingForecastViewModel) {
     val forecast by viewModel.forecast.observeAsState()
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
     val expandedHourIndices = viewModel.expandedHourIndices
+    val isLoading by viewModel.isLoading.observeAsState()
 
-    LazyColumn(
-        modifier = Modifier.fillMaxHeight()
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
     ) {
-        forecast?.let { forecast ->
-            itemsIndexed(forecast.days) { index, day ->
-                ExpandableDay(
-                    isExpanded = index in expandedHourIndices,
-                    dayUiModel = day,
-                    onClick = { viewModel.toggleExpanded(index) },
-                    modifier = Modifier.padding(
-                        start = 16.dp,
-                        end = 16.dp,
-                        top = 16.dp,
-                        bottom = if (index == forecast.days.lastIndex) 16.dp else 0.dp
-                    ),
-                    isTomorrow = index == 0
-                )
+        LazyColumn(
+            modifier = Modifier.fillMaxHeight()
+        ) {
+            forecast?.let { forecast ->
+                itemsIndexed(forecast.days) { index, day ->
+                    ExpandableDay(
+                        isExpanded = index in expandedHourIndices,
+                        dayUiModel = day,
+                        onClick = { viewModel.toggleExpanded(index) },
+                        modifier = Modifier.padding(
+                            start = 16.dp,
+                            end = 16.dp,
+                            top = 16.dp,
+                            bottom = if (index == forecast.days.lastIndex) 16.dp else 0.dp
+                        ),
+                        isTomorrow = index == 0
+                    )
+                }
             }
+        }
+        if (isLoading == true) {
+            CircularProgressIndicator()
         }
     }
 }
