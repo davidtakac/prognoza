@@ -152,7 +152,7 @@ fun DaySummary(
                 contentDescription = null,
                 modifier = Modifier.size(64.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.width(16.dp))
             DaySummaryLowestAndHighestTemperature(
                 lowestTemperature = lowestTemperature,
                 highestTemperature = highestTemperature,

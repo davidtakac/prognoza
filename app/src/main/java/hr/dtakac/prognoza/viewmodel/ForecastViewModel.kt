@@ -17,6 +17,7 @@ import hr.dtakac.prognoza.model.ui.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.model.ui.forecast.ForecastUiModel
 import hr.dtakac.prognoza.model.ui.forecast.OutdatedForecastUiModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 abstract class ForecastViewModel<T : ForecastUiModel>(
@@ -45,6 +46,7 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 _isLoading.value = true
+                delay(5000)
                 selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
                     ?: placeRepository.getDefaultPlace()
                 when (val result = getNewForecast()) {
@@ -68,7 +70,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
         currentUnit = selectedUnit
         _emptyScreen.value = null
         _outdatedForecastMessage.value = null
-        //_outdatedForecastMessage.value = OutdatedForecastUiModel(null)
     }
 
     private fun handleEmpty(empty: Empty) {

@@ -78,7 +78,11 @@
     <string name="error_met_server">The server is currently unable to process your request.</string>
     <string name="error_met_throttling">Heavy traffic from other users.</string>
     <string name="error_generic">An unexpected error occurred.</string>
-    <string name="template_error_forecast_empty_reason">We tried getting new forecast data, but it failed because of this reason: %1$s Please try again.</string>
+    <string name="template_error_forecast_empty_reason">
+        Tried getting forecast, but failed because:
+        \n\n%1$s\n\n
+        Please try again.
+    </string>
     <string name="button_try_again">Try again</string>
     <string name="title_search">Pick another place</string>
     <string name="placeholder_precipitation_text">No precipitation</string>

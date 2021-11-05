@@ -1,5 +1,9 @@
 package hr.dtakac.prognoza.model.ui.forecast
 
+import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class EmptyForecastUiModel(
-    val reasonResourceId: Int?
+    @StringRes val reasonResourceId: Int?
 )
