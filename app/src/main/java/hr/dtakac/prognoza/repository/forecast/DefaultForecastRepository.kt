@@ -42,8 +42,6 @@ class DefaultForecastRepository(
         end: ZonedDateTime,
         place: Place
     ): ForecastResult {
-        return Empty(null)
-
         var meta = try {
             metaRepository.get(place.id)
         } catch (e: Exception) {

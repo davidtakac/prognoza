@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.R
@@ -32,6 +33,7 @@ fun TomorrowForecast(viewModel: TomorrowForecastViewModel) {
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
     val expandedHourIndices = viewModel.expandedHourIndices
     val isLoading by viewModel.isLoading.observeAsState()
+    val empty by viewModel.emptyScreen.observeAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -53,12 +55,24 @@ fun TomorrowForecast(viewModel: TomorrowForecastViewModel) {
                         isExpanded = index in expandedHourIndices,
                         onClick = { viewModel.toggleExpanded(index) }
                     )
-                    Divider()
+                    if (index < forecast.hours.lastIndex) {
+                        Divider()
+                    } else {
+                        MetNorwayOrganizationCredit()
+                    }
                 }
             }
         }
         if (isLoading == true) {
             CircularProgressIndicator()
+        }
+        if (empty != null) {
+            EmptyForecast(
+                reason = empty?.reasonResourceId?.let { stringResource(id = it) }
+                    ?: stringResource(id = R.string.error_generic),
+                onTryAgainClick = { viewModel.getForecast() },
+                isLoading = isLoading == true
+            )
         }
     }
 }

@@ -20,9 +20,7 @@ import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.utils.ComposeStringFormatting
 import hr.dtakac.prognoza.common.utils.shouldShowPrecipitation
-import hr.dtakac.prognoza.composable.common.EmptyForecast
-import hr.dtakac.prognoza.composable.common.ExpandableHour
-import hr.dtakac.prognoza.composable.common.OutdatedForecastMessage
+import hr.dtakac.prognoza.composable.common.*
 import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.model.ui.WeatherDescription
 import hr.dtakac.prognoza.model.ui.cell.HourUiModel
@@ -60,7 +58,11 @@ fun TodayForecast(viewModel: TodayForecastViewModel) {
                         isExpanded = index in expandedHourIndices,
                         onClick = { viewModel.toggleExpanded(index) }
                     )
-                    Divider()
+                    if (index < forecast.otherHours.lastIndex) {
+                        Divider()
+                    } else {
+                        MetNorwayOrganizationCredit()
+                    }
                 }
             }
         }

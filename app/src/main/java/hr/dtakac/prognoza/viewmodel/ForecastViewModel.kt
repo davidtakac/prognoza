@@ -46,7 +46,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
         coroutineScope.launch {
             if (isReloadNeeded()) {
                 _isLoading.value = true
-                delay(5000)
                 selectedPlace = placeRepository.get(preferencesRepository.getSelectedPlaceId())
                     ?: placeRepository.getDefaultPlace()
                 when (val result = getNewForecast()) {

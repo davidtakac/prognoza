@@ -14,16 +14,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowRow
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.utils.ComposeStringFormatting
 import hr.dtakac.prognoza.common.utils.ComposeStringFormatting.getTomorrowTime
-import hr.dtakac.prognoza.composable.common.DaySummaryTime
-import hr.dtakac.prognoza.composable.common.DetailsItem
-import hr.dtakac.prognoza.composable.common.RepresentativeWeatherDescription
-import hr.dtakac.prognoza.composable.common.TotalPrecipitation
+import hr.dtakac.prognoza.composable.common.*
 import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.model.ui.cell.DayUiModel
@@ -38,6 +36,7 @@ fun ComingForecast(viewModel: ComingForecastViewModel) {
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
     val expandedHourIndices = viewModel.expandedHourIndices
     val isLoading by viewModel.isLoading.observeAsState()
+    val empty by viewModel.emptyScreen.observeAsState()
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -60,11 +59,22 @@ fun ComingForecast(viewModel: ComingForecastViewModel) {
                         ),
                         isTomorrow = index == 0
                     )
+                    if (index == forecast.days.lastIndex) {
+                        MetNorwayOrganizationCredit()
+                    }
                 }
             }
         }
         if (isLoading == true) {
             CircularProgressIndicator()
+        }
+        if (empty != null) {
+            EmptyForecast(
+                reason = empty?.reasonResourceId?.let { stringResource(id = it) }
+                    ?: stringResource(id = R.string.error_generic),
+                onTryAgainClick = { viewModel.getForecast() },
+                isLoading = isLoading == true
+            )
         }
     }
 }
