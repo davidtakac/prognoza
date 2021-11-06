@@ -9,11 +9,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
@@ -25,6 +26,7 @@ import hr.dtakac.prognoza.composable.common.*
 import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.model.ui.cell.DayUiModel
+import hr.dtakac.prognoza.model.ui.forecast.OutdatedForecastUiModel
 import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.viewmodel.ComingForecastViewModel
 import java.time.ZonedDateTime
@@ -47,6 +49,11 @@ fun ComingForecast(viewModel: ComingForecastViewModel) {
         ) {
             forecast?.let { forecast ->
                 itemsIndexed(forecast.days) { index, day ->
+                    if (index == 0) {
+                        outdatedForecast?.let {
+                            ComingForecastOutdatedMessage(outdatedForecastUiModel = it)
+                        }
+                    }
                     ExpandableDay(
                         isExpanded = index in expandedHourIndices,
                         dayUiModel = day,
@@ -247,6 +254,50 @@ fun DayDetails(
                 pressure = maxPressure,
                 unit = unit
             )
+        )
+    }
+}
+
+@Composable
+fun ComingForecastOutdatedMessage(outdatedForecastUiModel: OutdatedForecastUiModel) {
+    var showDialog by remember { mutableStateOf(false) }
+    Surface(
+        shape = AppTheme.shapes.small,
+        color = AppTheme.colors.surface,
+        contentColor = AppTheme.colors.onSurface,
+        elevation = 2.dp,
+        modifier = Modifier
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 16.dp
+            )
+            .fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .clickable { showDialog = true }
+                .padding(16.dp)
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_cloud_off),
+                contentDescription = null,
+                modifier = Modifier.size(size = 16.dp),
+                colorFilter = ColorFilter.tint(color = AppTheme.textColors.mediumEmphasis)
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = stringResource(id = R.string.notify_cached_data),
+                style = AppTheme.typography.subtitle2,
+                color = AppTheme.textColors.mediumEmphasis
+            )
+        }
+        OutdatedForecastDialog(
+            showDialog = showDialog,
+            reasonId = outdatedForecastUiModel.reason ?: R.string.error_generic,
+            onConfirmRequest = { showDialog = false },
+            onDismissRequest = { showDialog = false }
         )
     }
 }
