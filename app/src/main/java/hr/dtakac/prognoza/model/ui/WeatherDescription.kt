@@ -1,13 +1,16 @@
 package hr.dtakac.prognoza.model.ui
 
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 import hr.dtakac.prognoza.R
 
+@Immutable
 data class WeatherDescription(
     @DrawableRes val iconResourceId: Int,
     val descriptionResourceId: Int
 )
 
+@Immutable
 data class RepresentativeWeatherDescription(
     val weatherDescription: WeatherDescription,
     val isMostly: Boolean

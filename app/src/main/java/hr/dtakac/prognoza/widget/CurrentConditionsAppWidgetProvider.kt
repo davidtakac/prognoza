@@ -14,7 +14,7 @@ import hr.dtakac.prognoza.ACTION_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.BuildConfig
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
-import hr.dtakac.prognoza.activity.ForecastActivity
+import hr.dtakac.prognoza.activity.ComposeForecastActivity
 import hr.dtakac.prognoza.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.model.database.Place
 import hr.dtakac.prognoza.model.repository.CachedSuccess
@@ -124,7 +124,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
 
     private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {
         if (BuildConfig.VERSION_CODE < Build.VERSION_CODES.S) {
-            val intent = Intent(context, ForecastActivity::class.java)
+            val intent = Intent(context, ComposeForecastActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(
                 context,
                 REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE,

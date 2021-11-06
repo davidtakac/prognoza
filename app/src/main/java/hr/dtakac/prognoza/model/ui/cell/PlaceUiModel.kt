@@ -1,5 +1,8 @@
 package hr.dtakac.prognoza.model.ui.cell
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class PlaceUiModel(
     val id: String,
     val name: String,
