@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import hr.dtakac.prognoza.theme.AppTheme
-import hr.dtakac.prognoza.composable.forecast.ForecastTabbedPager
+import hr.dtakac.prognoza.composable.forecastpager.ForecastTabbedPager
 import hr.dtakac.prognoza.viewmodel.ComingForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel

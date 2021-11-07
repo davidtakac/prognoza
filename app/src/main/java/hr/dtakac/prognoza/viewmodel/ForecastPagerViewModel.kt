@@ -11,7 +11,7 @@ import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class ForecastActivityViewModel(
+class ForecastPagerViewModel(
     coroutineScope: CoroutineScope?,
     private val placeRepository: PlaceRepository,
     private val forecastRepository: ForecastRepository,

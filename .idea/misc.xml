@@ -3,25 +3,21 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.16041666666666668" />
-        <entry key="app/src/main/res/drawable/app_widget_background.xml" value="0.18090277777777777" />
-        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.16041666666666668" />
-        <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14375" />
-        <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
-        <entry key="app/src/main/res/layout/cell_day.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/cell_hour.xml" value="0.13125" />
-        <entry key="app/src/main/res/layout/fragment_days.xml" value="0.159375" />
-        <entry key="app/src/main/res/layout/fragment_place_search.xml" value="0.15069444444444444" />
-        <entry key="app/src/main/res/layout/fragment_today.xml" value="0.33" />
-        <entry key="app/src/main/res/layout/fragment_tomorrow.xml" value="0.5" />
-        <entry key="app/src/main/res/layout/layout_forecast_empty.xml" value="0.296195652173913" />
-        <entry key="app/src/main/res/layout/layout_place_search_empty.xml" value="0.15069444444444444" />
-        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.14375" />
-        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.14375" />
+        <entry key="app/src/main/res/drawable-v24/ic_cloud_off.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_air.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_cloud.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_error.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_history.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_more.xml" value="0.215625" />
+        <entry key="app/src/main/res/drawable/ic_refresh.xml" value="0.215625" />
+        <entry key="app/src/main/res/drawable/ic_speed.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_thermostat.xml" value="0.20052083333333334" />
+        <entry key="app/src/main/res/drawable/ic_water_drop.xml" value="0.20052083333333334" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

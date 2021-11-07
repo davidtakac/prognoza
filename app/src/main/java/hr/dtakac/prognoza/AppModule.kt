@@ -114,7 +114,7 @@ val prognozaAppModule = module {
     }
 
     viewModel {
-        ForecastActivityViewModel(null, get(), get(), get())
+        ForecastPagerViewModel(null, get(), get(), get())
     }
 
     viewModel {

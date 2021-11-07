@@ -1,7 +1,9 @@
-package hr.dtakac.prognoza.composable.forecast
+package hr.dtakac.prognoza.composable.forecastpager
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -10,6 +12,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.*
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.composable.coming.ComingForecast
@@ -42,10 +45,25 @@ fun ForecastTabbedPager(
     }
 
     Column {
-        ForecastTabRow(
-            pagerState = pagerState,
-            pages = pages
-        )
+        val backgroundColor =
+            if (isSystemInDarkTheme()) AppTheme.colors.surface else AppTheme.colors.primary
+        Surface(
+            elevation = 4.dp,
+            color = backgroundColor,
+            contentColor = contentColorFor(backgroundColor = backgroundColor)
+        ) {
+            Column {
+                ForecastTopAppBar(
+                    title = "Osijek",
+                    onSearchClicked = { /*TODO*/ },
+                    onMenuClicked = { /*TODO*/ }
+                )
+                ForecastTabRow(
+                    pagerState = pagerState,
+                    pages = pages
+                )
+            }
+        }
         ForecastPager(
             count = pages.size,
             pagerState = pagerState,
@@ -63,28 +81,25 @@ fun ForecastTabRow(
     pages: Array<String>
 ) {
     val scope = rememberCoroutineScope()
-    Surface(
-        shape = AppTheme.shapes.large,
-        color = AppTheme.colors.surface,
-        contentColor = AppTheme.colors.onSurface,
-        elevation = 4.dp
-    ) {
-        TabRow(
-            selectedTabIndex = pagerState.currentPage,
-            indicator = { tabPositions ->
-                TabRowDefaults.Indicator(
-                    modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-                )
-            },
+    val backgroundColor =
+        if (isSystemInDarkTheme()) AppTheme.colors.surface else AppTheme.colors.primary
 
-            ) {
-            pages.forEachIndexed { index, title ->
-                Tab(
-                    text = { Text(title) },
-                    selected = pagerState.currentPage == index,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
-                )
-            }
+    TabRow(
+        selectedTabIndex = pagerState.currentPage,
+        indicator = { tabPositions ->
+            TabRowDefaults.Indicator(
+                modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+            )
+        },
+        backgroundColor = backgroundColor,
+        contentColor = contentColorFor(backgroundColor = backgroundColor),
+    ) {
+        pages.forEachIndexed { index, title ->
+            Tab(
+                text = { Text(title) },
+                selected = pagerState.currentPage == index,
+                onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
+            )
         }
     }
 }
@@ -124,4 +139,34 @@ fun PageChangedListener(
             onPageChanged.invoke(it)
         }
     }
+}
+
+@Composable
+fun ForecastTopAppBar(
+    title: String,
+    onSearchClicked: () -> Unit,
+    onMenuClicked: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(text = title)
+        },
+        elevation = 0.dp,
+        actions = {
+            IconButton(onClick = onSearchClicked) {
+                Icon(
+                    painter = rememberImagePainter(data = R.drawable.ic_search),
+                    contentDescription = null,
+                    modifier = Modifier.size(size = 24.dp)
+                )
+            }
+            IconButton(onClick = onMenuClicked) {
+                Icon(
+                    painter = rememberImagePainter(data = R.drawable.ic_more),
+                    contentDescription = null,
+                    modifier = Modifier.size(size = 24.dp)
+                )
+            }
+        }
+    )
 }
