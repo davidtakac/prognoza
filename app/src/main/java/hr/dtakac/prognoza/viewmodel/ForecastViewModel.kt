@@ -12,12 +12,10 @@ import hr.dtakac.prognoza.model.repository.ForecastResult
 import hr.dtakac.prognoza.model.repository.Success
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.model.ui.forecast.EmptyForecastUiModel
 import hr.dtakac.prognoza.model.ui.forecast.ForecastUiModel
 import hr.dtakac.prognoza.model.ui.forecast.OutdatedForecastUiModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 abstract class ForecastViewModel<T : ForecastUiModel>(
@@ -26,7 +24,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     protected val placeRepository: PlaceRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
     private var currentMeta: ForecastMeta? = null
-    private var currentUnit: MeasurementUnit? = null
 
     protected abstract val _forecast: MutableLiveData<T>
     val forecast: LiveData<T> get() = _forecast
@@ -60,13 +57,11 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
 
     protected abstract suspend fun getNewForecast(): ForecastResult
 
-    protected abstract suspend fun mapToForecastUiModel(success: Success, unit: MeasurementUnit): T
+    protected abstract suspend fun mapToForecastUiModel(success: Success): T
 
     private suspend fun handleSuccess(success: Success) {
-        val selectedUnit = preferencesRepository.getSelectedUnit()
-        _forecast.value = mapToForecastUiModel(success, selectedUnit)
+        _forecast.value = mapToForecastUiModel(success)
         currentMeta = success.meta
-        currentUnit = selectedUnit
         _emptyScreen.value = null
         _outdatedForecastMessage.value = null
     }
@@ -85,7 +80,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     private suspend fun isReloadNeeded(): Boolean {
         return currentMeta?.hasExpired() != false ||
                 currentMeta?.placeId != preferencesRepository.getSelectedPlaceId() ||
-                currentUnit != preferencesRepository.getSelectedUnit() ||
                 _forecast.value == null
     }
 }

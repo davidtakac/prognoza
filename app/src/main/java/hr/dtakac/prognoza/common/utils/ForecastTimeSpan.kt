@@ -5,7 +5,6 @@ import hr.dtakac.prognoza.model.database.ForecastMeta
 import hr.dtakac.prognoza.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.model.database.Place
 import hr.dtakac.prognoza.model.repository.*
-import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.model.ui.WEATHER_ICONS
 import hr.dtakac.prognoza.model.ui.cell.DayUiModel
@@ -14,7 +13,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import java.util.*
 
-fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
+fun ForecastTimeSpan.toHourUiModel() =
     HourUiModel(
         id = "$placeId-$startTime",
         temperature = instantTemperature,
@@ -33,13 +32,11 @@ fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
         time = startTime,
         relativeHumidity = instantRelativeHumidity,
         windFromCompassDirection = instantWindFromDirection?.toCompassDirection(),
-        airPressureAtSeaLevel = instantAirPressureAtSeaLevel,
-        displayDataInUnit = unit
+        airPressureAtSeaLevel = instantAirPressureAtSeaLevel
     )
 
 suspend fun List<ForecastTimeSpan>.toDayUiModel(
     coroutineScope: CoroutineScope,
-    unit: MeasurementUnit,
     place: Place
 ): DayUiModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon(place) }
@@ -60,8 +57,7 @@ suspend fun List<ForecastTimeSpan>.toDayUiModel(
         maxWindSpeed = hourWithMaxWindSpeedAsync.await()?.instantWindSpeed,
         windFromCompassDirection = hourWithMaxWindSpeedAsync.await()?.instantWindFromDirection?.toCompassDirection(),
         maxHumidity = maxHumidityAsync.await(),
-        maxPressure = maxPressureAsync.await(),
-        displayDataInUnit = unit
+        maxPressure = maxPressureAsync.await()
     )
 }
 

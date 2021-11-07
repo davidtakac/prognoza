@@ -38,7 +38,7 @@ fun ForecastTabbedPager(
     val pagerState = rememberPagerState()
     val pages = stringArrayResource(id = R.array.forecast_tab_names)
 
-    val selectedUnit by forecastPagerViewModel.selectedUnit.observeAsState()
+    val selectedUnit by forecastPagerViewModel.selectedUnit.observeAsState(initial = MeasurementUnit.METRIC)
 
     PageChangedListener(pagerState = pagerState) { page ->
         when (page) {
@@ -62,7 +62,7 @@ fun ForecastTabbedPager(
                     title = "Osijek",
                     onSearchClicked = { /*TODO*/ },
                     onUnitChanged = { forecastPagerViewModel.changeSelectedUnit() },
-                    selectedUnit = selectedUnit ?: MeasurementUnit.METRIC
+                    selectedUnit = selectedUnit
                 )
                 ForecastTabRow(
                     pagerState = pagerState,
@@ -73,9 +73,24 @@ fun ForecastTabbedPager(
         ForecastPager(
             count = pages.size,
             pagerState = pagerState,
-            firstPage = { TodayForecast(viewModel = todayForecastViewModel) },
-            secondPage = { TomorrowForecast(viewModel = tomorrowForecastViewModel) },
-            thirdPage = { ComingForecast(viewModel = comingForecastViewModel) }
+            firstPage = {
+                TodayForecast(
+                    viewModel = todayForecastViewModel,
+                    preferredMeasurementUnit = selectedUnit
+                )
+            },
+            secondPage = {
+                TomorrowForecast(
+                    viewModel = tomorrowForecastViewModel,
+                    preferredMeasurementUnit = selectedUnit
+                )
+            },
+            thirdPage = {
+                ComingForecast(
+                    viewModel = comingForecastViewModel,
+                    preferredMeasurementUnit = selectedUnit
+                )
+            }
         )
     }
 }

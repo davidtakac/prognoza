@@ -30,7 +30,10 @@ import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import java.time.ZonedDateTime
 
 @Composable
-fun TodayForecast(viewModel: TodayForecastViewModel) {
+fun TodayForecast(
+    viewModel: TodayForecastViewModel,
+    preferredMeasurementUnit: MeasurementUnit
+) {
 
     val forecast by viewModel.forecast.observeAsState()
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
@@ -49,14 +52,16 @@ fun TodayForecast(viewModel: TodayForecastViewModel) {
                 item {
                     CurrentHourHeader(
                         currentHour = forecast.currentHour,
-                        outdatedForecastUiModel = outdatedForecast
+                        outdatedForecastUiModel = outdatedForecast,
+                        preferredMeasurementUnit = preferredMeasurementUnit
                     )
                 }
                 itemsIndexed(forecast.otherHours) { index, hour ->
                     ExpandableHour(
                         hour = hour,
                         isExpanded = index in expandedHourIndices,
-                        onClick = { viewModel.toggleExpanded(index) }
+                        onClick = { viewModel.toggleExpanded(index) },
+                        preferredMeasurementUnit = preferredMeasurementUnit
                     )
                     if (index < forecast.otherHours.lastIndex) {
                         Divider()
@@ -83,7 +88,8 @@ fun TodayForecast(viewModel: TodayForecastViewModel) {
 @Composable
 fun CurrentHourHeader(
     currentHour: HourUiModel,
-    outdatedForecastUiModel: OutdatedForecastUiModel?
+    outdatedForecastUiModel: OutdatedForecastUiModel?,
+    preferredMeasurementUnit: MeasurementUnit
 ) {
     Surface(
         shape = AppTheme.shapes.medium,
@@ -103,16 +109,16 @@ fun CurrentHourHeader(
                 CurrentHourHeaderTime(time = currentHour.time)
                 CurrentHourHeaderTemperature(
                     temperature = currentHour.temperature,
-                    unit = currentHour.displayDataInUnit
+                    unit = preferredMeasurementUnit
                 )
                 CurrentHourHeaderDescription(
                     precipitation = currentHour.precipitationAmount,
                     weatherDescription = currentHour.weatherDescription,
-                    unit = currentHour.displayDataInUnit
+                    unit = preferredMeasurementUnit
                 )
                 CurrentHourFeelsLikeTemperature(
                     feelsLike = currentHour.feelsLike,
-                    unit = currentHour.displayDataInUnit
+                    unit = preferredMeasurementUnit
                 )
             }
             Column(

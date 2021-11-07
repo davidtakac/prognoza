@@ -38,15 +38,12 @@ class TomorrowForecastViewModel(
         )
     }
 
-    override suspend fun mapToForecastUiModel(
-        success: Success,
-        unit: MeasurementUnit
-    ): TomorrowForecastUiModel {
+    override suspend fun mapToForecastUiModel(success: Success): TomorrowForecastUiModel {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans.toDayUiModel(this, unit, selectedPlace)
+            success.timeSpans.toDayUiModel(coroutineScope = this, place = selectedPlace)
         }
         val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans.map { it.toHourUiModel(unit) }
+            success.timeSpans.map { it.toHourUiModel() }
         }
         return TomorrowForecastUiModel(
             summary = summaryAsync.await(),

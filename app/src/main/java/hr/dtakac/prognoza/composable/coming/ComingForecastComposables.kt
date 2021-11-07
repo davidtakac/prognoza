@@ -32,7 +32,10 @@ import hr.dtakac.prognoza.viewmodel.ComingForecastViewModel
 import java.time.ZonedDateTime
 
 @Composable
-fun ComingForecast(viewModel: ComingForecastViewModel) {
+fun ComingForecast(
+    viewModel: ComingForecastViewModel,
+    preferredMeasurementUnit: MeasurementUnit
+) {
 
     val forecast by viewModel.forecast.observeAsState()
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
@@ -64,7 +67,8 @@ fun ComingForecast(viewModel: ComingForecastViewModel) {
                             top = 16.dp,
                             bottom = if (index == forecast.days.lastIndex) 16.dp else 0.dp
                         ),
-                        isTomorrow = index == 0
+                        isTomorrow = index == 0,
+                        preferredMeasurementUnit = preferredMeasurementUnit
                     )
                     if (index == forecast.days.lastIndex) {
                         MetNorwayOrganizationCredit()
@@ -91,6 +95,7 @@ fun ExpandableDay(
     isTomorrow: Boolean,
     isExpanded: Boolean,
     dayUiModel: DayUiModel,
+    preferredMeasurementUnit: MeasurementUnit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -114,7 +119,7 @@ fun ExpandableDay(
                 totalPrecipitation = dayUiModel.totalPrecipitationAmount,
                 lowestTemperature = dayUiModel.lowTemperature,
                 highestTemperature = dayUiModel.highTemperature,
-                unit = dayUiModel.displayDataInUnit
+                unit = preferredMeasurementUnit
             )
             if (isExpanded) {
                 Spacer(modifier = Modifier.height(16.dp))
@@ -123,7 +128,7 @@ fun ExpandableDay(
                     maxWindSpeedFromDirection = dayUiModel.windFromCompassDirection,
                     maxHumidity = dayUiModel.maxHumidity,
                     maxPressure = dayUiModel.maxPressure,
-                    unit = dayUiModel.displayDataInUnit
+                    unit = preferredMeasurementUnit
                 )
             }
         }

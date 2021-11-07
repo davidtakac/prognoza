@@ -27,7 +27,10 @@ import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel
 
 @Composable
-fun TomorrowForecast(viewModel: TomorrowForecastViewModel) {
+fun TomorrowForecast(
+    viewModel: TomorrowForecastViewModel,
+    preferredMeasurementUnit: MeasurementUnit
+) {
 
     val forecast by viewModel.forecast.observeAsState()
     val outdatedForecast by viewModel.outdatedForecastMessage.observeAsState()
@@ -46,14 +49,16 @@ fun TomorrowForecast(viewModel: TomorrowForecastViewModel) {
                 item {
                     TomorrowSummaryHeader(
                         dayUiModel = forecast.summary,
-                        outdatedForecastUiModel = outdatedForecast
+                        outdatedForecastUiModel = outdatedForecast,
+                        preferredMeasurementUnit = preferredMeasurementUnit
                     )
                 }
                 itemsIndexed(forecast.hours) { index, hour ->
                     ExpandableHour(
                         hour = hour,
                         isExpanded = index in expandedHourIndices,
-                        onClick = { viewModel.toggleExpanded(index) }
+                        onClick = { viewModel.toggleExpanded(index) },
+                        preferredMeasurementUnit = preferredMeasurementUnit
                     )
                     if (index < forecast.hours.lastIndex) {
                         Divider()
@@ -80,7 +85,8 @@ fun TomorrowForecast(viewModel: TomorrowForecastViewModel) {
 @Composable
 fun TomorrowSummaryHeader(
     dayUiModel: DayUiModel,
-    outdatedForecastUiModel: OutdatedForecastUiModel?
+    outdatedForecastUiModel: OutdatedForecastUiModel?,
+    preferredMeasurementUnit: MeasurementUnit
 ) {
     Surface(
         shape = AppTheme.shapes.medium,
@@ -101,11 +107,11 @@ fun TomorrowSummaryHeader(
                 TomorrowLowestAndHighestTemperature(
                     lowestTemperature = dayUiModel.lowTemperature,
                     highestTemperature = dayUiModel.highTemperature,
-                    unit = dayUiModel.displayDataInUnit
+                    unit = preferredMeasurementUnit
                 )
                 TotalPrecipitation(
                     totalPrecipitation = dayUiModel.totalPrecipitationAmount,
-                    unit = dayUiModel.displayDataInUnit
+                    unit = preferredMeasurementUnit
                 )
                 RepresentativeWeatherDescription(
                     representativeWeatherDescription = dayUiModel.representativeWeatherDescription

@@ -46,10 +46,7 @@ class ComingForecastViewModel(
         )
     }
 
-    override suspend fun mapToForecastUiModel(
-        success: Success,
-        unit: MeasurementUnit
-    ): DaysForecastUiModel {
+    override suspend fun mapToForecastUiModel(success: Success): DaysForecastUiModel {
         return DaysForecastUiModel(
             days = withContext(dispatcherProvider.default) {
                 var endOfDay: ZonedDateTime = forecastTimeProvider.tomorrowEnd
@@ -60,7 +57,7 @@ class ComingForecastViewModel(
                     if (currentTimeSpan.startTime < endOfDay) {
                         dayHours.add(currentTimeSpan)
                     } else {
-                        summaries.add(dayHours.toDayUiModel(this, unit, selectedPlace))
+                        summaries.add(dayHours.toDayUiModel(coroutineScope = this, place = selectedPlace))
                         dayHours.clear()
                         dayHours.add(currentTimeSpan)
                         val hoursLeftInDay = 24 - currentTimeSpan.startTime.hour

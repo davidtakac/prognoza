@@ -28,6 +28,7 @@ import java.time.ZonedDateTime
 fun ExpandableHour(
     isExpanded: Boolean,
     hour: HourUiModel,
+    preferredMeasurementUnit: MeasurementUnit,
     onClick: () -> Unit
 ) {
     Column(
@@ -47,7 +48,7 @@ fun ExpandableHour(
             precipitation = hour.precipitationAmount,
             temperature = hour.temperature,
             weatherDescription = hour.weatherDescription,
-            unit = hour.displayDataInUnit
+            unit = preferredMeasurementUnit
         )
         if (isExpanded) {
             Spacer(modifier = Modifier.height(8.dp))
@@ -57,7 +58,7 @@ fun ExpandableHour(
                 windFromCompassDirection = hour.windFromCompassDirection,
                 pressure = hour.airPressureAtSeaLevel,
                 humidity = hour.relativeHumidity,
-                unit = hour.displayDataInUnit
+                unit = preferredMeasurementUnit
             )
         }
     }

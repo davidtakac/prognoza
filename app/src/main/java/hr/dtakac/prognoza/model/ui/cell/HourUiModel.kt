@@ -16,6 +16,5 @@ data class HourUiModel(
     val weatherDescription: WeatherDescription?,
     val time: ZonedDateTime,
     val relativeHumidity: Double?,
-    val airPressureAtSeaLevel: Double?,
-    val displayDataInUnit: MeasurementUnit
+    val airPressureAtSeaLevel: Double?
 )

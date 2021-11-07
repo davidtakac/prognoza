@@ -39,15 +39,12 @@ class TodayForecastViewModel(
         )
     }
 
-    override suspend fun mapToForecastUiModel(
-        success: Success,
-        unit: MeasurementUnit
-    ): TodayForecastUiModel {
+    override suspend fun mapToForecastUiModel(success: Success): TodayForecastUiModel {
         val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans[0].toHourUiModel(unit).copy(time = ZonedDateTime.now())
+            success.timeSpans[0].toHourUiModel().copy(time = ZonedDateTime.now())
         }
         val otherHoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans.map { it.toHourUiModel(unit) }
+            success.timeSpans.map { it.toHourUiModel() }
         }
         return TodayForecastUiModel(
             currentHour = currentHourAsync.await(),

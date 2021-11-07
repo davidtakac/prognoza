@@ -16,6 +16,5 @@ data class DayUiModel(
     val windFromCompassDirection: Int?,
     val totalPrecipitationAmount: Double?,
     val maxHumidity: Double?,
-    val maxPressure: Double?,
-    val displayDataInUnit: MeasurementUnit
+    val maxPressure: Double?
 )
