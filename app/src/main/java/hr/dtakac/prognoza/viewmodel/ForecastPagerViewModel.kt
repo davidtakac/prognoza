@@ -32,6 +32,11 @@ class ForecastPagerViewModel(
     private val _unitChangedEvent = MutableLiveData<Event<Unit>>()
     val unitChangedEvent: LiveData<Event<Unit>> get() = _unitChangedEvent
 
+    init {
+        getSelectedUnit()
+        getSelectedPlaceName()
+    }
+
     fun getSelectedUnit() {
         coroutineScope.launch {
             getSelectedUnitActual()
