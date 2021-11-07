@@ -4,13 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.*
@@ -18,8 +18,10 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.composable.coming.ComingForecast
 import hr.dtakac.prognoza.composable.today.TodayForecast
 import hr.dtakac.prognoza.composable.tomorrow.TomorrowForecast
+import hr.dtakac.prognoza.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.theme.AppTheme
 import hr.dtakac.prognoza.viewmodel.ComingForecastViewModel
+import hr.dtakac.prognoza.viewmodel.ForecastPagerViewModel
 import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
 import hr.dtakac.prognoza.viewmodel.TomorrowForecastViewModel
 import kotlinx.coroutines.flow.collect
@@ -30,10 +32,13 @@ import kotlinx.coroutines.launch
 fun ForecastTabbedPager(
     todayForecastViewModel: TodayForecastViewModel,
     tomorrowForecastViewModel: TomorrowForecastViewModel,
-    comingForecastViewModel: ComingForecastViewModel
+    comingForecastViewModel: ComingForecastViewModel,
+    forecastPagerViewModel: ForecastPagerViewModel
 ) {
     val pagerState = rememberPagerState()
     val pages = stringArrayResource(id = R.array.forecast_tab_names)
+
+    val selectedUnit by forecastPagerViewModel.selectedUnit.observeAsState()
 
     PageChangedListener(pagerState = pagerState) { page ->
         when (page) {
@@ -56,7 +61,8 @@ fun ForecastTabbedPager(
                 ForecastTopAppBar(
                     title = "Osijek",
                     onSearchClicked = { /*TODO*/ },
-                    onMenuClicked = { /*TODO*/ }
+                    onUnitChanged = { forecastPagerViewModel.changeSelectedUnit() },
+                    selectedUnit = selectedUnit ?: MeasurementUnit.METRIC
                 )
                 ForecastTabRow(
                     pagerState = pagerState,
@@ -144,9 +150,11 @@ fun PageChangedListener(
 @Composable
 fun ForecastTopAppBar(
     title: String,
+    selectedUnit: MeasurementUnit,
     onSearchClicked: () -> Unit,
-    onMenuClicked: () -> Unit
+    onUnitChanged: () -> Unit
 ) {
+    var isMenuExpanded by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
             Text(text = title)
@@ -160,12 +168,33 @@ fun ForecastTopAppBar(
                     modifier = Modifier.size(size = 24.dp)
                 )
             }
-            IconButton(onClick = onMenuClicked) {
+            IconButton(onClick = { isMenuExpanded = !isMenuExpanded }) {
                 Icon(
                     painter = rememberImagePainter(data = R.drawable.ic_more),
                     contentDescription = null,
                     modifier = Modifier.size(size = 24.dp)
                 )
+                DropdownMenu(
+                    expanded = isMenuExpanded,
+                    onDismissRequest = { isMenuExpanded = false },
+                    modifier = Modifier.width(128.dp)
+                ) {
+                    DropdownMenuItem(
+                        onClick = {
+                            isMenuExpanded = false
+                            onUnitChanged.invoke()
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(
+                                id = when (selectedUnit) {
+                                    MeasurementUnit.IMPERIAL -> R.string.change_to_metric
+                                    MeasurementUnit.METRIC -> R.string.change_to_imperial
+                                }
+                            )
+                        )
+                    }
+                }
             }
         }
     )
