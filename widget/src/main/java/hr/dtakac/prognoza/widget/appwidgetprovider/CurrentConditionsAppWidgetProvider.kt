@@ -10,7 +10,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.widget.RemoteViews
-import hr.dtakac.prognoza.forecast.activity.ForecastActivity
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.CachedSuccess
@@ -18,8 +17,9 @@ import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.core.utils.*
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.core.utils.*
+import hr.dtakac.prognoza.forecast.activity.ForecastActivity
 import hr.dtakac.prognoza.widget.model.CurrentConditionsWidgetUiModel
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent

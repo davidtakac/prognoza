@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_widget_background"
-    android:orientation="vertical"
     android:gravity="center"
+    android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/Theme.Prognoza.Widget"
     tools:layout_height="180dp"
@@ -22,10 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="?attr/widgetTextSecondaryColor"
-        android:textSize="16sp"
         android:gravity="center"
-        android:text="@string/no_data" />
+        android:maxLines="1"
+        android:text="@string/no_data"
+        android:textColor="?attr/widgetTextSecondaryColor"
+        android:textSize="16sp" />
 
 </LinearLayout>

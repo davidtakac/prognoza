@@ -2,8 +2,6 @@ package hr.dtakac.prognoza.core.di
 
 import android.content.Context
 import androidx.room.Room
-import hr.dtakac.prognoza.core.utils.MET_NORWAY_BASE_URL
-import hr.dtakac.prognoza.core.utils.OSM_NOMINATIM_BASE_URL
 import hr.dtakac.prognoza.core.api.ForecastService
 import hr.dtakac.prognoza.core.api.PlaceService
 import hr.dtakac.prognoza.core.coroutines.DefaultDispatcherProvider
@@ -21,6 +19,8 @@ import hr.dtakac.prognoza.core.repository.preferences.DefaultPreferencesReposito
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.DefaultForecastTimeProvider
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.core.utils.MET_NORWAY_BASE_URL
+import hr.dtakac.prognoza.core.utils.OSM_NOMINATIM_BASE_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidApplication

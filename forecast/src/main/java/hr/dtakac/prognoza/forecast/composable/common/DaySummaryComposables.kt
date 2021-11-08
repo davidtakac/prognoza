@@ -7,8 +7,8 @@ import androidx.compose.ui.text.AnnotatedString
 import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
-import hr.dtakac.prognoza.core.utils.shouldShowPrecipitation
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
+import hr.dtakac.prognoza.core.utils.shouldShowPrecipitation
 import hr.dtakac.prognoza.forecast.R
 
 @Composable

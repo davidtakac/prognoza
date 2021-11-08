@@ -20,12 +20,12 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="?attr/widgetTextSecondaryColor"
-        android:textSize="12sp"
         android:layout_marginTop="4dp"
+        android:ellipsize="end"
         android:gravity="center"
-        android:text="@string/no_data"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:text="@string/no_data"
+        android:textColor="?attr/widgetTextSecondaryColor"
+        android:textSize="12sp" />
 
 </LinearLayout>

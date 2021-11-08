@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.core.theme.PrognozaTheme
+import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.coming.ComingForecast
 import hr.dtakac.prognoza.forecast.composable.today.TodayForecast
 import hr.dtakac.prognoza.forecast.composable.tomorrow.TomorrowForecast
-import hr.dtakac.prognoza.core.theme.PrognozaTheme
-import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.viewmodel.ComingForecastViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastPagerViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel

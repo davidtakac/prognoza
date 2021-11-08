@@ -2,9 +2,9 @@ package hr.dtakac.prognoza.widget.appwidgetprovider
 
 import android.content.Context
 import android.widget.RemoteViews
-import hr.dtakac.prognoza.widget.utils.formatTemperatureValue
 import hr.dtakac.prognoza.widget.R
 import hr.dtakac.prognoza.widget.model.CurrentConditionsWidgetUiModel
+import hr.dtakac.prognoza.widget.utils.formatTemperatureValue
 
 open class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetProvider() {
     override val widgetLayoutId: Int

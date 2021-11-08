@@ -1,11 +1,10 @@
 package hr.dtakac.prognoza
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import hr.dtakac.prognoza.fakes.*
 import hr.dtakac.prognoza.core.model.repository.CachedSuccess
 import hr.dtakac.prognoza.core.model.repository.Empty
 import hr.dtakac.prognoza.core.model.repository.Success
-import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
+import hr.dtakac.prognoza.fakes.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope

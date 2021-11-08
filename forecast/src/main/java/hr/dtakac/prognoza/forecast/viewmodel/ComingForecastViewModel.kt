@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.MutableLiveData
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
@@ -57,7 +56,12 @@ class ComingForecastViewModel(
                     if (currentTimeSpan.startTime < endOfDay) {
                         dayHours.add(currentTimeSpan)
                     } else {
-                        summaries.add(dayHours.toDayUiModel(coroutineScope = this, place = selectedPlace))
+                        summaries.add(
+                            dayHours.toDayUiModel(
+                                coroutineScope = this,
+                                place = selectedPlace
+                            )
+                        )
                         dayHours.clear()
                         dayHours.add(currentTimeSpan)
                         val hoursLeftInDay = 24 - currentTimeSpan.startTime.hour

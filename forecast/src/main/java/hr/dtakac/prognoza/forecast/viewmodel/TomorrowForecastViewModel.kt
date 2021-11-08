@@ -24,7 +24,11 @@ class TomorrowForecastViewModel(
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastViewModel<TomorrowForecastUiModel>(coroutineScope, preferencesRepository, placeRepository) {
+) : ForecastViewModel<TomorrowForecastUiModel>(
+    coroutineScope,
+    preferencesRepository,
+    placeRepository
+) {
     override val _forecast = mutableStateOf<TomorrowForecastUiModel?>(null)
 
     private val _expandedHourIndices = mutableStateListOf<Int>()

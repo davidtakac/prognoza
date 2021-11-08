@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.fakes
 
 import hr.dtakac.prognoza.common.TEST_PLACE
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 
 class FakePreferencesRepository : PreferencesRepository {
     override suspend fun getSelectedPlaceId(): String {

@@ -39,21 +39,21 @@
         android:id="@+id/tv_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="12sp"
-        android:layout_marginTop="4dp"
-        tools:text="Osijek"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        tools:text="Osijek" />
 
     <TextView
         android:id="@+id/tv_feels_like"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="12sp"
-        tools:text="Feels like 225°"
-        android:maxLines="1"
-        android:ellipsize="end"/>
+        tools:text="Feels like 225°" />
 
 </LinearLayout>

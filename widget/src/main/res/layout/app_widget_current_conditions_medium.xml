@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_widget_background"
-    android:orientation="vertical"
     android:gravity="center_vertical"
+    android:orientation="vertical"
     android:padding="16dp"
     android:theme="@style/Theme.Prognoza.Widget"
     tools:layout_height="180dp"
@@ -26,11 +26,11 @@
             android:id="@+id/tv_temperature"
             android:layout_width="wrap_content"
             android:layout_height="56dp"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
             android:maxLines="1"
             android:textColor="?attr/widgetTextPrimaryColor"
             android:textSize="42sp"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
             tools:text="180°" />
     </LinearLayout>
 
@@ -49,20 +49,20 @@
         android:id="@+id/tv_feels_like"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
-        tools:text="Feels like 225°"
-        android:maxLines="1"
-        android:ellipsize="end" />
+        tools:text="Feels like 225°" />
 
     <TextView
         android:id="@+id/tv_precipitation_forecast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:textColor="?attr/widgetTextSecondaryColor"
         android:textSize="16sp"
-        android:maxLines="2"
-        tools:text="No precipitation next two hours"
-        android:ellipsize="end"/>
+        tools:text="No precipitation next two hours" />
 
 </LinearLayout>

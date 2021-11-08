@@ -5,14 +5,14 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import hr.dtakac.prognoza.core.model.database.ForecastMeta
 import hr.dtakac.prognoza.core.model.database.Place
-import hr.dtakac.prognoza.core.utils.hasExpired
-import hr.dtakac.prognoza.core.utils.toErrorResourceId
 import hr.dtakac.prognoza.core.model.repository.CachedSuccess
 import hr.dtakac.prognoza.core.model.repository.Empty
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.core.utils.hasExpired
+import hr.dtakac.prognoza.core.utils.toErrorResourceId
 import hr.dtakac.prognoza.forecast.model.EmptyForecastUiModel
 import hr.dtakac.prognoza.forecast.model.ForecastUiModel
 import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel

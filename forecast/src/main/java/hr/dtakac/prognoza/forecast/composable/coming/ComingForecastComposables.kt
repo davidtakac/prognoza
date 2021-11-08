@@ -22,9 +22,9 @@ import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
 import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting.getTomorrowTime
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
-import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
+import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.forecast.model.DayUiModel
 import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.ComingForecastViewModel

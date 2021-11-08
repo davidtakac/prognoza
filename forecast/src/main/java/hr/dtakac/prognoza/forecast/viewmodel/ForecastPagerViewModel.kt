@@ -3,10 +3,10 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
-import hr.dtakac.prognoza.core.utils.shortenedName
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.core.utils.shortenedName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

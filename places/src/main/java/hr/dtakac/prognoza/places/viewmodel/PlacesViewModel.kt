@@ -3,9 +3,9 @@ package hr.dtakac.prognoza.places.viewmodel
 import android.annotation.SuppressLint
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import hr.dtakac.prognoza.core.network.NetworkChecker
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.database.Place
+import hr.dtakac.prognoza.core.network.NetworkChecker
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.places.R

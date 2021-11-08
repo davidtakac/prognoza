@@ -17,10 +17,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
-import hr.dtakac.prognoza.forecast.composable.common.*
-import hr.dtakac.prognoza.forecast.composable.common.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
+import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.forecast.model.DayUiModel
 import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowForecastViewModel

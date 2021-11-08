@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.core.repository.forecast
 
 import android.database.sqlite.SQLiteException
-import hr.dtakac.prognoza.core.utils.USER_AGENT
 import hr.dtakac.prognoza.core.api.ForecastService
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.database.converter.ForecastMetaDateTimeConverter
@@ -10,8 +9,9 @@ import hr.dtakac.prognoza.core.model.api.LocationForecastResponse
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.*
-import hr.dtakac.prognoza.core.utils.hasExpired
 import hr.dtakac.prognoza.core.repository.meta.MetaRepository
+import hr.dtakac.prognoza.core.utils.USER_AGENT
+import hr.dtakac.prognoza.core.utils.hasExpired
 import hr.dtakac.prognoza.core.utils.toForecastResult
 import hr.dtakac.prognoza.core.utils.toForecastTimeSpan
 import kotlinx.coroutines.withContext

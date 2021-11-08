@@ -10,5 +10,6 @@ interface ForecastRepository {
         end: ZonedDateTime,
         place: Place
     ): ForecastResult
+
     suspend fun deleteExpiredData()
 }

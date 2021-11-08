@@ -1,8 +1,8 @@
 package hr.dtakac.prognoza.fakes
 
 import com.google.gson.Gson
-import hr.dtakac.prognoza.core.model.api.LocationForecastResponse
 import hr.dtakac.prognoza.common.TEST_PLACE
+import hr.dtakac.prognoza.core.model.api.LocationForecastResponse
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.CachedSuccess
@@ -10,7 +10,6 @@ import hr.dtakac.prognoza.core.model.repository.Empty
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.core.utils.toForecastTimeSpan
 import okhttp3.Headers
 import retrofit2.Response
 import java.io.BufferedReader

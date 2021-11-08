@@ -1,11 +1,11 @@
 package hr.dtakac.prognoza.core.repository.place
 
-import hr.dtakac.prognoza.core.utils.DEFAULT_PLACE_ID
-import hr.dtakac.prognoza.core.utils.USER_AGENT
 import hr.dtakac.prognoza.core.api.PlaceService
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.database.dao.PlaceDao
 import hr.dtakac.prognoza.core.model.database.Place
+import hr.dtakac.prognoza.core.utils.DEFAULT_PLACE_ID
+import hr.dtakac.prognoza.core.utils.USER_AGENT
 import kotlinx.coroutines.withContext
 import java.util.*
 

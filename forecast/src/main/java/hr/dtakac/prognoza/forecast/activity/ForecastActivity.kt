@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.forecast.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.runtime.Composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import hr.dtakac.prognoza.core.theme.AppTheme
 import hr.dtakac.prognoza.forecast.composable.forecastpager.ForecastTabbedPager

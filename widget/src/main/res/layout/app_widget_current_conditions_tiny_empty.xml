@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@android:id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/app_widget_background"
-    android:orientation="horizontal"
-    android:paddingVertical="8dp"
-    android:paddingHorizontal="16dp"
-    tools:layout_height="40dp"
-    tools:layout_width="110dp"
     android:gravity="center"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp"
     android:theme="@style/Theme.Prognoza.Widget"
-    android:id="@android:id/background">
+    tools:layout_height="40dp"
+    tools:layout_width="110dp">
 
     <TextView
         android:id="@+id/tv_temperature"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textColor="?attr/widgetTextPrimaryColor"
-        android:textSize="18sp"
-        android:maxLines="1"
         android:gravity="center_vertical|start"
-        android:text="@string/no_data" />
+        android:maxLines="1"
+        android:text="@string/no_data"
+        android:textColor="?attr/widgetTextPrimaryColor"
+        android:textSize="18sp" />
 
 </LinearLayout>
