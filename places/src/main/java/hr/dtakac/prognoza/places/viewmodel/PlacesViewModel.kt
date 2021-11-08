@@ -33,6 +33,10 @@ class PlacesViewModel(
     private val _message = mutableStateOf<Int?>(null)
     val message: State<Int?> get() = _message
 
+    init {
+        showPlaces()
+    }
+
     fun showPlaces(query: String = "") {
         when {
             query.isBlank() -> {

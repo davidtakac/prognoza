@@ -1,18 +1,24 @@
 package hr.dtakac.prognoza.places.composable
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.places.R
+import hr.dtakac.prognoza.places.model.PlaceUiModel
 import hr.dtakac.prognoza.places.viewmodel.PlacesViewModel
 
 @Composable
@@ -20,10 +26,30 @@ fun Places(
     placesViewModel: PlacesViewModel,
     onBackClicked: () -> Unit
 ) {
-    Box(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.fillMaxHeight()) {
-            PlacesTopAppBar(onBackClicked = onBackClicked)
-            PlacesSearchBox(onSearchClicked = { placesViewModel.showPlaces(query = it) })
+    val places by placesViewModel.places
+    val isLoading by placesViewModel.isLoading
+
+    Box(
+        modifier = Modifier.fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Surface(
+            shape = PrognozaTheme.shapes.large,
+            color = PrognozaTheme.colors.surface
+        ) {
+            Column(modifier = Modifier.fillMaxHeight()) {
+                PlacesTopAppBar(onBackClicked = onBackClicked)
+                PlacesSearchBox(onSearchClicked = { placesViewModel.showPlaces(query = it) })
+                PlacesList(
+                    places = places,
+                    onPlacePicked = {
+                        placesViewModel.select(placeId = it.id)
+                    }
+                )
+            }
+        }
+        if (isLoading) {
+            CircularProgressIndicator()
         }
     }
 }
@@ -75,7 +101,12 @@ fun PlacesSearchBox(
         ),
         trailingIcon = {
             if (query.isNotEmpty()) {
-                IconButton(onClick = { query = "" }) {
+                IconButton(
+                    onClick = {
+                        query = ""
+                        onSearchClicked.invoke(query)
+                    }
+                ) {
                     Icon(
                         painter = rememberImagePainter(data = R.drawable.ic_clear),
                         contentDescription = null,
@@ -83,6 +114,72 @@ fun PlacesSearchBox(
                     )
                 }
             }
-        }
+        },
     )
+}
+
+@Composable
+fun PlacesList(
+    places: List<PlaceUiModel>,
+    onPlacePicked: (PlaceUiModel) -> Unit
+) {
+    LazyColumn(modifier = Modifier.fillMaxSize()) {
+        items(places) {
+            Place(
+                place = it,
+                onClicked = { onPlacePicked.invoke(it) }
+            )
+        }
+    }
+}
+
+@Composable
+fun Place(
+    place: PlaceUiModel,
+    onClicked: () -> Unit
+) {
+    Surface(
+        shape = PrognozaTheme.shapes.medium,
+        color = PrognozaTheme.colors.surface,
+        elevation = 2.dp,
+        modifier = Modifier.padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 8.dp,
+            bottom = 8.dp
+        )
+    ) {
+        val showIcon = place.isSelected || place.isSaved
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .clickable { onClicked.invoke() }
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (showIcon) {
+                Image(
+                    painter = rememberImagePainter(
+                        data = if (place.isSelected) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                    ),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(color = PrognozaTheme.colors.primary),
+                    modifier = Modifier.size(32.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+            }
+            Column {
+                Text(
+                    text = place.name,
+                    color = PrognozaTheme.textColors.highEmphasis,
+                    style = PrognozaTheme.typography.subtitle1
+                )
+                Text(
+                    text = place.fullName,
+                    color = PrognozaTheme.textColors.mediumEmphasis,
+                    style = PrognozaTheme.typography.subtitle2
+                )
+            }
+        }
+    }
 }
