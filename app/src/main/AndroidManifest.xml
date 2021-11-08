@@ -21,6 +21,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="hr.dtakac.prognoza.places.activity.PlacesActivity"
+            android:exported="true" />
 
         <receiver
             android:name=".widget.appwidgetprovider.TinyCurrentConditionsAppWidgetProvider"

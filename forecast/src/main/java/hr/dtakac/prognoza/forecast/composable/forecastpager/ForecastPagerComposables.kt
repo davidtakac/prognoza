@@ -32,7 +32,8 @@ fun ForecastTabbedPager(
     todayForecastViewModel: TodayForecastViewModel,
     tomorrowForecastViewModel: TomorrowForecastViewModel,
     comingForecastViewModel: ComingForecastViewModel,
-    forecastPagerViewModel: ForecastPagerViewModel
+    forecastPagerViewModel: ForecastPagerViewModel,
+    onSearchClicked: () -> Unit
 ) {
     val pagerState = rememberPagerState()
     val pages = stringArrayResource(id = R.array.forecast_tab_names)
@@ -60,7 +61,7 @@ fun ForecastTabbedPager(
             Column {
                 ForecastTopAppBar(
                     title = selectedPlace,
-                    onSearchClicked = { /*TODO*/ },
+                    onSearchClicked = onSearchClicked,
                     onUnitChanged = { forecastPagerViewModel.changeSelectedUnit() },
                     selectedUnit = selectedUnit
                 )
