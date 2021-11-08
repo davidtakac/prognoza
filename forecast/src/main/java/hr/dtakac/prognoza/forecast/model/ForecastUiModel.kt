@@ -6,17 +6,17 @@ interface ForecastUiModel
 
 @Immutable
 data class DaysForecastUiModel(
-    val days: List<hr.dtakac.prognoza.forecast.model.DayUiModel>
+    val days: List<DayUiModel>
 ) : ForecastUiModel
 
 @Immutable
 data class TodayForecastUiModel(
-    val currentHour: hr.dtakac.prognoza.forecast.model.HourUiModel,
-    val otherHours: List<hr.dtakac.prognoza.forecast.model.HourUiModel>
+    val currentHour: HourUiModel,
+    val otherHours: List<HourUiModel>
 ) : ForecastUiModel
 
 @Immutable
 data class TomorrowForecastUiModel(
-    val summary: hr.dtakac.prognoza.forecast.model.DayUiModel,
-    val hours: List<hr.dtakac.prognoza.forecast.model.HourUiModel>
+    val summary: DayUiModel,
+    val hours: List<HourUiModel>
 ) : ForecastUiModel
