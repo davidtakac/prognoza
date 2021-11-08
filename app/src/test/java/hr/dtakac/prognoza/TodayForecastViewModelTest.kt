@@ -2,10 +2,10 @@ package hr.dtakac.prognoza
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.fakes.*
-import hr.dtakac.prognoza.model.repository.CachedSuccess
-import hr.dtakac.prognoza.model.repository.Empty
-import hr.dtakac.prognoza.model.repository.Success
-import hr.dtakac.prognoza.viewmodel.TodayForecastViewModel
+import hr.dtakac.prognoza.core.model.repository.CachedSuccess
+import hr.dtakac.prognoza.core.model.repository.Empty
+import hr.dtakac.prognoza.core.model.repository.Success
+import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -29,11 +29,11 @@ class TodayForecastViewModelTest {
     private val timeProvider = FakeForecastTimeProvider()
 
     // class under test
-    private lateinit var viewModel: TodayForecastViewModel
+    private lateinit var viewModel: hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
 
     @Before
     fun setup() {
-        viewModel = TodayForecastViewModel(
+        viewModel = hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel(
             coroutineScope,
             preferencesRepository,
             placeRepository,

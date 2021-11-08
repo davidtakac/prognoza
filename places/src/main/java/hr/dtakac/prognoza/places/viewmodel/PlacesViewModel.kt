@@ -1,0 +1,91 @@
+package hr.dtakac.prognoza.places.viewmodel
+
+import android.annotation.SuppressLint
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import hr.dtakac.prognoza.core.network.NetworkChecker
+import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.core.model.database.Place
+import hr.dtakac.prognoza.core.repository.place.PlaceRepository
+import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.places.R
+import hr.dtakac.prognoza.places.mapping.toPlaceUiModel
+import hr.dtakac.prognoza.places.model.PlaceUiModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+class PlacesViewModel(
+    coroutineScope: CoroutineScope?,
+    private val dispatcherProvider: DispatcherProvider,
+    private val placeRepository: PlaceRepository,
+    private val preferencesRepository: PreferencesRepository,
+    private val networkChecker: NetworkChecker
+) : hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel(coroutineScope) {
+    private var displayedPlaces = listOf<Place>()
+
+    private var _places = mutableStateOf<List<PlaceUiModel>>(listOf())
+    val places: State<List<PlaceUiModel>> get() = _places
+
+    private val _isLoading = mutableStateOf(false)
+    val isLoading: State<Boolean> get() = _isLoading
+
+    private val _message = mutableStateOf<Int?>(null)
+    val message: State<Int?> get() = _message
+
+    fun showPlaces(query: String = "") {
+        when {
+            query.isBlank() -> {
+                showSavedPlaces()
+            }
+            networkChecker.hasInternetConnection() -> {
+                search(query)
+            }
+            else -> {
+                _message.value = R.string.notify_no_internet
+            }
+        }
+    }
+
+    private fun showSavedPlaces() {
+        coroutineScope.launch {
+            _isLoading.value = true
+            setDisplayedPlaces(placeRepository.getAll())
+            _isLoading.value = false
+        }
+    }
+
+    private fun search(query: String) {
+        coroutineScope.launch {
+            _isLoading.value = true
+            setDisplayedPlaces(placeRepository.search(query))
+            _isLoading.value = false
+        }
+    }
+
+    fun select(placeId: String) {
+        coroutineScope.launch {
+            _isLoading.value = true
+            val selectedPlace = withContext(dispatcherProvider.default) {
+                displayedPlaces.firstOrNull { it.id == placeId }
+                    ?: placeRepository.getDefaultPlace()
+            }
+            placeRepository.save(selectedPlace)
+            preferencesRepository.setSelectedPlaceId(selectedPlace.id)
+            _isLoading.value = false
+        }
+    }
+
+    @SuppressLint("NullSafeMutableLiveData")
+    private suspend fun setDisplayedPlaces(places: List<Place>) {
+        displayedPlaces = places
+        _places.value = withContext(dispatcherProvider.default) {
+            displayedPlaces.map {
+                it.toPlaceUiModel(
+                    isSaved = placeRepository.isSaved(it.id),
+                    isSelected = preferencesRepository.getSelectedPlaceId() == it.id
+                )
+            }
+        }
+    }
+}

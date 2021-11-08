@@ -1,8 +1,8 @@
 package hr.dtakac.prognoza.fakes
 
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.model.database.Place
-import hr.dtakac.prognoza.repository.place.PlaceRepository
+import hr.dtakac.prognoza.core.model.database.Place
+import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 
 class FakePlaceRepository : PlaceRepository {
     override suspend fun get(placeId: String): Place? {

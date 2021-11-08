@@ -2,12 +2,12 @@ package hr.dtakac.prognoza
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.common.utils.toDayUiModel
-import hr.dtakac.prognoza.model.database.ForecastTimeSpan
-import hr.dtakac.prognoza.model.ui.MeasurementUnit
-import hr.dtakac.prognoza.model.ui.cell.DayUiModel
-import hr.dtakac.prognoza.model.ui.RepresentativeWeatherDescription
-import hr.dtakac.prognoza.model.ui.WEATHER_ICONS
+import hr.dtakac.prognoza.core.utils.toDayUiModel
+import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
+import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.forecast.model.DayUiModel
+import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
+import hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
@@ -30,7 +30,7 @@ class DayUiModelMappingTest {
         val start = ZonedDateTime.now()
         val hours = getForecastTimeSpans_withNormalValues(start)
         // Act
-        val actual = hours.toDayUiModel(this, MeasurementUnit.METRIC, TEST_PLACE)
+        val actual = hours.toDayUiModel(this, hr.dtakac.prognoza.core.model.ui.MeasurementUnit.METRIC, TEST_PLACE)
         // Assert
         val expected = getExpectedDayUiModel_forNormalValues(start)
         assertTrue { actual == expected }
@@ -42,7 +42,7 @@ class DayUiModelMappingTest {
         val start = ZonedDateTime.now()
         val nullHours = getForecastTimeSpans_withAllNullValues(start)
         // Act
-        val actual = nullHours.toDayUiModel(this, MeasurementUnit.METRIC, TEST_PLACE)
+        val actual = nullHours.toDayUiModel(this, hr.dtakac.prognoza.core.model.ui.MeasurementUnit.METRIC, TEST_PLACE)
         // Assert
         val expected = getExpectedDayUiModel_forAllNullValues(start)
         assertTrue { actual == expected }
@@ -55,7 +55,7 @@ class DayUiModelMappingTest {
         val hours = getForecastTimeSpans_withNormalValues(start) +
                 getForecastTimeSpans_withAllNullValues(start)
         // Act
-        val actual = hours.toDayUiModel(this, MeasurementUnit.METRIC, TEST_PLACE)
+        val actual = hours.toDayUiModel(this, hr.dtakac.prognoza.core.model.ui.MeasurementUnit.METRIC, TEST_PLACE)
         // Assert
         val expected = getExpectedDayUiModel_forNormalValues(start)
         assertTrue { actual == expected }
@@ -128,12 +128,12 @@ class DayUiModelMappingTest {
         return listOf(nullHour, nullHour, nullHour)
     }
 
-    private fun getExpectedDayUiModel_forNormalValues(start: ZonedDateTime): DayUiModel =
-        DayUiModel(
+    private fun getExpectedDayUiModel_forNormalValues(start: ZonedDateTime): hr.dtakac.prognoza.forecast.model.DayUiModel =
+        hr.dtakac.prognoza.forecast.model.DayUiModel(
             id = "${TEST_PLACE.id}-$start",
             time = start,
-            representativeWeatherDescription = RepresentativeWeatherDescription(
-                weatherDescription = WEATHER_ICONS["clearsky_night"]!!,
+            representativeWeatherDescription = hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription(
+                weatherDescription = hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS["clearsky_night"]!!,
                 isMostly = true
             ),
             lowTemperature = 18.0,
@@ -144,21 +144,22 @@ class DayUiModelMappingTest {
             maxHumidity = 90.0,
             maxPressure = 1020.0,
             isExpanded = false,
-            displayDataInUnit = MeasurementUnit.METRIC
+            displayDataInUnit = hr.dtakac.prognoza.core.model.ui.MeasurementUnit.METRIC
         )
 
-    private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) = DayUiModel(
-        id = "${TEST_PLACE.id}-$start",
-        time = start,
-        representativeWeatherDescription = null,
-        lowTemperature = null,
-        highTemperature = null,
-        maxWindSpeed = null,
-        windFromCompassDirection = null,
-        totalPrecipitationAmount = 0.0,
-        maxHumidity = null,
-        maxPressure = null,
-        isExpanded = false,
-        displayDataInUnit = MeasurementUnit.METRIC
-    )
+    private fun getExpectedDayUiModel_forAllNullValues(start: ZonedDateTime) =
+        hr.dtakac.prognoza.forecast.model.DayUiModel(
+            id = "${TEST_PLACE.id}-$start",
+            time = start,
+            representativeWeatherDescription = null,
+            lowTemperature = null,
+            highTemperature = null,
+            maxWindSpeed = null,
+            windFromCompassDirection = null,
+            totalPrecipitationAmount = 0.0,
+            maxHumidity = null,
+            maxPressure = null,
+            isExpanded = false,
+            displayDataInUnit = hr.dtakac.prognoza.core.model.ui.MeasurementUnit.METRIC
+        )
 }

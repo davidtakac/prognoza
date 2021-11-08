@@ -14,7 +14,7 @@
         android:theme="@style/Theme.Prognoza">
 
         <activity
-            android:name=".activity.ComposeForecastActivity"
+            android:name="hr.dtakac.prognoza.forecast.activity.ComposeForecastActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
@@ -24,7 +24,7 @@
         </activity>
 
         <receiver
-            android:name=".widget.TinyCurrentConditionsAppWidgetProvider"
+            android:name=".widget.appwidgetprovider.TinyCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -34,7 +34,7 @@
                 android:resource="@xml/app_widget_info_current_conditions_tiny" />
         </receiver>
         <receiver
-            android:name=".widget.SmallCurrentConditionsAppWidgetProvider"
+            android:name=".widget.appwidgetprovider.SmallCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -44,7 +44,7 @@
                 android:resource="@xml/app_widget_info_current_conditions_small" />
         </receiver>
         <receiver
-            android:name=".widget.MediumCurrentConditionsAppWidgetProvider"
+            android:name=".widget.appwidgetprovider.MediumCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

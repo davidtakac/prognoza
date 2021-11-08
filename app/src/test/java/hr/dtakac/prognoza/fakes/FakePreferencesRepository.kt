@@ -1,8 +1,8 @@
 package hr.dtakac.prognoza.fakes
 
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.model.ui.MeasurementUnit
+import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 
 class FakePreferencesRepository : PreferencesRepository {
     override suspend fun getSelectedPlaceId(): String {
@@ -13,11 +13,11 @@ class FakePreferencesRepository : PreferencesRepository {
         // do nothing
     }
 
-    override suspend fun getSelectedUnit(): MeasurementUnit {
-        return MeasurementUnit.METRIC
+    override suspend fun getSelectedUnit(): hr.dtakac.prognoza.core.model.ui.MeasurementUnit {
+        return hr.dtakac.prognoza.core.model.ui.MeasurementUnit.METRIC
     }
 
-    override suspend fun setSelectedUnit(unit: MeasurementUnit) {
+    override suspend fun setSelectedUnit(unit: hr.dtakac.prognoza.core.model.ui.MeasurementUnit) {
         // do nothing
     }
 }
