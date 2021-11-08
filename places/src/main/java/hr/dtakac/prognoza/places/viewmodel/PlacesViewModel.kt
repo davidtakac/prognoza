@@ -9,8 +9,11 @@ import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.places.R
 import hr.dtakac.prognoza.places.mapping.toPlaceUiModel
+import hr.dtakac.prognoza.places.model.EmptyPlacesUiModel
 import hr.dtakac.prognoza.places.model.PlaceUiModel
+import hr.dtakac.prognoza.places.model.PlacesMessageUiModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -29,8 +32,11 @@ class PlacesViewModel(
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> get() = _isLoading
 
-    private val _message = mutableStateOf<Int?>(null)
-    val message: State<Int?> get() = _message
+    private val _message = mutableStateOf<PlacesMessageUiModel?>(null)
+    val message: State<PlacesMessageUiModel?> get() = _message
+
+    private val _empty = mutableStateOf<EmptyPlacesUiModel?>(null)
+    val empty: State<EmptyPlacesUiModel?> get() = _empty
 
     init {
         showPlaces()
@@ -45,7 +51,7 @@ class PlacesViewModel(
                 search(query)
             }
             else -> {
-                _message.value = R.string.notify_no_internet
+                showNoConnectionMessage()
             }
         }
     }
@@ -88,6 +94,14 @@ class PlacesViewModel(
                     isSelected = preferencesRepository.getSelectedPlaceId() == it.id
                 )
             }
+        }
+    }
+
+    private fun showNoConnectionMessage() {
+        coroutineScope.launch {
+            _message.value = PlacesMessageUiModel(R.string.notify_no_internet)
+            delay(3000)
+            _message.value = null
         }
     }
 }

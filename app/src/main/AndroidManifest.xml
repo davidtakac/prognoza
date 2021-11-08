@@ -23,7 +23,8 @@
         </activity>
         <activity
             android:name="hr.dtakac.prognoza.places.activity.PlacesActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
 
         <receiver
             android:name=".widget.appwidgetprovider.TinyCurrentConditionsAppWidgetProvider"

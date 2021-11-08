@@ -28,14 +28,15 @@ fun Places(
 ) {
     val places by placesViewModel.places
     val isLoading by placesViewModel.isLoading
+    val message by placesViewModel.message
 
-    Box(
-        modifier = Modifier.fillMaxWidth(),
-        contentAlignment = Alignment.Center
+    Surface(
+        shape = PrognozaTheme.shapes.large,
+        color = PrognozaTheme.colors.surface
     ) {
-        Surface(
-            shape = PrognozaTheme.shapes.large,
-            color = PrognozaTheme.colors.surface
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.BottomCenter
         ) {
             Column(modifier = Modifier.fillMaxHeight()) {
                 PlacesTopAppBar(onBackClicked = onBackClicked)
@@ -47,9 +48,20 @@ fun Places(
                     }
                 )
             }
-        }
-        if (isLoading) {
-            CircularProgressIndicator()
+            if (isLoading) {
+                CircularProgressIndicator()
+            }
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                message?.let {
+                    Snackbar(modifier = Modifier.padding(16.dp)) {
+                        Text(text = stringResource(id = it.messageId))
+                    }
+                }
+            }
         }
     }
 }
@@ -115,7 +127,8 @@ fun PlacesSearchBox(
                 }
             }
         },
-    )
+
+        )
 }
 
 @Composable
