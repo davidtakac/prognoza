@@ -35,8 +35,8 @@ class PlacesViewModel(
     private val _message = mutableStateOf<PlacesMessageUiModel?>(null)
     val message: State<PlacesMessageUiModel?> get() = _message
 
-    private val _empty = mutableStateOf<EmptyPlacesUiModel?>(null)
-    val empty: State<EmptyPlacesUiModel?> get() = _empty
+    private val _closePlaces = mutableStateOf(false)
+    val closePlaces: State<Boolean> get() = _closePlaces
 
     init {
         showPlaces()
@@ -82,6 +82,7 @@ class PlacesViewModel(
             placeRepository.save(selectedPlace)
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
             _isLoading.value = false
+            _closePlaces.value = true
         }
     }
 
