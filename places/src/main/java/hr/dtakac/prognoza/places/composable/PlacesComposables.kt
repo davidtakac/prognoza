@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
@@ -36,17 +37,21 @@ fun Places(
     ) {
         Box(
             modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.BottomCenter
+            contentAlignment = Alignment.Center
         ) {
             Column(modifier = Modifier.fillMaxHeight()) {
                 PlacesTopAppBar(onBackClicked = onBackClicked)
                 PlacesSearchBox(onSearchClicked = { placesViewModel.showPlaces(query = it) })
-                PlacesList(
-                    places = places,
-                    onPlacePicked = {
-                        placesViewModel.select(placeId = it.id)
-                    }
-                )
+                if (places.isEmpty()) {
+                    EmptyPlaces()
+                } else {
+                    PlacesList(
+                        places = places,
+                        onPlacePicked = {
+                            placesViewModel.select(placeId = it.id)
+                        }
+                    )
+                }
             }
             if (isLoading) {
                 CircularProgressIndicator()
@@ -198,4 +203,21 @@ fun Place(
             }
         }
     }
+}
+
+@Composable
+fun EmptyPlaces() {
+    Text(
+        text = stringResource(id = R.string.place_search_empty),
+        color = PrognozaTheme.textColors.mediumEmphasis,
+        style = PrognozaTheme.typography.subtitle1,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp
+            ),
+        textAlign = TextAlign.Center
+    )
 }
