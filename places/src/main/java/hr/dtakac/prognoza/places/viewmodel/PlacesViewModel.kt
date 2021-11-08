@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.places.viewmodel
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
@@ -80,7 +79,6 @@ class PlacesViewModel(
         }
     }
 
-    @SuppressLint("NullSafeMutableLiveData")
     private suspend fun setDisplayedPlaces(places: List<Place>) {
         displayedPlaces = places
         _places.value = withContext(dispatcherProvider.default) {

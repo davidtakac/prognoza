@@ -58,10 +58,10 @@ fun TomorrowForecast(
                         onClick = { viewModel.toggleExpanded(index) },
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
-                    if (index < forecast.hours.lastIndex) {
-                        Divider()
-                    } else {
+                    if (index == forecast.hours.lastIndex) {
                         MetNorwayOrganizationCredit()
+                    } else {
+                        Divider()
                     }
                 }
             }

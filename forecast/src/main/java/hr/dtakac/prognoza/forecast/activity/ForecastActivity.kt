@@ -9,10 +9,7 @@ import androidx.compose.runtime.Composable
 import com.google.accompanist.pager.ExperimentalPagerApi
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.composable.forecastpager.ForecastTabbedPager
-import hr.dtakac.prognoza.forecast.viewmodel.ComingForecastViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.ForecastPagerViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
-import hr.dtakac.prognoza.forecast.viewmodel.TomorrowForecastViewModel
+import hr.dtakac.prognoza.forecast.viewmodel.*
 import hr.dtakac.prognoza.places.activity.PlacesActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -22,15 +19,22 @@ class ForecastActivity : ComponentActivity() {
     private val comingViewModel by viewModel<ComingForecastViewModel>()
     private val forecastPagerViewModel by viewModel<ForecastPagerViewModel>()
 
+    private var currentPage: Int = 0
+
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        todayViewModel.getForecast()
         setContent {
             PrognozaTheme {
                 Screen()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getCurrentForecastViewModel(currentPage).getForecast()
+        forecastPagerViewModel.getData()
     }
 
     @ExperimentalPagerApi
@@ -42,7 +46,8 @@ class ForecastActivity : ComponentActivity() {
                 tomorrowForecastViewModel = tomorrowViewModel,
                 comingForecastViewModel = comingViewModel,
                 forecastPagerViewModel = forecastPagerViewModel,
-                onSearchClicked = { openPlaces() }
+                onSearchClicked = { openPlaces() },
+                onPageChanged = { handleChangedPage(newPage = it) }
             )
         }
     }
@@ -50,5 +55,19 @@ class ForecastActivity : ComponentActivity() {
     private fun openPlaces() {
         val intent = Intent(this, PlacesActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun handleChangedPage(newPage: Int) {
+        getCurrentForecastViewModel(newPage).getForecast()
+        currentPage = newPage
+    }
+
+    private fun getCurrentForecastViewModel(page: Int): ForecastViewModel<*> {
+        return when (page) {
+            0 -> todayViewModel
+            1 -> tomorrowViewModel
+            2 -> comingViewModel
+            else -> throw IllegalStateException("No ViewModel for page $page.")
+        }
     }
 }

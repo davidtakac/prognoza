@@ -65,10 +65,10 @@ fun TodayForecast(
                         onClick = { viewModel.toggleExpanded(index) },
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
-                    if (index < forecast.otherHours.lastIndex) {
-                        Divider()
-                    } else {
+                    if (index == forecast.otherHours.lastIndex) {
                         MetNorwayOrganizationCredit()
+                    } else {
+                        Divider()
                     }
                 }
             }

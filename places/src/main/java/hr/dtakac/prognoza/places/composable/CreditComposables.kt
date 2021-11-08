@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.forecast.composable.common
+package hr.dtakac.prognoza.places.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,12 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.core.composable.OrganizationCredit
-import hr.dtakac.prognoza.forecast.R
+import hr.dtakac.prognoza.places.R
 
 @Composable
-fun MetNorwayOrganizationCredit() {
+fun OsmNominatimOrganizationCredit() {
     OrganizationCredit(
-        text = stringResource(id = R.string.met_norway_credit),
+        text = stringResource(id = R.string.osm_nominatim_credit),
         modifier = Modifier
             .fillMaxWidth()
             .padding(

@@ -26,6 +26,10 @@ class ForecastPagerViewModel(
     val selectedUnit: State<MeasurementUnit> get() = _selectedUnit
 
     init {
+        getData()
+    }
+
+    fun getData() {
         getSelectedUnit()
         getSelectedPlaceName()
     }

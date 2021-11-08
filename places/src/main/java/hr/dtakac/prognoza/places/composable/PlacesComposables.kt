@@ -4,7 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -124,11 +124,14 @@ fun PlacesList(
     onPlacePicked: (PlaceUiModel) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
-        items(places) {
+        itemsIndexed(places) { index, place ->
             Place(
-                place = it,
-                onClicked = { onPlacePicked.invoke(it) }
+                place = place,
+                onClicked = { onPlacePicked.invoke(place) }
             )
+            if (index == places.lastIndex) {
+                OsmNominatimOrganizationCredit()
+            }
         }
     }
 }

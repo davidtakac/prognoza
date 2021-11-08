@@ -33,7 +33,8 @@ fun ForecastTabbedPager(
     tomorrowForecastViewModel: TomorrowForecastViewModel,
     comingForecastViewModel: ComingForecastViewModel,
     forecastPagerViewModel: ForecastPagerViewModel,
-    onSearchClicked: () -> Unit
+    onSearchClicked: () -> Unit,
+    onPageChanged: (Int) -> Unit
 ) {
     val pagerState = rememberPagerState()
     val pages = stringArrayResource(id = R.array.forecast_tab_names)
@@ -41,15 +42,7 @@ fun ForecastTabbedPager(
     val selectedUnit by forecastPagerViewModel.selectedUnit
     val selectedPlace by forecastPagerViewModel.placeName
 
-    PageChangedListener(pagerState = pagerState) { page ->
-        when (page) {
-            0 -> todayForecastViewModel
-            1 -> tomorrowForecastViewModel
-            2 -> comingForecastViewModel
-            else -> throw IllegalStateException("No composable for page $page.")
-        }.getForecast()
-    }
-
+    PageChangedListener(pagerState = pagerState, onPageChanged = onPageChanged)
     Column {
         val backgroundColor =
             if (isSystemInDarkTheme()) PrognozaTheme.colors.surface else PrognozaTheme.colors.primary
