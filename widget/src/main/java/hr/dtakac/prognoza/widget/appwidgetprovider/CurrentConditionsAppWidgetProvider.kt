@@ -10,7 +10,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.widget.RemoteViews
-import hr.dtakac.prognoza.forecast.activity.ComposeForecastActivity
+import hr.dtakac.prognoza.forecast.activity.ForecastActivity
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.CachedSuccess
@@ -20,7 +20,6 @@ import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.*
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
-import hr.dtakac.prognoza.core.BuildConfig
 import hr.dtakac.prognoza.widget.model.CurrentConditionsWidgetUiModel
 import kotlinx.coroutines.runBlocking
 import org.koin.core.component.KoinComponent
@@ -119,7 +118,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
 
     private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-            val intent = Intent(context, ComposeForecastActivity::class.java)
+            val intent = Intent(context, ForecastActivity::class.java)
             val pendingIntent = PendingIntent.getActivity(
                 context,
                 REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE,

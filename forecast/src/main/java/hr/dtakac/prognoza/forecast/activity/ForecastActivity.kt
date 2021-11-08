@@ -14,7 +14,7 @@ import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.TomorrowForecastViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class ComposeForecastActivity : ComponentActivity() {
+class ForecastActivity : ComponentActivity() {
     private val todayViewModel by viewModel<TodayForecastViewModel>()
     private val tomorrowViewModel by viewModel<TomorrowForecastViewModel>()
     private val comingViewModel by viewModel<ComingForecastViewModel>()

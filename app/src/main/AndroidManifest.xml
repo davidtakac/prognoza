@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hr.dtakac.prognoza">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".PrognozaApplication"
@@ -12,9 +12,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Prognoza">
-
         <activity
-            android:name="hr.dtakac.prognoza.forecast.activity.ComposeForecastActivity"
+            android:name="hr.dtakac.prognoza.forecast.activity.ForecastActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
