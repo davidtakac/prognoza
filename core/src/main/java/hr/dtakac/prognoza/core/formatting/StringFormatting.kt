@@ -2,21 +2,17 @@ package hr.dtakac.prognoza.core.formatting
 
 import android.icu.text.RelativeDateTimeFormatter
 import android.text.format.DateUtils
-import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import hr.dtakac.prognoza.core.R
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
-import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.core.utils.*
+import java.lang.IllegalStateException
 import java.math.RoundingMode
 import java.text.DecimalFormat
+import java.text.NumberFormat
 import java.time.ZonedDateTime
 import java.util.*
 import kotlin.math.roundToInt
@@ -40,7 +36,7 @@ fun formatDaySummaryTime(time: ZonedDateTime): String {
 }
 
 @Composable
-fun getTomorrowTime(): String {
+fun formatTomorrowTime(): String {
     return RelativeDateTimeFormatter.getInstance().format(
         RelativeDateTimeFormatter.Direction.NEXT,
         RelativeDateTimeFormatter.AbsoluteUnit.DAY
@@ -56,7 +52,7 @@ fun formatTemperatureValue(temperature: Double?, unit: MeasurementUnit): String 
     }
     return when {
         temperature == null -> {
-            stringResource(id = R.string.placeholder_temperature)
+            stringResource(R.string.placeholder_temperature)
         }
         unit == MeasurementUnit.IMPERIAL -> {
             stringResource(
@@ -75,11 +71,32 @@ fun formatTemperatureValue(temperature: Double?, unit: MeasurementUnit): String 
 
 @Composable
 fun formatPrecipitationValue(
-    precipitation: Double?,
-    unit: MeasurementUnit
-): AnnotatedString {
-    val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
-        maximumFractionDigits = when (unit) {
+    precipitationMetric: Double?,
+    preferredUnit: MeasurementUnit
+): String {
+    val formatter = getPrecipitationFormatter(preferredUnit)
+    if (!precipitationExists(precipitationMetric)) {
+        throw IllegalStateException("Precipitation is nonexistent.")
+    }
+    return when(preferredUnit) {
+        MeasurementUnit.METRIC -> {
+            stringResource(
+                id = R.string.template_precipitation_metric,
+                formatter.format(precipitationMetric)
+            )
+        }
+        MeasurementUnit.IMPERIAL -> {
+            stringResource(
+                id = R.string.template_precipitation_imperial,
+                formatter.format(precipitationMetric?.millimetresToInches())
+            )
+        }
+    }
+}
+
+private fun getPrecipitationFormatter(preferredUnit: MeasurementUnit): NumberFormat {
+    return DecimalFormat.getInstance(Locale.getDefault()).apply {
+        maximumFractionDigits = when (preferredUnit) {
             MeasurementUnit.IMPERIAL -> {
                 2
             }
@@ -89,66 +106,14 @@ fun formatPrecipitationValue(
         }
         roundingMode = RoundingMode.HALF_UP
     }
-    return if (precipitation == null || precipitation == 0.0) {
-        AnnotatedString(text = stringResource(id = R.string.placeholder_temperature))
-    } else {
-        val significantPrecipitation = if (unit == MeasurementUnit.IMPERIAL) {
-            SIGNIFICANT_PRECIPITATION_IMPERIAL
-        } else {
-            SIGNIFICANT_PRECIPITATION_METRIC
-        }
-        val convertedPrecipitation = if (unit == MeasurementUnit.IMPERIAL) {
-            precipitation.millimetresToInches()
-        } else {
-            precipitation
-        }
-        val template = if (unit == MeasurementUnit.IMPERIAL) {
-            R.string.template_precipitation_imperial
-        } else {
-            R.string.template_precipitation_metric
-        }
-        val insignificantTemplate = if (unit == MeasurementUnit.IMPERIAL) {
-            R.string.placeholder_precipitation_insignificant_imperial
-        } else {
-            R.string.placeholder_precipitation_insignificant_metric
-        }
-        val precipitationColor = if (convertedPrecipitation >= significantPrecipitation) {
-            PrognozaTheme.precipitationColors.significant
-        } else {
-            LocalContentColor.current
-        }
-        if (convertedPrecipitation >= significantPrecipitation) {
-            buildAnnotatedString {
-                withStyle(style = SpanStyle(color = precipitationColor)) {
-                    append(
-                        text = stringResource(
-                            id = template,
-                            formatter.format(convertedPrecipitation)
-                        )
-                    )
-                }
-            }
-        } else {
-            buildAnnotatedString {
-                withStyle(style = SpanStyle(color = precipitationColor)) {
-                    append(
-                        text = stringResource(
-                            id = insignificantTemplate,
-                            formatter.format(significantPrecipitation)
-                        )
-                    )
-                }
-            }
-        }
-    }
 }
 
 @Composable
 fun formatWeatherIconDescription(id: Int?): String {
     return if (id == null) {
-        stringResource(id = R.string.placeholder_description)
+        stringResource(R.string.placeholder_description)
     } else {
-        stringResource(id = id)
+        stringResource(id)
     }
 }
 
@@ -157,7 +122,7 @@ fun formatFeelsLike(feelsLike: Double?, unit: MeasurementUnit): String {
     return stringResource(
         R.string.template_feels_like,
         if (feelsLike == null) {
-            stringResource(id = R.string.placeholder_temperature)
+            stringResource(R.string.placeholder_temperature)
         } else {
             formatTemperatureValue(
                 temperature = feelsLike,
@@ -195,7 +160,7 @@ fun formatWindSpeedValue(windSpeed: Double?, unit: MeasurementUnit): String {
             )
         }
     } else {
-        stringResource(id = R.string.placeholder_wind_speed)
+        stringResource(R.string.placeholder_wind_speed)
     }
 }
 
@@ -225,7 +190,7 @@ fun formatHumidityValue(relativeHumidity: Double?): String {
             formatter.format(relativeHumidity.roundToInt())
         )
     } else {
-        stringResource(id = R.string.placeholder_humidity)
+        stringResource(R.string.placeholder_humidity)
     }
 }
 
@@ -256,7 +221,7 @@ fun formatPressureValue(pressure: Double?, unit: MeasurementUnit): String {
             )
         }
     } else {
-        stringResource(id = R.string.placeholder_pressure)
+        stringResource(R.string.placeholder_pressure)
     }
 }
 

@@ -11,6 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import hr.dtakac.prognoza.core.formatting.formatDaySummaryTime
+import hr.dtakac.prognoza.core.formatting.formatRepresentativeWeatherIconDescription
 import hr.dtakac.prognoza.core.formatting.formatTemperatureValue
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
@@ -35,12 +37,12 @@ fun TomorrowForecast(
         contentAlignment = Alignment.Center
     ) {
         if (forecast != null) {
-            LazyColumn(modifier = Modifier.fillMaxHeight()) {
+            LazyColumn(Modifier.fillMaxHeight()) {
                 item {
                     TomorrowSummaryHeader(
                         dayUiModel = forecast.summary,
                         outdatedForecastUiModel = outdatedForecast,
-                        preferredMeasurementUnit = preferredMeasurementUnit
+                        preferredUnit = preferredMeasurementUnit
                     )
                 }
                 itemsIndexed(forecast.hours) { index, hour ->
@@ -79,7 +81,7 @@ fun TomorrowForecast(
 fun TomorrowSummaryHeader(
     dayUiModel: DayUiModel,
     outdatedForecastUiModel: OutdatedForecastUiModel?,
-    preferredMeasurementUnit: MeasurementUnit
+    preferredUnit: MeasurementUnit
 ) {
     Surface(
         shape = PrognozaTheme.shapes.medium,
@@ -96,20 +98,20 @@ fun TomorrowSummaryHeader(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(horizontalAlignment = Alignment.Start) {
-                DaySummaryTime(time = dayUiModel.time)
-                TomorrowLowestAndHighestTemperature(
-                    lowestTemperature = dayUiModel.lowTemperature,
-                    highestTemperature = dayUiModel.highTemperature,
-                    unit = preferredMeasurementUnit
-                )
+                Text(formatDaySummaryTime(dayUiModel.time))
+                CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.h4) {
+                    TomorrowLowestAndHighestTemperature(
+                        lowestTemperature = dayUiModel.lowTemperature,
+                        highestTemperature = dayUiModel.highTemperature,
+                        unit = preferredUnit
+                    )
+                }
                 CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                    TotalPrecipitation(
-                        totalPrecipitation = dayUiModel.totalPrecipitationAmount,
-                        unit = preferredMeasurementUnit
+                    DaySummaryPrecipitation(
+                        precipitationMetric = dayUiModel.totalPrecipitationAmount,
+                        preferredUnit = preferredUnit
                     )
-                    RepresentativeWeatherDescription(
-                        representativeWeatherDescription = dayUiModel.representativeWeatherDescription
-                    )
+                    Text(formatRepresentativeWeatherIconDescription(dayUiModel.representativeWeatherDescription))
                 }
             }
             Column(
@@ -118,11 +120,11 @@ fun TomorrowSummaryHeader(
             ) {
                 Image(
                     painter = rememberImagePainter(
-                        data = dayUiModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
+                        dayUiModel.representativeWeatherDescription?.weatherDescription?.iconResourceId
                             ?: R.drawable.ic_cloud_off
                     ),
                     contentDescription = null,
-                    modifier = Modifier.size(size = 86.dp)
+                    modifier = Modifier.size(86.dp)
                 )
                 if (outdatedForecastUiModel != null) {
                     var showDialog by remember { mutableStateOf(false) }
@@ -147,20 +149,18 @@ fun TomorrowLowestAndHighestTemperature(
 ) {
     Row {
         Text(
-            text = formatTemperatureValue(
+            formatTemperatureValue(
                 temperature = highestTemperature,
                 unit = unit
-            ),
-            style = PrognozaTheme.typography.h4
+            )
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(Modifier.width(8.dp))
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = formatTemperatureValue(
+                formatTemperatureValue(
                     temperature = lowestTemperature,
                     unit = unit
-                ),
-                style = PrognozaTheme.typography.h4
+                )
             )
         }
     }

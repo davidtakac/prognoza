@@ -112,7 +112,7 @@ fun ExpandableDay(
                 unit = preferredMeasurementUnit
             )
             if (isExpanded) {
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(Modifier.height(16.dp))
                 DayDetails(
                     maxWindSpeed = dayUiModel.maxWindSpeed,
                     maxWindSpeedFromDirection = dayUiModel.windFromCompassDirection,
@@ -135,48 +135,44 @@ fun DaySummary(
     highestTemperature: Double?,
     unit: MeasurementUnit
 ) {
-    Row(
-        modifier = Modifier
-            .height(IntrinsicSize.Max)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.Start
+    CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.subtitle1) {
+        Row(
+            modifier = Modifier
+                .height(IntrinsicSize.Max)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            if (isTomorrow) {
-                TomorrowTime()
-            } else {
-                DaySummaryTime(time = time)
+            Column(horizontalAlignment = Alignment.Start) {
+                if (isTomorrow) {
+                    Text(formatTomorrowTime())
+                } else {
+                    Text(formatDaySummaryTime(time))
+                }
+                Spacer(Modifier.height(4.dp))
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    DaySummaryPrecipitation(
+                        precipitationMetric = totalPrecipitation,
+                        preferredUnit = unit
+                    )
+                    Text(formatRepresentativeWeatherIconDescription(representativeWeatherDescription))
+                }
             }
-            Spacer(modifier = Modifier.height(4.dp))
-            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-                TotalPrecipitation(
-                    totalPrecipitation = totalPrecipitation,
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Image(
+                    painter = rememberImagePainter(
+                        data = representativeWeatherDescription?.weatherDescription?.iconResourceId
+                            ?: R.drawable.ic_cloud_off
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp)
+                )
+                Spacer(Modifier.width(16.dp))
+                DaySummaryLowestAndHighestTemperature(
+                    lowestTemperature = lowestTemperature,
+                    highestTemperature = highestTemperature,
                     unit = unit
                 )
-                RepresentativeWeatherDescription(
-                    representativeWeatherDescription = representativeWeatherDescription
-                )
             }
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                painter = rememberImagePainter(
-                    data = representativeWeatherDescription?.weatherDescription?.iconResourceId
-                        ?: R.drawable.ic_cloud_off
-                ),
-                contentDescription = null,
-                modifier = Modifier.size(64.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            DaySummaryLowestAndHighestTemperature(
-                lowestTemperature = lowestTemperature,
-                highestTemperature = highestTemperature,
-                unit = unit
-            )
         }
     }
 }
@@ -192,30 +188,20 @@ fun DaySummaryLowestAndHighestTemperature(
         horizontalAlignment = Alignment.End
     ) {
         Text(
-            text = formatTemperatureValue(
+            formatTemperatureValue(
                 temperature = highestTemperature,
                 unit = unit
-            ),
-            style = PrognozaTheme.typography.subtitle1,
+            )
         )
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Text(
-                text = formatTemperatureValue(
+                formatTemperatureValue(
                     temperature = lowestTemperature,
                     unit = unit
-                ),
-                style = PrognozaTheme.typography.subtitle1
+                )
             )
         }
     }
-}
-
-@Composable
-fun TomorrowTime() {
-    Text(
-        text = getTomorrowTime(),
-        style = PrognozaTheme.typography.subtitle1
-    )
 }
 
 @Composable
@@ -226,35 +212,37 @@ fun DayDetails(
     maxPressure: Double?,
     unit: MeasurementUnit
 ) {
-    FlowRow(
-        mainAxisSpacing = 8.dp,
-        crossAxisSpacing = 8.dp,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        DetailsItem(
-            iconId = R.drawable.ic_air,
-            labelId = R.string.max_wind,
-            text = formatWindWithDirection(
-                windSpeed = maxWindSpeed,
-                windFromCompassDirection = maxWindSpeedFromDirection,
-                windSpeedUnit = unit
+    CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.subtitle2) {
+        FlowRow(
+            mainAxisSpacing = 8.dp,
+            crossAxisSpacing = 8.dp,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            DetailsItem(
+                iconId = R.drawable.ic_air,
+                labelId = R.string.max_wind,
+                text = formatWindWithDirection(
+                    windSpeed = maxWindSpeed,
+                    windFromCompassDirection = maxWindSpeedFromDirection,
+                    windSpeedUnit = unit
+                )
             )
-        )
-        DetailsItem(
-            iconId = R.drawable.ic_water_drop,
-            labelId = R.string.max_humidity,
-            text = formatHumidityValue(
-                relativeHumidity = maxHumidity
+            DetailsItem(
+                iconId = R.drawable.ic_water_drop,
+                labelId = R.string.max_humidity,
+                text = formatHumidityValue(
+                    relativeHumidity = maxHumidity
+                )
             )
-        )
-        DetailsItem(
-            iconId = R.drawable.ic_speed,
-            labelId = R.string.max_pressure,
-            text = formatPressureValue(
-                pressure = maxPressure,
-                unit = unit
+            DetailsItem(
+                iconId = R.drawable.ic_speed,
+                labelId = R.string.max_pressure,
+                text = formatPressureValue(
+                    pressure = maxPressure,
+                    unit = unit
+                )
             )
-        )
+        }
     }
 }
 

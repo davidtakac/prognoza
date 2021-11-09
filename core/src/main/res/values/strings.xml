@@ -122,5 +122,6 @@
     <string name="no_place">No place</string>
     <string name="no_saved_places">No saved places.</string>
     <string name="error_forecast_empty_no_selected_place">You don\'t have a picked place.</string>
+    <string name="template_precipitation_insignificant">&lt; %1$s</string>
 
 </resources>

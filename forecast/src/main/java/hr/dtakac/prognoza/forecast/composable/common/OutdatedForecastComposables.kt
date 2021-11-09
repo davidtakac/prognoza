@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
@@ -27,13 +27,13 @@ fun OutdatedForecastMessage(
             modifier = modifier
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_cloud_off),
+                painter = rememberImagePainter(R.drawable.ic_cloud_off),
                 contentDescription = null,
-                modifier = Modifier.size(size = 16.dp),
+                modifier = Modifier.size(16.dp),
             )
-            Spacer(modifier = Modifier.width(4.dp))
+            Spacer(Modifier.width(4.dp))
             Text(
-                text = stringResource(id = R.string.notify_cached_data),
+                text = stringResource(R.string.notify_cached_data),
                 style = PrognozaTheme.typography.subtitle2
             )
         }
@@ -56,16 +56,12 @@ fun OutdatedForecastDialog(
     if (showDialog) {
         AlertDialog(
             onDismissRequest = onDismissRequest,
-            title = {
-                Text(
-                    text = stringResource(id = R.string.title_outdated_forecast)
-                )
-            },
+            title = { Text(stringResource(R.string.title_outdated_forecast)) },
             text = {
                 Text(
-                    text = stringResource(
+                    stringResource(
                         id = R.string.template_content_outdated_forecast,
-                        stringResource(id = reasonId)
+                        stringResource(reasonId)
                     )
                 )
             },
@@ -78,7 +74,7 @@ fun OutdatedForecastDialog(
                         modifier = Modifier.wrapContentSize(),
                         onClick = { onConfirmRequest() }
                     ) {
-                        Text(stringResource(id = R.string.action_ok))
+                        Text(stringResource(R.string.action_ok))
                     }
                 }
             }

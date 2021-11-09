@@ -12,7 +12,7 @@ import hr.dtakac.prognoza.places.R
 @Composable
 fun OsmNominatimOrganizationCredit() {
     OrganizationCredit(
-        text = stringResource(id = R.string.osm_nominatim_credit),
+        text = stringResource(R.string.osm_nominatim_credit),
         modifier = Modifier
             .fillMaxWidth()
             .padding(

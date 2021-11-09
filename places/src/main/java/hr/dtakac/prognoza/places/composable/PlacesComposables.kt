@@ -74,7 +74,7 @@ fun Places(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Snackbar(modifier = Modifier.padding(16.dp)) {
-                        Text(text = stringResource(id = it.messageId))
+                        Text(text = stringResource(it.messageId))
                     }
                 }
             }
@@ -87,13 +87,13 @@ fun PlacesTopAppBar(
     onBackClicked: () -> Unit
 ) {
     TopAppBar(
-        title = { Text(text = stringResource(id = R.string.pick_a_place)) },
+        title = { Text(text = stringResource(R.string.pick_a_place)) },
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_back),
+                    painter = rememberImagePainter(R.drawable.ic_arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.size(size = 24.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
         }
@@ -111,15 +111,15 @@ fun PlacesSearchBox(
         value = value,
         onValueChange = onValueChange,
         label = {
-            Text(text = stringResource(id = R.string.hint_places_search))
+            Text(text = stringResource(R.string.hint_places_search))
         },
         singleLine = true,
         textStyle = PrognozaTheme.typography.body1,
         leadingIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_search),
+                painter = rememberImagePainter(R.drawable.ic_search),
                 contentDescription = null,
-                modifier = Modifier.size(size = 24.dp)
+                modifier = Modifier.size(24.dp)
             )
         },
         modifier = Modifier
@@ -142,9 +142,9 @@ fun PlacesSearchBox(
                     onClick = { onClearAll() }
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_clear),
+                        painter = rememberImagePainter(R.drawable.ic_clear),
                         contentDescription = null,
-                        modifier = Modifier.size(size = 24.dp)
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
@@ -207,7 +207,7 @@ fun Place(
                     tint = PrognozaTheme.colors.primary,
                     modifier = Modifier.size(32.dp)
                 )
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(Modifier.width(16.dp))
             }
             Column {
                 Text(
@@ -231,7 +231,7 @@ fun EmptyPlaces(
 ) {
     CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
         Text(
-            text = stringResource(id = emptyPlaces.reason),
+            text = stringResource(emptyPlaces.reason),
             style = PrognozaTheme.typography.subtitle1,
             modifier = Modifier
                 .fillMaxWidth()

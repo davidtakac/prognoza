@@ -7,7 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -74,7 +73,7 @@ fun ForecastTabbedPager(
 
     Column {
         ForecastHeader(
-            currentPlaceName = placeName ?: stringResource(id = R.string.no_place),
+            currentPlaceName = placeName ?: stringResource(R.string.no_place),
             pagerState = pagerState,
             pages = pages,
             onSearchClicked = onSearchClicked,
@@ -139,15 +138,10 @@ fun ForecastHeader(
     onSettingsClicked: () -> Unit,
     onTabClicked: (Int) -> Unit
 ) {
-    val backgroundColor = if (isSystemInDarkTheme()) {
-        PrognozaTheme.colors.surface
-    } else {
-        PrognozaTheme.colors.primary
-    }
     Surface(
         elevation = 4.dp,
-        color = backgroundColor,
-        contentColor = contentColorFor(backgroundColor)
+        color = PrognozaTheme.colors.primarySurface,
+        contentColor = contentColorFor(PrognozaTheme.colors.primarySurface)
     ) {
         Column {
             ForecastTopAppBar(
@@ -159,7 +153,7 @@ fun ForecastHeader(
                 pagerState = pagerState,
                 pages = pages,
                 onTabClicked = onTabClicked,
-                backgroundColor = backgroundColor
+                backgroundColor = PrognozaTheme.colors.primarySurface
             )
         }
     }
@@ -248,16 +242,16 @@ fun ForecastTopAppBar(
         actions = {
             IconButton(onClick = onSearchClicked) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_search),
+                    painter = rememberImagePainter(R.drawable.ic_search),
                     contentDescription = null,
-                    modifier = Modifier.size(size = 24.dp)
+                    modifier = Modifier.size(24.dp)
                 )
             }
             IconButton(onClick = { isMenuExpanded = !isMenuExpanded }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_more),
+                    painter = rememberImagePainter(R.drawable.ic_more),
                     contentDescription = null,
-                    modifier = Modifier.size(size = 24.dp)
+                    modifier = Modifier.size(24.dp)
                 )
                 DropdownMenu(
                     expanded = isMenuExpanded,
@@ -270,7 +264,7 @@ fun ForecastTopAppBar(
                             onSettingsClicked()
                         }
                     ) {
-                        Text(text = stringResource(id = R.string.settings))
+                        Text(text = stringResource(R.string.settings))
                     }
                 }
             }

@@ -46,17 +46,17 @@ fun EmptyForecast(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_cloud_off),
+                    painter = rememberImagePainter(R.drawable.ic_cloud_off),
                     contentDescription = null,
-                    modifier = Modifier.size(size = 52.dp),
+                    modifier = Modifier.size(52.dp),
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
                 Text(
                     text = text,
                     style = PrognozaTheme.typography.body2,
                     textAlign = TextAlign.Center
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(Modifier.height(24.dp))
                 content()
             }
         }
@@ -87,14 +87,14 @@ fun LoaderButton(
             )
         } else {
             Icon(
-                painter = painterResource(id = iconResourceId),
+                painter = rememberImagePainter(iconResourceId),
                 contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = contentColor
             )
         }
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(text = text)
+        Spacer(Modifier.width(8.dp))
+        Text(text)
     }
 }
 
@@ -106,11 +106,11 @@ fun EmptyForecastBecauseReason(
 ) {
     val errorText = stringResource(
         id = R.string.template_error_forecast_empty_reason,
-        stringResource(id = emptyForecast.reason ?: R.string.error_generic)
+        stringResource(emptyForecast.reason ?: R.string.error_generic)
     )
     EmptyForecast(text = errorText) {
         LoaderButton(
-            text = stringResource(id = R.string.button_try_again),
+            text = stringResource(R.string.button_try_again),
             isLoading = isLoading,
             onClick = onTryAgainClicked,
             iconResourceId = R.drawable.ic_refresh
@@ -123,10 +123,10 @@ fun EmptyForecastBecauseNoSelectedPlace(
     isLoading: Boolean,
     onPickAPlaceClicked: () -> Unit
 ) {
-    val errorText = stringResource(id = R.string.error_forecast_empty_no_selected_place)
+    val errorText = stringResource(R.string.error_forecast_empty_no_selected_place)
     EmptyForecast(text = errorText) {
         LoaderButton(
-            text = stringResource(id = R.string.pick_a_place),
+            text = stringResource(R.string.pick_a_place),
             isLoading = isLoading,
             onClick = onPickAPlaceClicked,
             iconResourceId = R.drawable.ic_favorite_border

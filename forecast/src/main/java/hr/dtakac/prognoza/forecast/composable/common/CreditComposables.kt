@@ -12,7 +12,7 @@ import hr.dtakac.prognoza.forecast.R
 @Composable
 fun MetNorwayOrganizationCredit() {
     OrganizationCredit(
-        text = stringResource(id = R.string.met_norway_credit),
+        text = stringResource(R.string.met_norway_credit),
         modifier = Modifier
             .fillMaxWidth()
             .padding(
