@@ -117,6 +117,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     }
 
     private fun handleNoSelectedPlace() {
-        TODO()
+        // TODO
     }
 }

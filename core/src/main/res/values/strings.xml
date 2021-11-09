@@ -113,12 +113,13 @@
     <string name="app_widget_current_conditions_small_description">Current weather icon, temperature and feels like temperature</string>
     <string name="app_widget_current_conditions_medium_description">Current weather icon, temperature, feels like temperature and two hour precipitation forecast</string>
     <string name="no_data">No data</string>
-    <string name="place_search_empty">No places match the entered query.</string>
+    <string name="no_places_for_query">No places match the entered query.</string>
     <string name="max_wind">Wind</string>
     <string name="max_humidity">Humidity</string>
     <string name="max_pressure">Pressure</string>
     <string name="pick_a_place">Pick a place</string>
     <string name="settings">Settings</string>
     <string name="no_place">No place</string>
+    <string name="no_saved_places">"No saved places. "</string>
 
 </resources>

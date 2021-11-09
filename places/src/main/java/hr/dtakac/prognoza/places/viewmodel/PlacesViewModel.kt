@@ -38,6 +38,9 @@ class PlacesViewModel(
     private val _closePlaces = mutableStateOf(false)
     val closePlaces: State<Boolean> get() = _closePlaces
 
+    private val _emptyPlaces = mutableStateOf<EmptyPlacesUiModel?>(null)
+    val emptyPlaces: State<EmptyPlacesUiModel?> get() = _emptyPlaces
+
     init {
         showPlaces()
     }
@@ -59,7 +62,13 @@ class PlacesViewModel(
     private fun showSavedPlaces() {
         coroutineScope.launch {
             _isLoading.value = true
-            setDisplayedPlaces(placeRepository.getAll())
+            val places = placeRepository.getAll()
+            setDisplayedPlaces(places)
+            if (places.isEmpty()) {
+                _emptyPlaces.value = EmptyPlacesUiModel(reason = R.string.no_saved_places)
+            } else {
+                _emptyPlaces.value = null
+            }
             _isLoading.value = false
         }
     }
@@ -67,7 +76,13 @@ class PlacesViewModel(
     private fun search(query: String) {
         coroutineScope.launch {
             _isLoading.value = true
-            setDisplayedPlaces(placeRepository.search(query))
+            val places = placeRepository.search(query)
+            setDisplayedPlaces(places)
+            if (places.isEmpty()) {
+                _emptyPlaces.value = EmptyPlacesUiModel(reason = R.string.no_places_for_query)
+            } else {
+                _emptyPlaces.value = null
+            }
             _isLoading.value = false
         }
     }

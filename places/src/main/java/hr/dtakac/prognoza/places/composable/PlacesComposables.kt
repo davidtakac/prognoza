@@ -8,8 +8,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -20,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.places.R
+import hr.dtakac.prognoza.places.model.EmptyPlacesUiModel
 import hr.dtakac.prognoza.places.model.PlaceUiModel
 import hr.dtakac.prognoza.places.viewmodel.PlacesViewModel
 
@@ -31,6 +35,7 @@ fun Places(
     val places by placesViewModel.places
     val isLoading by placesViewModel.isLoading
     val message by placesViewModel.message
+    val emptyPlaces by placesViewModel.emptyPlaces
 
     Surface(
         shape = PrognozaTheme.shapes.large,
@@ -41,18 +46,27 @@ fun Places(
             contentAlignment = Alignment.Center
         ) {
             Column(modifier = Modifier.fillMaxHeight()) {
+                var searchValue by rememberSaveable { mutableStateOf("") }
                 PlacesTopAppBar(onBackClicked = onBackClicked)
-                PlacesSearchBox(onSearchClicked = { placesViewModel.showPlaces(query = it) })
-                if (places.isEmpty()) {
-                    EmptyPlaces()
-                } else {
-                    PlacesList(
-                        places = places,
-                        onPlacePicked = {
-                            placesViewModel.select(placeId = it.id)
-                        }
-                    )
-                }
+                PlacesSearchBox(
+                    value = searchValue,
+                    onValueChange = { newValue: String -> searchValue = newValue },
+                    onSearchClicked = {
+                        placesViewModel.showPlaces(searchValue)
+                    },
+                    onClearAll = {
+                        searchValue = ""
+                        placesViewModel.showPlaces()
+                    }
+                )
+                emptyPlaces?.let {
+                    EmptyPlaces(emptyPlaces = it)
+                } ?: PlacesList(
+                    places = places,
+                    onPlacePicked = {
+                        placesViewModel.select(placeId = it.id)
+                    }
+                )
             }
             if (isLoading) {
                 CircularProgressIndicator()
@@ -92,12 +106,14 @@ fun PlacesTopAppBar(
 
 @Composable
 fun PlacesSearchBox(
-    onSearchClicked: (String) -> Unit
+    value: String,
+    onSearchClicked: () -> Unit,
+    onValueChange: (String) -> Unit,
+    onClearAll: () -> Unit
 ) {
-    var query by rememberSaveable { mutableStateOf("") }
     OutlinedTextField(
-        value = query,
-        onValueChange = { query = it },
+        value = value,
+        onValueChange = onValueChange,
         label = { Text(text = stringResource(id = R.string.hint_places_search)) },
         singleLine = true,
         textStyle = PrognozaTheme.typography.body1.copy(color = PrognozaTheme.textColors.highEmphasis),
@@ -117,18 +133,15 @@ fun PlacesSearchBox(
                 bottom = 8.dp
             ),
         keyboardActions = KeyboardActions(
-            onSearch = { onSearchClicked(query) }
+            onSearch = { onSearchClicked() }
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Search
         ),
         trailingIcon = {
-            if (query.isNotEmpty()) {
+            if (value.isNotEmpty()) {
                 IconButton(
-                    onClick = {
-                        query = ""
-                        onSearchClicked(query)
-                    }
+                    onClick = { onClearAll() }
                 ) {
                     Icon(
                         painter = rememberImagePainter(data = R.drawable.ic_clear),
@@ -137,9 +150,8 @@ fun PlacesSearchBox(
                     )
                 }
             }
-        },
-
-        )
+        }
+    )
 }
 
 @Composable
@@ -212,9 +224,11 @@ fun Place(
 }
 
 @Composable
-fun EmptyPlaces() {
+fun EmptyPlaces(
+    emptyPlaces: EmptyPlacesUiModel
+) {
     Text(
-        text = stringResource(id = R.string.place_search_empty),
+        text = stringResource(id = emptyPlaces.reason),
         color = PrognozaTheme.textColors.mediumEmphasis,
         style = PrognozaTheme.typography.subtitle1,
         modifier = Modifier
