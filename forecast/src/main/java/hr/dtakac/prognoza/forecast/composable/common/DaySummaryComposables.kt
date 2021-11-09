@@ -4,7 +4,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
-import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
+import hr.dtakac.prognoza.core.formatting.formatPrecipitationValue
+import hr.dtakac.prognoza.core.formatting.formatRepresentativeWeatherIconDescription
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
@@ -18,7 +19,7 @@ fun TotalPrecipitation(
 ) {
     Text(
         text = if (shouldShowPrecipitation(totalPrecipitation)) {
-            ComposeStringFormatting.formatPrecipitationValue(
+            formatPrecipitationValue(
                 precipitation = totalPrecipitation,
                 unit = unit
             )
@@ -35,7 +36,7 @@ fun RepresentativeWeatherDescription(
     representativeWeatherDescription: RepresentativeWeatherDescription?
 ) {
     Text(
-        text = ComposeStringFormatting.formatRepresentativeWeatherIconDescription(
+        text = formatRepresentativeWeatherIconDescription(
             representativeWeatherDescription = representativeWeatherDescription
         ),
         style = PrognozaTheme.typography.subtitle1,

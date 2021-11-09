@@ -118,5 +118,6 @@
     <string name="max_humidity">Humidity</string>
     <string name="max_pressure">Pressure</string>
     <string name="pick_a_place">Pick a place</string>
+    <string name="settings">Settings</string>
 
 </resources>

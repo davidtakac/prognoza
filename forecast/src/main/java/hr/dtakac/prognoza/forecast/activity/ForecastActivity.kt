@@ -47,7 +47,8 @@ class ForecastActivity : ComponentActivity() {
                 comingForecastViewModel = comingViewModel,
                 forecastPagerViewModel = forecastPagerViewModel,
                 onSearchClicked = { openPlaces() },
-                onPageChanged = { handleChangedPage(newPage = it) }
+                onPageChanged = { handleChangedPage(newPage = it) },
+                onSettingsClicked = { /*TODO*/ }
             )
         }
     }

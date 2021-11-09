@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.pager.*
-import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.coming.ComingForecast
@@ -34,55 +34,65 @@ fun ForecastTabbedPager(
     comingForecastViewModel: ComingForecastViewModel,
     forecastPagerViewModel: ForecastPagerViewModel,
     onSearchClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
     onPageChanged: (Int) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+
+    // Pager
     val pagerState = rememberPagerState()
     val pages = stringArrayResource(id = R.array.forecast_tab_names)
 
-    val selectedUnit by forecastPagerViewModel.selectedUnit
-    val selectedPlace by forecastPagerViewModel.placeName
+    // Forecast pager data
+    val preferredUnit by forecastPagerViewModel.preferredUnit
+    val placeName by forecastPagerViewModel.placeName
 
-    PageChangedListener(pagerState = pagerState, onPageChanged = onPageChanged)
+    // Today forecast data
+    val todayForecast by todayForecastViewModel.forecast
+    val outdatedTodayForecast by todayForecastViewModel.outdatedForecast
+    val isTodayForecastLoading by todayForecastViewModel.isLoading
+    val emptyTodayForecast by todayForecastViewModel.emptyForecast
+    val expandedTodayForecastHourIndices = todayForecastViewModel.expandedHourIndices
+
+    PageChangedListener(
+        pagerState = pagerState,
+        onPageChanged = onPageChanged
+    )
+
     Column {
-        val backgroundColor =
-            if (isSystemInDarkTheme()) PrognozaTheme.colors.surface else PrognozaTheme.colors.primary
-        Surface(
-            elevation = 4.dp,
-            color = backgroundColor,
-            contentColor = contentColorFor(backgroundColor = backgroundColor)
-        ) {
-            Column {
-                ForecastTopAppBar(
-                    title = selectedPlace,
-                    onSearchClicked = onSearchClicked,
-                    onUnitChanged = { forecastPagerViewModel.changeSelectedUnit() },
-                    selectedUnit = selectedUnit
-                )
-                ForecastTabRow(
-                    pagerState = pagerState,
-                    pages = pages
-                )
-            }
-        }
+        ForecastHeader(
+            currentPlaceName = placeName,
+            pagerState = pagerState,
+            pages = pages,
+            onSearchClicked = onSearchClicked,
+            onSettingsClicked = onSettingsClicked,
+            onTabClicked = { scope.launch { pagerState.animateScrollToPage(it) } }
+        )
         ForecastPager(
             count = pages.size,
             pagerState = pagerState,
             firstPage = {
                 TodayForecast(
-                    viewModel = todayForecastViewModel,
-                    preferredMeasurementUnit = selectedUnit
+                    todayForecast = todayForecast,
+                    outdatedForecast = outdatedTodayForecast,
+                    emptyForecast = emptyTodayForecast,
+                    isLoading = isTodayForecastLoading,
+                    expandedHourIndices = expandedTodayForecastHourIndices,
+                    onHourClicked = { index: Int -> todayForecastViewModel.toggleExpanded(index) },
+                    onTryAgainClicked = { todayForecastViewModel.getForecast() },
+                    preferredMeasurementUnit = preferredUnit
                 )
             },
             secondPage = {
                 TomorrowForecast(
                     viewModel = tomorrowForecastViewModel,
-                    preferredMeasurementUnit = selectedUnit
+                    preferredMeasurementUnit = preferredUnit
                 )
             },
             thirdPage = {
                 ComingForecast(
                     viewModel = comingForecastViewModel,
-                    preferredMeasurementUnit = selectedUnit
+                    preferredMeasurementUnit = preferredUnit
                 )
             }
         )
@@ -91,29 +101,66 @@ fun ForecastTabbedPager(
 
 @ExperimentalPagerApi
 @Composable
+fun ForecastHeader(
+    currentPlaceName: String,
+    pagerState: PagerState,
+    pages: Array<String>,
+    onSearchClicked: () -> Unit,
+    onSettingsClicked: () -> Unit,
+    onTabClicked: (Int) -> Unit
+) {
+    val backgroundColor = if (isSystemInDarkTheme()) {
+        PrognozaTheme.colors.surface
+    } else {
+        PrognozaTheme.colors.primary
+    }
+    Surface(
+        elevation = 4.dp,
+        color = backgroundColor,
+        contentColor = contentColorFor(backgroundColor)
+    ) {
+        Column {
+            ForecastTopAppBar(
+                title = currentPlaceName,
+                onSearchClicked = onSearchClicked,
+                onSettingsClicked = onSettingsClicked
+            )
+            ForecastTabRow(
+                pagerState = pagerState,
+                pages = pages,
+                onTabClicked = onTabClicked,
+                backgroundColor = backgroundColor
+            )
+        }
+    }
+}
+
+@ExperimentalPagerApi
+@Composable
 fun ForecastTabRow(
     pagerState: PagerState,
-    pages: Array<String>
+    pages: Array<String>,
+    backgroundColor: Color,
+    onTabClicked: (Int) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
-    val backgroundColor =
-        if (isSystemInDarkTheme()) PrognozaTheme.colors.surface else PrognozaTheme.colors.primary
-
     TabRow(
         selectedTabIndex = pagerState.currentPage,
         indicator = { tabPositions ->
             TabRowDefaults.Indicator(
-                modifier = Modifier.pagerTabIndicatorOffset(pagerState, tabPositions),
+                modifier = Modifier.pagerTabIndicatorOffset(
+                    pagerState = pagerState,
+                    tabPositions = tabPositions
+                ),
             )
         },
         backgroundColor = backgroundColor,
-        contentColor = contentColorFor(backgroundColor = backgroundColor),
+        contentColor = contentColorFor(backgroundColor),
     ) {
         pages.forEachIndexed { index, title ->
             Tab(
                 text = { Text(title) },
                 selected = pagerState.currentPage == index,
-                onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
+                onClick = { onTabClicked(index) }
             )
         }
     }
@@ -136,9 +183,9 @@ fun ForecastPager(
         )
     ) { page ->
         when (page) {
-            0 -> firstPage.invoke()
-            1 -> secondPage.invoke()
-            2 -> thirdPage.invoke()
+            0 -> firstPage()
+            1 -> secondPage()
+            2 -> thirdPage()
         }
     }
 }
@@ -151,7 +198,7 @@ fun PageChangedListener(
 ) {
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect {
-            onPageChanged.invoke(it)
+            onPageChanged(it)
         }
     }
 }
@@ -159,16 +206,15 @@ fun PageChangedListener(
 @Composable
 fun ForecastTopAppBar(
     title: String,
-    selectedUnit: MeasurementUnit,
     onSearchClicked: () -> Unit,
-    onUnitChanged: () -> Unit
+    onSettingsClicked: () -> Unit
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
     TopAppBar(
         title = {
             Text(text = title)
         },
-        elevation = 0.dp,
+        elevation = 0.dp, // because elevation is set on the parent surface
         actions = {
             IconButton(onClick = onSearchClicked) {
                 Icon(
@@ -191,17 +237,10 @@ fun ForecastTopAppBar(
                     DropdownMenuItem(
                         onClick = {
                             isMenuExpanded = false
-                            onUnitChanged.invoke()
+                            onSettingsClicked()
                         }
                     ) {
-                        Text(
-                            text = stringResource(
-                                id = when (selectedUnit) {
-                                    MeasurementUnit.IMPERIAL -> R.string.change_to_metric
-                                    MeasurementUnit.METRIC -> R.string.change_to_imperial
-                                }
-                            )
-                        )
+                        Text(text = stringResource(id = R.string.settings))
                     }
                 }
             }

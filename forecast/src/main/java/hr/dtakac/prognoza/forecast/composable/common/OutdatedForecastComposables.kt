@@ -78,7 +78,7 @@ fun OutdatedForecastDialog(
                 ) {
                     TextButton(
                         modifier = Modifier.wrapContentSize(),
-                        onClick = { onConfirmRequest.invoke() }
+                        onClick = { onConfirmRequest() }
                     ) {
                         Text(stringResource(id = R.string.action_ok))
                     }

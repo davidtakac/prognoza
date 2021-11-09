@@ -18,8 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowRow
-import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
-import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting.getTomorrowTime
+import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
@@ -36,10 +35,10 @@ fun ComingForecast(
     preferredMeasurementUnit: MeasurementUnit
 ) {
     val forecast by viewModel.forecast
-    val outdatedForecast by viewModel.outdatedForecastMessage
+    val outdatedForecast by viewModel.outdatedForecast
     val expandedHourIndices = viewModel.expandedHourIndices
     val isLoading by viewModel.isLoading
-    val empty by viewModel.emptyScreen
+    val empty by viewModel.emptyForecast
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -81,7 +80,7 @@ fun ComingForecast(
             EmptyForecast(
                 reason = empty?.reasonResourceId?.let { stringResource(id = it) }
                     ?: stringResource(id = R.string.error_generic),
-                onTryAgainClick = { viewModel.getForecast() },
+                onTryAgainClicked = { viewModel.getForecast() },
                 isLoading = isLoading
             )
         }
@@ -107,7 +106,7 @@ fun ExpandableDay(
         Column(
             modifier = Modifier
                 .animateContentSize()
-                .clickable { onClick.invoke() }
+                .clickable { onClick() }
                 .padding(16.dp)
         ) {
             DaySummary(
@@ -194,7 +193,7 @@ fun DaySummaryLowestAndHighestTemperature(
         horizontalAlignment = Alignment.End
     ) {
         Text(
-            text = ComposeStringFormatting.formatTemperatureValue(
+            text = formatTemperatureValue(
                 temperature = highestTemperature,
                 unit = unit
             ),
@@ -202,7 +201,7 @@ fun DaySummaryLowestAndHighestTemperature(
             color = PrognozaTheme.textColors.highEmphasis
         )
         Text(
-            text = ComposeStringFormatting.formatTemperatureValue(
+            text = formatTemperatureValue(
                 temperature = lowestTemperature,
                 unit = unit
             ),
@@ -237,7 +236,7 @@ fun DayDetails(
         DetailsItem(
             iconId = R.drawable.ic_air,
             labelId = R.string.max_wind,
-            text = ComposeStringFormatting.formatWindWithDirection(
+            text = formatWindWithDirection(
                 windSpeed = maxWindSpeed,
                 windFromCompassDirection = maxWindSpeedFromDirection,
                 windSpeedUnit = unit
@@ -246,14 +245,14 @@ fun DayDetails(
         DetailsItem(
             iconId = R.drawable.ic_water_drop,
             labelId = R.string.max_humidity,
-            text = ComposeStringFormatting.formatHumidityValue(
+            text = formatHumidityValue(
                 relativeHumidity = maxHumidity
             )
         )
         DetailsItem(
             iconId = R.drawable.ic_speed,
             labelId = R.string.max_pressure,
-            text = ComposeStringFormatting.formatPressureValue(
+            text = formatPressureValue(
                 pressure = maxPressure,
                 unit = unit
             )

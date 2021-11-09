@@ -15,7 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
+import hr.dtakac.prognoza.core.formatting.formatTemperatureValue
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
@@ -31,10 +31,10 @@ fun TomorrowForecast(
 ) {
 
     val forecast by viewModel.forecast
-    val outdatedForecast by viewModel.outdatedForecastMessage
+    val outdatedForecast by viewModel.outdatedForecast
     val expandedHourIndices = viewModel.expandedHourIndices
     val isLoading by viewModel.isLoading
-    val empty by viewModel.emptyScreen
+    val empty by viewModel.emptyForecast
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -73,7 +73,7 @@ fun TomorrowForecast(
             EmptyForecast(
                 reason = empty?.reasonResourceId?.let { stringResource(id = it) }
                     ?: stringResource(id = R.string.error_generic),
-                onTryAgainClick = { viewModel.getForecast() },
+                onTryAgainClicked = { viewModel.getForecast() },
                 isLoading = isLoading
             )
         }
@@ -141,7 +141,7 @@ fun TomorrowLowestAndHighestTemperature(
 ) {
     Row {
         Text(
-            text = ComposeStringFormatting.formatTemperatureValue(
+            text = formatTemperatureValue(
                 temperature = highestTemperature,
                 unit = unit
             ),
@@ -150,7 +150,7 @@ fun TomorrowLowestAndHighestTemperature(
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = ComposeStringFormatting.formatTemperatureValue(
+            text = formatTemperatureValue(
                 temperature = lowestTemperature,
                 unit = unit
             ),

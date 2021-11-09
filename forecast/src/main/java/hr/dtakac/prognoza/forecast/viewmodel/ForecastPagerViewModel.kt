@@ -22,8 +22,8 @@ class ForecastPagerViewModel(
     private val _placeName = mutableStateOf("")
     val placeName: State<String> get() = _placeName
 
-    private val _selectedUnit = mutableStateOf(MeasurementUnit.METRIC)
-    val selectedUnit: State<MeasurementUnit> get() = _selectedUnit
+    private val _preferredUnit = mutableStateOf(MeasurementUnit.METRIC)
+    val preferredUnit: State<MeasurementUnit> get() = _preferredUnit
 
     init {
         getData()
@@ -76,7 +76,7 @@ class ForecastPagerViewModel(
     private suspend fun getSelectedUnitActual() {
         if (isUnitReloadNeeded()) {
             val selectedUnit = preferencesRepository.getSelectedUnit()
-            _selectedUnit.value = selectedUnit
+            _preferredUnit.value = selectedUnit
             currentUnit = selectedUnit
         }
     }

@@ -31,11 +31,11 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
 
     protected lateinit var selectedPlace: Place
 
-    private val _emptyScreen = mutableStateOf<EmptyForecastUiModel?>(null)
-    val emptyScreen: State<EmptyForecastUiModel?> get() = _emptyScreen
+    private val _emptyForecast = mutableStateOf<EmptyForecastUiModel?>(null)
+    val emptyForecast: State<EmptyForecastUiModel?> get() = _emptyForecast
 
-    private val _outdatedForecastMessage = mutableStateOf<OutdatedForecastUiModel?>(null)
-    val outdatedForecastMessage: State<OutdatedForecastUiModel?> get() = _outdatedForecastMessage
+    private val _outdatedForecast = mutableStateOf<OutdatedForecastUiModel?>(null)
+    val outdatedForecast: State<OutdatedForecastUiModel?> get() = _outdatedForecast
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> get() = _isLoading
@@ -63,17 +63,17 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     private suspend fun handleSuccess(success: Success) {
         _forecast.value = mapToForecastUiModel(success)
         currentMeta = success.meta
-        _emptyScreen.value = null
-        _outdatedForecastMessage.value = null
+        _emptyForecast.value = null
+        _outdatedForecast.value = null
     }
 
     private fun handleEmpty(empty: Empty) {
-        _emptyScreen.value = EmptyForecastUiModel(empty.reason?.toErrorResourceId())
+        _emptyForecast.value = EmptyForecastUiModel(empty.reason?.toErrorResourceId())
     }
 
     private suspend fun handleCachedSuccess(cachedResult: CachedSuccess) {
         handleSuccess(cachedResult.success)
-        _outdatedForecastMessage.value = OutdatedForecastUiModel(
+        _outdatedForecast.value = OutdatedForecastUiModel(
             reason = cachedResult.reason?.toErrorResourceId()
         )
     }

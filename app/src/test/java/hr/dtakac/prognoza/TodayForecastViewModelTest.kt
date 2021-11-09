@@ -75,7 +75,7 @@ class TodayForecastViewModelTest {
     fun getForecast_whenEmpty_showsEmptyScreen() {
         // Arrange
         assertTrue {
-            viewModel.emptyScreen.value == null
+            viewModel.emptyForecast.value == null
         }
         forecastRepository.typeOfResultToReturn = Empty::class.java
         // Act
@@ -85,7 +85,7 @@ class TodayForecastViewModelTest {
             viewModel.forecast.value == null
         }
         assertTrue("Is empty screen shown") {
-            viewModel.emptyScreen.value != null
+            viewModel.emptyForecast.value != null
         }
     }
 
@@ -93,7 +93,7 @@ class TodayForecastViewModelTest {
     fun getForecast_whenCached_showsMessageAndForecast() {
         // Arrange
         assertTrue {
-            viewModel.outdatedForecastMessage.value == null
+            viewModel.outdatedForecast.value == null
         }
         assertTrue {
             viewModel.forecast.value == null
@@ -106,7 +106,7 @@ class TodayForecastViewModelTest {
             viewModel.forecast.value != null
         }
         assertTrue("Is cached results notification shown") {
-            viewModel.outdatedForecastMessage.value != null
+            viewModel.outdatedForecast.value != null
         }
     }
 }

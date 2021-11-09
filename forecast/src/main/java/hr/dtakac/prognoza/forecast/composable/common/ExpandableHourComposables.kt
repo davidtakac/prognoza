@@ -6,6 +6,8 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowRow
-import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
+import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
@@ -34,7 +36,7 @@ fun ExpandableHour(
     Column(
         modifier = Modifier
             .animateContentSize()
-            .clickable { onClick.invoke() }
+            .clickable { onClick() }
             .padding(
                 start = 16.dp,
                 end = 16.dp,
@@ -80,13 +82,13 @@ fun HourSummary(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = ComposeStringFormatting.formatHourTime(time = time),
+                text = formatHourTime(time = time),
                 style = PrognozaTheme.typography.subtitle1,
                 color = PrognozaTheme.textColors.highEmphasis
             )
             Spacer(modifier = Modifier.width(16.dp))
             Text(
-                text = ComposeStringFormatting.formatPrecipitationValue(
+                text = formatPrecipitationValue(
                     precipitation = precipitation,
                     unit = unit
                 ),
@@ -95,7 +97,7 @@ fun HourSummary(
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = ComposeStringFormatting.formatTemperatureValue(
+                text = formatTemperatureValue(
                     temperature = temperature,
                     unit = unit
                 ),
@@ -132,7 +134,7 @@ fun HourDetails(
         DetailsItem(
             iconId = R.drawable.ic_thermostat,
             labelId = R.string.feels_like,
-            text = ComposeStringFormatting.formatTemperatureValue(
+            text = formatTemperatureValue(
                 temperature = feelsLike,
                 unit = unit
             )
@@ -140,7 +142,7 @@ fun HourDetails(
         DetailsItem(
             iconId = R.drawable.ic_air,
             labelId = R.string.wind,
-            text = ComposeStringFormatting.formatWindWithDirection(
+            text = formatWindWithDirection(
                 windSpeed = windSpeed,
                 windFromCompassDirection = windFromCompassDirection,
                 windSpeedUnit = unit
@@ -149,14 +151,14 @@ fun HourDetails(
         DetailsItem(
             iconId = R.drawable.ic_water_drop,
             labelId = R.string.humidity,
-            text = ComposeStringFormatting.formatHumidityValue(
+            text = formatHumidityValue(
                 relativeHumidity = humidity
             )
         )
         DetailsItem(
             iconId = R.drawable.ic_speed,
             labelId = R.string.pressure,
-            text = ComposeStringFormatting.formatPressureValue(
+            text = formatPressureValue(
                 pressure = pressure,
                 unit = unit
             )

@@ -17,7 +17,7 @@ import hr.dtakac.prognoza.forecast.R
 @Composable
 fun EmptyForecast(
     reason: String,
-    onTryAgainClick: () -> Unit,
+    onTryAgainClicked: () -> Unit,
     isLoading: Boolean
 ) {
     Surface(
@@ -61,7 +61,7 @@ fun EmptyForecast(
                 RefreshButton(
                     text = stringResource(id = R.string.button_try_again),
                     isLoading = isLoading,
-                    onClick = onTryAgainClick
+                    onClick = onTryAgainClicked
                 )
             }
         }

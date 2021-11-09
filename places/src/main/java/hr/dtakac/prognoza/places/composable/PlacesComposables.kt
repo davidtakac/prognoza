@@ -111,7 +111,7 @@ fun PlacesSearchBox(
             .fillMaxWidth()
             .padding(16.dp),
         keyboardActions = KeyboardActions(
-            onSearch = { onSearchClicked.invoke(query) }
+            onSearch = { onSearchClicked(query) }
         ),
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Search
@@ -121,7 +121,7 @@ fun PlacesSearchBox(
                 IconButton(
                     onClick = {
                         query = ""
-                        onSearchClicked.invoke(query)
+                        onSearchClicked(query)
                     }
                 ) {
                     Icon(
@@ -145,7 +145,7 @@ fun PlacesList(
         itemsIndexed(places) { index, place ->
             Place(
                 place = place,
-                onClicked = { onPlacePicked.invoke(place) }
+                onClicked = { onPlacePicked(place) }
             )
             if (index == places.lastIndex) {
                 OsmNominatimOrganizationCredit()
@@ -174,7 +174,7 @@ fun Place(
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onClicked.invoke() }
+                .clickable { onClicked() }
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

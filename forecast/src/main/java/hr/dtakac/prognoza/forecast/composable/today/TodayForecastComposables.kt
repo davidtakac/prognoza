@@ -9,63 +9,59 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import hr.dtakac.prognoza.core.formatting.ComposeStringFormatting
+import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.core.utils.shouldShowPrecipitation
 import hr.dtakac.prognoza.forecast.R
-import hr.dtakac.prognoza.forecast.composable.common.EmptyForecast
-import hr.dtakac.prognoza.forecast.composable.common.ExpandableHour
-import hr.dtakac.prognoza.forecast.composable.common.MetNorwayOrganizationCredit
-import hr.dtakac.prognoza.forecast.composable.common.OutdatedForecastMessage
+import hr.dtakac.prognoza.forecast.composable.common.*
+import hr.dtakac.prognoza.forecast.model.EmptyForecastUiModel
 import hr.dtakac.prognoza.forecast.model.HourUiModel
 import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
-import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
+import hr.dtakac.prognoza.forecast.model.TodayForecastUiModel
 import java.time.ZonedDateTime
 
 @Composable
 fun TodayForecast(
-    viewModel: TodayForecastViewModel,
+    todayForecast: TodayForecastUiModel?,
+    outdatedForecast: OutdatedForecastUiModel?,
+    isLoading: Boolean,
+    emptyForecast: EmptyForecastUiModel?,
+    expandedHourIndices: List<Int>,
+    onHourClicked: (Int) -> Unit,
+    onTryAgainClicked: () -> Unit,
     preferredMeasurementUnit: MeasurementUnit
 ) {
-
-    val forecast by viewModel.forecast
-    val outdatedForecast by viewModel.outdatedForecastMessage
-    val expandedHourIndices = viewModel.expandedHourIndices
-    val isLoading by viewModel.isLoading
-    val empty by viewModel.emptyScreen
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            forecast?.let { forecast ->
+        if (todayForecast != null) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
                 item {
                     CurrentHourHeader(
-                        currentHour = forecast.currentHour,
+                        currentHour = todayForecast.currentHour,
                         outdatedForecastUiModel = outdatedForecast,
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
                 }
-                itemsIndexed(forecast.otherHours) { index, hour ->
+                itemsIndexed(todayForecast.otherHours) { index, hour ->
                     ExpandableHour(
                         hour = hour,
                         isExpanded = index in expandedHourIndices,
-                        onClick = { viewModel.toggleExpanded(index) },
+                        onClick = { onHourClicked(index) },
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
-                    if (index == forecast.otherHours.lastIndex) {
+                    if (index == todayForecast.otherHours.lastIndex) {
                         MetNorwayOrganizationCredit()
                     } else {
                         Divider()
@@ -76,11 +72,11 @@ fun TodayForecast(
         if (isLoading) {
             CircularProgressIndicator()
         }
-        if (empty != null) {
+        if (emptyForecast != null) {
             EmptyForecast(
-                reason = empty?.reasonResourceId?.let { stringResource(id = it) }
+                reason = emptyForecast.reasonResourceId?.let { stringResource(id = it) }
                     ?: stringResource(id = R.string.error_generic),
-                onTryAgainClick = { viewModel.getForecast() },
+                onTryAgainClicked = onTryAgainClicked,
                 isLoading = isLoading
             )
         }
@@ -135,7 +131,9 @@ fun CurrentHourHeader(
                     contentDescription = null,
                     modifier = Modifier.size(size = 86.dp)
                 )
-                OutdatedForecastMessage(outdatedForecastUiModel = outdatedForecastUiModel)
+                OutdatedForecastMessage(
+                    outdatedForecastUiModel = outdatedForecastUiModel
+                )
             }
         }
     }
@@ -144,7 +142,7 @@ fun CurrentHourHeader(
 @Composable
 fun CurrentHourHeaderTime(time: ZonedDateTime) {
     Text(
-        text = ComposeStringFormatting.formatCurrentHourHeaderTime(time = time),
+        text = formatCurrentHourHeaderTime(time = time),
         style = PrognozaTheme.typography.subtitle1,
         color = PrognozaTheme.textColors.highEmphasis
     )
@@ -156,7 +154,7 @@ fun CurrentHourHeaderTemperature(
     unit: MeasurementUnit
 ) {
     Text(
-        text = ComposeStringFormatting.formatTemperatureValue(
+        text = formatTemperatureValue(
             temperature = temperature,
             unit = unit
         ),
@@ -173,13 +171,13 @@ fun CurrentHourHeaderDescription(
 ) {
     Text(
         text = if (shouldShowPrecipitation(precipitation)) {
-            ComposeStringFormatting.formatPrecipitationValue(
+            formatPrecipitationValue(
                 precipitation = precipitation,
                 unit = unit
             )
         } else {
             AnnotatedString(
-                text = ComposeStringFormatting.formatWeatherIconDescription(
+                text = formatWeatherIconDescription(
                     id = weatherDescription?.descriptionResourceId
                 )
             )
@@ -195,7 +193,7 @@ fun CurrentHourFeelsLikeTemperature(
     unit: MeasurementUnit
 ) {
     Text(
-        text = ComposeStringFormatting.formatFeelsLike(
+        text = formatFeelsLike(
             feelsLike = feelsLike,
             unit = unit
         ),
