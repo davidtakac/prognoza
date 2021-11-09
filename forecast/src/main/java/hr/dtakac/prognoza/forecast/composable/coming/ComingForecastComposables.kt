@@ -24,30 +24,28 @@ import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.common.*
-import hr.dtakac.prognoza.forecast.model.DayUiModel
-import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
-import hr.dtakac.prognoza.forecast.viewmodel.ComingForecastViewModel
+import hr.dtakac.prognoza.forecast.model.*
 import java.time.ZonedDateTime
 
 @Composable
 fun ComingForecast(
-    viewModel: ComingForecastViewModel,
+    forecast: ComingForecastUiModel?,
+    outdatedForecast: OutdatedForecastUiModel?,
+    isLoading: Boolean,
+    emptyForecast: EmptyForecastUiModel?,
+    expandedHourIndices: List<Int>,
+    onDayClicked: (Int) -> Unit,
+    onTryAgainClicked: () -> Unit,
     preferredMeasurementUnit: MeasurementUnit
 ) {
-    val forecast by viewModel.forecast
-    val outdatedForecast by viewModel.outdatedForecast
-    val expandedHourIndices = viewModel.expandedHourIndices
-    val isLoading by viewModel.isLoading
-    val empty by viewModel.emptyForecast
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            forecast?.let { forecast ->
+        if (forecast != null) {
+            LazyColumn(
+                modifier = Modifier.fillMaxHeight()
+            ) {
                 itemsIndexed(forecast.days) { index, day ->
                     if (index == 0) {
                         outdatedForecast?.let {
@@ -57,7 +55,7 @@ fun ComingForecast(
                     ExpandableDay(
                         isExpanded = index in expandedHourIndices,
                         dayUiModel = day,
-                        onClick = { viewModel.toggleExpanded(index) },
+                        onClick = { onDayClicked(index) },
                         modifier = Modifier.padding(
                             start = 16.dp,
                             end = 16.dp,
@@ -76,11 +74,11 @@ fun ComingForecast(
         if (isLoading) {
             CircularProgressIndicator()
         }
-        if (empty != null) {
+        if (emptyForecast != null) {
             EmptyForecast(
-                reason = empty?.reasonResourceId?.let { stringResource(id = it) }
+                reason = emptyForecast.reasonResourceId?.let { stringResource(id = it) }
                     ?: stringResource(id = R.string.error_generic),
-                onTryAgainClicked = { viewModel.getForecast() },
+                onTryAgainClicked = onTryAgainClicked,
                 isLoading = isLoading
             )
         }

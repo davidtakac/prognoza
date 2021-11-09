@@ -5,7 +5,7 @@ import androidx.compose.runtime.Immutable
 interface ForecastUiModel
 
 @Immutable
-data class DaysForecastUiModel(
+data class ComingForecastUiModel(
     val days: List<DayUiModel>
 ) : ForecastUiModel
 

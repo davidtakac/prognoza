@@ -14,7 +14,7 @@ import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.HOURS_AFTER_MIDNIGHT
 import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
 import hr.dtakac.prognoza.forecast.model.DayUiModel
-import hr.dtakac.prognoza.forecast.model.DaysForecastUiModel
+import hr.dtakac.prognoza.forecast.model.ComingForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -27,15 +27,15 @@ class ComingForecastViewModel(
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
-) : ForecastViewModel<DaysForecastUiModel>(
+) : ForecastViewModel<ComingForecastUiModel>(
     coroutineScope,
     preferencesRepository,
     placeRepository
 ) {
-    override val _forecast = mutableStateOf<DaysForecastUiModel?>(null)
+    override val _forecast = mutableStateOf<ComingForecastUiModel?>(null)
 
-    private val _expandedHourIndices = mutableStateListOf<Int>()
-    val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
+    private val _expandedDayIndices = mutableStateListOf<Int>()
+    val expandedDayIndices: SnapshotStateList<Int> get() = _expandedDayIndices
 
     override suspend fun getNewForecast(): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
@@ -45,8 +45,8 @@ class ComingForecastViewModel(
         )
     }
 
-    override suspend fun mapToForecastUiModel(success: Success): DaysForecastUiModel {
-        return DaysForecastUiModel(
+    override suspend fun mapToForecastUiModel(success: Success): ComingForecastUiModel {
+        return ComingForecastUiModel(
             days = withContext(dispatcherProvider.default) {
                 var endOfDay: ZonedDateTime = forecastTimeProvider.tomorrowEnd
                 val dayHours: MutableList<ForecastTimeSpan> = mutableListOf()
@@ -76,10 +76,10 @@ class ComingForecastViewModel(
 
     fun toggleExpanded(index: Int) {
         coroutineScope.launch(dispatcherProvider.default) {
-            if (index in _expandedHourIndices) {
-                _expandedHourIndices.remove(index)
+            if (index in _expandedDayIndices) {
+                _expandedDayIndices.remove(index)
             } else {
-                _expandedHourIndices.add(index)
+                _expandedDayIndices.add(index)
             }
         }
     }

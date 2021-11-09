@@ -61,6 +61,13 @@ fun ForecastTabbedPager(
     val emptyTomorrowForecast by tomorrowForecastViewModel.emptyForecast
     val expandedTomorrowForecastHourIndices = tomorrowForecastViewModel.expandedHourIndices
 
+    // Coming forecast data
+    val comingForecast by comingForecastViewModel.forecast
+    val outdatedComingForecast by comingForecastViewModel.outdatedForecast
+    val isComingForecastLoading by comingForecastViewModel.isLoading
+    val emptyComingForecast by comingForecastViewModel.emptyForecast
+    val expandedComingForecastDayIndices = comingForecastViewModel.expandedDayIndices
+
     PageChangedListener(
         pagerState = pagerState,
         onPageChanged = onPageChanged
@@ -104,7 +111,13 @@ fun ForecastTabbedPager(
             },
             thirdPage = {
                 ComingForecast(
-                    viewModel = comingForecastViewModel,
+                    forecast = comingForecast,
+                    outdatedForecast = outdatedComingForecast,
+                    emptyForecast = emptyComingForecast,
+                    isLoading = isComingForecastLoading,
+                    expandedHourIndices = expandedComingForecastDayIndices,
+                    onDayClicked = { index: Int -> comingForecastViewModel.toggleExpanded(index) },
+                    onTryAgainClicked = { comingForecastViewModel.getForecast() },
                     preferredMeasurementUnit = preferredUnit
                 )
             }
