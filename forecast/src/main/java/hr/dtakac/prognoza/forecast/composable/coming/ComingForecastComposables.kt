@@ -73,7 +73,6 @@ fun ComingForecast(
                 onTryAgainClicked = onTryAgainClicked
             )
             is EmptyForecastBecauseNoSelectedPlace -> EmptyForecastBecauseNoSelectedPlace(
-                emptyForecast = emptyForecast,
                 isLoading = isLoading,
                 onPickAPlaceClicked = onPickAPlaceClicked
             )

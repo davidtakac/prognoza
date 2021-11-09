@@ -51,7 +51,7 @@ fun EmptyForecast(
                     modifier = Modifier.size(size = 52.dp),
                     colorFilter = ColorFilter.tint(color = PrognozaTheme.textColors.mediumEmphasis)
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = text,
                     style = PrognozaTheme.typography.body2,
@@ -122,7 +122,6 @@ fun EmptyForecastBecauseReason(
 
 @Composable
 fun EmptyForecastBecauseNoSelectedPlace(
-    emptyForecast: EmptyForecastBecauseNoSelectedPlace,
     isLoading: Boolean,
     onPickAPlaceClicked: () -> Unit
 ) {
