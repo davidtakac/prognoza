@@ -73,7 +73,7 @@ fun ForecastTabbedPager(
 
     Column {
         ForecastHeader(
-            currentPlaceName = placeName,
+            currentPlaceName = placeName ?: stringResource(id = R.string.no_place),
             pagerState = pagerState,
             pages = pages,
             onSearchClicked = onSearchClicked,

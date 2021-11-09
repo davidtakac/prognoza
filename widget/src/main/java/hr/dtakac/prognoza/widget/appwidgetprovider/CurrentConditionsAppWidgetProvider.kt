@@ -15,6 +15,7 @@ import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.CachedSuccess
 import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.core.repository.meta.MetaRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
@@ -34,6 +35,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     private val forecastTimeProvider by inject<ForecastTimeProvider>()
     private val preferencesRepository by inject<PreferencesRepository>()
     private val placeRepository by inject<PlaceRepository>()
+    private val metaRepository by inject<MetaRepository>()
 
     abstract fun onSuccess(
         views: RemoteViews,
@@ -90,14 +92,15 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     }
 
     private suspend fun getCurrentConditionsWidgetUiModel(): CurrentConditionsWidgetUiModel? {
-        val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-        val selectedUnit = preferencesRepository.getSelectedUnit()
-        val selectedPlace = placeRepository.get(selectedPlaceId)
+        val selectedPlace = preferencesRepository.getSelectedPlaceId()?.let {
+            placeRepository.get(placeId = it)
+        }
         return if (selectedPlace != null) {
             val result = forecastRepository.getForecastTimeSpans(
-                forecastTimeProvider.todayStart,
-                forecastTimeProvider.todayEnd,
-                selectedPlace
+                start = forecastTimeProvider.todayStart,
+                end = forecastTimeProvider.todayEnd,
+                place = selectedPlace,
+                oldMeta = metaRepository.get(placeId = selectedPlace.id)
             )
             val hours = when (result) {
                 is Success -> {
@@ -110,7 +113,10 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
                     null
                 }
             }
-            hours?.toCurrentConditionsWidgetUiModel(selectedUnit, selectedPlace)
+            hours?.toCurrentConditionsWidgetUiModel(
+                preferredUnit = preferencesRepository.getSelectedUnit(),
+                selectedPlace = selectedPlace
+            )
         } else {
             null
         }
@@ -130,7 +136,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
     }
 
     private fun List<ForecastTimeSpan>.toCurrentConditionsWidgetUiModel(
-        selectedUnit: hr.dtakac.prognoza.core.model.ui.MeasurementUnit,
+        preferredUnit: hr.dtakac.prognoza.core.model.ui.MeasurementUnit,
         selectedPlace: Place
     ): CurrentConditionsWidgetUiModel {
         val precipitationTwoHours = subList(0, 2).totalPrecipitationAmount()
@@ -146,7 +152,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             },
             placeName = selectedPlace.shortenedName,
             iconResourceId = hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS[currentHour.symbolCode]?.iconResourceId,
-            displayDataInUnit = selectedUnit,
+            displayDataInUnit = preferredUnit,
             precipitationTwoHours = if (precipitationTwoHours <= 0) null else precipitationTwoHours,
         )
     }

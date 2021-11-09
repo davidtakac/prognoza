@@ -119,5 +119,6 @@
     <string name="max_pressure">Pressure</string>
     <string name="pick_a_place">Pick a place</string>
     <string name="settings">Settings</string>
+    <string name="no_place">No place</string>
 
 </resources>

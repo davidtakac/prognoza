@@ -76,8 +76,7 @@ class PlacesViewModel(
         coroutineScope.launch {
             _isLoading.value = true
             val selectedPlace = withContext(dispatcherProvider.default) {
-                displayedPlaces.firstOrNull { it.id == placeId }
-                    ?: placeRepository.getDefaultPlace()
+                displayedPlaces.first { it.id == placeId }
             }
             placeRepository.save(selectedPlace)
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)

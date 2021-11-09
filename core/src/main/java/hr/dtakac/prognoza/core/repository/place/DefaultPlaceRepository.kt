@@ -4,7 +4,6 @@ import hr.dtakac.prognoza.core.api.PlaceService
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.database.dao.PlaceDao
 import hr.dtakac.prognoza.core.model.database.Place
-import hr.dtakac.prognoza.core.utils.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.core.utils.USER_AGENT
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -17,22 +16,6 @@ class DefaultPlaceRepository(
 
     override suspend fun get(placeId: String): Place? {
         return placeDao.get(placeId)
-    }
-
-    override suspend fun getDefaultPlace(): Place {
-        var defaultPlace = get(DEFAULT_PLACE_ID)
-        return if (defaultPlace == null) {
-            defaultPlace = Place(
-                id = DEFAULT_PLACE_ID,
-                fullName = "Osijek, Grad Osijek, Osijek-Baranja County, Croatia",
-                latitude = 45.55,
-                longitude = 18.69
-            )
-            placeDao.insertOrUpdate(defaultPlace)
-            defaultPlace
-        } else {
-            defaultPlace
-        }
     }
 
     override suspend fun getAll(): List<Place> {

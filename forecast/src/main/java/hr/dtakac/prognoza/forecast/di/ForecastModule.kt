@@ -9,18 +9,18 @@ import org.koin.dsl.module
 
 val forecastModule = module {
     viewModel {
-        ComingForecastViewModel(null, get(), get(), get(), get(), get())
+        ComingForecastViewModel(null, get(), get(), get(), get(), get(), get())
     }
 
     viewModel {
-        ForecastPagerViewModel(null, get(), get(), get())
+        ForecastPagerViewModel(null, get(), get())
     }
 
     viewModel {
-        TodayForecastViewModel(null, get(), get(), get(), get(), get())
+        TodayForecastViewModel(null, get(), get(), get(), get(), get(), get())
     }
 
     viewModel {
-        TomorrowForecastViewModel(null, get(), get(), get(), get(), get())
+        TomorrowForecastViewModel(null, get(), get(), get(), get(), get(), get())
     }
 }
