@@ -25,7 +25,7 @@ fun formatCurrentHourHeaderTime(time: ZonedDateTime): String {
     return DateUtils.formatDateTime(
         LocalContext.current,
         time.toInstant().toEpochMilli(),
-        DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
+        DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_ALL
     )
 }
 
@@ -34,7 +34,7 @@ fun formatDaySummaryTime(time: ZonedDateTime): String {
     return DateUtils.formatDateTime(
         LocalContext.current,
         time.toInstant().toEpochMilli(),
-        DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
+        DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_ALL
     )
 }
 

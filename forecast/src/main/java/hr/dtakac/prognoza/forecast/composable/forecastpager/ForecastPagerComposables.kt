@@ -2,9 +2,7 @@ package hr.dtakac.prognoza.forecast.composable.forecastpager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -180,7 +178,7 @@ fun ForecastTabRow(
             )
         },
         backgroundColor = backgroundColor,
-        contentColor = contentColorFor(backgroundColor),
+        contentColor = contentColorFor(backgroundColor)
     ) {
         pages.forEachIndexed { index, title ->
             Tab(
@@ -204,9 +202,9 @@ fun ForecastPager(
     HorizontalPager(
         count = count,
         state = pagerState,
-        modifier = Modifier.background(
-            color = PrognozaTheme.colors.background
-        )
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = PrognozaTheme.colors.background)
     ) { page ->
         when (page) {
             0 -> firstPage()

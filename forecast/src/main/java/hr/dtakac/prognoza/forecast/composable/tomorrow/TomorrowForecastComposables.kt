@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.forecast.composable.tomorrow
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -8,7 +9,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,9 +41,7 @@ fun TomorrowForecast(
         contentAlignment = Alignment.Center
     ) {
         if (forecast != null) {
-            LazyColumn(
-                modifier = Modifier.fillMaxHeight()
-            ) {
+            LazyColumn(modifier = Modifier.fillMaxHeight()) {
                 item {
                     TomorrowSummaryHeader(
                         dayUiModel = forecast.summary,
@@ -65,17 +64,17 @@ fun TomorrowForecast(
                 }
             }
         }
-    }
-    if (isLoading) {
-        CircularProgressIndicator()
-    }
-    if (emptyForecast != null) {
-        EmptyForecast(
-            reason = emptyForecast.reasonResourceId?.let { stringResource(id = it) }
-                ?: stringResource(id = R.string.error_generic),
-            onTryAgainClicked = onTryAgainClicked,
-            isLoading = isLoading
-        )
+        if (isLoading) {
+            CircularProgressIndicator()
+        }
+        if (emptyForecast != null) {
+            EmptyForecast(
+                reason = emptyForecast.reasonResourceId?.let { stringResource(id = it) }
+                    ?: stringResource(id = R.string.error_generic),
+                onTryAgainClicked = onTryAgainClicked,
+                isLoading = isLoading
+            )
+        }
     }
 }
 
@@ -126,7 +125,16 @@ fun TomorrowSummaryHeader(
                     contentDescription = null,
                     modifier = Modifier.size(size = 86.dp)
                 )
-                OutdatedForecastMessage(outdatedForecastUiModel = outdatedForecastUiModel)
+                if (outdatedForecastUiModel != null) {
+                    var showDialog by remember { mutableStateOf(false) }
+                    OutdatedForecastMessage(
+                        outdatedForecastUiModel = outdatedForecastUiModel,
+                        showDialog = showDialog,
+                        modifier = Modifier.clickable { showDialog = true },
+                        onDialogConfirm = { showDialog = false },
+                        onDialogDismiss = { showDialog = false }
+                    )
+                }
             }
         }
     }

@@ -57,12 +57,12 @@ fun Places(
             if (isLoading) {
                 CircularProgressIndicator()
             }
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Bottom,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                message?.let {
+            message?.let {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Bottom,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Snackbar(modifier = Modifier.padding(16.dp)) {
                         Text(text = stringResource(id = it.messageId))
                     }

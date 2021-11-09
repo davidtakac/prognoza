@@ -73,7 +73,7 @@
     <string name="placeholder_precipitation_insignificant_imperial">&lt; %1$s\"</string>
     <string name="placeholder_precipitation" />
     <string name="placeholder_wind_speed" />
-    <string name="hint_places_search">Search places…</string>
+    <string name="hint_places_search">Search</string>
     <string name="error_met_client">Something is wrong with your request.</string>
     <string name="error_met_server">The server is currently unable to process your request.</string>
     <string name="error_met_throttling">Heavy traffic from other users.</string>
