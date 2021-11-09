@@ -21,7 +21,3 @@ fun ForecastMeta.hasExpired(): Boolean = try {
 } catch (e: Exception) {
     true
 }
-
-fun shouldShowPrecipitation(precipitation: Double?): Boolean {
-    return precipitation != null && precipitation > 0
-}

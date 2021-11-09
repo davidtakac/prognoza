@@ -9,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.formatting.formatTemperatureValue
@@ -103,13 +102,15 @@ fun TomorrowSummaryHeader(
                     highestTemperature = dayUiModel.highTemperature,
                     unit = preferredMeasurementUnit
                 )
-                TotalPrecipitation(
-                    totalPrecipitation = dayUiModel.totalPrecipitationAmount,
-                    unit = preferredMeasurementUnit
-                )
-                RepresentativeWeatherDescription(
-                    representativeWeatherDescription = dayUiModel.representativeWeatherDescription
-                )
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    TotalPrecipitation(
+                        totalPrecipitation = dayUiModel.totalPrecipitationAmount,
+                        unit = preferredMeasurementUnit
+                    )
+                    RepresentativeWeatherDescription(
+                        representativeWeatherDescription = dayUiModel.representativeWeatherDescription
+                    )
+                }
             }
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -150,17 +151,17 @@ fun TomorrowLowestAndHighestTemperature(
                 temperature = highestTemperature,
                 unit = unit
             ),
-            style = PrognozaTheme.typography.h4,
-            color = PrognozaTheme.textColors.highEmphasis
+            style = PrognozaTheme.typography.h4
         )
         Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = formatTemperatureValue(
-                temperature = lowestTemperature,
-                unit = unit
-            ),
-            style = PrognozaTheme.typography.h4,
-            color = PrognozaTheme.textColors.mediumEmphasis
-        )
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(
+                text = formatTemperatureValue(
+                    temperature = lowestTemperature,
+                    unit = unit
+                ),
+                style = PrognozaTheme.typography.h4
+            )
+        }
     }
 }

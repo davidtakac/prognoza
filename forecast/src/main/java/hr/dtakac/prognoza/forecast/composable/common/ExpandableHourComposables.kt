@@ -6,14 +6,12 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
@@ -22,6 +20,7 @@ import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
+import hr.dtakac.prognoza.core.utils.contentAlphaForPrecipitation
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.model.HourUiModel
 import java.time.ZonedDateTime
@@ -83,17 +82,23 @@ fun HourSummary(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = formatHourTime(time = time),
-                style = PrognozaTheme.typography.subtitle1,
-                color = PrognozaTheme.textColors.highEmphasis
+                style = PrognozaTheme.typography.subtitle1
             )
             Spacer(modifier = Modifier.width(16.dp))
-            Text(
-                text = formatPrecipitationValue(
+            CompositionLocalProvider(
+                LocalContentAlpha provides contentAlphaForPrecipitation(
                     precipitation = precipitation,
                     unit = unit
-                ),
-                style = PrognozaTheme.typography.subtitle2
-            )
+                )
+            ) {
+                Text(
+                    text = formatPrecipitationValue(
+                        precipitation = precipitation,
+                        unit = unit
+                    ),
+                    style = PrognozaTheme.typography.subtitle2
+                )
+            }
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -101,8 +106,7 @@ fun HourSummary(
                     temperature = temperature,
                     unit = unit
                 ),
-                style = PrognozaTheme.typography.subtitle1,
-                color = PrognozaTheme.textColors.highEmphasis
+                style = PrognozaTheme.typography.subtitle1
             )
             Spacer(modifier = Modifier.width(16.dp))
             Image(
@@ -175,7 +179,6 @@ fun DetailsItem(
     Surface(
         shape = PrognozaTheme.shapes.small,
         color = PrognozaTheme.colors.surface,
-        contentColor = PrognozaTheme.colors.onSurface,
         elevation = 2.dp
     ) {
         Row(
@@ -188,35 +191,24 @@ fun DetailsItem(
             )
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                DetailsIcon(id = iconId)
+                Icon(
+                    painter = painterResource(id = iconId),
+                    contentDescription = null,
+                    modifier = Modifier.size(size = 18.dp)
+                )
                 Spacer(modifier = Modifier.width(4.dp))
-                DetailsLabel(id = labelId)
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text(
+                        text = stringResource(id = labelId),
+                        style = PrognozaTheme.typography.subtitle2
+                    )
+                }
             }
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 text = text,
-                style = PrognozaTheme.typography.subtitle2,
-                color = PrognozaTheme.textColors.highEmphasis
+                style = PrognozaTheme.typography.subtitle2
             )
         }
     }
-}
-
-@Composable
-fun DetailsIcon(@DrawableRes id: Int) {
-    Image(
-        painter = rememberImagePainter(data = id),
-        contentDescription = null,
-        modifier = Modifier.size(size = 18.dp),
-        colorFilter = ColorFilter.tint(color = PrognozaTheme.textColors.highEmphasis)
-    )
-}
-
-@Composable
-fun DetailsLabel(@StringRes id: Int) {
-    Text(
-        text = stringResource(id = id),
-        style = PrognozaTheme.typography.subtitle2,
-        color = PrognozaTheme.textColors.mediumEmphasis
-    )
 }

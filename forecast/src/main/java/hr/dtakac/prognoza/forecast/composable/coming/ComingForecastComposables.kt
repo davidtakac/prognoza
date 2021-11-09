@@ -150,8 +150,15 @@ fun DaySummary(
                 DaySummaryTime(time = time)
             }
             Spacer(modifier = Modifier.height(4.dp))
-            TotalPrecipitation(totalPrecipitation = totalPrecipitation, unit = unit)
-            RepresentativeWeatherDescription(representativeWeatherDescription = representativeWeatherDescription)
+            CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                TotalPrecipitation(
+                    totalPrecipitation = totalPrecipitation,
+                    unit = unit
+                )
+                RepresentativeWeatherDescription(
+                    representativeWeatherDescription = representativeWeatherDescription
+                )
+            }
         }
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -180,7 +187,6 @@ fun DaySummaryLowestAndHighestTemperature(
     highestTemperature: Double?,
     unit: MeasurementUnit
 ) {
-    val typography = PrognozaTheme.typography.subtitle1
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.End
@@ -190,17 +196,17 @@ fun DaySummaryLowestAndHighestTemperature(
                 temperature = highestTemperature,
                 unit = unit
             ),
-            style = typography,
-            color = PrognozaTheme.textColors.highEmphasis
+            style = PrognozaTheme.typography.subtitle1,
         )
-        Text(
-            text = formatTemperatureValue(
-                temperature = lowestTemperature,
-                unit = unit
-            ),
-            style = typography,
-            color = PrognozaTheme.textColors.mediumEmphasis
-        )
+        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+            Text(
+                text = formatTemperatureValue(
+                    temperature = lowestTemperature,
+                    unit = unit
+                ),
+                style = PrognozaTheme.typography.subtitle1
+            )
+        }
     }
 }
 
@@ -208,8 +214,7 @@ fun DaySummaryLowestAndHighestTemperature(
 fun TomorrowTime() {
     Text(
         text = getTomorrowTime(),
-        style = PrognozaTheme.typography.subtitle1,
-        color = PrognozaTheme.textColors.highEmphasis
+        style = PrognozaTheme.typography.subtitle1
     )
 }
 

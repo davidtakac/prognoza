@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.places.composable
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,14 +7,11 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -95,7 +91,7 @@ fun PlacesTopAppBar(
         navigationIcon = {
             IconButton(onClick = onBackClicked) {
                 Icon(
-                    painter = rememberImagePainter(data = R.drawable.ic_arrow_back),
+                    painter = painterResource(id = R.drawable.ic_arrow_back),
                     contentDescription = null,
                     modifier = Modifier.size(size = 24.dp)
                 )
@@ -114,12 +110,14 @@ fun PlacesSearchBox(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(text = stringResource(id = R.string.hint_places_search)) },
+        label = {
+            Text(text = stringResource(id = R.string.hint_places_search))
+        },
         singleLine = true,
-        textStyle = PrognozaTheme.typography.body1.copy(color = PrognozaTheme.textColors.highEmphasis),
+        textStyle = PrognozaTheme.typography.body1,
         leadingIcon = {
             Icon(
-                painter = rememberImagePainter(data = R.drawable.ic_search),
+                painter = painterResource(id = R.drawable.ic_search),
                 contentDescription = null,
                 modifier = Modifier.size(size = 24.dp)
             )
@@ -144,7 +142,7 @@ fun PlacesSearchBox(
                     onClick = { onClearAll() }
                 ) {
                     Icon(
-                        painter = rememberImagePainter(data = R.drawable.ic_clear),
+                        painter = painterResource(id = R.drawable.ic_clear),
                         contentDescription = null,
                         modifier = Modifier.size(size = 24.dp)
                     )
@@ -197,12 +195,16 @@ fun Place(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (showIcon) {
-                Image(
+                Icon(
                     painter = rememberImagePainter(
-                        data = if (place.isSelected) R.drawable.ic_favorite else R.drawable.ic_favorite_border
+                        data = if (place.isSelected) {
+                            R.drawable.ic_favorite
+                        } else {
+                            R.drawable.ic_favorite_border
+                        }
                     ),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(color = PrognozaTheme.colors.primary),
+                    tint = PrognozaTheme.colors.primary,
                     modifier = Modifier.size(32.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
@@ -210,14 +212,14 @@ fun Place(
             Column {
                 Text(
                     text = place.name,
-                    color = PrognozaTheme.textColors.highEmphasis,
                     style = PrognozaTheme.typography.subtitle1
                 )
-                Text(
-                    text = place.fullName,
-                    color = PrognozaTheme.textColors.mediumEmphasis,
-                    style = PrognozaTheme.typography.subtitle2
-                )
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Text(
+                        text = place.fullName,
+                        style = PrognozaTheme.typography.subtitle2
+                    )
+                }
             }
         }
     }
@@ -227,17 +229,18 @@ fun Place(
 fun EmptyPlaces(
     emptyPlaces: EmptyPlacesUiModel
 ) {
-    Text(
-        text = stringResource(id = emptyPlaces.reason),
-        color = PrognozaTheme.textColors.mediumEmphasis,
-        style = PrognozaTheme.typography.subtitle1,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 8.dp
-            ),
-        textAlign = TextAlign.Center
-    )
+    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+        Text(
+            text = stringResource(id = emptyPlaces.reason),
+            style = PrognozaTheme.typography.subtitle1,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp
+                ),
+            textAlign = TextAlign.Center
+        )
+    }
 }

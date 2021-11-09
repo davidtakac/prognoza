@@ -14,9 +14,3 @@ val DarkPurple500 = Color(0xFF181124)
 
 val Blue700 = Color(0xFF1976D2)
 val Blue300 = Color(0xFF64B5F6)
-
-val Black87 = Color(0xDE000000)
-val Black60 = Color(0x99000000)
-
-val White87 = Color(0xDEFFFFFF)
-val White60 = Color(0x99FFFFFF)

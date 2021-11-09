@@ -1,10 +1,7 @@
 package hr.dtakac.prognoza.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.Colors
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Shapes
-import androidx.compose.material.Typography
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
@@ -13,21 +10,12 @@ fun PrognozaTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val precipitationColors = PrecipitationColors(
-        significant = if (darkTheme) Blue300 else Blue700,
-        insignificant = if (darkTheme) White60 else Black60
-    )
-
-    val textColors = TextColors(
-        highEmphasis = if (darkTheme) White87 else Black87,
-        mediumEmphasis = if (darkTheme) White60 else Black60
-    )
+    val precipitationColors = PrecipitationColors(significant = if (darkTheme) Blue300 else Blue700)
 
     val shapes = AppShapes
 
     CompositionLocalProvider(
         LocalPrecipitationColors provides precipitationColors,
-        LocalTextColors provides textColors,
         LocalShapes provides shapes
     ) {
         MaterialTheme(
@@ -53,8 +41,4 @@ object PrognozaTheme {
     val precipitationColors: PrecipitationColors
         @Composable
         get() = LocalPrecipitationColors.current
-
-    val textColors: TextColors
-        @Composable
-        get() = LocalTextColors.current
 }

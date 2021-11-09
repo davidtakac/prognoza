@@ -55,7 +55,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
                     ?.let { placeRepository.get(placeId = it) }
                     ?.let {
                         _isLoading.value = true
-                        delay(3000)
                         when (val result = getNewForecast(place = it, oldMeta = currentMeta)) {
                             is Success -> handleSuccess(result, it)
                             is CachedSuccess -> handleCachedSuccess(result, it)

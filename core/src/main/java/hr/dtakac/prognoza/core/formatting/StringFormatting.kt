@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.core.formatting
 
 import android.icu.text.RelativeDateTimeFormatter
 import android.text.format.DateUtils
+import androidx.compose.material.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -114,7 +115,7 @@ fun formatPrecipitationValue(
         val precipitationColor = if (convertedPrecipitation >= significantPrecipitation) {
             PrognozaTheme.precipitationColors.significant
         } else {
-            PrognozaTheme.precipitationColors.insignificant
+            LocalContentColor.current
         }
         if (convertedPrecipitation >= significantPrecipitation) {
             buildAnnotatedString {

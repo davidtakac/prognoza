@@ -5,10 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +16,8 @@ import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
+import hr.dtakac.prognoza.core.utils.contentAlphaForPrecipitation
+import hr.dtakac.prognoza.core.utils.isPrecipitationSignificant
 import hr.dtakac.prognoza.core.utils.shouldShowPrecipitation
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.common.*
@@ -108,15 +107,17 @@ fun CurrentHourHeader(
                     temperature = currentHour.temperature,
                     unit = preferredMeasurementUnit
                 )
-                CurrentHourHeaderDescription(
-                    precipitation = currentHour.precipitationAmount,
-                    weatherDescription = currentHour.weatherDescription,
-                    unit = preferredMeasurementUnit
-                )
-                CurrentHourFeelsLikeTemperature(
-                    feelsLike = currentHour.feelsLike,
-                    unit = preferredMeasurementUnit
-                )
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    CurrentHourHeaderDescription(
+                        precipitation = currentHour.precipitationAmount,
+                        weatherDescription = currentHour.weatherDescription,
+                        unit = preferredMeasurementUnit
+                    )
+                    CurrentHourFeelsLikeTemperature(
+                        feelsLike = currentHour.feelsLike,
+                        unit = preferredMeasurementUnit
+                    )
+                }
             }
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
@@ -149,8 +150,7 @@ fun CurrentHourHeader(
 fun CurrentHourHeaderTime(time: ZonedDateTime) {
     Text(
         text = formatCurrentHourHeaderTime(time = time),
-        style = PrognozaTheme.typography.subtitle1,
-        color = PrognozaTheme.textColors.highEmphasis
+        style = PrognozaTheme.typography.subtitle1
     )
 }
 
@@ -164,8 +164,7 @@ fun CurrentHourHeaderTemperature(
             temperature = temperature,
             unit = unit
         ),
-        style = PrognozaTheme.typography.h3,
-        color = PrognozaTheme.textColors.highEmphasis
+        style = PrognozaTheme.typography.h3
     )
 }
 
@@ -175,22 +174,28 @@ fun CurrentHourHeaderDescription(
     weatherDescription: WeatherDescription?,
     unit: MeasurementUnit
 ) {
-    Text(
-        text = if (shouldShowPrecipitation(precipitation)) {
-            formatPrecipitationValue(
-                precipitation = precipitation,
-                unit = unit
-            )
-        } else {
-            AnnotatedString(
-                text = formatWeatherIconDescription(
-                    id = weatherDescription?.descriptionResourceId
+    CompositionLocalProvider(
+        LocalContentAlpha provides contentAlphaForPrecipitation(
+            precipitation = precipitation,
+            unit = unit
+        )
+    ) {
+        Text(
+            text = if (shouldShowPrecipitation(precipitation)) {
+                formatPrecipitationValue(
+                    precipitation = precipitation,
+                    unit = unit
                 )
-            )
-        },
-        style = PrognozaTheme.typography.subtitle1,
-        color = PrognozaTheme.textColors.mediumEmphasis
-    )
+            } else {
+                AnnotatedString(
+                    text = formatWeatherIconDescription(
+                        id = weatherDescription?.descriptionResourceId
+                    )
+                )
+            },
+            style = PrognozaTheme.typography.subtitle1
+        )
+    }
 }
 
 @Composable
@@ -203,7 +208,6 @@ fun CurrentHourFeelsLikeTemperature(
             feelsLike = feelsLike,
             unit = unit
         ),
-        style = PrognozaTheme.typography.subtitle1,
-        color = PrognozaTheme.textColors.mediumEmphasis
+        style = PrognozaTheme.typography.subtitle1
     )
 }

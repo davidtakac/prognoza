@@ -1,14 +1,11 @@
 package hr.dtakac.prognoza.forecast.composable.common
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Text
-import androidx.compose.material.TextButton
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -24,22 +21,22 @@ fun OutdatedForecastMessage(
     onDialogConfirm: () -> Unit,
     onDialogDismiss: () -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.ic_cloud_off),
-            contentDescription = null,
-            modifier = Modifier.size(size = 16.dp),
-            colorFilter = ColorFilter.tint(color = PrognozaTheme.textColors.mediumEmphasis)
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-        Text(
-            text = stringResource(id = R.string.notify_cached_data),
-            style = PrognozaTheme.typography.subtitle2,
-            color = PrognozaTheme.textColors.mediumEmphasis
-        )
+    CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_cloud_off),
+                contentDescription = null,
+                modifier = Modifier.size(size = 16.dp),
+            )
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = stringResource(id = R.string.notify_cached_data),
+                style = PrognozaTheme.typography.subtitle2
+            )
+        }
     }
     OutdatedForecastDialog(
         showDialog = showDialog,

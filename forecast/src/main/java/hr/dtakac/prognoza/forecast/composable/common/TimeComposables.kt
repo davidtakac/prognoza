@@ -10,7 +10,6 @@ import java.time.ZonedDateTime
 fun DaySummaryTime(time: ZonedDateTime) {
     Text(
         text = formatDaySummaryTime(time = time),
-        style = PrognozaTheme.typography.subtitle1,
-        color = PrognozaTheme.textColors.highEmphasis
+        style = PrognozaTheme.typography.subtitle1
     )
 }

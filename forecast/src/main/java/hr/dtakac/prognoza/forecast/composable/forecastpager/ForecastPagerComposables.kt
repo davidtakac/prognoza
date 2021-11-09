@@ -7,6 +7,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -80,49 +81,51 @@ fun ForecastTabbedPager(
             onSettingsClicked = onSettingsClicked,
             onTabClicked = { scope.launch { pagerState.animateScrollToPage(it) } }
         )
-        ForecastPager(
-            count = pages.size,
-            pagerState = pagerState,
-            firstPage = {
-                TodayForecast(
-                    forecast = todayForecast,
-                    outdatedForecast = outdatedTodayForecast,
-                    emptyForecast = emptyTodayForecast,
-                    isLoading = isTodayForecastLoading,
-                    expandedHourIndices = expandedTodayForecastHourIndices,
-                    onHourClicked = { index: Int -> todayForecastViewModel.toggleExpanded(index) },
-                    onTryAgainClicked = { todayForecastViewModel.getForecast() },
-                    onPickAPlaceClicked = { onSearchClicked() },
-                    preferredMeasurementUnit = preferredUnit
-                )
-            },
-            secondPage = {
-                TomorrowForecast(
-                    forecast = tomorrowForecast,
-                    outdatedForecast = outdatedTomorrowForecast,
-                    emptyForecast = emptyTomorrowForecast,
-                    isLoading = isTomorrowForecastLoading,
-                    expandedHourIndices = expandedTomorrowForecastHourIndices,
-                    onHourClicked = { index: Int -> tomorrowForecastViewModel.toggleExpanded(index) },
-                    onTryAgainClicked = { tomorrowForecastViewModel.getForecast() },
-                    onPickAPlaceClicked = { onSearchClicked() },
-                    preferredMeasurementUnit = preferredUnit
-                )
-            },
-            thirdPage = {
-                ComingForecast(
-                    forecast = comingForecast,
-                    outdatedForecast = outdatedComingForecast,
-                    emptyForecast = emptyComingForecast,
-                    isLoading = isComingForecastLoading,
-                    expandedHourIndices = expandedComingForecastDayIndices,
-                    onDayClicked = { index: Int -> comingForecastViewModel.toggleExpanded(index) },
-                    onTryAgainClicked = { comingForecastViewModel.getForecast() },
-                    onPickAPlaceClicked = { onSearchClicked() },
-                    preferredMeasurementUnit = preferredUnit
-                )
-            }
-        )
+        CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
+            ForecastPager(
+                count = pages.size,
+                pagerState = pagerState,
+                firstPage = {
+                    TodayForecast(
+                        forecast = todayForecast,
+                        outdatedForecast = outdatedTodayForecast,
+                        emptyForecast = emptyTodayForecast,
+                        isLoading = isTodayForecastLoading,
+                        expandedHourIndices = expandedTodayForecastHourIndices,
+                        onHourClicked = { index: Int -> todayForecastViewModel.toggleExpanded(index) },
+                        onTryAgainClicked = { todayForecastViewModel.getForecast() },
+                        onPickAPlaceClicked = { onSearchClicked() },
+                        preferredMeasurementUnit = preferredUnit
+                    )
+                },
+                secondPage = {
+                    TomorrowForecast(
+                        forecast = tomorrowForecast,
+                        outdatedForecast = outdatedTomorrowForecast,
+                        emptyForecast = emptyTomorrowForecast,
+                        isLoading = isTomorrowForecastLoading,
+                        expandedHourIndices = expandedTomorrowForecastHourIndices,
+                        onHourClicked = { index: Int -> tomorrowForecastViewModel.toggleExpanded(index) },
+                        onTryAgainClicked = { tomorrowForecastViewModel.getForecast() },
+                        onPickAPlaceClicked = { onSearchClicked() },
+                        preferredMeasurementUnit = preferredUnit
+                    )
+                },
+                thirdPage = {
+                    ComingForecast(
+                        forecast = comingForecast,
+                        outdatedForecast = outdatedComingForecast,
+                        emptyForecast = emptyComingForecast,
+                        isLoading = isComingForecastLoading,
+                        expandedHourIndices = expandedComingForecastDayIndices,
+                        onDayClicked = { index: Int -> comingForecastViewModel.toggleExpanded(index) },
+                        onTryAgainClicked = { comingForecastViewModel.getForecast() },
+                        onPickAPlaceClicked = { onSearchClicked() },
+                        preferredMeasurementUnit = preferredUnit
+                    )
+                }
+            )
+        }
     }
 }
 
@@ -245,14 +248,14 @@ fun ForecastTopAppBar(
         actions = {
             IconButton(onClick = onSearchClicked) {
                 Icon(
-                    painter = rememberImagePainter(data = R.drawable.ic_search),
+                    painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = null,
                     modifier = Modifier.size(size = 24.dp)
                 )
             }
             IconButton(onClick = { isMenuExpanded = !isMenuExpanded }) {
                 Icon(
-                    painter = rememberImagePainter(data = R.drawable.ic_more),
+                    painter = painterResource(id = R.drawable.ic_more),
                     contentDescription = null,
                     modifier = Modifier.size(size = 24.dp)
                 )

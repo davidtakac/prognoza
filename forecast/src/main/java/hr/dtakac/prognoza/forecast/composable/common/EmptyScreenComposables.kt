@@ -45,17 +45,15 @@ fun EmptyForecast(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Image(
+                Icon(
                     painter = painterResource(id = R.drawable.ic_cloud_off),
                     contentDescription = null,
                     modifier = Modifier.size(size = 52.dp),
-                    colorFilter = ColorFilter.tint(color = PrognozaTheme.textColors.mediumEmphasis)
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = text,
                     style = PrognozaTheme.typography.body2,
-                    color = PrognozaTheme.textColors.highEmphasis,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))
@@ -89,7 +87,7 @@ fun LoaderButton(
             )
         } else {
             Icon(
-                painter = rememberImagePainter(data = iconResourceId),
+                painter = painterResource(id = iconResourceId),
                 contentDescription = null,
                 modifier = Modifier.size(18.dp),
                 tint = contentColor
