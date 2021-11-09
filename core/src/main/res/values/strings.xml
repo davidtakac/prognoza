@@ -102,7 +102,7 @@
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
     <string name="error_database">An error occurred while fetching forecast data from the database. Try clearing your app data.</string>
     <string name="action_ok">OK</string>
-    <string name="error_io">An IO error occurred. You are probably not connected to the Internet. Reconnect and try again.</string>
+    <string name="error_io">An IO error occurred. You are probably not connected to the Internet.</string>
     <string name="change_units">Change units</string>
     <string name="change_to_imperial">To imperial</string>
     <string name="change_to_metric">To metric</string>
@@ -121,6 +121,6 @@
     <string name="settings">Settings</string>
     <string name="no_place">No place</string>
     <string name="no_saved_places">No saved places.</string>
-    <string name="error_forecast_empty_no_selected_place">You haven\'t picked a place yet.</string>
+    <string name="error_forecast_empty_no_selected_place">You don\'t have a picked place.</string>
 
 </resources>

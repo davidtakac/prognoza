@@ -6,14 +6,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Button
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowRow
@@ -70,29 +66,17 @@ fun ComingForecast(
         if (isLoading) {
             CircularProgressIndicator()
         }
-        if (emptyForecast != null) {
-            if (emptyForecast is EmptyForecastBecauseReason) {
-                val errorText = stringResource(
-                    id = R.string.template_error_forecast_empty_reason,
-                    stringResource(id = emptyForecast.reason ?: R.string.error_generic)
-                )
-                EmptyForecast(text = errorText) {
-                    RefreshButton(
-                        text = stringResource(id = R.string.button_try_again),
-                        isLoading = isLoading,
-                        onClick = onTryAgainClicked
-                    )
-                }
-            } else {
-                val errorText = stringResource(id = R.string.error_forecast_empty_no_selected_place)
-                EmptyForecast(text = errorText) {
-                    Button(onClick = onPickAPlaceClicked) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = stringResource(id = R.string.pick_a_place))
-                        }
-                    }
-                }
-            }
+        when (emptyForecast) {
+            is EmptyForecastBecauseReason -> EmptyForecastBecauseReason(
+                emptyForecast = emptyForecast,
+                isLoading = isLoading,
+                onTryAgainClicked = onTryAgainClicked
+            )
+            is EmptyForecastBecauseNoSelectedPlace -> EmptyForecastBecauseNoSelectedPlace(
+                emptyForecast = emptyForecast,
+                isLoading = isLoading,
+                onPickAPlaceClicked = onPickAPlaceClicked
+            )
         }
     }
 }

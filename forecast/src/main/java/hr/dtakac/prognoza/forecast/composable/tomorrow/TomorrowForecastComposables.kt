@@ -62,29 +62,17 @@ fun TomorrowForecast(
         if (isLoading) {
             CircularProgressIndicator()
         }
-        if (emptyForecast != null) {
-            if (emptyForecast is EmptyForecastBecauseReason) {
-                val errorText = stringResource(
-                    id = R.string.template_error_forecast_empty_reason,
-                    stringResource(id = emptyForecast.reason ?: R.string.error_generic)
-                )
-                EmptyForecast(text = errorText) {
-                    RefreshButton(
-                        text = stringResource(id = R.string.button_try_again),
-                        isLoading = isLoading,
-                        onClick = onTryAgainClicked
-                    )
-                }
-            } else {
-                val errorText = stringResource(id = R.string.error_forecast_empty_no_selected_place)
-                EmptyForecast(text = errorText) {
-                    Button(onClick = onPickAPlaceClicked) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(text = stringResource(id = R.string.pick_a_place))
-                        }
-                    }
-                }
-            }
+        when (emptyForecast) {
+            is EmptyForecastBecauseReason -> EmptyForecastBecauseReason(
+                emptyForecast = emptyForecast,
+                isLoading = isLoading,
+                onTryAgainClicked = onTryAgainClicked
+            )
+            is EmptyForecastBecauseNoSelectedPlace -> EmptyForecastBecauseNoSelectedPlace(
+                emptyForecast = emptyForecast,
+                isLoading = isLoading,
+                onPickAPlaceClicked = onPickAPlaceClicked
+            )
         }
     }
 }

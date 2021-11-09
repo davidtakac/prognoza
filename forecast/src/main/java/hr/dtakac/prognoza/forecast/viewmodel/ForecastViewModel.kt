@@ -17,6 +17,7 @@ import hr.dtakac.prognoza.core.utils.toErrorResourceId
 import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
 import hr.dtakac.prognoza.forecast.model.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 abstract class ForecastViewModel<T : ForecastUiModel>(
@@ -54,6 +55,7 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
                     ?.let { placeRepository.get(placeId = it) }
                     ?.let {
                         _isLoading.value = true
+                        delay(3000)
                         when (val result = getNewForecast(place = it, oldMeta = currentMeta)) {
                             is Success -> handleSuccess(result, it)
                             is CachedSuccess -> handleCachedSuccess(result, it)
