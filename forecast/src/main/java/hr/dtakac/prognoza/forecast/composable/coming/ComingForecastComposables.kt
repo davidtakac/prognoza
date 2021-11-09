@@ -262,7 +262,7 @@ fun DayDetails(
 fun ComingForecastOutdatedMessage(outdatedForecastUiModel: OutdatedForecastUiModel) {
     var showDialog by remember { mutableStateOf(false) }
     Surface(
-        shape = PrognozaTheme.shapes.small,
+        shape = PrognozaTheme.shapes.medium,
         color = PrognozaTheme.colors.surface,
         contentColor = PrognozaTheme.colors.onSurface,
         elevation = 2.dp,

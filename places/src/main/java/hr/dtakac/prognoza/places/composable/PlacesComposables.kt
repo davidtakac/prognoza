@@ -9,6 +9,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -93,7 +94,7 @@ fun PlacesTopAppBar(
 fun PlacesSearchBox(
     onSearchClicked: (String) -> Unit
 ) {
-    var query by remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
     OutlinedTextField(
         value = query,
         onValueChange = { query = it },
@@ -109,7 +110,12 @@ fun PlacesSearchBox(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp,
+                bottom = 8.dp
+            ),
         keyboardActions = KeyboardActions(
             onSearch = { onSearchClicked(query) }
         ),
