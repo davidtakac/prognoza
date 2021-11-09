@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.forecast.viewmodel
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
-import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.shortenedName
@@ -13,7 +12,6 @@ import kotlinx.coroutines.launch
 class ForecastPagerViewModel(
     coroutineScope: CoroutineScope?,
     private val placeRepository: PlaceRepository,
-    private val forecastRepository: ForecastRepository,
     private val preferencesRepository: PreferencesRepository
 ) : hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel(coroutineScope) {
     private var currentPlaceId: String? = null
@@ -30,47 +28,10 @@ class ForecastPagerViewModel(
     }
 
     fun getData() {
-        getSelectedUnit()
-        getSelectedPlaceName()
-    }
-
-    fun getSelectedUnit() {
         coroutineScope.launch {
             getSelectedUnitActual()
-        }
-    }
-
-    fun getSelectedPlaceName() {
-        coroutineScope.launch {
             getSelectedPlaceNameActual()
         }
-    }
-
-    fun changeSelectedUnit() {
-        coroutineScope.launch {
-            changeSelectedUnitActual()
-            getSelectedUnitActual()
-        }
-    }
-
-    fun changeSelectedPlace() {
-        coroutineScope.launch {
-            getSelectedPlaceNameActual()
-        }
-    }
-
-    fun cleanUpDatabase() {
-        coroutineScope.launch {
-            forecastRepository.deleteExpiredData()
-        }
-    }
-
-    private suspend fun changeSelectedUnitActual() {
-        val newUnit = when (preferencesRepository.getSelectedUnit()) {
-            MeasurementUnit.IMPERIAL -> MeasurementUnit.METRIC
-            MeasurementUnit.METRIC -> MeasurementUnit.IMPERIAL
-        }
-        preferencesRepository.setSelectedUnit(newUnit)
     }
 
     private suspend fun getSelectedUnitActual() {

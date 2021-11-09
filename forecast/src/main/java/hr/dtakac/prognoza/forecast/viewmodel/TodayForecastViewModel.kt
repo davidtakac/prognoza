@@ -4,9 +4,12 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.core.model.database.ForecastMeta
+import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.core.repository.meta.MetaRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
@@ -21,28 +24,37 @@ class TodayForecastViewModel(
     coroutineScope: CoroutineScope?,
     preferencesRepository: PreferencesRepository,
     placeRepository: PlaceRepository,
+    metaRepository: MetaRepository,
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
 ) : ForecastViewModel<TodayForecastUiModel>(
     coroutineScope,
     preferencesRepository,
-    placeRepository
+    placeRepository,
+    metaRepository
 ) {
     override val _forecast = mutableStateOf<TodayForecastUiModel?>(null)
 
     private val _expandedHourIndices = mutableStateListOf<Int>()
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
-    override suspend fun getNewForecast(): ForecastResult {
+    override suspend fun getNewForecast(
+        place: Place,
+        oldMeta: ForecastMeta?
+    ): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
-            forecastTimeProvider.todayStart,
-            forecastTimeProvider.todayEnd,
-            selectedPlace
+            start = forecastTimeProvider.todayStart,
+            end = forecastTimeProvider.todayEnd,
+            place = place,
+            oldMeta = oldMeta
         )
     }
 
-    override suspend fun mapToForecastUiModel(success: Success): TodayForecastUiModel {
+    override suspend fun mapToForecastUiModel(
+        success: Success,
+        place: Place
+    ): TodayForecastUiModel {
         val currentHourAsync = coroutineScope.async(dispatcherProvider.default) {
             success.timeSpans[0].toHourUiModel().copy(time = ZonedDateTime.now())
         }

@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.core.repository.preferences
 import android.content.SharedPreferences
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
-import hr.dtakac.prognoza.core.utils.DEFAULT_PLACE_ID
 import kotlinx.coroutines.withContext
 
 private const val PLACE_ID_KEY = "place_id"
@@ -13,15 +12,9 @@ class DefaultPreferencesRepository(
     private val sharedPreferences: SharedPreferences,
     private val dispatcherProvider: DispatcherProvider
 ) : PreferencesRepository {
-    override suspend fun getSelectedPlaceId(): String =
+    override suspend fun getSelectedPlaceId(): String? =
         withContext(dispatcherProvider.io) {
-            val selected = sharedPreferences.getString(PLACE_ID_KEY, null)
-            if (selected == null) {
-                setSelectedPlaceId(DEFAULT_PLACE_ID)
-                DEFAULT_PLACE_ID
-            } else {
-                selected
-            }
+            sharedPreferences.getString(PLACE_ID_KEY, null)
         }
 
     override suspend fun setSelectedPlaceId(placeId: String) {

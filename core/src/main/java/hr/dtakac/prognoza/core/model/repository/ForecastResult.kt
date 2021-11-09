@@ -6,7 +6,6 @@ import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 sealed interface ForecastResult
 
 data class Success(
-    val meta: ForecastMeta?,
     val timeSpans: List<ForecastTimeSpan>
 ) : ForecastResult
 

@@ -4,14 +4,18 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.core.model.database.ForecastMeta
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
+import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
+import hr.dtakac.prognoza.core.repository.meta.MetaRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.HOURS_AFTER_MIDNIGHT
+import hr.dtakac.prognoza.core.utils.hasExpired
 import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
 import hr.dtakac.prognoza.forecast.model.DayUiModel
 import hr.dtakac.prognoza.forecast.model.ComingForecastUiModel
@@ -24,28 +28,37 @@ class ComingForecastViewModel(
     coroutineScope: CoroutineScope?,
     preferencesRepository: PreferencesRepository,
     placeRepository: PlaceRepository,
+    metaRepository: MetaRepository,
     private val forecastRepository: ForecastRepository,
     private val forecastTimeProvider: ForecastTimeProvider,
     private val dispatcherProvider: DispatcherProvider,
 ) : ForecastViewModel<ComingForecastUiModel>(
     coroutineScope,
     preferencesRepository,
-    placeRepository
+    placeRepository,
+    metaRepository
 ) {
     override val _forecast = mutableStateOf<ComingForecastUiModel?>(null)
 
     private val _expandedDayIndices = mutableStateListOf<Int>()
     val expandedDayIndices: SnapshotStateList<Int> get() = _expandedDayIndices
 
-    override suspend fun getNewForecast(): ForecastResult {
+    override suspend fun getNewForecast(
+        place: Place,
+        oldMeta: ForecastMeta?
+    ): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
-            forecastTimeProvider.comingStart,
-            forecastTimeProvider.comingEnd,
-            selectedPlace
+            start = forecastTimeProvider.comingStart,
+            end = forecastTimeProvider.comingEnd,
+            place = place,
+            oldMeta = oldMeta
         )
     }
 
-    override suspend fun mapToForecastUiModel(success: Success): ComingForecastUiModel {
+    override suspend fun mapToForecastUiModel(
+        success: Success,
+        place: Place
+    ): ComingForecastUiModel {
         return ComingForecastUiModel(
             days = withContext(dispatcherProvider.default) {
                 var endOfDay: ZonedDateTime = forecastTimeProvider.tomorrowEnd
@@ -59,7 +72,7 @@ class ComingForecastViewModel(
                         summaries.add(
                             dayHours.toDayUiModel(
                                 coroutineScope = this,
-                                place = selectedPlace
+                                place = place
                             )
                         )
                         dayHours.clear()

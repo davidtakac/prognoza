@@ -10,13 +10,12 @@ import hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS
 import java.util.*
 
 fun List<ForecastTimeSpan>.toForecastResult(
-    meta: ForecastMeta?,
     error: ForecastError?
 ): ForecastResult {
     return if (isNullOrEmpty()) {
         Empty(error)
     } else {
-        val success = Success(meta, this)
+        val success = Success(timeSpans = this)
         if (error == null) {
             success
         } else {

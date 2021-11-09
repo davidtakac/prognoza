@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.database.converter.ForecastMetaDateTimeConverter
 import hr.dtakac.prognoza.core.database.dao.ForecastTimeSpanDao
 import hr.dtakac.prognoza.core.model.api.LocationForecastResponse
+import hr.dtakac.prognoza.core.model.database.ForecastMeta
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.*
@@ -40,18 +41,13 @@ class DefaultForecastRepository(
     override suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
-        place: Place
+        place: Place,
+        oldMeta: ForecastMeta?
     ): ForecastResult {
-        var meta = try {
-            metaRepository.get(place.id)
-        } catch (e: Exception) {
-            null
-        }
         var error: ForecastError? = null
-        if (meta?.hasExpired() != false) {
+        if (oldMeta?.hasExpired() != false) {
             try {
-                updateForecastDatabase(place, meta?.lastModified)
-                meta = metaRepository.get(place.id)
+                updateForecastDatabase(place, oldMeta?.lastModified)
             } catch (e: HttpException) {
                 error = handleHttpException(e)
             } catch (e: SQLiteException) {
@@ -64,7 +60,7 @@ class DefaultForecastRepository(
         }
         return try {
             val hours = forecastDao.getForecastTimeSpans(start, end, place.id)
-            hours.toForecastResult(meta, error)
+            hours.toForecastResult(error)
         } catch (e: SQLiteException) {
             Empty(DatabaseError(e))
         } catch (e: Exception) {

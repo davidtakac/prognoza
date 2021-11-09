@@ -73,7 +73,7 @@ fun TodayForecast(
         }
         if (emptyForecast != null) {
             EmptyForecast(
-                reason = emptyForecast.reasonResourceId?.let { stringResource(id = it) }
+                reason = emptyForecast.reason?.let { stringResource(id = it) }
                     ?: stringResource(id = R.string.error_generic),
                 onTryAgainClicked = onTryAgainClicked,
                 isLoading = isLoading

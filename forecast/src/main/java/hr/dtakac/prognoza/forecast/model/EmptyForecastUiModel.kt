@@ -5,5 +5,5 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 data class EmptyForecastUiModel(
-    @StringRes val reasonResourceId: Int?
+    @StringRes val reason: Int?
 )
