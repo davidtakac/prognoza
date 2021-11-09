@@ -5,10 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,10 +20,7 @@ import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.core.utils.shouldShowPrecipitation
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.common.*
-import hr.dtakac.prognoza.forecast.model.EmptyForecastUiModel
-import hr.dtakac.prognoza.forecast.model.HourUiModel
-import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
-import hr.dtakac.prognoza.forecast.model.TodayForecastUiModel
+import hr.dtakac.prognoza.forecast.model.*
 import java.time.ZonedDateTime
 
 @Composable
@@ -38,6 +32,7 @@ fun TodayForecast(
     expandedHourIndices: List<Int>,
     onHourClicked: (Int) -> Unit,
     onTryAgainClicked: () -> Unit,
+    onPickAPlaceClicked: () -> Unit,
     preferredMeasurementUnit: MeasurementUnit
 ) {
     Box(
@@ -72,12 +67,28 @@ fun TodayForecast(
             CircularProgressIndicator()
         }
         if (emptyForecast != null) {
-            EmptyForecast(
-                reason = emptyForecast.reason?.let { stringResource(id = it) }
-                    ?: stringResource(id = R.string.error_generic),
-                onTryAgainClicked = onTryAgainClicked,
-                isLoading = isLoading
-            )
+            if (emptyForecast is EmptyForecastBecauseReason) {
+                val errorText = stringResource(
+                    id = R.string.template_error_forecast_empty_reason,
+                    stringResource(id = emptyForecast.reason ?: R.string.error_generic)
+                )
+                EmptyForecast(text = errorText) {
+                    RefreshButton(
+                        text = stringResource(id = R.string.button_try_again),
+                        isLoading = isLoading,
+                        onClick = onTryAgainClicked
+                    )
+                }
+            } else {
+                val errorText = stringResource(id = R.string.error_forecast_empty_no_selected_place)
+                EmptyForecast(text = errorText) {
+                    Button(onClick = onPickAPlaceClicked) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(text = stringResource(id = R.string.pick_a_place))
+                        }
+                    }
+                }
+            }
         }
     }
 }

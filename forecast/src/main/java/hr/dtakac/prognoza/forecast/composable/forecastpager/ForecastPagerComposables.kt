@@ -92,6 +92,7 @@ fun ForecastTabbedPager(
                     expandedHourIndices = expandedTodayForecastHourIndices,
                     onHourClicked = { index: Int -> todayForecastViewModel.toggleExpanded(index) },
                     onTryAgainClicked = { todayForecastViewModel.getForecast() },
+                    onPickAPlaceClicked = { onSearchClicked() },
                     preferredMeasurementUnit = preferredUnit
                 )
             },
@@ -104,6 +105,7 @@ fun ForecastTabbedPager(
                     expandedHourIndices = expandedTomorrowForecastHourIndices,
                     onHourClicked = { index: Int -> tomorrowForecastViewModel.toggleExpanded(index) },
                     onTryAgainClicked = { tomorrowForecastViewModel.getForecast() },
+                    onPickAPlaceClicked = { onSearchClicked() },
                     preferredMeasurementUnit = preferredUnit
                 )
             },
@@ -116,6 +118,7 @@ fun ForecastTabbedPager(
                     expandedHourIndices = expandedComingForecastDayIndices,
                     onDayClicked = { index: Int -> comingForecastViewModel.toggleExpanded(index) },
                     onTryAgainClicked = { comingForecastViewModel.getForecast() },
+                    onPickAPlaceClicked = { onSearchClicked() },
                     preferredMeasurementUnit = preferredUnit
                 )
             }

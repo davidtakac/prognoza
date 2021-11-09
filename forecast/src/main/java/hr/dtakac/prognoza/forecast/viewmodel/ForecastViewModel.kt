@@ -15,9 +15,7 @@ import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.hasExpired
 import hr.dtakac.prognoza.core.utils.toErrorResourceId
 import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
-import hr.dtakac.prognoza.forecast.model.EmptyForecastUiModel
-import hr.dtakac.prognoza.forecast.model.ForecastUiModel
-import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
+import hr.dtakac.prognoza.forecast.model.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -91,7 +89,7 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     }
 
     private fun handleEmpty(empty: Empty) {
-        _emptyForecast.value = EmptyForecastUiModel(
+        _emptyForecast.value = EmptyForecastBecauseReason(
             reason = empty.reason?.toErrorResourceId()
         )
     }
@@ -117,6 +115,6 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     }
 
     private fun handleNoSelectedPlace() {
-        // TODO
+        _emptyForecast.value = EmptyForecastBecauseNoSelectedPlace
     }
 }

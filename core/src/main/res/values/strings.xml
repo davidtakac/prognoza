@@ -120,6 +120,7 @@
     <string name="pick_a_place">Pick a place</string>
     <string name="settings">Settings</string>
     <string name="no_place">No place</string>
-    <string name="no_saved_places">"No saved places. "</string>
+    <string name="no_saved_places">No saved places.</string>
+    <string name="error_forecast_empty_no_selected_place">You haven\'t picked a place yet.</string>
 
 </resources>

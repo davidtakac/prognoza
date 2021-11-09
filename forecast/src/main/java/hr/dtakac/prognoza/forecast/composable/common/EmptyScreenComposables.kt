@@ -8,7 +8,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
@@ -16,9 +15,8 @@ import hr.dtakac.prognoza.forecast.R
 
 @Composable
 fun EmptyForecast(
-    reason: String,
-    onTryAgainClicked: () -> Unit,
-    isLoading: Boolean
+    text: String,
+    content: @Composable () -> Unit
 ) {
     Surface(
         shape = PrognozaTheme.shapes.large,
@@ -45,24 +43,17 @@ fun EmptyForecast(
                     painter = painterResource(id = R.drawable.ic_cloud_off),
                     contentDescription = null,
                     modifier = Modifier.size(size = 64.dp),
-                    colorFilter = ColorFilter.tint(color = PrognozaTheme.colors.error)
+                    colorFilter = ColorFilter.tint(color = PrognozaTheme.textColors.mediumEmphasis)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = stringResource(
-                        id = R.string.template_error_forecast_empty_reason,
-                        reason
-                    ),
+                    text = text,
                     style = PrognozaTheme.typography.body1,
                     color = PrognozaTheme.textColors.highEmphasis,
                     textAlign = TextAlign.Center
                 )
                 Spacer(modifier = Modifier.height(24.dp))
-                RefreshButton(
-                    text = stringResource(id = R.string.button_try_again),
-                    isLoading = isLoading,
-                    onClick = onTryAgainClicked
-                )
+                content()
             }
         }
     }
