@@ -9,7 +9,6 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -21,29 +20,29 @@ import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.forecast.model.DayUiModel
+import hr.dtakac.prognoza.forecast.model.EmptyForecastUiModel
 import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
-import hr.dtakac.prognoza.forecast.viewmodel.TomorrowForecastViewModel
+import hr.dtakac.prognoza.forecast.model.TomorrowForecastUiModel
 
 @Composable
 fun TomorrowForecast(
-    viewModel: TomorrowForecastViewModel,
+    forecast: TomorrowForecastUiModel?,
+    outdatedForecast: OutdatedForecastUiModel?,
+    isLoading: Boolean,
+    emptyForecast: EmptyForecastUiModel?,
+    expandedHourIndices: List<Int>,
+    onHourClicked: (Int) -> Unit,
+    onTryAgainClicked: () -> Unit,
     preferredMeasurementUnit: MeasurementUnit
 ) {
-
-    val forecast by viewModel.forecast
-    val outdatedForecast by viewModel.outdatedForecast
-    val expandedHourIndices = viewModel.expandedHourIndices
-    val isLoading by viewModel.isLoading
-    val empty by viewModel.emptyForecast
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxHeight()
-        ) {
-            forecast?.let { forecast ->
+        if (forecast != null) {
+            LazyColumn(
+                modifier = Modifier.fillMaxHeight()
+            ) {
                 item {
                     TomorrowSummaryHeader(
                         dayUiModel = forecast.summary,
@@ -55,7 +54,7 @@ fun TomorrowForecast(
                     ExpandableHour(
                         hour = hour,
                         isExpanded = index in expandedHourIndices,
-                        onClick = { viewModel.toggleExpanded(index) },
+                        onClick = { onHourClicked(index) },
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
                     if (index == forecast.hours.lastIndex) {
@@ -66,17 +65,17 @@ fun TomorrowForecast(
                 }
             }
         }
-        if (isLoading) {
-            CircularProgressIndicator()
-        }
-        if (empty != null) {
-            EmptyForecast(
-                reason = empty?.reasonResourceId?.let { stringResource(id = it) }
-                    ?: stringResource(id = R.string.error_generic),
-                onTryAgainClicked = { viewModel.getForecast() },
-                isLoading = isLoading
-            )
-        }
+    }
+    if (isLoading) {
+        CircularProgressIndicator()
+    }
+    if (emptyForecast != null) {
+        EmptyForecast(
+            reason = emptyForecast.reasonResourceId?.let { stringResource(id = it) }
+                ?: stringResource(id = R.string.error_generic),
+            onTryAgainClicked = onTryAgainClicked,
+            isLoading = isLoading
+        )
     }
 }
 

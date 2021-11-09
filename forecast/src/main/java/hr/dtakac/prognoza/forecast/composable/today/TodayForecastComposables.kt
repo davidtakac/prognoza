@@ -30,7 +30,7 @@ import java.time.ZonedDateTime
 
 @Composable
 fun TodayForecast(
-    todayForecast: TodayForecastUiModel?,
+    forecast: TodayForecastUiModel?,
     outdatedForecast: OutdatedForecastUiModel?,
     isLoading: Boolean,
     emptyForecast: EmptyForecastUiModel?,
@@ -43,25 +43,25 @@ fun TodayForecast(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (todayForecast != null) {
+        if (forecast != null) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
                 item {
                     CurrentHourHeader(
-                        currentHour = todayForecast.currentHour,
+                        currentHour = forecast.currentHour,
                         outdatedForecastUiModel = outdatedForecast,
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
                 }
-                itemsIndexed(todayForecast.otherHours) { index, hour ->
+                itemsIndexed(forecast.otherHours) { index, hour ->
                     ExpandableHour(
                         hour = hour,
                         isExpanded = index in expandedHourIndices,
                         onClick = { onHourClicked(index) },
                         preferredMeasurementUnit = preferredMeasurementUnit
                     )
-                    if (index == todayForecast.otherHours.lastIndex) {
+                    if (index == forecast.otherHours.lastIndex) {
                         MetNorwayOrganizationCredit()
                     } else {
                         Divider()
