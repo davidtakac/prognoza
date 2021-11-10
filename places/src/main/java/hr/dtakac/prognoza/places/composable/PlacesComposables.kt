@@ -187,7 +187,7 @@ fun Place(
             bottom = 8.dp
         )
     ) {
-        val showIcon = place.isSelected || place.isSaved
+        val showIcon = place.isPicked || place.isSaved
         Row(
             modifier = Modifier
                 .fillMaxSize()
@@ -198,7 +198,7 @@ fun Place(
             if (showIcon) {
                 Icon(
                     painter = rememberImagePainter(
-                        data = if (place.isSelected) {
+                        data = if (place.isPicked) {
                             R.drawable.ic_favorite
                         } else {
                             R.drawable.ic_favorite_border

@@ -4,6 +4,7 @@ import hr.dtakac.prognoza.core.api.PlaceService
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.database.dao.PlaceDao
 import hr.dtakac.prognoza.core.model.database.Place
+import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.USER_AGENT
 import kotlinx.coroutines.withContext
 import java.util.*
@@ -11,10 +12,11 @@ import java.util.*
 class DefaultPlaceRepository(
     private val placeDao: PlaceDao,
     private val placeService: PlaceService,
+    private val preferencesRepository: PreferencesRepository,
     private val dispatcherProvider: DispatcherProvider,
 ) : PlaceRepository {
 
-    override suspend fun get(placeId: String): Place {
+    override suspend fun get(placeId: String): Place? {
         return placeDao.get(placeId)
     }
 
@@ -45,11 +47,16 @@ class DefaultPlaceRepository(
         }
     }
 
-    override suspend fun save(place: Place) {
+    override suspend fun pick(place: Place) {
         placeDao.insertOrUpdate(place)
+        preferencesRepository.setSelectedPlaceId(place.id)
     }
 
     override suspend fun isSaved(placeId: String): Boolean {
         return placeDao.get(placeId) != null
+    }
+
+    override suspend fun isPicked(placeId: String): Boolean {
+        return isSaved(placeId) && preferencesRepository.getSelectedPlaceId() == placeId
     }
 }

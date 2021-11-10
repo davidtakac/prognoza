@@ -21,7 +21,7 @@ class FakePlaceRepository : PlaceRepository {
         return placeId == TEST_PLACE.id
     }
 
-    override suspend fun save(place: Place) {
+    override suspend fun pick(place: Place) {
         // do nothing
     }
 

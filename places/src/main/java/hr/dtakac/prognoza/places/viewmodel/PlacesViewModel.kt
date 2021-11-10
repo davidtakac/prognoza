@@ -6,8 +6,8 @@ import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.network.NetworkChecker
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
-import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.ProgressTimeLatch
+import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
 import hr.dtakac.prognoza.places.R
 import hr.dtakac.prognoza.places.mapping.toPlaceUiModel
 import hr.dtakac.prognoza.places.model.EmptyPlacesUiModel
@@ -22,9 +22,8 @@ class PlacesViewModel(
     coroutineScope: CoroutineScope?,
     private val dispatcherProvider: DispatcherProvider,
     private val placeRepository: PlaceRepository,
-    private val preferencesRepository: PreferencesRepository,
     private val networkChecker: NetworkChecker
-) : hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel(coroutineScope) {
+) : CoroutineScopeViewModel(coroutineScope) {
     private var displayedPlaces = listOf<Place>()
 
     private var _places = mutableStateOf<List<PlaceUiModel>>(listOf())
@@ -98,8 +97,7 @@ class PlacesViewModel(
             val selectedPlace = withContext(dispatcherProvider.default) {
                 displayedPlaces.first { it.id == placeId }
             }
-            placeRepository.save(selectedPlace)
-            preferencesRepository.setSelectedPlaceId(selectedPlace.id)
+            placeRepository.pick(selectedPlace)
             _closePlaces.value = true
             progressTimeLatch.loading = false
         }
@@ -111,7 +109,7 @@ class PlacesViewModel(
             displayedPlaces.map {
                 it.toPlaceUiModel(
                     isSaved = placeRepository.isSaved(it.id),
-                    isSelected = preferencesRepository.getSelectedPlaceId() == it.id
+                    isPicked = placeRepository.isPicked(it.id)
                 )
             }
         }

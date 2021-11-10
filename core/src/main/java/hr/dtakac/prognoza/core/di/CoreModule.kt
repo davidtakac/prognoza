@@ -90,7 +90,7 @@ val coreModule = module {
     }
 
     factory<PlaceRepository> {
-        DefaultPlaceRepository(get<PrognozaDatabase>().placeDao(), get(), get())
+        DefaultPlaceRepository(get<PrognozaDatabase>().placeDao(), get(), get(), get())
     }
 
     factory<ForecastRepository> {

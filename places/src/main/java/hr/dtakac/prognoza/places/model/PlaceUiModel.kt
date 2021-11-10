@@ -8,5 +8,5 @@ data class PlaceUiModel(
     val name: String,
     val fullName: String,
     val isSaved: Boolean,
-    val isSelected: Boolean,
+    val isPicked: Boolean,
 )

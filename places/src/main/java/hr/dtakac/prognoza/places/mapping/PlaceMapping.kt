@@ -6,11 +6,11 @@ import hr.dtakac.prognoza.places.model.PlaceUiModel
 
 fun Place.toPlaceUiModel(
     isSaved: Boolean,
-    isSelected: Boolean
+    isPicked: Boolean
 ) = PlaceUiModel(
     id = id,
     name = shortenedName,
     fullName = fullName,
     isSaved = isSaved,
-    isSelected = isSelected
+    isPicked = isPicked
 )

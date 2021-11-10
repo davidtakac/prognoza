@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 val placesModule = module {
     viewModel {
-        PlacesViewModel(null, get(), get(), get(), get())
+        PlacesViewModel(null, get(), get(), get())
     }
 }
