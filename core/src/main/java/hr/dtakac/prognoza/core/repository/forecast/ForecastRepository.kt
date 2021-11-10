@@ -1,17 +1,14 @@
 package hr.dtakac.prognoza.core.repository.forecast
 
-import hr.dtakac.prognoza.core.model.database.ForecastMeta
-import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
+import kotlinx.coroutines.flow.StateFlow
 import java.time.ZonedDateTime
 
 interface ForecastRepository {
-    suspend fun getForecastTimeSpans(
-        start: ZonedDateTime,
-        end: ZonedDateTime,
-        place: Place,
-        oldMeta: ForecastMeta?
-    ): ForecastResult
+    val result: StateFlow<ForecastResult>
 
-    suspend fun deleteExpiredData()
+    suspend fun updateForecastResult(
+        start: ZonedDateTime,
+        end: ZonedDateTime
+    )
 }

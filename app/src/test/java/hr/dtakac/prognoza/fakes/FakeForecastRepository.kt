@@ -28,7 +28,7 @@ class FakeForecastRepository : ForecastRepository {
         // do nothing
     }
 
-    override suspend fun getForecastTimeSpans(
+    override suspend fun updateForecastTimespans(
         start: ZonedDateTime,
         end: ZonedDateTime,
         place: Place

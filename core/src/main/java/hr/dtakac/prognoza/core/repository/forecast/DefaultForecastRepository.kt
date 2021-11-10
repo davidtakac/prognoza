@@ -11,74 +11,91 @@ import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.*
 import hr.dtakac.prognoza.core.repository.meta.MetaRepository
+import hr.dtakac.prognoza.core.repository.place.PlaceRepository
+import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.USER_AGENT
 import hr.dtakac.prognoza.core.utils.hasExpired
 import hr.dtakac.prognoza.core.utils.toForecastResult
 import hr.dtakac.prognoza.core.utils.toForecastTimeSpan
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
 import retrofit2.HttpException
 import java.io.IOException
-import java.lang.IllegalStateException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
     private val forecastService: ForecastService,
     private val forecastDao: ForecastTimeSpanDao,
     private val metaRepository: MetaRepository,
+    private val placeRepository: PlaceRepository,
+    private val preferencesRepository: PreferencesRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
 
-    override suspend fun deleteExpiredData() {
-        try {
-            forecastDao.deleteExpiredForecastTimeSpans()
-        } catch (e: Exception) {
-            // intentionally ignored
-            e.printStackTrace()
-        }
-    }
+    private val _result = MutableStateFlow<ForecastResult>(None)
+    override val result: StateFlow<ForecastResult> get() = _result.asStateFlow()
 
-    override suspend fun getForecastTimeSpans(
+    override suspend fun updateForecastResult(
         start: ZonedDateTime,
-        end: ZonedDateTime,
-        place: Place,
-        oldMeta: ForecastMeta?
-    ): ForecastResult {
-        var error: ForecastError? = null
-        if (oldMeta.hasExpired()) {
-            if (oldMeta != null && oldMeta.placeId != place.id) {
-                // TODO: remove possibility of this happening by removing place and instead fetching the place here.
-                throw IllegalStateException("Meta place ID doesn't match place ID.")
+        end: ZonedDateTime
+    ) {
+        val selectedPlace = getSelectedPlace()
+        if (selectedPlace == null) {
+            _result.value = Empty(NoSelectedPlaceForecastError)
+            return
+        } else {
+            val selectedPlaceMeta = getPlaceMeta(selectedPlace)
+            var error: ForecastError? = null
+            if (selectedPlaceMeta.hasExpired()) {
+                try {
+                    updateForecastDatabase(
+                        place = selectedPlace,
+                        lastModified = selectedPlaceMeta?.lastModified
+                    )
+                } catch (e: HttpException) {
+                    error = getHttpForecastError(e)
+                } catch (e: SQLiteException) {
+                    error = DatabaseForecastError(e)
+                } catch (e: IOException) {
+                    error = IoForecastError(e)
+                } catch (e: Exception) {
+                    error = UnknownForecastError(e)
+                }
             }
-            try {
-                updateForecastDatabase(place, oldMeta?.lastModified)
-            } catch (e: HttpException) {
-                error = handleHttpException(e)
+            _result.value = try {
+                val timeSpans = forecastDao.getForecastTimeSpans(
+                    start = start,
+                    end = end,
+                    placeId = selectedPlace.id
+                )
+                if (error == null) {
+                    Success(timeSpans)
+                } else {
+                    CachedSuccess(
+                        success = Success(timeSpans),
+                        reason = error
+                    )
+                }
             } catch (e: SQLiteException) {
-                error = DatabaseError(e)
-            } catch (e: IOException) {
-                error = IOError(e)
+                Empty(DatabaseForecastError(e))
             } catch (e: Exception) {
-                error = UnknownError(e)
+                Empty(UnknownForecastError(e))
+            } finally {
+                deleteExpiredData()
             }
-        }
-        return try {
-            val hours = forecastDao.getForecastTimeSpans(start, end, place.id)
-            hours.toForecastResult(error)
-        } catch (e: SQLiteException) {
-            Empty(DatabaseError(e))
-        } catch (e: Exception) {
-            Empty(UnknownError(e))
         }
     }
 
-    private fun handleHttpException(httpException: HttpException): ForecastError {
+    private fun getHttpForecastError(httpException: HttpException): ForecastError {
         return when (httpException.code()) {
-            429 -> ThrottlingError(httpException)
-            in 400..499 -> ClientError(httpException)
-            in 500..504 -> ServerError(httpException)
-            else -> UnknownError(httpException)
+            429 -> ThrottlingForecastError(httpException)
+            in 400..499 -> ClientForecastError(httpException)
+            in 500..504 -> ServerForecastError(httpException)
+            else -> UnknownForecastError(httpException)
         }
     }
 
@@ -118,5 +135,24 @@ class DefaultForecastRepository(
             }
         } ?: return
         forecastDao.insertOrUpdateAll(forecastTimeSpans)
+    }
+
+    private suspend fun deleteExpiredData() {
+        try {
+            forecastDao.deleteExpiredForecastTimeSpans()
+        } catch (e: Exception) {
+            // intentionally ignored
+            e.printStackTrace()
+        }
+    }
+
+    private suspend fun getSelectedPlace(): Place? {
+        return preferencesRepository.getSelectedPlaceId()?.let {
+            placeRepository.get(it)
+        }
+    }
+
+    private suspend fun getPlaceMeta(place: Place): ForecastMeta? {
+        return metaRepository.get(place.id)
     }
 }

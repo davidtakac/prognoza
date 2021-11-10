@@ -17,7 +17,6 @@ import hr.dtakac.prognoza.core.repository.place.DefaultPlaceRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.core.timeprovider.DefaultForecastTimeProvider
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.MET_NORWAY_BASE_URL
 import hr.dtakac.prognoza.core.utils.OSM_NOMINATIM_BASE_URL

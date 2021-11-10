@@ -96,11 +96,11 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             placeRepository.get(placeId = it)
         }
         return if (selectedPlace != null) {
-            val result = forecastRepository.getForecastTimeSpans(
+            val result = forecastRepository.updateForecastTimespans(
                 start = forecastTimeProvider.todayStart,
                 end = forecastTimeProvider.todayEnd,
                 place = selectedPlace,
-                oldMeta = metaRepository.get(placeId = selectedPlace.id)
+                placeMeta = metaRepository.get(placeId = selectedPlace.id)
             )
             val hours = when (result) {
                 is Success -> {

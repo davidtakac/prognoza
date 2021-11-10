@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.forecast.viewmodel
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
@@ -15,6 +16,7 @@ import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
 import hr.dtakac.prognoza.forecast.mapping.toHourUiModel
+import hr.dtakac.prognoza.forecast.model.TodayForecastUiModel
 import hr.dtakac.prognoza.forecast.model.TomorrowForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -22,39 +24,18 @@ import kotlinx.coroutines.launch
 
 class TomorrowForecastViewModel(
     coroutineScope: CoroutineScope?,
-    preferencesRepository: PreferencesRepository,
-    placeRepository: PlaceRepository,
-    metaRepository: MetaRepository,
-    private val forecastRepository: ForecastRepository,
-    private val forecastTimeProvider: ForecastTimeProvider,
-    private val dispatcherProvider: DispatcherProvider,
-) : ForecastViewModel<TomorrowForecastUiModel>(
-    coroutineScope,
-    preferencesRepository,
-    placeRepository,
-    metaRepository
-) {
-    override val _forecast = mutableStateOf<TomorrowForecastUiModel?>(null)
+    forecastRepository: ForecastRepository,
+    timeProvider: ForecastTimeProvider,
+    private val dispatcherProvider: DispatcherProvider
+) : ForecastViewModel(coroutineScope, timeProvider, forecastRepository) {
+
+    private val _forecast = mutableStateOf<TomorrowForecastUiModel>(TomorrowForecastUiModel.None)
+    val forecast: State<TomorrowForecastUiModel> get() = _forecast
 
     private val _expandedHourIndices = mutableStateListOf<Int>()
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
-    override suspend fun getNewForecast(
-        place: Place,
-        meta: ForecastMeta?
-    ): ForecastResult {
-        return forecastRepository.getForecastTimeSpans(
-            start = forecastTimeProvider.tomorrowStart,
-            end = forecastTimeProvider.tomorrowEnd,
-            place = place,
-            oldMeta = meta
-        )
-    }
-
-    override suspend fun mapToForecastUiModel(
-        success: Success,
-        place: Place
-    ): TomorrowForecastUiModel {
+    override suspend fun handleSuccess(success: Success) {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
             success.timeSpans.toDayUiModel(coroutineScope = this, place = place)
         }

@@ -46,11 +46,11 @@ class ComingForecastViewModel(
         place: Place,
         meta: ForecastMeta?
     ): ForecastResult {
-        return forecastRepository.getForecastTimeSpans(
+        return forecastRepository.updateForecastTimespans(
             start = forecastTimeProvider.comingStart,
             end = forecastTimeProvider.comingEnd,
             place = place,
-            oldMeta = meta
+            placeMeta = meta
         )
     }
 
