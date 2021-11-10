@@ -41,8 +41,7 @@ fun Context.formatTemperatureValue(temperature: Double?, unit: MeasurementUnit):
 
 fun Context.formatPrecipitationValue(
     precipitation: Double?,
-    unit: MeasurementUnit,
-    significantPrecipitationColor: Boolean = true
+    unit: MeasurementUnit
 ): Spannable {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = when (unit) {
@@ -192,8 +191,7 @@ fun Context.formatRepresentativeWeatherIconDescription(
 
 fun Context.formatTotalPrecipitation(
     precipitation: Double?,
-    unit: MeasurementUnit,
-    significantPrecipitationColor: Boolean = true
+    unit: MeasurementUnit
 ): Spannable {
     return when (precipitation) {
         null, 0.0 -> {
@@ -202,8 +200,7 @@ fun Context.formatTotalPrecipitation(
         else -> {
             formatPrecipitationValue(
                 precipitation,
-                unit,
-                significantPrecipitationColor
+                unit
             )
         }
     }
@@ -215,8 +212,7 @@ fun Context.formatEmptyMessage(reasonResourceId: Int?): String {
 
 fun Context.formatPrecipitationTwoHours(
     precipitationForecast: Double?,
-    unit: MeasurementUnit,
-    significantPrecipitationColor: Boolean = true
+    unit: MeasurementUnit
 ): Spannable {
     return SpannableStringBuilder()
         .append(
@@ -224,8 +220,7 @@ fun Context.formatPrecipitationTwoHours(
                 null, 0.0 -> getString(R.string.placeholder_precipitation_text)
                 else -> formatPrecipitationValue(
                     precipitationForecast,
-                    unit,
-                    significantPrecipitationColor
+                    unit
                 )
             }
         )

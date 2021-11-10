@@ -13,11 +13,10 @@ import android.widget.RemoteViews
 import hr.dtakac.prognoza.core.mapping.totalPrecipitationAmount
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
+import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.core.repository.meta.MetaRepository
-import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.core.timeprovider.TodayForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.*
 import hr.dtakac.prognoza.forecast.activity.ForecastActivity
 import hr.dtakac.prognoza.widget.model.CurrentConditionsWidgetUiModel
@@ -29,12 +28,6 @@ import kotlin.random.Random
 abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinComponent {
     abstract val widgetLayoutId: Int
     abstract val widgetErrorLayoutId: Int
-
-    private val forecastRepository by inject<ForecastRepository>()
-    private val forecastTimeProvider by inject<ForecastTimeProvider>()
-    private val preferencesRepository by inject<PreferencesRepository>()
-    private val placeRepository by inject<PlaceRepository>()
-    private val metaRepository by inject<MetaRepository>()
 
     abstract fun onSuccess(
         views: RemoteViews,
@@ -69,7 +62,28 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         appWidgetIds: IntArray?
     ) {
         setNextUpdateAlarm(context)
-        val uiModel = runBlocking { getCurrentConditionsWidgetUiModel() }
+        val timeProvider by inject<TodayForecastTimeProvider>()
+        val forecastRepository by inject<ForecastRepository>()
+        val preferencesRepository by inject<PreferencesRepository>()
+        val uiModel = runBlocking {
+            forecastRepository.updateForecastResult(
+                start = timeProvider.start,
+                end = timeProvider.end
+            )
+            val result = forecastRepository.result.value
+            val preferredUnit = preferencesRepository.getSelectedUnit()
+            when (result) {
+                is ForecastResult.Success -> result.timeSpans.toCurrentConditionsWidgetUiModel(
+                    preferredUnit = preferredUnit,
+                    selectedPlace = result.place
+                )
+                is ForecastResult.Cached -> result.success.timeSpans.toCurrentConditionsWidgetUiModel(
+                    preferredUnit = preferredUnit,
+                    selectedPlace = result.success.place
+                )
+                else -> null
+            }
+        }
         appWidgetIds?.forEach { appWidgetId ->
             val remoteViews: RemoteViews?
             if (uiModel != null) {
@@ -88,38 +102,6 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             setOnClickOpenApplication(remoteViews, context)
             appWidgetManager?.updateAppWidget(appWidgetId, remoteViews)
         }
-    }
-
-    private suspend fun getCurrentConditionsWidgetUiModel(): CurrentConditionsWidgetUiModel? {
-        val selectedPlace = preferencesRepository.getSelectedPlaceId()?.let {
-            placeRepository.get(placeId = it)
-        }
-        return null
-        /*return if (selectedPlace != null) {
-            val result = forecastRepository.updateForecastTimespans(
-                start = forecastTimeProvider.todayStart,
-                end = forecastTimeProvider.todayEnd,
-                place = selectedPlace,
-                placeMeta = metaRepository.get(placeId = selectedPlace.id)
-            )
-            val hours = when (result) {
-                is Success -> {
-                    result.timeSpans
-                }
-                is CachedSuccess -> {
-                    result.success.timeSpans
-                }
-                else -> {
-                    null
-                }
-            }
-            hours?.toCurrentConditionsWidgetUiModel(
-                preferredUnit = preferencesRepository.getSelectedUnit(),
-                selectedPlace = selectedPlace
-            )
-        } else {
-            null
-        }*/
     }
 
     private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {

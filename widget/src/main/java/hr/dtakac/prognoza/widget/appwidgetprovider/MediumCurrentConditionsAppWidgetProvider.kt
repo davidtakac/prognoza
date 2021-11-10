@@ -22,8 +22,7 @@ open class MediumCurrentConditionsAppWidgetProvider : SmallCurrentConditionsAppW
             R.id.tv_precipitation_forecast,
             context?.formatPrecipitationTwoHours(
                 uiModel.precipitationTwoHours,
-                uiModel.displayDataInUnit,
-                significantPrecipitationColor = false
+                uiModel.displayDataInUnit
             )
         )
     }
