@@ -22,11 +22,10 @@ import hr.dtakac.prognoza.core.utils.precipitationExists
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.forecast.model.*
-import java.time.ZonedDateTime
 
 @Composable
 fun TodayForecast(
-    forecast: TodayForecastUiModel?,
+    forecast: TodayForecastUiModel,
     outdatedForecast: OutdatedForecastUiModel?,
     isLoading: Boolean,
     emptyForecast: EmptyForecastUiModel?,
@@ -40,7 +39,7 @@ fun TodayForecast(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (forecast != null) {
+        if (forecast is TodayForecastUiModel.Success) {
             LazyColumn(Modifier.fillMaxHeight()) {
                 item {
                     CurrentHourHeader(
@@ -131,7 +130,8 @@ fun CurrentHourHeader(
                 ) {
                     Image(
                         painter = rememberImagePainter(
-                            currentHour.weatherDescription?.iconResourceId ?: R.drawable.ic_cloud_off
+                            currentHour.weatherDescription?.iconResourceId
+                                ?: R.drawable.ic_cloud_off
                         ),
                         contentDescription = null,
                         modifier = Modifier.size(86.dp)

@@ -24,7 +24,7 @@ import java.time.ZonedDateTime
 
 @Composable
 fun ComingForecast(
-    forecast: ComingForecastUiModel?,
+    forecast: ComingForecastUiModel,
     outdatedForecast: OutdatedForecastUiModel?,
     isLoading: Boolean,
     emptyForecast: EmptyForecastUiModel?,
@@ -38,7 +38,7 @@ fun ComingForecast(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (forecast != null) {
+        if (forecast is ComingForecastUiModel.Success) {
             LazyColumn(modifier = Modifier.fillMaxHeight()) {
                 itemsIndexed(forecast.days) { index, day ->
                     if (index == 0 && outdatedForecast != null) {

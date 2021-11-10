@@ -1,5 +1,8 @@
 package hr.dtakac.prognoza.forecast.di
 
+import hr.dtakac.prognoza.core.timeprovider.ComingForecastTimeProvider
+import hr.dtakac.prognoza.core.timeprovider.TodayForecastTimeProvider
+import hr.dtakac.prognoza.core.timeprovider.TomorrowForecastTimeProvider
 import hr.dtakac.prognoza.forecast.viewmodel.ComingForecastViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.ForecastPagerViewModel
 import hr.dtakac.prognoza.forecast.viewmodel.TodayForecastViewModel
@@ -9,7 +12,7 @@ import org.koin.dsl.module
 
 val forecastModule = module {
     viewModel {
-        ComingForecastViewModel(null, get(), get(), get(), get(), get(), get())
+        ComingForecastViewModel(null, get(), get<ComingForecastTimeProvider>(), get(), get())
     }
 
     viewModel {
@@ -17,10 +20,10 @@ val forecastModule = module {
     }
 
     viewModel {
-        TodayForecastViewModel(null, get(), get(), get(), get(), get(), get())
+        TodayForecastViewModel(null, get(), get<TodayForecastTimeProvider>(), get())
     }
 
     viewModel {
-        TomorrowForecastViewModel(null, get(), get(), get(), get(), get(), get())
+        TomorrowForecastViewModel(null, get(), get<TomorrowForecastTimeProvider>(), get())
     }
 }

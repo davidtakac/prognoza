@@ -17,7 +17,9 @@ import hr.dtakac.prognoza.core.repository.place.DefaultPlaceRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.DefaultPreferencesRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
-import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.core.timeprovider.ComingForecastTimeProvider
+import hr.dtakac.prognoza.core.timeprovider.TodayForecastTimeProvider
+import hr.dtakac.prognoza.core.timeprovider.TomorrowForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.MET_NORWAY_BASE_URL
 import hr.dtakac.prognoza.core.utils.OSM_NOMINATIM_BASE_URL
 import okhttp3.OkHttpClient
@@ -83,25 +85,35 @@ val coreModule = module {
         )
     }
 
-    single<MetaRepository> {
+    factory<MetaRepository> {
         DefaultMetaRepository(get<PrognozaDatabase>().metaDao())
     }
 
-    single<PlaceRepository> {
+    factory<PlaceRepository> {
         DefaultPlaceRepository(get<PrognozaDatabase>().placeDao(), get(), get())
     }
 
-    single<ForecastRepository> {
+    factory<ForecastRepository> {
         DefaultForecastRepository(
             dispatcherProvider = get(),
             forecastService = get(),
             forecastDao = get<PrognozaDatabase>().hourDao(),
-            metaRepository = get()
+            metaRepository = get(),
+            placeRepository = get(),
+            preferencesRepository = get()
         )
     }
 
-    single<ForecastTimeProvider> {
-        DefaultForecastTimeProvider()
+    single {
+        TodayForecastTimeProvider()
+    }
+
+    single {
+        TomorrowForecastTimeProvider(referenceTimeProvider = get<TodayForecastTimeProvider>())
+    }
+
+    single {
+        ComingForecastTimeProvider(referenceTimeProvider = get<TomorrowForecastTimeProvider>())
     }
 
     factory<NetworkChecker> {

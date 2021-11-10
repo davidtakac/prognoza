@@ -63,7 +63,7 @@ class ForecastActivity : ComponentActivity() {
         currentPage = newPage
     }
 
-    private fun getCurrentForecastViewModel(page: Int): ForecastViewModel<*> {
+    private fun getCurrentForecastViewModel(page: Int): ForecastViewModel {
         return when (page) {
             0 -> todayViewModel
             1 -> tomorrowViewModel

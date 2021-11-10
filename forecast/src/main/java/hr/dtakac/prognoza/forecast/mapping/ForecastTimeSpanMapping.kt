@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.forecast.mapping
 
+import hr.dtakac.prognoza.core.mapping.*
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS

@@ -22,7 +22,7 @@ import hr.dtakac.prognoza.forecast.model.*
 
 @Composable
 fun TomorrowForecast(
-    forecast: TomorrowForecastUiModel?,
+    forecast: TomorrowForecastUiModel,
     outdatedForecast: OutdatedForecastUiModel?,
     isLoading: Boolean,
     emptyForecast: EmptyForecastUiModel?,
@@ -36,7 +36,7 @@ fun TomorrowForecast(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (forecast != null) {
+        if (forecast is TomorrowForecastUiModel.Success) {
             LazyColumn(Modifier.fillMaxHeight()) {
                 item {
                     TomorrowSummaryHeader(

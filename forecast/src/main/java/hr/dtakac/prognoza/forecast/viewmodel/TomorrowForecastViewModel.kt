@@ -5,8 +5,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
+import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
+import hr.dtakac.prognoza.forecast.mapping.toHourUiModel
 import hr.dtakac.prognoza.forecast.model.TomorrowForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -25,7 +28,7 @@ class TomorrowForecastViewModel(
     private val _expandedHourIndices = mutableStateListOf<Int>()
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
-    override suspend fun handleSuccess(success: Success) {
+    override suspend fun handleSuccess(success: ForecastResult.Success) {
         val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
             success.timeSpans.toDayUiModel(coroutineScope = this, place = success.place)
         }

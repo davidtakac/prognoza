@@ -1,28 +1,12 @@
-package hr.dtakac.prognoza.core.utils
+package hr.dtakac.prognoza.core.mapping
 
 import ca.rmen.sunrisesunset.SunriseSunset
-import hr.dtakac.prognoza.core.model.database.ForecastMeta
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
-import hr.dtakac.prognoza.core.model.repository.*
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS
+import hr.dtakac.prognoza.core.utils.mostCommon
 import java.util.*
-
-fun List<ForecastTimeSpan>.toForecastResult(
-    error: ForecastError?
-): ForecastResult {
-    return if (isNullOrEmpty()) {
-        Empty(error)
-    } else {
-        val success = Success(timeSpans = this)
-        if (error == null) {
-            success
-        } else {
-            CachedSuccess(success, error)
-        }
-    }
-}
 
 fun List<ForecastTimeSpan>.highestTemperature(): Double? {
     val max = maxOf { it.airTemperatureMax ?: Double.MIN_VALUE }

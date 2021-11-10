@@ -29,19 +29,19 @@ abstract class ForecastViewModel(
         this.coroutineScope.launch {
             forecastRepository.result.collect {
                 when (it) {
-                    is Success -> {
+                    is ForecastResult.Success -> {
                         _emptyForecast.value = null
                         handleSuccess(it)
                     }
-                    is CachedSuccess -> handleCachedSuccess(it)
-                    is Empty -> handleEmpty(it)
-                    is None -> handleNone()
+                    is ForecastResult.Cached -> handleCachedSuccess(it)
+                    is ForecastResult.Empty -> handleEmpty(it)
+                    is ForecastResult.None -> handleNone()
                 }
             }
         }
     }
 
-    abstract suspend fun handleSuccess(success: Success)
+    abstract suspend fun handleSuccess(success: ForecastResult.Success)
 
     fun getForecast() {
         coroutineScope.launch {
@@ -54,8 +54,8 @@ abstract class ForecastViewModel(
         }
     }
 
-    private fun handleEmpty(empty: Empty) {
-        _emptyForecast.value = if (empty.reason is NoSelectedPlaceForecastError) {
+    private fun handleEmpty(empty: ForecastResult.Empty) {
+        _emptyForecast.value = if (empty.reason is ForecastError.NoSelectedPlace) {
             EmptyForecastBecauseNoSelectedPlace
         } else {
             EmptyForecastBecauseReason(
@@ -64,7 +64,7 @@ abstract class ForecastViewModel(
         }
     }
 
-    private suspend fun handleCachedSuccess(cachedSuccess: CachedSuccess) {
+    private suspend fun handleCachedSuccess(cachedSuccess: ForecastResult.Cached) {
         handleSuccess(cachedSuccess.success)
         _outdatedForecast.value = OutdatedForecastUiModel(
             reason = cachedSuccess.reason?.toErrorResourceId()

@@ -10,10 +10,9 @@ import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.widget.RemoteViews
+import hr.dtakac.prognoza.core.mapping.totalPrecipitationAmount
 import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.database.Place
-import hr.dtakac.prognoza.core.model.repository.CachedSuccess
-import hr.dtakac.prognoza.core.model.repository.Success
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.repository.meta.MetaRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
@@ -95,7 +94,8 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         val selectedPlace = preferencesRepository.getSelectedPlaceId()?.let {
             placeRepository.get(placeId = it)
         }
-        return if (selectedPlace != null) {
+        return null
+        /*return if (selectedPlace != null) {
             val result = forecastRepository.updateForecastTimespans(
                 start = forecastTimeProvider.todayStart,
                 end = forecastTimeProvider.todayEnd,
@@ -119,7 +119,7 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
             )
         } else {
             null
-        }
+        }*/
     }
 
     private fun setOnClickOpenApplication(views: RemoteViews, context: Context?) {

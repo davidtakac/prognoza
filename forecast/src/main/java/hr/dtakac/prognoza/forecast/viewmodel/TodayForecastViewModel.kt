@@ -8,6 +8,7 @@ import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.forecast.mapping.toHourUiModel
 import hr.dtakac.prognoza.forecast.model.TodayForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
