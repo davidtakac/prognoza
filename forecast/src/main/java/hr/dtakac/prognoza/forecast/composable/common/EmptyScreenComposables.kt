@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,11 +46,13 @@ fun EmptyForecast(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Icon(
-                    painter = rememberImagePainter(R.drawable.ic_cloud_off),
-                    contentDescription = null,
-                    modifier = Modifier.size(52.dp),
-                )
+                CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
+                    Icon(
+                        painter = rememberImagePainter(R.drawable.ic_cloud_off),
+                        contentDescription = null,
+                        modifier = Modifier.size(52.dp),
+                    )
+                }
                 Spacer(Modifier.height(24.dp))
                 Text(
                     text = text,
