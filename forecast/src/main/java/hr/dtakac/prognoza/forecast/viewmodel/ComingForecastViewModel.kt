@@ -15,8 +15,8 @@ import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
 import hr.dtakac.prognoza.forecast.model.DayUiModel
 import hr.dtakac.prognoza.forecast.model.ComingForecastUiModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 
 class ComingForecastViewModel(
@@ -34,7 +34,7 @@ class ComingForecastViewModel(
     val expandedDayIndices: SnapshotStateList<Int> get() = _expandedDayIndices
 
     override suspend fun handleSuccess(success: ForecastResult.Success) {
-        val daysAsync = coroutineScope.async(dispatcherProvider.default) {
+        val days = withContext(dispatcherProvider.default) {
             var endOfDay: ZonedDateTime = tomorrowForecastTimeProvider.end
             val dayHours: MutableList<ForecastTimeSpan> = mutableListOf()
             val days: MutableList<DayUiModel> = mutableListOf()
@@ -57,7 +57,7 @@ class ComingForecastViewModel(
             }
             days
         }
-        _forecast.value = ComingForecastUiModel.Success(days = daysAsync.await())
+        _forecast.value = ComingForecastUiModel.Success(days = days)
     }
 
     fun toggleExpanded(index: Int) {
