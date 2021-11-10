@@ -15,7 +15,6 @@ import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.USER_AGENT
 import hr.dtakac.prognoza.core.utils.hasExpired
-import hr.dtakac.prognoza.core.utils.toForecastResult
 import hr.dtakac.prognoza.core.utils.toForecastTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +35,7 @@ class DefaultForecastRepository(
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
 
-    private val _result = MutableStateFlow<ForecastResult>(None)
+    private val _result = MutableStateFlow<ForecastResult>(ForecastResult.None)
     override val result: StateFlow<ForecastResult> get() = _result.asStateFlow()
 
     override suspend fun updateForecastResult(
@@ -45,7 +44,7 @@ class DefaultForecastRepository(
     ) {
         val selectedPlace = getSelectedPlace()
         if (selectedPlace == null) {
-            _result.value = Empty(NoSelectedPlaceForecastError)
+            _result.value = ForecastResult.Empty(ForecastError.NoSelectedPlace)
             return
         } else {
             val selectedPlaceMeta = getPlaceMeta(selectedPlace)
@@ -59,11 +58,11 @@ class DefaultForecastRepository(
                 } catch (e: HttpException) {
                     error = getHttpForecastError(e)
                 } catch (e: SQLiteException) {
-                    error = DatabaseForecastError(e)
+                    error = ForecastError.Database(e)
                 } catch (e: IOException) {
-                    error = IoForecastError(e)
+                    error = ForecastError.Io(e)
                 } catch (e: Exception) {
-                    error = UnknownForecastError(e)
+                    error = ForecastError.Unknown(e)
                 }
             }
             _result.value = try {
@@ -73,17 +72,23 @@ class DefaultForecastRepository(
                     placeId = selectedPlace.id
                 )
                 if (error == null) {
-                    Success(timeSpans)
+                    ForecastResult.Success(
+                        timeSpans = timeSpans,
+                        place = selectedPlace
+                    )
                 } else {
-                    CachedSuccess(
-                        success = Success(timeSpans),
+                    ForecastResult.Cached(
+                        success = ForecastResult.Success(
+                            timeSpans = timeSpans,
+                            place = selectedPlace
+                        ),
                         reason = error
                     )
                 }
             } catch (e: SQLiteException) {
-                Empty(DatabaseForecastError(e))
+                ForecastResult.Empty(ForecastError.Database(e))
             } catch (e: Exception) {
-                Empty(UnknownForecastError(e))
+                ForecastResult.Empty(ForecastError.Unknown(e))
             } finally {
                 deleteExpiredData()
             }
@@ -92,10 +97,10 @@ class DefaultForecastRepository(
 
     private fun getHttpForecastError(httpException: HttpException): ForecastError {
         return when (httpException.code()) {
-            429 -> ThrottlingForecastError(httpException)
-            in 400..499 -> ClientForecastError(httpException)
-            in 500..504 -> ServerForecastError(httpException)
-            else -> UnknownForecastError(httpException)
+            429 -> ForecastError.Throttling(httpException)
+            in 400..499 -> ForecastError.Client(httpException)
+            in 500..504 -> ForecastError.Server(httpException)
+            else -> ForecastError.Unknown(httpException)
         }
     }
 

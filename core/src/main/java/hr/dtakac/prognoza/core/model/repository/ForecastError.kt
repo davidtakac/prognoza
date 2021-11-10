@@ -1,11 +1,11 @@
 package hr.dtakac.prognoza.core.model.repository
 
-sealed class ForecastError(val reason: Exception?)
-
-class ThrottlingForecastError(reason: Exception? = null) : ForecastError(reason)
-class ClientForecastError(reason: Exception? = null) : ForecastError(reason)
-class ServerForecastError(reason: Exception? = null) : ForecastError(reason)
-class IoForecastError(reason: Exception? = null) : ForecastError(reason)
-class DatabaseForecastError(reason: Exception? = null) : ForecastError(reason)
-class UnknownForecastError(reason: Exception? = null) : ForecastError(reason)
-object NoSelectedPlaceForecastError : ForecastError(null)
+sealed class ForecastError(val reason: Exception?) {
+    class Throttling(reason: Exception?) : ForecastError(reason)
+    class Client(reason: Exception?) : ForecastError(reason)
+    class Server(reason: Exception?) : ForecastError(reason)
+    class Io(reason: Exception?) : ForecastError(reason)
+    class Database(reason: Exception?) : ForecastError(reason)
+    class Unknown(reason: Exception?) : ForecastError(reason)
+    object NoSelectedPlace : ForecastError(null)
+}
