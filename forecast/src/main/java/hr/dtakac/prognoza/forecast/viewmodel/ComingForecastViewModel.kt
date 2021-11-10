@@ -15,7 +15,6 @@ import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.HOURS_AFTER_MIDNIGHT
-import hr.dtakac.prognoza.core.utils.hasExpired
 import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
 import hr.dtakac.prognoza.forecast.model.DayUiModel
 import hr.dtakac.prognoza.forecast.model.ComingForecastUiModel
@@ -45,13 +44,13 @@ class ComingForecastViewModel(
 
     override suspend fun getNewForecast(
         place: Place,
-        oldMeta: ForecastMeta?
+        meta: ForecastMeta?
     ): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
             start = forecastTimeProvider.comingStart,
             end = forecastTimeProvider.comingEnd,
             place = place,
-            oldMeta = oldMeta
+            oldMeta = meta
         )
     }
 

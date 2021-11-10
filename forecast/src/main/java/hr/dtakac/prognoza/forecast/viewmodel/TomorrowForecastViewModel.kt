@@ -41,13 +41,13 @@ class TomorrowForecastViewModel(
 
     override suspend fun getNewForecast(
         place: Place,
-        oldMeta: ForecastMeta?
+        meta: ForecastMeta?
     ): ForecastResult {
         return forecastRepository.getForecastTimeSpans(
             start = forecastTimeProvider.tomorrowStart,
             end = forecastTimeProvider.tomorrowEnd,
             place = place,
-            oldMeta = oldMeta
+            oldMeta = meta
         )
     }
 

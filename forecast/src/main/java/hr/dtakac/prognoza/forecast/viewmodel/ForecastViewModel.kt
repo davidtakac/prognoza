@@ -17,7 +17,6 @@ import hr.dtakac.prognoza.core.utils.toErrorResourceId
 import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
 import hr.dtakac.prognoza.forecast.model.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 abstract class ForecastViewModel<T : ForecastUiModel>(
@@ -45,34 +44,34 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
     fun getForecast() {
         coroutineScope.launch {
             val selectedPlaceId = preferencesRepository.getSelectedPlaceId()
-            val isReloadNeeded = isReloadNeeded(
-                meta = currentMeta,
-                selectedPlaceId = selectedPlaceId,
-                forecast = _forecast.value
-            )
-            if (isReloadNeeded) {
-                selectedPlaceId
-                    ?.let { placeRepository.get(placeId = it) }
-                    ?.let {
-                        _isLoading.value = true
-                        when (val result = getNewForecast(place = it, oldMeta = currentMeta)) {
-                            is Success -> handleSuccess(result, it)
-                            is CachedSuccess -> handleCachedSuccess(result, it)
-                            is Empty -> handleEmpty(result)
-                        }
-                        _isLoading.value = false
-
-                        currentPlace = it
-                        currentMeta = metaRepository.get(placeId = it.id)
+            if (selectedPlaceId == null) {
+                handleNoSelectedPlace()
+            } else {
+                val isReloadNeeded = isReloadNeeded(
+                    meta = currentMeta,
+                    selectedPlaceId = selectedPlaceId,
+                    forecast = _forecast.value
+                )
+                if (isReloadNeeded) {
+                    _isLoading.value = true
+                    val selectedPlace = placeRepository.get(placeId = selectedPlaceId)
+                    currentMeta = selectedPlaceId.let { metaRepository.get(placeId = it) }
+                    when (val result = getNewForecast(place = selectedPlace, meta = currentMeta)) {
+                        is Success -> handleSuccess(result, selectedPlace)
+                        is CachedSuccess -> handleCachedSuccess(result, selectedPlace)
+                        is Empty -> handleEmpty(result)
                     }
-                    ?: handleNoSelectedPlace()
+                    currentPlace = selectedPlace
+                    currentMeta = metaRepository.get(placeId = selectedPlace.id)
+                    _isLoading.value = false
+                }
             }
         }
     }
 
     protected abstract suspend fun getNewForecast(
         place: Place,
-        oldMeta: ForecastMeta?
+        meta: ForecastMeta?
     ): ForecastResult
 
     protected abstract suspend fun mapToForecastUiModel(
@@ -110,8 +109,8 @@ abstract class ForecastViewModel<T : ForecastUiModel>(
         selectedPlaceId: String?,
         forecast: ForecastUiModel?
     ): Boolean {
-        return meta?.hasExpired() != false ||
-                meta.placeId != selectedPlaceId ||
+        return meta.hasExpired() ||
+                meta?.placeId != selectedPlaceId ||
                 forecast == null
     }
 

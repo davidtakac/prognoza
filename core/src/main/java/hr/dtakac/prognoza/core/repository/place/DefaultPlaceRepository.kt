@@ -14,7 +14,7 @@ class DefaultPlaceRepository(
     private val dispatcherProvider: DispatcherProvider,
 ) : PlaceRepository {
 
-    override suspend fun get(placeId: String): Place? {
+    override suspend fun get(placeId: String): Place {
         return placeDao.get(placeId)
     }
 

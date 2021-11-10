@@ -16,8 +16,8 @@ val Number.toPx
         Resources.getSystem().displayMetrics
     )
 
-fun ForecastMeta.hasExpired(): Boolean = try {
-    ZonedDateTime.now() > expires
+fun ForecastMeta?.hasExpired(): Boolean = try {
+    ZonedDateTime.now() > this?.expires!!
 } catch (e: Exception) {
     true
 }

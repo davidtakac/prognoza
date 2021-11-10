@@ -20,6 +20,7 @@ import okhttp3.Headers
 import okhttp3.internal.format
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.IllegalStateException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -45,7 +46,11 @@ class DefaultForecastRepository(
         oldMeta: ForecastMeta?
     ): ForecastResult {
         var error: ForecastError? = null
-        if (oldMeta?.hasExpired() != false) {
+        if (oldMeta.hasExpired()) {
+            if (oldMeta != null && oldMeta.placeId != place.id) {
+                // TODO: remove possibility of this happening by removing place and instead fetching the place here.
+                throw IllegalStateException("Meta place ID doesn't match place ID.")
+            }
             try {
                 updateForecastDatabase(place, oldMeta?.lastModified)
             } catch (e: HttpException) {
