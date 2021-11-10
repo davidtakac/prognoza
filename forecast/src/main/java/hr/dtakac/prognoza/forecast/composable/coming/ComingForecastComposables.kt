@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.forecast.composable.coming
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowRow
+import hr.dtakac.prognoza.core.composable.ContentLoader
 import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.RepresentativeWeatherDescription
@@ -22,6 +24,7 @@ import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.forecast.model.*
 import java.time.ZonedDateTime
 
+@ExperimentalAnimationApi
 @Composable
 fun ComingForecast(
     forecast: ComingForecastUiModel,
@@ -63,9 +66,7 @@ fun ComingForecast(
                 }
             }
         }
-        if (isLoading) {
-            CircularProgressIndicator()
-        }
+        ContentLoader(isLoading = isLoading)
         when (emptyForecast) {
             is EmptyForecastBecauseReason -> EmptyForecastBecauseReason(
                 emptyForecast = emptyForecast,

@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.forecast.composable.forecastpager
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
@@ -24,6 +24,7 @@ import hr.dtakac.prognoza.forecast.viewmodel.TomorrowForecastViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
 fun ForecastTabbedPager(
@@ -71,7 +72,8 @@ fun ForecastTabbedPager(
         onPageChanged = onPageChanged
     )
 
-    Column {
+    val backgroundColor = PrognozaTheme.colors.background
+    Column(Modifier.background(backgroundColor)) {
         ForecastHeader(
             currentPlaceName = placeName ?: stringResource(R.string.no_place),
             pagerState = pagerState,
@@ -80,7 +82,7 @@ fun ForecastTabbedPager(
             onSettingsClicked = onSettingsClicked,
             onTabClicked = { scope.launch { pagerState.animateScrollToPage(it) } }
         )
-        CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
+        CompositionLocalProvider(LocalContentColor provides contentColorFor(backgroundColor)) {
             ForecastPager(
                 count = pages.size,
                 pagerState = pagerState,

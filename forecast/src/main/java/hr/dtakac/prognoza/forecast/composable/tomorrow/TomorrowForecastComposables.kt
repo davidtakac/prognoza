@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.forecast.composable.tomorrow
 
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -11,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import hr.dtakac.prognoza.core.composable.ContentLoader
 import hr.dtakac.prognoza.core.formatting.formatDaySummaryTime
 import hr.dtakac.prognoza.core.formatting.formatRepresentativeWeatherIconDescription
 import hr.dtakac.prognoza.core.formatting.formatTemperatureValue
@@ -20,6 +22,7 @@ import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.composable.common.*
 import hr.dtakac.prognoza.forecast.model.*
 
+@ExperimentalAnimationApi
 @Composable
 fun TomorrowForecast(
     forecast: TomorrowForecastUiModel,
@@ -60,9 +63,7 @@ fun TomorrowForecast(
                 }
             }
         }
-        if (isLoading) {
-            CircularProgressIndicator()
-        }
+        ContentLoader(isLoading = isLoading)
         when (emptyForecast) {
             is EmptyForecastBecauseReason -> EmptyForecastBecauseReason(
                 emptyForecast = emptyForecast,

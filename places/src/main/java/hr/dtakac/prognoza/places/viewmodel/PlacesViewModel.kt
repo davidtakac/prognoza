@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.network.NetworkChecker
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
+import hr.dtakac.prognoza.core.utils.ProgressTimeLatch
 import hr.dtakac.prognoza.places.R
 import hr.dtakac.prognoza.places.mapping.toPlaceUiModel
 import hr.dtakac.prognoza.places.model.EmptyPlacesUiModel
@@ -41,6 +42,10 @@ class PlacesViewModel(
     private val _emptyPlaces = mutableStateOf<EmptyPlacesUiModel?>(null)
     val emptyPlaces: State<EmptyPlacesUiModel?> get() = _emptyPlaces
 
+    private val progressTimeLatch = ProgressTimeLatch {
+        _isLoading.value = it
+    }
+
     init {
         showPlaces()
     }
@@ -61,7 +66,7 @@ class PlacesViewModel(
 
     private fun showSavedPlaces() {
         coroutineScope.launch {
-            _isLoading.value = true
+            progressTimeLatch.loading = true
             val places = placeRepository.getAll()
             setDisplayedPlaces(places)
             if (places.isEmpty()) {
@@ -69,13 +74,13 @@ class PlacesViewModel(
             } else {
                 _emptyPlaces.value = null
             }
-            _isLoading.value = false
+            progressTimeLatch.loading = false
         }
     }
 
     private fun search(query: String) {
         coroutineScope.launch {
-            _isLoading.value = true
+            progressTimeLatch.loading = true
             val places = placeRepository.search(query)
             setDisplayedPlaces(places)
             if (places.isEmpty()) {
@@ -83,20 +88,20 @@ class PlacesViewModel(
             } else {
                 _emptyPlaces.value = null
             }
-            _isLoading.value = false
+            progressTimeLatch.loading = false
         }
     }
 
     fun select(placeId: String) {
         coroutineScope.launch {
-            _isLoading.value = true
+            progressTimeLatch.loading = true
             val selectedPlace = withContext(dispatcherProvider.default) {
                 displayedPlaces.first { it.id == placeId }
             }
             placeRepository.save(selectedPlace)
             preferencesRepository.setSelectedPlaceId(selectedPlace.id)
-            _isLoading.value = false
             _closePlaces.value = true
+            progressTimeLatch.loading = false
         }
     }
 

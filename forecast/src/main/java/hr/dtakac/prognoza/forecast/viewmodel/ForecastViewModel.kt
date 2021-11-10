@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import hr.dtakac.prognoza.core.model.repository.*
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
+import hr.dtakac.prognoza.core.utils.ProgressTimeLatch
 import hr.dtakac.prognoza.core.utils.toErrorResourceId
 import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
 import hr.dtakac.prognoza.forecast.model.*
@@ -25,6 +26,10 @@ abstract class ForecastViewModel(
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> get() = _isLoading
 
+    private val progressTimeLatch = ProgressTimeLatch {
+        _isLoading.value = it
+    }
+
     init {
         this.coroutineScope.launch {
             forecastRepository.result.collect {
@@ -45,12 +50,12 @@ abstract class ForecastViewModel(
 
     fun getForecast() {
         coroutineScope.launch {
-            _isLoading.value = true
+            progressTimeLatch.loading = true
             forecastRepository.updateForecastResult(
                 start = timeProvider.start,
                 end = timeProvider.end
             )
-            _isLoading.value = false
+            progressTimeLatch.loading = false
         }
     }
 

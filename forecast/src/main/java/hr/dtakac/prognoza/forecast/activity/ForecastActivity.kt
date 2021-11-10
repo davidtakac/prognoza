@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -21,6 +22,7 @@ class ForecastActivity : ComponentActivity() {
 
     private var currentPage: Int = 0
 
+    @ExperimentalAnimationApi
     @ExperimentalPagerApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,7 @@ class ForecastActivity : ComponentActivity() {
         forecastPagerViewModel.getData()
     }
 
+    @ExperimentalAnimationApi
     @ExperimentalPagerApi
     @Composable
     fun Screen() {

@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.places.composable
 
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,18 +13,19 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import hr.dtakac.prognoza.core.composable.ContentLoader
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.places.R
 import hr.dtakac.prognoza.places.model.EmptyPlacesUiModel
 import hr.dtakac.prognoza.places.model.PlaceUiModel
 import hr.dtakac.prognoza.places.viewmodel.PlacesViewModel
 
+@ExperimentalAnimationApi
 @Composable
 fun Places(
     placesViewModel: PlacesViewModel,
@@ -33,14 +36,14 @@ fun Places(
     val message by placesViewModel.message
     val emptyPlaces by placesViewModel.emptyPlaces
 
-    Surface(
-        shape = PrognozaTheme.shapes.large,
-        color = PrognozaTheme.colors.surface
+    val backgroundColor = PrognozaTheme.colors.background
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(backgroundColor),
+        contentAlignment = Alignment.Center
     ) {
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ) {
+        CompositionLocalProvider(LocalContentColor provides contentColorFor(backgroundColor)) {
             Column(modifier = Modifier.fillMaxHeight()) {
                 var searchValue by rememberSaveable { mutableStateOf("") }
                 PlacesTopAppBar(onBackClicked = onBackClicked)
@@ -64,9 +67,7 @@ fun Places(
                     }
                 )
             }
-            if (isLoading) {
-                CircularProgressIndicator()
-            }
+            ContentLoader(isLoading = isLoading)
             message?.let {
                 Column(
                     modifier = Modifier.fillMaxSize(),
