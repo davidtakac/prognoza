@@ -25,7 +25,7 @@ class TodayForecastViewModel(
     private val _forecast = mutableStateOf<TodayForecastUiModel>(TodayForecastUiModel.None)
     val forecast: State<TodayForecastUiModel> get() = _forecast
 
-    private val _expandedHourIndices = mutableStateListOf<Int>()
+    private val _expandedHourIndices = mutableStateListOf<Int>(0)
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
     override suspend fun handleSuccess(success: ForecastResult.Success) {
