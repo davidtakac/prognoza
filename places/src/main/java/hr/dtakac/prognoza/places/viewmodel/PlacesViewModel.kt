@@ -1,7 +1,9 @@
 package hr.dtakac.prognoza.places.viewmodel
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.network.NetworkChecker
@@ -41,65 +43,69 @@ class PlacesViewModel(
     private val _emptyPlaces = mutableStateOf<EmptyPlacesUiModel?>(null)
     val emptyPlaces: State<EmptyPlacesUiModel?> get() = _emptyPlaces
 
+    private val _selectedPlaces = mutableStateListOf<PlaceUiModel>()
+    val selectedPlaces: SnapshotStateList<PlaceUiModel> get() = _selectedPlaces
+
     private val progressTimeLatch = ProgressTimeLatch {
         _isLoading.value = it
     }
 
-    init {
-        showPlaces()
-    }
+    init { showSavedPlaces() }
 
-    fun showPlaces(query: String = "") {
-        when {
-            query.isBlank() -> {
-                showSavedPlaces()
-            }
-            networkChecker.hasInternetConnection() -> {
-                search(query)
-            }
-            else -> {
-                showNoConnectionMessage()
-            }
+    fun showSavedPlaces() {
+        coroutineScope.launch {
+            progressTimeLatch.loading = true
+            showSavedPlacesActual()
+            progressTimeLatch.loading = false
         }
     }
 
-    private fun showSavedPlaces() {
-        coroutineScope.launch {
-            progressTimeLatch.loading = true
-            val places = placeRepository.getAll()
-            setDisplayedPlaces(places)
-            if (places.isEmpty()) {
-                _emptyPlaces.value = EmptyPlacesUiModel(reason = R.string.no_saved_places)
+    fun search(query: String) {
+        coroutineScope.launch(dispatcherProvider.default) {
+            if (networkChecker.hasInternetConnection()) {
+                progressTimeLatch.loading = true
+                _selectedPlaces.clear()
+                searchPlacesActual(query)
+                progressTimeLatch.loading = false
             } else {
-                _emptyPlaces.value = null
+                _message.value = PlacesMessageUiModel(R.string.notify_no_internet)
+                delay(3000)
+                _message.value = null
             }
-            progressTimeLatch.loading = false
         }
     }
 
-    private fun search(query: String) {
-        coroutineScope.launch {
+    fun handlePlaceClicked(place: PlaceUiModel) {
+        coroutineScope.launch(dispatcherProvider.default) {
             progressTimeLatch.loading = true
-            val places = placeRepository.search(query)
-            setDisplayedPlaces(places)
-            if (places.isEmpty()) {
-                _emptyPlaces.value = EmptyPlacesUiModel(reason = R.string.no_places_for_query)
+            if (_selectedPlaces.isEmpty()) {
+                pickAPlaceActual(place)
             } else {
-                _emptyPlaces.value = null
+                handlePlaceSelectedActual(place)
             }
             progressTimeLatch.loading = false
         }
     }
 
-    fun select(placeId: String) {
+    fun handlePlaceSelected(place: PlaceUiModel) {
+        coroutineScope.launch(dispatcherProvider.default) {
+            handlePlaceSelectedActual(place)
+        }
+    }
+
+    fun deletePlaces(places: List<PlaceUiModel>) {
         coroutineScope.launch {
             progressTimeLatch.loading = true
-            val selectedPlace = withContext(dispatcherProvider.default) {
-                displayedPlaces.first { it.id == placeId }
-            }
-            placeRepository.pick(selectedPlace)
-            _closePlaces.value = true
+            placeRepository.deleteAll(places.map { it.id })
+            showSavedPlacesActual()
+            _selectedPlaces.removeAll(places)
             progressTimeLatch.loading = false
+        }
+    }
+
+    fun clearPlaceSelection() {
+        coroutineScope.launch(dispatcherProvider.default) {
+            _selectedPlaces.clear()
         }
     }
 
@@ -115,11 +121,43 @@ class PlacesViewModel(
         }
     }
 
-    private fun showNoConnectionMessage() {
-        coroutineScope.launch {
-            _message.value = PlacesMessageUiModel(R.string.notify_no_internet)
-            delay(3000)
-            _message.value = null
+    private suspend fun showSavedPlacesActual() {
+        val places = placeRepository.getAll()
+        setDisplayedPlaces(places)
+        if (places.isEmpty()) {
+            _emptyPlaces.value = EmptyPlacesUiModel(reason = R.string.no_saved_places)
+        } else {
+            _emptyPlaces.value = null
+        }
+    }
+
+    private suspend fun searchPlacesActual(query: String) {
+        val places = placeRepository.search(query)
+        setDisplayedPlaces(places)
+        if (places.isEmpty()) {
+            _emptyPlaces.value = EmptyPlacesUiModel(reason = R.string.no_places_for_query)
+        } else {
+            _emptyPlaces.value = null
+        }
+    }
+
+    private suspend fun pickAPlaceActual(place: PlaceUiModel) {
+        val selectedPlace = withContext(dispatcherProvider.default) {
+            displayedPlaces.first { it.id == place.id }
+        }
+        placeRepository.pick(selectedPlace)
+        _closePlaces.value = true
+    }
+
+    private suspend fun handlePlaceSelectedActual(place: PlaceUiModel) {
+        withContext(dispatcherProvider.default) {
+            if (_places.value.all { it.isSaved }) {
+                if (place in _selectedPlaces) {
+                    _selectedPlaces.remove(place)
+                } else {
+                    _selectedPlaces.add(place)
+                }
+            }
         }
     }
 }

@@ -1,8 +1,10 @@
 package hr.dtakac.prognoza.places.composable
 
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.composable.ContentLoader
@@ -23,19 +26,25 @@ import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.places.R
 import hr.dtakac.prognoza.places.model.EmptyPlacesUiModel
 import hr.dtakac.prognoza.places.model.PlaceUiModel
-import hr.dtakac.prognoza.places.viewmodel.PlacesViewModel
+import hr.dtakac.prognoza.places.model.PlacesMessageUiModel
 
+@ExperimentalFoundationApi
 @ExperimentalAnimationApi
 @Composable
 fun Places(
-    placesViewModel: PlacesViewModel,
-    onBackClicked: () -> Unit
+    places: List<PlaceUiModel>,
+    isLoading: Boolean,
+    message: PlacesMessageUiModel?,
+    emptyPlaces: EmptyPlacesUiModel?,
+    selectedPlaces: List<PlaceUiModel>,
+    onBackClicked: () -> Unit,
+    onSearchClicked: (String) -> Unit,
+    onClearSearch: () -> Unit,
+    onPlaceClicked: (PlaceUiModel) -> Unit,
+    onPlaceLongClicked: (PlaceUiModel) -> Unit,
+    onPlaceSelectionCancelled: () -> Unit,
+    onDeletePlacesClicked: () -> Unit
 ) {
-    val places by placesViewModel.places
-    val isLoading by placesViewModel.isLoading
-    val message by placesViewModel.message
-    val emptyPlaces by placesViewModel.emptyPlaces
-
     val backgroundColor = PrognozaTheme.colors.background
     Box(
         modifier = Modifier
@@ -46,25 +55,36 @@ fun Places(
         CompositionLocalProvider(LocalContentColor provides contentColorFor(backgroundColor)) {
             Column(modifier = Modifier.fillMaxHeight()) {
                 var searchValue by rememberSaveable { mutableStateOf("") }
-                PlacesTopAppBar(onBackClicked = onBackClicked)
+                if (selectedPlaces.isEmpty()) {
+                    PickAPlaceTopAppBar(onBackClicked = onBackClicked)
+                } else {
+                    SelectPlacesTopAppBar(
+                        numberOfPlacesSelected = selectedPlaces.size,
+                        onCloseClicked = { onPlaceSelectionCancelled() },
+                        onDeleteClicked = { onDeletePlacesClicked() }
+                    )
+                }
                 PlacesSearchBox(
                     value = searchValue,
-                    onValueChange = { newValue: String -> searchValue = newValue },
-                    onSearchClicked = {
-                        placesViewModel.showPlaces(searchValue)
+                    onValueChange = {
+                        searchValue = it
+                        if (it.isEmpty()) {
+                            onClearSearch()
+                        }
                     },
+                    onSearchClicked = { onSearchClicked(searchValue) },
                     onClearAll = {
                         searchValue = ""
-                        placesViewModel.showPlaces()
+                        onClearSearch()
                     }
                 )
                 emptyPlaces?.let {
                     EmptyPlaces(emptyPlaces = it)
                 } ?: PlacesList(
                     places = places,
-                    onPlacePicked = {
-                        placesViewModel.select(placeId = it.id)
-                    }
+                    onPlaceClicked = { onPlaceClicked(it) },
+                    onPlaceLongClicked = { onPlaceLongClicked(it) },
+                    selectedPlaces = selectedPlaces
                 )
             }
             ContentLoader(isLoading = isLoading)
@@ -84,7 +104,7 @@ fun Places(
 }
 
 @Composable
-fun PlacesTopAppBar(
+fun PickAPlaceTopAppBar(
     onBackClicked: () -> Unit
 ) {
     TopAppBar(
@@ -95,6 +115,75 @@ fun PlacesTopAppBar(
                     painter = rememberImagePainter(R.drawable.ic_arrow_back),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+    )
+}
+
+@Composable
+fun SelectPlacesTopAppBar(
+    numberOfPlacesSelected: Int,
+    onCloseClicked: () -> Unit,
+    onDeleteClicked: () -> Unit
+) {
+    TopAppBar(
+        title = {
+            Text(
+                stringResource(
+                    id = R.string.template_selected,
+                    numberOfPlacesSelected
+                )
+            )
+        },
+        navigationIcon = {
+            IconButton(onClick = onCloseClicked) {
+                Icon(
+                    painter = rememberImagePainter(R.drawable.ic_clear),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        },
+        actions = {
+            var showDeleteConfirmationDialog by remember { mutableStateOf(false) }
+            IconButton(onClick = { showDeleteConfirmationDialog = true }) {
+                Icon(
+                    painter = rememberImagePainter(R.drawable.ic_delete),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+            if (showDeleteConfirmationDialog) {
+                AlertDialog(
+                    onDismissRequest = { showDeleteConfirmationDialog = false },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                showDeleteConfirmationDialog = false
+                                onDeleteClicked()
+                            }
+                        ) {
+                            Text(
+                                text = stringResource(R.string.delete),
+                                style = PrognozaTheme.typography.button
+                            )
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDeleteConfirmationDialog = false }) {
+                            Text(
+                                text = stringResource(R.string.cancel),
+                                style = PrognozaTheme.typography.button
+                            )
+                        }
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.delete_places),
+                            style = PrognozaTheme.typography.body1
+                        )
+                    }
                 )
             }
         }
@@ -153,16 +242,21 @@ fun PlacesSearchBox(
     )
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun PlacesList(
     places: List<PlaceUiModel>,
-    onPlacePicked: (PlaceUiModel) -> Unit
+    selectedPlaces: List<PlaceUiModel>,
+    onPlaceClicked: (PlaceUiModel) -> Unit,
+    onPlaceLongClicked: (PlaceUiModel) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         itemsIndexed(places) { index, place ->
             Place(
                 place = place,
-                onClicked = { onPlacePicked(place) }
+                onClicked = { onPlaceClicked(place) },
+                onLongClicked = { onPlaceLongClicked(place) },
+                isSelected = place in selectedPlaces
             )
             if (index == places.lastIndex) {
                 OsmNominatimOrganizationCredit()
@@ -171,27 +265,39 @@ fun PlacesList(
     }
 }
 
+@ExperimentalFoundationApi
 @Composable
 fun Place(
     place: PlaceUiModel,
-    onClicked: () -> Unit
+    isSelected: Boolean,
+    onClicked: () -> Unit,
+    onLongClicked: () -> Unit
 ) {
     Surface(
         shape = PrognozaTheme.shapes.medium,
         color = PrognozaTheme.colors.surface,
         elevation = 2.dp,
-        modifier = Modifier.padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 8.dp,
-            bottom = 8.dp
-        )
+        modifier = Modifier
+            .padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp,
+                bottom = 8.dp
+            )
+            .border(
+                width = if (isSelected) 2.dp else Dp.Unspecified,
+                color = PrognozaTheme.colors.primary,
+                shape = PrognozaTheme.shapes.medium
+            )
     ) {
         val showIcon = place.isPicked || place.isSaved
         Row(
             modifier = Modifier
                 .fillMaxSize()
-                .clickable { onClicked() }
+                .combinedClickable(
+                    onClick = { onClicked() },
+                    onLongClick = { onLongClicked() }
+                )
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {

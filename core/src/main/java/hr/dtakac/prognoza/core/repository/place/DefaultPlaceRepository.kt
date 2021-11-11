@@ -59,4 +59,8 @@ class DefaultPlaceRepository(
     override suspend fun isPicked(placeId: String): Boolean {
         return isSaved(placeId) && preferencesRepository.getSelectedPlaceId() == placeId
     }
+
+    override suspend fun deleteAll(placeIds: List<String>) {
+        placeDao.deleteAll(placeIds)
+    }
 }
