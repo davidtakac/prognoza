@@ -1,23 +1,18 @@
 package hr.dtakac.prognoza.core.utils
 
-import android.content.res.Resources
-import android.util.TypedValue
 import hr.dtakac.prognoza.core.model.database.ForecastMeta
+import java.time.Duration
 import java.time.ZonedDateTime
 
 fun <T> List<T>.mostCommon(): T? =
     groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
 
-// courtesy of https://stackoverflow.com/a/6327095
-val Number.toPx
-    get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        this.toFloat(),
-        Resources.getSystem().displayMetrics
-    )
-
 fun ForecastMeta?.hasExpired(): Boolean = try {
     ZonedDateTime.now() > this?.expires!!
 } catch (e: Exception) {
     true
+}
+
+fun ZonedDateTime.isSameHourAsNow(): Boolean {
+    return Duration.between(this, ZonedDateTime.now()).toMinutes() in (0L..60L)
 }

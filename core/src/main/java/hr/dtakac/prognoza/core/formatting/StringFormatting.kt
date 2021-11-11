@@ -44,6 +44,14 @@ fun formatTomorrowTime(): String {
 }
 
 @Composable
+fun formatNowTime(): String {
+    return RelativeDateTimeFormatter.getInstance().format(
+        RelativeDateTimeFormatter.Direction.PLAIN,
+        RelativeDateTimeFormatter.AbsoluteUnit.NOW
+    ).replaceFirstChar { it.uppercaseChar() }
+}
+
+@Composable
 fun formatTemperatureValue(temperature: Double?, unit: MeasurementUnit): String {
     val formatter = DecimalFormat.getInstance(Locale.getDefault()).apply {
         maximumFractionDigits = 0

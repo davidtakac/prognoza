@@ -18,6 +18,7 @@ import hr.dtakac.prognoza.core.formatting.*
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
+import hr.dtakac.prognoza.core.utils.isSameHourAsNow
 import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.model.HourUiModel
 import java.time.ZonedDateTime
@@ -111,7 +112,7 @@ fun HourSummary(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(formatHourTime(time))
+                Text(if (time.isSameHourAsNow()) formatNowTime() else formatHourTime(time))
                 Spacer(Modifier.width(16.dp))
                 CompositionLocalProvider(
                     LocalTextStyle provides PrognozaTheme.typography.subtitle2,
