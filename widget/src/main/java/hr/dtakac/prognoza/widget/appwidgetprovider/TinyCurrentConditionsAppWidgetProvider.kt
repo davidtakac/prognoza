@@ -26,7 +26,7 @@ open class TinyCurrentConditionsAppWidgetProvider : CurrentConditionsAppWidgetPr
         )
         views.setImageViewResource(
             R.id.iv_weather_icon,
-            uiModel.iconResourceId ?: hr.dtakac.prognoza.core.R.drawable.ic_cloud
+            uiModel.iconResourceId ?: R.drawable.ic_cloud
         )
     }
 }
