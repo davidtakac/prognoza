@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
 }
 
 android {
@@ -24,52 +23,18 @@ android {
         }
     }
     compileOptions {
-        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
-    }
-    buildFeatures {
-        viewBinding true
     }
 }
 
 dependencies {
-    // base
-    implementation "androidx.core:core-ktx:$versions.core_ktx"
-    implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "com.google.android.material:material:$versions.material"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
-    // testing
-    testImplementation "junit:junit:$versions.junit"
-    testImplementation "androidx.room:room-testing:$versions.room"
-    testImplementation "androidx.arch.core:core-testing:$versions.arch"
-    testImplementation "io.insert-koin:koin-test-junit4:$versions.koin"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
-    // networking
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
-    implementation("com.squareup.okhttp3:logging-interceptor")
-    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "com.google.code.gson:gson:$versions.gson"
-    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
-    // database
-    implementation "androidx.room:room-runtime:$versions.room"
-    implementation "androidx.room:room-ktx:$versions.room"
-    kapt "androidx.room:room-compiler:$versions.room"
-    // lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle"
-    // coroutines
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
-    // images
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
-    // desugar
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
-    // dependency injection
+    implementation project(":core")
+    implementation project(":forecast")
+    implementation project(":places")
+    implementation project(":widget")
+
+    // Dependency injection
     implementation "io.insert-koin:koin-core:$versions.koin"
     implementation "io.insert-koin:koin-android:$versions.koin"
-    // other
-    implementation "androidx.viewpager2:viewpager2:$versions.viewpager2"
-    implementation "ca.rmen:lib-sunrise-sunset:$versions.lib_sunrise_sunset"
 }

@@ -1,2 +1,6 @@
 rootProject.name = "Prognoza"
 include ':app'
+include ':core'
+include ':forecast'
+include ':places'
+include ':widget'

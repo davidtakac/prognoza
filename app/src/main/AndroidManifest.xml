@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hr.dtakac.prognoza">
 
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".PrognozaApplication"
@@ -13,7 +13,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/Theme.Prognoza">
         <activity
-            android:name=".activity.ForecastActivity"
+            android:name="hr.dtakac.prognoza.forecast.activity.ForecastActivity"
             android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
@@ -21,9 +21,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="hr.dtakac.prognoza.places.activity.PlacesActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize"/>
 
         <receiver
-            android:name=".widget.TinyCurrentConditionsAppWidgetProvider"
+            android:name=".widget.appwidgetprovider.TinyCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -33,7 +37,7 @@
                 android:resource="@xml/app_widget_info_current_conditions_tiny" />
         </receiver>
         <receiver
-            android:name=".widget.SmallCurrentConditionsAppWidgetProvider"
+            android:name=".widget.appwidgetprovider.SmallCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -43,7 +47,7 @@
                 android:resource="@xml/app_widget_info_current_conditions_small" />
         </receiver>
         <receiver
-            android:name=".widget.MediumCurrentConditionsAppWidgetProvider"
+            android:name=".widget.appwidgetprovider.MediumCurrentConditionsAppWidgetProvider"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

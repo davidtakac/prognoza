@@ -1,0 +1,70 @@
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "$versions.compose"
+    }
+}
+
+dependencies {
+    // Networking
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
+    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.google.code.gson:gson:$versions.gson"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+
+    // Database
+    implementation "androidx.room:room-runtime:$versions.room"
+    implementation "androidx.room:room-ktx:$versions.room"
+    kapt "androidx.room:room-compiler:$versions.room"
+
+    // Coroutines
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+
+    // Desugar
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
+
+    // Dependency injection
+    implementation "io.insert-koin:koin-core:$versions.koin"
+    implementation "io.insert-koin:koin-android:$versions.koin"
+
+    // Compose
+    implementation "androidx.compose.ui:ui:$versions.compose"
+    implementation "androidx.activity:activity-compose:$versions.compose_activity"
+    implementation "androidx.compose.material:material:$versions.compose"
+    implementation "androidx.compose.animation:animation:$versions.compose"
+    implementation "androidx.compose.ui:ui-tooling:$versions.compose"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$versions.compose_viewmodel"
+
+    // Sunrise-sunset
+    implementation "ca.rmen:lib-sunrise-sunset:$versions.lib_sunrise_sunset"
+}
