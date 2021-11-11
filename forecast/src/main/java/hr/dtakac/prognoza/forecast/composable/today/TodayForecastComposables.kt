@@ -5,7 +5,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,7 +35,7 @@ fun TodayForecast(
     onHourClicked: (Int) -> Unit,
     onTryAgainClicked: () -> Unit,
     onPickAPlaceClicked: () -> Unit,
-    preferredMeasurementUnit: MeasurementUnit
+    preferredUnit: MeasurementUnit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -48,22 +47,15 @@ fun TodayForecast(
                     CurrentHourHeader(
                         currentHour = forecast.currentHour,
                         outdatedForecastUiModel = outdatedForecast,
-                        preferredUnit = preferredMeasurementUnit
+                        preferredUnit = preferredUnit
                     )
                 }
-                itemsIndexed(forecast.otherHours) { index, hour ->
-                    ExpandableHour(
-                        hour = hour,
-                        isExpanded = index in expandedHourIndices,
-                        onClick = { onHourClicked(index) },
-                        preferredMeasurementUnit = preferredMeasurementUnit
-                    )
-                    if (index == forecast.otherHours.lastIndex) {
-                        MetNorwayOrganizationCredit()
-                    } else {
-                        Divider()
-                    }
-                }
+                ExpandableHours(
+                    hours = forecast.otherHours,
+                    expandedHourIndices = expandedHourIndices,
+                    preferredUnit = preferredUnit,
+                    onHourClicked = { onHourClicked(it) }
+                )
             }
         }
         ContentLoader(isLoading = isLoading)
@@ -92,7 +84,12 @@ fun CurrentHourHeader(
         color = PrognozaTheme.colors.surface,
         contentColor = PrognozaTheme.colors.onSurface,
         elevation = 2.dp,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+            bottom = 8.dp
+        )
     ) {
         CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.subtitle1) {
             Row(

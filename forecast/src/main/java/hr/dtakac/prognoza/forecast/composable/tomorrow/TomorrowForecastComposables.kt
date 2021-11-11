@@ -33,7 +33,7 @@ fun TomorrowForecast(
     onHourClicked: (Int) -> Unit,
     onTryAgainClicked: () -> Unit,
     onPickAPlaceClicked: () -> Unit,
-    preferredMeasurementUnit: MeasurementUnit
+    preferredUnit: MeasurementUnit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -45,22 +45,15 @@ fun TomorrowForecast(
                     TomorrowSummaryHeader(
                         dayUiModel = forecast.summary,
                         outdatedForecastUiModel = outdatedForecast,
-                        preferredUnit = preferredMeasurementUnit
+                        preferredUnit = preferredUnit
                     )
                 }
-                itemsIndexed(forecast.hours) { index, hour ->
-                    ExpandableHour(
-                        hour = hour,
-                        isExpanded = index in expandedHourIndices,
-                        onClick = { onHourClicked(index) },
-                        preferredMeasurementUnit = preferredMeasurementUnit
-                    )
-                    if (index == forecast.hours.lastIndex) {
-                        MetNorwayOrganizationCredit()
-                    } else {
-                        Divider()
-                    }
-                }
+                ExpandableHours(
+                    hours = forecast.hours,
+                    expandedHourIndices = expandedHourIndices,
+                    preferredUnit = preferredUnit,
+                    onHourClicked = { onHourClicked(it) }
+                )
             }
         }
         ContentLoader(isLoading = isLoading)
@@ -89,7 +82,12 @@ fun TomorrowSummaryHeader(
         color = PrognozaTheme.colors.surface,
         contentColor = PrognozaTheme.colors.onSurface,
         elevation = 2.dp,
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+            bottom = 8.dp
+        )
     ) {
         Row(
             modifier = Modifier

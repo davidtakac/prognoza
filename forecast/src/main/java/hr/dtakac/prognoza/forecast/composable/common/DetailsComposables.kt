@@ -21,8 +21,7 @@ fun DetailsItem(
 ) {
     Surface(
         shape = PrognozaTheme.shapes.small,
-        color = PrognozaTheme.colors.surface,
-        elevation = 2.dp
+        color = PrognozaTheme.colors.primary,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -4,10 +4,9 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ContentAlpha
-import androidx.compose.material.LocalContentAlpha
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.Text
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
@@ -23,42 +22,75 @@ import hr.dtakac.prognoza.forecast.R
 import hr.dtakac.prognoza.forecast.model.HourUiModel
 import java.time.ZonedDateTime
 
+fun LazyListScope.ExpandableHours(
+    hours: List<HourUiModel>,
+    expandedHourIndices: List<Int>,
+    preferredUnit: MeasurementUnit,
+    onHourClicked: (Int) -> Unit
+) {
+    itemsIndexed(hours) { index, hour ->
+        ExpandableHour(
+            hour = hour,
+            isExpanded = index in expandedHourIndices,
+            onClick = { onHourClicked(index) },
+            modifier = Modifier.padding(
+                start = 16.dp,
+                end = 16.dp,
+                top = 8.dp,
+                bottom = if (index == hours.lastIndex) 8.dp else 0.dp
+            ),
+            preferredUnit = preferredUnit
+        )
+        if (index == hours.lastIndex) {
+            MetNorwayOrganizationCredit()
+        }
+    }
+}
+
 @Composable
 fun ExpandableHour(
     isExpanded: Boolean,
     hour: HourUiModel,
-    preferredMeasurementUnit: MeasurementUnit,
+    preferredUnit: MeasurementUnit,
+    modifier: Modifier,
     onClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .animateContentSize()
-            .clickable { onClick() }
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 8.dp,
-                bottom = 8.dp
-            )
+    Surface(
+        modifier = modifier,
+        elevation = 2.dp,
+        shape = PrognozaTheme.shapes.medium,
+        color = PrognozaTheme.colors.surface
     ) {
-        HourSummary(
-            modifier = Modifier.fillMaxWidth(),
-            time = hour.time,
-            precipitation = hour.precipitationAmount,
-            temperature = hour.temperature,
-            weatherDescription = hour.weatherDescription,
-            unit = preferredMeasurementUnit
-        )
-        if (isExpanded) {
-            Spacer(Modifier.height(8.dp))
-            HourDetails(
-                feelsLike = hour.feelsLike,
-                windSpeed = hour.windSpeed,
-                windFromCompassDirection = hour.windFromCompassDirection,
-                pressure = hour.airPressureAtSeaLevel,
-                humidity = hour.relativeHumidity,
-                unit = preferredMeasurementUnit
+        Column(
+            modifier = Modifier
+                .animateContentSize()
+                .clickable { onClick() }
+                .padding(
+                    start = 16.dp,
+                    end = 16.dp,
+                    top = 8.dp,
+                    bottom = 8.dp
+                )
+        ) {
+            HourSummary(
+                modifier = Modifier.fillMaxWidth(),
+                time = hour.time,
+                precipitation = hour.precipitationAmount,
+                temperature = hour.temperature,
+                weatherDescription = hour.weatherDescription,
+                unit = preferredUnit
             )
+            if (isExpanded) {
+                Spacer(Modifier.height(8.dp))
+                HourDetails(
+                    feelsLike = hour.feelsLike,
+                    windSpeed = hour.windSpeed,
+                    windFromCompassDirection = hour.windFromCompassDirection,
+                    pressure = hour.airPressureAtSeaLevel,
+                    humidity = hour.relativeHumidity,
+                    unit = preferredUnit
+                )
+            }
         }
     }
 }

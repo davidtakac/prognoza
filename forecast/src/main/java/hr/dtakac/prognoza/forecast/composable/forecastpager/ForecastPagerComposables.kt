@@ -96,7 +96,7 @@ fun ForecastTabbedPager(
                         onHourClicked = { index: Int -> todayForecastViewModel.toggleExpanded(index) },
                         onTryAgainClicked = { todayForecastViewModel.getForecast() },
                         onPickAPlaceClicked = { onSearchClicked() },
-                        preferredMeasurementUnit = preferredUnit
+                        preferredUnit = preferredUnit
                     )
                 },
                 secondPage = {
@@ -109,7 +109,7 @@ fun ForecastTabbedPager(
                         onHourClicked = { index: Int -> tomorrowForecastViewModel.toggleExpanded(index) },
                         onTryAgainClicked = { tomorrowForecastViewModel.getForecast() },
                         onPickAPlaceClicked = { onSearchClicked() },
-                        preferredMeasurementUnit = preferredUnit
+                        preferredUnit = preferredUnit
                     )
                 },
                 thirdPage = {
