@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.forecast.composable.common
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -9,16 +8,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
-import hr.dtakac.prognoza.forecast.model.EmptyForecastBecauseNoSelectedPlace
-import hr.dtakac.prognoza.forecast.model.EmptyForecastBecauseReason
+import hr.dtakac.prognoza.forecast.uistate.EmptyForecastUiState
 
 @Composable
 fun EmptyForecast(
@@ -103,7 +99,7 @@ fun LoaderButton(
 
 @Composable
 fun EmptyForecastBecauseReason(
-    emptyForecast: EmptyForecastBecauseReason,
+    emptyForecast: EmptyForecastUiState.BecauseReason,
     isLoading: Boolean,
     onTryAgainClicked: () -> Unit
 ) {

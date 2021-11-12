@@ -10,7 +10,8 @@ import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.forecast.mapping.toInstantUiModel
 import hr.dtakac.prognoza.forecast.model.InstantUiModel
-import hr.dtakac.prognoza.forecast.model.TodayForecastUiModel
+import hr.dtakac.prognoza.forecast.model.TodaySummaryUiModel
+import hr.dtakac.prognoza.forecast.uistate.TodayForecastUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -22,13 +23,18 @@ class TodayForecastViewModel(
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastViewModel(coroutineScope, timeProvider, forecastRepository) {
 
-    private val _forecast = mutableStateOf<TodayForecastUiModel>(TodayForecastUiModel.None)
-    val forecast: State<TodayForecastUiModel> get() = _forecast
+    private val _forecast = mutableStateOf<TodayForecastUiState>(TodayForecastUiState.None)
+    val forecast: State<TodayForecastUiState> get() = _forecast
 
     private val _expandedHourIndices = mutableStateListOf<Int>(0)
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
     override suspend fun handleSuccess(success: ForecastResult.Success) {
+        val summary = coroutineScope.async(dispatcherProvider.default) {
+            TodaySummaryUiModel(
+                time = success.timeSpans[0].time
+            )
+        }
         val instants = coroutineScope.async(dispatcherProvider.default) {
             mutableListOf<InstantUiModel>().apply {
                 for (i in success.timeSpans.indices) {
@@ -36,7 +42,8 @@ class TodayForecastViewModel(
                 }
             }
         }
-        _forecast.value = TodayForecastUiModel.Success(
+        _forecast.value = TodayForecastUiState.Success(
+            todaySummary = summary.await(),
             instants = instants.await(),
         )
     }

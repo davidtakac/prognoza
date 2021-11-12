@@ -7,7 +7,7 @@ import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.ProgressTimeLatch
 import hr.dtakac.prognoza.core.mapping.toErrorResourceId
 import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
-import hr.dtakac.prognoza.forecast.model.*
+import hr.dtakac.prognoza.forecast.uistate.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 
@@ -17,11 +17,11 @@ abstract class ForecastViewModel(
     private val forecastRepository: ForecastRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
 
-    private val _emptyForecast = mutableStateOf<EmptyForecastUiModel?>(null)
-    val emptyForecast: State<EmptyForecastUiModel?> get() = _emptyForecast
+    private val _emptyForecast = mutableStateOf<EmptyForecastUiState?>(null)
+    val emptyForecast: State<EmptyForecastUiState?> get() = _emptyForecast
 
-    private val _outdatedForecast = mutableStateOf<OutdatedForecastUiModel?>(null)
-    val outdatedForecast: State<OutdatedForecastUiModel?> get() = _outdatedForecast
+    private val _outdatedForecast = mutableStateOf<OutdatedForecastUiState?>(null)
+    val outdatedForecast: State<OutdatedForecastUiState?> get() = _outdatedForecast
 
     private val _isLoading = mutableStateOf(false)
     val isLoading: State<Boolean> get() = _isLoading
@@ -61,9 +61,9 @@ abstract class ForecastViewModel(
 
     private fun handleEmpty(empty: ForecastResult.Empty) {
         _emptyForecast.value = if (empty.reason is ForecastError.NoSelectedPlace) {
-            EmptyForecastBecauseNoSelectedPlace
+            EmptyForecastUiState.BecauseNoSelectedPlace
         } else {
-            EmptyForecastBecauseReason(
+            EmptyForecastUiState.BecauseReason(
                 reason = empty.reason?.toErrorResourceId()
             )
         }
@@ -71,7 +71,7 @@ abstract class ForecastViewModel(
 
     private suspend fun handleCachedSuccess(cachedSuccess: ForecastResult.Cached) {
         handleSuccess(cachedSuccess.success)
-        _outdatedForecast.value = OutdatedForecastUiModel(
+        _outdatedForecast.value = OutdatedForecastUiState(
             reason = cachedSuccess.reason?.toErrorResourceId()
         )
     }

@@ -9,15 +9,15 @@ import androidx.compose.ui.Modifier
 import hr.dtakac.prognoza.core.composable.ContentLoader
 import hr.dtakac.prognoza.core.model.ui.MeasurementUnit
 import hr.dtakac.prognoza.forecast.composable.common.*
-import hr.dtakac.prognoza.forecast.model.*
+import hr.dtakac.prognoza.forecast.uistate.*
 
 @ExperimentalAnimationApi
 @Composable
 fun TomorrowForecast(
-    forecast: TomorrowForecastUiModel,
-    outdatedForecast: OutdatedForecastUiModel?,
+    forecast: TomorrowForecastUiState,
+    outdatedForecast: OutdatedForecastUiState?,
     isLoading: Boolean,
-    emptyForecast: EmptyForecastUiModel?,
+    emptyForecast: EmptyForecastUiState?,
     expandedHourIndices: List<Int>,
     onHourClicked: (Int) -> Unit,
     onTryAgainClicked: () -> Unit,
@@ -28,7 +28,7 @@ fun TomorrowForecast(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (forecast is TomorrowForecastUiModel.Success) {
+        if (forecast is TomorrowForecastUiState.Success) {
             LazyColumn(Modifier.fillMaxHeight()) {
                 ExpandableInstants(
                     instants = forecast.instants,
@@ -40,12 +40,12 @@ fun TomorrowForecast(
         }
         ContentLoader(isLoading = isLoading)
         when (emptyForecast) {
-            is EmptyForecastBecauseReason -> EmptyForecastBecauseReason(
+            is EmptyForecastUiState.BecauseReason -> EmptyForecastBecauseReason(
                 emptyForecast = emptyForecast,
                 isLoading = isLoading,
                 onTryAgainClicked = onTryAgainClicked
             )
-            is EmptyForecastBecauseNoSelectedPlace -> EmptyForecastBecauseNoSelectedPlace(
+            is EmptyForecastUiState.BecauseNoSelectedPlace -> EmptyForecastBecauseNoSelectedPlace(
                 isLoading = isLoading,
                 onPickAPlaceClicked = onPickAPlaceClicked
             )

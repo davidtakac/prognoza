@@ -11,11 +11,11 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.forecast.R
-import hr.dtakac.prognoza.forecast.model.OutdatedForecastUiModel
+import hr.dtakac.prognoza.forecast.uistate.OutdatedForecastUiState
 
 @Composable
 fun OutdatedForecastMessage(
-    outdatedForecastUiModel: OutdatedForecastUiModel,
+    outdatedForecastUiState: OutdatedForecastUiState,
     showDialog: Boolean,
     modifier: Modifier,
     onDialogConfirm: () -> Unit,
@@ -40,7 +40,7 @@ fun OutdatedForecastMessage(
     }
     OutdatedForecastDialog(
         showDialog = showDialog,
-        reasonId = outdatedForecastUiModel.reason ?: R.string.error_generic,
+        reasonId = outdatedForecastUiState.reason ?: R.string.error_generic,
         onConfirmRequest = onDialogConfirm,
         onDismissRequest = onDialogDismiss
     )

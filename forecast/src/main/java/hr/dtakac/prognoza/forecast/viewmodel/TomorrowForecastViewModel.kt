@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.forecast.mapping.toInstantUiModel
 import hr.dtakac.prognoza.forecast.model.InstantUiModel
-import hr.dtakac.prognoza.forecast.model.TomorrowForecastUiModel
+import hr.dtakac.prognoza.forecast.uistate.TomorrowForecastUiState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -22,8 +22,8 @@ class TomorrowForecastViewModel(
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastViewModel(coroutineScope, timeProvider, forecastRepository) {
 
-    private val _forecast = mutableStateOf<TomorrowForecastUiModel>(TomorrowForecastUiModel.None)
-    val forecast: State<TomorrowForecastUiModel> get() = _forecast
+    private val _forecast = mutableStateOf<TomorrowForecastUiState>(TomorrowForecastUiState.None)
+    val forecast: State<TomorrowForecastUiState> get() = _forecast
 
     private val _expandedHourIndices = mutableStateListOf<Int>()
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
@@ -36,7 +36,7 @@ class TomorrowForecastViewModel(
                 }
             }
         }
-        _forecast.value =  TomorrowForecastUiModel.Success(
+        _forecast.value =  TomorrowForecastUiState.Success(
             instants = instants.await()
         )
     }

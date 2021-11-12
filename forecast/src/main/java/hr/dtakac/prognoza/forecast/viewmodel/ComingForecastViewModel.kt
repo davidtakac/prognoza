@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.timeprovider.TomorrowForecastTimeProvider
 import hr.dtakac.prognoza.forecast.mapping.toInstantUiModel
-import hr.dtakac.prognoza.forecast.model.ComingForecastUiModel
+import hr.dtakac.prognoza.forecast.uistate.ComingForecastUiState
 import hr.dtakac.prognoza.forecast.model.InstantUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -24,8 +24,8 @@ class ComingForecastViewModel(
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastViewModel(coroutineScope, timeProvider, forecastRepository){
 
-    private val _forecast = mutableStateOf<ComingForecastUiModel>(ComingForecastUiModel.None)
-    val forecast: State<ComingForecastUiModel> get() = _forecast
+    private val _forecast = mutableStateOf<ComingForecastUiState>(ComingForecastUiState.None)
+    val forecast: State<ComingForecastUiState> get() = _forecast
 
     private val _expandedDayIndices = mutableStateListOf<Int>()
     val expandedDayIndices: SnapshotStateList<Int> get() = _expandedDayIndices
@@ -38,7 +38,7 @@ class ComingForecastViewModel(
                 }
             }
         }
-        _forecast.value = ComingForecastUiModel.Success(instants = instants.await())
+        _forecast.value = ComingForecastUiState.Success(instants = instants.await())
     }
 
     fun toggleExpanded(index: Int) {

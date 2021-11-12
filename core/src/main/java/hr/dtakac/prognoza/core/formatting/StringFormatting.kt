@@ -31,7 +31,7 @@ fun formatDaySummaryTime(time: ZonedDateTime): String {
     return DateUtils.formatDateTime(
         LocalContext.current,
         time.toInstant().toEpochMilli(),
-        DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_ALL
+        DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY
     )
 }
 
