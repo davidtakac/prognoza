@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.core.utils
 import hr.dtakac.prognoza.core.R
 import kotlin.math.roundToInt
 
-fun Double.toCompassDirection() = when (this.roundToInt()) {
+fun Double.toWindCompassDirectionId() = when (this.roundToInt()) {
     in 0..44 -> R.string.direction_n
     in 45..89 -> R.string.direction_ne
     in 90..134 -> R.string.direction_e

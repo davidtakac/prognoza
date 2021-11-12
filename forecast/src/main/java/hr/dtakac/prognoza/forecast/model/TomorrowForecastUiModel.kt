@@ -5,8 +5,7 @@ import androidx.compose.runtime.Immutable
 sealed class TomorrowForecastUiModel {
     @Immutable
     data class Success(
-        val summary: DayUiModel,
-        val hours: List<HourUiModel>
+        val instants: List<InstantUiModel>
     ) : TomorrowForecastUiModel()
 
     @Immutable

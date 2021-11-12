@@ -5,19 +5,16 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.timeprovider.TomorrowForecastTimeProvider
-import hr.dtakac.prognoza.core.utils.HOURS_AFTER_MIDNIGHT
-import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
-import hr.dtakac.prognoza.forecast.model.DayUiModel
+import hr.dtakac.prognoza.forecast.mapping.toInstantUiModel
 import hr.dtakac.prognoza.forecast.model.ComingForecastUiModel
+import hr.dtakac.prognoza.forecast.model.InstantUiModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.time.ZonedDateTime
 
 class ComingForecastViewModel(
     coroutineScope: CoroutineScope?,
@@ -34,30 +31,14 @@ class ComingForecastViewModel(
     val expandedDayIndices: SnapshotStateList<Int> get() = _expandedDayIndices
 
     override suspend fun handleSuccess(success: ForecastResult.Success) {
-        val days = withContext(dispatcherProvider.default) {
-            var endOfDay: ZonedDateTime = tomorrowForecastTimeProvider.end
-            val dayHours: MutableList<ForecastTimeSpan> = mutableListOf()
-            val days: MutableList<DayUiModel> = mutableListOf()
-            for (i in success.timeSpans.indices) {
-                val currentTimeSpan = success.timeSpans[i]
-                if (currentTimeSpan.startTime < endOfDay) {
-                    dayHours.add(currentTimeSpan)
-                } else {
-                    days.add(
-                        dayHours.toDayUiModel(
-                            coroutineScope = this,
-                            place = success.place
-                        )
-                    )
-                    dayHours.clear()
-                    dayHours.add(currentTimeSpan)
-                    val hoursLeftInDay = 24 - currentTimeSpan.startTime.hour
-                    endOfDay = currentTimeSpan.startTime.plusHours(hoursLeftInDay + HOURS_AFTER_MIDNIGHT)
+        val instants = coroutineScope.async(dispatcherProvider.default) {
+            mutableListOf<InstantUiModel>().apply {
+                for (i in success.timeSpans.indices) {
+                    add(success.timeSpans[i].toInstantUiModel(success.timeSpans.getOrNull(i + 1)))
                 }
             }
-            days
         }
-        _forecast.value = ComingForecastUiModel.Success(days = days)
+        _forecast.value = ComingForecastUiModel.Success(instants = instants.await())
     }
 
     fun toggleExpanded(index: Int) {

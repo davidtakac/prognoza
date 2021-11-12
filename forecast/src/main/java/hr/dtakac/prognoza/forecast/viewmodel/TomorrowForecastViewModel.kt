@@ -8,8 +8,8 @@ import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
-import hr.dtakac.prognoza.forecast.mapping.toDayUiModel
-import hr.dtakac.prognoza.forecast.mapping.toHourUiModel
+import hr.dtakac.prognoza.forecast.mapping.toInstantUiModel
+import hr.dtakac.prognoza.forecast.model.InstantUiModel
 import hr.dtakac.prognoza.forecast.model.TomorrowForecastUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
@@ -29,15 +29,15 @@ class TomorrowForecastViewModel(
     val expandedHourIndices: SnapshotStateList<Int> get() = _expandedHourIndices
 
     override suspend fun handleSuccess(success: ForecastResult.Success) {
-        val summaryAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans.toDayUiModel(coroutineScope = this, place = success.place)
-        }
-        val hoursAsync = coroutineScope.async(dispatcherProvider.default) {
-            success.timeSpans.map { it.toHourUiModel() }
+        val instants = coroutineScope.async(dispatcherProvider.default) {
+            mutableListOf<InstantUiModel>().apply {
+                for (i in success.timeSpans.indices) {
+                    add(success.timeSpans[i].toInstantUiModel(success.timeSpans.getOrNull(i + 1)))
+                }
+            }
         }
         _forecast.value =  TomorrowForecastUiModel.Success(
-            summary = summaryAsync.await(),
-            hours = hoursAsync.await()
+            instants = instants.await()
         )
     }
 

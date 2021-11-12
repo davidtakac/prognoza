@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.core.utils
+package hr.dtakac.prognoza.core.mapping
 
 import hr.dtakac.prognoza.core.R
 import hr.dtakac.prognoza.core.model.repository.*

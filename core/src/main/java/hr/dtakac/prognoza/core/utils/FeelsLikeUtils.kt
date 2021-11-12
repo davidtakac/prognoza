@@ -11,7 +11,7 @@ import kotlin.math.sqrt
  * @return The "Feels like" temperature in degrees Celsius or null if it can't be calculated with
  * the provided parameters.
  */
-fun calculateFeelsLikeTemperature(
+fun calculateFeelsLike(
     temperature: Double,
     windSpeed: Double?,
     relativeHumidity: Double?

@@ -1,19 +1,22 @@
 package hr.dtakac.prognoza.forecast.model
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import java.time.ZonedDateTime
 
 @Immutable
-data class HourUiModel(
-    val id: String,
+data class InstantUiModel(
+    val time: ZonedDateTime,
+    val nextInstantTime: ZonedDateTime?,
+    val showNextInstantTime: Boolean,
+
     val temperature: Double?,
     val feelsLike: Double?,
     val precipitationAmount: Double?,
     val windSpeed: Double?,
-    val windFromCompassDirection: Int?,
-    val weatherDescription: WeatherDescription?,
-    val time: ZonedDateTime,
+    @StringRes val windCompassDirectionId: Int?,
     val relativeHumidity: Double?,
-    val airPressureAtSeaLevel: Double?
+    val airPressure: Double?,
+    val weatherDescription: WeatherDescription?,
 )

@@ -1,11 +1,11 @@
 package hr.dtakac.prognoza.core.model.repository
 
-import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
+import hr.dtakac.prognoza.core.model.database.ForecastInstant
 import hr.dtakac.prognoza.core.model.database.Place
 
 sealed class ForecastResult {
     data class Success(
-        val timeSpans: List<ForecastTimeSpan>,
+        val timeSpans: List<ForecastInstant>,
         val place: Place
     ) : ForecastResult()
 

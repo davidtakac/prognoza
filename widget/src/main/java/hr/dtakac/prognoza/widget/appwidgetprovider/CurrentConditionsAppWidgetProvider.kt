@@ -10,10 +10,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.SystemClock
 import android.widget.RemoteViews
-import hr.dtakac.prognoza.core.mapping.totalPrecipitationAmount
-import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
+import hr.dtakac.prognoza.core.model.database.ForecastInstant
 import hr.dtakac.prognoza.core.model.database.Place
 import hr.dtakac.prognoza.core.model.repository.ForecastResult
+import hr.dtakac.prognoza.core.model.ui.WEATHER_DESCRIPTIONS
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.timeprovider.TodayForecastTimeProvider
@@ -117,23 +117,26 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         }
     }
 
-    private fun List<ForecastTimeSpan>.toCurrentConditionsWidgetUiModel(
+    private fun List<ForecastInstant>.toCurrentConditionsWidgetUiModel(
         preferredUnit: hr.dtakac.prognoza.core.model.ui.MeasurementUnit,
         selectedPlace: Place
     ): CurrentConditionsWidgetUiModel {
-        val precipitationTwoHours = subList(0, 2).totalPrecipitationAmount()
-        val currentHour = get(0)
+        val precipitationTwoHours = 1.0 //TODO: fix!
+        val currentInstant = get(0)
         return CurrentConditionsWidgetUiModel(
-            temperature = currentHour.instantTemperature,
-            feelsLike = currentHour.instantTemperature?.let {
-                calculateFeelsLikeTemperature(
+            temperature = currentInstant.temperature,
+            feelsLike = currentInstant.temperature?.let {
+                calculateFeelsLike(
                     it,
-                    currentHour.instantWindSpeed,
-                    currentHour.instantRelativeHumidity
+                    currentInstant.windSpeed,
+                    currentInstant.relativeHumidity
                 )
             },
             placeName = selectedPlace.shortenedName,
-            iconResourceId = hr.dtakac.prognoza.core.model.ui.WEATHER_ICONS[currentHour.symbolCode]?.iconResourceId,
+            iconResourceId = WEATHER_DESCRIPTIONS[
+                    currentInstant.nextOneHours?.symbolCode
+                        ?: currentInstant.nextSixHours?.symbolCode
+            ]?.iconId,
             displayDataInUnit = preferredUnit,
             precipitationTwoHours = if (precipitationTwoHours <= 0) null else precipitationTwoHours,
         )

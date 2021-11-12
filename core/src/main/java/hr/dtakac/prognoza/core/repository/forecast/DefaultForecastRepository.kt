@@ -4,18 +4,17 @@ import android.database.sqlite.SQLiteException
 import hr.dtakac.prognoza.core.api.ForecastService
 import hr.dtakac.prognoza.core.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.core.database.converter.ForecastMetaDateTimeConverter
-import hr.dtakac.prognoza.core.database.dao.ForecastTimeSpanDao
+import hr.dtakac.prognoza.core.database.dao.ForecastInstantDao
+import hr.dtakac.prognoza.core.model.api.ForecastTimeStep
 import hr.dtakac.prognoza.core.model.api.LocationForecastResponse
-import hr.dtakac.prognoza.core.model.database.ForecastMeta
-import hr.dtakac.prognoza.core.model.database.ForecastTimeSpan
-import hr.dtakac.prognoza.core.model.database.Place
-import hr.dtakac.prognoza.core.model.repository.*
+import hr.dtakac.prognoza.core.model.database.*
+import hr.dtakac.prognoza.core.model.repository.ForecastError
+import hr.dtakac.prognoza.core.model.repository.ForecastResult
 import hr.dtakac.prognoza.core.repository.meta.MetaRepository
 import hr.dtakac.prognoza.core.repository.place.PlaceRepository
 import hr.dtakac.prognoza.core.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.core.utils.USER_AGENT
 import hr.dtakac.prognoza.core.utils.hasExpired
-import hr.dtakac.prognoza.core.utils.toForecastTimeSpan
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,7 +27,7 @@ import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
     private val forecastService: ForecastService,
-    private val forecastDao: ForecastTimeSpanDao,
+    private val forecastDao: ForecastInstantDao,
     private val metaRepository: MetaRepository,
     private val placeRepository: PlaceRepository,
     private val preferencesRepository: PreferencesRepository,
@@ -66,7 +65,7 @@ class DefaultForecastRepository(
                 }
             }
             _result.value = try {
-                val timeSpans = forecastDao.getForecastTimeSpans(
+                val timeSpans = forecastDao.getForecastInstants(
                     start = start,
                     end = end,
                     placeId = selectedPlace.id
@@ -106,7 +105,7 @@ class DefaultForecastRepository(
 
     private suspend fun updateForecastDatabase(place: Place, lastModified: ZonedDateTime?) {
         val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
-        val forecastResponse = forecastService.getCompleteLocationForecast(
+        val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = USER_AGENT,
             ifModifiedSince = lastModifiedTimestamp,
             latitude = format("%.2f", place.latitude),
@@ -128,23 +127,20 @@ class DefaultForecastRepository(
         locationForecastResponse: LocationForecastResponse?,
         placeId: String
     ) {
-        val forecastTimeSpans = locationForecastResponse?.forecast?.forecastTimeSteps?.let {
-            withContext(dispatcherProvider.default) {
-                val result = mutableListOf<ForecastTimeSpan>()
-                for (i in it.indices) {
-                    val current = it[i]
-                    val next = it.getOrNull(i + 1)
-                    result.add(current.toForecastTimeSpan(placeId, next))
+        val forecastInstants =
+            locationForecastResponse?.forecast?.forecastTimeSteps?.let { timeSteps ->
+                withContext(dispatcherProvider.default) {
+                    timeSteps.map {
+                        it.toForecastInstant(placeId)
+                    }
                 }
-                result
-            }
-        } ?: return
-        forecastDao.insertOrUpdateAll(forecastTimeSpans)
+            } ?: return
+        forecastDao.insertOrUpdateAll(forecastInstants)
     }
 
     private suspend fun deleteExpiredData() {
         try {
-            forecastDao.deleteExpiredForecastTimeSpans()
+            forecastDao.deletePastForecastInstants()
         } catch (e: Exception) {
             // intentionally ignored
             e.printStackTrace()
@@ -159,5 +155,37 @@ class DefaultForecastRepository(
 
     private suspend fun getPlaceMeta(place: Place): ForecastMeta? {
         return metaRepository.get(place.id)
+    }
+
+    private fun ForecastTimeStep.toForecastInstant(placeId: String): ForecastInstant {
+        return ForecastInstant(
+            time = ZonedDateTime.parse(time),
+            placeId = placeId,
+            temperature = data.instant.data.airTemperature,
+            windSpeed = data.instant.data.windSpeed,
+            windFromDirection = data.instant.data.windFromDirection,
+            relativeHumidity = data.instant.data.relativeHumidity,
+            airPressure = data.instant.data.airPressureAtSeaLevel,
+
+            nextOneHours = data.next1Hours?.let {
+                NextOneHours(
+                    // if next1Hours exists, it's precipitation amount does too.
+                    precipitationAmount = it.details.precipitationAmount!!,
+                    symbolCode = it.summary.symbolCode
+                )
+            },
+            nextSixHours = data.next6Hours?.let {
+                NextSixHours(
+                    // if next6Hours exists, it's precipitation amount does too.
+                    precipitationAmount = data.next6Hours.details.precipitationAmount!!,
+                    symbolCode = data.next6Hours.summary.symbolCode
+                )
+            },
+            nextTwelveHours = data.next12Hours?.let {
+                NextTwelveHours(
+                    symbolCode = data.next12Hours.summary.symbolCode
+                )
+            }
+        )
     }
 }

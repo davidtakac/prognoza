@@ -1,13 +1,14 @@
 package hr.dtakac.prognoza.core.model.ui
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import hr.dtakac.prognoza.core.R
 
 @Immutable
 data class WeatherDescription(
-    @DrawableRes val iconResourceId: Int,
-    val descriptionResourceId: Int
+    @DrawableRes val iconId: Int,
+    @StringRes val descriptionResourceId: Int
 )
 
 @Immutable
@@ -16,7 +17,7 @@ data class RepresentativeWeatherDescription(
     val isMostly: Boolean
 )
 
-val WEATHER_ICONS = mapOf(
+val WEATHER_DESCRIPTIONS = mapOf(
     "clearsky_day" to WeatherDescription(R.drawable.clearsky_day, R.string.clearsky),
     "clearsky_night" to WeatherDescription(R.drawable.clearsky_night, R.string.clearsky),
     "clearsky_polartwilight" to WeatherDescription(

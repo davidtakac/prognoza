@@ -118,11 +118,11 @@ fun ForecastTabbedPager(
                         outdatedForecast = outdatedComingForecast,
                         emptyForecast = emptyComingForecast,
                         isLoading = isComingForecastLoading,
-                        expandedHourIndices = expandedComingForecastDayIndices,
-                        onDayClicked = { index: Int -> comingForecastViewModel.toggleExpanded(index) },
+                        expandedInstantIndices = expandedComingForecastDayIndices,
+                        onInstantClicked = { index: Int -> comingForecastViewModel.toggleExpanded(index) },
                         onTryAgainClicked = { comingForecastViewModel.getForecast() },
                         onPickAPlaceClicked = { onSearchClicked() },
-                        preferredMeasurementUnit = preferredUnit
+                        preferredUnit = preferredUnit
                     )
                 }
             )

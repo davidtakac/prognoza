@@ -18,12 +18,12 @@ data class ForecastTimeStep(
     @SerializedName("time")
     val time: String,
     @SerializedName("data")
-    val data: ForecastTimeStepData?
+    val data: ForecastTimeStepData
 )
 
 data class ForecastTimeStepData(
     @SerializedName("instant")
-    val instant: ForecastTimeInstant?,
+    val instant: ForecastTimeInstant,
     @SerializedName("next_1_hours")
     val next1Hours: ForecastTimePeriod?,
     @SerializedName("next_6_hours")
@@ -66,9 +66,9 @@ data class ForecastInstantData(
 
 data class ForecastTimePeriod(
     @SerializedName("details")
-    val data: ForecastTimePeriodData?,
+    val details: ForecastTimePeriodDetails,
     @SerializedName("summary")
-    val summary: ForecastTimePeriodSummary?
+    val summary: ForecastTimePeriodSummary
 )
 
 data class ForecastTimePeriodSummary(
@@ -76,7 +76,7 @@ data class ForecastTimePeriodSummary(
     val symbolCode: String
 )
 
-data class ForecastTimePeriodData(
+data class ForecastTimePeriodDetails(
     @SerializedName("probability_of_thunder")
     val probabilityOfThunder: Double?,
     @SerializedName("ultraviolet_index_clear_sky_max")

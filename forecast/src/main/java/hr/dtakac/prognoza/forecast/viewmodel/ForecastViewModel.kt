@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.core.model.repository.*
 import hr.dtakac.prognoza.core.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.core.timeprovider.ForecastTimeProvider
 import hr.dtakac.prognoza.core.utils.ProgressTimeLatch
-import hr.dtakac.prognoza.core.utils.toErrorResourceId
+import hr.dtakac.prognoza.core.mapping.toErrorResourceId
 import hr.dtakac.prognoza.core.viewmodel.CoroutineScopeViewModel
 import hr.dtakac.prognoza.forecast.model.*
 import kotlinx.coroutines.*

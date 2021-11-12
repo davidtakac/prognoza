@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.google.accompanist.flowlayout.FlowRow
@@ -20,38 +21,38 @@ import hr.dtakac.prognoza.core.model.ui.WeatherDescription
 import hr.dtakac.prognoza.core.theme.PrognozaTheme
 import hr.dtakac.prognoza.core.utils.isSameHourAsNow
 import hr.dtakac.prognoza.forecast.R
-import hr.dtakac.prognoza.forecast.model.HourUiModel
+import hr.dtakac.prognoza.forecast.model.InstantUiModel
 import java.time.ZonedDateTime
 
-fun LazyListScope.ExpandableHours(
-    hours: List<HourUiModel>,
-    expandedHourIndices: List<Int>,
+fun LazyListScope.ExpandableInstants(
+    instants: List<InstantUiModel>,
+    expandedInstantIndices: List<Int>,
     preferredUnit: MeasurementUnit,
-    onHourClicked: (Int) -> Unit
+    onInstantClicked: (Int) -> Unit
 ) {
-    itemsIndexed(hours) { index, hour ->
-        ExpandableHour(
-            hour = hour,
-            isExpanded = index in expandedHourIndices,
-            onClick = { onHourClicked(index) },
+    itemsIndexed(instants) { index, hour ->
+        ExpandableInstant(
+            instant = hour,
+            isExpanded = index in expandedInstantIndices,
+            onClick = { onInstantClicked(index) },
             modifier = Modifier.padding(
                 start = 16.dp,
                 end = 16.dp,
                 top = 8.dp,
-                bottom = if (index == hours.lastIndex) 8.dp else 0.dp
+                bottom = if (index == instants.lastIndex) 8.dp else 0.dp
             ),
             preferredUnit = preferredUnit
         )
-        if (index == hours.lastIndex) {
+        if (index == instants.lastIndex) {
             MetNorwayOrganizationCredit()
         }
     }
 }
 
 @Composable
-fun ExpandableHour(
+fun ExpandableInstant(
     isExpanded: Boolean,
-    hour: HourUiModel,
+    instant: InstantUiModel,
     preferredUnit: MeasurementUnit,
     modifier: Modifier,
     onClick: () -> Unit
@@ -73,22 +74,24 @@ fun ExpandableHour(
                     bottom = 8.dp
                 )
         ) {
-            HourSummary(
+            InstantSummary(
                 modifier = Modifier.fillMaxWidth(),
-                time = hour.time,
-                precipitation = hour.precipitationAmount,
-                temperature = hour.temperature,
-                weatherDescription = hour.weatherDescription,
+                time = instant.time,
+                nextInstantTime = instant.nextInstantTime,
+                showNextInstantTime = instant.showNextInstantTime,
+                precipitation = instant.precipitationAmount,
+                temperature = instant.temperature,
+                weatherDescription = instant.weatherDescription,
                 unit = preferredUnit
             )
             if (isExpanded) {
                 Spacer(Modifier.height(8.dp))
-                HourDetails(
-                    feelsLike = hour.feelsLike,
-                    windSpeed = hour.windSpeed,
-                    windFromCompassDirection = hour.windFromCompassDirection,
-                    pressure = hour.airPressureAtSeaLevel,
-                    humidity = hour.relativeHumidity,
+                InstantDetails(
+                    feelsLike = instant.feelsLike,
+                    windSpeed = instant.windSpeed,
+                    windFromCompassDirection = instant.windCompassDirectionId,
+                    pressure = instant.airPressure,
+                    humidity = instant.relativeHumidity,
                     unit = preferredUnit
                 )
             }
@@ -97,9 +100,11 @@ fun ExpandableHour(
 }
 
 @Composable
-fun HourSummary(
+fun InstantSummary(
     modifier: Modifier,
     time: ZonedDateTime,
+    nextInstantTime: ZonedDateTime?,
+    showNextInstantTime: Boolean,
     precipitation: Double?,
     temperature: Double?,
     weatherDescription: WeatherDescription?,
@@ -112,7 +117,16 @@ fun HourSummary(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(if (time.isSameHourAsNow()) formatNowTime() else formatHourTime(time))
+                val firstTime =
+                    if (time.isSameHourAsNow()) formatNowTime() else formatHourTime(time)
+                val secondTime = if (showNextInstantTime && nextInstantTime != null) formatHourTime(
+                    nextInstantTime
+                ) else null
+                Text(
+                    secondTime?.let {
+                        stringResource(id = R.string.template_time_span, firstTime, secondTime)
+                    } ?: firstTime
+                )
                 Spacer(Modifier.width(16.dp))
                 CompositionLocalProvider(
                     LocalTextStyle provides PrognozaTheme.typography.subtitle2,
@@ -134,7 +148,7 @@ fun HourSummary(
                 Spacer(Modifier.width(16.dp))
                 Image(
                     painter = rememberImagePainter(
-                        weatherDescription?.iconResourceId ?: R.drawable.ic_cloud_off
+                        weatherDescription?.iconId ?: R.drawable.ic_cloud_off
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(36.dp)
@@ -145,7 +159,7 @@ fun HourSummary(
 }
 
 @Composable
-fun HourDetails(
+fun InstantDetails(
     feelsLike: Double?,
     windSpeed: Double?,
     windFromCompassDirection: Int?,
