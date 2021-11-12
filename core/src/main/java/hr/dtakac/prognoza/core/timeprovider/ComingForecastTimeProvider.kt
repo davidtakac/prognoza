@@ -6,7 +6,7 @@ class ComingForecastTimeProvider(
     private val referenceTimeProvider: ForecastTimeProvider
 ) : ForecastTimeProvider {
     override val start: ZonedDateTime
-        get() = referenceTimeProvider.start
+        get() = referenceTimeProvider.end.plusHours(1L)
 
     override val end: ZonedDateTime
         get() = start.plusDays(7L)
