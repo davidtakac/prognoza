@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14375" />
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
+        <entry key="app/src/main/res/layout/app_widget_current_conditions_medium_empty.xml" value="0.41299429355300554" />
         <entry key="app/src/main/res/layout/cell_day.xml" value="0.75" />
         <entry key="app/src/main/res/layout/cell_hour.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_days.xml" value="0.159375" />
@@ -20,7 +21,7 @@
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
