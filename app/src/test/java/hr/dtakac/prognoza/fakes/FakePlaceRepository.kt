@@ -1,19 +1,19 @@
 package hr.dtakac.prognoza.fakes
 
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 
 class FakePlaceRepository : PlaceRepository {
-    override suspend fun get(placeId: String): Place? {
+    override suspend fun get(placeId: String): hr.dtakac.prognoza.data.database.place.Place? {
         return TEST_PLACE
     }
 
-    override suspend fun getAll(): List<Place> {
+    override suspend fun getAll(): List<hr.dtakac.prognoza.data.database.place.Place> {
         return listOf(TEST_PLACE)
     }
 
-    override suspend fun getDefaultPlace(): Place {
+    override suspend fun getDefaultPlace(): hr.dtakac.prognoza.data.database.place.Place {
         return TEST_PLACE
     }
 
@@ -21,11 +21,11 @@ class FakePlaceRepository : PlaceRepository {
         return placeId == TEST_PLACE.id
     }
 
-    override suspend fun save(place: Place) {
+    override suspend fun save(place: hr.dtakac.prognoza.data.database.place.Place) {
         // do nothing
     }
 
-    override suspend fun search(query: String): List<Place> {
+    override suspend fun search(query: String): List<hr.dtakac.prognoza.data.database.place.Place> {
         return getAll()
     }
 }

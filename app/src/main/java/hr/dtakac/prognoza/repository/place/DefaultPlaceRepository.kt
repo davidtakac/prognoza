@@ -4,25 +4,25 @@ import hr.dtakac.prognoza.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.PlaceService
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.database.dao.PlaceDao
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.data.database.place.PlaceDao
+import hr.dtakac.prognoza.data.database.place.Place
 import kotlinx.coroutines.withContext
 import java.util.*
 
 class DefaultPlaceRepository(
-    private val placeDao: PlaceDao,
+    private val placeDao: hr.dtakac.prognoza.data.database.place.PlaceDao,
     private val placeService: PlaceService,
     private val dispatcherProvider: DispatcherProvider,
 ) : PlaceRepository {
 
-    override suspend fun get(placeId: String): Place? {
+    override suspend fun get(placeId: String): hr.dtakac.prognoza.data.database.place.Place? {
         return placeDao.get(placeId)
     }
 
-    override suspend fun getDefaultPlace(): Place {
+    override suspend fun getDefaultPlace(): hr.dtakac.prognoza.data.database.place.Place {
         var defaultPlace = get(DEFAULT_PLACE_ID)
         return if (defaultPlace == null) {
-            defaultPlace = Place(
+            defaultPlace = hr.dtakac.prognoza.data.database.place.Place(
                 id = DEFAULT_PLACE_ID,
                 fullName = "Osijek, Grad Osijek, Osijek-Baranja County, Croatia",
                 latitude = 45.55,
@@ -35,11 +35,11 @@ class DefaultPlaceRepository(
         }
     }
 
-    override suspend fun getAll(): List<Place> {
+    override suspend fun getAll(): List<hr.dtakac.prognoza.data.database.place.Place> {
         return placeDao.getAll()
     }
 
-    override suspend fun search(query: String): List<Place> {
+    override suspend fun search(query: String): List<hr.dtakac.prognoza.data.database.place.Place> {
         val response = try {
             placeService.search(
                 userAgent = USER_AGENT,
@@ -52,7 +52,7 @@ class DefaultPlaceRepository(
         }
         return withContext(dispatcherProvider.default) {
             response.map {
-                Place(
+                hr.dtakac.prognoza.data.database.place.Place(
                     id = it.id,
                     fullName = it.displayName,
                     latitude = it.latitude,
@@ -62,7 +62,7 @@ class DefaultPlaceRepository(
         }
     }
 
-    override suspend fun save(place: Place) {
+    override suspend fun save(place: hr.dtakac.prognoza.data.database.place.Place) {
         placeDao.insertOrUpdate(place)
     }
 

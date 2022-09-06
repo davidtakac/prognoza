@@ -1,3 +1,5 @@
 rootProject.name = "Prognoza"
 include ':app'
 include ':entities'
+include ':domain'
+include ':data'

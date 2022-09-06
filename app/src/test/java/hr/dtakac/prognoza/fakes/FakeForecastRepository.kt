@@ -3,20 +3,18 @@ package hr.dtakac.prognoza.fakes
 import com.google.gson.Gson
 import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.common.TEST_PLACE
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
 import hr.dtakac.prognoza.repomodel.ForecastResult
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
-import hr.dtakac.prognoza.utils.toForecastTimeSpan
 import okhttp3.Headers
 import retrofit2.Response
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class FakeForecastRepository : ForecastRepository {
@@ -33,7 +31,7 @@ class FakeForecastRepository : ForecastRepository {
     override suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
-        place: Place
+        place: hr.dtakac.prognoza.data.database.place.Place
     ): ForecastResult {
         val response = getData()
         // filter data according to start and end times then map to ForecastTimeSpan
@@ -42,7 +40,7 @@ class FakeForecastRepository : ForecastRepository {
                 val time = ZonedDateTime.parse(it.time)
                 time in start..end
             }
-        val timeSpans: MutableList<ForecastTimeSpan> = mutableListOf()
+        val timeSpans: MutableList<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan> = mutableListOf()
         for (i in timeSteps.indices) {
             timeSpans.add(
                 timeSteps[i].toForecastTimeSpan(

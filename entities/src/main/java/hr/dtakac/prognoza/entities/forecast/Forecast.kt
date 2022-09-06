@@ -18,5 +18,5 @@ data class Forecast(
         airTemperature = temperature.fahrenheit,
         windSpeed = wind.milesPerHour,
         relativeHumidity = humidity.percent
-    )?.let { Temperature(it, TemperatureUnit.FAHRENHEIT) } ?: temperature
+    )?.let { Temperature(it, TemperatureUnit.F) } ?: temperature
 }

@@ -1,6 +1,10 @@
-package hr.dtakac.prognoza.apimodel
+package hr.dtakac.prognoza.data.network.forecast
 
 import com.google.gson.annotations.SerializedName
+import hr.dtakac.prognoza.data.database.forecast.model.ForecastDbModel
+import hr.dtakac.prognoza.entities.forecast.units.Temperature
+import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import java.time.ZonedDateTime
 
 data class LocationForecastResponse(
     @SerializedName("properties")
@@ -18,12 +22,12 @@ data class ForecastTimeStep(
     @SerializedName("time")
     val time: String,
     @SerializedName("data")
-    val data: ForecastTimeStepData?
+    val data: ForecastTimeStepData
 )
 
 data class ForecastTimeStepData(
     @SerializedName("instant")
-    val instant: ForecastTimeInstant?,
+    val instant: ForecastTimeInstant,
     @SerializedName("next_1_hours")
     val next1Hours: ForecastTimePeriod?,
     @SerializedName("next_6_hours")
@@ -39,36 +43,24 @@ data class ForecastTimeInstant(
 
 data class ForecastInstantData(
     @SerializedName("air_temperature")
-    val airTemperature: Double?,
-    @SerializedName("cloud_area_fraction_low")
-    val cloudAreaFractionLow: Double?,
-    @SerializedName("cloud_area_fraction_high")
-    val cloudAreaFractionHigh: Double?,
-    @SerializedName("cloud_area_fraction_medium")
-    val cloudAreaFractionMedium: Double?,
-    @SerializedName("wind_from_direction")
-    val windFromDirection: Double?,
-    @SerializedName("air_pressure_at_sea_level")
-    val airPressureAtSeaLevel: Double?,
+    val airTemperature: Double,
     @SerializedName("cloud_area_fraction")
-    val cloudAreaFraction: Double?,
-    @SerializedName("wind_speed_of_gust")
-    val windSpeedOfGust: Double?,
+    val cloudAreaFraction: Double,
+    @SerializedName("wind_from_direction")
+    val windFromDirection: Double,
+    @SerializedName("air_pressure_at_sea_level")
+    val airPressureAtSeaLevel: Double,
     @SerializedName("relative_humidity")
-    val relativeHumidity: Double?,
-    @SerializedName("dew_point_temperature")
-    val dewPointTemperature: Double?,
+    val relativeHumidity: Double,
     @SerializedName("wind_speed")
-    val windSpeed: Double?,
-    @SerializedName("fog_area_fraction")
-    val fogAreaFraction: Double?
+    val windSpeed: Double
 )
 
 data class ForecastTimePeriod(
     @SerializedName("details")
     val data: ForecastTimePeriodData?,
     @SerializedName("summary")
-    val summary: ForecastTimePeriodSummary?
+    val summary: ForecastTimePeriodSummary
 )
 
 data class ForecastTimePeriodSummary(

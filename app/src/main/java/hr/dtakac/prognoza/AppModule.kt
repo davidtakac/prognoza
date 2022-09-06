@@ -8,7 +8,7 @@ import hr.dtakac.prognoza.common.network.DefaultNetworkChecker
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.database.AppDatabase
+import hr.dtakac.prognoza.data.database.AppDatabase
 import hr.dtakac.prognoza.repository.forecast.DefaultForecastRepository
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
 import hr.dtakac.prognoza.repository.meta.DefaultMetaRepository
@@ -71,7 +71,7 @@ val prognozaAppModule = module {
     single {
         Room.databaseBuilder(
             androidApplication().applicationContext,
-            AppDatabase::class.java, "prognoza_database"
+            hr.dtakac.prognoza.data.database.AppDatabase::class.java, "prognoza_database"
         ).build()
     }
 
@@ -85,18 +85,18 @@ val prognozaAppModule = module {
     }
 
     single<MetaRepository> {
-        DefaultMetaRepository(get<AppDatabase>().metaDao())
+        DefaultMetaRepository(get<hr.dtakac.prognoza.data.database.AppDatabase>().metaDao())
     }
 
     single<PlaceRepository> {
-        DefaultPlaceRepository(get<AppDatabase>().placeDao(), get(), get())
+        DefaultPlaceRepository(get<hr.dtakac.prognoza.data.database.AppDatabase>().placeDao(), get(), get())
     }
 
     single<ForecastRepository> {
         DefaultForecastRepository(
             dispatcherProvider = get(),
             forecastService = get(),
-            forecastDao = get<AppDatabase>().hourDao(),
+            forecastDao = get<hr.dtakac.prognoza.data.database.AppDatabase>().hourDao(),
             metaRepository = get()
         )
     }

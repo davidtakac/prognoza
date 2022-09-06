@@ -14,11 +14,11 @@ class Temperature(
     }
 
     val celsius: Double = resolveCelsius()
-    val fahrenheit: Double = if (unit == TemperatureUnit.FAHRENHEIT) value else celsius * 1.8 + 32
+    val fahrenheit: Double = if (unit == TemperatureUnit.F) value else celsius * 1.8 + 32
 
-    private fun resolveCelsius(): Double = if (unit == TemperatureUnit.CELSIUS) value else (value - 32) / 1.8
+    private fun resolveCelsius(): Double = if (unit == TemperatureUnit.C) value else (value - 32) / 1.8
 }
 
 enum class TemperatureUnit {
-    CELSIUS, FAHRENHEIT
+    C, F
 }

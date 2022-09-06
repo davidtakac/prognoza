@@ -1,13 +1,13 @@
 package hr.dtakac.prognoza.repository.meta
 
-import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
-import hr.dtakac.prognoza.database.dao.ForecastMetaDao
-import hr.dtakac.prognoza.entity.ForecastMeta
+import hr.dtakac.prognoza.data.database.converter.ForecastMetaDateTimeConverter
+import hr.dtakac.prognoza.data.database.forecast.ForecastMetaDao
+import hr.dtakac.prognoza.data.database.forecast.ForecastMeta
 
 class DefaultMetaRepository(
-    private val metaDao: ForecastMetaDao,
+    private val metaDao: hr.dtakac.prognoza.data.database.forecast.ForecastMetaDao,
 ) : MetaRepository {
-    override suspend fun get(placeId: String): ForecastMeta? {
+    override suspend fun get(placeId: String): hr.dtakac.prognoza.data.database.forecast.ForecastMeta? {
         return metaDao.get(placeId)
     }
 
@@ -17,9 +17,9 @@ class DefaultMetaRepository(
         lastModifiedTime: String?
     ) {
         metaDao.updateForecastMeta(
-            ForecastMeta(
-                expires = ForecastMetaDateTimeConverter.fromTimestamp(expiresTime),
-                lastModified = ForecastMetaDateTimeConverter.fromTimestamp(lastModifiedTime),
+            hr.dtakac.prognoza.data.database.forecast.ForecastMeta(
+                expires = hr.dtakac.prognoza.data.database.converter.ForecastMetaDateTimeConverter.fromTimestamp(expiresTime),
+                lastModified = hr.dtakac.prognoza.data.database.converter.ForecastMetaDateTimeConverter.fromTimestamp(lastModifiedTime),
                 placeId = placeId
             )
         )

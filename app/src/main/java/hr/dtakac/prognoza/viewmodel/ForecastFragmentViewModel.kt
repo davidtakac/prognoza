@@ -2,9 +2,8 @@ package hr.dtakac.prognoza.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import hr.dtakac.prognoza.entity.ForecastMeta
-import hr.dtakac.prognoza.entity.Place
-import hr.dtakac.prognoza.utils.hasExpired
+import hr.dtakac.prognoza.data.database.forecast.ForecastMeta
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.utils.toErrorResourceId
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Empty
@@ -24,13 +23,13 @@ abstract class ForecastFragmentViewModel<T : ForecastUiModel>(
     protected val preferencesRepository: PreferencesRepository,
     protected val placeRepository: PlaceRepository
 ) : CoroutineScopeViewModel(coroutineScope) {
-    private var currentMeta: ForecastMeta? = null
+    private var currentMeta: hr.dtakac.prognoza.data.database.forecast.ForecastMeta? = null
     private var currentUnit: MeasurementUnit? = null
 
     protected abstract val _forecast: MutableLiveData<T>
     val forecast: LiveData<T> get() = _forecast
 
-    protected lateinit var selectedPlace: Place
+    protected lateinit var selectedPlace: hr.dtakac.prognoza.data.database.place.Place
 
     private val _emptyScreen = MutableLiveData<EmptyForecastUiModel?>()
     val emptyScreen: LiveData<EmptyForecastUiModel?> get() = _emptyScreen

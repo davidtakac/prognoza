@@ -8,8 +8,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.common.Event
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.entity.Place
-import hr.dtakac.prognoza.utils.toPlaceUiModel
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.repository.place.PlaceRepository
 import hr.dtakac.prognoza.repository.preferences.PreferencesRepository
 import hr.dtakac.prognoza.uimodel.cell.PlaceUiModel
@@ -24,7 +23,7 @@ class PlacesViewModel(
     private val preferencesRepository: PreferencesRepository,
     private val networkChecker: NetworkChecker
 ) : CoroutineScopeViewModel(coroutineScope) {
-    private var displayedPlaces = listOf<Place>()
+    private var displayedPlaces = listOf<hr.dtakac.prognoza.data.database.place.Place>()
 
     private val _places = MutableLiveData<List<PlaceUiModel>>()
     val places: LiveData<List<PlaceUiModel>> get() = _places
@@ -85,7 +84,7 @@ class PlacesViewModel(
     }
 
     @SuppressLint("NullSafeMutableLiveData")
-    private suspend fun setDisplayedPlaces(places: List<Place>) {
+    private suspend fun setDisplayedPlaces(places: List<hr.dtakac.prognoza.data.database.place.Place>) {
         displayedPlaces = places
         _places.value = withContext(dispatcherProvider.default) {
             displayedPlaces.map {

@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.repository.meta
 
-import hr.dtakac.prognoza.entity.ForecastMeta
+import hr.dtakac.prognoza.data.database.forecast.ForecastMeta
 
 interface MetaRepository {
     suspend fun update(
@@ -9,5 +9,5 @@ interface MetaRepository {
         lastModifiedTime: String?
     )
 
-    suspend fun get(placeId: String): ForecastMeta?
+    suspend fun get(placeId: String): hr.dtakac.prognoza.data.database.forecast.ForecastMeta?
 }

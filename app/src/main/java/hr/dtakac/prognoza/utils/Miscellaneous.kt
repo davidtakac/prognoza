@@ -2,8 +2,7 @@ package hr.dtakac.prognoza.utils
 
 import android.content.res.Resources
 import android.util.TypedValue
-import hr.dtakac.prognoza.entity.ForecastMeta
-import java.time.ZonedDateTime
+import hr.dtakac.prognoza.data.database.forecast.ForecastMeta
 
 fun <T> List<T>.mostCommon(): T? =
     groupingBy { it }.eachCount().maxByOrNull { it.value }?.key
@@ -16,7 +15,7 @@ val Number.toPx
         Resources.getSystem().displayMetrics
     )
 
-fun ForecastMeta.hasExpired(): Boolean = try {
+fun hr.dtakac.prognoza.data.database.forecast.ForecastMeta.hasExpired(): Boolean = try {
     ZonedDateTime.now() > expires
 } catch (e: Exception) {
     true

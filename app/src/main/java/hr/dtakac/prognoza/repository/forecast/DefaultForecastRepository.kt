@@ -5,13 +5,11 @@ import hr.dtakac.prognoza.USER_AGENT
 import hr.dtakac.prognoza.api.ForecastService
 import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
-import hr.dtakac.prognoza.database.converter.ForecastMetaDateTimeConverter
-import hr.dtakac.prognoza.database.dao.ForecastTimeSpanDao
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.data.database.converter.ForecastMetaDateTimeConverter
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpanDao
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.utils.hasExpired
-import hr.dtakac.prognoza.utils.toForecastResult
-import hr.dtakac.prognoza.utils.toForecastTimeSpan
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.repository.meta.MetaRepository
 import kotlinx.coroutines.withContext
@@ -23,7 +21,7 @@ import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
     private val forecastService: ForecastService,
-    private val forecastDao: ForecastTimeSpanDao,
+    private val forecastDao: hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpanDao,
     private val metaRepository: MetaRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : ForecastRepository {
@@ -40,7 +38,7 @@ class DefaultForecastRepository(
     override suspend fun getForecastTimeSpans(
         start: ZonedDateTime,
         end: ZonedDateTime,
-        place: Place
+        place: hr.dtakac.prognoza.data.database.place.Place
     ): ForecastResult {
         var meta = try {
             metaRepository.get(place.id)
@@ -81,8 +79,8 @@ class DefaultForecastRepository(
         }
     }
 
-    private suspend fun updateForecastDatabase(place: Place, lastModified: ZonedDateTime?) {
-        val lastModifiedTimestamp = ForecastMetaDateTimeConverter.toTimestamp(lastModified)
+    private suspend fun updateForecastDatabase(place: hr.dtakac.prognoza.data.database.place.Place, lastModified: ZonedDateTime?) {
+        val lastModifiedTimestamp = hr.dtakac.prognoza.data.database.converter.ForecastMetaDateTimeConverter.toTimestamp(lastModified)
         val forecastResponse = forecastService.getCompleteLocationForecast(
             userAgent = USER_AGENT,
             ifModifiedSince = lastModifiedTimestamp,
@@ -107,7 +105,7 @@ class DefaultForecastRepository(
     ) {
         val forecastTimeSpans = locationForecastResponse?.forecast?.forecastTimeSteps?.let {
             withContext(dispatcherProvider.default) {
-                val result = mutableListOf<ForecastTimeSpan>()
+                val result = mutableListOf<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>()
                 for (i in it.indices) {
                     val current = it[i]
                     val next = it.getOrNull(i + 1)

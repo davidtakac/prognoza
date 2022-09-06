@@ -1,13 +1,13 @@
 package hr.dtakac.prognoza.repomodel
 
-import hr.dtakac.prognoza.entity.ForecastMeta
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
+import hr.dtakac.prognoza.data.database.forecast.ForecastMeta
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
 
 sealed interface ForecastResult
 
 data class Success(
-    val meta: ForecastMeta?,
-    val timeSpans: List<ForecastTimeSpan>
+    val meta: hr.dtakac.prognoza.data.database.forecast.ForecastMeta?,
+    val timeSpans: List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>
 ) : ForecastResult
 
 data class CachedSuccess(

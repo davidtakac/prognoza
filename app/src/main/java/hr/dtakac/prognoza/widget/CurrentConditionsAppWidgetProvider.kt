@@ -15,8 +15,8 @@ import hr.dtakac.prognoza.BuildConfig
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_INTENT_TRAMPOLINE
 import hr.dtakac.prognoza.REQUEST_CODE_APP_WIDGET_CURRENT_CONDITIONS_UPDATE
 import hr.dtakac.prognoza.activity.ForecastActivity
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.repomodel.CachedSuccess
 import hr.dtakac.prognoza.repomodel.Success
 import hr.dtakac.prognoza.repository.forecast.ForecastRepository
@@ -135,9 +135,9 @@ abstract class CurrentConditionsAppWidgetProvider : AppWidgetProvider(), KoinCom
         }
     }
 
-    private fun List<ForecastTimeSpan>.toCurrentConditionsWidgetUiModel(
+    private fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.toCurrentConditionsWidgetUiModel(
         selectedUnit: MeasurementUnit,
-        selectedPlace: Place
+        selectedPlace: hr.dtakac.prognoza.data.database.place.Place
     ): CurrentConditionsWidgetUiModel {
         val precipitationTwoHours = subList(0, 2).totalPrecipitationAmount()
         val currentHour = get(0)

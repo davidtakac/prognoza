@@ -1,13 +1,12 @@
 package hr.dtakac.prognoza.utils
 
 import hr.dtakac.prognoza.apimodel.ForecastTimeStep
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import java.time.ZonedDateTime
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
 
 fun ForecastTimeStep.toForecastTimeSpan(
     placeId: String,
     next: ForecastTimeStep?
-): ForecastTimeSpan {
+): hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan {
     val startTime = ZonedDateTime.parse(time)
     val endTime = next?.time?.let { ZonedDateTime.parse(it) }
     val priorityDetails = when (endTime) {

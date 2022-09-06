@@ -1,10 +1,10 @@
-package hr.dtakac.prognoza.database.converter
+package hr.dtakac.prognoza.data.database.converter
 
 import androidx.room.TypeConverter
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-object ForecastMetaDateTimeConverter {
+object MetaDateTimeConverter {
     private val formatter = DateTimeFormatter.RFC_1123_DATE_TIME
 
     @JvmStatic

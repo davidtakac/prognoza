@@ -1,20 +1,19 @@
 package hr.dtakac.prognoza.utils
 
 import ca.rmen.sunrisesunset.SunriseSunset
-import hr.dtakac.prognoza.entity.ForecastMeta
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
-import hr.dtakac.prognoza.entity.Place
+import hr.dtakac.prognoza.data.database.forecast.ForecastMeta
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
+import hr.dtakac.prognoza.data.database.place.Place
 import hr.dtakac.prognoza.repomodel.*
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
 import hr.dtakac.prognoza.uimodel.WEATHER_ICONS
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
-import hr.dtakac.prognoza.uimodel.cell.HourUiModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.async
 import java.util.*
 
-fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
+fun hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
     HourUiModel(
         id = "$placeId-$startTime",
         temperature = instantTemperature,
@@ -37,10 +36,10 @@ fun ForecastTimeSpan.toHourUiModel(unit: MeasurementUnit) =
         displayDataInUnit = unit
     )
 
-suspend fun List<ForecastTimeSpan>.toDayUiModel(
+suspend fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.toDayUiModel(
     coroutineScope: CoroutineScope,
     unit: MeasurementUnit,
-    place: Place
+    place: hr.dtakac.prognoza.data.database.place.Place
 ): DayUiModel {
     val weatherIconAsync = coroutineScope.async { representativeWeatherIcon(place) }
     val lowTempAsync = coroutineScope.async { lowestTemperature() }
@@ -65,8 +64,8 @@ suspend fun List<ForecastTimeSpan>.toDayUiModel(
     )
 }
 
-fun List<ForecastTimeSpan>.toForecastResult(
-    meta: ForecastMeta?,
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.toForecastResult(
+    meta: hr.dtakac.prognoza.data.database.forecast.ForecastMeta?,
     error: ForecastError?
 ): ForecastResult {
     return if (isNullOrEmpty()) {
@@ -81,7 +80,7 @@ fun List<ForecastTimeSpan>.toForecastResult(
     }
 }
 
-fun List<ForecastTimeSpan>.highestTemperature(): Double? {
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.highestTemperature(): Double? {
     val max = maxOf { it.airTemperatureMax ?: Double.MIN_VALUE }
     return if (max == Double.MIN_VALUE) {
         null
@@ -90,7 +89,7 @@ fun List<ForecastTimeSpan>.highestTemperature(): Double? {
     }
 }
 
-fun List<ForecastTimeSpan>.lowestTemperature(): Double? {
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.lowestTemperature(): Double? {
     val min = minOf { it.airTemperatureMin ?: Double.MAX_VALUE }
     return if (min == Double.MAX_VALUE) {
         null
@@ -99,7 +98,7 @@ fun List<ForecastTimeSpan>.lowestTemperature(): Double? {
     }
 }
 
-fun List<ForecastTimeSpan>.highestRelativeHumidity(): Double? {
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.highestRelativeHumidity(): Double? {
     val max = maxOf { it.instantRelativeHumidity ?: Double.MIN_VALUE }
     return if (max == Double.MIN_VALUE) {
         null
@@ -108,7 +107,7 @@ fun List<ForecastTimeSpan>.highestRelativeHumidity(): Double? {
     }
 }
 
-fun List<ForecastTimeSpan>.highestPressure(): Double? {
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.highestPressure(): Double? {
     val max = maxOf { it.instantAirPressureAtSeaLevel ?: Double.MIN_VALUE }
     return if (max == Double.MIN_VALUE) {
         null
@@ -117,7 +116,7 @@ fun List<ForecastTimeSpan>.highestPressure(): Double? {
     }
 }
 
-fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): RepresentativeWeatherDescription? {
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.representativeWeatherIcon(place: hr.dtakac.prognoza.data.database.place.Place): RepresentativeWeatherDescription? {
     val timeSpansGroupedByIsDay = groupBy {
         SunriseSunset.isDay(
             GregorianCalendar.from(it.startTime),
@@ -144,11 +143,11 @@ fun List<ForecastTimeSpan>.representativeWeatherIcon(place: Place): Representati
     }
 }
 
-fun List<ForecastTimeSpan>.totalPrecipitationAmount(): Double {
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.totalPrecipitationAmount(): Double {
     return sumOf { it.precipitationAmount ?: 0.0 }
 }
 
-fun List<ForecastTimeSpan>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
+fun List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan>.hourWithMaxWindSpeed() = maxWithOrNull { o1, o2 ->
     val difference =
         (o1.instantWindSpeed ?: Double.MIN_VALUE) - (o2.instantWindSpeed ?: Double.MIN_VALUE)
     when {

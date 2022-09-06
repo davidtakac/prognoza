@@ -3,7 +3,7 @@ package hr.dtakac.prognoza
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import hr.dtakac.prognoza.common.TEST_PLACE
 import hr.dtakac.prognoza.utils.toDayUiModel
-import hr.dtakac.prognoza.entity.ForecastTimeSpan
+import hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan
 import hr.dtakac.prognoza.uimodel.MeasurementUnit
 import hr.dtakac.prognoza.uimodel.cell.DayUiModel
 import hr.dtakac.prognoza.uimodel.RepresentativeWeatherDescription
@@ -62,7 +62,7 @@ class DayUiModelMappingTest {
     }
 
     private fun getForecastTimeSpans_withNormalValues(start: ZonedDateTime) = listOf(
-        ForecastTimeSpan(
+        hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan(
             startTime = start,
             endTime = start.plusHours(1L),
             placeId = TEST_PLACE.id,
@@ -77,7 +77,7 @@ class DayUiModelMappingTest {
             airTemperatureMin = 18.0,
             airTemperatureMax = 18.0,
         ),
-        ForecastTimeSpan(
+        hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan(
             startTime = start.plusHours(1L),
             endTime = start.plusHours(2L),
             placeId = TEST_PLACE.id,
@@ -92,7 +92,7 @@ class DayUiModelMappingTest {
             airTemperatureMin = 23.56,
             airTemperatureMax = 23.56,
         ),
-        ForecastTimeSpan(
+        hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan(
             startTime = start.plusHours(2L),
             endTime = start.plusHours(3L),
             placeId = TEST_PLACE.id,
@@ -109,8 +109,8 @@ class DayUiModelMappingTest {
         ),
     )
 
-    private fun getForecastTimeSpans_withAllNullValues(time: ZonedDateTime): List<ForecastTimeSpan> {
-        val nullHour = ForecastTimeSpan(
+    private fun getForecastTimeSpans_withAllNullValues(time: ZonedDateTime): List<hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan> {
+        val nullHour = hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpan(
             startTime = time,
             endTime = null,
             placeId = TEST_PLACE.id,
