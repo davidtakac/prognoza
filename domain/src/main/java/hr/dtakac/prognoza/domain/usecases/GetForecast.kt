@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.domain.usecases
 
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
+import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.entities.forecast.Forecast
 import java.lang.Exception
 import java.time.ZonedDateTime
@@ -22,7 +23,7 @@ class GetForecast(
                 to = to
             )
                 .takeIf { it.isNotEmpty() }
-                ?.let { ForecastResult.Success(it) }
+                ?.let { ForecastResult.Success(place = selectedPlace, forecast = it) }
                 ?: ForecastResult.Empty
         } catch (e: Exception) {
             ForecastResult.Empty
@@ -32,6 +33,7 @@ class GetForecast(
 
 sealed interface ForecastResult {
     data class Success(
+        val place: Place,
         val forecast: List<Forecast>
     ): ForecastResult
     object Empty : ForecastResult
