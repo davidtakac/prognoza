@@ -2,8 +2,8 @@ package hr.dtakac.prognoza
 
 import android.content.Context
 import androidx.room.Room
-import hr.dtakac.prognoza.api.ForecastService
-import hr.dtakac.prognoza.api.PlaceService
+import hr.dtakac.prognoza.data.network.place.ForecastService
+import hr.dtakac.prognoza.data.network.place.PlaceService
 import hr.dtakac.prognoza.common.network.DefaultNetworkChecker
 import hr.dtakac.prognoza.common.network.NetworkChecker
 import hr.dtakac.prognoza.coroutines.DefaultDispatcherProvider
@@ -56,12 +56,12 @@ val prognozaAppModule = module {
             .build()
     }
 
-    single<ForecastService> {
-        get<Retrofit>(metNorwayRetrofit).create(ForecastService::class.java)
+    single<hr.dtakac.prognoza.data.network.place.ForecastService> {
+        get<Retrofit>(metNorwayRetrofit).create(hr.dtakac.prognoza.data.network.place.ForecastService::class.java)
     }
 
-    single<PlaceService> {
-        get<Retrofit>(nominatimRetrofit).create(PlaceService::class.java)
+    single<hr.dtakac.prognoza.data.network.place.PlaceService> {
+        get<Retrofit>(nominatimRetrofit).create(hr.dtakac.prognoza.data.network.place.PlaceService::class.java)
     }
 
     single<DispatcherProvider> {

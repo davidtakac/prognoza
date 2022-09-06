@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.repository.place
 
 import hr.dtakac.prognoza.DEFAULT_PLACE_ID
 import hr.dtakac.prognoza.USER_AGENT
-import hr.dtakac.prognoza.api.PlaceService
+import hr.dtakac.prognoza.data.network.place.PlaceService
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.data.database.place.PlaceDao
 import hr.dtakac.prognoza.data.database.place.Place
@@ -11,7 +11,7 @@ import java.util.*
 
 class DefaultPlaceRepository(
     private val placeDao: hr.dtakac.prognoza.data.database.place.PlaceDao,
-    private val placeService: PlaceService,
+    private val placeService: hr.dtakac.prognoza.data.network.place.PlaceService,
     private val dispatcherProvider: DispatcherProvider,
 ) : PlaceRepository {
 

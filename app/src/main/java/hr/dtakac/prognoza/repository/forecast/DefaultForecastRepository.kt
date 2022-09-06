@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.repository.forecast
 
 import android.database.sqlite.SQLiteException
 import hr.dtakac.prognoza.USER_AGENT
-import hr.dtakac.prognoza.api.ForecastService
+import hr.dtakac.prognoza.data.network.place.ForecastService
 import hr.dtakac.prognoza.apimodel.LocationForecastResponse
 import hr.dtakac.prognoza.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.data.database.converter.ForecastMetaDateTimeConverter
@@ -20,7 +20,7 @@ import java.io.IOException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
-    private val forecastService: ForecastService,
+    private val forecastService: hr.dtakac.prognoza.data.network.place.ForecastService,
     private val forecastDao: hr.dtakac.prognoza.data.database.forecast.ForecastTimeSpanDao,
     private val metaRepository: MetaRepository,
     private val dispatcherProvider: DispatcherProvider

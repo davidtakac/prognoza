@@ -15,13 +15,15 @@ class GetForecast(
     ): ForecastResult {
         val selectedPlace = getSelectedPlace()
         return try {
-            val forecast = forecastRepository.getForecast(
+            forecastRepository.getForecast(
                 latitude = selectedPlace.latitude,
                 longitude = selectedPlace.longitude,
                 from = from,
                 to = to
             )
-            ForecastResult.Success(forecast)
+                .takeIf { it.isNotEmpty() }
+                ?.let { ForecastResult.Success(it) }
+                ?: ForecastResult.Empty
         } catch (e: Exception) {
             ForecastResult.Empty
         }
@@ -32,6 +34,5 @@ sealed interface ForecastResult {
     data class Success(
         val forecast: List<Forecast>
     ): ForecastResult
-
     object Empty : ForecastResult
 }

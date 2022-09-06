@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.api
+package hr.dtakac.prognoza.data.network.place
 
 import hr.dtakac.prognoza.apimodel.PlaceResponse
 import retrofit2.http.GET
