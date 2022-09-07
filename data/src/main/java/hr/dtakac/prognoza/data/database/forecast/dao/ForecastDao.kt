@@ -8,7 +8,7 @@ import java.time.ZonedDateTime
 @Dao
 interface ForecastDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdateAll(forecastTimeSpans: List<ForecastDbModel>)
+    suspend fun insertOrUpdateAll(dbModels: List<ForecastDbModel>)
 
     @Query("DELETE FROM forecast WHERE DATE(start_time) < DATE('now')")
     suspend fun deleteExpiredForecastTimeSpans()

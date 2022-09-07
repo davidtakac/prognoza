@@ -4,6 +4,7 @@ import hr.dtakac.prognoza.data.database.forecast.model.ForecastDbModel
 import hr.dtakac.prognoza.data.network.forecast.ForecastTimeStep
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription.*
 import hr.dtakac.prognoza.entities.forecast.units.*
+import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.time.ZonedDateTime
 
 fun mapResponseToDbModel(
@@ -65,14 +66,13 @@ fun mapResponseToDbModel(
     )
 }
 
-fun mapDbModelToEntity(dbModel: ForecastDbModel): hr.dtakac.prognoza.entities.forecast.Forecast {
-    return hr.dtakac.prognoza.entities.forecast.Forecast(
+fun mapDbModelToEntity(dbModel: ForecastDbModel): hr.dtakac.prognoza.entities.forecast.ForecastDatum {
+    return hr.dtakac.prognoza.entities.forecast.ForecastDatum(
         start = dbModel.startTime,
         end = dbModel.endTime,
         temperature = dbModel.temperature,
         precipitation = dbModel.precipitation,
-        wind = dbModel.wind,
-        windFromDirection = dbModel.windFromDirection,
+        wind = Wind(speed = dbModel.wind, fromDirection = dbModel.windFromDirection),
         airPressureAtSeaLevel = dbModel.airPressureAtSeaLevel,
         description = dbModel.forecastDescription,
         humidity = dbModel.humidity

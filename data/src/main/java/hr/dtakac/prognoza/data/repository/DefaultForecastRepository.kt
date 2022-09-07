@@ -12,7 +12,7 @@ import hr.dtakac.prognoza.data.network.forecast.ForecastService
 import hr.dtakac.prognoza.data.network.forecast.LocationForecastResponse
 import hr.dtakac.prognoza.domain.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
-import hr.dtakac.prognoza.entities.forecast.Forecast
+import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
@@ -30,7 +30,7 @@ class DefaultForecastRepository(
         longitude: Double,
         from: ZonedDateTime,
         to: ZonedDateTime
-    ): List<Forecast> {
+    ): List<ForecastDatum> {
         val meta = try {
             metaDao.get(latitude, longitude)
         } catch (e: Exception) {

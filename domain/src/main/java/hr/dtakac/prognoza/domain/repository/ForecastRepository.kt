@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.domain.repository
 
-import hr.dtakac.prognoza.entities.forecast.Forecast
+import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import java.time.ZonedDateTime
 
 interface ForecastRepository {
@@ -9,5 +9,5 @@ interface ForecastRepository {
         longitude: Double,
         from: ZonedDateTime,
         to: ZonedDateTime
-    ): List<Forecast>
+    ): List<ForecastDatum>
 }

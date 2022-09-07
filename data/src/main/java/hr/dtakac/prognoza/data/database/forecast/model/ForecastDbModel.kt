@@ -10,7 +10,7 @@ import java.time.ZonedDateTime
 
 @Entity(
     tableName = "forecast",
-    primaryKeys = ["startTime", "endTime", "latitude", "longitude"]
+    primaryKeys = ["start_time", "end_time", "latitude", "longitude"]
 )
 @TypeConverters(
     IsoLocalDateTimeConverter::class,

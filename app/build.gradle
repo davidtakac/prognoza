@@ -34,6 +34,9 @@ android {
 }
 
 dependencies {
+    implementation project(":entities")
+    implementation project(":domain")
+
     // base
     implementation "androidx.core:core-ktx:$versions.core_ktx"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
