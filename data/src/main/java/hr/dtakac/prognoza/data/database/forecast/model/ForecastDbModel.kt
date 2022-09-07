@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.data.database.forecast.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.TypeConverters
-import hr.dtakac.prognoza.data.database.converter.ForecastDateTimeConverter
+import hr.dtakac.prognoza.data.database.converter.*
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.*
 import java.time.ZonedDateTime
@@ -12,7 +12,15 @@ import java.time.ZonedDateTime
     tableName = "forecast",
     primaryKeys = ["startTime", "endTime", "latitude", "longitude"]
 )
-@TypeConverters(ForecastDateTimeConverter::class)
+@TypeConverters(
+    IsoLocalDateTimeConverter::class,
+    TemperatureConverter::class,
+    LengthConverter::class,
+    SpeedConverter::class,
+    AngleConverter::class,
+    PercentageConverter::class,
+    PressureConverter::class
+)
 data class ForecastDbModel(
     @ColumnInfo(name = "start_time")
     val startTime: ZonedDateTime,

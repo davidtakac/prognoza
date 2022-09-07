@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.data.database.forecast.dao
 
 import androidx.room.*
-import hr.dtakac.prognoza.data.database.converter.ForecastDateTimeConverter
+import hr.dtakac.prognoza.data.database.converter.IsoLocalDateTimeConverter
 import hr.dtakac.prognoza.data.database.forecast.model.ForecastDbModel
 import java.time.ZonedDateTime
 
@@ -21,7 +21,7 @@ interface ForecastDao {
             ORDER BY DATETIME(start_time) ASC
         """
     )
-    @TypeConverters(ForecastDateTimeConverter::class)
+    @TypeConverters(IsoLocalDateTimeConverter::class)
     suspend fun getForecasts(
         start: ZonedDateTime,
         end: ZonedDateTime,

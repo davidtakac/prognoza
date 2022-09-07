@@ -3,14 +3,14 @@ package hr.dtakac.prognoza.data.database.forecast.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.TypeConverters
-import hr.dtakac.prognoza.data.database.converter.MetaDateTimeConverter
+import hr.dtakac.prognoza.data.database.converter.Rfc1123DateTimeConverter
 import java.time.ZonedDateTime
 
 @Entity(
     tableName = "meta",
     primaryKeys = ["latitude", "longitude"]
 )
-@TypeConverters(MetaDateTimeConverter::class)
+@TypeConverters(Rfc1123DateTimeConverter::class)
 data class MetaDbModel(
     @ColumnInfo(name = "latitude")
     val latitude: Double,

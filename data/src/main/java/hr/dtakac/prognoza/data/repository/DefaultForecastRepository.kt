@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.data.repository
 
 import android.util.Log
-import hr.dtakac.prognoza.data.database.converter.MetaDateTimeConverter
+import hr.dtakac.prognoza.data.database.converter.Rfc1123DateTimeConverter
 import hr.dtakac.prognoza.data.database.forecast.dao.ForecastDao
 import hr.dtakac.prognoza.data.database.forecast.dao.MetaDao
 import hr.dtakac.prognoza.data.database.forecast.model.ForecastDbModel
@@ -66,7 +66,7 @@ class DefaultForecastRepository(
         longitude: Double,
         lastModified: ZonedDateTime?
     ) {
-        val lastModifiedTimestamp = MetaDateTimeConverter.toTimestamp(lastModified)
+        val lastModifiedTimestamp = Rfc1123DateTimeConverter.toTimestamp(lastModified)
         val forecastResponse = forecastService.getCompactLocationForecast(
             userAgent = userAgent,
             ifModifiedSince = lastModifiedTimestamp,
@@ -86,8 +86,8 @@ class DefaultForecastRepository(
         val dbModel = MetaDbModel(
             latitude = latitude,
             longitude = longitude,
-            expires = MetaDateTimeConverter.fromTimestamp(headers["Expires"]),
-            lastModified = MetaDateTimeConverter.fromTimestamp(headers["Last-Modified"])
+            expires = Rfc1123DateTimeConverter.fromTimestamp(headers["Expires"]),
+            lastModified = Rfc1123DateTimeConverter.fromTimestamp(headers["Last-Modified"])
         )
         metaDao.updateForecastMeta(dbModel)
     }

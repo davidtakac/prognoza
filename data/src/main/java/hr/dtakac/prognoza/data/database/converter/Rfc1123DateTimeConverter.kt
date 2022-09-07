@@ -1,21 +1,18 @@
 package hr.dtakac.prognoza.data.database.converter
 
 import androidx.room.TypeConverter
-import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
-object ForecastDateTimeConverter {
-    private val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-    private val zoneId = ZoneId.of("Etc/GMT")
+object Rfc1123DateTimeConverter {
+    private val formatter = DateTimeFormatter.RFC_1123_DATE_TIME
 
     @JvmStatic
     @TypeConverter
     fun fromTimestamp(timestamp: String?): ZonedDateTime? {
         return timestamp?.let {
             try {
-                LocalDateTime.parse(timestamp, formatter).atZone(zoneId)
+                ZonedDateTime.parse(timestamp, formatter)
             } catch (e: Exception) {
                 null
             }
@@ -26,10 +23,7 @@ object ForecastDateTimeConverter {
     @TypeConverter
     fun toTimestamp(dateTime: ZonedDateTime?): String? {
         return try {
-            dateTime
-                ?.withZoneSameInstant(zoneId)
-                ?.toLocalDateTime()
-                ?.format(formatter)
+            dateTime?.format(formatter)
         } catch (e: Exception) {
             null
         }
