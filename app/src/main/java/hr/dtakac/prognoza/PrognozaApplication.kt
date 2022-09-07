@@ -1,9 +1,7 @@
 package hr.dtakac.prognoza
 
 import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
 
-class PrognozaApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-    }
-}
+@HiltAndroidApp
+class PrognozaApplication : Application()

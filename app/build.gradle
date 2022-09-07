@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -45,9 +46,9 @@ android {
 dependencies {
     implementation project(":entities")
     implementation project(":domain")
+    implementation project(":data")
 
     implementation "androidx.core:core-ktx:$versions.core"
-    implementation "androidx.appcompat:appcompat:$versions.appcompat"
 
     // Room
     implementation "androidx.room:room-ktx:$versions.room"

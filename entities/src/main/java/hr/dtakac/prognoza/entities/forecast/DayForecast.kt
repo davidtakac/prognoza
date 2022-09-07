@@ -7,13 +7,13 @@ import java.lang.IllegalStateException
 import java.time.Duration
 import java.time.ZonedDateTime
 
-class ForecastForADay(data: List<ForecastDatum>) {
+class DayForecast(data: List<ForecastDatum>) {
     init {
         if (data.isEmpty()) {
             throw IllegalStateException("Forecast data must not be empty.")
         }
         if (Duration.between(data.first().start, data.last().start) > Duration.ofDays(1L)) {
-            throw IllegalStateException("Forecast data must encompass 24 hours or less.")
+            throw IllegalStateException("Forecast data size must not exceed 24, was ${data.size}.")
         }
     }
 
@@ -26,13 +26,13 @@ class ForecastForADay(data: List<ForecastDatum>) {
     val description: ForecastDescription = firstDatum.description
     val highTemperature: Temperature = data.maxOf { it.temperature }
     val lowTemperature: Temperature = data.minOf { it.temperature }
-    val precipitation: PrecipitationForADay? = data
+    val precipitation: DayPrecipitation? = data
         .firstOrNull { it.precipitation.millimeters > 0 }
         ?.let(this::mapToPrecipitationForADay)
     val smallData: List<SmallForecastDatum> = data.map(this::mapToSmallForecastDatum)
 
-    private fun mapToPrecipitationForADay(datum: ForecastDatum): PrecipitationForADay =
-        PrecipitationForADay(
+    private fun mapToPrecipitationForADay(datum: ForecastDatum): DayPrecipitation =
+        DayPrecipitation(
             amount = datum.precipitation,
             at = datum.start
         )
@@ -46,7 +46,7 @@ class ForecastForADay(data: List<ForecastDatum>) {
         )
 }
 
-data class PrecipitationForADay(
+data class DayPrecipitation(
     val amount: Length,
     val at: ZonedDateTime
 )
