@@ -5,9 +5,4 @@
     <attr name="widgetBackgroundColor" format="color"/>
     <attr name="widgetTextPrimaryColor" format="color"/>
     <attr name="widgetTextSecondaryColor" format="color"/>
-
-    <!-- Text -->
-    <attr name="colorHighEmphasis" format="color"/>
-    <attr name="colorMediumEmphasis" format="color"/>
-    <attr name="colorSignificantPrecipitation" format="color"/>
 </resources>

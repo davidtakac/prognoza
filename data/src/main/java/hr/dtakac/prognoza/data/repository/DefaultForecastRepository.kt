@@ -10,9 +10,9 @@ import hr.dtakac.prognoza.data.mapping.mapDbModelToEntity
 import hr.dtakac.prognoza.data.mapping.mapResponseToDbModel
 import hr.dtakac.prognoza.data.network.forecast.ForecastService
 import hr.dtakac.prognoza.data.network.forecast.LocationForecastResponse
-import hr.dtakac.prognoza.domain.coroutines.DispatcherProvider
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
@@ -23,7 +23,7 @@ class DefaultForecastRepository(
     private val forecastDao: ForecastDao,
     private val metaDao: MetaDao,
     private val userAgent: String,
-    private val dispatchers: DispatcherProvider
+    private val defaultDispatcher: CoroutineDispatcher
 ) : ForecastRepository {
     override suspend fun getForecast(
         latitude: Double,
@@ -98,7 +98,7 @@ class DefaultForecastRepository(
         longitude: Double
     ) {
         val result = mutableListOf<ForecastDbModel>()
-        val dbModels = withContext(dispatchers.compute) {
+        val dbModels = withContext(defaultDispatcher) {
             locationForecastResponse?.forecast?.forecastTimeSteps?.let { timeSteps ->
                 for (i in timeSteps.indices) {
                     mapResponseToDbModel(

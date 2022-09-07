@@ -5,12 +5,12 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 33
 
     defaultConfig {
         applicationId "hr.dtakac.prognoza"
         minSdk 24
-        targetSdk 31
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -31,48 +31,54 @@ android {
     buildFeatures {
         viewBinding true
     }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion "$versions.compose"
+    }
+    kotlinOptions {
+        jvmTarget = "11"
+    }
 }
 
 dependencies {
     implementation project(":entities")
     implementation project(":domain")
 
-    // base
-    implementation "androidx.core:core-ktx:$versions.core_ktx"
+    implementation "androidx.core:core-ktx:$versions.core"
     implementation "androidx.appcompat:appcompat:$versions.appcompat"
-    implementation "com.google.android.material:material:$versions.material"
-    implementation "androidx.constraintlayout:constraintlayout:$versions.constraintlayout"
-    // testing
-    testImplementation "junit:junit:$versions.junit"
-    testImplementation "androidx.room:room-testing:$versions.room"
-    testImplementation "androidx.arch.core:core-testing:$versions.arch"
-    testImplementation "io.insert-koin:koin-test-junit4:$versions.koin"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
-    // networking
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
-    implementation("com.squareup.okhttp3:logging-interceptor")
-    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "com.google.code.gson:gson:$versions.gson"
-    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
-    // database
-    implementation "androidx.room:room-runtime:$versions.room"
+
+    // Room
     implementation "androidx.room:room-ktx:$versions.room"
-    kapt "androidx.room:room-compiler:$versions.room"
-    // lifecycle
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$versions.lifecycle"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle"
-    // coroutines
+
+    // Network
+    implementation "com.google.code.gson:gson:$versions.gson"
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
+    implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+
+    // Dependency injection
+    implementation "com.google.dagger:hilt-android:$versions.dagger"
+    kapt "com.google.dagger:hilt-compiler:$versions.dagger"
+
+    // Android coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
-    // images
-    implementation "com.github.bumptech.glide:glide:$versions.glide"
-    kapt "com.github.bumptech.glide:compiler:$versions.glide"
-    // desugar
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
-    // dependency injection
-    implementation "io.insert-koin:koin-core:$versions.koin"
-    implementation "io.insert-koin:koin-android:$versions.koin"
-    // other
-    implementation "androidx.viewpager2:viewpager2:$versions.viewpager2"
-    implementation "ca.rmen:lib-sunrise-sunset:$versions.lib_sunrise_sunset"
+
+    // Lifecycle and extensions
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$versions.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.lifecycle"
+    implementation "androidx.activity:activity-ktx:$versions.activity_ktx"
+
+    // Compose
+    implementation "androidx.compose.ui:ui:$versions.compose"
+    implementation "androidx.activity:activity-compose:$versions.compose_activity"
+    implementation "androidx.compose.material3:material3:$versions.compose_material3"
+    implementation "androidx.compose.animation:animation:$versions.compose"
+    implementation "androidx.compose.ui:ui-tooling:$versions.compose"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$versions.lifecycle"
+    implementation "io.coil-kt:coil-compose:$versions.coil"
+
+    // Core library desugaring
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.core_library_desugaring"
 }

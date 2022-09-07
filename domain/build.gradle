@@ -10,6 +10,4 @@ java {
 
 dependencies {
     implementation project(":entities")
-
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
 }
