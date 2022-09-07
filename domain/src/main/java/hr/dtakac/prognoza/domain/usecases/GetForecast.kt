@@ -14,7 +14,8 @@ class GetForecast(
         from: ZonedDateTime,
         to: ZonedDateTime
     ): ForecastResult {
-        val selectedPlace = getSelectedPlace()
+        val selectedPlace = getSelectedPlace() ?: return ForecastResult.NoSelectedPlace
+
         return try {
             forecastRepository.getForecast(
                 latitude = selectedPlace.latitude,
@@ -36,5 +37,6 @@ sealed interface ForecastResult {
         val place: Place,
         val forecast: List<Forecast>
     ): ForecastResult
+    object NoSelectedPlace : ForecastResult
     object Empty : ForecastResult
 }
