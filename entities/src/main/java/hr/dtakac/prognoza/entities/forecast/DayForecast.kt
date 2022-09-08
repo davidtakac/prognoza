@@ -23,7 +23,13 @@ class DayForecast(data: List<ForecastDatum>) {
     val airTemperature: Temperature = firstDatum.temperature
     val feelsLikeTemperature: Temperature = firstDatum.feelsLike
     val wind: Wind = firstDatum.wind
-    val description: ForecastDescription = firstDatum.description
+
+    val description: ForecastDescription = data
+        .take(6)
+        .groupingBy { it.description }
+        .eachCount()
+        .maxBy { it.value }
+        .key
     val highTemperature: Temperature = data.maxOf { it.temperature }
     val lowTemperature: Temperature = data.minOf { it.temperature }
     val precipitation: DayPrecipitation? = data

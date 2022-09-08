@@ -73,7 +73,7 @@ class DefaultForecastRepository(
             latitude = format("%.2f", latitude),
             longitude = format("%.2f", longitude)
         )
-        forecastDao.deleteExpiredForecastTimeSpans()
+        forecastDao.deleteExpired()
         updateForecast(forecastResponse.body(), latitude, longitude)
         updateMeta(forecastResponse.headers(), latitude, longitude)
     }
@@ -89,7 +89,7 @@ class DefaultForecastRepository(
             expires = Rfc1123DateTimeConverter.fromTimestamp(headers["Expires"]),
             lastModified = Rfc1123DateTimeConverter.fromTimestamp(headers["Last-Modified"])
         )
-        metaDao.updateForecastMeta(dbModel)
+        metaDao.update(dbModel)
     }
 
     private suspend fun updateForecast(
@@ -111,6 +111,7 @@ class DefaultForecastRepository(
                 result
             }
         } ?: return
-        forecastDao.insertOrUpdateAll(dbModels)
+        forecastDao.delete(latitude, longitude)
+        forecastDao.insert(dbModels)
     }
 }

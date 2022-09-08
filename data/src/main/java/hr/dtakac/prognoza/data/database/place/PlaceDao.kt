@@ -11,8 +11,8 @@ interface PlaceDao {
     suspend fun get(latitude: Double, longitude: Double): PlaceDbModel?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdate(place: PlaceDbModel)
+    suspend fun insert(place: PlaceDbModel)
 
     @Query("SELECT * FROM place ORDER BY name ASC")
-    suspend fun getAll(): List<PlaceDbModel>
+    suspend fun getPlaces(): List<PlaceDbModel>
 }

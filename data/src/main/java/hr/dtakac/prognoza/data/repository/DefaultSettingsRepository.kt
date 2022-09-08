@@ -101,7 +101,7 @@ class DefaultSettingsRepository(
 
     private suspend fun commit(
         action: SharedPreferences.Editor.() -> Unit
-    ) = suspendCoroutine<Unit> {
+    ) = suspendCoroutine {
         sharedPreferences.edit(commit = true, action = action)
         it.resumeWith(Result.success(Unit))
     }

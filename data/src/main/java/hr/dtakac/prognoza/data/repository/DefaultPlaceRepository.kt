@@ -19,7 +19,7 @@ class DefaultPlaceRepository(
     }
 
     override suspend fun getSaved(): List<Place> {
-        return placeDao.getAll().map { mapDbModelToEntity(it) }
+        return placeDao.getPlaces().map { mapDbModelToEntity(it) }
     }
 
     override suspend fun search(query: String): List<Place> {
@@ -32,6 +32,6 @@ class DefaultPlaceRepository(
     }
 
     override suspend fun save(place: Place) {
-        placeDao.insertOrUpdate(mapEntityToDbModel(place))
+        placeDao.insert(mapEntityToDbModel(place))
     }
 }

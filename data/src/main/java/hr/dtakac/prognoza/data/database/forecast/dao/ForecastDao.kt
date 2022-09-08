@@ -8,10 +8,13 @@ import java.time.ZonedDateTime
 @Dao
 interface ForecastDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertOrUpdateAll(dbModels: List<ForecastDbModel>)
+    suspend fun insert(dbModels: List<ForecastDbModel>)
+
+    @Query("DELETE FROM forecast WHERE latitude == :latitude AND longitude == :longitude")
+    suspend fun delete(latitude: Double, longitude: Double)
 
     @Query("DELETE FROM forecast WHERE DATE(start_time) < DATE('now')")
-    suspend fun deleteExpiredForecastTimeSpans()
+    suspend fun deleteExpired()
 
     @Query(
         value = """
