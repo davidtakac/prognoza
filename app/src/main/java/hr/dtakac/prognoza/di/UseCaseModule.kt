@@ -17,8 +17,9 @@ class UseCaseModule {
     @ViewModelScoped
     fun provideGetTodayForecastUseCase(
         getSelectedPlaceUseCase: GetSelectedPlace,
-        forecastRepository: ForecastRepository
-    ): GetTodayForecast = GetTodayForecast(getSelectedPlaceUseCase, forecastRepository)
+        forecastRepository: ForecastRepository,
+        settingsRepository: SettingsRepository
+    ): GetTodayForecast = GetTodayForecast(getSelectedPlaceUseCase, forecastRepository, settingsRepository)
 
     @Provides
     @ViewModelScoped

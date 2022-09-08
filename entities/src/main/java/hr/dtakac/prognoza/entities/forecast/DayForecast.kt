@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.entities.forecast
 
+import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
 import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
@@ -32,14 +33,14 @@ class DayForecast(data: List<ForecastDatum>) {
         .key
     val highTemperature: Temperature = data.maxOf { it.temperature }
     val lowTemperature: Temperature = data.minOf { it.temperature }
-    val precipitation: DayPrecipitation? = data
-        .firstOrNull { it.precipitation.millimeters > 0 }
+    val dailyPrecipitation: DayPrecipitation? = data
+        .firstOrNull { it.precipitation.amount.millimeters > 0 }
         ?.let(this::mapToPrecipitationForADay)
     val smallData: List<SmallForecastDatum> = data.map(this::mapToSmallForecastDatum)
 
     private fun mapToPrecipitationForADay(datum: ForecastDatum): DayPrecipitation =
         DayPrecipitation(
-            amount = datum.precipitation,
+            precipitation = datum.precipitation,
             at = datum.start
         )
 
@@ -48,12 +49,12 @@ class DayForecast(data: List<ForecastDatum>) {
             time = datum.start,
             description = datum.description,
             temperature = datum.temperature,
-            precipitation = datum.precipitation
+            precipitation = datum.precipitation.amount
         )
 }
 
 data class DayPrecipitation(
-    val amount: Length,
+    val precipitation: Precipitation,
     val at: ZonedDateTime
 )
 

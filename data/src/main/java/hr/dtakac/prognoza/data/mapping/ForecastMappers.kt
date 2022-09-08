@@ -2,7 +2,10 @@ package hr.dtakac.prognoza.data.mapping
 
 import hr.dtakac.prognoza.data.database.forecast.model.ForecastDbModel
 import hr.dtakac.prognoza.data.network.forecast.ForecastTimeStep
+import hr.dtakac.prognoza.entities.forecast.ForecastDatum
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription.*
+import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.time.ZonedDateTime
@@ -41,7 +44,7 @@ fun mapResponseToDbModel(
             unit = TemperatureUnit.C
         ),
         forecastDescription = details?.summary?.symbolCode?.let {
-            symbolCodeToForecastDescription[it]!!
+            mapToForecastDescription(it)
         } ?: UNKNOWN,
         precipitation = Length(
             value = details?.data?.precipitationAmount ?: 0.0,
@@ -66,12 +69,12 @@ fun mapResponseToDbModel(
     )
 }
 
-fun mapDbModelToEntity(dbModel: ForecastDbModel): hr.dtakac.prognoza.entities.forecast.ForecastDatum {
-    return hr.dtakac.prognoza.entities.forecast.ForecastDatum(
+fun mapDbModelToEntity(dbModel: ForecastDbModel): ForecastDatum {
+    return ForecastDatum(
         start = dbModel.startTime,
         end = dbModel.endTime,
         temperature = dbModel.temperature,
-        precipitation = dbModel.precipitation,
+        precipitation = Precipitation(amount = dbModel.precipitation, forecastDescription = dbModel.forecastDescription),
         wind = Wind(speed = dbModel.wind, fromDirection = dbModel.windFromDirection),
         airPressureAtSeaLevel = dbModel.airPressureAtSeaLevel,
         description = dbModel.forecastDescription,
@@ -79,88 +82,89 @@ fun mapDbModelToEntity(dbModel: ForecastDbModel): hr.dtakac.prognoza.entities.fo
     )
 }
 
-private val symbolCodeToForecastDescription = mapOf(
-    "clearsky_day" to CLEAR_SKY_DAY,
-    "clearsky_night" to CLEAR_SKY_NIGHT,
-    "clearsky_polartwilight" to CLEAR_SKY_POLAR_TWILIGHT,
-    "cloudy" to CLOUDY,
-    "fair_day" to FAIR_DAY,
-    "fair_night" to FAIR_NIGHT,
-    "fair_polartwilight" to FAIR_POLAR_TWILIGHT,
-    "fog" to FOG,
-    "heavyrainandthunder" to HEAVY_RAIN_AND_THUNDER,
-    "heavyrain" to HEAVY_RAIN,
-    "heavyrainshowersandthunder_day" to HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY,
-    "heavyrainshowersandthunder_night" to HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT,
-    "heavyrainshowersandthunder_polartwilight" to HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "heavyrainshowers_day" to HEAVY_RAIN_SHOWERS_DAY,
-    "heavyrainshowers_night" to HEAVY_RAIN_SHOWERS_NIGHT,
-    "heavyrainshowers_polartwilight" to HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT,
-    "heavysleetandthunder" to HEAVY_SLEET_AND_THUNDER,
-    "heavysleet" to HEAVY_SLEET,
-    "heavysleetshowersandthunder_day" to HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY,
-    "heavysleetshowersandthunder_night" to HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT,
-    "heavysleetshowersandthunder_polartwilight" to HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "heavysleetshowers_day" to HEAVY_SLEET_SHOWERS_DAY,
-    "heavysleetshowers_night" to HEAVY_SLEET_SHOWERS_NIGHT,
-    "heavysleetshowers_polartwilight" to HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT,
-    "heavysnowandthunder" to HEAVY_SNOW_AND_THUNDER,
-    "heavysnow" to HEAVY_SNOW,
-    "heavysnowshowersandthunder_day" to HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY,
-    "heavysnowshowersandthunder_night" to HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT,
-    "heavysnowshowersandthunder_polartwilight" to HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "heavysnowshowers_day" to HEAVY_SNOW_SHOWERS_DAY,
-    "heavysnowshowers_night" to HEAVY_SNOW_SHOWERS_NIGHT,
-    "heavysnowshowers_polartwilight" to HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT,
-    "lightrainandthunder" to LIGHT_RAIN_AND_THUNDER,
-    "lightrain" to LIGHT_RAIN,
-    "lightrainshowersandthunder_day" to LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY,
-    "lightrainshowersandthunder_night" to LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT,
-    "lightrainshowersandthunder_polartwilight" to LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "lightrainshowers_day" to LIGHT_RAIN_SHOWERS_DAY,
-    "lightrainshowers_night" to LIGHT_RAIN_SHOWERS_NIGHT,
-    "lightrainshowers_polartwilight" to LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT,
-    "lightsleetandthunder" to LIGHT_SLEET_AND_THUNDER,
-    "lightsleet" to LIGHT_SLEET,
-    "lightsleetshowers_day" to LIGHT_SLEET_SHOWERS_DAY,
-    "lightsleetshowers_night" to LIGHT_SLEET_SHOWERS_NIGHT,
-    "lightsleetshowers_polartwilight" to LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT,
-    "lightsnowandthunder" to LIGHT_SNOW_AND_THUNDER,
-    "lightsnow" to LIGHT_SNOW,
-    "lightsnowshowers_day" to LIGHT_SNOW_SHOWERS_DAY,
-    "lightsnowshowers_night" to LIGHT_SNOW_SHOWERS_NIGHT,
-    "lightsnowshowers_polartwilight" to LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT,
-    "lightssleetshowersandthunder_day" to LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY,
-    "lightssleetshowersandthunder_night" to LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT,
-    "lightssleetshowersandthunder_polartwilight" to LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "lightssnowshowersandthunder_day" to LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY,
-    "lightssnowshowersandthunder_night" to LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT,
-    "lightssnowshowersandthunder_polartwilight" to LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "partlycloudy_day" to PARTLY_CLOUDY_DAY,
-    "partlycloudy_night" to PARTLY_CLOUDY_NIGHT,
-    "partlycloudy_polartwilight" to PARTLY_CLOUDY_POLAR_TWILIGHT,
-    "rainandthunder" to RAIN_AND_THUNDER,
-    "rain" to RAIN,
-    "rainshowersandthunder_day" to RAIN_SHOWERS_AND_THUNDER_DAY,
-    "rainshowersandthunder_night" to RAIN_SHOWERS_AND_THUNDER_NIGHT,
-    "rainshowersandthunder_polartwilight" to RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "rainshowers_day" to RAIN_SHOWERS_DAY,
-    "rainshowers_night" to RAIN_SHOWERS_NIGHT,
-    "rainshowers_polartwilight" to RAIN_SHOWERS_POLAR_TWILIGHT,
-    "sleetandthunder" to SLEET_AND_THUNDER,
-    "sleet" to SLEET,
-    "sleetshowersandthunder_day" to SLEET_SHOWERS_AND_THUNDER_DAY,
-    "sleetshowersandthunder_night" to SLEET_SHOWERS_AND_THUNDER_NIGHT,
-    "sleetshowersandthunder_polartwilight" to SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "sleetshowers_day" to SLEET_SHOWERS_DAY,
-    "sleetshowers_night" to SLEET_SHOWERS_NIGHT,
-    "sleetshowers_polartwilight" to SLEET_SHOWERS_POLAR_TWILIGHT,
-    "snowandthunder" to SNOW_AND_THUNDER,
-    "snow" to SNOW,
-    "snowshowersandthunder_day" to SNOW_SHOWERS_AND_THUNDER_DAY,
-    "snowshowersandthunder_night" to SNOW_SHOWERS_AND_THUNDER_NIGHT,
-    "snowshowersandthunder_polartwilight" to SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-    "snowshowers_day" to SNOW_SHOWERS_DAY,
-    "snowshowers_night" to SNOW_SHOWERS_NIGHT,
-    "snowshowers_polartwilight" to SNOW_SHOWERS_POLAR_TWILIGHT
-)
+private fun mapToForecastDescription(symbolCode: String): ForecastDescription = when (symbolCode) {
+    "clearsky_day" -> CLEAR_SKY_DAY
+    "clearsky_night" -> CLEAR_SKY_NIGHT
+    "clearsky_polartwilight" -> CLEAR_SKY_POLAR_TWILIGHT
+    "cloudy" -> CLOUDY
+    "fair_day" -> FAIR_DAY
+    "fair_night" -> FAIR_NIGHT
+    "fair_polartwilight" -> FAIR_POLAR_TWILIGHT
+    "fog" -> FOG
+    "heavyrainandthunder" -> HEAVY_RAIN_AND_THUNDER
+    "heavyrain" -> HEAVY_RAIN
+    "heavyrainshowersandthunder_day" -> HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY
+    "heavyrainshowersandthunder_night" -> HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT
+    "heavyrainshowersandthunder_polartwilight" -> HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "heavyrainshowers_day" -> HEAVY_RAIN_SHOWERS_DAY
+    "heavyrainshowers_night" -> HEAVY_RAIN_SHOWERS_NIGHT
+    "heavyrainshowers_polartwilight" -> HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT
+    "heavysleetandthunder" -> HEAVY_SLEET_AND_THUNDER
+    "heavysleet" -> HEAVY_SLEET
+    "heavysleetshowersandthunder_day" -> HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY
+    "heavysleetshowersandthunder_night" -> HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT
+    "heavysleetshowersandthunder_polartwilight" -> HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "heavysleetshowers_day" -> HEAVY_SLEET_SHOWERS_DAY
+    "heavysleetshowers_night" -> HEAVY_SLEET_SHOWERS_NIGHT
+    "heavysleetshowers_polartwilight" -> HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT
+    "heavysnowandthunder" -> HEAVY_SNOW_AND_THUNDER
+    "heavysnow" -> HEAVY_SNOW
+    "heavysnowshowersandthunder_day" -> HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY
+    "heavysnowshowersandthunder_night" -> HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT
+    "heavysnowshowersandthunder_polartwilight" -> HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "heavysnowshowers_day" -> HEAVY_SNOW_SHOWERS_DAY
+    "heavysnowshowers_night" -> HEAVY_SNOW_SHOWERS_NIGHT
+    "heavysnowshowers_polartwilight" -> HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT
+    "lightrainandthunder" -> LIGHT_RAIN_AND_THUNDER
+    "lightrain" -> LIGHT_RAIN
+    "lightrainshowersandthunder_day" -> LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY
+    "lightrainshowersandthunder_night" -> LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT
+    "lightrainshowersandthunder_polartwilight" -> LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "lightrainshowers_day" -> LIGHT_RAIN_SHOWERS_DAY
+    "lightrainshowers_night" -> LIGHT_RAIN_SHOWERS_NIGHT
+    "lightrainshowers_polartwilight" -> LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT
+    "lightsleetandthunder" -> LIGHT_SLEET_AND_THUNDER
+    "lightsleet" -> LIGHT_SLEET
+    "lightsleetshowers_day" -> LIGHT_SLEET_SHOWERS_DAY
+    "lightsleetshowers_night" -> LIGHT_SLEET_SHOWERS_NIGHT
+    "lightsleetshowers_polartwilight" -> LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT
+    "lightsnowandthunder" -> LIGHT_SNOW_AND_THUNDER
+    "lightsnow" -> LIGHT_SNOW
+    "lightsnowshowers_day" -> LIGHT_SNOW_SHOWERS_DAY
+    "lightsnowshowers_night" -> LIGHT_SNOW_SHOWERS_NIGHT
+    "lightsnowshowers_polartwilight" -> LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT
+    "lightssleetshowersandthunder_day" -> LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY
+    "lightssleetshowersandthunder_night" -> LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT
+    "lightssleetshowersandthunder_polartwilight" -> LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "lightssnowshowersandthunder_day" -> LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY
+    "lightssnowshowersandthunder_night" -> LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT
+    "lightssnowshowersandthunder_polartwilight" -> LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "partlycloudy_day" -> PARTLY_CLOUDY_DAY
+    "partlycloudy_night" -> PARTLY_CLOUDY_NIGHT
+    "partlycloudy_polartwilight" -> PARTLY_CLOUDY_POLAR_TWILIGHT
+    "rainandthunder" -> RAIN_AND_THUNDER
+    "rain" -> RAIN
+    "rainshowersandthunder_day" -> RAIN_SHOWERS_AND_THUNDER_DAY
+    "rainshowersandthunder_night" -> RAIN_SHOWERS_AND_THUNDER_NIGHT
+    "rainshowersandthunder_polartwilight" -> RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "rainshowers_day" -> RAIN_SHOWERS_DAY
+    "rainshowers_night" -> RAIN_SHOWERS_NIGHT
+    "rainshowers_polartwilight" -> RAIN_SHOWERS_POLAR_TWILIGHT
+    "sleetandthunder" -> SLEET_AND_THUNDER
+    "sleet" -> SLEET
+    "sleetshowersandthunder_day" -> SLEET_SHOWERS_AND_THUNDER_DAY
+    "sleetshowersandthunder_night" -> SLEET_SHOWERS_AND_THUNDER_NIGHT
+    "sleetshowersandthunder_polartwilight" -> SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "sleetshowers_day" -> SLEET_SHOWERS_DAY
+    "sleetshowers_night" -> SLEET_SHOWERS_NIGHT
+    "sleetshowers_polartwilight" -> SLEET_SHOWERS_POLAR_TWILIGHT
+    "snowandthunder" -> SNOW_AND_THUNDER
+    "snow" -> SNOW
+    "snowshowersandthunder_day" -> SNOW_SHOWERS_AND_THUNDER_DAY
+    "snowshowersandthunder_night" -> SNOW_SHOWERS_AND_THUNDER_NIGHT
+    "snowshowersandthunder_polartwilight" -> SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "snowshowers_day" -> SNOW_SHOWERS_DAY
+    "snowshowers_night" -> SNOW_SHOWERS_NIGHT
+    "snowshowers_polartwilight" -> SNOW_SHOWERS_POLAR_TWILIGHT
+    else -> UNKNOWN
+}

@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.data.repository
 
-import android.util.Log
+import android.database.sqlite.SQLiteException
 import hr.dtakac.prognoza.data.database.converter.Rfc1123DateTimeConverter
 import hr.dtakac.prognoza.data.database.forecast.dao.ForecastDao
 import hr.dtakac.prognoza.data.database.forecast.dao.MetaDao
@@ -11,11 +11,12 @@ import hr.dtakac.prognoza.data.mapping.mapResponseToDbModel
 import hr.dtakac.prognoza.data.network.forecast.ForecastService
 import hr.dtakac.prognoza.data.network.forecast.LocationForecastResponse
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
-import hr.dtakac.prognoza.entities.forecast.ForecastDatum
+import hr.dtakac.prognoza.domain.repository.ForecastRepositoryResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
+import retrofit2.HttpException
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -30,7 +31,7 @@ class DefaultForecastRepository(
         longitude: Double,
         from: ZonedDateTime,
         to: ZonedDateTime
-    ): List<ForecastDatum> {
+    ): ForecastRepositoryResult {
         val meta = try {
             metaDao.get(latitude, longitude)
         } catch (e: Exception) {
@@ -44,8 +45,12 @@ class DefaultForecastRepository(
                     longitude = longitude,
                     lastModified = meta?.lastModified
                 )
+            } catch (e: HttpException) {
+                return getResultFromHttpException(e)
+            } catch (e: SQLiteException) {
+                return ForecastRepositoryResult.DatabaseError
             } catch (e: Exception) {
-                Log.e(this::class.qualifiedName, e.stackTraceToString())
+                return ForecastRepositoryResult.UnknownError
             }
         }
         return try {
@@ -54,10 +59,9 @@ class DefaultForecastRepository(
                 end = to,
                 latitude = latitude,
                 longitude = longitude
-            ).map(::mapDbModelToEntity)
+            ).map(::mapDbModelToEntity).let { ForecastRepositoryResult.Success(it) }
         } catch (e: Exception) {
-            Log.e(this::class.qualifiedName, e.stackTraceToString())
-            listOf()
+            ForecastRepositoryResult.UnknownError
         }
     }
 
@@ -113,5 +117,14 @@ class DefaultForecastRepository(
         } ?: return
         forecastDao.delete(latitude, longitude)
         forecastDao.insert(dbModels)
+    }
+
+    private fun getResultFromHttpException(httpException: HttpException): ForecastRepositoryResult {
+        return when (httpException.code()) {
+            429 -> ForecastRepositoryResult.ThrottleError
+            in 400..499 -> ForecastRepositoryResult.ClientError
+            in 500..504 -> ForecastRepositoryResult.ServerError
+            else -> ForecastRepositoryResult.UnknownError
+        }
     }
 }

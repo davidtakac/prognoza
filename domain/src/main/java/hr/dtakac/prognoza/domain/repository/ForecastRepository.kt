@@ -9,5 +9,17 @@ interface ForecastRepository {
         longitude: Double,
         from: ZonedDateTime,
         to: ZonedDateTime
-    ): List<ForecastDatum>
+    ): ForecastRepositoryResult
+}
+
+sealed interface ForecastRepositoryResult {
+    object ThrottleError : ForecastRepositoryResult
+    object ClientError : ForecastRepositoryResult
+    object ServerError : ForecastRepositoryResult
+    object UnknownError : ForecastRepositoryResult
+    object DatabaseError : ForecastRepositoryResult
+
+    data class Success(
+        val data: List<ForecastDatum>
+    ) : ForecastRepositoryResult
 }
