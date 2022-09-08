@@ -26,10 +26,10 @@ sealed class TextResource {
     }
 
     abstract fun asString(context: Context): String
-}
 
-@Composable
-fun TextResource.asString(): String = asString(LocalContext.current)
+    @Composable
+    fun asString(): String = asString(LocalContext.current)
+}
 
 private data class SimpleTextResource(
     val text: String

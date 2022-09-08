@@ -20,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.presentation.today.TodayViewModel
-import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @AndroidEntryPoint

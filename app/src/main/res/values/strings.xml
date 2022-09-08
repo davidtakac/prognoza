@@ -55,7 +55,7 @@
     <string name="direction_w">west</string>
     <string name="direction_nw">northwest</string>
 
-    <string name="template_today_time">Today, %1$s</string>
+    <string name="template_today_time">Now, %1$s</string>
     <string name="template_temperature_degrees">%1$s°</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_precipitation_mm">%1$s mm</string>
