@@ -10,6 +10,7 @@ import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import hr.dtakac.prognoza.domain.usecases.TodayForecastResult.*
 
 class GetTodayForecast(
     private val getSelectedPlace: GetSelectedPlace,
@@ -17,7 +18,7 @@ class GetTodayForecast(
     private val settingsRepository: SettingsRepository
 ) {
     suspend operator fun invoke(): TodayForecastResult {
-        val selectedPlace = getSelectedPlace() ?: return TodayForecastResult.NoSelectedPlace
+        val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
         val now = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
         return forecastRepository.getForecast(
             latitude = selectedPlace.latitude,
@@ -29,14 +30,14 @@ class GetTodayForecast(
 
     private suspend fun mapToResult(place: Place, repositoryResult: ForecastRepositoryResult): TodayForecastResult =
         when (repositoryResult) {
-            is ForecastRepositoryResult.ThrottleError -> TodayForecastResult.ThrottleError
-            is ForecastRepositoryResult.ClientError -> TodayForecastResult.ClientError
-            is ForecastRepositoryResult.ServerError -> TodayForecastResult.ServerError
-            is ForecastRepositoryResult.UnknownError -> TodayForecastResult.UnknownError
-            is ForecastRepositoryResult.DatabaseError -> TodayForecastResult.DatabaseError
+            is ForecastRepositoryResult.ThrottleError -> Error.Throttle
+            is ForecastRepositoryResult.ClientError -> Error.Client
+            is ForecastRepositoryResult.ServerError -> Error.Server
+            is ForecastRepositoryResult.UnknownError -> Error.Unknown
+            is ForecastRepositoryResult.DatabaseError -> Error.Database
             is ForecastRepositoryResult.Success -> {
-                if (repositoryResult.data.isEmpty()) TodayForecastResult.UnknownError
-                else TodayForecastResult.Success(
+                if (repositoryResult.data.isEmpty()) Error.Unknown
+                else Success(
                     placeName = place.name,
                     todayForecast = DayForecast(repositoryResult.data),
                     temperatureUnit = settingsRepository.getTemperatureUnit(),
@@ -56,10 +57,12 @@ sealed interface TodayForecastResult {
         val precipitationUnit: LengthUnit
     ) : TodayForecastResult
 
-    object NoSelectedPlace : TodayForecastResult
-    object ThrottleError : TodayForecastResult
-    object ClientError : TodayForecastResult
-    object ServerError : TodayForecastResult
-    object DatabaseError : TodayForecastResult
-    object UnknownError : TodayForecastResult
+    sealed interface Error : TodayForecastResult {
+        object NoSelectedPlace : Error
+        object Throttle : Error
+        object Client : Error
+        object Server : Error
+        object Database : Error
+        object Unknown : Error
+    }
 }

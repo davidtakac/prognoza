@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.presentation.today
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.domain.usecases.TodayForecastResult
 import hr.dtakac.prognoza.entities.forecast.DayForecast
 import hr.dtakac.prognoza.entities.forecast.DayPrecipitation
 import hr.dtakac.prognoza.entities.forecast.SmallForecastDatum
@@ -43,6 +44,20 @@ fun mapToTodayUiState(
     precipitation = getDailyPrecipitation(todayForecast.dailyPrecipitation, precipitationUnit),
     hours = todayForecast.smallData.map { getHour(it, temperatureUnit, precipitationUnit) }
 )
+
+fun mapToEmptyTodayUiState(
+    error: TodayForecastResult.Error
+): TodayUiState.Empty {
+    val stringId = when (error) {
+        TodayForecastResult.Error.Client -> R.string.error_client
+        TodayForecastResult.Error.Database -> R.string.error_database
+        TodayForecastResult.Error.NoSelectedPlace -> R.string.error_no_selected_place
+        TodayForecastResult.Error.Server -> R.string.error_server
+        TodayForecastResult.Error.Throttle -> R.string.error_throttling
+        TodayForecastResult.Error.Unknown -> R.string.error_unknown
+    }
+    return TodayUiState.Empty(TextResource.fromStringId(stringId))
+}
 
 private fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
     millis = time.toInstant().toEpochMilli(),

@@ -6,10 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecases.TodayForecastResult
 import hr.dtakac.prognoza.domain.usecases.GetTodayForecast
-import hr.dtakac.prognoza.presentation.TextResource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,12 +30,7 @@ class TodayViewModel @Inject constructor(
                     result.windUnit,
                     result.precipitationUnit
                 )
-                TodayForecastResult.ClientError -> TodayUiState.Empty(TextResource.fromStringId(R.string.error_client))
-                TodayForecastResult.DatabaseError -> TodayUiState.Empty(TextResource.fromStringId(R.string.error_database))
-                TodayForecastResult.NoSelectedPlace -> TodayUiState.Empty(TextResource.fromStringId(R.string.error_no_selected_place))
-                TodayForecastResult.ServerError -> TodayUiState.Empty(TextResource.fromStringId(R.string.error_server))
-                TodayForecastResult.ThrottleError -> TodayUiState.Empty(TextResource.fromStringId(R.string.error_throttling))
-                TodayForecastResult.UnknownError -> TodayUiState.Empty(TextResource.fromStringId(R.string.error_unknown))
+                is TodayForecastResult.Error -> mapToEmptyTodayUiState(result)
             }
         }
     }
