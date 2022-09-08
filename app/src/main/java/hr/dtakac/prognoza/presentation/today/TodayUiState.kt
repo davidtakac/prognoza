@@ -1,8 +1,7 @@
-package hr.dtakac.prognoza.presentation
+package hr.dtakac.prognoza.presentation.today
 
 import androidx.annotation.DrawableRes
-import hr.dtakac.prognoza.presentation.strings.TextResource
-import java.time.ZonedDateTime
+import hr.dtakac.prognoza.presentation.TextResource
 
 sealed interface TodayUiState {
     object Loading : TodayUiState

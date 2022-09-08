@@ -18,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import dagger.hilt.android.AndroidEntryPoint
-import hr.dtakac.prognoza.presentation.TodayUiState
-import hr.dtakac.prognoza.presentation.TodayViewModel
-import hr.dtakac.prognoza.presentation.strings.asString
+import hr.dtakac.prognoza.presentation.today.TodayUiState
+import hr.dtakac.prognoza.presentation.today.TodayViewModel
+import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @AndroidEntryPoint

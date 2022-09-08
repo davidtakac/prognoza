@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.entities.forecast
 
 import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
-import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.lang.IllegalStateException
@@ -49,7 +48,7 @@ class DayForecast(data: List<ForecastDatum>) {
             time = datum.start,
             description = datum.description,
             temperature = datum.temperature,
-            precipitation = datum.precipitation.amount
+            precipitation = datum.precipitation
         )
 }
 
@@ -62,5 +61,5 @@ data class SmallForecastDatum(
     val time: ZonedDateTime,
     val description: ForecastDescription,
     val temperature: Temperature,
-    val precipitation: Length
+    val precipitation: Precipitation
 )

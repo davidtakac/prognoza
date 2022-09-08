@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation.strings
+package hr.dtakac.prognoza.presentation
 
 import android.content.Context
 import android.icu.text.NumberFormat
