@@ -60,7 +60,8 @@
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_precipitation_mm">%1$s mm</string>
     <string name="template_precipitation_in">%1$s\"</string>
-    <string name="template_precipitation">%1$s at %2$s (%3$s)</string>
+    <string name="template_precipitation_at">%1$s at %2$s (%3$s)</string>
+    <string name="template_precipitation_now">%1$s now (%2$s)</string>
     <string name="template_wind_kmh">%1$s km/h</string>
     <string name="template_wind_mps">%1$s m/s</string>
     <string name="template_wind_mph">%1$s mi/h</string>

@@ -7,8 +7,8 @@ import dagger.hilt.android.components.ViewModelComponent
 import dagger.hilt.android.scopes.ViewModelScoped
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
-import hr.dtakac.prognoza.domain.usecases.GetSelectedPlace
-import hr.dtakac.prognoza.domain.usecases.GetTodayForecast
+import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetTodayForecast
 
 @Module
 @InstallIn(ViewModelComponent::class)

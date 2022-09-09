@@ -15,7 +15,7 @@ sealed class TextResource {
         fun fromStringId(@StringRes id: Int): TextResource =
             IdTextResource(id)
 
-        fun fromStringIdWithArgs(@StringRes id: Int, vararg args: Any): TextResource =
+        fun fromStringId(@StringRes id: Int, vararg args: Any): TextResource =
             IdTextResourceWithArgs(id, args.toList())
 
         fun fromEpochMillis(millis: Long, flags: Int): TextResource =

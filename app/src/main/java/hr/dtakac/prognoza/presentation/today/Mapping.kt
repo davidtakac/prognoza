@@ -2,10 +2,9 @@ package hr.dtakac.prognoza.presentation.today
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.domain.usecases.TodayForecastResult
-import hr.dtakac.prognoza.entities.forecast.DayForecast
-import hr.dtakac.prognoza.entities.forecast.DayPrecipitation
-import hr.dtakac.prognoza.entities.forecast.SmallForecastDatum
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecast
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.SmallForecastDatum
 import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
 import hr.dtakac.prognoza.entities.forecast.precipitation.PrecipitationDescription
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
@@ -21,18 +20,18 @@ import java.time.ZonedDateTime
 
 fun mapToTodayUiState(
     placeName: String,
-    todayForecast: DayForecast,
+    todayForecast: TodayForecast,
     temperatureUnit: TemperatureUnit,
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayUiState.Success = TodayUiState.Success(
     placeName = TextResource.fromText(placeName),
-    time = TextResource.fromStringIdWithArgs(
+    time = TextResource.fromStringId(
         R.string.template_today_time,
         getShortTime(todayForecast.time)
     ),
     temperature = getTemperature(todayForecast.airTemperature, temperatureUnit),
-    feelsLike = TextResource.fromStringIdWithArgs(
+    feelsLike = TextResource.fromStringId(
         R.string.template_feels_like,
         getTemperature(todayForecast.feelsLikeTemperature, temperatureUnit)
     ),
@@ -41,7 +40,7 @@ fun mapToTodayUiState(
     descriptionIcon = todayForecast.description.toDrawableId(),
     lowTemperature = getTemperature(todayForecast.lowTemperature, temperatureUnit),
     highTemperature = getTemperature(todayForecast.highTemperature, temperatureUnit),
-    precipitation = getDailyPrecipitation(todayForecast.dailyPrecipitation, precipitationUnit),
+    precipitation = getDailyPrecipitation(todayForecast, precipitationUnit),
     hours = todayForecast.smallData.map { getHour(it, temperatureUnit, precipitationUnit) }
 )
 
@@ -67,7 +66,7 @@ private fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromE
 private fun getTemperature(
     temperature: Temperature,
     unit: TemperatureUnit
-): TextResource = TextResource.fromStringIdWithArgs(
+): TextResource = TextResource.fromStringId(
     id = R.string.template_temperature_degrees,
     TextResource.fromNumber(
         temperature.run {
@@ -82,11 +81,11 @@ private fun getTemperature(
 private fun getWind(
     wind: Wind,
     unit: SpeedUnit
-): TextResource = TextResource.fromStringIdWithArgs(
+): TextResource = TextResource.fromStringId(
     id = R.string.template_wind,
     TextResource.fromStringId(wind.description.toStringId()),
     TextResource.fromStringId(wind.fromDirection.toCompassDirectionStringId()),
-    TextResource.fromStringIdWithArgs(
+    TextResource.fromStringId(
         id = when (unit) {
             SpeedUnit.KPH -> R.string.template_wind_kmh
             SpeedUnit.MPH -> R.string.template_wind_mph
@@ -107,7 +106,7 @@ private fun getWind(
 private fun getPrecipitation(
     precipitation: Precipitation,
     unit: LengthUnit
-): TextResource = TextResource.fromStringIdWithArgs(
+): TextResource = TextResource.fromStringId(
     id = when (unit) {
         LengthUnit.MM -> R.string.template_precipitation_mm
         LengthUnit.IN -> R.string.template_precipitation_in
@@ -121,14 +120,20 @@ private fun getPrecipitation(
 )
 
 private fun getDailyPrecipitation(
-    dailyPrecipitation: DayPrecipitation?,
+    todayForecast: TodayForecast,
     unit: LengthUnit
-): TextResource = dailyPrecipitation?.run {
+): TextResource = todayForecast.dailyPrecipitation?.run {
     if (precipitation.description == PrecipitationDescription.NONE) {
         TextResource.fromStringId(R.string.precipitation_none)
+    } else if (todayForecast.time == at){
+        TextResource.fromStringId(
+            id = R.string.template_precipitation_now,
+            TextResource.fromStringId(precipitation.description.toStringId()),
+            getPrecipitation(precipitation, unit)
+        )
     } else {
-        TextResource.fromStringIdWithArgs(
-            id = R.string.template_precipitation,
+        TextResource.fromStringId(
+            id = R.string.template_precipitation_at,
             TextResource.fromStringId(precipitation.description.toStringId()),
             getShortTime(at),
             getPrecipitation(precipitation, unit)

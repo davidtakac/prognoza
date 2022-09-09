@@ -1,16 +1,16 @@
-package hr.dtakac.prognoza.domain.usecases
+package hr.dtakac.prognoza.domain.usecase.gettodayforecast
 
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepositoryResult
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
+import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
 import hr.dtakac.prognoza.entities.Place
-import hr.dtakac.prognoza.entities.forecast.DayForecast
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import hr.dtakac.prognoza.domain.usecases.TodayForecastResult.*
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult.*
 
 class GetTodayForecast(
     private val getSelectedPlace: GetSelectedPlace,
@@ -39,7 +39,7 @@ class GetTodayForecast(
                 if (repositoryResult.data.isEmpty()) Error.Unknown
                 else Success(
                     placeName = place.name,
-                    todayForecast = DayForecast(repositoryResult.data),
+                    todayForecast = TodayForecast(repositoryResult.data),
                     temperatureUnit = settingsRepository.getTemperatureUnit(),
                     windUnit = settingsRepository.getWindUnit(),
                     precipitationUnit = settingsRepository.getPrecipitationUnit()
@@ -51,7 +51,7 @@ class GetTodayForecast(
 sealed interface TodayForecastResult {
     data class Success(
         val placeName: String,
-        val todayForecast: DayForecast,
+        val todayForecast: TodayForecast,
         val temperatureUnit: TemperatureUnit,
         val windUnit: SpeedUnit,
         val precipitationUnit: LengthUnit

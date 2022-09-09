@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.domain.usecases
+package hr.dtakac.prognoza.domain.usecase
 
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.entities.Place
