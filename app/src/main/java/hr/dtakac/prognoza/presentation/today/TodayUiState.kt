@@ -20,7 +20,7 @@ sealed interface TodayUiState {
         val descriptionIcon: Int,
         val lowTemperature: TextResource,
         val highTemperature: TextResource,
-        val precipitation: TextResource,
+        val dayPrecipitation: TextResource,
         val hours: List<TodayHour>
     ) : TodayUiState
 }

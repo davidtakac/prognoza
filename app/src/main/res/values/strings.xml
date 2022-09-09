@@ -60,7 +60,7 @@
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_precipitation_mm">%1$s mm</string>
     <string name="template_precipitation_in">%1$s\"</string>
-    <string name="template_precipitation_starts">%1$s at %2$s</string>
+    <string name="template_precipitation_starts">Precipitation starts at %1$s</string>
     <string name="template_precipitation_breaks">Precipitation stops at %1$s</string>
     <string name="template_precipitation_continues">Precipitation stops at %1$s and continues at %2$s</string>
     <string name="template_precipitation_rest_of_day">Precipitation for the rest of the day</string>
@@ -92,6 +92,6 @@
     <string name="wind_storm">Storm</string>
     <string name="wind_violent_storm">Violent storm</string>
     <string name="wind_hurricane">Hurricane</string>
-    <string name="label_feels_like">Feels like</string>
+    <string name="rest_of_the_day">Rest of the day</string>
 
 </resources>

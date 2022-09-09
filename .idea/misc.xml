@@ -6,10 +6,14 @@
         <entry key="../../../../layout/compose-model-1662713609268.xml" value="0.75" />
         <entry key="../../../../layout/compose-model-1662714861600.xml" value="0.33" />
         <entry key="../../../../layout/compose-model-1662715939522.xml" value="0.33" />
+        <entry key="../../../../layout/compose-model-1662724605489.xml" value="0.33" />
+        <entry key="../../../../layout/compose-model-1662725739339.xml" value="0.5" />
         <entry key="app/src/main/res/drawable-v24/ic_cloud_off.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/app_widget_background.xml" value="0.18090277777777777" />
+        <entry key="app/src/main/res/drawable/arrow_upward-48px.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_air.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_arrow_up.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_cloud.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_error.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_history.xml" value="0.1" />

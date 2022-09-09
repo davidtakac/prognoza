@@ -46,7 +46,7 @@ fun mapToTodayUiState(
     descriptionIcon = todayForecast.descriptionNow.toDrawableId(),
     lowTemperature = getTemperature(todayForecast.lowTemperature, temperatureUnit),
     highTemperature = getTemperature(todayForecast.highTemperature, temperatureUnit),
-    precipitation = getNextDistinctPrecipitation(todayForecast.nextDistinctPrecipitation),
+    dayPrecipitation = getNextDistinctPrecipitation(todayForecast.nextDistinctPrecipitation),
     hours = todayForecast.restOfDayData.map { getHour(it, temperatureUnit, precipitationUnit) }
 )
 
