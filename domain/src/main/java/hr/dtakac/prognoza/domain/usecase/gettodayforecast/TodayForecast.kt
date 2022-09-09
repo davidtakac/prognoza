@@ -28,7 +28,8 @@ class TodayForecast(data: List<ForecastDatum>) {
             time = datum.start,
             description = datum.description,
             temperature = datum.temperature,
-            precipitation = datum.precipitation
+            precipitation = datum.precipitation,
+            wind = datum.wind
         )
     }
     val highTemperature: Temperature = restOfDayData.maxOf { it.temperature }
@@ -76,7 +77,8 @@ data class SmallForecastDatum(
     val time: ZonedDateTime,
     val description: ForecastDescription,
     val temperature: Temperature,
-    val precipitation: Precipitation
+    val precipitation: Precipitation,
+    val wind: Wind
 )
 
 sealed interface NextDistinctPrecipitation {

@@ -37,7 +37,7 @@ fun mapToTodayUiState(
         R.string.template_feels_like,
         getTemperature(todayForecast.feelsLikeNow, temperatureUnit)
     ),
-    wind = getWind(todayForecast.windNow, windUnit),
+    wind = getWindLong(todayForecast.windNow, windUnit),
     description = getDescription(
         todayForecast.precipitationNow,
         todayForecast.descriptionNow,
@@ -47,7 +47,7 @@ fun mapToTodayUiState(
     lowTemperature = getTemperature(todayForecast.lowTemperature, temperatureUnit),
     highTemperature = getTemperature(todayForecast.highTemperature, temperatureUnit),
     dayPrecipitation = getNextDistinctPrecipitation(todayForecast.nextDistinctPrecipitation),
-    hours = todayForecast.restOfDayData.map { getHour(it, temperatureUnit, precipitationUnit) }
+    hours = todayForecast.restOfDayData.map { getHour(it, temperatureUnit, precipitationUnit, windUnit) }
 )
 
 fun mapToEmptyTodayUiState(
@@ -100,28 +100,33 @@ private fun getTemperature(
     )
 )
 
-private fun getWind(
+private fun getWindLong(
     wind: Wind,
     unit: SpeedUnit
 ): TextResource = TextResource.fromStringId(
     id = R.string.template_wind,
     TextResource.fromStringId(wind.description.toStringId()),
     TextResource.fromStringId(wind.fromDirection.toCompassDirectionStringId()),
-    TextResource.fromStringId(
-        id = when (unit) {
-            SpeedUnit.KPH -> R.string.template_wind_kmh
-            SpeedUnit.MPH -> R.string.template_wind_mph
-            SpeedUnit.MPS -> R.string.template_wind_mps
-        },
-        TextResource.fromNumber(
-            wind.speed.run {
-                when (unit) {
-                    SpeedUnit.KPH -> kilometersPerHour
-                    SpeedUnit.MPH -> milesPerHour
-                    SpeedUnit.MPS -> metersPerSecond
-                }
+    getWind(wind, unit)
+)
+
+private fun getWind(
+    wind: Wind,
+    unit: SpeedUnit
+): TextResource = TextResource.fromStringId(
+    id = when (unit) {
+        SpeedUnit.KPH -> R.string.template_wind_kmh
+        SpeedUnit.MPH -> R.string.template_wind_mph
+        SpeedUnit.MPS -> R.string.template_wind_mps
+    },
+    TextResource.fromNumber(
+        wind.speed.run {
+            when (unit) {
+                SpeedUnit.KPH -> kilometersPerHour
+                SpeedUnit.MPH -> milesPerHour
+                SpeedUnit.MPS -> metersPerSecond
             }
-        )
+        }
     )
 )
 
@@ -164,13 +169,15 @@ private fun getNextDistinctPrecipitation(
 private fun getHour(
     datum: SmallForecastDatum,
     temperatureUnit: TemperatureUnit,
-    precipitationUnit: LengthUnit
+    precipitationUnit: LengthUnit,
+    windUnit: SpeedUnit
 ): TodayHour = TodayHour(
     time = getShortTime(datum.time),
     icon = datum.description.toDrawableId(),
     temperature = getTemperature(datum.temperature, temperatureUnit),
-    precipitation = datum.precipitation.takeIf { it.description != PrecipitationDescription.NONE }
-        ?.let {
-            getPrecipitation(it, precipitationUnit)
-        }
+    precipitation = datum.precipitation
+        .takeIf { it.description != PrecipitationDescription.NONE }
+        ?.let { getPrecipitation(it, precipitationUnit) },
+    wind = getWind(datum.wind, windUnit),
+    windIconRotation = datum.wind.fromDirection.degrees.toFloat()
 )

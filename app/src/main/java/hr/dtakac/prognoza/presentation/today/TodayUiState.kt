@@ -30,5 +30,7 @@ data class TodayHour(
     @DrawableRes
     val icon: Int,
     val temperature: TextResource,
-    val precipitation: TextResource?
+    val precipitation: TextResource?,
+    val wind: TextResource,
+    val windIconRotation: Float
 )
