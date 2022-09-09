@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.domain.usecase.gettodayforecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
+import hr.dtakac.prognoza.entities.forecast.precipitation.PrecipitationDescription
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.lang.IllegalStateException
@@ -15,30 +16,14 @@ class TodayForecast(data: List<ForecastDatum>) {
         }
     }
 
-    val time: ZonedDateTime = data.first().start
+    val now: ZonedDateTime = data.first().start
+    val temperatureNow: Temperature = data.first().temperature
+    val feelsLikeNow: Temperature = data.first().feelsLike
+    val windNow: Wind = data.first().wind
+    val descriptionNow: ForecastDescription = data.first().description
+    val precipitationNow: Precipitation = data.first().precipitation
 
-    val airTemperature: Temperature = data.first().temperature
-
-    val feelsLikeTemperature: Temperature = data.first().feelsLike
-
-    val wind: Wind = data.first().wind
-
-    val description: ForecastDescription = data.first().description
-
-    val highTemperature: Temperature = data.maxOf { it.temperature }
-
-    val lowTemperature: Temperature = data.minOf { it.temperature }
-
-    val dailyPrecipitation: DailyPrecipitation? = data
-        .firstOrNull { it.precipitation.amount.millimeters > 0 }
-        ?.let { datum ->
-            DailyPrecipitation(
-                precipitation = datum.precipitation,
-                at = datum.start
-            )
-        }
-
-    val smallData: List<SmallForecastDatum> = data.drop(1).map { datum ->
+    val restOfDayData: List<SmallForecastDatum> = data.drop(1).map { datum ->
         SmallForecastDatum(
             time = datum.start,
             description = datum.description,
@@ -46,12 +31,46 @@ class TodayForecast(data: List<ForecastDatum>) {
             precipitation = datum.precipitation
         )
     }
-}
+    val highTemperature: Temperature = restOfDayData.maxOf { it.temperature }
+    val lowTemperature: Temperature = restOfDayData.minOf { it.temperature }
+    val nextDistinctPrecipitation: NextDistinctPrecipitation = resolveNextDistinctPrecipitation()
 
-data class DailyPrecipitation(
-    val precipitation: Precipitation,
-    val at: ZonedDateTime
-)
+    private fun resolveNextDistinctPrecipitation(): NextDistinctPrecipitation {
+        val isPrecipitatingNow = precipitationNow.description != PrecipitationDescription.NONE
+        return if (isPrecipitatingNow) {
+            val idxFirstBreak = restOfDayData.indexOfFirst {
+                it.precipitation.description == PrecipitationDescription.NONE
+            }
+            if (idxFirstBreak < 0) {
+                NextDistinctPrecipitation.RestOfDay
+            } else {
+                val breakTime = restOfDayData[idxFirstBreak].time
+                val idxPrecipitationAfterBreak = restOfDayData
+                    .subList(idxFirstBreak + 1, restOfDayData.size)
+                    .indexOfFirst {
+                        it.precipitation.description != PrecipitationDescription.NONE
+                    }
+                if (idxPrecipitationAfterBreak < 0) {
+                    NextDistinctPrecipitation.Breaks(breakTime)
+                } else {
+                    NextDistinctPrecipitation.ContinuesAfterBreak(
+                        breakTime = breakTime,
+                        continueTime = restOfDayData[idxPrecipitationAfterBreak].time,
+                    )
+                }
+            }
+        } else {
+            val idxFirstPrecipitation = restOfDayData.indexOfFirst {
+                it.precipitation.description != PrecipitationDescription.NONE
+            }
+            if (idxFirstPrecipitation < 0) {
+                NextDistinctPrecipitation.None
+            } else {
+                NextDistinctPrecipitation.Starts(restOfDayData[idxFirstPrecipitation].time)
+            }
+        }
+    }
+}
 
 data class SmallForecastDatum(
     val time: ZonedDateTime,
@@ -59,3 +78,20 @@ data class SmallForecastDatum(
     val temperature: Temperature,
     val precipitation: Precipitation
 )
+
+sealed interface NextDistinctPrecipitation {
+    object None : NextDistinctPrecipitation
+    object RestOfDay : NextDistinctPrecipitation
+    data class Starts(
+        val at: ZonedDateTime
+    ) : NextDistinctPrecipitation
+
+    data class Breaks(
+        val at: ZonedDateTime
+    ) : NextDistinctPrecipitation
+
+    data class ContinuesAfterBreak(
+        val breakTime: ZonedDateTime,
+        val continueTime: ZonedDateTime,
+    ) : NextDistinctPrecipitation
+}
