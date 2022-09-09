@@ -69,7 +69,7 @@
     <string name="template_wind_mps">%1$s m/s</string>
     <string name="template_wind_mph">%1$s mi/h</string>
     <string name="precipitation_none">No precipitation</string>
-    <string name="template_wind">%1$s\nfrom %2$s (%3$s)</string>
+    <string name="template_wind">%1$s from %2$s (%3$s)</string>
     <string name="template_humidity_percent">%1$s%%</string>
     <string name="error_client">Something is wrong with your request.</string>
     <string name="error_server">The server is currently unable to process your request.</string>
