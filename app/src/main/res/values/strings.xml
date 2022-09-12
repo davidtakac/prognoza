@@ -93,5 +93,6 @@
     <string name="wind_hurricane">Hurricane</string>
     <string name="rest_of_the_day">Rest of the day</string>
     <string name="now">Now</string>
+    <string name="today_loading">Getting today\'s forecast…</string>
 
 </resources>

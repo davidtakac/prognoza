@@ -20,13 +20,13 @@ import hr.dtakac.prognoza.presentation.toDrawableId
 import hr.dtakac.prognoza.presentation.toStringId
 import java.time.ZonedDateTime
 
-fun mapToTodayUiState(
+fun mapToTodayContent(
     placeName: String,
     todayForecast: TodayForecast,
     temperatureUnit: TemperatureUnit,
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
-): TodayUiState.Success = TodayUiState.Success(
+): TodayContent = TodayContent(
     placeName = TextResource.fromText(placeName),
     time = getLongTime(todayForecast.now),
     temperature = getTemperature(todayForecast.temperatureNow, temperatureUnit),
@@ -62,9 +62,9 @@ fun getLowHighTemperature(
     getTemperature(lowTemperature, temperatureUnit)
 )
 
-fun mapToEmptyTodayUiState(
+fun mapToTodayError(
     error: TodayForecastResult.Error
-): TodayUiState.Empty {
+): TextResource {
     val stringId = when (error) {
         TodayForecastResult.Error.Client -> R.string.error_client
         TodayForecastResult.Error.Database -> R.string.error_database
@@ -73,7 +73,7 @@ fun mapToEmptyTodayUiState(
         TodayForecastResult.Error.Throttle -> R.string.error_throttling
         TodayForecastResult.Error.Unknown -> R.string.error_unknown
     }
-    return TodayUiState.Empty(TextResource.fromStringId(stringId))
+    return TextResource.fromStringId(stringId)
 }
 
 private fun getDescription(

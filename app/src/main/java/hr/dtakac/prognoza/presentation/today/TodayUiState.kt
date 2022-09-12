@@ -3,25 +3,23 @@ package hr.dtakac.prognoza.presentation.today
 import androidx.annotation.DrawableRes
 import hr.dtakac.prognoza.presentation.TextResource
 
-sealed interface TodayUiState {
-    object Loading : TodayUiState
+data class TodayUiState(
+    val isLoading: Boolean = false,
+    val error: TextResource? = null,
+    val content: TodayContent? = null
+)
 
-    data class Empty(
-        val text: TextResource
-    ) : TodayUiState
-
-    data class Success(
-        val placeName: TextResource,
-        val time: TextResource,
-        val temperature: TextResource,
-        val feelsLike: TextResource,
-        val currentDescription: TextResource,
-        @DrawableRes
-        val descriptionIcon: Int,
-        val restOfDayDescription: TextResource,
-        val hours: List<TodayHour>
-    ) : TodayUiState
-}
+data class TodayContent(
+    val placeName: TextResource,
+    val time: TextResource,
+    val temperature: TextResource,
+    val feelsLike: TextResource,
+    val currentDescription: TextResource,
+    @DrawableRes
+    val descriptionIcon: Int,
+    val restOfDayDescription: TextResource,
+    val hours: List<TodayHour>
+)
 
 data class TodayHour(
     val time: TextResource,

@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.ui.today
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,44 +24,112 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodayContent(state: TodayUiState.Success) {
+fun TodayScreen(state: TodayUiState) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            SmallTopAppBar(
-                title = {
-                    Text(state.placeName.asString())
-                }
-            )
+            state.content?.placeName?.let {
+                SmallTopAppBar(
+                    title = { Text(it.asString()) }
+                )
+            }
         },
-        content = {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .padding(16.dp)
-            ) {
-                CurrentConditionsCard(
-                    title = state.time,
-                    airTemperature = state.temperature,
-                    feelsLike = state.feelsLike,
-                    descriptionIcon = state.descriptionIcon,
-                    description = state.currentDescription
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                RestOfDayCard(
-                    modifier = Modifier.weight(1f),
-                    description = state.restOfDayDescription,
-                    hours = state.hours
-                )
+        content = { paddingValues ->
+            Box(modifier = Modifier.fillMaxSize()) {
+                if (state.content != null) {
+                    Content(
+                        modifier = Modifier.padding(paddingValues),
+                        content = state.content
+                    )
+                }
+
+                if (state.isLoading) {
+                    if (state.content == null) {
+                        TodayLoading()
+                        return@Box
+                    } else {
+                        LinearProgressIndicator(
+                            modifier = Modifier
+                                .padding(paddingValues)
+                                .fillMaxWidth()
+                                .align(Alignment.TopStart)
+                        )
+                    }
+                }
+
+                if (state.error != null) {
+                    if (state.content == null) {
+                        TodayError(state.error)
+                        return@Box
+                    } else {
+                        Snackbar(
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                                .padding(16.dp)
+                        ) {
+                            Text(state.error.asString())
+                        }
+                    }
+                }
             }
         }
     )
+}
+
+@Preview
+@Composable
+private fun TodayScreenPreview() {
+    TodayScreen(
+        TodayUiState().copy(
+            content = fakeContent(),
+            isLoading = true,
+            error = TextResource.fromText("Error test")
+        )
+    )
+}
+
+@Preview()
+@Composable
+private fun TodayScreenPreviewDark() {
+    PrognozaTheme(useDarkTheme = true) {
+        TodayScreenPreview()
+    }
+}
+
+@Preview
+@Composable
+private fun TodayScreenLoadingPreview() {
+    TodayScreen(TodayUiState().copy(isLoading = true))
+}
+
+@Composable
+private fun Content(
+    modifier: Modifier = Modifier,
+    content: TodayContent
+) {
+    Column(modifier) {
+        content.run {
+            CurrentConditionsCard(
+                title = time,
+                airTemperature = temperature,
+                feelsLike = feelsLike,
+                descriptionIcon = descriptionIcon,
+                description = currentDescription
+            )
+            RestOfDayCard(
+                modifier = Modifier.weight(1f),
+                description = restOfDayDescription,
+                hours = hours
+            )
+        }
+    }
 }
 
 @Composable
@@ -72,7 +141,7 @@ private fun CurrentConditionsCard(
     descriptionIcon: Int,
     description: TextResource
 ) {
-    ElevatedCard(modifier = Modifier.fillMaxWidth()) {
+    ElevatedCard(modifier = Modifier.padding(16.dp)) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -110,38 +179,28 @@ private fun CurrentConditionsCard(
     }
 }
 
-@Preview
-@Composable
-private fun TodayContentPreview() {
-    TodayContent(fakeState())
-}
-
 @Composable
 private fun RestOfDayCard(
     modifier: Modifier,
     description: TextResource,
     hours: List<TodayHour>
 ) {
-    ElevatedCard(modifier) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Text(
-                stringResource(R.string.rest_of_the_day),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.alpha(0.6f)
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
-            Spacer(Modifier.height(12.dp))
-            Divider()
-            Spacer(Modifier.height(12.dp))
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                items(hours) { hour ->
-                    HourRow(hour)
-                }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Text(
+            stringResource(R.string.rest_of_the_day),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.alpha(0.6f)
+        )
+        Spacer(Modifier.height(8.dp))
+        Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyColumn(modifier = Modifier.fillMaxWidth()) {
+            items(hours) { hour ->
+                HourRow(hour)
             }
         }
     }
@@ -220,15 +279,8 @@ private fun WindWithRotatedDirectionIcon(
     )
 }
 
-@Preview()
-@Composable
-private fun TodayContentPreviewDark() {
-    PrognozaTheme(useDarkTheme = true) {
-        TodayContentPreview()
-    }
-}
 
-private fun fakeState(): TodayUiState.Success = TodayUiState.Success(
+private fun fakeContent(): TodayContent = TodayContent(
     placeName = TextResource.fromText("Tenja"),
     time = TextResource.fromText("September 12, 13:00"),
     temperature = TextResource.fromText("23°"),
@@ -279,3 +331,24 @@ private fun fakeState(): TodayUiState.Success = TodayUiState.Success(
         )
     )
 )
+
+@Composable
+private fun TodayLoading() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator()
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            stringResource(id = R.string.today_loading),
+            style = MaterialTheme.typography.bodyLarge
+        )
+    }
+}
+
+@Composable
+private fun TodayError(textResource: TextResource) {
+    // todo
+}
