@@ -11,7 +11,8 @@ sealed interface TodayUiState {
     ) : TodayUiState
 
     data class Success(
-        val title: TextResource,
+        val placeName: TextResource,
+        val time: TextResource,
         val temperature: TextResource,
         val feelsLike: TextResource,
         val currentDescription: TextResource,

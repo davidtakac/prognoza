@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -28,27 +29,35 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayContent(state: TodayUiState.Success) {
-    Scaffold(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            CurrentConditionsCard(
-                title = state.title,
-                airTemperature = state.temperature,
-                feelsLike = state.feelsLike,
-                descriptionIcon = state.descriptionIcon,
-                description = state.currentDescription
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            SmallTopAppBar(
+                title = {
+                    Text(state.placeName.asString())
+                }
             )
-            Spacer(modifier = Modifier.height(24.dp))
-            RestOfDayCard(
-                modifier = Modifier.weight(1f),
-                description = state.restOfDayDescription,
-                hours = state.hours
-            )
+        },
+        content = {
+            Column(modifier = Modifier
+                .padding(it)
+                .padding(16.dp)) {
+                CurrentConditionsCard(
+                    title = state.time,
+                    airTemperature = state.temperature,
+                    feelsLike = state.feelsLike,
+                    descriptionIcon = state.descriptionIcon,
+                    description = state.currentDescription
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                RestOfDayCard(
+                    modifier = Modifier.weight(1f),
+                    description = state.restOfDayDescription,
+                    hours = state.hours
+                )
+            }
         }
-    }
+    )
 }
 
 @Composable
@@ -70,10 +79,11 @@ private fun CurrentConditionsCard(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column {
+                Column(Modifier.weight(2f)) {
                     Text(
                         title.asString(),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.alpha(0.6f)
                     )
                     Text(
                         airTemperature.asString(),
@@ -83,13 +93,15 @@ private fun CurrentConditionsCard(
                         feelsLike.asString(),
                         style = MaterialTheme.typography.bodyLarge
                     )
+                    Spacer(Modifier.height(4.dp))
+                    Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
                 }
                 Image(
                     painter = painterResource(id = descriptionIcon),
-                    contentDescription = null
+                    contentDescription = null,
+                    modifier = Modifier.weight(1f)
                 )
             }
-            Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
@@ -109,17 +121,18 @@ private fun RestOfDayCard(
     ElevatedCard(modifier) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp)
         ) {
             Text(
                 stringResource(R.string.rest_of_the_day),
-                style = MaterialTheme.typography.titleMedium
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.alpha(0.6f)
             )
             Spacer(Modifier.height(8.dp))
             Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(8.dp))
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(hours) { hour ->
                     HourRow(hour)
                 }
@@ -129,7 +142,7 @@ private fun RestOfDayCard(
 }
 
 @Composable
-fun HourRow(hour: TodayHour) {
+private fun HourRow(hour: TodayHour) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
@@ -158,7 +171,7 @@ fun HourRow(hour: TodayHour) {
 }
 
 @Composable
-fun WindWithRotatedDirectionIcon(modifier: Modifier, wind: TextResource, windFromDirection: Float) {
+private fun WindWithRotatedDirectionIcon(modifier: Modifier, wind: TextResource, windFromDirection: Float) {
     val style = MaterialTheme.typography.bodyMedium
     val placeholderSize = style.fontSize
     val inlineContent = mapOf(
@@ -197,7 +210,8 @@ private fun TodayContentPreviewDark() {
 }
 
 private fun fakeState(): TodayUiState.Success = TodayUiState.Success(
-    title = TextResource.fromText("San Francisco, 13:00"),
+    placeName = TextResource.fromText("Tenja"),
+    time = TextResource.fromText("September 12, 13:00"),
     temperature = TextResource.fromText("23°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
     descriptionIcon = R.drawable.clearsky_day,

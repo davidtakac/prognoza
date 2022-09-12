@@ -27,11 +27,8 @@ fun mapToTodayUiState(
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayUiState.Success = TodayUiState.Success(
-    title = TextResource.fromStringId(
-        id = R.string.template_today_time,
-        TextResource.fromText(placeName),
-        getShortTime(todayForecast.now)
-    ),
+    placeName = TextResource.fromText(placeName),
+    time = getLongTime(todayForecast.now),
     temperature = getTemperature(todayForecast.temperatureNow, temperatureUnit),
     feelsLike = TextResource.fromStringId(
         R.string.template_feels_like,
@@ -110,6 +107,11 @@ private fun getNextPrecipitation(
         )
     }
 }
+
+private fun getLongTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
+    millis = time.toInstant().toEpochMilli(),
+    flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
+)
 
 private fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
     millis = time.toInstant().toEpochMilli(),
