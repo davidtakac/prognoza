@@ -44,8 +44,7 @@ fun TodayContent(state: TodayUiState.Success) {
             Spacer(modifier = Modifier.height(24.dp))
             RestOfDayCard(
                 modifier = Modifier.weight(1f),
-                lowTemperature = state.lowTemperature,
-                highTemperature = state.highTemperature,
+                description = state.restOfDayDescription,
                 hours = state.hours
             )
         }
@@ -104,8 +103,7 @@ private fun TodayContentPreview() {
 @Composable
 private fun RestOfDayCard(
     modifier: Modifier,
-    lowTemperature: TextResource,
-    highTemperature: TextResource,
+    description: TextResource,
     hours: List<TodayHour>
 ) {
     ElevatedCard(modifier) {
@@ -119,17 +117,7 @@ private fun RestOfDayCard(
                 style = MaterialTheme.typography.titleMedium
             )
             Spacer(Modifier.height(8.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max)
-            ) {
-                LowHighTemperatureCard(
-                    modifier = Modifier.fillMaxHeight(),
-                    lowTemperature = lowTemperature,
-                    highTemperature = highTemperature
-                )
-            }
+            Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.width(8.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 items(hours) {
@@ -138,55 +126,6 @@ private fun RestOfDayCard(
             }
         }
     }
-}
-
-@Composable
-fun LowHighTemperatureCard(
-    modifier: Modifier = Modifier,
-    lowTemperature: TextResource,
-    highTemperature: TextResource
-) {
-    val style = MaterialTheme.typography.bodyLarge
-    val placeholderSize = style.fontSize
-    val inlineContent = mapOf(
-        "up" to InlineTextContent(
-            placeholder = Placeholder(
-                width = placeholderSize,
-                height = placeholderSize,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-            )
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_arrow_up),
-                colorFilter = ColorFilter.tint(LocalContentColor.current),
-                contentDescription = null
-            )
-        },
-        "down" to InlineTextContent(
-            placeholder = Placeholder(
-                width = placeholderSize,
-                height = placeholderSize,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-            )
-        ) {
-            Image(
-                modifier = Modifier.rotate(180f),
-                painter = painterResource(id = R.drawable.ic_arrow_up),
-                colorFilter = ColorFilter.tint(LocalContentColor.current),
-                contentDescription = null
-            )
-        }
-    )
-    Text(
-        text = buildAnnotatedString {
-            appendInlineContent("up", "[icon]")
-            append(highTemperature.asString())
-            appendInlineContent("down", "[icon]")
-            append(lowTemperature.asString())
-        },
-        inlineContent = inlineContent,
-        style = style
-    )
 }
 
 @Composable
@@ -259,8 +198,7 @@ private fun fakeState(): TodayUiState.Success = TodayUiState.Success(
     feelsLike = TextResource.fromText("Feels like 28°"),
     descriptionIcon = R.drawable.clearsky_day,
     currentDescription = TextResource.fromText("Clear sky, light breeze from southeast (2 m/s)"),
-    lowTemperature = TextResource.fromText("18°"),
-    highTemperature = TextResource.fromText("30°"),
+    restOfDayDescription = TextResource.fromText("High 22, low 18. Heavy rain at 18:00"),
     hours = listOf(
         TodayHour(
             time = TextResource.fromText("14:00"),

@@ -17,8 +17,7 @@ sealed interface TodayUiState {
         val currentDescription: TextResource,
         @DrawableRes
         val descriptionIcon: Int,
-        val lowTemperature: TextResource,
-        val highTemperature: TextResource,
+        val restOfDayDescription: TextResource,
         val hours: List<TodayHour>
     ) : TodayUiState
 }

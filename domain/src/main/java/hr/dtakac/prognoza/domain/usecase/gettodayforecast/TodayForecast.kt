@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.domain.usecase.gettodayforecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
+import hr.dtakac.prognoza.entities.forecast.precipitation.PrecipitationDescription
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.lang.IllegalStateException
@@ -33,6 +34,9 @@ class TodayForecast(data: List<ForecastDatum>) {
     }
     val highTemperature: Temperature = restOfDayData.maxOf { it.temperature }
     val lowTemperature: Temperature = restOfDayData.minOf { it.temperature }
+    val nextPrecipitation: NextPrecipitation? = restOfDayData
+        .firstOrNull { it.precipitation.description != PrecipitationDescription.NONE }
+        ?.let { NextPrecipitation(at = it.time, precipitation = it.precipitation) }
 }
 
 data class SmallForecastDatum(
@@ -41,4 +45,9 @@ data class SmallForecastDatum(
     val temperature: Temperature,
     val precipitation: Precipitation,
     val wind: Wind
+)
+
+data class NextPrecipitation(
+    val at: ZonedDateTime,
+    val precipitation: Precipitation
 )

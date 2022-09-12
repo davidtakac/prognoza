@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.presentation.today
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.NextPrecipitation
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecast
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.SmallForecastDatum
@@ -46,9 +47,22 @@ fun mapToTodayUiState(
         getWindLong(todayForecast.windNow, windUnit)
     ),
     descriptionIcon = todayForecast.descriptionNow.toDrawableId(),
-    lowTemperature = getTemperature(todayForecast.lowTemperature, temperatureUnit),
-    highTemperature = getTemperature(todayForecast.highTemperature, temperatureUnit),
+    restOfDayDescription = TextResource.fromStringId(
+        id = R.string.template_rest_of_day_description,
+        getNextPrecipitation(todayForecast.nextPrecipitation, precipitationUnit),
+        getLowHighTemperature(todayForecast.lowTemperature, todayForecast.highTemperature, temperatureUnit)
+    ),
     hours = todayForecast.restOfDayData.map { getHour(it, temperatureUnit, precipitationUnit, windUnit) }
+)
+
+fun getLowHighTemperature(
+    lowTemperature: Temperature,
+    highTemperature: Temperature,
+    temperatureUnit: TemperatureUnit
+): TextResource = TextResource.fromStringId(
+    id = R.string.template_high_low_temperature,
+    getTemperature(highTemperature, temperatureUnit),
+    getTemperature(lowTemperature, temperatureUnit)
 )
 
 fun mapToEmptyTodayUiState(
@@ -74,9 +88,25 @@ private fun getDescription(
         TextResource.fromStringId(description.toStringId())
     } else {
         TextResource.fromStringId(
-            id = R.string.template_precipitation_now,
+            id = R.string.template_precipitation,
             TextResource.fromStringId(precipitation.description.toStringId()),
             getPrecipitation(precipitation, precipitationUnit)
+        )
+    }
+}
+
+private fun getNextPrecipitation(
+    nextPrecipitation: NextPrecipitation?,
+    unit: LengthUnit
+): TextResource {
+    return if (nextPrecipitation == null || nextPrecipitation.precipitation.description == PrecipitationDescription.NONE) {
+        TextResource.fromStringId(R.string.precipitation_none)
+    } else {
+        TextResource.fromStringId(
+            id = R.string.template_precipitation_at,
+            TextResource.fromStringId(nextPrecipitation.precipitation.description.toStringId()),
+            getPrecipitation(nextPrecipitation.precipitation, unit),
+            getShortTime(nextPrecipitation.at)
         )
     }
 }
