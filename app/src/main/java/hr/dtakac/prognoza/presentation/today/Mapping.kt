@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.presentation.today
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.NextDistinctPrecipitation
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecast
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.SmallForecastDatum
@@ -37,16 +36,18 @@ fun mapToTodayUiState(
         R.string.template_feels_like,
         getTemperature(todayForecast.feelsLikeNow, temperatureUnit)
     ),
-    wind = getWindLong(todayForecast.windNow, windUnit),
-    description = getDescription(
-        todayForecast.precipitationNow,
-        todayForecast.descriptionNow,
-        precipitationUnit
+    currentDescription = TextResource.fromStringId(
+        id = R.string.template_current_description,
+        getDescription(
+            todayForecast.precipitationNow,
+            todayForecast.descriptionNow,
+            precipitationUnit
+        ),
+        getWindLong(todayForecast.windNow, windUnit)
     ),
     descriptionIcon = todayForecast.descriptionNow.toDrawableId(),
     lowTemperature = getTemperature(todayForecast.lowTemperature, temperatureUnit),
     highTemperature = getTemperature(todayForecast.highTemperature, temperatureUnit),
-    dayPrecipitation = getNextDistinctPrecipitation(todayForecast.nextDistinctPrecipitation),
     hours = todayForecast.restOfDayData.map { getHour(it, temperatureUnit, precipitationUnit, windUnit) }
 )
 
@@ -145,26 +146,6 @@ private fun getPrecipitation(
         }
     }, decimalPlaces = 2)
 )
-
-private fun getNextDistinctPrecipitation(
-    nextDistinctPrecipitation: NextDistinctPrecipitation
-): TextResource = when (nextDistinctPrecipitation) {
-    is NextDistinctPrecipitation.Breaks -> TextResource.fromStringId(
-        id = R.string.template_precipitation_breaks,
-        getShortTime(nextDistinctPrecipitation.at)
-    )
-    is NextDistinctPrecipitation.ContinuesAfterBreak -> TextResource.fromStringId(
-        id = R.string.template_precipitation_continues,
-        getShortTime(nextDistinctPrecipitation.breakTime),
-        getShortTime(nextDistinctPrecipitation.continueTime)
-    )
-    NextDistinctPrecipitation.None -> TextResource.fromStringId(R.string.precipitation_none)
-    NextDistinctPrecipitation.RestOfDay -> TextResource.fromStringId(R.string.template_precipitation_rest_of_day)
-    is NextDistinctPrecipitation.Starts -> TextResource.fromStringId(
-        id = R.string.template_precipitation_starts,
-        getShortTime(nextDistinctPrecipitation.at)
-    )
-}
 
 private fun getHour(
     datum: SmallForecastDatum,

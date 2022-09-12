@@ -31,7 +31,7 @@ data class ForecastDatum(
      * @return The "Feels like" temperature in degrees Fahrenheit or null if it can't be calculated with
      * the provided parameters.
      */
-    fun calculateFeelsLikeTemperature(
+    private fun calculateFeelsLikeTemperature(
         airTemperature: Double,
         windSpeed: Double?,
         relativeHumidity: Double?

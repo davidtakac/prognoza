@@ -38,14 +38,12 @@ fun TodayContent(state: TodayUiState.Success) {
                 title = state.title,
                 airTemperature = state.temperature,
                 feelsLike = state.feelsLike,
-                wind = state.wind,
                 descriptionIcon = state.descriptionIcon,
-                description = state.description
+                description = state.currentDescription
             )
             Spacer(modifier = Modifier.height(24.dp))
             RestOfDayCard(
                 modifier = Modifier.weight(1f),
-                dayPrecipitation = state.dayPrecipitation,
                 lowTemperature = state.lowTemperature,
                 highTemperature = state.highTemperature,
                 hours = state.hours
@@ -59,7 +57,6 @@ private fun CurrentConditionsCard(
     title: TextResource,
     airTemperature: TextResource,
     feelsLike: TextResource,
-    wind: TextResource,
     @DrawableRes
     descriptionIcon: Int,
     description: TextResource
@@ -85,7 +82,7 @@ private fun CurrentConditionsCard(
                     )
                     Text(
                         feelsLike.asString(),
-                        style = MaterialTheme.typography.labelMedium
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
                 Image(
@@ -93,37 +90,8 @@ private fun CurrentConditionsCard(
                     contentDescription = null
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(IntrinsicSize.Max)
-            ) {
-                ConditionTextCard(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    wind.asString()
-                )
-                Spacer(Modifier.width(8.dp))
-                ConditionTextCard(
-                    modifier = Modifier
-                        .fillMaxHeight(),
-                    description.asString()
-                )
-            }
+            Text(description.asString(), style = MaterialTheme.typography.bodyMedium)
         }
-    }
-}
-
-@Composable
-fun ConditionTextCard(modifier: Modifier = Modifier, content: String) {
-    Card(modifier) {
-        Text(
-            content,
-            modifier = Modifier.padding(12.dp),
-            style = MaterialTheme.typography.bodyMedium
-        )
     }
 }
 
@@ -136,7 +104,6 @@ private fun TodayContentPreview() {
 @Composable
 private fun RestOfDayCard(
     modifier: Modifier,
-    dayPrecipitation: TextResource,
     lowTemperature: TextResource,
     highTemperature: TextResource,
     hours: List<TodayHour>
@@ -161,13 +128,6 @@ private fun RestOfDayCard(
                     modifier = Modifier.fillMaxHeight(),
                     lowTemperature = lowTemperature,
                     highTemperature = highTemperature
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                ConditionTextCard(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight(),
-                    content = dayPrecipitation.asString()
                 )
             }
             Spacer(modifier = Modifier.width(8.dp))
@@ -300,12 +260,10 @@ private fun fakeState(): TodayUiState.Success = TodayUiState.Success(
     title = TextResource.fromText("San Francisco, 13:00"),
     temperature = TextResource.fromText("23°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
-    wind = TextResource.fromText("Light air\nfrom northeast (2 m/s)"),
     descriptionIcon = R.drawable.clearsky_day,
-    description = TextResource.fromText("Clear sky"),
+    currentDescription = TextResource.fromText("Clear sky, light breeze from southeast (2 m/s)"),
     lowTemperature = TextResource.fromText("18°"),
     highTemperature = TextResource.fromText("30°"),
-    dayPrecipitation = TextResource.fromText("Precipitation starts at 18:00"),
     hours = listOf(
         TodayHour(
             time = TextResource.fromText("14:00"),

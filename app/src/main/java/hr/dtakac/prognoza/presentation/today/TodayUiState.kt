@@ -14,13 +14,11 @@ sealed interface TodayUiState {
         val title: TextResource,
         val temperature: TextResource,
         val feelsLike: TextResource,
-        val wind: TextResource,
-        val description: TextResource,
+        val currentDescription: TextResource,
         @DrawableRes
         val descriptionIcon: Int,
         val lowTemperature: TextResource,
         val highTemperature: TextResource,
-        val dayPrecipitation: TextResource,
         val hours: List<TodayHour>
     ) : TodayUiState
 }
