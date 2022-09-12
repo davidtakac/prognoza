@@ -19,12 +19,17 @@ class GetTodayForecast(
 ) {
     suspend operator fun invoke(): TodayForecastResult {
         val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
-        val now = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
+        val from = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
+        val to = if (from.hour >= 18) {
+            from.plusDays(1L).truncatedTo(ChronoUnit.HOURS).withHour(6)
+        } else {
+            from.withHour(23)
+        }
         return forecastRepository.getForecast(
             latitude = selectedPlace.latitude,
             longitude = selectedPlace.longitude,
-            from = now,
-            to = now.plusHours(23L)
+            from = from,
+            to = to
         ).let { mapToResult(selectedPlace, it) }
     }
 

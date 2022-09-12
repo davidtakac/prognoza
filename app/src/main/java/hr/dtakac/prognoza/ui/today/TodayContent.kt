@@ -74,7 +74,7 @@ private fun CurrentConditionsCard(
                 Column {
                     Text(
                         title.asString(),
-                        style = MaterialTheme.typography.labelLarge
+                        style = MaterialTheme.typography.titleMedium
                     )
                     Text(
                         airTemperature.asString(),
@@ -82,7 +82,7 @@ private fun CurrentConditionsCard(
                     )
                     Text(
                         feelsLike.asString(),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 }
                 Image(
@@ -90,7 +90,7 @@ private fun CurrentConditionsCard(
                     contentDescription = null
                 )
             }
-            Text(description.asString(), style = MaterialTheme.typography.bodyMedium)
+            Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
@@ -118,7 +118,7 @@ private fun RestOfDayCard(
                 stringResource(R.string.rest_of_the_day),
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(Modifier.height(8.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -146,50 +146,47 @@ fun LowHighTemperatureCard(
     lowTemperature: TextResource,
     highTemperature: TextResource
 ) {
-    Card(modifier) {
-        val style = MaterialTheme.typography.bodyMedium
-        val placeholderSize = style.fontSize
-        val inlineContent = mapOf(
-            "up" to InlineTextContent(
-                placeholder = Placeholder(
-                    width = placeholderSize,
-                    height = placeholderSize,
-                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-                )
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_arrow_up),
-                    colorFilter = ColorFilter.tint(LocalContentColor.current),
-                    contentDescription = null
-                )
-            },
-            "down" to InlineTextContent(
-                placeholder = Placeholder(
-                    width = placeholderSize,
-                    height = placeholderSize,
-                    placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-                )
-            ) {
-                Image(
-                    modifier = Modifier.rotate(180f),
-                    painter = painterResource(id = R.drawable.ic_arrow_up),
-                    colorFilter = ColorFilter.tint(LocalContentColor.current),
-                    contentDescription = null
-                )
-            }
-        )
-        Text(
-            modifier = Modifier.padding(12.dp),
-            text = buildAnnotatedString {
-                appendInlineContent("up", "[icon]")
-                append(highTemperature.asString())
-                appendInlineContent("down", "[icon]")
-                append(lowTemperature.asString())
-            },
-            inlineContent = inlineContent,
-            style = style
-        )
-    }
+    val style = MaterialTheme.typography.bodyLarge
+    val placeholderSize = style.fontSize
+    val inlineContent = mapOf(
+        "up" to InlineTextContent(
+            placeholder = Placeholder(
+                width = placeholderSize,
+                height = placeholderSize,
+                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+            )
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_arrow_up),
+                colorFilter = ColorFilter.tint(LocalContentColor.current),
+                contentDescription = null
+            )
+        },
+        "down" to InlineTextContent(
+            placeholder = Placeholder(
+                width = placeholderSize,
+                height = placeholderSize,
+                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
+            )
+        ) {
+            Image(
+                modifier = Modifier.rotate(180f),
+                painter = painterResource(id = R.drawable.ic_arrow_up),
+                colorFilter = ColorFilter.tint(LocalContentColor.current),
+                contentDescription = null
+            )
+        }
+    )
+    Text(
+        text = buildAnnotatedString {
+            appendInlineContent("up", "[icon]")
+            append(highTemperature.asString())
+            appendInlineContent("down", "[icon]")
+            append(lowTemperature.asString())
+        },
+        inlineContent = inlineContent,
+        style = style
+    )
 }
 
 @Composable
