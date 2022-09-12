@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.*
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
@@ -39,9 +40,11 @@ fun TodayContent(state: TodayUiState.Success) {
             )
         },
         content = {
-            Column(modifier = Modifier
-                .padding(it)
-                .padding(16.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .padding(16.dp)
+            ) {
                 CurrentConditionsCard(
                     title = state.time,
                     airTemperature = state.temperature,
@@ -77,7 +80,8 @@ private fun CurrentConditionsCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Column(Modifier.weight(2f)) {
                     Text(
@@ -93,8 +97,6 @@ private fun CurrentConditionsCard(
                         feelsLike.asString(),
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    Spacer(Modifier.height(4.dp))
-                    Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
                 }
                 Image(
                     painter = painterResource(id = descriptionIcon),
@@ -102,6 +104,8 @@ private fun CurrentConditionsCard(
                     modifier = Modifier.weight(1f)
                 )
             }
+            Spacer(Modifier.height(8.dp))
+            Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
@@ -131,7 +135,9 @@ private fun RestOfDayCard(
             )
             Spacer(Modifier.height(8.dp))
             Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(Modifier.height(12.dp))
+            Divider()
+            Spacer(Modifier.height(12.dp))
             LazyColumn(modifier = Modifier.fillMaxWidth()) {
                 items(hours) { hour ->
                     HourRow(hour)
@@ -148,13 +154,22 @@ private fun HourRow(hour: TodayHour) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
-            Text(hour.time.asString(), modifier = Modifier.weight(1f))
-            Text(hour.temperature.asString(), modifier = Modifier.weight(1f))
+        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+            Text(
+                hour.time.asString(),
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Normal
+            )
+            Text(
+                hour.temperature.asString(),
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Medium
+            )
             Text(
                 hour.precipitation?.asString() ?: "",
                 modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Medium
             )
             WindWithRotatedDirectionIcon(
                 modifier = Modifier.weight(1f),
@@ -171,8 +186,12 @@ private fun HourRow(hour: TodayHour) {
 }
 
 @Composable
-private fun WindWithRotatedDirectionIcon(modifier: Modifier, wind: TextResource, windFromDirection: Float) {
-    val style = MaterialTheme.typography.bodyMedium
+private fun WindWithRotatedDirectionIcon(
+    modifier: Modifier,
+    wind: TextResource,
+    windFromDirection: Float
+) {
+    val style = LocalTextStyle.current
     val placeholderSize = style.fontSize
     val inlineContent = mapOf(
         "icon" to InlineTextContent(
