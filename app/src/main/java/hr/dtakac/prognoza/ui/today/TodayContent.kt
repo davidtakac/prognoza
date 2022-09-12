@@ -118,10 +118,10 @@ private fun RestOfDayCard(
             )
             Spacer(Modifier.height(8.dp))
             Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = Modifier.height(8.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()) {
-                items(hours) {
-                    HourRow(hour = it)
+                items(hours) { hour ->
+                    HourRow(hour)
                 }
             }
         }
@@ -138,7 +138,11 @@ fun HourRow(hour: TodayHour) {
         CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyMedium) {
             Text(hour.time.asString(), modifier = Modifier.weight(1f))
             Text(hour.temperature.asString(), modifier = Modifier.weight(1f))
-            Text(hour.precipitation?.asString() ?: "", modifier = Modifier.weight(1f))
+            Text(
+                hour.precipitation?.asString() ?: "",
+                modifier = Modifier.weight(1f),
+                color = MaterialTheme.colorScheme.primary
+            )
             WindWithRotatedDirectionIcon(
                 modifier = Modifier.weight(1f),
                 wind = hour.wind,
@@ -147,7 +151,7 @@ fun HourRow(hour: TodayHour) {
             Image(
                 painter = painterResource(id = hour.icon),
                 contentDescription = null,
-                modifier = Modifier.size(32.dp)
+                modifier = Modifier.size(40.dp)
             )
         }
     }
