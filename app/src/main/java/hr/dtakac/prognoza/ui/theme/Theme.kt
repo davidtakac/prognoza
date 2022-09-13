@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
@@ -9,12 +8,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-
-@Immutable
-data class PrognozaColors(
-    val background: Color,
-    val onBackground: Color
-)
+import hr.dtakac.prognoza.entities.forecast.units.Temperature
 
 @Immutable
 data class PrognozaTypography(
@@ -55,13 +49,10 @@ val LocalContentAlpha = staticCompositionLocalOf {
 
 @Composable
 fun PrognozaTheme(
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    currentTemperature: Temperature,
     content: @Composable() () -> Unit
 ) {
-    val colors = PrognozaColors(
-        background = if (useDarkTheme) prognoza_theme_dark_primary else prognoza_theme_light_primary,
-        onBackground = if (useDarkTheme) prognoza_theme_dark_onPrimary else prognoza_theme_light_onPrimary
-    )
+    val colors = PrognozaColors.forTemperature(currentTemperature)
 
     val typography = PrognozaTypography(
         contentProminent = TextStyle(

@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.compose.runtime.getValue
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.presentation.today.TodayViewModel
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.today.TodayScreen
 
 @AndroidEntryPoint
@@ -17,10 +16,8 @@ class ForecastActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PrognozaTheme {
-                val state by viewModel.state
-                TodayScreen(state)
-            }
+            val state by viewModel.state
+            TodayScreen(state)
         }
     }
 

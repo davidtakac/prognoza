@@ -17,24 +17,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.entities.forecast.units.Temperature
+import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
-import hr.dtakac.prognoza.ui.theme.LocalContentAlpha
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
-        Content(state.content)
+        PrognozaTheme(currentTemperature = state.content.temperatureValue) {
+            Content(state.content)
+        }
     }
 }
 
 @Composable
 private fun Content(content: TodayContent) {
     CompositionLocalProvider(
-        LocalContentColor provides PrognozaTheme.colors.onBackground.copy(alpha = LocalContentAlpha.current.high),
+        LocalContentColor provides PrognozaTheme.colors.onBackground.copy(alpha = PrognozaTheme.alpha.high),
         LocalTextStyle provides PrognozaTheme.typography.contentNormal
     ) {
         LazyColumn(
@@ -132,30 +135,13 @@ private fun Content(content: TodayContent) {
 
 @Preview
 @Composable
-private fun TodayScreenPreviewLight() {
-    PrognozaTheme(useDarkTheme = false) {
-        TodayScreen(
-            TodayUiState().copy(
-                content = fakeContent(),
-                isLoading = true,
-                error = TextResource.fromText("Error test")
-            )
-        )
-    }
-}
-
-@Preview()
-@Composable
-private fun TodayScreenPreviewDark() {
-    PrognozaTheme(useDarkTheme = true) {
-        TodayScreen(
-            TodayUiState().copy(
-                content = fakeContent(),
-                isLoading = true,
-                error = TextResource.fromText("Error test")
-            )
-        )
-    }
+private fun TodayScreenPreview() {
+    val state = TodayUiState().copy(
+        content = fakeContent(),
+        isLoading = true,
+        error = TextResource.fromText("Error test")
+    )
+    TodayScreen(state)
 }
 
 @Preview
@@ -165,9 +151,10 @@ private fun TodayScreenLoadingPreview() {
 }
 
 private fun fakeContent(): TodayContent = TodayContent(
+    temperatureValue = Temperature(value = 70.0, unit = TemperatureUnit.F),
     placeName = TextResource.fromText("Helsinki"),
     time = TextResource.fromText("September 12"),
-    temperature = TextResource.fromText("140°"),
+    temperature = TextResource.fromText("1°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
     description = TextResource.fromText("Clear sky, sleet soon"),
     lowHighTemperature = TextResource.fromText("15°—7°"),

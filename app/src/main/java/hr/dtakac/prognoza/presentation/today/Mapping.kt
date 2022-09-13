@@ -22,6 +22,7 @@ fun mapToTodayContent(
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayContent = TodayContent(
+    temperatureValue = todayForecast.temperatureNow,
     placeName = TextResource.fromText(placeName),
     time = getLongTime(todayForecast.now),
     temperature = getTemperature(todayForecast.temperatureNow, temperatureUnit),
