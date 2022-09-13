@@ -23,4 +23,9 @@ class ForecastActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getState()
+    }
 }

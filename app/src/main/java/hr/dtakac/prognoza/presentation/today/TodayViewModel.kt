@@ -8,12 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetTodayForecast
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.Duration
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class TodayViewModel @Inject constructor(
@@ -23,12 +19,7 @@ class TodayViewModel @Inject constructor(
     private val _state: MutableState<TodayUiState> = mutableStateOf(TodayUiState())
     val state: State<TodayUiState> get() = _state
 
-    init {
-        getState()
-        scheduleStateRefresh()
-    }
-
-    private fun getState() {
+    fun getState() {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
             _state.value = when (val result = getTodayForecast()) {
@@ -46,15 +37,6 @@ class TodayViewModel @Inject constructor(
                     error = mapToTodayError(result),
                     isLoading = false
                 )
-            }
-        }
-    }
-
-    private fun scheduleStateRefresh() {
-        viewModelScope.launch {
-            while (isActive) {
-                delay(Duration.ofMinutes(Random.nextLong(45L, 75L)).toMillis())
-                getState()
             }
         }
     }
