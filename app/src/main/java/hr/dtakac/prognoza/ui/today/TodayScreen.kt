@@ -1,27 +1,19 @@
 package hr.dtakac.prognoza.ui.today
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.InlineTextContent
-import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
+import androidx.compose.material3.Divider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.*
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.today.TodayContent
@@ -29,77 +21,147 @@ import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodayScreen(state: TodayUiState) {
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        topBar = {
-            state.content?.placeName?.let {
-                SmallTopAppBar(
-                    title = { Text(it.asString()) }
+    if (state.content != null) {
+        Content(state.content)
+    }
+}
+
+@Composable
+private fun Content(content: TodayContent) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PrognozaTheme.colors.background)
+            .padding(horizontal = 32.dp)
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(64.dp))
+            Text(
+                text = content.placeName.asString(),
+                style = PrognozaTheme.typography.contentProminent,
+                color = PrognozaTheme.colors.onBackground
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = content.time.asString(),
+                style = PrognozaTheme.typography.contentNormal,
+                color = PrognozaTheme.colors.onBackground
+            )
+            ResponsiveText(
+                text = content.temperature.asString(),
+                style = PrognozaTheme.typography.contentProminent,
+                targetHeight = 250.sp,
+                color = PrognozaTheme.colors.onBackground
+            )
+            Row(modifier = Modifier.fillMaxWidth(),) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = content.description.asString(),
+                    style = PrognozaTheme.typography.contentProminent,
+                    color = PrognozaTheme.colors.onBackground
+                )
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = content.lowHighTemperature.asString(),
+                    style = PrognozaTheme.typography.contentProminent,
+                    color = PrognozaTheme.colors.onBackground,
+                    textAlign = TextAlign.End
                 )
             }
-        },
-        content = { paddingValues ->
-            Box(modifier = Modifier.fillMaxSize()) {
-                if (state.content != null) {
-                    Content(
-                        modifier = Modifier.padding(paddingValues),
-                        content = state.content
-                    )
-                }
-
-                if (state.isLoading) {
-                    if (state.content == null) {
-                        TodayLoading()
-                        return@Box
-                    } else {
-                        LinearProgressIndicator(
-                            modifier = Modifier
-                                .padding(paddingValues)
-                                .fillMaxWidth()
-                                .align(Alignment.TopStart)
-                        )
-                    }
-                }
-
-                if (state.error != null) {
-                    if (state.content == null) {
-                        TodayError(state.error)
-                        return@Box
-                    } else {
-                        Snackbar(
-                            modifier = Modifier
-                                .align(Alignment.BottomStart)
-                                .padding(16.dp)
-                        ) {
-                            Text(state.error.asString())
-                        }
-                    }
-                }
+            Spacer(modifier = Modifier.height(42.dp))
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = content.wind.asString(),
+                    style = PrognozaTheme.typography.contentSmall,
+                    color = PrognozaTheme.colors.onBackground
+                )
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = content.precipitation.asString(),
+                    style = PrognozaTheme.typography.contentSmall,
+                    color = PrognozaTheme.colors.onBackground,
+                    textAlign = TextAlign.End
+                )
             }
+            Spacer(modifier = Modifier.height(42.dp))
+            Text(
+                text = stringResource(id = R.string.hourly),
+                style = PrognozaTheme.typography.contentSmall,
+                color = PrognozaTheme.colors.onBackground
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Divider(color = PrognozaTheme.colors.onBackground)
+            Spacer(modifier = Modifier.height(16.dp))
         }
-    )
+        items(content.hours) { hour ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    modifier = Modifier.width(52.dp),
+                    text = hour.time.asString(),
+                    style = PrognozaTheme.typography.contentSmall,
+                    color = PrognozaTheme.colors.onBackground,
+                    textAlign = TextAlign.Start,
+                    maxLines = 1
+                )
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = hour.description.asString(),
+                    style = PrognozaTheme.typography.contentSmall,
+                    color = PrognozaTheme.colors.onBackground,
+                    textAlign = TextAlign.Start,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    modifier = Modifier.width(88.dp),
+                    text = hour.precipitation.asString(),
+                    style = PrognozaTheme.typography.contentSmall,
+                    color = PrognozaTheme.colors.onBackground,
+                    textAlign = TextAlign.End,
+                    maxLines = 1
+                )
+                Text(
+                    modifier = Modifier.width(52.dp),
+                    text = hour.temperature.asString(),
+                    style = PrognozaTheme.typography.contentSmall,
+                    color = PrognozaTheme.colors.onBackground,
+                    textAlign = TextAlign.End,
+                    maxLines = 1
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+    }
 }
 
 @Preview
 @Composable
-private fun TodayScreenPreview() {
-    TodayScreen(
-        TodayUiState().copy(
-            content = fakeContent(),
-            isLoading = true,
-            error = TextResource.fromText("Error test")
+private fun TodayScreenPreviewLight() {
+    PrognozaTheme(useDarkTheme = false) {
+        TodayScreen(
+            TodayUiState().copy(
+                content = fakeContent(),
+                isLoading = true,
+                error = TextResource.fromText("Error test")
+            )
         )
-    )
+    }
 }
 
 @Preview()
 @Composable
 private fun TodayScreenPreviewDark() {
     PrognozaTheme(useDarkTheme = true) {
-        TodayScreenPreview()
+        TodayScreen(
+            TodayUiState().copy(
+                content = fakeContent(),
+                isLoading = true,
+                error = TextResource.fromText("Error test")
+            )
+        )
     }
 }
 
@@ -109,246 +171,45 @@ private fun TodayScreenLoadingPreview() {
     TodayScreen(TodayUiState().copy(isLoading = true))
 }
 
-@Composable
-private fun Content(
-    modifier: Modifier = Modifier,
-    content: TodayContent
-) {
-    Column(modifier) {
-        content.run {
-            CurrentConditionsCard(
-                title = time,
-                airTemperature = temperature,
-                feelsLike = feelsLike,
-                descriptionIcon = descriptionIcon,
-                description = currentDescription
-            )
-            RestOfDayCard(
-                modifier = Modifier.weight(1f),
-                description = restOfDayDescription,
-                hours = hours
-            )
-        }
-    }
-}
-
-@Composable
-private fun CurrentConditionsCard(
-    title: TextResource,
-    airTemperature: TextResource,
-    feelsLike: TextResource,
-    @DrawableRes
-    descriptionIcon: Int,
-    description: TextResource
-) {
-    ElevatedCard(modifier = Modifier.padding(16.dp)) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(Modifier.weight(2f)) {
-                    Text(
-                        title.asString(),
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.alpha(0.6f)
-                    )
-                    Text(
-                        airTemperature.asString(),
-                        style = MaterialTheme.typography.displayLarge
-                    )
-                    Text(
-                        feelsLike.asString(),
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-                Image(
-                    painter = painterResource(id = descriptionIcon),
-                    contentDescription = null,
-                    modifier = Modifier.weight(1f)
-                )
-            }
-            Spacer(Modifier.height(8.dp))
-            Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
-        }
-    }
-}
-
-@Composable
-private fun RestOfDayCard(
-    modifier: Modifier,
-    description: TextResource,
-    hours: List<TodayHour>
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-    ) {
-        Text(
-            stringResource(R.string.rest_of_the_day),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.alpha(0.6f)
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(description.asString(), style = MaterialTheme.typography.bodyLarge)
-        Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn(modifier = Modifier.fillMaxWidth()) {
-            items(hours) { hour ->
-                HourRow(hour)
-            }
-        }
-    }
-}
-
-@Composable
-private fun HourRow(hour: TodayHour) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
-            Text(
-                hour.time.asString(),
-                modifier = Modifier.weight(1f),
-                fontWeight = FontWeight.Normal
-            )
-            Text(
-                hour.temperature.asString(),
-                modifier = Modifier.weight(1f),
-                fontWeight = FontWeight.Medium
-            )
-            Text(
-                hour.precipitation?.asString() ?: "",
-                modifier = Modifier.weight(1f),
-                color = MaterialTheme.colorScheme.primary,
-                fontWeight = FontWeight.Medium
-            )
-            WindWithRotatedDirectionIcon(
-                modifier = Modifier.weight(1f),
-                wind = hour.wind,
-                windFromDirection = hour.windIconRotation
-            )
-            Image(
-                painter = painterResource(id = hour.icon),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
-        }
-    }
-}
-
-@Composable
-private fun WindWithRotatedDirectionIcon(
-    modifier: Modifier,
-    wind: TextResource,
-    windFromDirection: Float
-) {
-    val style = LocalTextStyle.current
-    val placeholderSize = style.fontSize
-    val inlineContent = mapOf(
-        "icon" to InlineTextContent(
-            placeholder = Placeholder(
-                width = placeholderSize,
-                height = placeholderSize,
-                placeholderVerticalAlign = PlaceholderVerticalAlign.Center
-            )
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_north),
-                colorFilter = ColorFilter.tint(LocalContentColor.current),
-                contentDescription = null,
-                modifier = Modifier.rotate(windFromDirection)
-            )
-        },
-    )
-    Text(
-        modifier = modifier,
-        text = buildAnnotatedString {
-            append("${wind.asString()} ")
-            appendInlineContent("icon", "[icon]")
-        },
-        inlineContent = inlineContent,
-        style = style
-    )
-}
-
-
 private fun fakeContent(): TodayContent = TodayContent(
-    placeName = TextResource.fromText("Tenja"),
-    time = TextResource.fromText("September 12, 13:00"),
-    temperature = TextResource.fromText("23°"),
+    placeName = TextResource.fromText("Helsinki"),
+    time = TextResource.fromText("September 12"),
+    temperature = TextResource.fromText("140°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
-    descriptionIcon = R.drawable.clearsky_day,
-    currentDescription = TextResource.fromText("Clear sky, light breeze from southeast (2 m/s)"),
-    restOfDayDescription = TextResource.fromText("High 22, low 18. Heavy rain at 18:00"),
+    description = TextResource.fromText("Clear sky, sleet soon"),
+    lowHighTemperature = TextResource.fromText("15°—7°"),
+    wind = TextResource.fromText("Wind: 15 km/h"),
+    precipitation = TextResource.fromText("Precipitation: 0 mm"),
     hours = listOf(
         TodayHour(
             time = TextResource.fromText("14:00"),
-            icon = R.drawable.clearsky_day,
             temperature = TextResource.fromText("23°"),
-            precipitation = null,
-            wind = TextResource.fromText("2 m/s"),
-            windIconRotation = 90f
+            precipitation = TextResource.fromText("0 mm"),
+            description = TextResource.fromText("Clear")
         ),
         TodayHour(
             time = TextResource.fromText("15:00"),
-            icon = R.drawable.clearsky_day,
             temperature = TextResource.fromText("25°"),
-            precipitation = null,
-            wind = TextResource.fromText("2 m/s"),
-            windIconRotation = 90f
+            precipitation = TextResource.fromText("0 mm"),
+            description = TextResource.fromText("Partly cloudy")
         ),
         TodayHour(
             time = TextResource.fromText("16:00"),
-            icon = R.drawable.partlycloudy_day,
             temperature = TextResource.fromText("26°"),
-            precipitation = null,
-            wind = TextResource.fromText("2 m/s"),
-            windIconRotation = 90f
+            precipitation = TextResource.fromText("0 mm"),
+            description = TextResource.fromText("Cloudy")
         ),
         TodayHour(
             time = TextResource.fromText("17:00"),
-            icon = R.drawable.cloudy,
             temperature = TextResource.fromText("28°"),
-            precipitation = null,
-            wind = TextResource.fromText("2 m/s"),
-            windIconRotation = 90f
+            precipitation = TextResource.fromText("0 mm"),
+            description = TextResource.fromText("Cloudy")
         ),
         TodayHour(
             time = TextResource.fromText("18:00"),
-            icon = R.drawable.heavyrain,
-            temperature = TextResource.fromText("30°"),
-            precipitation = TextResource.fromText("1.8 mm"),
-            wind = TextResource.fromText("2 m/s"),
-            windIconRotation = 90f
+            temperature = TextResource.fromText("128°"),
+            precipitation = TextResource.fromText("1.55 mm"),
+            description = TextResource.fromText("Heavy rain")
         )
     )
 )
-
-@Composable
-private fun TodayLoading() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        CircularProgressIndicator()
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            stringResource(id = R.string.today_loading),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-@Composable
-private fun TodayError(textResource: TextResource) {
-    // todo
-}

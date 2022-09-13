@@ -59,16 +59,16 @@
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_precipitation_mm">%1$s mm</string>
     <string name="template_precipitation_in">%1$s\"</string>
-    <string name="template_precipitation">%1$s (%2$s)</string>
+    <string name="template_precipitation">Precipitation: %1$s</string>
     <string name="template_precipitation_at">%1$s at %2$s</string>
     <string name="template_wind_kmh">%1$s km/h</string>
     <string name="template_wind_mps">%1$s m/s</string>
     <string name="template_wind_mph">%1$s mi/h</string>
     <string name="template_current_description">%1$s. %2$s</string>
     <string name="template_rest_of_day_description">%1$s. %2$s</string>
-    <string name="template_high_low_temperature">High %1$s, low %2$s</string>
+    <string name="template_high_low_temperature">%1$s—%2$s</string>
     <string name="precipitation_none">No precipitation</string>
-    <string name="template_wind">%1$s from %2$s (%3$s)</string>
+    <string name="template_wind">Wind: %1$s</string>
     <string name="template_humidity_percent">%1$s%%</string>
     <string name="error_client">Something is wrong with your request.</string>
     <string name="error_server">The server is currently unable to process your request.</string>
@@ -94,5 +94,6 @@
     <string name="rest_of_the_day">Rest of the day</string>
     <string name="now">Now</string>
     <string name="today_loading">Getting today\'s forecast…</string>
+    <string name="hourly">Hourly</string>
 
 </resources>

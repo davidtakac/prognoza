@@ -14,19 +14,17 @@ data class TodayContent(
     val time: TextResource,
     val temperature: TextResource,
     val feelsLike: TextResource,
-    val currentDescription: TextResource,
-    @DrawableRes
-    val descriptionIcon: Int,
-    val restOfDayDescription: TextResource,
+    val description: TextResource,
+    val lowHighTemperature: TextResource,
+    val wind: TextResource,
+    val precipitation: TextResource,
     val hours: List<TodayHour>
 )
 
 data class TodayHour(
     val time: TextResource,
     @DrawableRes
-    val icon: Int,
     val temperature: TextResource,
-    val precipitation: TextResource?,
-    val wind: TextResource,
-    val windIconRotation: Float
+    val precipitation: TextResource,
+    val description: TextResource
 )
