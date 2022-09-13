@@ -7,7 +7,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
@@ -66,19 +65,19 @@ fun PrognozaTheme(
 
     val typography = PrognozaTypography(
         contentProminent = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Black,
+            fontFamily = Manrope,
+            fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             letterSpacing = (-0.25).sp,
         ),
         contentNormal = TextStyle(
-            fontFamily = FontFamily.Default,
-            fontWeight = FontWeight.Normal,
+            fontFamily = Manrope,
+            fontWeight = FontWeight.Medium,
             fontSize = 24.sp,
             letterSpacing = (-0.25).sp,
         ),
         contentSmall = TextStyle(
-            fontFamily = FontFamily.Default,
+            fontFamily = Manrope,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
         )
