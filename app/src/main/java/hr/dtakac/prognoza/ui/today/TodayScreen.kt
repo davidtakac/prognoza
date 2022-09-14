@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -55,7 +56,7 @@ private fun Content(content: TodayContent) {
                 Text(text = content.time.asString())
                 ResponsiveText(
                     text = content.temperature.asString(),
-                    style = PrognozaTheme.typography.prominent,
+                    style = PrognozaTheme.typography.prominent.copy(fontWeight = FontWeight.ExtraBold),
                     targetHeight = 250.sp,
                 )
                 Row(modifier = Modifier.fillMaxWidth(),) {
@@ -150,7 +151,7 @@ private fun TodayScreenLoadingPreview() {
 }
 
 private fun fakeContent(): TodayContent = TodayContent(
-    temperatureValue = Temperature(value = 70.0, unit = TemperatureUnit.F),
+    temperatureValue = Temperature(value = 23.0, unit = TemperatureUnit.C),
     placeName = TextResource.fromText("Helsinki"),
     time = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),

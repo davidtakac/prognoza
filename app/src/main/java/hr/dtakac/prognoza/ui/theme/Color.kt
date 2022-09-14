@@ -61,7 +61,7 @@ data class PrognozaColors(
                     onBackground = black
                 )
                 celsius < 25.0 -> PrognozaColors(
-                    background = Color(0xFF70ff4d),
+                    background = Color(0xFF7bed5e),
                     onBackground = black
                 )
                 celsius < 30.0 -> PrognozaColors(
