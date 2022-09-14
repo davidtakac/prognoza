@@ -75,7 +75,7 @@ fun PrognozaTheme(
     )
 
     val alpha = PrognozaContentAlpha(
-        high = 0.87f,
+        high = 1f,
         medium = 0.6f,
         disabled = 0.38f
     )

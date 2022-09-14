@@ -4,10 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -28,9 +25,15 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
-        PrognozaTheme(currentTemperature = state.content.temperatureValue) {
-            Content(state.content)
+        var temp by remember {
+            mutableStateOf(Temperature(0.0, TemperatureUnit.C))
         }
+        PrognozaTheme(currentTemperature = temp) {
+            Content(state.content.copy(temperature = TextResource.fromText("%.0f°".format(temp.celsius.toFloat()))))
+        }
+        Slider(modifier = Modifier.padding(horizontal = 24.dp), value = temp.celsius.toFloat(), valueRange = -50f..50f, onValueChange = {
+            temp = Temperature(it.toDouble(), TemperatureUnit.C)
+        })
     }
 }
 
@@ -44,7 +47,7 @@ private fun Content(content: TodayContent) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(PrognozaTheme.colors.background)
-                .padding(horizontal = 32.dp)
+                .padding(horizontal = 24.dp)
         ) {
             item {
                 Spacer(modifier = Modifier.height(64.dp))
