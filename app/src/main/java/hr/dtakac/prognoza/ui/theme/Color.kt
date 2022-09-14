@@ -6,9 +6,8 @@ import androidx.compose.ui.graphics.compositeOver
 import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
 
 private val mustard = Color(0xFFFFDD4A)
-private val queenBlue = Color(0xFF3C6997)
-private val snow = Color(0xFFFFF9FB)
-private val lightGray = Color(0xFFCED4DA)
+private val yaleBlue = Color(0xFF084887)
+private val gainsboro = Color(0xFFCEDADA)
 private val backgroundDark = Color(0xFF121212)
 
 @Immutable
@@ -23,10 +22,10 @@ data class PrognozaColors(
         ): PrognozaColors {
             val lightColors = when (description) {
                 ShortForecastDescription.CLEAR -> PrognozaColors(mustard, Color.Black)
-                ShortForecastDescription.RAIN -> PrognozaColors(queenBlue, Color.White)
-                ShortForecastDescription.SNOW -> PrognozaColors(snow, Color.Black)
-                ShortForecastDescription.SLEET -> PrognozaColors(snow, Color.Black)
-                ShortForecastDescription.CLOUDY -> PrognozaColors(lightGray, Color.Black)
+                ShortForecastDescription.RAIN -> PrognozaColors(yaleBlue, Color.White)
+                ShortForecastDescription.SNOW -> PrognozaColors(Color.White, Color.Black)
+                ShortForecastDescription.SLEET -> PrognozaColors(Color.White, Color.Black)
+                ShortForecastDescription.CLOUDY -> PrognozaColors(gainsboro, Color.Black)
             }
 
             return if (useDarkTheme) {

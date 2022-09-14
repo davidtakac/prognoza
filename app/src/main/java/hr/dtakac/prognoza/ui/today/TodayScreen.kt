@@ -39,7 +39,7 @@ fun TodayScreen(state: TodayUiState) {
 @Composable
 private fun Content(content: TodayContent) {
     CompositionLocalProvider(
-        LocalContentColor provides PrognozaTheme.colors.onBackground,
+        LocalContentColor provides PrognozaTheme.colors.onBackground.copy(alpha = 0.87f),
         LocalTextStyle provides PrognozaTheme.typography.normal
     ) {
         val background by animateColorAsState(targetValue = PrognozaTheme.colors.background)
@@ -159,6 +159,7 @@ private fun Content(content: TodayContent) {
                 }
                 Spacer(modifier = Modifier.height(16.dp))
             }
+
         }
     }
 }
@@ -166,19 +167,13 @@ private fun Content(content: TodayContent) {
 @Composable
 fun SetStatusAndNavigationBarColors(color: Color) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(
-        color,
-        darkIcons = !isSystemInDarkTheme()
-    )
-    systemUiController.setNavigationBarColor(
-        color,
-        darkIcons = !isSystemInDarkTheme()
-    )
+    systemUiController.setSystemBarsColor(color)
+    systemUiController.setNavigationBarColor(color)
 }
 
 @Preview
 @Composable
-private fun TodayScreenNoPrecipitationPreview() {
+private fun TodayScreenClearPreview() {
     val state = TodayUiState().copy(
         content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.CLEAR),
         isLoading = true,
