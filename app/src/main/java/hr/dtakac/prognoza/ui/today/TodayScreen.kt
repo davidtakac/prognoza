@@ -26,15 +26,9 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
-        var temp by remember {
-            mutableStateOf(Temperature(0.0, TemperatureUnit.C))
+        PrognozaTheme(temperature = state.content.temperatureValue) {
+            Content(state.content)
         }
-        PrognozaTheme(currentTemperature = temp) {
-            Content(state.content.copy(temperature = TextResource.fromText("%.0f°".format(temp.celsius.toFloat()))))
-        }
-        Slider(modifier = Modifier.padding(horizontal = 24.dp), value = temp.celsius.toFloat(), valueRange = -50f..50f, onValueChange = {
-            temp = Temperature(it.toDouble(), TemperatureUnit.C)
-        })
     }
 }
 
@@ -42,7 +36,7 @@ fun TodayScreen(state: TodayUiState) {
 private fun Content(content: TodayContent) {
     CompositionLocalProvider(
         LocalContentColor provides PrognozaTheme.colors.onBackground,
-        LocalTextStyle provides PrognozaTheme.typography.contentNormal
+        LocalTextStyle provides PrognozaTheme.typography.normal
     ) {
         val background by animateColorAsState(targetValue = PrognozaTheme.colors.background)
         LazyColumn(
@@ -55,25 +49,25 @@ private fun Content(content: TodayContent) {
                 Spacer(modifier = Modifier.height(64.dp))
                 Text(
                     text = content.placeName.asString(),
-                    style = PrognozaTheme.typography.contentProminent,
+                    style = PrognozaTheme.typography.prominent,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = content.time.asString())
                 ResponsiveText(
                     text = content.temperature.asString(),
-                    style = PrognozaTheme.typography.contentProminent,
+                    style = PrognozaTheme.typography.prominent,
                     targetHeight = 250.sp,
                 )
                 Row(modifier = Modifier.fillMaxWidth(),) {
                     Text(
                         modifier = Modifier.weight(1f),
                         text = content.description.asString(),
-                        style = PrognozaTheme.typography.contentProminent,
+                        style = PrognozaTheme.typography.prominent,
                     )
                     Text(
                         modifier = Modifier.weight(1f),
                         text = content.lowHighTemperature.asString(),
-                        style = PrognozaTheme.typography.contentProminent,
+                        style = PrognozaTheme.typography.prominent,
                         textAlign = TextAlign.End
                     )
                 }
@@ -82,19 +76,19 @@ private fun Content(content: TodayContent) {
                     Text(
                         modifier = Modifier.weight(1f),
                         text = content.wind.asString(),
-                        style = PrognozaTheme.typography.contentSmall,
+                        style = PrognozaTheme.typography.small,
                     )
                     Text(
                         modifier = Modifier.weight(1f),
                         text = content.precipitation.asString(),
-                        style = PrognozaTheme.typography.contentSmall,
+                        style = PrognozaTheme.typography.small,
                         textAlign = TextAlign.End
                     )
                 }
                 Spacer(modifier = Modifier.height(42.dp))
                 Text(
                     text = stringResource(id = R.string.hourly),
-                    style = PrognozaTheme.typography.contentSmall,
+                    style = PrognozaTheme.typography.small,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Divider(color = PrognozaTheme.colors.onBackground)
@@ -105,14 +99,14 @@ private fun Content(content: TodayContent) {
                     Text(
                         modifier = Modifier.width(52.dp),
                         text = hour.time.asString(),
-                        style = PrognozaTheme.typography.contentSmall,
+                        style = PrognozaTheme.typography.small,
                         textAlign = TextAlign.Start,
                         maxLines = 1
                     )
                     Text(
                         modifier = Modifier.weight(1f),
                         text = hour.description.asString(),
-                        style = PrognozaTheme.typography.contentSmall,
+                        style = PrognozaTheme.typography.small,
                         textAlign = TextAlign.Start,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
@@ -120,14 +114,14 @@ private fun Content(content: TodayContent) {
                     Text(
                         modifier = Modifier.width(88.dp),
                         text = hour.precipitation.asString(),
-                        style = PrognozaTheme.typography.contentSmall,
+                        style = PrognozaTheme.typography.small,
                         textAlign = TextAlign.End,
                         maxLines = 1
                     )
                     Text(
                         modifier = Modifier.width(52.dp),
                         text = hour.temperature.asString(),
-                        style = PrognozaTheme.typography.contentSmall,
+                        style = PrognozaTheme.typography.small,
                         textAlign = TextAlign.End,
                         maxLines = 1
                     )

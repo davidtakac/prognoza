@@ -14,9 +14,9 @@ import hr.dtakac.prognoza.entities.forecast.units.Temperature
 
 @Immutable
 data class PrognozaTypography(
-    val contentProminent: TextStyle,
-    val contentNormal: TextStyle,
-    val contentSmall: TextStyle
+    val prominent: TextStyle,
+    val normal: TextStyle,
+    val small: TextStyle
 )
 
 val LocalPrognozaColors = staticCompositionLocalOf {
@@ -28,21 +28,22 @@ val LocalPrognozaColors = staticCompositionLocalOf {
 
 val LocalPrognozaTypography = staticCompositionLocalOf {
     PrognozaTypography(
-        contentProminent = TextStyle.Default,
-        contentNormal = TextStyle.Default,
-        contentSmall = TextStyle.Default
+        prominent = TextStyle.Default,
+        normal = TextStyle.Default,
+        small = TextStyle.Default
     )
 }
 
 @Composable
 fun PrognozaTheme(
-    currentTemperature: Temperature,
+    temperature: Temperature,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    var colors = PrognozaColors.forTemperature(currentTemperature)
+    var colors = PrognozaColors.forTemperature(temperature)
     if (useDarkTheme) {
         colors = PrognozaColors(
+            // Simulates elevation overlay for dark themes
             background = colors.background
                 .copy(alpha = 0.12f)
                 .compositeOver(background_dark),
@@ -51,19 +52,19 @@ fun PrognozaTheme(
     }
 
     val typography = PrognozaTypography(
-        contentProminent = TextStyle(
+        prominent = TextStyle(
             fontFamily = Manrope,
             fontWeight = FontWeight.Bold,
             fontSize = 24.sp,
             letterSpacing = (-0.25).sp,
         ),
-        contentNormal = TextStyle(
+        normal = TextStyle(
             fontFamily = Manrope,
             fontWeight = FontWeight.Medium,
             fontSize = 24.sp,
             letterSpacing = (-0.25).sp,
         ),
-        contentSmall = TextStyle(
+        small = TextStyle(
             fontFamily = Manrope,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,

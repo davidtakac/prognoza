@@ -17,6 +17,8 @@ data class PrognozaColors(
         fun forTemperature(temperature: Temperature): PrognozaColors {
             val celsius = temperature.celsius
             // https://hslpicker.com/
+            // Colors above 0C obtained by setting lightness to 65%, saturation to 100% and
+            // sliding the hue. Below 0C, #4dd5ff saturation was reduced in 10% increments.
             return when {
                 celsius < -25.0 -> PrognozaColors(
                     background = Color(0xFF82b9c9),
