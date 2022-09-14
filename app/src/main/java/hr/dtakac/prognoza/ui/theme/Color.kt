@@ -2,11 +2,14 @@ package hr.dtakac.prognoza.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import hr.dtakac.prognoza.entities.forecast.units.Temperature
+import androidx.compose.ui.graphics.compositeOver
+import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
 
-val white = Color.White
-val black = Color.Black
-val background_dark = Color(0x121212)
+private val mustard = Color(0xFFFFDD4A)
+private val queenBlue = Color(0xFF3C6997)
+private val snow = Color(0xFFFFF9FB)
+private val lightGray = Color(0xFFCED4DA)
+private val backgroundDark = Color(0xFF121212)
 
 @Immutable
 data class PrognozaColors(
@@ -14,73 +17,26 @@ data class PrognozaColors(
     val onBackground: Color
 ) {
     companion object {
-        fun forTemperature(temperature: Temperature): PrognozaColors {
-            val celsius = temperature.celsius
-            // https://hslpicker.com/
-            // Colors above 0C obtained by setting lightness to 65%, saturation to 100% and
-            // sliding the hue. Below 0C, #4dd5ff saturation was reduced in 10% increments.
-            return when {
-                celsius < -25.0 -> PrognozaColors(
-                    background = Color(0xFF82b9c9),
-                    onBackground = black
-                )
-                celsius < -20.0 -> PrognozaColors(
-                    background = Color(0xFF79bed2),
-                    onBackground = black
-                )
-                celsius < -15.0 -> PrognozaColors(
-                    background = Color(0xFF70c2db),
-                    onBackground = black
-                )
-                celsius < -10.0 -> PrognozaColors(
-                    background = Color(0xFF67c7e4),
-                    onBackground = black
-                )
-                celsius < -5.0 -> PrognozaColors(
-                    background = Color(0xFF5ecced),
-                    onBackground = black
-                )
-                celsius < 0.0 -> PrognozaColors(
-                    background = Color(0xFF4dd5ff),
-                    onBackground = black
-                )
-                celsius < 5.0 -> PrognozaColors(
-                    background = Color(0xFF4dedff),
-                    onBackground = black
-                )
-                celsius < 10.0 -> PrognozaColors(
-                    background = Color(0xFF4dffe4),
-                    onBackground = black
-                )
-                celsius < 15.0 -> PrognozaColors(
-                    background = Color(0xFF4dffb8),
-                    onBackground = black
-                )
-                celsius < 20.0 -> PrognozaColors(
-                    background = Color(0xFF4dff7c),
-                    onBackground = black
-                )
-                celsius < 25.0 -> PrognozaColors(
-                    background = Color(0xFF7bed5e),
-                    onBackground = black
-                )
-                celsius < 30.0 -> PrognozaColors(
-                    background = Color(0xFFc9ff4d),
-                    onBackground = black
-                )
-                celsius < 35.0 -> PrognozaColors(
-                    background = Color(0xFFffa64d),
-                    onBackground = black
-                )
-                celsius < 40.0 -> PrognozaColors(
-                    background = Color(0xFFff884d),
-                    onBackground = black
-                )
-                else -> PrognozaColors(
-                    background = Color(0xFFff4d4d),
-                    onBackground = black
-                )
+        fun get(
+            description: ShortForecastDescription,
+            useDarkTheme: Boolean
+        ): PrognozaColors {
+            val lightColors = when (description) {
+                ShortForecastDescription.CLEAR -> PrognozaColors(mustard, Color.Black)
+                ShortForecastDescription.RAIN -> PrognozaColors(queenBlue, Color.White)
+                ShortForecastDescription.SNOW -> PrognozaColors(snow, Color.Black)
+                ShortForecastDescription.SLEET -> PrognozaColors(snow, Color.Black)
+                ShortForecastDescription.CLOUDY -> PrognozaColors(lightGray, Color.Black)
             }
+
+            return if (useDarkTheme) {
+                PrognozaColors(
+                    background = if (description != ShortForecastDescription.CLEAR) {
+                        lightColors.background.copy(alpha = 0.12f).compositeOver(backgroundDark)
+                    } else backgroundDark,
+                    onBackground = Color.White
+                )
+            } else lightColors
         }
     }
 }

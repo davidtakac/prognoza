@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.presentation.today
 
 import androidx.annotation.DrawableRes
-import hr.dtakac.prognoza.entities.forecast.units.Temperature
+import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 
 data class TodayUiState(
@@ -13,13 +13,13 @@ data class TodayUiState(
 data class TodayContent(
     val placeName: TextResource,
     val time: TextResource,
-    val temperatureValue: Temperature,
     val temperature: TextResource,
     val feelsLike: TextResource,
     val description: TextResource,
     val lowHighTemperature: TextResource,
     val wind: TextResource,
     val precipitation: TextResource,
+    val shortForecastDescription: ShortForecastDescription,
     val hours: List<TodayHour>
 )
 

@@ -86,3 +86,7 @@ enum class ForecastDescription {
     SNOW_SHOWERS_NIGHT,
     SNOW_SHOWERS_POLAR_TWILIGHT
 }
+
+enum class ShortForecastDescription {
+    CLEAR, CLOUDY, RAIN, SNOW, SLEET
+}

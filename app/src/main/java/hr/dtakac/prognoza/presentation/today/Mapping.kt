@@ -5,11 +5,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecast
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.SmallForecastDatum
-import hr.dtakac.prognoza.entities.forecast.precipitation.Precipitation
-import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
-import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
-import hr.dtakac.prognoza.entities.forecast.units.Temperature
-import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.toStringId
@@ -22,7 +18,6 @@ fun mapToTodayContent(
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayContent = TodayContent(
-    temperatureValue = todayForecast.temperatureNow,
     placeName = TextResource.fromText(placeName),
     time = getLongTime(todayForecast.now),
     temperature = getTemperature(todayForecast.temperatureNow, temperatureUnit),
@@ -44,6 +39,7 @@ fun mapToTodayContent(
         id = R.string.template_precipitation,
         getPrecipitation(todayForecast.precipitationNow, precipitationUnit)
     ),
+    shortForecastDescription = todayForecast.shortDescriptionNow,
     hours = todayForecast.restOfDayData.map { datum ->
         getHour(
             datum,
@@ -123,14 +119,14 @@ private fun getWind(
 )
 
 private fun getPrecipitation(
-    precipitation: Precipitation,
+    precipitation: Length,
     unit: LengthUnit
 ): TextResource = TextResource.fromStringId(
     id = when (unit) {
         LengthUnit.MM -> R.string.template_precipitation_mm
         LengthUnit.IN -> R.string.template_precipitation_in
     },
-    TextResource.fromNumber(precipitation.amount.run {
+    TextResource.fromNumber(precipitation.run {
         when (unit) {
             LengthUnit.MM -> millimeters
             LengthUnit.IN -> inches

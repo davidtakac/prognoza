@@ -5,7 +5,6 @@ import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription.*
-import hr.dtakac.prognoza.entities.forecast.precipitation.PrecipitationDescription
 import hr.dtakac.prognoza.entities.forecast.units.Angle
 import hr.dtakac.prognoza.entities.forecast.wind.WindDescription
 import hr.dtakac.prognoza.entities.forecast.wind.WindDescription.*
@@ -213,18 +212,4 @@ fun ForecastDescription.toDrawableId(): Int = when (this) {
     SNOW_SHOWERS_DAY -> R.drawable.snowshowers_day
     SNOW_SHOWERS_NIGHT -> R.drawable.snowshowers_night
     SNOW_SHOWERS_POLAR_TWILIGHT -> R.drawable.snowshowers_polartwilight
-}
-
-@StringRes
-fun PrecipitationDescription.toStringId(): Int = when (this) {
-    PrecipitationDescription.NONE -> R.string.precipitation_none
-    PrecipitationDescription.LIGHT_RAIN -> R.string.description_light_rain
-    PrecipitationDescription.RAIN -> R.string.description_rain_showers
-    PrecipitationDescription.HEAVY_RAIN -> R.string.description_heavy_rain
-    PrecipitationDescription.LIGHT_SNOW -> R.string.description_light_snow
-    PrecipitationDescription.SNOW -> R.string.description_snow
-    PrecipitationDescription.HEAVY_SNOW -> R.string.description_heavy_snow
-    PrecipitationDescription.LIGHT_SLEET -> R.string.description_light_sleet
-    PrecipitationDescription.SLEET -> R.string.description_sleet
-    PrecipitationDescription.HEAVY_SLEET -> R.string.description_heavy_sleet
 }

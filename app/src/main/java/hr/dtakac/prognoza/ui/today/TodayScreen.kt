@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -19,8 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.entities.forecast.units.Temperature
-import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
@@ -30,8 +30,7 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
-        PrognozaTheme(temperature = state.content.temperatureValue) {
-            SetStatusAndNavigationBarColors()
+        PrognozaTheme(state.content.shortForecastDescription) {
             Content(state.content)
         }
     }
@@ -44,6 +43,7 @@ private fun Content(content: TodayContent) {
         LocalTextStyle provides PrognozaTheme.typography.normal
     ) {
         val background by animateColorAsState(targetValue = PrognozaTheme.colors.background)
+        SetStatusAndNavigationBarColors(background)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -164,23 +164,67 @@ private fun Content(content: TodayContent) {
 }
 
 @Composable
-fun SetStatusAndNavigationBarColors() {
+fun SetStatusAndNavigationBarColors(color: Color) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(
-        PrognozaTheme.colors.background,
+        color,
         darkIcons = !isSystemInDarkTheme()
     )
     systemUiController.setNavigationBarColor(
-        PrognozaTheme.colors.background,
+        color,
         darkIcons = !isSystemInDarkTheme()
     )
 }
 
 @Preview
 @Composable
-private fun TodayScreenPreview() {
+private fun TodayScreenNoPrecipitationPreview() {
     val state = TodayUiState().copy(
-        content = fakeContent(),
+        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.CLEAR),
+        isLoading = true,
+        error = TextResource.fromText("Error test")
+    )
+    TodayScreen(state)
+}
+
+@Preview
+@Composable
+private fun TodayScreenRainPreview() {
+    val state = TodayUiState().copy(
+        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.RAIN),
+        isLoading = true,
+        error = TextResource.fromText("Error test")
+    )
+    TodayScreen(state)
+}
+
+@Preview
+@Composable
+private fun TodayScreenSnowPreview() {
+    val state = TodayUiState().copy(
+        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.SNOW),
+        isLoading = true,
+        error = TextResource.fromText("Error test")
+    )
+    TodayScreen(state)
+}
+
+@Preview
+@Composable
+private fun TodayScreenSleetPreview() {
+    val state = TodayUiState().copy(
+        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.SLEET),
+        isLoading = true,
+        error = TextResource.fromText("Error test")
+    )
+    TodayScreen(state)
+}
+
+@Preview
+@Composable
+private fun TodayScreenCloudyPreview() {
+    val state = TodayUiState().copy(
+        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.CLOUDY),
         isLoading = true,
         error = TextResource.fromText("Error test")
     )
@@ -194,7 +238,6 @@ private fun TodayScreenLoadingPreview() {
 }
 
 private fun fakeContent(): TodayContent = TodayContent(
-    temperatureValue = Temperature(value = 23.0, unit = TemperatureUnit.C),
     placeName = TextResource.fromText("Helsinki"),
     time = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
@@ -203,6 +246,7 @@ private fun fakeContent(): TodayContent = TodayContent(
     lowHighTemperature = TextResource.fromText("15°—7°"),
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
+    shortForecastDescription = ShortForecastDescription.CLEAR,
     hours = listOf(
         TodayHour(
             time = TextResource.fromText("14:00"),
