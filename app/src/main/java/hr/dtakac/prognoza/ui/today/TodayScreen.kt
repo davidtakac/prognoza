@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.ui.today
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -40,13 +41,14 @@ fun TodayScreen(state: TodayUiState) {
 @Composable
 private fun Content(content: TodayContent) {
     CompositionLocalProvider(
-        LocalContentColor provides PrognozaTheme.colors.onBackground.copy(alpha = PrognozaTheme.alpha.high),
+        LocalContentColor provides PrognozaTheme.colors.onBackground,
         LocalTextStyle provides PrognozaTheme.typography.contentNormal
     ) {
+        val background by animateColorAsState(targetValue = PrognozaTheme.colors.background)
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(PrognozaTheme.colors.background)
+                .background(background)
                 .padding(horizontal = 24.dp)
         ) {
             item {

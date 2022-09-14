@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.entities.forecast.units.Temperature
 
 val white = Color.White
 val black = Color.Black
+val background_dark = Color(0x121212)
 
 @Immutable
 data class PrognozaColors(

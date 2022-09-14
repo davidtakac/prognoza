@@ -1,10 +1,12 @@
 package hr.dtakac.prognoza.ui.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
@@ -15,13 +17,6 @@ data class PrognozaTypography(
     val contentProminent: TextStyle,
     val contentNormal: TextStyle,
     val contentSmall: TextStyle
-)
-
-@Immutable
-data class PrognozaContentAlpha(
-    val high: Float,
-    val medium: Float,
-    val disabled: Float
 )
 
 val LocalPrognozaColors = staticCompositionLocalOf {
@@ -39,20 +34,21 @@ val LocalPrognozaTypography = staticCompositionLocalOf {
     )
 }
 
-val LocalContentAlpha = staticCompositionLocalOf {
-    PrognozaContentAlpha(
-        high = 1f,
-        medium = 1f,
-        disabled = 1f
-    )
-}
-
 @Composable
 fun PrognozaTheme(
     currentTemperature: Temperature,
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = PrognozaColors.forTemperature(currentTemperature)
+    var colors = PrognozaColors.forTemperature(currentTemperature)
+    if (useDarkTheme) {
+        colors = PrognozaColors(
+            background = colors.background
+                .copy(alpha = 0.12f)
+                .compositeOver(background_dark),
+            onBackground = white
+        )
+    }
 
     val typography = PrognozaTypography(
         contentProminent = TextStyle(
@@ -74,16 +70,9 @@ fun PrognozaTheme(
         )
     )
 
-    val alpha = PrognozaContentAlpha(
-        high = 1f,
-        medium = 0.6f,
-        disabled = 0.38f
-    )
-
     CompositionLocalProvider(
         LocalPrognozaColors provides colors,
         LocalPrognozaTypography provides typography,
-        LocalContentAlpha provides alpha,
         content = content
     )
 }
@@ -96,8 +85,4 @@ object PrognozaTheme {
     val typography: PrognozaTypography
         @Composable
         get() = LocalPrognozaTypography.current
-
-    val alpha: PrognozaContentAlpha
-        @Composable
-        get() = LocalContentAlpha.current
 }
