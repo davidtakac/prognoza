@@ -7,7 +7,8 @@ import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
 
 private val mustard = Color(0xFFFFDD4A)
 private val yaleBlue = Color(0xFF084887)
-private val gainsboro = Color(0xFFCEDADA)
+private val blueGray100 = Color(0xFFCFD8DC)
+private val gray50 = Color(0xFFFAFAFA)
 private val backgroundDark = Color(0xFF121212)
 
 @Immutable
@@ -23,9 +24,9 @@ data class PrognozaColors(
             val lightColors = when (description) {
                 ShortForecastDescription.CLEAR -> PrognozaColors(mustard, Color.Black)
                 ShortForecastDescription.RAIN -> PrognozaColors(yaleBlue, Color.White)
-                ShortForecastDescription.SNOW -> PrognozaColors(Color.White, Color.Black)
-                ShortForecastDescription.SLEET -> PrognozaColors(Color.White, Color.Black)
-                ShortForecastDescription.CLOUDY -> PrognozaColors(gainsboro, Color.Black)
+                ShortForecastDescription.SNOW -> PrognozaColors(gray50, Color.Black)
+                ShortForecastDescription.SLEET -> PrognozaColors(gray50, Color.Black)
+                ShortForecastDescription.CLOUDY -> PrognozaColors(blueGray100, Color.Black)
             }
 
             return if (useDarkTheme) {
