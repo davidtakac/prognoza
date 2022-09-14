@@ -25,11 +25,11 @@ val LocalPrognozaTypography = staticCompositionLocalOf {
 
 @Composable
 fun PrognozaTheme(
-    precipitationDescription: ShortForecastDescription,
+    description: ShortForecastDescription,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = PrognozaColors.get(precipitationDescription, useDarkTheme)
+    val colors = PrognozaColors.get(description, useDarkTheme)
     val typography = PrognozaTypography.get()
     CompositionLocalProvider(
         LocalPrognozaColors provides colors,
