@@ -2,12 +2,14 @@ package hr.dtakac.prognoza.ui.today
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -15,6 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
@@ -28,6 +31,7 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
         PrognozaTheme(temperature = state.content.temperatureValue) {
+            SetStatusAndNavigationBarColors()
             Content(state.content)
         }
     }
@@ -47,7 +51,33 @@ private fun Content(content: TodayContent) {
                 .padding(horizontal = 24.dp)
         ) {
             item {
-                Spacer(modifier = Modifier.height(64.dp))
+                Column {
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                modifier = Modifier.size(42.dp),
+                                painter = painterResource(id = R.drawable.ic_outline_settings),
+                                contentDescription = null
+                            )
+                        }
+                        IconButton(onClick = { /*TODO*/ }) {
+                            Icon(
+                                modifier = Modifier.size(42.dp),
+                                painter = painterResource(id = R.drawable.ic_search),
+                                contentDescription = null
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    Divider(color = LocalContentColor.current)
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = content.placeName.asString(),
                     style = PrognozaTheme.typography.prominent,
@@ -59,7 +89,7 @@ private fun Content(content: TodayContent) {
                     style = PrognozaTheme.typography.prominent.copy(fontWeight = FontWeight.ExtraBold),
                     targetHeight = 250.sp,
                 )
-                Row(modifier = Modifier.fillMaxWidth(),) {
+                Row(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         modifier = Modifier.weight(1f),
                         text = content.description.asString(),
@@ -92,7 +122,7 @@ private fun Content(content: TodayContent) {
                     style = PrognozaTheme.typography.small,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                Divider(color = PrognozaTheme.colors.onBackground)
+                Divider(color = LocalContentColor.current)
                 Spacer(modifier = Modifier.height(16.dp))
             }
             items(content.hours) { hour ->
@@ -131,6 +161,19 @@ private fun Content(content: TodayContent) {
             }
         }
     }
+}
+
+@Composable
+fun SetStatusAndNavigationBarColors() {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setSystemBarsColor(
+        PrognozaTheme.colors.background,
+        darkIcons = !isSystemInDarkTheme()
+    )
+    systemUiController.setNavigationBarColor(
+        PrognozaTheme.colors.background,
+        darkIcons = !isSystemInDarkTheme()
+    )
 }
 
 @Preview

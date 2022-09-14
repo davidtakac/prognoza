@@ -17,7 +17,8 @@ buildscript {
                 compose_activity        : '1.5.1',
                 compose_material3       : '1.0.0-beta01',
                 coil                    : '1.4.0',
-                appcompat               : '1.5.0'
+                appcompat               : '1.5.0',
+                accompanist             : '0.26.3-beta'
         ]
     }
     repositories {

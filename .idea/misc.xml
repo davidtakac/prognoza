@@ -31,6 +31,7 @@
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14375" />
         <entry key="app/src/main/res/drawable/ic_north.xml" value="0.242" />
+        <entry key="app/src/main/res/drawable/ic_outline_settings.xml" value="0.23" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_speed.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_thermostat.xml" value="0.1" />
