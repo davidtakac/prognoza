@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -23,7 +24,6 @@ import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import kotlin.math.max
 
 @Composable
 fun TodayScreen(state: TodayUiState) {
@@ -61,8 +61,6 @@ private fun Content(content: TodayContent) {
             var timeVisible by remember { mutableStateOf(false) }
             var temperatureVisible by remember { mutableStateOf(false) }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
             Toolbar(
                 placeName = content.placeName.asString(),
                 placeNameVisible = placeNameVisible,
@@ -92,11 +90,11 @@ private fun Content(content: TodayContent) {
                     Text(text = content.time.asString())
                 }
                 item(key = "temperature") {
-                    ResponsiveText(
-                        modifier = Modifier.fillMaxWidth(),
+                    AutoSizeText(
                         text = content.temperature.asString(),
                         style = PrognozaTheme.typography.prominentLarge,
-                        targetHeight = 250.sp,
+                        maxFontSize = 200.sp,
+                        maxLines = 1
                     )
                 }
                 item {
@@ -198,7 +196,12 @@ private fun Toolbar(
     onMenuClicked: () -> Unit = {}
 ) {
     Column(modifier = Modifier.background(PrognozaTheme.colors.background)) {
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier
+                .height(90.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             IconButton(
                 onClick = onMenuClicked,
                 modifier = Modifier.size(42.dp)
@@ -218,23 +221,37 @@ private fun Toolbar(
             Column(
                 modifier = Modifier
                     .padding(start = 24.dp)
-                    .weight(1f),
+                    .weight(1f)
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                AnimatedVisibility(visible = placeNameVisible) {
+                val density = LocalDensity.current
+                AnimatedVisibility(
+                    visible = placeNameVisible,
+                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                    exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+                ) {
                     Text(
                         text = placeName,
                         style = PrognozaTheme.typography.prominentSmall
                     )
                 }
-                AnimatedVisibility(visible = timeVisible) {
+                AnimatedVisibility(
+                    visible = timeVisible,
+                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                    exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+                ) {
                     Text(
                         text = time,
                         style = PrognozaTheme.typography.normalSmall
                     )
                 }
             }
-            AnimatedVisibility(visible = temperatureVisible) {
+            AnimatedVisibility(
+                visible = timeVisible,
+                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+            ) {
                 Text(
                     text = temperature,
                     style = PrognozaTheme.typography.prominentLarge,
@@ -242,10 +259,7 @@ private fun Toolbar(
                 )
             }
         }
-        Divider(
-            color = LocalContentColor.current,
-            modifier = Modifier.padding(top = 24.dp)
-        )
+        Divider(color = LocalContentColor.current)
     }
 }
 

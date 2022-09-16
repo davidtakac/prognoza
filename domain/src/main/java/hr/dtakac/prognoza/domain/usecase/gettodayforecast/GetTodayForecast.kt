@@ -21,9 +21,9 @@ class GetTodayForecast(
         val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
         val from = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
         val to = if (from.hour >= 18) {
-            from.plusDays(1L).truncatedTo(ChronoUnit.HOURS).withHour(6)
+            from.plusDays(1L).truncatedTo(ChronoUnit.HOURS).withHour(8)
         } else {
-            from.withHour(23)
+            from.plusDays(1L).withHour(0)
         }
         return forecastRepository.getForecast(
             latitude = selectedPlace.latitude,
