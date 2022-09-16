@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -24,6 +23,7 @@ import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import kotlin.math.max
 
 @Composable
 fun TodayScreen(state: TodayUiState) {
@@ -170,10 +170,9 @@ private fun Content(content: TodayContent) {
                 }
             }
 
-            placeNameVisible = state.layoutInfo.visibleItemsInfo.none { it.key == "place" }
-            timeVisible = state.layoutInfo.visibleItemsInfo.none { it.key == "time" }
-            // todo: trigger this when temperature half visible (or so)
-            temperatureVisible = state.layoutInfo.visibleItemsInfo.none { it.key == "temperature" }
+            placeNameVisible = state.visibleItems(0f).none { it.key == "place" }
+            timeVisible = state.visibleItems(0f).none { it.key == "time" }
+            temperatureVisible = state.visibleItems(50f).none { it.key == "temperature" }
         }
     }
 }
@@ -225,7 +224,6 @@ private fun Toolbar(
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                val density = LocalDensity.current
                 AnimatedVisibility(
                     visible = placeNameVisible,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
@@ -248,7 +246,7 @@ private fun Toolbar(
                 }
             }
             AnimatedVisibility(
-                visible = timeVisible,
+                visible = temperatureVisible,
                 enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
                 exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
             ) {
@@ -334,36 +332,24 @@ private fun fakeContent(): TodayContent = TodayContent(
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
     shortForecastDescription = ShortForecastDescription.CLEAR,
-    hours = listOf(
-        TodayHour(
-            time = TextResource.fromText("14:00"),
-            temperature = TextResource.fromText("23°"),
-            precipitation = TextResource.fromText("0 mm"),
-            description = TextResource.fromText("Clear")
-        ),
-        TodayHour(
-            time = TextResource.fromText("15:00"),
-            temperature = TextResource.fromText("25°"),
-            precipitation = TextResource.fromText("0 mm"),
-            description = TextResource.fromText("Partly cloudy")
-        ),
-        TodayHour(
-            time = TextResource.fromText("16:00"),
-            temperature = TextResource.fromText("26°"),
-            precipitation = TextResource.fromText("0 mm"),
-            description = TextResource.fromText("Cloudy")
-        ),
-        TodayHour(
-            time = TextResource.fromText("17:00"),
-            temperature = TextResource.fromText("28°"),
-            precipitation = TextResource.fromText("0 mm"),
-            description = TextResource.fromText("Cloudy")
-        ),
-        TodayHour(
-            time = TextResource.fromText("18:00"),
-            temperature = TextResource.fromText("128°"),
-            precipitation = TextResource.fromText("1.55 mm"),
-            description = TextResource.fromText("Heavy rain")
-        )
-    )
+    hours = mutableListOf<TodayHour>().apply {
+        for (i in 1..100) {
+            add(TodayHour(
+                time = TextResource.fromText("14:00"),
+                temperature = TextResource.fromText("23°"),
+                precipitation = TextResource.fromText("1.99 mm"),
+                description = TextResource.fromText("Clear")
+            ))
+        }
+    }
 )
+
+// https://stackoverflow.com/a/69267808
+private fun LazyListState.visibleItems(itemVisiblePercentThreshold: Float) =
+    layoutInfo.visibleItemsInfo.filter { visibilityPercent(it) >= itemVisiblePercentThreshold }
+
+private fun LazyListState.visibilityPercent(info: LazyListItemInfo): Float {
+    val cutTop = max(0, layoutInfo.viewportStartOffset - info.offset)
+    val cutBottom = max(0, info.offset + info.size - layoutInfo.viewportEndOffset)
+    return max(0f, 100f - (cutTop + cutBottom) * 100f / info.size)
+}
