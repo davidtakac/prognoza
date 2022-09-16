@@ -5,19 +5,19 @@ import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription.*
-import hr.dtakac.prognoza.entities.forecast.units.Angle
+import hr.dtakac.prognoza.entities.forecast.units.CompassDirection
 import hr.dtakac.prognoza.entities.forecast.wind.WindDescription
 import hr.dtakac.prognoza.entities.forecast.wind.WindDescription.*
 
 @StringRes
-fun Angle.toCompassDirectionStringId(): Int = when (degrees) {
-    in 0.0..44.0 -> R.string.direction_n
-    in 45.0..89.0 -> R.string.direction_ne
-    in 90.0..134.0 -> R.string.direction_e
-    in 135.0..179.0 -> R.string.direction_se
-    in 180.0..224.0 -> R.string.direction_s
-    in 225.0..269.0 -> R.string.direction_sw
-    in 270.0..314.0 -> R.string.direction_w
+fun CompassDirection.toCompassDirectionStringId(): Int = when (this) {
+    CompassDirection.N -> R.string.direction_n
+    CompassDirection.NE -> R.string.direction_ne
+    CompassDirection.E -> R.string.direction_e
+    CompassDirection.SE -> R.string.direction_se
+    CompassDirection.S -> R.string.direction_s
+    CompassDirection.SW -> R.string.direction_sw
+    CompassDirection.W -> R.string.direction_w
     else -> R.string.direction_nw
 }
 

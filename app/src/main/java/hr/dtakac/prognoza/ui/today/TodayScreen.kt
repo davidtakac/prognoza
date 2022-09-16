@@ -134,7 +134,7 @@ private fun Content(content: TodayContent) {
                     Divider(color = LocalContentColor.current)
                     Spacer(modifier = Modifier.height(16.dp))
                 }
-                items(content.hours) { hour ->
+                items(content.hourly) { hour ->
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             modifier = Modifier.width(52.dp),
@@ -332,7 +332,7 @@ private fun fakeContent(): TodayContent = TodayContent(
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
     shortDescription = ForecastDescription.Short.CLEAR,
-    hours = mutableListOf<TodayHour>().apply {
+    hourly = mutableListOf<TodayHour>().apply {
         for (i in 1..100) {
             add(TodayHour(
                 time = TextResource.fromText("14:00"),

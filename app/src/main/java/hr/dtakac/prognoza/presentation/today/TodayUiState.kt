@@ -20,7 +20,7 @@ data class TodayContent(
     val wind: TextResource,
     val precipitation: TextResource,
     val shortDescription: ForecastDescription.Short,
-    val hours: List<TodayHour>
+    val hourly: List<TodayHour>
 )
 
 data class TodayHour(

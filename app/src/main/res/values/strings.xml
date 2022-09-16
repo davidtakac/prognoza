@@ -46,14 +46,14 @@
     <string name="description_snow_showers_and_thunder">Snow showers and thunder</string>
 
     <!-- Compass directions -->
-    <string name="direction_n">north</string>
-    <string name="direction_ne">northeast</string>
-    <string name="direction_e">east</string>
-    <string name="direction_se">southeast</string>
-    <string name="direction_s">south</string>
-    <string name="direction_sw">southwest</string>
-    <string name="direction_w">west</string>
-    <string name="direction_nw">northwest</string>
+    <string name="direction_n">North</string>
+    <string name="direction_ne">Northeast</string>
+    <string name="direction_e">East</string>
+    <string name="direction_se">Southeast</string>
+    <string name="direction_s">South</string>
+    <string name="direction_sw">Southwest</string>
+    <string name="direction_w">West</string>
+    <string name="direction_nw">Northwest</string>
 
     <string name="template_temperature_degrees">%1$s°</string>
     <string name="template_feels_like">Feels like %1$s</string>

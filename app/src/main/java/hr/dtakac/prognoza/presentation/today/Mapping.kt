@@ -40,7 +40,7 @@ fun mapToTodayContent(
         getPrecipitation(todayForecast.precipitation, precipitationUnit)
     ),
     shortDescription = todayForecast.description.short,
-    hours = todayForecast.hourly.map { datum ->
+    hourly = todayForecast.hourly.map { datum ->
         getHour(
             datum,
             temperatureUnit,

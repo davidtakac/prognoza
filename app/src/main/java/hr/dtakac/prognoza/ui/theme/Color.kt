@@ -9,7 +9,7 @@ private val stPatricksBlue = Color(0xFF123285)
 private val blueGray200 = Color(0xFFB0BEC5)
 private val gray50 = Color(0xFFFAFAFA)
 private val cyan900 = Color(0xFF006064)
-private val backgroundDark = Color(0xFF121212)
+private val almostBlack = Color(0xFF121212)
 
 @Immutable
 data class PrognozaColors(
@@ -23,7 +23,7 @@ data class PrognozaColors(
         ): PrognozaColors =
             if (useDarkTheme) {
                 PrognozaColors(
-                    background = backgroundDark,
+                    background = almostBlack,
                     onBackground = Color.White
                 )
             } else when (description) {
