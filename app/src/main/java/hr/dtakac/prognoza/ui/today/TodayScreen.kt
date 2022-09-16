@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
@@ -45,7 +44,7 @@ private fun Content(content: TodayContent) {
         targetValue = PrognozaTheme.colors.background
     )
 
-    SetStatusAndNavigationBarColors(backgroundColor)
+    StatusAndNavigationBars(backgroundColor)
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         Column(
             modifier = Modifier
@@ -72,7 +71,7 @@ private fun Content(content: TodayContent) {
                 state = state
             ) {
                 item {
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
                 }
                 item(key = "place") {
                     Text(
@@ -175,7 +174,7 @@ private fun Content(content: TodayContent) {
 }
 
 @Composable
-private fun SetStatusAndNavigationBarColors(color: Color) {
+private fun StatusAndNavigationBars(color: Color) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color)
     systemUiController.setNavigationBarColor(color)
