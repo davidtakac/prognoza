@@ -92,8 +92,8 @@ private fun Content(content: TodayContent) {
                 item(key = "temperature") {
                     AutoSizeText(
                         text = content.temperature.asString(),
-                        style = PrognozaTheme.typography.prominentLarge,
-                        maxFontSize = 200.sp,
+                        style = PrognozaTheme.typography.jumbo,
+                        maxFontSize = PrognozaTheme.typography.jumbo.fontSize,
                         maxLines = 1
                     )
                 }
