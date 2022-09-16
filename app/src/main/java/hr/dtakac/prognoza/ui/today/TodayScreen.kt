@@ -46,10 +46,7 @@ private fun Content(content: TodayContent) {
     )
 
     SetStatusAndNavigationBarColors(backgroundColor)
-    CompositionLocalProvider(
-        LocalContentColor provides contentColor,
-        LocalTextStyle provides PrognozaTheme.typography.normalLarge
-    ) {
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,20 +77,23 @@ private fun Content(content: TodayContent) {
                 item(key = "place") {
                     Text(
                         text = content.placeName.asString(),
-                        style = PrognozaTheme.typography.prominentLarge,
+                        style = PrognozaTheme.typography.titleLarge,
                     )
                 }
                 item {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
                 item(key = "time") {
-                    Text(text = content.time.asString())
+                    Text(
+                        text = content.time.asString(),
+                        style = PrognozaTheme.typography.subtitleLarge
+                    )
                 }
                 item(key = "temperature") {
                     AutoSizeText(
                         text = content.temperature.asString(),
-                        style = PrognozaTheme.typography.jumbo,
-                        maxFontSize = PrognozaTheme.typography.jumbo.fontSize,
+                        style = PrognozaTheme.typography.headlineLarge,
+                        maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
                         maxLines = 1
                     )
                 }
@@ -102,51 +102,48 @@ private fun Content(content: TodayContent) {
                         Text(
                             modifier = Modifier.weight(1f),
                             text = content.description.asString(),
-                            style = PrognozaTheme.typography.prominentLarge,
+                            style = PrognozaTheme.typography.titleLarge,
                         )
                         Text(
                             modifier = Modifier.weight(1f),
                             text = content.lowHighTemperature.asString(),
-                            style = PrognozaTheme.typography.prominentLarge,
+                            style = PrognozaTheme.typography.titleLarge,
                             textAlign = TextAlign.End
                         )
                     }
-                    Spacer(modifier = Modifier.height(42.dp))
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(top = 42.dp)) {
                         Text(
                             modifier = Modifier.weight(1f),
                             text = content.wind.asString(),
-                            style = PrognozaTheme.typography.normalSmall,
+                            style = PrognozaTheme.typography.bodySmall,
                         )
                         Text(
                             modifier = Modifier.weight(1f),
                             text = content.precipitation.asString(),
-                            style = PrognozaTheme.typography.normalSmall,
+                            style = PrognozaTheme.typography.bodySmall,
                             textAlign = TextAlign.End
                         )
                     }
-                    Spacer(modifier = Modifier.height(42.dp))
                     Text(
                         text = stringResource(id = R.string.hourly),
-                        style = PrognozaTheme.typography.normalSmall,
+                        style = PrognozaTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 42.dp)
                     )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Divider(color = LocalContentColor.current)
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Divider(color = LocalContentColor.current, modifier = Modifier.padding(vertical = 16.dp))
                 }
                 items(content.hourly) { hour ->
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Text(
                             modifier = Modifier.width(52.dp),
                             text = hour.time.asString(),
-                            style = PrognozaTheme.typography.normalSmall,
+                            style = PrognozaTheme.typography.bodySmall,
                             textAlign = TextAlign.Start,
                             maxLines = 1
                         )
                         Text(
                             modifier = Modifier.weight(1f),
                             text = hour.description.asString(),
-                            style = PrognozaTheme.typography.normalSmall,
+                            style = PrognozaTheme.typography.bodySmall,
                             textAlign = TextAlign.Start,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -154,14 +151,14 @@ private fun Content(content: TodayContent) {
                         Text(
                             modifier = Modifier.width(88.dp),
                             text = hour.precipitation.asString(),
-                            style = PrognozaTheme.typography.normalSmall,
+                            style = PrognozaTheme.typography.bodySmall,
                             textAlign = TextAlign.End,
                             maxLines = 1
                         )
                         Text(
                             modifier = Modifier.width(52.dp),
                             text = hour.temperature.asString(),
-                            style = PrognozaTheme.typography.normalSmall,
+                            style = PrognozaTheme.typography.bodySmall,
                             textAlign = TextAlign.End,
                             maxLines = 1
                         )
@@ -231,7 +228,7 @@ private fun Toolbar(
                 ) {
                     Text(
                         text = placeName,
-                        style = PrognozaTheme.typography.prominentSmall
+                        style = PrognozaTheme.typography.titleSmall
                     )
                 }
                 AnimatedVisibility(
@@ -241,7 +238,7 @@ private fun Toolbar(
                 ) {
                     Text(
                         text = time,
-                        style = PrognozaTheme.typography.normalSmall
+                        style = PrognozaTheme.typography.subtitleSmall
                     )
                 }
             }
@@ -252,8 +249,7 @@ private fun Toolbar(
             ) {
                 Text(
                     text = temperature,
-                    style = PrognozaTheme.typography.prominentLarge,
-                    fontSize = 46.sp
+                    style = PrognozaTheme.typography.headlineSmall
                 )
             }
         }
@@ -334,12 +330,14 @@ private fun fakeContent(): TodayContent = TodayContent(
     shortDescription = ForecastDescription.Short.CLEAR,
     hourly = mutableListOf<TodayHour>().apply {
         for (i in 1..100) {
-            add(TodayHour(
-                time = TextResource.fromText("14:00"),
-                temperature = TextResource.fromText("23°"),
-                precipitation = TextResource.fromText("1.99 mm"),
-                description = TextResource.fromText("Clear")
-            ))
+            add(
+                TodayHour(
+                    time = TextResource.fromText("14:00"),
+                    temperature = TextResource.fromText("23°"),
+                    precipitation = TextResource.fromText("1.99 mm"),
+                    description = TextResource.fromText("Clear")
+                )
+            )
         }
     }
 )

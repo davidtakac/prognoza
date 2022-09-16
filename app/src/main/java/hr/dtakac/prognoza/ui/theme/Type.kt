@@ -19,42 +19,57 @@ val Manrope = FontFamily(
 
 @Immutable
 data class PrognozaTypography(
-    val jumbo: TextStyle,
-    val prominentLarge: TextStyle,
-    val prominentSmall: TextStyle,
-    val normalLarge: TextStyle,
-    val normalSmall: TextStyle
+    val headlineLarge: TextStyle,
+    val headlineSmall: TextStyle,
+    val titleLarge: TextStyle,
+    val subtitleLarge: TextStyle,
+    val titleSmall: TextStyle,
+    val subtitleSmall: TextStyle,
+    val bodySmall: TextStyle
 ) {
     companion object {
         fun get(): PrognozaTypography = PrognozaTypography(
-            jumbo = TextStyle(
+            headlineLarge = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 200.sp,
                 letterSpacing = (-12).sp
             ),
-            prominentLarge = TextStyle(
+            headlineSmall = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.Bold,
+                fontSize = 46.sp,
+                letterSpacing = 0.sp
+            ),
+            titleLarge = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
-                letterSpacing = (-0.25).sp,
+                letterSpacing = 0.sp,
             ),
-            prominentSmall = TextStyle(
+            subtitleLarge = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.Normal,
+                fontSize = 22.sp,
+                letterSpacing = 0.sp
+            ),
+            titleSmall = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                letterSpacing = -(0.25).sp
+                letterSpacing = 0.25.sp
             ),
-            normalLarge = TextStyle(
+            subtitleSmall = TextStyle(
                 fontFamily = Manrope,
-                fontWeight = FontWeight.Medium,
-                fontSize = 24.sp,
-                letterSpacing = (-0.25).sp,
+                fontWeight = FontWeight.Normal,
+                fontSize = 18.sp,
+                letterSpacing = 0.25.sp
             ),
-            normalSmall = TextStyle(
+            bodySmall = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
+                letterSpacing = 0.25.sp
             )
         )
     }

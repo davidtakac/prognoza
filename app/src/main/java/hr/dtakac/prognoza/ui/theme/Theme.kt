@@ -17,11 +17,13 @@ val LocalPrognozaColors = staticCompositionLocalOf {
 
 val LocalPrognozaTypography = staticCompositionLocalOf {
     PrognozaTypography(
-        jumbo = TextStyle.Default,
-        prominentLarge = TextStyle.Default,
-        prominentSmall = TextStyle.Default,
-        normalLarge = TextStyle.Default,
-        normalSmall = TextStyle.Default
+        headlineLarge = TextStyle.Default,
+        headlineSmall = TextStyle.Default,
+        titleLarge = TextStyle.Default,
+        titleSmall = TextStyle.Default,
+        subtitleLarge = TextStyle.Default,
+        subtitleSmall = TextStyle.Default,
+        bodySmall = TextStyle.Default
     )
 }
 
