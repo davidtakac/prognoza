@@ -53,23 +53,17 @@ private fun Content(content: TodayContent) {
             item {
                 Column {
                     Spacer(modifier = Modifier.height(24.dp))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                modifier = Modifier.size(42.dp),
-                                painter = painterResource(id = R.drawable.ic_outline_settings),
-                                contentDescription = null
-                            )
-                        }
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                modifier = Modifier.size(42.dp),
-                                painter = painterResource(id = R.drawable.ic_search),
-                                contentDescription = null
-                            )
+                    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(42.dp)) {
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            repeat(3) {
+                                Divider(
+                                    color = LocalContentColor.current,
+                                    modifier = Modifier.fillMaxWidth()
+                                )
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(24.dp))
@@ -85,8 +79,9 @@ private fun Content(content: TodayContent) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(text = content.time.asString())
                 ResponsiveText(
+                    modifier = Modifier.fillMaxWidth(),
                     text = content.temperature.asString(),
-                    style = PrognozaTheme.typography.prominent.copy(fontWeight = FontWeight.ExtraBold),
+                    style = PrognozaTheme.typography.prominent,
                     targetHeight = 250.sp,
                 )
                 Row(modifier = Modifier.fillMaxWidth()) {
