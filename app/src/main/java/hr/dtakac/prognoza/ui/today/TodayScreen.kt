@@ -22,6 +22,8 @@ import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.max
 
 @Composable
@@ -52,23 +54,43 @@ private fun Content(content: TodayContent) {
                 .background(backgroundColor)
                 .padding(horizontal = 24.dp)
         ) {
-            val state = rememberLazyListState()
-            var placeNameVisible by remember { mutableStateOf(false) }
-            var timeVisible by remember { mutableStateOf(false) }
-            var temperatureVisible by remember { mutableStateOf(false) }
+            val lazyListState = rememberLazyListState()
+            var toolbarPlaceNameVisible by remember { mutableStateOf(false) }
+            var toolbarTimeVisible by remember { mutableStateOf(false) }
+            var toolbarTemperatureVisible by remember { mutableStateOf(false) }
+
+            // todo: figure out a way to avoid recompositions https://developer.android.com/jetpack/compose/side-effects#snapshotFlow,
+            //  try combining with derivedStateOf
+            // Launched effect is important because unconditionally accessing layoutInfo causes
+            // a composition loop. This will access it when scrolling.
+            LaunchedEffect(lazyListState) {
+                snapshotFlow { lazyListState.firstVisibleItemScrollOffset }
+                    .distinctUntilChanged()
+                    .collectLatest {
+                        // These values need to be calculated after LazyColumn because its state is only
+                        // up-to-date after it renders. Changing these values will trigger a recomposition
+                        // which will update the toolbar
+                        @Suppress("UNUSED_VALUE")
+                        toolbarPlaceNameVisible = lazyListState.layoutInfo.visibleItems(0f).none { it.key == "place" }
+                        @Suppress("UNUSED_VALUE")
+                        toolbarTimeVisible = lazyListState.layoutInfo.visibleItems(0f).none { it.key == "time" }
+                        @Suppress("UNUSED_VALUE")
+                        toolbarTemperatureVisible = lazyListState.layoutInfo.visibleItems(50f).none { it.key == "temperature" }
+                    }
+            }
 
             Toolbar(
                 placeName = content.placeName.asString(),
-                placeNameVisible = placeNameVisible,
+                placeNameVisible = toolbarPlaceNameVisible,
                 time = content.time.asString(),
-                timeVisible = timeVisible,
+                timeVisible = toolbarTimeVisible,
                 temperature = content.temperature.asString(),
-                temperatureVisible = temperatureVisible
+                temperatureVisible = toolbarTemperatureVisible
             )
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                state = state
+                state = lazyListState
             ) {
                 item {
                     Spacer(modifier = Modifier.height(24.dp))
@@ -110,7 +132,9 @@ private fun Content(content: TodayContent) {
                             textAlign = TextAlign.End
                         )
                     }
-                    Row(modifier = Modifier.fillMaxWidth().padding(top = 42.dp)) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 42.dp)) {
                         Text(
                             modifier = Modifier.weight(1f),
                             text = content.wind.asString(),
@@ -165,10 +189,6 @@ private fun Content(content: TodayContent) {
                     Spacer(modifier = Modifier.height(16.dp))
                 }
             }
-
-            placeNameVisible = state.visibleItems(0f).none { it.key == "place" }
-            timeVisible = state.visibleItems(0f).none { it.key == "time" }
-            temperatureVisible = state.visibleItems(50f).none { it.key == "temperature" }
         }
     }
 }
@@ -342,11 +362,10 @@ private fun fakeContent(): TodayContent = TodayContent(
 )
 
 // https://stackoverflow.com/a/69267808
-private fun LazyListState.visibleItems(itemVisiblePercentThreshold: Float) =
-    layoutInfo.visibleItemsInfo.filter { visibilityPercent(it) >= itemVisiblePercentThreshold }
+private fun LazyListLayoutInfo.visibleItems(itemVisiblePercentThreshold: Float) =
+    visibleItemsInfo.filter {
+        val cutTop = max(0, viewportStartOffset - it.offset)
+        val cutBottom = max(0, it.offset + it.size - viewportEndOffset)
 
-private fun LazyListState.visibilityPercent(info: LazyListItemInfo): Float {
-    val cutTop = max(0, layoutInfo.viewportStartOffset - info.offset)
-    val cutBottom = max(0, info.offset + info.size - layoutInfo.viewportEndOffset)
-    return max(0f, 100f - (cutTop + cutBottom) * 100f / info.size)
-}
+        max(0f, 100f - (cutTop + cutBottom) * 100f / it.size) >= itemVisiblePercentThreshold
+    }
