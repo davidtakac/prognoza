@@ -19,25 +19,32 @@ val Manrope = FontFamily(
 
 @Immutable
 data class PrognozaTypography(
-    val prominent: TextStyle,
-    val normal: TextStyle,
-    val small: TextStyle
+    val prominentLarge: TextStyle,
+    val prominentSmall: TextStyle,
+    val normalLarge: TextStyle,
+    val normalSmall: TextStyle
 ) {
     companion object {
         fun get(): PrognozaTypography = PrognozaTypography(
-            prominent = TextStyle(
+            prominentLarge = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 letterSpacing = (-0.25).sp,
             ),
-            normal = TextStyle(
+            prominentSmall = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                letterSpacing = -(0.25).sp
+            ),
+            normalLarge = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Medium,
                 fontSize = 24.sp,
                 letterSpacing = (-0.25).sp,
             ),
-            small = TextStyle(
+            normalSmall = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,

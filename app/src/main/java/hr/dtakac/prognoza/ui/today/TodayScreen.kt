@@ -1,18 +1,15 @@
 package hr.dtakac.prognoza.ui.today
 
-import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +23,7 @@ import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
 import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import kotlin.math.max
 
 @Composable
 fun TodayScreen(state: TodayUiState) {
@@ -38,132 +36,217 @@ fun TodayScreen(state: TodayUiState) {
 
 @Composable
 private fun Content(content: TodayContent) {
+    val contentColor by animateColorAsState(
+        targetValue = PrognozaTheme.colors.onBackground.copy(
+            alpha = 0.87f
+        )
+    )
+    val backgroundColor by animateColorAsState(
+        targetValue = PrognozaTheme.colors.background
+    )
+
+    SetStatusAndNavigationBarColors(backgroundColor)
     CompositionLocalProvider(
-        LocalContentColor provides PrognozaTheme.colors.onBackground.copy(alpha = 0.87f),
-        LocalTextStyle provides PrognozaTheme.typography.normal
+        LocalContentColor provides contentColor,
+        LocalTextStyle provides PrognozaTheme.typography.normalLarge
     ) {
-        val background by animateColorAsState(targetValue = PrognozaTheme.colors.background)
-        SetStatusAndNavigationBarColors(background)
-        LazyColumn(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(background)
+                .background(backgroundColor)
                 .padding(horizontal = 24.dp)
         ) {
-            item {
-                Column {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    IconButton(onClick = { /*TODO*/ }, modifier = Modifier.size(42.dp)) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.SpaceEvenly
-                        ) {
-                            repeat(3) {
-                                Divider(
-                                    color = LocalContentColor.current,
-                                    modifier = Modifier.fillMaxWidth()
-                                )
-                            }
-                        }
+            val state = rememberLazyListState()
+            var placeNameVisible by remember { mutableStateOf(false) }
+            var timeVisible by remember { mutableStateOf(false) }
+            var temperatureVisible by remember { mutableStateOf(false) }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Toolbar(
+                placeName = content.placeName.asString(),
+                placeNameVisible = placeNameVisible,
+                time = content.time.asString(),
+                timeVisible = timeVisible,
+                temperature = content.temperature.asString(),
+                temperatureVisible = temperatureVisible
+            )
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                state = state
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+                item(key = "place") {
+                    Text(
+                        text = content.placeName.asString(),
+                        style = PrognozaTheme.typography.prominentLarge,
+                    )
+                }
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+                item(key = "time") {
+                    Text(text = content.time.asString())
+                }
+                item(key = "temperature") {
+                    ResponsiveText(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = content.temperature.asString(),
+                        style = PrognozaTheme.typography.prominentLarge,
+                        targetHeight = 250.sp,
+                    )
+                }
+                item {
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = content.description.asString(),
+                            style = PrognozaTheme.typography.prominentLarge,
+                        )
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = content.lowHighTemperature.asString(),
+                            style = PrognozaTheme.typography.prominentLarge,
+                            textAlign = TextAlign.End
+                        )
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(42.dp))
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = content.wind.asString(),
+                            style = PrognozaTheme.typography.normalSmall,
+                        )
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = content.precipitation.asString(),
+                            style = PrognozaTheme.typography.normalSmall,
+                            textAlign = TextAlign.End
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(42.dp))
+                    Text(
+                        text = stringResource(id = R.string.hourly),
+                        style = PrognozaTheme.typography.normalSmall,
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
                     Divider(color = LocalContentColor.current)
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-            }
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-                Text(
-                    text = content.placeName.asString(),
-                    style = PrognozaTheme.typography.prominent,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = content.time.asString())
-                ResponsiveText(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = content.temperature.asString(),
-                    style = PrognozaTheme.typography.prominent,
-                    targetHeight = 250.sp,
-                )
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = content.description.asString(),
-                        style = PrognozaTheme.typography.prominent,
-                    )
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = content.lowHighTemperature.asString(),
-                        style = PrognozaTheme.typography.prominent,
-                        textAlign = TextAlign.End
-                    )
+                items(content.hours) { hour ->
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            modifier = Modifier.width(52.dp),
+                            text = hour.time.asString(),
+                            style = PrognozaTheme.typography.normalSmall,
+                            textAlign = TextAlign.Start,
+                            maxLines = 1
+                        )
+                        Text(
+                            modifier = Modifier.weight(1f),
+                            text = hour.description.asString(),
+                            style = PrognozaTheme.typography.normalSmall,
+                            textAlign = TextAlign.Start,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Text(
+                            modifier = Modifier.width(88.dp),
+                            text = hour.precipitation.asString(),
+                            style = PrognozaTheme.typography.normalSmall,
+                            textAlign = TextAlign.End,
+                            maxLines = 1
+                        )
+                        Text(
+                            modifier = Modifier.width(52.dp),
+                            text = hour.temperature.asString(),
+                            style = PrognozaTheme.typography.normalSmall,
+                            textAlign = TextAlign.End,
+                            maxLines = 1
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-                Spacer(modifier = Modifier.height(42.dp))
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = content.wind.asString(),
-                        style = PrognozaTheme.typography.small,
-                    )
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = content.precipitation.asString(),
-                        style = PrognozaTheme.typography.small,
-                        textAlign = TextAlign.End
-                    )
-                }
-                Spacer(modifier = Modifier.height(42.dp))
-                Text(
-                    text = stringResource(id = R.string.hourly),
-                    style = PrognozaTheme.typography.small,
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Divider(color = LocalContentColor.current)
-                Spacer(modifier = Modifier.height(16.dp))
-            }
-            items(content.hours) { hour ->
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        modifier = Modifier.width(52.dp),
-                        text = hour.time.asString(),
-                        style = PrognozaTheme.typography.small,
-                        textAlign = TextAlign.Start,
-                        maxLines = 1
-                    )
-                    Text(
-                        modifier = Modifier.weight(1f),
-                        text = hour.description.asString(),
-                        style = PrognozaTheme.typography.small,
-                        textAlign = TextAlign.Start,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        modifier = Modifier.width(88.dp),
-                        text = hour.precipitation.asString(),
-                        style = PrognozaTheme.typography.small,
-                        textAlign = TextAlign.End,
-                        maxLines = 1
-                    )
-                    Text(
-                        modifier = Modifier.width(52.dp),
-                        text = hour.temperature.asString(),
-                        style = PrognozaTheme.typography.small,
-                        textAlign = TextAlign.End,
-                        maxLines = 1
-                    )
-                }
-                Spacer(modifier = Modifier.height(16.dp))
             }
 
+            placeNameVisible = state.layoutInfo.visibleItemsInfo.none { it.key == "place" }
+            timeVisible = state.layoutInfo.visibleItemsInfo.none { it.key == "time" }
+            // todo: trigger this when temperature half visible (or so)
+            temperatureVisible = state.layoutInfo.visibleItemsInfo.none { it.key == "temperature" }
         }
     }
 }
 
 @Composable
-fun SetStatusAndNavigationBarColors(color: Color) {
+private fun SetStatusAndNavigationBarColors(color: Color) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color)
     systemUiController.setNavigationBarColor(color)
+}
+
+@Composable
+private fun Toolbar(
+    placeName: String,
+    placeNameVisible: Boolean,
+    time: String,
+    timeVisible: Boolean,
+    temperature: String,
+    temperatureVisible: Boolean,
+    onMenuClicked: () -> Unit = {}
+) {
+    Column(modifier = Modifier.background(PrognozaTheme.colors.background)) {
+        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(
+                onClick = onMenuClicked,
+                modifier = Modifier.size(42.dp)
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.SpaceAround
+                ) {
+                    repeat(3) {
+                        Divider(
+                            color = LocalContentColor.current,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+                }
+            }
+            Column(
+                modifier = Modifier
+                    .padding(start = 24.dp)
+                    .weight(1f),
+                verticalArrangement = Arrangement.Center
+            ) {
+                AnimatedVisibility(visible = placeNameVisible) {
+                    Text(
+                        text = placeName,
+                        style = PrognozaTheme.typography.prominentSmall
+                    )
+                }
+                AnimatedVisibility(visible = timeVisible) {
+                    Text(
+                        text = time,
+                        style = PrognozaTheme.typography.normalSmall
+                    )
+                }
+            }
+            AnimatedVisibility(visible = temperatureVisible) {
+                Text(
+                    text = temperature,
+                    style = PrognozaTheme.typography.prominentLarge,
+                    fontSize = 46.sp
+                )
+            }
+        }
+        Divider(
+            color = LocalContentColor.current,
+            modifier = Modifier.padding(top = 24.dp)
+        )
+    }
 }
 
 @Preview
