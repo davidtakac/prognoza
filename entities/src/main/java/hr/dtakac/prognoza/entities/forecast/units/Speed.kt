@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.entities.forecast.units
 import java.lang.IllegalStateException
 
 class Speed(
-    private val value: Double,
-    private val unit: SpeedUnit
+    value: Double,
+    unit: SpeedUnit
 ) {
     init {
         if (value < 0) {

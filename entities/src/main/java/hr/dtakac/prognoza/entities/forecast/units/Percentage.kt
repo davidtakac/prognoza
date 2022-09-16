@@ -3,20 +3,22 @@ package hr.dtakac.prognoza.entities.forecast.units
 import java.lang.IllegalStateException
 
 class Percentage(
-    private val value: Double,
-    private val unit: PercentageUnit
+    value: Double,
+    unit: PercentageUnit
 ) {
     init {
-        val percent = resolvePercent()
+        val percent = resolvePercent(value, unit)
         if (percent !in 0.0..100.0) {
             throw IllegalStateException("Value in percent must be in [0, 100], was $percent.")
         }
     }
 
-    val percent: Double = resolvePercent()
-    val fraction: Double = if (unit == PercentageUnit.FRACTION) value else percent / 100
+    val percent: Double = resolvePercent(value, unit)
 
-    private fun resolvePercent(): Double = if (unit == PercentageUnit.PERCENT) value else value * 100
+    private fun resolvePercent(
+        value: Double,
+        unit: PercentageUnit
+    ): Double = if (unit == PercentageUnit.PERCENT) value else value * 100
 }
 
 enum class PercentageUnit {

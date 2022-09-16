@@ -13,7 +13,7 @@ data class ForecastDatum(
     val temperature: Temperature,
     val precipitation: Length,
     val wind: Wind,
-    val airPressureAtSeaLevel: Pressure,
+    val airPressure: Pressure,
     val description: ForecastDescription,
     val humidity: Percentage
 ) {

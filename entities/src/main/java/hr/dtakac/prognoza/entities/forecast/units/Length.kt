@@ -4,8 +4,8 @@ import java.lang.IllegalStateException
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit.*
 
 class Length(
-    private val value: Double,
-    private val unit: LengthUnit
+    value: Double,
+    unit: LengthUnit
 ) {
     init {
         if (value < 0) {

@@ -75,7 +75,7 @@ fun mapDbModelToEntity(dbModel: ForecastDbModel): ForecastDatum {
         temperature = dbModel.temperature,
         precipitation = dbModel.precipitation,
         wind = Wind(speed = dbModel.wind, fromDirection = dbModel.windFromDirection),
-        airPressureAtSeaLevel = dbModel.airPressureAtSeaLevel,
+        airPressure = dbModel.airPressureAtSeaLevel,
         description = dbModel.forecastDescription,
         humidity = dbModel.humidity
     )

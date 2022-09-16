@@ -3,8 +3,8 @@ package hr.dtakac.prognoza.entities.forecast.units
 import java.lang.IllegalStateException
 
 class Pressure(
-    private val value: Double,
-    private val unit: PressureUnit
+    value: Double,
+    unit: PressureUnit
 ) {
     init {
         if (value < 0) {
