@@ -6,7 +6,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
 val LocalPrognozaColors = staticCompositionLocalOf {
     PrognozaColors(
@@ -26,7 +26,7 @@ val LocalPrognozaTypography = staticCompositionLocalOf {
 
 @Composable
 fun PrognozaTheme(
-    description: ShortForecastDescription,
+    description: ForecastDescription.Short,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {

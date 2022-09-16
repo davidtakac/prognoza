@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.ui.theme
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
 private val oldGold = Color(0xFFDCBA31)
 private val stPatricksBlue = Color(0xFF123285)
@@ -18,7 +18,7 @@ data class PrognozaColors(
 ) {
     companion object {
         fun get(
-            description: ShortForecastDescription,
+            description: ForecastDescription.Short,
             useDarkTheme: Boolean
         ): PrognozaColors =
             if (useDarkTheme) {
@@ -27,11 +27,11 @@ data class PrognozaColors(
                     onBackground = Color.White
                 )
             } else when (description) {
-                ShortForecastDescription.CLEAR -> PrognozaColors(oldGold, Color.Black)
-                ShortForecastDescription.RAIN -> PrognozaColors(stPatricksBlue, Color.White)
-                ShortForecastDescription.SNOW -> PrognozaColors(gray50, Color.Black)
-                ShortForecastDescription.SLEET -> PrognozaColors(cyan900, Color.White)
-                ShortForecastDescription.CLOUDY -> PrognozaColors(blueGray200, Color.Black)
+                ForecastDescription.Short.CLEAR -> PrognozaColors(oldGold, Color.Black)
+                ForecastDescription.Short.RAIN -> PrognozaColors(stPatricksBlue, Color.White)
+                ForecastDescription.Short.SNOW -> PrognozaColors(gray50, Color.Black)
+                ForecastDescription.Short.SLEET -> PrognozaColors(cyan900, Color.White)
+                ForecastDescription.Short.CLOUDY -> PrognozaColors(blueGray200, Color.Black)
             }
     }
 }

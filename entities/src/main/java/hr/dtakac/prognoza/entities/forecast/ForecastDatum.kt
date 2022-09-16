@@ -18,7 +18,6 @@ data class ForecastDatum(
     val humidity: Percentage
 ) {
     val feelsLike: Temperature = calculateFeelsLikeTemperature()
-    val shortDescription: ShortForecastDescription = calculateShortForecastDescription()
 
     private fun calculateFeelsLikeTemperature(): Temperature {
         val tempFahrenheit = temperature.fahrenheit
@@ -77,96 +76,5 @@ data class ForecastDatum(
                 rothfuszHeatIndex
             }
         }
-    }
-
-    private fun calculateShortForecastDescription(): ShortForecastDescription = when (description) {
-        ForecastDescription.CLEAR_SKY_DAY,
-        ForecastDescription.CLEAR_SKY_NIGHT,
-        ForecastDescription.CLEAR_SKY_POLAR_TWILIGHT,
-        ForecastDescription.FAIR_DAY,
-        ForecastDescription.FAIR_NIGHT,
-        ForecastDescription.FAIR_POLAR_TWILIGHT,
-        ForecastDescription.FOG,
-        ForecastDescription.UNKNOWN -> ShortForecastDescription.CLEAR
-
-        ForecastDescription.CLOUDY,
-        ForecastDescription.PARTLY_CLOUDY_DAY,
-        ForecastDescription.PARTLY_CLOUDY_NIGHT,
-        ForecastDescription.PARTLY_CLOUDY_POLAR_TWILIGHT -> ShortForecastDescription.CLOUDY
-
-        ForecastDescription.HEAVY_RAIN_AND_THUNDER,
-        ForecastDescription.HEAVY_RAIN,
-        ForecastDescription.HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.HEAVY_RAIN_SHOWERS_DAY,
-        ForecastDescription.HEAVY_RAIN_SHOWERS_NIGHT,
-        ForecastDescription.HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT,
-        ForecastDescription.LIGHT_RAIN_AND_THUNDER,
-        ForecastDescription.LIGHT_RAIN,
-        ForecastDescription.LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.LIGHT_RAIN_SHOWERS_DAY,
-        ForecastDescription.LIGHT_RAIN_SHOWERS_NIGHT,
-        ForecastDescription.LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT,
-        ForecastDescription.RAIN_AND_THUNDER,
-        ForecastDescription.RAIN,
-        ForecastDescription.RAIN_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.RAIN_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.RAIN_SHOWERS_DAY,
-        ForecastDescription.RAIN_SHOWERS_NIGHT,
-        ForecastDescription.RAIN_SHOWERS_POLAR_TWILIGHT -> ShortForecastDescription.RAIN
-
-        ForecastDescription.HEAVY_SLEET_AND_THUNDER,
-        ForecastDescription.HEAVY_SLEET,
-        ForecastDescription.HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.HEAVY_SLEET_SHOWERS_DAY,
-        ForecastDescription.HEAVY_SLEET_SHOWERS_NIGHT,
-        ForecastDescription.HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT,
-        ForecastDescription.LIGHT_SLEET_AND_THUNDER,
-        ForecastDescription.LIGHT_SLEET,
-        ForecastDescription.LIGHT_SLEET_SHOWERS_DAY,
-        ForecastDescription.LIGHT_SLEET_SHOWERS_NIGHT,
-        ForecastDescription.LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT,
-        ForecastDescription.SLEET_AND_THUNDER,
-        ForecastDescription.SLEET,
-        ForecastDescription.SLEET_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.SLEET_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.SLEET_SHOWERS_DAY,
-        ForecastDescription.SLEET_SHOWERS_NIGHT,
-        ForecastDescription.SLEET_SHOWERS_POLAR_TWILIGHT -> ShortForecastDescription.SLEET
-
-        ForecastDescription.HEAVY_SNOW_AND_THUNDER,
-        ForecastDescription.HEAVY_SNOW,
-        ForecastDescription.HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.HEAVY_SNOW_SHOWERS_DAY,
-        ForecastDescription.HEAVY_SNOW_SHOWERS_NIGHT,
-        ForecastDescription.HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT,
-        ForecastDescription.LIGHT_SNOW_AND_THUNDER,
-        ForecastDescription.LIGHT_SNOW,
-        ForecastDescription.LIGHT_SNOW_SHOWERS_DAY,
-        ForecastDescription.LIGHT_SNOW_SHOWERS_NIGHT,
-        ForecastDescription.LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT,
-        ForecastDescription.SNOW_AND_THUNDER,
-        ForecastDescription.SNOW,
-        ForecastDescription.SNOW_SHOWERS_AND_THUNDER_DAY,
-        ForecastDescription.SNOW_SHOWERS_AND_THUNDER_NIGHT,
-        ForecastDescription.SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT,
-        ForecastDescription.SNOW_SHOWERS_DAY,
-        ForecastDescription.SNOW_SHOWERS_NIGHT,
-        ForecastDescription.SNOW_SHOWERS_POLAR_TWILIGHT -> ShortForecastDescription.SNOW
     }
 }

@@ -4,7 +4,7 @@ import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
 import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecast
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.SmallForecastDatum
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.HourlyDatum
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource
@@ -19,13 +19,13 @@ fun mapToTodayContent(
     precipitationUnit: LengthUnit
 ): TodayContent = TodayContent(
     placeName = TextResource.fromText(placeName),
-    time = getLongTime(todayForecast.now),
-    temperature = getTemperature(todayForecast.temperatureNow, temperatureUnit),
+    time = getLongTime(todayForecast.time),
+    temperature = getTemperature(todayForecast.temperature, temperatureUnit),
     feelsLike = TextResource.fromStringId(
         R.string.template_feels_like,
-        getTemperature(todayForecast.feelsLikeNow, temperatureUnit)
+        getTemperature(todayForecast.feelsLike, temperatureUnit)
     ),
-    description = TextResource.fromStringId(todayForecast.descriptionNow.toStringId()),
+    description = TextResource.fromStringId(todayForecast.description.toStringId()),
     lowHighTemperature = getLowHighTemperature(
         todayForecast.lowTemperature,
         todayForecast.highTemperature,
@@ -33,14 +33,14 @@ fun mapToTodayContent(
     ),
     wind = TextResource.fromStringId(
         id = R.string.template_wind,
-        getWind(todayForecast.windNow, windUnit)
+        getWind(todayForecast.wind, windUnit)
     ),
     precipitation = TextResource.fromStringId(
         id = R.string.template_precipitation,
-        getPrecipitation(todayForecast.precipitationNow, precipitationUnit)
+        getPrecipitation(todayForecast.precipitation, precipitationUnit)
     ),
-    shortForecastDescription = todayForecast.shortDescriptionNow,
-    hours = todayForecast.restOfDayData.map { datum ->
+    shortDescription = todayForecast.description.short,
+    hours = todayForecast.hourly.map { datum ->
         getHour(
             datum,
             temperatureUnit,
@@ -135,7 +135,7 @@ private fun getPrecipitation(
 )
 
 private fun getHour(
-    datum: SmallForecastDatum,
+    datum: HourlyDatum,
     temperatureUnit: TemperatureUnit,
     precipitationUnit: LengthUnit
 ): TodayHour = TodayHour(

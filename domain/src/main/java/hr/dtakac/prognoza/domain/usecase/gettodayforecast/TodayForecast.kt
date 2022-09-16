@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.domain.usecase.gettodayforecast
 
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
-import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
@@ -16,16 +15,15 @@ class TodayForecast(data: List<ForecastDatum>) {
         }
     }
 
-    val now: ZonedDateTime = data.first().start
-    val temperatureNow: Temperature = data.first().temperature
-    val feelsLikeNow: Temperature = data.first().feelsLike
-    val windNow: Wind = data.first().wind
-    val descriptionNow: ForecastDescription = data.first().description
-    val precipitationNow: Length = data.first().precipitation
-    val shortDescriptionNow: ShortForecastDescription = data.first().shortDescription
+    val time: ZonedDateTime = data.first().start
+    val temperature: Temperature = data.first().temperature
+    val feelsLike: Temperature = data.first().feelsLike
+    val wind: Wind = data.first().wind
+    val description: ForecastDescription = data.first().description
+    val precipitation: Length = data.first().precipitation
 
-    val restOfDayData: List<SmallForecastDatum> = data.drop(1).map { datum ->
-        SmallForecastDatum(
+    val hourly: List<HourlyDatum> = data.drop(1).map { datum ->
+        HourlyDatum(
             time = datum.start,
             description = datum.description,
             temperature = datum.temperature,
@@ -33,11 +31,11 @@ class TodayForecast(data: List<ForecastDatum>) {
             wind = datum.wind
         )
     }
-    val highTemperature: Temperature = restOfDayData.maxOf { it.temperature }
-    val lowTemperature: Temperature = restOfDayData.minOf { it.temperature }
+    val highTemperature: Temperature = hourly.maxOf { it.temperature }
+    val lowTemperature: Temperature = hourly.minOf { it.temperature }
 }
 
-data class SmallForecastDatum(
+data class HourlyDatum(
     val time: ZonedDateTime,
     val description: ForecastDescription,
     val temperature: Temperature,

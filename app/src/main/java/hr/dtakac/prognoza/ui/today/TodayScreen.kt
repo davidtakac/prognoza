@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.entities.forecast.ShortForecastDescription
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
@@ -28,7 +28,7 @@ import kotlin.math.max
 @Composable
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
-        PrognozaTheme(state.content.shortForecastDescription) {
+        PrognozaTheme(state.content.shortDescription) {
             Content(state.content)
         }
     }
@@ -265,7 +265,7 @@ private fun Toolbar(
 @Composable
 private fun TodayScreenClearPreview() {
     val state = TodayUiState().copy(
-        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.CLEAR),
+        content = fakeContent().copy(shortDescription = ForecastDescription.Short.CLEAR),
         isLoading = true,
         error = TextResource.fromText("Error test")
     )
@@ -276,7 +276,7 @@ private fun TodayScreenClearPreview() {
 @Composable
 private fun TodayScreenRainPreview() {
     val state = TodayUiState().copy(
-        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.RAIN),
+        content = fakeContent().copy(shortDescription = ForecastDescription.Short.RAIN),
         isLoading = true,
         error = TextResource.fromText("Error test")
     )
@@ -287,7 +287,7 @@ private fun TodayScreenRainPreview() {
 @Composable
 private fun TodayScreenSnowPreview() {
     val state = TodayUiState().copy(
-        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.SNOW),
+        content = fakeContent().copy(shortDescription = ForecastDescription.Short.SNOW),
         isLoading = true,
         error = TextResource.fromText("Error test")
     )
@@ -298,7 +298,7 @@ private fun TodayScreenSnowPreview() {
 @Composable
 private fun TodayScreenSleetPreview() {
     val state = TodayUiState().copy(
-        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.SLEET),
+        content = fakeContent().copy(shortDescription = ForecastDescription.Short.SLEET),
         isLoading = true,
         error = TextResource.fromText("Error test")
     )
@@ -309,7 +309,7 @@ private fun TodayScreenSleetPreview() {
 @Composable
 private fun TodayScreenCloudyPreview() {
     val state = TodayUiState().copy(
-        content = fakeContent().copy(shortForecastDescription = ShortForecastDescription.CLOUDY),
+        content = fakeContent().copy(shortDescription = ForecastDescription.Short.CLOUDY),
         isLoading = true,
         error = TextResource.fromText("Error test")
     )
@@ -331,7 +331,7 @@ private fun fakeContent(): TodayContent = TodayContent(
     lowHighTemperature = TextResource.fromText("15°—7°"),
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
-    shortForecastDescription = ShortForecastDescription.CLEAR,
+    shortDescription = ForecastDescription.Short.CLEAR,
     hours = mutableListOf<TodayHour>().apply {
         for (i in 1..100) {
             add(TodayHour(
