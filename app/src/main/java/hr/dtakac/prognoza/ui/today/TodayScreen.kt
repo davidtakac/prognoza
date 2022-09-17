@@ -53,9 +53,24 @@ private fun Content(content: TodayContent) {
                 .padding(horizontal = 24.dp)
         ) {
             val listState = rememberLazyListState()
-            val toolbarPlaceNameVisible = remember { derivedStateOf { isPlaceVisible(listState) } }
-            val toolbarTimeVisible = remember { derivedStateOf { isTimeVisible(listState) } }
-            val toolbarTemperatureVisible = remember { derivedStateOf { isTemperatureVisible(listState) } }
+            val toolbarPlaceNameVisible = remember {
+                derivedStateOf {
+                    !listState.layoutInfo.isKeyVisible(key = "place")
+                }
+            }
+            val toolbarTimeVisible = remember {
+                derivedStateOf {
+                    !listState.layoutInfo.isKeyVisible(key = "time")
+                }
+            }
+            val toolbarTemperatureVisible = remember {
+                derivedStateOf {
+                    !listState.layoutInfo.isKeyVisible(
+                        key = "temperature",
+                        visiblePercent = 50f
+                    )
+                }
+            }
 
             Toolbar(
                 placeName = content.placeName.asString(),
@@ -110,9 +125,11 @@ private fun Content(content: TodayContent) {
                             textAlign = TextAlign.End
                         )
                     }
-                    Row(modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 42.dp)) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 42.dp)
+                    ) {
                         Text(
                             modifier = Modifier.weight(1f),
                             text = content.wind.asString(),
@@ -130,7 +147,10 @@ private fun Content(content: TodayContent) {
                         style = PrognozaTheme.typography.bodySmall,
                         modifier = Modifier.padding(top = 42.dp)
                     )
-                    Divider(color = LocalContentColor.current, modifier = Modifier.padding(vertical = 16.dp))
+                    Divider(
+                        color = LocalContentColor.current,
+                        modifier = Modifier.padding(vertical = 16.dp)
+                    )
                 }
                 items(content.hourly) { hour ->
                     Row(modifier = Modifier.fillMaxWidth()) {
@@ -340,21 +360,10 @@ private fun fakeContent(): TodayContent = TodayContent(
 )
 
 
-
 // https://stackoverflow.com/a/69267808
-private fun LazyListLayoutInfo.visibleItems(atLeastVisiblePercent: Float) =
+private fun LazyListLayoutInfo.isKeyVisible(key: String, visiblePercent: Float = 0f): Boolean =
     visibleItemsInfo.filter {
         val cutTop = max(0, viewportStartOffset - it.offset)
         val cutBottom = max(0, it.offset + it.size - viewportEndOffset)
-
-        max(0f, 100f - (cutTop + cutBottom) * 100f / it.size) >= atLeastVisiblePercent
-    }
-
-private fun isPlaceVisible(lazyListState: LazyListState): Boolean =
-    lazyListState.layoutInfo.visibleItems(0f).none { it.key == "place" }
-
-private fun isTimeVisible(lazyListState: LazyListState): Boolean =
-    lazyListState.layoutInfo.visibleItems(0f).none { it.key == "time" }
-
-private fun isTemperatureVisible(lazyListState: LazyListState): Boolean =
-    lazyListState.layoutInfo.visibleItems(50f).none { it.key == "temperature" }
+        max(0f, 100f - (cutTop + cutBottom) * 100f / it.size) >= visiblePercent
+    }.any { it.key == key }
