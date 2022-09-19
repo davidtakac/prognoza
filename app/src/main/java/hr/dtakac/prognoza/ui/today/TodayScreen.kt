@@ -30,7 +30,9 @@ import kotlin.math.max
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
         PrognozaTheme(state.content.shortDescription) {
-            val colorAnimationSpec = tween<Color>(durationMillis = 1000)
+            val colorAnimationSpec = remember {
+                tween<Color>(durationMillis = 1000)
+            }
             val contentColor by animateColorAsState(
                 targetValue = PrognozaTheme.colors.onBackground.copy(
                     alpha = 0.87f
