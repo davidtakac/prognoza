@@ -42,7 +42,6 @@ class TodayViewModel @Inject constructor(
                 )
             }
         }
-
         //testColorChanges()
     }
 
