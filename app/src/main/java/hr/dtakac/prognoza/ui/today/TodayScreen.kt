@@ -253,17 +253,17 @@ private fun DescriptionAndLowHighTemperature(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = description,
-            style = PrognozaTheme.typography.titleLarge,
-        )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = lowHighTemperature,
-            style = PrognozaTheme.typography.titleLarge,
-            textAlign = TextAlign.End
-        )
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.titleLarge) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = description
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = lowHighTemperature,
+                textAlign = TextAlign.End
+            )
+        }
     }
 }
 
@@ -274,17 +274,17 @@ private fun WindAndPrecipitation(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        Text(
-            modifier = Modifier.weight(1f),
-            text = wind,
-            style = PrognozaTheme.typography.bodySmall,
-        )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = precipitation,
-            style = PrognozaTheme.typography.bodySmall,
-            textAlign = TextAlign.End
-        )
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.bodySmall) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = wind,
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = precipitation,
+                textAlign = TextAlign.End
+            )
+        }
     }
 }
 
@@ -305,35 +305,33 @@ private fun HourlyItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        Text(
-            modifier = Modifier.width(52.dp),
-            text = hour.time.asString(),
-            style = PrognozaTheme.typography.bodySmall,
-            textAlign = TextAlign.Start,
-            maxLines = 1
-        )
-        Text(
-            modifier = Modifier.weight(1f),
-            text = hour.description.asString(),
-            style = PrognozaTheme.typography.bodySmall,
-            textAlign = TextAlign.Start,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            modifier = Modifier.width(88.dp),
-            text = hour.precipitation.asString(),
-            style = PrognozaTheme.typography.bodySmall,
-            textAlign = TextAlign.End,
-            maxLines = 1
-        )
-        Text(
-            modifier = Modifier.width(52.dp),
-            text = hour.temperature.asString(),
-            style = PrognozaTheme.typography.bodySmall,
-            textAlign = TextAlign.End,
-            maxLines = 1
-        )
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.bodySmall) {
+            Text(
+                modifier = Modifier.width(52.dp),
+                text = hour.time.asString(),
+                textAlign = TextAlign.Start,
+                maxLines = 1
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = hour.description.asString(),
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.width(88.dp),
+                text = hour.precipitation.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1
+            )
+            Text(
+                modifier = Modifier.width(52.dp),
+                text = hour.temperature.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1
+            )
+        }
     }
 }
 

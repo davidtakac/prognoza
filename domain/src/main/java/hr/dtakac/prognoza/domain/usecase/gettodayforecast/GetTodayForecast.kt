@@ -20,11 +20,7 @@ class GetTodayForecast(
     suspend operator fun invoke(): TodayForecastResult {
         val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
         val from = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
-        val to = if (from.hour >= 20) {
-            from.plusDays(1L).truncatedTo(ChronoUnit.HOURS).withHour(6)
-        } else {
-            from.plusDays(1L).withHour(0)
-        }
+        val to = from.plusDays(1L)
         return forecastRepository.getForecast(
             latitude = selectedPlace.latitude,
             longitude = selectedPlace.longitude,
