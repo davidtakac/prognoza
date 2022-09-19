@@ -68,9 +68,9 @@ private fun Content(
                 .padding(horizontal = 24.dp)
         ) {
             val listState = rememberLazyListState()
-            val placeVisible by rememberPlaceVisible(listState)
-            val timeVisible by rememberTimeVisible(listState)
-            val temperatureVisible by rememberTemperatureVisible(listState)
+            val placeVisible = rememberPlaceVisible(listState)
+            val timeVisible = rememberTimeVisible(listState)
+            val temperatureVisible = rememberTemperatureVisible(listState)
 
             Toolbar(
                 modifier = Modifier.background(backgroundColor),
@@ -402,7 +402,7 @@ fun rememberPlaceVisible(listState: LazyListState) = remember {
         if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
         else listState.layoutInfo.isKeyVisible(key = "place")
     }
-}
+}.value
 
 @Composable
 fun rememberTimeVisible(listState: LazyListState) = remember {
@@ -410,7 +410,7 @@ fun rememberTimeVisible(listState: LazyListState) = remember {
         if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
         else listState.layoutInfo.isKeyVisible(key = "time")
     }
-}
+}.value
 
 @Composable
 fun rememberTemperatureVisible(listState: LazyListState) = remember {
@@ -421,7 +421,7 @@ fun rememberTemperatureVisible(listState: LazyListState) = remember {
             visiblePercent = 50f
         )
     }
-}
+}.value
 
 private fun fakeContent(): TodayContent = TodayContent(
     place = TextResource.fromText("Helsinki"),
