@@ -56,19 +56,19 @@ private fun Content(content: TodayContent) {
                 .padding(horizontal = 24.dp)
         ) {
             val listState = rememberLazyListState()
-            val toolbarPlaceNameVisible = remember {
+            val toolbarPlaceNameVisible by remember {
                 derivedStateOf {
                     if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
                     else !listState.layoutInfo.isKeyVisible(key = "place")
                 }
             }
-            val toolbarTimeVisible = remember {
+            val toolbarTimeVisible by remember {
                 derivedStateOf {
                     if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
                     else !listState.layoutInfo.isKeyVisible(key = "time")
                 }
             }
-            val toolbarTemperatureVisible = remember {
+            val toolbarTemperatureVisible by remember {
                 derivedStateOf {
                     if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
                     else !listState.layoutInfo.isKeyVisible(
@@ -132,6 +132,8 @@ private fun Content(content: TodayContent) {
                             textAlign = TextAlign.End
                         )
                     }
+                }
+                item {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -149,6 +151,8 @@ private fun Content(content: TodayContent) {
                             textAlign = TextAlign.End
                         )
                     }
+                }
+                item {
                     Text(
                         text = stringResource(id = R.string.hourly),
                         style = PrognozaTheme.typography.bodySmall,
@@ -160,7 +164,7 @@ private fun Content(content: TodayContent) {
                     )
                 }
                 items(content.hourly) { hour ->
-                    Row(modifier = Modifier.fillMaxWidth()) {
+                    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
                         Text(
                             modifier = Modifier.width(52.dp),
                             text = hour.time.asString(),
@@ -191,7 +195,6 @@ private fun Content(content: TodayContent) {
                             maxLines = 1
                         )
                     }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
@@ -208,11 +211,11 @@ private fun StatusAndNavigationBars(color: Color) {
 @Composable
 private fun Toolbar(
     placeName: String,
-    placeNameVisible: State<Boolean>,
+    placeNameVisible: Boolean,
     time: String,
-    timeVisible: State<Boolean>,
+    timeVisible: Boolean,
     temperature: String,
-    temperatureVisible: State<Boolean>,
+    temperatureVisible: Boolean,
     onMenuClicked: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -247,7 +250,7 @@ private fun Toolbar(
                 verticalArrangement = Arrangement.Center
             ) {
                 AnimatedVisibility(
-                    visible = placeNameVisible.value,
+                    visible = placeNameVisible,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
                     exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
                 ) {
@@ -257,7 +260,7 @@ private fun Toolbar(
                     )
                 }
                 AnimatedVisibility(
-                    visible = timeVisible.value,
+                    visible = timeVisible,
                     enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
                     exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
                 ) {
@@ -268,7 +271,7 @@ private fun Toolbar(
                 }
             }
             AnimatedVisibility(
-                visible = temperatureVisible.value,
+                visible = temperatureVisible,
                 enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
                 exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
             ) {
