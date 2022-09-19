@@ -58,17 +58,20 @@ private fun Content(content: TodayContent) {
             val listState = rememberLazyListState()
             val toolbarPlaceNameVisible = remember {
                 derivedStateOf {
-                    !listState.layoutInfo.isKeyVisible(key = "place")
+                    if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
+                    else !listState.layoutInfo.isKeyVisible(key = "place")
                 }
             }
             val toolbarTimeVisible = remember {
                 derivedStateOf {
-                    !listState.layoutInfo.isKeyVisible(key = "time")
+                    if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
+                    else !listState.layoutInfo.isKeyVisible(key = "time")
                 }
             }
             val toolbarTemperatureVisible = remember {
                 derivedStateOf {
-                    !listState.layoutInfo.isKeyVisible(
+                    if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
+                    else !listState.layoutInfo.isKeyVisible(
                         key = "temperature",
                         visiblePercent = 50f
                     )
