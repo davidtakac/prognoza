@@ -11,7 +11,7 @@ data class TodayUiState(
 )
 
 data class TodayContent(
-    val placeName: TextResource,
+    val place: TextResource,
     val time: TextResource,
     val temperature: TextResource,
     val feelsLike: TextResource,

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,25 +30,36 @@ import kotlin.math.max
 fun TodayScreen(state: TodayUiState) {
     if (state.content != null) {
         PrognozaTheme(state.content.shortDescription) {
-            Content(state.content)
+            val colorAnimationSpec = tween<Color>(durationMillis = 1000)
+            val contentColor by animateColorAsState(
+                targetValue = PrognozaTheme.colors.onBackground.copy(
+                    alpha = 0.87f
+                ),
+                animationSpec = colorAnimationSpec
+            )
+            val backgroundColor by animateColorAsState(
+                targetValue = PrognozaTheme.colors.background,
+                animationSpec = colorAnimationSpec
+            )
+
+            StatusAndNavigationBarColors(backgroundColor)
+            Content(
+                state = state.content,
+                contentColor = contentColor,
+                backgroundColor = backgroundColor,
+                onMenuClicked = { /*todo*/ },
+            )
         }
     }
 }
 
 @Composable
-private fun Content(content: TodayContent) {
-    val contentColor by animateColorAsState(
-        targetValue = PrognozaTheme.colors.onBackground.copy(
-            alpha = 0.87f
-        ),
-        animationSpec = tween(durationMillis = 1000)
-    )
-    val backgroundColor by animateColorAsState(
-        targetValue = PrognozaTheme.colors.background,
-        animationSpec = tween(durationMillis = 1000)
-    )
-
-    StatusAndNavigationBars(backgroundColor)
+private fun Content(
+    state: TodayContent,
+    contentColor: Color = LocalContentColor.current,
+    backgroundColor: Color = Color.Unspecified,
+    onMenuClicked: () -> Unit = {}
+) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         Column(
             modifier = Modifier
@@ -56,36 +68,19 @@ private fun Content(content: TodayContent) {
                 .padding(horizontal = 24.dp)
         ) {
             val listState = rememberLazyListState()
-            val toolbarPlaceNameVisible by remember {
-                derivedStateOf {
-                    if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
-                    else !listState.layoutInfo.isKeyVisible(key = "place")
-                }
-            }
-            val toolbarTimeVisible by remember {
-                derivedStateOf {
-                    if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
-                    else !listState.layoutInfo.isKeyVisible(key = "time")
-                }
-            }
-            val toolbarTemperatureVisible by remember {
-                derivedStateOf {
-                    if (listState.layoutInfo.visibleItemsInfo.isEmpty()) false
-                    else !listState.layoutInfo.isKeyVisible(
-                        key = "temperature",
-                        visiblePercent = 50f
-                    )
-                }
-            }
+            val placeVisible by rememberPlaceVisible(listState)
+            val timeVisible by rememberTimeVisible(listState)
+            val temperatureVisible by rememberTemperatureVisible(listState)
 
             Toolbar(
                 modifier = Modifier.background(backgroundColor),
-                placeName = content.placeName.asString(),
-                placeNameVisible = toolbarPlaceNameVisible,
-                time = content.time.asString(),
-                timeVisible = toolbarTimeVisible,
-                temperature = content.temperature.asString(),
-                temperatureVisible = toolbarTemperatureVisible
+                place = state.place.asString(),
+                placeVisible = placeVisible?.let { !it } ?: false,
+                time = state.time.asString(),
+                timeVisible = timeVisible?.let { !it } ?: false,
+                temperature = state.temperature.asString(),
+                temperatureVisible = temperatureVisible?.let { !it } ?: false,
+                onMenuClicked = onMenuClicked
             )
 
             LazyColumn(
@@ -97,7 +92,7 @@ private fun Content(content: TodayContent) {
                 }
                 item(key = "place") {
                     Text(
-                        text = content.placeName.asString(),
+                        text = state.place.asString(),
                         style = PrognozaTheme.typography.titleLarge,
                     )
                 }
@@ -106,95 +101,48 @@ private fun Content(content: TodayContent) {
                 }
                 item(key = "time") {
                     Text(
-                        text = content.time.asString(),
+                        text = state.time.asString(),
                         style = PrognozaTheme.typography.subtitleLarge
                     )
                 }
                 item(key = "temperature") {
                     AutoSizeText(
-                        text = content.temperature.asString(),
+                        text = state.temperature.asString(),
                         style = PrognozaTheme.typography.headlineLarge,
                         maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
                         maxLines = 1
                     )
                 }
                 item {
-                    Row(modifier = Modifier.fillMaxWidth()) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = content.description.asString(),
-                            style = PrognozaTheme.typography.titleLarge,
-                        )
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = content.lowHighTemperature.asString(),
-                            style = PrognozaTheme.typography.titleLarge,
-                            textAlign = TextAlign.End
-                        )
-                    }
+                    DescriptionAndLowHighTemperature(
+                        description = state.description.asString(),
+                        lowHighTemperature = state.lowHighTemperature.asString(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
                 item {
-                    Row(
+                    WindAndPrecipitation(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 42.dp)
-                    ) {
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = content.wind.asString(),
-                            style = PrognozaTheme.typography.bodySmall,
-                        )
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = content.precipitation.asString(),
-                            style = PrognozaTheme.typography.bodySmall,
-                            textAlign = TextAlign.End
-                        )
-                    }
+                            .padding(top = 42.dp),
+                        wind = state.wind.asString(),
+                        precipitation = state.precipitation.asString()
+                    )
                 }
                 item {
-                    Text(
-                        text = stringResource(id = R.string.hourly),
-                        style = PrognozaTheme.typography.bodySmall,
-                        modifier = Modifier.padding(top = 42.dp)
-                    )
-                    Divider(
-                        color = LocalContentColor.current,
-                        modifier = Modifier.padding(vertical = 16.dp)
+                    HourlyHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 42.dp, bottom = 16.dp)
                     )
                 }
-                items(content.hourly) { hour ->
-                    Row(modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)) {
-                        Text(
-                            modifier = Modifier.width(52.dp),
-                            text = hour.time.asString(),
-                            style = PrognozaTheme.typography.bodySmall,
-                            textAlign = TextAlign.Start,
-                            maxLines = 1
-                        )
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = hour.description.asString(),
-                            style = PrognozaTheme.typography.bodySmall,
-                            textAlign = TextAlign.Start,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        Text(
-                            modifier = Modifier.width(88.dp),
-                            text = hour.precipitation.asString(),
-                            style = PrognozaTheme.typography.bodySmall,
-                            textAlign = TextAlign.End,
-                            maxLines = 1
-                        )
-                        Text(
-                            modifier = Modifier.width(52.dp),
-                            text = hour.temperature.asString(),
-                            style = PrognozaTheme.typography.bodySmall,
-                            textAlign = TextAlign.End,
-                            maxLines = 1
-                        )
-                    }
+                items(state.hourly) { hour ->
+                    HourlyItem(
+                        hour = hour,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    )
                 }
             }
         }
@@ -202,7 +150,7 @@ private fun Content(content: TodayContent) {
 }
 
 @Composable
-private fun StatusAndNavigationBars(color: Color) {
+private fun StatusAndNavigationBarColors(color: Color) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setSystemBarsColor(color)
     systemUiController.setNavigationBarColor(color)
@@ -210,8 +158,8 @@ private fun StatusAndNavigationBars(color: Color) {
 
 @Composable
 private fun Toolbar(
-    placeName: String,
-    placeNameVisible: Boolean,
+    place: String,
+    placeVisible: Boolean,
     time: String,
     timeVisible: Boolean,
     temperature: String,
@@ -226,22 +174,10 @@ private fun Toolbar(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
+            HamburgerButton(
                 onClick = onMenuClicked,
                 modifier = Modifier.size(42.dp)
-            ) {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.SpaceAround
-                ) {
-                    repeat(3) {
-                        Divider(
-                            color = LocalContentColor.current,
-                            modifier = Modifier.fillMaxWidth()
-                        )
-                    }
-                }
-            }
+            )
             Column(
                 modifier = Modifier
                     .padding(start = 24.dp)
@@ -249,39 +185,155 @@ private fun Toolbar(
                     .fillMaxHeight(),
                 verticalArrangement = Arrangement.Center
             ) {
-                AnimatedVisibility(
-                    visible = placeNameVisible,
-                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                    exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-                ) {
-                    Text(
-                        text = placeName,
-                        style = PrognozaTheme.typography.titleSmall
-                    )
-                }
-                AnimatedVisibility(
+                SlideUpAppearText(
+                    text = place,
+                    visible = placeVisible,
+                    style = PrognozaTheme.typography.titleSmall
+                )
+                SlideUpAppearText(
+                    text = time,
                     visible = timeVisible,
-                    enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                    exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-                ) {
-                    Text(
-                        text = time,
-                        style = PrognozaTheme.typography.subtitleSmall
-                    )
-                }
+                    style = PrognozaTheme.typography.subtitleSmall
+                )
             }
-            AnimatedVisibility(
+            SlideUpAppearText(
+                text = temperature,
                 visible = temperatureVisible,
-                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-            ) {
-                Text(
-                    text = temperature,
-                    style = PrognozaTheme.typography.headlineSmall
+                style = PrognozaTheme.typography.headlineSmall
+            )
+        }
+        Divider(color = LocalContentColor.current)
+    }
+}
+
+@Composable
+private fun HamburgerButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceAround
+        ) {
+            repeat(3) {
+                Divider(
+                    color = LocalContentColor.current,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
-        Divider(color = LocalContentColor.current)
+    }
+}
+
+@Composable
+fun SlideUpAppearText(
+    text: String,
+    visible: Boolean,
+    style: TextStyle = LocalTextStyle.current
+) {
+    val enter = fadeIn() + expandVertically(expandFrom = Alignment.Top)
+    val exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+    AnimatedVisibility(
+        visible = visible,
+        enter = enter,
+        exit = exit
+    ) {
+        Text(text = text, style = style)
+    }
+}
+
+@Composable
+private fun DescriptionAndLowHighTemperature(
+    description: String,
+    lowHighTemperature: String,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = description,
+            style = PrognozaTheme.typography.titleLarge,
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = lowHighTemperature,
+            style = PrognozaTheme.typography.titleLarge,
+            textAlign = TextAlign.End
+        )
+    }
+}
+
+@Composable
+private fun WindAndPrecipitation(
+    wind: String,
+    precipitation: String,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        Text(
+            modifier = Modifier.weight(1f),
+            text = wind,
+            style = PrognozaTheme.typography.bodySmall,
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = precipitation,
+            style = PrognozaTheme.typography.bodySmall,
+            textAlign = TextAlign.End
+        )
+    }
+}
+
+@Composable
+private fun HourlyHeader(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(id = R.string.hourly),
+            style = PrognozaTheme.typography.bodySmall,
+        )
+        Divider(color = LocalContentColor.current, modifier = Modifier.padding(top = 16.dp))
+    }
+}
+
+@Composable
+private fun HourlyItem(
+    hour: TodayHour,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        Text(
+            modifier = Modifier.width(52.dp),
+            text = hour.time.asString(),
+            style = PrognozaTheme.typography.bodySmall,
+            textAlign = TextAlign.Start,
+            maxLines = 1
+        )
+        Text(
+            modifier = Modifier.weight(1f),
+            text = hour.description.asString(),
+            style = PrognozaTheme.typography.bodySmall,
+            textAlign = TextAlign.Start,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            modifier = Modifier.width(88.dp),
+            text = hour.precipitation.asString(),
+            style = PrognozaTheme.typography.bodySmall,
+            textAlign = TextAlign.End,
+            maxLines = 1
+        )
+        Text(
+            modifier = Modifier.width(52.dp),
+            text = hour.temperature.asString(),
+            style = PrognozaTheme.typography.bodySmall,
+            textAlign = TextAlign.End,
+            maxLines = 1
+        )
     }
 }
 
@@ -346,8 +398,35 @@ private fun TodayScreenLoadingPreview() {
     TodayScreen(TodayUiState().copy(isLoading = true))
 }
 
+@Composable
+fun rememberPlaceVisible(listState: LazyListState) = remember {
+    derivedStateOf {
+        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
+        else listState.layoutInfo.isKeyVisible(key = "place")
+    }
+}
+
+@Composable
+fun rememberTimeVisible(listState: LazyListState) = remember {
+    derivedStateOf {
+        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
+        else listState.layoutInfo.isKeyVisible(key = "time")
+    }
+}
+
+@Composable
+fun rememberTemperatureVisible(listState: LazyListState) = remember {
+    derivedStateOf {
+        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
+        else listState.layoutInfo.isKeyVisible(
+            key = "temperature",
+            visiblePercent = 50f
+        )
+    }
+}
+
 private fun fakeContent(): TodayContent = TodayContent(
-    placeName = TextResource.fromText("Helsinki"),
+    place = TextResource.fromText("Helsinki"),
     time = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
