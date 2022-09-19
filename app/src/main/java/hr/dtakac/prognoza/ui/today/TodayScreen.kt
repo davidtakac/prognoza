@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.ui.today
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -38,10 +39,12 @@ private fun Content(content: TodayContent) {
     val contentColor by animateColorAsState(
         targetValue = PrognozaTheme.colors.onBackground.copy(
             alpha = 0.87f
-        )
+        ),
+        animationSpec = tween(durationMillis = 1000)
     )
     val backgroundColor by animateColorAsState(
-        targetValue = PrognozaTheme.colors.background
+        targetValue = PrognozaTheme.colors.background,
+        animationSpec = tween(durationMillis = 1000)
     )
 
     StatusAndNavigationBars(backgroundColor)
@@ -73,6 +76,7 @@ private fun Content(content: TodayContent) {
             }
 
             Toolbar(
+                modifier = Modifier.background(backgroundColor),
                 placeName = content.placeName.asString(),
                 placeNameVisible = toolbarPlaceNameVisible,
                 time = content.time.asString(),
@@ -206,9 +210,10 @@ private fun Toolbar(
     timeVisible: State<Boolean>,
     temperature: String,
     temperatureVisible: State<Boolean>,
-    onMenuClicked: () -> Unit = {}
+    onMenuClicked: () -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = Modifier.background(PrognozaTheme.colors.background)) {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .height(90.dp)
