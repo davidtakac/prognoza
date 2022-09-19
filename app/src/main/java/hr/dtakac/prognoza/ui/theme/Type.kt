@@ -67,9 +67,9 @@ data class PrognozaTypography(
             ),
             bodySmall = TextStyle(
                 fontFamily = Manrope,
-                fontWeight = FontWeight.Normal,
+                fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
-                letterSpacing = 0.25.sp
+                letterSpacing = 0.sp
             )
         )
     }

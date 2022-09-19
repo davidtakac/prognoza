@@ -315,7 +315,7 @@ private fun HourlyItem(
                 maxLines = 1
             )
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).padding(start = 4.dp),
                 text = hour.description.asString(),
                 textAlign = TextAlign.Start,
                 maxLines = 1,
