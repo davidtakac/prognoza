@@ -141,6 +141,8 @@ private fun getHour(
 ): TodayHour = TodayHour(
     time = getShortTime(datum.time),
     temperature = getTemperature(datum.temperature, temperatureUnit),
-    precipitation = getPrecipitation(datum.precipitation, precipitationUnit),
+    precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {
+        getPrecipitation(it, precipitationUnit)
+    } ?: TextResource.fromText(""),
     description = TextResource.fromStringId(datum.description.toStringId())
 )
