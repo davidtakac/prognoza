@@ -64,6 +64,10 @@ fun ForecastScreen(
         val scope = rememberCoroutineScope()
         val navController = rememberNavController()
 
+        var toolbarPlaceVisible by remember { mutableStateOf(false) }
+        var toolbarDateTimeVisible by remember { mutableStateOf(false) }
+        var toolbarTemperatureVisible by remember { mutableStateOf(false) }
+
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -71,16 +75,23 @@ fun ForecastScreen(
                     backgroundColor = backgroundColor,
                     contentColor = contentColor,
                     onTodayClick = {
-                        navController.navigate("today") {
-                            popUpTo("today") { inclusive = true }
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate("today") {
+                                popUpTo("today") { inclusive = true }
+                            }
                         }
-                        scope.launch { drawerState.close() }
                     },
                     onComingClick = {
-                        navController.navigate("coming") {
-                            popUpTo("coming") { inclusive = true }
+                        scope.launch {
+                            drawerState.close()
+                            navController.navigate("coming") {
+                                popUpTo("coming") { inclusive = true }
+                            }
+                            toolbarPlaceVisible = true
+                            toolbarDateTimeVisible = true
+                            toolbarTemperatureVisible = true
                         }
-                        scope.launch { drawerState.close() }
                     },
                     onPlacePickerClick = {
                         // todo
@@ -97,10 +108,6 @@ fun ForecastScreen(
                         .background(backgroundColor)
                         .padding(horizontal = 24.dp)
                 ) {
-                    var toolbarPlaceVisible by remember { mutableStateOf(false) }
-                    var toolbarDateTimeVisible by remember { mutableStateOf(false) }
-                    var toolbarTemperatureVisible by remember { mutableStateOf(false) }
-
                     CompositionLocalProvider(LocalContentColor provides contentColor) {
                         ForecastToolbar(
                             place = today.place.asString(),

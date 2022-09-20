@@ -17,6 +17,7 @@ import hr.dtakac.prognoza.presentation.TodayContent
 import hr.dtakac.prognoza.presentation.TodayHour
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlin.math.max
 
 @Composable
@@ -29,7 +30,6 @@ fun TodayScreen(
 ) {
     Column(modifier = modifier) {
         val listState = rememberLazyListState()
-
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             state = listState
@@ -96,10 +96,18 @@ fun TodayScreen(
         LaunchedEffect(listState) {
             snapshotFlow { listState.layoutInfo }
                 .distinctUntilChanged()
-                .collect { layoutInfo ->
-                    onPlaceVisibilityChange(layoutInfo.keyVisibilityPercent("place"))
-                    onDateTimeVisibilityChange(layoutInfo.keyVisibilityPercent("time"))
-                    onTemperatureVisibilityChange(layoutInfo.keyVisibilityPercent("temperature"))
+                .map { layoutInfo ->
+                    Triple(
+                        layoutInfo.keyVisibilityPercent("place"),
+                        layoutInfo.keyVisibilityPercent("time"),
+                        layoutInfo.keyVisibilityPercent("temperature")
+                    )
+                }
+                .distinctUntilChanged()
+                .collect { (placeVis, dateTimeVis, temperatureVis) ->
+                    onPlaceVisibilityChange(placeVis)
+                    onDateTimeVisibilityChange(dateTimeVis)
+                    onTemperatureVisibilityChange(temperatureVis)
                 }
         }
     }
