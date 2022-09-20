@@ -46,17 +46,20 @@
         <entry key="app/src/main/res/drawable/arrow_upward-48px.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_air.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_arrow_up.xml" value="0.242" />
+        <entry key="app/src/main/res/drawable/ic_calendar.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_cloud.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_error.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_history.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14375" />
+        <entry key="app/src/main/res/drawable/ic_location_pin.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.2195" />
         <entry key="app/src/main/res/drawable/ic_north.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_outline_settings.xml" value="0.23" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_speed.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_thermostat.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_today.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_water_drop.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/app_widget_current_conditions_medium_empty.xml" value="0.41299429355300554" />

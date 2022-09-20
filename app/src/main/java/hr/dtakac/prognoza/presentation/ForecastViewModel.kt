@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation.today
+package hr.dtakac.prognoza.presentation
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecastResult
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecast
+import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecastResult
+import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -35,6 +35,7 @@ class ForecastViewModel @Inject constructor(
                         result.windUnit,
                         result.precipitationUnit
                     ),
+                    comingContent = ComingContent(listOf()),
                     isLoading = false
                 )
                 is GetForecastResult.Error -> _state.value.copy(

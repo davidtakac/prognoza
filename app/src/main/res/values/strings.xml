@@ -95,5 +95,10 @@
     <string name="now">Now</string>
     <string name="today_loading">Getting today\'s forecast…</string>
     <string name="hourly">Hourly</string>
+    <string name="today">Today</string>
+    <string name="coming">Coming</string>
+    <string name="forecast">Forecast</string>
+    <string name="settings">Settings</string>
+    <string name="change_place">Change place</string>
 
 </resources>

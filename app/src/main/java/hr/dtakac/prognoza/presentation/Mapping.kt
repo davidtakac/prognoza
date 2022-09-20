@@ -1,12 +1,10 @@
-package hr.dtakac.prognoza.presentation.today
+package hr.dtakac.prognoza.presentation
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.*
+import hr.dtakac.prognoza.domain.usecase.getforecast.*
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
-import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.toStringId
 import java.time.ZonedDateTime
 
 fun mapToTodayContent(

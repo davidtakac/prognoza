@@ -44,7 +44,7 @@ data class PrognozaTypography(
             titleLarge = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
-                fontSize = 24.sp,
+                fontSize = 22.sp,
                 letterSpacing = 0.sp,
             ),
             subtitleLarge = TextStyle(
@@ -56,7 +56,7 @@ data class PrognozaTypography(
             titleSmall = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
-                fontSize = 20.sp,
+                fontSize = 18.sp,
                 letterSpacing = 0.25.sp
             ),
             subtitleSmall = TextStyle(

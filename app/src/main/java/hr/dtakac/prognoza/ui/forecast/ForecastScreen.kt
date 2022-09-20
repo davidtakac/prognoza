@@ -8,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,9 +18,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import hr.dtakac.prognoza.presentation.today.ForecastViewModel
+import hr.dtakac.prognoza.presentation.ForecastViewModel
+import hr.dtakac.prognoza.ui.forecast.coming.ComingScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import hr.dtakac.prognoza.ui.today.TodayScreen
+import hr.dtakac.prognoza.ui.forecast.today.TodayScreen
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +41,7 @@ fun ForecastScreen(
 
     val state by remember { viewModel.state }
     val today = state.today ?: return // todo: handle other cases
+    val coming = state.comingContent ?: return
 
     PrognozaTheme(today.shortDescription) {
         val colorAnimationSpec = remember {
@@ -61,22 +62,40 @@ fun ForecastScreen(
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
+        val navController = rememberNavController()
+
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet(
-                    drawerContentColor = contentColor,
-                    drawerShape = RectangleShape,
-                    drawerContainerColor = backgroundColor
-                ) {
-                    Text("shii")
-                }
+                ForecastDrawerContent(
+                    backgroundColor = backgroundColor,
+                    contentColor = contentColor,
+                    onTodayClick = {
+                        navController.navigate("today") {
+                            popUpTo("today") { inclusive = true }
+                        }
+                        scope.launch { drawerState.close() }
+                    },
+                    onComingClick = {
+                        navController.navigate("coming") {
+                            popUpTo("coming") { inclusive = true }
+                        }
+                        scope.launch { drawerState.close() }
+                    },
+                    onPlacePickerClick = {
+                        // todo
+                    },
+                    onSettingsClick = {
+                        // todo
+                    }
+                )
             },
             content = {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(backgroundColor)
+                        .padding(horizontal = 24.dp)
                 ) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateTimeVisible by remember { mutableStateOf(false) }
@@ -90,20 +109,14 @@ fun ForecastScreen(
                             dateTimeVisible = toolbarDateTimeVisible,
                             temperature = today.temperature.asString(),
                             temperatureVisible = toolbarTemperatureVisible,
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .background(backgroundColor),
+                            modifier = Modifier.background(backgroundColor),
                             onMenuClicked = { scope.launch { drawerState.open() } }
                         )
 
-                        val navController = rememberNavController()
                         NavHost(navController = navController, startDestination = "today") {
                             composable("today") {
                                 TodayScreen(
                                     state = today,
-                                    modifier = Modifier
-                                        .background(backgroundColor)
-                                        .padding(horizontal = 24.dp),
                                     onPlaceVisibilityChange = { visibilityPercent ->
                                         toolbarPlaceVisible = visibilityPercent == 0f
                                     },
@@ -114,6 +127,9 @@ fun ForecastScreen(
                                         toolbarTemperatureVisible = visibilityPercent <= 50f
                                     }
                                 )
+                            }
+                            composable("coming") {
+                                ComingScreen(state = coming)
                             }
                         }
                     }

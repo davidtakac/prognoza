@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.domain.usecase.gettodayforecast
+package hr.dtakac.prognoza.domain.usecase.getforecast
 
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepositoryResult
@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecastResult.*
+import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecastResult.*
 
 class GetForecast(
     private val getSelectedPlace: GetSelectedPlace,

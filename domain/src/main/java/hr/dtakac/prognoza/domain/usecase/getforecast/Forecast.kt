@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.domain.usecase.gettodayforecast
+package hr.dtakac.prognoza.domain.usecase.getforecast
 
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription

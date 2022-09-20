@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.ui.today
+package hr.dtakac.prognoza.ui.forecast.today
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.today.TodayContent
-import hr.dtakac.prognoza.presentation.today.TodayHour
+import hr.dtakac.prognoza.presentation.TodayContent
+import hr.dtakac.prognoza.presentation.TodayHour
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.max
