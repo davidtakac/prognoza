@@ -4,10 +4,10 @@ import androidx.annotation.DrawableRes
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 
-data class TodayUiState(
+data class ForecastUiState(
     val isLoading: Boolean = false,
     val error: TextResource? = null,
-    val content: TodayContent? = null
+    val today: TodayContent? = null
 )
 
 data class TodayContent(

@@ -10,17 +10,17 @@ import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult.*
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecastResult.*
 
-class GetTodayForecast(
+class GetForecast(
     private val getSelectedPlace: GetSelectedPlace,
     private val forecastRepository: ForecastRepository,
     private val settingsRepository: SettingsRepository
 ) {
-    suspend operator fun invoke(): TodayForecastResult {
+    suspend operator fun invoke(): GetForecastResult {
         val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
         val from = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
-        val to = from.plusDays(1L)
+        val to = from.plusDays(10L)
         return forecastRepository.getForecast(
             latitude = selectedPlace.latitude,
             longitude = selectedPlace.longitude,
@@ -29,7 +29,7 @@ class GetTodayForecast(
         ).let { mapToResult(selectedPlace, it) }
     }
 
-    private suspend fun mapToResult(place: Place, repositoryResult: ForecastRepositoryResult): TodayForecastResult =
+    private suspend fun mapToResult(place: Place, repositoryResult: ForecastRepositoryResult): GetForecastResult =
         when (repositoryResult) {
             is ForecastRepositoryResult.ThrottleError -> Error.Throttle
             is ForecastRepositoryResult.ClientError -> Error.Client
@@ -40,7 +40,7 @@ class GetTodayForecast(
                 if (repositoryResult.data.isEmpty()) Error.Unknown
                 else Success(
                     placeName = place.name,
-                    todayForecast = TodayForecast(repositoryResult.data),
+                    forecast = Forecast(repositoryResult.data),
                     temperatureUnit = settingsRepository.getTemperatureUnit(),
                     windUnit = settingsRepository.getWindUnit(),
                     precipitationUnit = settingsRepository.getPrecipitationUnit()
@@ -49,16 +49,16 @@ class GetTodayForecast(
         }
 }
 
-sealed interface TodayForecastResult {
+sealed interface GetForecastResult {
     data class Success(
         val placeName: String,
-        val todayForecast: TodayForecast,
+        val forecast: Forecast,
         val temperatureUnit: TemperatureUnit,
         val windUnit: SpeedUnit,
         val precipitationUnit: LengthUnit
-    ) : TodayForecastResult
+    ) : GetForecastResult
 
-    sealed interface Error : TodayForecastResult {
+    sealed interface Error : GetForecastResult {
         object NoSelectedPlace : Error
         object Throttle : Error
         object Client : Error

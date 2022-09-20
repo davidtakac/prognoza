@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetTodayForecast
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecastResult
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -15,28 +15,29 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TodayViewModel @Inject constructor(
-    private val getTodayForecast: GetTodayForecast
+class ForecastViewModel @Inject constructor(
+    private val getForecast: GetForecast
 ) : ViewModel() {
 
-    private val _state: MutableState<TodayUiState> = mutableStateOf(TodayUiState())
-    val state: State<TodayUiState> get() = _state
+    private val _state: MutableState<ForecastUiState> = mutableStateOf(ForecastUiState())
+    val state: State<ForecastUiState> get() = _state
 
     fun getState() {
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true)
-            _state.value = when (val result = getTodayForecast()) {
-                is TodayForecastResult.Success -> _state.value.copy(
-                    content = mapToTodayContent(
+            _state.value = when (val result = getForecast()) {
+                is GetForecastResult.Success -> _state.value.copy(
+                    today = mapToTodayContent(
                         result.placeName,
-                        result.todayForecast,
+                        result.forecast.current,
+                        result.forecast.today,
                         result.temperatureUnit,
                         result.windUnit,
                         result.precipitationUnit
                     ),
                     isLoading = false
                 )
-                is TodayForecastResult.Error -> _state.value.copy(
+                is GetForecastResult.Error -> _state.value.copy(
                     error = mapToTodayError(result),
                     isLoading = false
                 )
@@ -50,7 +51,7 @@ class TodayViewModel @Inject constructor(
             while (isActive) {
                 delay(3000L)
                 _state.value = _state.value.copy(
-                    content = _state.value.content?.copy(
+                    today = _state.value.today?.copy(
                         shortDescription = ForecastDescription.Short.values().random()
                     )
                 )

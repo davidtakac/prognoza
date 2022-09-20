@@ -61,6 +61,7 @@ dependencies {
 
     // Dependency injection
     implementation "com.google.dagger:hilt-android:$versions.dagger"
+    implementation "androidx.hilt:hilt-navigation-compose:$versions.hilt_navigation_compose"
     kapt "com.google.dagger:hilt-compiler:$versions.dagger"
 
     // Android coroutines

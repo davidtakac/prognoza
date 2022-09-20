@@ -2,9 +2,7 @@ package hr.dtakac.prognoza.presentation.today
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecastResult
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.TodayForecast
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.HourlyDatum
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.*
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource
@@ -13,34 +11,35 @@ import java.time.ZonedDateTime
 
 fun mapToTodayContent(
     placeName: String,
-    todayForecast: TodayForecast,
+    current: Current,
+    today: Day,
     temperatureUnit: TemperatureUnit,
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayContent = TodayContent(
     place = TextResource.fromText(placeName),
-    time = getLongTime(todayForecast.time),
-    temperature = getTemperature(todayForecast.temperature, temperatureUnit),
+    time = getLongTime(current.dateTime),
+    temperature = getTemperature(current.temperature, temperatureUnit),
     feelsLike = TextResource.fromStringId(
         R.string.template_feels_like,
-        getTemperature(todayForecast.feelsLike, temperatureUnit)
+        getTemperature(current.feelsLike, temperatureUnit)
     ),
-    description = TextResource.fromStringId(todayForecast.description.toStringId()),
+    description = TextResource.fromStringId(current.description.toStringId()),
     lowHighTemperature = getLowHighTemperature(
-        todayForecast.lowTemperature,
-        todayForecast.highTemperature,
+        today.lowTemperature,
+        today.highTemperature,
         temperatureUnit
     ),
     wind = TextResource.fromStringId(
         id = R.string.template_wind,
-        getWind(todayForecast.wind, windUnit)
+        getWind(current.wind, windUnit)
     ),
     precipitation = TextResource.fromStringId(
         id = R.string.template_precipitation,
-        getPrecipitation(todayForecast.precipitation, precipitationUnit)
+        getPrecipitation(current.precipitation, precipitationUnit)
     ),
-    shortDescription = todayForecast.description.short,
-    hourly = todayForecast.hourly.map { datum ->
+    shortDescription = current.description.short,
+    hourly = today.hourly.map { datum ->
         getHour(
             datum,
             temperatureUnit,
@@ -60,15 +59,15 @@ fun getLowHighTemperature(
 )
 
 fun mapToTodayError(
-    error: TodayForecastResult.Error
+    error: GetForecastResult.Error
 ): TextResource {
     val stringId = when (error) {
-        TodayForecastResult.Error.Client -> R.string.error_client
-        TodayForecastResult.Error.Database -> R.string.error_database
-        TodayForecastResult.Error.NoSelectedPlace -> R.string.error_no_selected_place
-        TodayForecastResult.Error.Server -> R.string.error_server
-        TodayForecastResult.Error.Throttle -> R.string.error_throttling
-        TodayForecastResult.Error.Unknown -> R.string.error_unknown
+        GetForecastResult.Error.Client -> R.string.error_client
+        GetForecastResult.Error.Database -> R.string.error_database
+        GetForecastResult.Error.NoSelectedPlace -> R.string.error_no_selected_place
+        GetForecastResult.Error.Server -> R.string.error_server
+        GetForecastResult.Error.Throttle -> R.string.error_throttling
+        GetForecastResult.Error.Unknown -> R.string.error_unknown
     }
     return TextResource.fromStringId(stringId)
 }
@@ -139,7 +138,7 @@ private fun getHour(
     temperatureUnit: TemperatureUnit,
     precipitationUnit: LengthUnit
 ): TodayHour = TodayHour(
-    time = getShortTime(datum.time),
+    time = getShortTime(datum.dateTime),
     temperature = getTemperature(datum.temperature, temperatureUnit),
     precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {
         getPrecipitation(it, precipitationUnit)

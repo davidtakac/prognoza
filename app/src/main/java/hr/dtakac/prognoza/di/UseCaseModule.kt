@@ -8,7 +8,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
-import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetTodayForecast
+import hr.dtakac.prognoza.domain.usecase.gettodayforecast.GetForecast
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -19,7 +19,7 @@ class UseCaseModule {
         getSelectedPlaceUseCase: GetSelectedPlace,
         forecastRepository: ForecastRepository,
         settingsRepository: SettingsRepository
-    ): GetTodayForecast = GetTodayForecast(getSelectedPlaceUseCase, forecastRepository, settingsRepository)
+    ): GetForecast = GetForecast(getSelectedPlaceUseCase, forecastRepository, settingsRepository)
 
     @Provides
     @ViewModelScoped

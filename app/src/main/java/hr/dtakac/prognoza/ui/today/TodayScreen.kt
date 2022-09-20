@@ -1,250 +1,107 @@
 package hr.dtakac.prognoza.ui.today
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.today.TodayContent
 import hr.dtakac.prognoza.presentation.today.TodayHour
-import hr.dtakac.prognoza.presentation.today.TodayUiState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.math.max
 
 @Composable
-fun TodayScreen(state: TodayUiState) {
-    if (state.content != null) {
-        PrognozaTheme(state.content.shortDescription) {
-            val colorAnimationSpec = remember {
-                tween<Color>(durationMillis = 1000)
-            }
-            val contentColor by animateColorAsState(
-                targetValue = PrognozaTheme.colors.onBackground.copy(
-                    alpha = 0.87f
-                ),
-                animationSpec = colorAnimationSpec
-            )
-            val backgroundColor by animateColorAsState(
-                targetValue = PrognozaTheme.colors.background,
-                animationSpec = colorAnimationSpec
-            )
-
-            StatusAndNavigationBarColors(backgroundColor)
-            Content(
-                state = state.content,
-                contentColor = contentColor,
-                backgroundColor = backgroundColor,
-                onMenuClicked = { /*todo*/ },
-            )
-        }
-    }
-}
-
-@Composable
-private fun Content(
+fun TodayScreen(
     state: TodayContent,
-    contentColor: Color = LocalContentColor.current,
-    backgroundColor: Color = Color.Unspecified,
-    onMenuClicked: () -> Unit = {}
-) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(backgroundColor)
-                .padding(horizontal = 24.dp)
-        ) {
-            val listState = rememberLazyListState()
-            val placeVisible = rememberPlaceVisible(listState)
-            val timeVisible = rememberTimeVisible(listState)
-            val temperatureVisible = rememberTemperatureVisible(listState)
-
-            Toolbar(
-                modifier = Modifier.background(backgroundColor),
-                place = state.place.asString(),
-                placeVisible = placeVisible?.let { !it } ?: false,
-                time = state.time.asString(),
-                timeVisible = timeVisible?.let { !it } ?: false,
-                temperature = state.temperature.asString(),
-                temperatureVisible = temperatureVisible?.let { !it } ?: false,
-                onMenuClicked = onMenuClicked
-            )
-
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                state = listState
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                item(key = "place") {
-                    Text(
-                        text = state.place.asString(),
-                        style = PrognozaTheme.typography.titleLarge,
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                item(key = "time") {
-                    Text(
-                        text = state.time.asString(),
-                        style = PrognozaTheme.typography.subtitleLarge
-                    )
-                }
-                item(key = "temperature") {
-                    AutoSizeText(
-                        text = state.temperature.asString(),
-                        style = PrognozaTheme.typography.headlineLarge,
-                        maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
-                        maxLines = 1
-                    )
-                }
-                item {
-                    DescriptionAndLowHighTemperature(
-                        description = state.description.asString(),
-                        lowHighTemperature = state.lowHighTemperature.asString(),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                item {
-                    WindAndPrecipitation(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 42.dp),
-                        wind = state.wind.asString(),
-                        precipitation = state.precipitation.asString()
-                    )
-                }
-                item {
-                    HourlyHeader(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 42.dp, bottom = 16.dp)
-                    )
-                }
-                items(state.hourly) { hour ->
-                    HourlyItem(
-                        hour = hour,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp)
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun StatusAndNavigationBarColors(color: Color) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(color)
-    systemUiController.setNavigationBarColor(color)
-}
-
-@Composable
-private fun Toolbar(
-    place: String,
-    placeVisible: Boolean,
-    time: String,
-    timeVisible: Boolean,
-    temperature: String,
-    temperatureVisible: Boolean,
-    onMenuClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onPlaceVisibilityChange: (Float) -> Unit = {},
+    onDateTimeVisibilityChange: (Float) -> Unit = {},
+    onTemperatureVisibilityChange: (Float) -> Unit = {}
 ) {
     Column(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .height(90.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+        val listState = rememberLazyListState()
+
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+            state = listState
         ) {
-            HamburgerButton(
-                onClick = onMenuClicked,
-                modifier = Modifier.size(42.dp)
-            )
-            Column(
-                modifier = Modifier
-                    .padding(start = 24.dp)
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
-            ) {
-                SlideUpAppearText(
-                    text = place,
-                    visible = placeVisible,
-                    style = PrognozaTheme.typography.titleSmall
-                )
-                SlideUpAppearText(
-                    text = time,
-                    visible = timeVisible,
-                    style = PrognozaTheme.typography.subtitleSmall
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
+            }
+            item(key = "place") {
+                Text(
+                    text = state.place.asString(),
+                    style = PrognozaTheme.typography.titleLarge,
                 )
             }
-            SlideUpAppearText(
-                text = temperature,
-                visible = temperatureVisible,
-                style = PrognozaTheme.typography.headlineSmall
-            )
-        }
-        Divider(color = LocalContentColor.current)
-    }
-}
-
-@Composable
-private fun HamburgerButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceAround
-        ) {
-            repeat(3) {
-                Divider(
-                    color = LocalContentColor.current,
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            item(key = "time") {
+                Text(
+                    text = state.time.asString(),
+                    style = PrognozaTheme.typography.subtitleLarge
+                )
+            }
+            item(key = "temperature") {
+                AutoSizeText(
+                    text = state.temperature.asString(),
+                    style = PrognozaTheme.typography.headlineLarge,
+                    maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
+                    maxLines = 1
+                )
+            }
+            item {
+                DescriptionAndLowHighTemperature(
+                    description = state.description.asString(),
+                    lowHighTemperature = state.lowHighTemperature.asString(),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
+            item {
+                WindAndPrecipitation(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 42.dp),
+                    wind = state.wind.asString(),
+                    precipitation = state.precipitation.asString()
+                )
+            }
+            item {
+                HourlyHeader(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 42.dp, bottom = 16.dp)
+                )
+            }
+            items(state.hourly) { hour ->
+                HourlyItem(
+                    hour = hour,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                )
+            }
         }
-    }
-}
 
-@Composable
-fun SlideUpAppearText(
-    text: String,
-    visible: Boolean,
-    style: TextStyle = LocalTextStyle.current
-) {
-    val enter = fadeIn() + expandVertically(expandFrom = Alignment.Top)
-    val exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-    AnimatedVisibility(
-        visible = visible,
-        enter = enter,
-        exit = exit
-    ) {
-        Text(text = text, style = style)
+        LaunchedEffect(listState) {
+            snapshotFlow { listState.layoutInfo }
+                .distinctUntilChanged()
+                .collect { layoutInfo ->
+                    onPlaceVisibilityChange(layoutInfo.keyVisibilityPercent("place"))
+                    onDateTimeVisibilityChange(layoutInfo.keyVisibilityPercent("time"))
+                    onTemperatureVisibilityChange(layoutInfo.keyVisibilityPercent("temperature"))
+                }
+        }
     }
 }
 
@@ -315,7 +172,9 @@ private fun HourlyItem(
                 maxLines = 1
             )
             Text(
-                modifier = Modifier.weight(1f).padding(start = 4.dp),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 4.dp),
                 text = hour.description.asString(),
                 textAlign = TextAlign.Start,
                 maxLines = 1,
@@ -340,90 +199,37 @@ private fun HourlyItem(
 @Preview
 @Composable
 private fun TodayScreenClearPreview() {
-    val state = TodayUiState().copy(
-        content = fakeContent().copy(shortDescription = ForecastDescription.Short.CLEAR),
-        isLoading = true,
-        error = TextResource.fromText("Error test")
-    )
+    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.CLEAR)
     TodayScreen(state)
 }
 
 @Preview
 @Composable
 private fun TodayScreenRainPreview() {
-    val state = TodayUiState().copy(
-        content = fakeContent().copy(shortDescription = ForecastDescription.Short.RAIN),
-        isLoading = true,
-        error = TextResource.fromText("Error test")
-    )
+    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.RAIN)
     TodayScreen(state)
 }
 
 @Preview
 @Composable
 private fun TodayScreenSnowPreview() {
-    val state = TodayUiState().copy(
-        content = fakeContent().copy(shortDescription = ForecastDescription.Short.SNOW),
-        isLoading = true,
-        error = TextResource.fromText("Error test")
-    )
+    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.SNOW)
     TodayScreen(state)
 }
 
 @Preview
 @Composable
 private fun TodayScreenSleetPreview() {
-    val state = TodayUiState().copy(
-        content = fakeContent().copy(shortDescription = ForecastDescription.Short.SLEET),
-        isLoading = true,
-        error = TextResource.fromText("Error test")
-    )
+    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.SLEET)
     TodayScreen(state)
 }
 
 @Preview
 @Composable
 private fun TodayScreenCloudyPreview() {
-    val state = TodayUiState().copy(
-        content = fakeContent().copy(shortDescription = ForecastDescription.Short.CLOUDY),
-        isLoading = true,
-        error = TextResource.fromText("Error test")
-    )
+    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.CLOUDY)
     TodayScreen(state)
 }
-
-@Preview
-@Composable
-private fun TodayScreenLoadingPreview() {
-    TodayScreen(TodayUiState().copy(isLoading = true))
-}
-
-@Composable
-fun rememberPlaceVisible(listState: LazyListState) = remember {
-    derivedStateOf {
-        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
-        else listState.layoutInfo.isKeyVisible(key = "place")
-    }
-}.value
-
-@Composable
-fun rememberTimeVisible(listState: LazyListState) = remember {
-    derivedStateOf {
-        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
-        else listState.layoutInfo.isKeyVisible(key = "time")
-    }
-}.value
-
-@Composable
-fun rememberTemperatureVisible(listState: LazyListState) = remember {
-    derivedStateOf {
-        if (listState.layoutInfo.visibleItemsInfo.isEmpty()) null
-        else listState.layoutInfo.isKeyVisible(
-            key = "temperature",
-            visiblePercent = 50f
-        )
-    }
-}.value
 
 private fun fakeContent(): TodayContent = TodayContent(
     place = TextResource.fromText("Helsinki"),
@@ -451,9 +257,9 @@ private fun fakeContent(): TodayContent = TodayContent(
 
 
 // https://stackoverflow.com/a/69267808
-private fun LazyListLayoutInfo.isKeyVisible(key: String, visiblePercent: Float = 0f): Boolean =
-    visibleItemsInfo.filter {
+private fun LazyListLayoutInfo.keyVisibilityPercent(key: String): Float =
+    visibleItemsInfo.firstOrNull { it.key == key }?.let {
         val cutTop = max(0, viewportStartOffset - it.offset)
         val cutBottom = max(0, it.offset + it.size - viewportEndOffset)
-        max(0f, 100f - (cutTop + cutBottom) * 100f / it.size) >= visiblePercent
-    }.any { it.key == key }
+        max(0f, 100f - (cutTop + cutBottom) * 100f / it.size)
+    } ?: 0f
