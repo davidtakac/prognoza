@@ -3,15 +3,19 @@ package hr.dtakac.prognoza.presentation
 import androidx.annotation.DrawableRes
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
-data class ForecastUiState(
+data class ForecastState(
     val isLoading: Boolean = false,
     val error: TextResource? = null,
-    val today: TodayContent? = null,
-    val comingContent: ComingContent? = null
+    val forecast: ForecastUi? = null
 )
 
-data class TodayContent(
+data class ForecastUi(
     val place: TextResource,
+    val today: TodayUi,
+    val coming: List<DayUi>
+)
+
+data class TodayUi(
     val time: TextResource,
     val temperature: TextResource,
     val feelsLike: TextResource,
@@ -20,10 +24,10 @@ data class TodayContent(
     val wind: TextResource,
     val precipitation: TextResource,
     val shortDescription: ForecastDescription.Short,
-    val hourly: List<TodayHour>
+    val hourly: List<DayHourUi>
 )
 
-data class TodayHour(
+data class DayHourUi(
     val time: TextResource,
     @DrawableRes
     val temperature: TextResource,
@@ -31,6 +35,9 @@ data class TodayHour(
     val description: TextResource
 )
 
-data class ComingContent(
-    val days: List<String>
+data class DayUi(
+    val date: TextResource,
+    val lowHighTemperature: TextResource,
+    val hourly: List<DayHourUi>
 )
+

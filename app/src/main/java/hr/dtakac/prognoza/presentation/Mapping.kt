@@ -7,15 +7,41 @@ import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.time.ZonedDateTime
 
-fun mapToTodayContent(
+fun mapToForecastUi(
     placeName: String,
+    current: Current,
+    today: Day,
+    coming: List<Day>,
+    temperatureUnit: TemperatureUnit,
+    windUnit: SpeedUnit,
+    precipitationUnit: LengthUnit
+): ForecastUi = ForecastUi(
+    place = TextResource.fromText(placeName),
+    today = mapToTodayUi(current, today, temperatureUnit, windUnit, precipitationUnit),
+    coming = mapToComingUi(coming, temperatureUnit, precipitationUnit)
+)
+
+fun mapToError(
+    error: GetForecastResult.Error
+): TextResource {
+    val stringId = when (error) {
+        GetForecastResult.Error.Client -> R.string.error_client
+        GetForecastResult.Error.Database -> R.string.error_database
+        GetForecastResult.Error.NoSelectedPlace -> R.string.error_no_selected_place
+        GetForecastResult.Error.Server -> R.string.error_server
+        GetForecastResult.Error.Throttle -> R.string.error_throttling
+        GetForecastResult.Error.Unknown -> R.string.error_unknown
+    }
+    return TextResource.fromStringId(stringId)
+}
+
+private fun mapToTodayUi(
     current: Current,
     today: Day,
     temperatureUnit: TemperatureUnit,
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
-): TodayContent = TodayContent(
-    place = TextResource.fromText(placeName),
+): TodayUi = TodayUi(
     time = getLongTime(current.dateTime),
     temperature = getTemperature(current.temperature, temperatureUnit),
     feelsLike = TextResource.fromStringId(
@@ -38,7 +64,7 @@ fun mapToTodayContent(
     ),
     shortDescription = current.description.short,
     hourly = today.hourly.map { datum ->
-        getHour(
+        getDayHourUi(
             datum,
             temperatureUnit,
             precipitationUnit,
@@ -46,7 +72,32 @@ fun mapToTodayContent(
     }
 )
 
-fun getLowHighTemperature(
+private fun mapToComingUi(
+    days: List<Day>,
+    temperatureUnit: TemperatureUnit,
+    precipitationUnit: LengthUnit
+): List<DayUi> = days.map { day ->
+    DayUi(
+        date = TextResource.fromEpochMillis(
+            millis = day.dateTime.toInstant().toEpochMilli(),
+            flags = DateUtils.FORMAT_SHOW_DATE
+        ),
+        lowHighTemperature = getLowHighTemperature(
+            lowTemperature = day.lowTemperature,
+            highTemperature = day.highTemperature,
+            temperatureUnit = temperatureUnit
+        ),
+        hourly = day.hourly.map { hourlyDatum ->
+            getDayHourUi(
+                datum = hourlyDatum,
+                temperatureUnit = temperatureUnit,
+                precipitationUnit = precipitationUnit
+            )
+        }
+    )
+}
+
+private fun getLowHighTemperature(
     lowTemperature: Temperature,
     highTemperature: Temperature,
     temperatureUnit: TemperatureUnit
@@ -55,20 +106,6 @@ fun getLowHighTemperature(
     getTemperature(highTemperature, temperatureUnit),
     getTemperature(lowTemperature, temperatureUnit)
 )
-
-fun mapToTodayError(
-    error: GetForecastResult.Error
-): TextResource {
-    val stringId = when (error) {
-        GetForecastResult.Error.Client -> R.string.error_client
-        GetForecastResult.Error.Database -> R.string.error_database
-        GetForecastResult.Error.NoSelectedPlace -> R.string.error_no_selected_place
-        GetForecastResult.Error.Server -> R.string.error_server
-        GetForecastResult.Error.Throttle -> R.string.error_throttling
-        GetForecastResult.Error.Unknown -> R.string.error_unknown
-    }
-    return TextResource.fromStringId(stringId)
-}
 
 private fun getLongTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
     millis = time.toInstant().toEpochMilli(),
@@ -131,11 +168,11 @@ private fun getPrecipitation(
     }, decimalPlaces = 2)
 )
 
-private fun getHour(
+private fun getDayHourUi(
     datum: HourlyDatum,
     temperatureUnit: TemperatureUnit,
     precipitationUnit: LengthUnit
-): TodayHour = TodayHour(
+): DayHourUi = DayHourUi(
     time = getShortTime(datum.dateTime),
     temperature = getTemperature(datum.temperature, temperatureUnit),
     precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {

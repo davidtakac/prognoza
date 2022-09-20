@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.TodayContent
-import hr.dtakac.prognoza.presentation.TodayHour
+import hr.dtakac.prognoza.presentation.TodayUi
+import hr.dtakac.prognoza.presentation.DayHourUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -22,7 +22,7 @@ import kotlin.math.max
 
 @Composable
 fun TodayScreen(
-    state: TodayContent,
+    state: TodayUi,
     modifier: Modifier = Modifier,
     onPlaceVisibilityChange: (Float) -> Unit = {},
     onDateTimeVisibilityChange: (Float) -> Unit = {},
@@ -168,7 +168,7 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
 
 @Composable
 private fun HourlyItem(
-    hour: TodayHour,
+    hour: DayHourUi,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
@@ -239,7 +239,7 @@ private fun TodayScreenCloudyPreview() {
     TodayScreen(state)
 }
 
-private fun fakeContent(): TodayContent = TodayContent(
+private fun fakeContent(): TodayUi = TodayUi(
     place = TextResource.fromText("Helsinki"),
     time = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
@@ -249,10 +249,10 @@ private fun fakeContent(): TodayContent = TodayContent(
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
     shortDescription = ForecastDescription.Short.CLEAR,
-    hourly = mutableListOf<TodayHour>().apply {
+    hourly = mutableListOf<DayHourUi>().apply {
         for (i in 1..100) {
             add(
-                TodayHour(
+                DayHourUi(
                     time = TextResource.fromText("14:00"),
                     temperature = TextResource.fromText("23°"),
                     precipitation = TextResource.fromText("1.99 mm"),

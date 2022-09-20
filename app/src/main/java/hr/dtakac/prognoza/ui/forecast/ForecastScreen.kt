@@ -40,10 +40,9 @@ fun ForecastScreen(
     }
 
     val state by remember { viewModel.state }
-    val today = state.today ?: return // todo: handle other cases
-    val coming = state.comingContent ?: return
+    val forecast = state.forecast ?: return
 
-    PrognozaTheme(today.shortDescription) {
+    PrognozaTheme(forecast.today.shortDescription) {
         val colorAnimationSpec = remember {
             tween<Color>(durationMillis = 1000)
         }
@@ -110,11 +109,11 @@ fun ForecastScreen(
                 ) {
                     CompositionLocalProvider(LocalContentColor provides contentColor) {
                         ForecastToolbar(
-                            place = today.place.asString(),
+                            place = forecast.place.asString(),
                             placeVisible = toolbarPlaceVisible,
-                            dateTime = today.time.asString(),
+                            dateTime = forecast.today.time.asString(),
                             dateTimeVisible = toolbarDateTimeVisible,
-                            temperature = today.temperature.asString(),
+                            temperature = forecast.today.temperature.asString(),
                             temperatureVisible = toolbarTemperatureVisible,
                             modifier = Modifier.background(backgroundColor),
                             onMenuClicked = { scope.launch { drawerState.open() } }
@@ -123,7 +122,7 @@ fun ForecastScreen(
                         NavHost(navController = navController, startDestination = "today") {
                             composable("today") {
                                 TodayScreen(
-                                    state = today,
+                                    state = forecast.today,
                                     onPlaceVisibilityChange = { visibilityPercent ->
                                         toolbarPlaceVisible = visibilityPercent == 0f
                                     },
@@ -136,7 +135,7 @@ fun ForecastScreen(
                                 )
                             }
                             composable("coming") {
-                                ComingScreen(state = coming)
+                                ComingScreen(state = forecast.coming)
                             }
                         }
                     }
