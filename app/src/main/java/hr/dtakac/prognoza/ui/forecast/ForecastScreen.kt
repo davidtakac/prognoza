@@ -2,14 +2,12 @@ package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -81,7 +79,7 @@ fun ForecastScreen(
                 ForecastDrawerContent(
                     place = forecast.place.asString(),
                     backgroundColor = secondary,
-                    contentColor = onSecondary,
+                    onBackgroundColor = onSecondary,
                     onTodayClick = {
                         scope.launch {
                             drawerState.close()
@@ -111,47 +109,45 @@ fun ForecastScreen(
             },
             content = {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    CompositionLocalProvider(LocalContentColor provides onSecondary) {
-                        ForecastToolbar(
-                            place = forecast.place.asString(),
-                            placeVisible = toolbarPlaceVisible,
-                            dateTime = forecast.today.time.asString(),
-                            dateTimeVisible = toolbarDateTimeVisible,
-                            temperature = forecast.today.temperature.asString(),
-                            temperatureVisible = toolbarTemperatureVisible,
-                            modifier = Modifier
-                                .background(secondary)
-                                .padding(horizontal = 24.dp),
-                            onMenuClicked = { scope.launch { drawerState.open() } }
-                        )
-                    }
+                    ForecastToolbar(
+                        place = forecast.place.asString(),
+                        placeVisible = toolbarPlaceVisible,
+                        dateTime = forecast.today.time.asString(),
+                        dateTimeVisible = toolbarDateTimeVisible,
+                        temperature = forecast.today.temperature.asString(),
+                        temperatureVisible = toolbarTemperatureVisible,
+                        backgroundColor = secondary,
+                        onBackgroundColor = onSecondary,
+                        onMenuClicked = { scope.launch { drawerState.open() } }
+                    )
 
-                    CompositionLocalProvider(LocalContentColor provides onPrimary) {
-                        NavHost(
-                            navController = navController,
-                            startDestination = "today",
-                            modifier = Modifier
-                                .background(primary)
-                                .padding(horizontal = 24.dp)
-                        ) {
-                            composable("today") {
-                                TodayScreen(
-                                    state = forecast.today,
-                                    place = forecast.place,
-                                    onPlaceVisibilityChange = { visibilityPercent ->
-                                        toolbarPlaceVisible = visibilityPercent == 0f
-                                    },
-                                    onDateTimeVisibilityChange = { visibilityPercent ->
-                                        toolbarDateTimeVisible = visibilityPercent == 0f
-                                    },
-                                    onTemperatureVisibilityChange = { visibilityPercent ->
-                                        toolbarTemperatureVisible = visibilityPercent <= 50f
-                                    }
-                                )
-                            }
-                            composable("coming") {
-                                ComingScreen(state = forecast.coming)
-                            }
+                    NavHost(
+                        navController = navController,
+                        startDestination = "today"
+                    ) {
+                        composable("today") {
+                            TodayScreen(
+                                state = forecast.today,
+                                place = forecast.place,
+                                backgroundColor = primary,
+                                onBackgroundColor = onPrimary,
+                                onPlaceVisibilityChange = { visibilityPercent ->
+                                    toolbarPlaceVisible = visibilityPercent == 0f
+                                },
+                                onDateTimeVisibilityChange = { visibilityPercent ->
+                                    toolbarDateTimeVisible = visibilityPercent == 0f
+                                },
+                                onTemperatureVisibilityChange = { visibilityPercent ->
+                                    toolbarTemperatureVisible = visibilityPercent <= 50f
+                                }
+                            )
+                        }
+                        composable("coming") {
+                            ComingScreen(
+                                state = forecast.coming,
+                                backgroundColor = primary,
+                                onBackgroundColor = onPrimary,
+                            )
                         }
                     }
                 }

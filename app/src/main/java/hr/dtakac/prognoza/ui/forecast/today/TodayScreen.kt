@@ -1,10 +1,12 @@
 package hr.dtakac.prognoza.ui.forecast.today
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,91 +27,98 @@ fun TodayScreen(
     state: TodayUi,
     place: TextResource,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = PrognozaTheme.colors.primary,
+    onBackgroundColor: Color = PrognozaTheme.colors.onPrimary,
     onPlaceVisibilityChange: (Float) -> Unit = {},
     onDateTimeVisibilityChange: (Float) -> Unit = {},
     onTemperatureVisibilityChange: (Float) -> Unit = {}
 ) {
-    Column(modifier = modifier) {
-        val listState = rememberLazyListState()
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            state = listState
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-            }
-            item(key = "place") {
-                Text(
-                    text = place.asString(),
-                    style = PrognozaTheme.typography.titleLarge,
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            item(key = "time") {
-                Text(
-                    text = state.time.asString(),
-                    style = PrognozaTheme.typography.subtitleLarge
-                )
-            }
-            item(key = "temperature") {
-                AutoSizeText(
-                    text = state.temperature.asString(),
-                    style = PrognozaTheme.typography.headlineLarge,
-                    maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
-                    maxLines = 1
-                )
-            }
-            item {
-                DescriptionAndLowHighTemperature(
-                    description = state.description.asString(),
-                    lowHighTemperature = state.lowHighTemperature.asString(),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            item {
-                WindAndPrecipitation(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 42.dp),
-                    wind = state.wind.asString(),
-                    precipitation = state.precipitation.asString()
-                )
-            }
-            item {
-                HourlyHeader(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 42.dp, bottom = 16.dp)
-                )
-            }
-            items(state.hourly) { hour ->
-                HourItem(
-                    hour = hour,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
-            }
-        }
-
-        LaunchedEffect(listState) {
-            snapshotFlow { listState.layoutInfo }
-                .distinctUntilChanged()
-                .map { layoutInfo ->
-                    Triple(
-                        layoutInfo.keyVisibilityPercent("place"),
-                        layoutInfo.keyVisibilityPercent("time"),
-                        layoutInfo.keyVisibilityPercent("temperature")
+    CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+        Box(modifier = modifier) {
+            val listState = rememberLazyListState()
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor)
+                    .padding(horizontal = 24.dp),
+                state = listState
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                item(key = "place") {
+                    Text(
+                        text = place.asString(),
+                        style = PrognozaTheme.typography.titleLarge,
                     )
                 }
-                .distinctUntilChanged()
-                .collect { (placeVis, dateTimeVis, temperatureVis) ->
-                    onPlaceVisibilityChange(placeVis)
-                    onDateTimeVisibilityChange(dateTimeVis)
-                    onTemperatureVisibilityChange(temperatureVis)
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
+                item(key = "time") {
+                    Text(
+                        text = state.time.asString(),
+                        style = PrognozaTheme.typography.subtitleLarge
+                    )
+                }
+                item(key = "temperature") {
+                    AutoSizeText(
+                        text = state.temperature.asString(),
+                        style = PrognozaTheme.typography.headlineLarge,
+                        maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
+                        maxLines = 1
+                    )
+                }
+                item {
+                    DescriptionAndLowHighTemperature(
+                        description = state.description.asString(),
+                        lowHighTemperature = state.lowHighTemperature.asString(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                item {
+                    WindAndPrecipitation(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 42.dp),
+                        wind = state.wind.asString(),
+                        precipitation = state.precipitation.asString()
+                    )
+                }
+                item {
+                    HourlyHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 42.dp, bottom = 16.dp)
+                    )
+                }
+                items(state.hourly) { hour ->
+                    HourItem(
+                        hour = hour,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp)
+                    )
+                }
+            }
+
+            LaunchedEffect(listState) {
+                snapshotFlow { listState.layoutInfo }
+                    .distinctUntilChanged()
+                    .map { layoutInfo ->
+                        Triple(
+                            layoutInfo.keyVisibilityPercent("place"),
+                            layoutInfo.keyVisibilityPercent("time"),
+                            layoutInfo.keyVisibilityPercent("temperature")
+                        )
+                    }
+                    .distinctUntilChanged()
+                    .collect { (placeVis, dateTimeVis, temperatureVis) ->
+                        onPlaceVisibilityChange(placeVis)
+                        onDateTimeVisibilityChange(dateTimeVis)
+                        onTemperatureVisibilityChange(temperatureVis)
+                    }
+            }
         }
     }
 }

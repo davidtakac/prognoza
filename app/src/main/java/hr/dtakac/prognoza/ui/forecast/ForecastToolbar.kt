@@ -1,11 +1,14 @@
 package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -18,43 +21,48 @@ fun ForecastToolbar(
     dateTimeVisible: Boolean,
     temperature: String,
     temperatureVisible: Boolean,
-    onMenuClicked: () -> Unit = {},
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = PrognozaTheme.colors.secondary,
+    onBackgroundColor: Color = PrognozaTheme.colors.onSecondary,
+    onMenuClicked: () -> Unit = {}
 ) {
-    Column(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .height(90.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HamburgerButton(
-                onClick = onMenuClicked,
-                modifier = Modifier.size(42.dp)
-            )
-            Column(
+    CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+        Column(modifier = modifier.background(backgroundColor)) {
+            Row(
                 modifier = Modifier
-                    .padding(start = 24.dp)
-                    .weight(1f)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.Center
+                    .height(90.dp)
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                SlideUpAppearText(
-                    text = place,
-                    visible = placeVisible,
-                    style = PrognozaTheme.typography.titleSmall
+                HamburgerButton(
+                    onClick = onMenuClicked,
+                    modifier = Modifier.size(42.dp)
                 )
+                Column(
+                    modifier = Modifier
+                        .padding(start = 24.dp)
+                        .weight(1f)
+                        .fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    SlideUpAppearText(
+                        text = place,
+                        visible = placeVisible,
+                        style = PrognozaTheme.typography.titleSmall
+                    )
+                    SlideUpAppearText(
+                        text = dateTime,
+                        visible = dateTimeVisible,
+                        style = PrognozaTheme.typography.subtitleSmall
+                    )
+                }
                 SlideUpAppearText(
-                    text = dateTime,
-                    visible = dateTimeVisible,
-                    style = PrognozaTheme.typography.subtitleSmall
+                    text = temperature,
+                    visible = temperatureVisible,
+                    style = PrognozaTheme.typography.headlineSmall
                 )
             }
-            SlideUpAppearText(
-                text = temperature,
-                visible = temperatureVisible,
-                style = PrognozaTheme.typography.headlineSmall
-            )
         }
     }
 }

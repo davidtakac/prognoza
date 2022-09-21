@@ -27,22 +27,18 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 fun ForecastDrawerContent(
     place: String,
     backgroundColor: Color = PrognozaTheme.colors.primary,
-    contentColor: Color = PrognozaTheme.colors.onPrimary,
+    onBackgroundColor: Color = PrognozaTheme.colors.onPrimary,
     onTodayClick: () -> Unit = {},
     onComingClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
     onPlacePickerClick: () -> Unit = {}
 ) {
     ModalDrawerSheet(
-        drawerContentColor = contentColor,
+        drawerContentColor = onBackgroundColor,
         drawerShape = RectangleShape,
         drawerContainerColor = backgroundColor
     ) {
-        LazyColumn(
-            modifier = Modifier
-                .padding(horizontal = 24.dp)
-                .fillMaxWidth()
-        ) {
+        LazyColumn(modifier = Modifier.padding(horizontal = 24.dp)) {
             item {
                 SectionItem(
                     text = stringResource(id = R.string.forecast),

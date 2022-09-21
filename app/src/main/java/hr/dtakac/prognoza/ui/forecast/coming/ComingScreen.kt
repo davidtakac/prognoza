@@ -9,7 +9,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,31 +26,42 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun ComingScreen(
     state: List<DayUi>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = PrognozaTheme.colors.primary,
+    onBackgroundColor: Color = PrognozaTheme.colors.onPrimary,
 ) {
-    LazyColumn(modifier = modifier) {
-        state.forEach { dayUi ->
-            stickyHeader {
-                Column(modifier = Modifier.background(PrognozaTheme.colors.primary)) {
-                    DateAndLowHighTemperature(
-                        date = dayUi.date.asString(),
-                        lowHighTemperature = dayUi.lowHighTemperature.asString(),
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
-                    Divider(
-                        color = LocalContentColor.current,
-                        modifier = Modifier.padding(top = 16.dp)
-                    )
+    CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+        Box(modifier = modifier) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor)
+                    .padding(horizontal = 24.dp)
+            ) {
+                state.forEach { dayUi ->
+                    stickyHeader {
+                        Column(modifier = Modifier.background(backgroundColor)) {
+                            DateAndLowHighTemperature(
+                                date = dayUi.date.asString(),
+                                lowHighTemperature = dayUi.lowHighTemperature.asString(),
+                                modifier = Modifier.padding(top = 16.dp)
+                            )
+                            Divider(
+                                color = LocalContentColor.current,
+                                modifier = Modifier.padding(top = 16.dp)
+                            )
+                        }
+                    }
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
+                    items(dayUi.hourly) { hour ->
+                        HourItem(
+                            hour = hour,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 16.dp)
+                        )
+                    }
                 }
-            }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-            items(dayUi.hourly) { hour ->
-                HourItem(
-                    hour = hour,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                )
             }
         }
     }

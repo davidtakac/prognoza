@@ -5,7 +5,7 @@ import androidx.compose.ui.graphics.Color
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
 private val oldGold = Color(0xFFDCBA31)
-private val oldGoldLight = Color(0xFFe4c95e)
+private val oldGoldLight = Color(0xFFe5cc66)
 
 private val stPatricksBlue = Color(0xFF123285)
 private val stPatricksBlueLight = Color(0xFF173fa6)
