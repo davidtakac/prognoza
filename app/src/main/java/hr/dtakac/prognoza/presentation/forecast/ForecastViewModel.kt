@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecastResult
 import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecast
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,6 +41,20 @@ class ForecastViewModel @Inject constructor(
                 is GetForecastResult.Error -> _state.value.copy(
                     error = mapToError(result),
                     isLoading = false
+                )
+            }
+        }
+        //testColorChanges()
+    }
+
+    private fun testColorChanges() {
+        viewModelScope.launch {
+            while (isActive) {
+                delay(2000L)
+                _state.value = _state.value.copy(
+                    forecast = _state.value.forecast?.copy(
+                        today = _state.value.forecast!!.today.copy(shortDescription = ForecastDescription.Short.values().random())
+                    )
                 )
             }
         }

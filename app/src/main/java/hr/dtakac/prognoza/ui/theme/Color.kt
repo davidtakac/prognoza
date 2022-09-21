@@ -10,11 +10,11 @@ private val oldGoldLight = Color(0xFFe4c95e)
 private val stPatricksBlue = Color(0xFF123285)
 private val stPatricksBlueLight = Color(0xFF173fa6)
 
-private val gray50 = Color(0xFFFAFAFA)
-private val gray50Dark = Color(0xFFe6e6e6)
+private val gray200 = Color(0xFFEEEEEE)
+private val gray200Light = Color.White
 
-private val blueGray200 = Color(0xFFB0BEC5)
-private val blueGray200Light = Color(0xFFc4cfd4)
+private val blueGray700 = Color(0xFF455A64)
+private val blueGray700Light = Color(0xFF526a75)
 
 private val cyan900 = Color(0xFF006064)
 private val cyan900Light = Color(0xFF007b80)
@@ -55,9 +55,9 @@ data class PrognozaColors(
                     onSecondary = Color.White
                 )
                 ForecastDescription.Short.SNOW -> PrognozaColors(
-                    primary = gray50,
+                    primary = gray200,
                     onPrimary = Color.Black,
-                    secondary = gray50Dark,
+                    secondary = gray200Light,
                     onSecondary = Color.Black
                 )
                 ForecastDescription.Short.SLEET -> PrognozaColors(
@@ -67,10 +67,10 @@ data class PrognozaColors(
                     onSecondary = Color.White
                 )
                 ForecastDescription.Short.CLOUDY -> PrognozaColors(
-                    primary = blueGray200,
-                    onPrimary = Color.Black,
-                    secondary = blueGray200Light,
-                    onSecondary = Color.Black
+                    primary = blueGray700,
+                    onPrimary = Color.White,
+                    secondary = blueGray700Light,
+                    onSecondary = Color.White
                 )
             }
     }
