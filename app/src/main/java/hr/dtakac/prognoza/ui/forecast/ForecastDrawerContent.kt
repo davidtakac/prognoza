@@ -25,6 +25,7 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForecastDrawerContent(
+    place: String,
     backgroundColor: Color = PrognozaTheme.colors.primary,
     contentColor: Color = PrognozaTheme.colors.onPrimary,
     onTodayClick: () -> Unit = {},
@@ -74,7 +75,7 @@ fun ForecastDrawerContent(
             }
             item {
                 NavigationItem(
-                    text = stringResource(id = R.string.change_place),
+                    text = place,
                     icon = R.drawable.ic_location_pin,
                     onClick = onPlacePickerClick
                 )
@@ -94,7 +95,7 @@ fun ForecastDrawerContent(
 private fun SectionItem(text: String, modifier: Modifier = Modifier) {
     Text(
         text = text,
-        style = PrognozaTheme.typography.titleSmall,
+        style = PrognozaTheme.typography.label,
         modifier = modifier
     )
 }

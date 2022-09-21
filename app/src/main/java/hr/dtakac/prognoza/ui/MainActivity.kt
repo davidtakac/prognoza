@@ -19,6 +19,9 @@ class MainActivity : ComponentActivity() {
                 composable("forecast") {
                     ForecastScreen()
                 }
+                composable("places") {
+
+                }
             }
         }
     }

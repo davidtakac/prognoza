@@ -1,10 +1,11 @@
-package hr.dtakac.prognoza.presentation
+package hr.dtakac.prognoza.presentation.forecast
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.getforecast.*
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
+import hr.dtakac.prognoza.presentation.TextResource
 import java.time.ZonedDateTime
 
 fun mapToForecastUi(

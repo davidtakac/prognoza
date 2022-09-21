@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import hr.dtakac.prognoza.presentation.DayHourUi
+import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
@@ -20,7 +20,7 @@ fun HourItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.bodySmall) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.width(52.dp),
                 text = hour.time.asString(),

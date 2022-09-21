@@ -25,7 +25,8 @@ data class PrognozaTypography(
     val subtitleLarge: TextStyle,
     val titleSmall: TextStyle,
     val subtitleSmall: TextStyle,
-    val bodySmall: TextStyle
+    val body: TextStyle,
+    val label: TextStyle
 ) {
     companion object {
         fun get(): PrognozaTypography = PrognozaTypography(
@@ -65,11 +66,17 @@ data class PrognozaTypography(
                 fontSize = 18.sp,
                 letterSpacing = 0.25.sp
             ),
-            bodySmall = TextStyle(
+            body = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.Normal,
+                fontSize = 16.sp,
+                letterSpacing = 0.sp
+            ),
+            label = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.SemiBold,
                 fontSize = 16.sp,
-                letterSpacing = 0.sp
+                letterSpacing = 0.25.sp
             )
         )
     }

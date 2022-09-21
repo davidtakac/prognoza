@@ -18,7 +18,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import hr.dtakac.prognoza.presentation.ForecastViewModel
+import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.forecast.coming.ComingScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.forecast.today.TodayScreen
@@ -79,6 +79,7 @@ fun ForecastScreen(
             drawerState = drawerState,
             drawerContent = {
                 ForecastDrawerContent(
+                    place = forecast.place.asString(),
                     backgroundColor = secondary,
                     contentColor = onSecondary,
                     onTodayClick = {
@@ -129,7 +130,9 @@ fun ForecastScreen(
                         NavHost(
                             navController = navController,
                             startDestination = "today",
-                            modifier = Modifier.background(primary).padding(horizontal = 24.dp)
+                            modifier = Modifier
+                                .background(primary)
+                                .padding(horizontal = 24.dp)
                         ) {
                             composable("today") {
                                 TodayScreen(

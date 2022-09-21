@@ -1,7 +1,8 @@
-package hr.dtakac.prognoza.presentation
+package hr.dtakac.prognoza.presentation.forecast
 
 import androidx.annotation.DrawableRes
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.presentation.TextResource
 
 data class ForecastState(
     val isLoading: Boolean = false,

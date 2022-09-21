@@ -14,8 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
-import hr.dtakac.prognoza.presentation.DayHourUi
-import hr.dtakac.prognoza.presentation.DayUi
+import hr.dtakac.prognoza.presentation.forecast.DayHourUi
+import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme

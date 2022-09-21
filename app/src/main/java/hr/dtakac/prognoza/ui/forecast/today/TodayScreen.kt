@@ -12,8 +12,8 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.TodayUi
-import hr.dtakac.prognoza.presentation.DayHourUi
+import hr.dtakac.prognoza.presentation.forecast.TodayUi
+import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -142,7 +142,7 @@ private fun WindAndPrecipitation(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.bodySmall) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = wind,
@@ -161,7 +161,7 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = stringResource(id = R.string.hourly),
-            style = PrognozaTheme.typography.bodySmall,
+            style = PrognozaTheme.typography.label,
         )
         Divider(color = LocalContentColor.current, modifier = Modifier.padding(top = 16.dp))
     }
