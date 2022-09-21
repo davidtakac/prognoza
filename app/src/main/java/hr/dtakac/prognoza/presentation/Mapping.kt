@@ -42,7 +42,10 @@ private fun mapToTodayUi(
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayUi = TodayUi(
-    time = getLongTime(current.dateTime),
+    time = TextResource.fromEpochMillis(
+        millis = current.dateTime.toInstant().toEpochMilli(),
+        flags = DateUtils.FORMAT_SHOW_DATE
+    ),
     temperature = getTemperature(current.temperature, temperatureUnit),
     feelsLike = TextResource.fromStringId(
         R.string.template_feels_like,
@@ -80,7 +83,7 @@ private fun mapToComingUi(
     DayUi(
         date = TextResource.fromEpochMillis(
             millis = day.dateTime.toInstant().toEpochMilli(),
-            flags = DateUtils.FORMAT_SHOW_DATE
+            flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY
         ),
         lowHighTemperature = getLowHighTemperature(
             lowTemperature = day.lowTemperature,
@@ -105,11 +108,6 @@ private fun getLowHighTemperature(
     id = R.string.template_high_low_temperature,
     getTemperature(highTemperature, temperatureUnit),
     getTemperature(lowTemperature, temperatureUnit)
-)
-
-private fun getLongTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
-    millis = time.toInstant().toEpochMilli(),
-    flags = DateUtils.FORMAT_SHOW_DATE
 )
 
 private fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(

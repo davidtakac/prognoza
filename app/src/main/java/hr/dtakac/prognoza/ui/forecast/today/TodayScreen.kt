@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
@@ -15,6 +14,7 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.TodayUi
 import hr.dtakac.prognoza.presentation.DayHourUi
+import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -85,7 +85,7 @@ fun TodayScreen(
                 )
             }
             items(state.hourly) { hour ->
-                HourlyItem(
+                HourItem(
                     hour = hour,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -167,77 +167,12 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview
 @Composable
-private fun HourlyItem(
-    hour: DayHourUi,
-    modifier: Modifier = Modifier
-) {
-    Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.bodySmall) {
-            Text(
-                modifier = Modifier.width(52.dp),
-                text = hour.time.asString(),
-                textAlign = TextAlign.Start,
-                maxLines = 1
-            )
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 4.dp),
-                text = hour.description.asString(),
-                textAlign = TextAlign.Start,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                modifier = Modifier.width(88.dp),
-                text = hour.precipitation.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1
-            )
-            Text(
-                modifier = Modifier.width(52.dp),
-                text = hour.temperature.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1
-            )
-        }
+private fun TodayScreenPreview() {
+    PrognozaTheme(description = ForecastDescription.Short.CLEAR) {
+        TodayScreen(fakeContent(), place = TextResource.fromText("Helsinki"))
     }
-}
-
-@Preview
-@Composable
-private fun TodayScreenClearPreview() {
-    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.CLEAR)
-    TodayScreen(state, place = TextResource.fromText("Helsinki"))
-}
-
-@Preview
-@Composable
-private fun TodayScreenRainPreview() {
-    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.RAIN)
-    TodayScreen(state, place = TextResource.fromText("Helsinki"))
-}
-
-@Preview
-@Composable
-private fun TodayScreenSnowPreview() {
-    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.SNOW)
-    TodayScreen(state, place = TextResource.fromText("Helsinki"))
-}
-
-@Preview
-@Composable
-private fun TodayScreenSleetPreview() {
-    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.SLEET)
-    TodayScreen(state, place = TextResource.fromText("Helsinki"))
-}
-
-@Preview
-@Composable
-private fun TodayScreenCloudyPreview() {
-    val state = fakeContent().copy(shortDescription = ForecastDescription.Short.CLOUDY)
-    TodayScreen(state, place = TextResource.fromText("Helsinki"))
 }
 
 private fun fakeContent(): TodayUi = TodayUi(
