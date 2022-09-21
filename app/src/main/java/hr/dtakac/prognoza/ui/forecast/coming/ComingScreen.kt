@@ -29,7 +29,7 @@ fun ComingScreen(
     LazyColumn(modifier = modifier) {
         state.forEach { dayUi ->
             stickyHeader {
-                Column(modifier = Modifier.background(PrognozaTheme.colors.background)) {
+                Column(modifier = Modifier.background(PrognozaTheme.colors.primary)) {
                     DateAndLowHighTemperature(
                         date = dayUi.date.asString(),
                         lowHighTemperature = dayUi.lowHighTemperature.asString(),

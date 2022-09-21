@@ -56,7 +56,6 @@ fun ForecastToolbar(
                 style = PrognozaTheme.typography.headlineSmall
             )
         }
-        Divider(color = LocalContentColor.current)
     }
 }
 

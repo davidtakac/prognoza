@@ -10,8 +10,10 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
 val LocalPrognozaColors = staticCompositionLocalOf {
     PrognozaColors(
-        background = Color.Unspecified,
-        onBackground = Color.Unspecified
+        primary = Color.Unspecified,
+        onPrimary = Color.Unspecified,
+        secondary = Color.Unspecified,
+        onSecondary = Color.Unspecified
     )
 }
 

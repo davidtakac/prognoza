@@ -46,18 +46,26 @@ fun ForecastScreen(
         val colorAnimationSpec = remember {
             tween<Color>(durationMillis = 1000)
         }
-        val contentColor by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onBackground.copy(
-                alpha = 0.87f
-            ),
+        val primary by animateColorAsState(
+            targetValue = PrognozaTheme.colors.primary,
             animationSpec = colorAnimationSpec
         )
-        val backgroundColor by animateColorAsState(
-            targetValue = PrognozaTheme.colors.background,
+        val onPrimary by animateColorAsState(
+            targetValue = PrognozaTheme.colors.onPrimary,
+            animationSpec = colorAnimationSpec
+        )
+        val secondary by animateColorAsState(
+            targetValue = PrognozaTheme.colors.secondary,
+            animationSpec = colorAnimationSpec
+        )
+        val onSecondary by animateColorAsState(
+            targetValue = PrognozaTheme.colors.onSecondary,
             animationSpec = colorAnimationSpec
         )
 
-        setStatusAndNavigationBarColors(backgroundColor)
+        val systemUiController = rememberSystemUiController()
+        systemUiController.setSystemBarsColor(secondary)
+        systemUiController.setNavigationBarColor(primary)
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -71,8 +79,8 @@ fun ForecastScreen(
             drawerState = drawerState,
             drawerContent = {
                 ForecastDrawerContent(
-                    backgroundColor = backgroundColor,
-                    contentColor = contentColor,
+                    backgroundColor = secondary,
+                    contentColor = onSecondary,
                     onTodayClick = {
                         scope.launch {
                             drawerState.close()
@@ -101,13 +109,8 @@ fun ForecastScreen(
                 )
             },
             content = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(backgroundColor)
-                        .padding(horizontal = 24.dp)
-                ) {
-                    CompositionLocalProvider(LocalContentColor provides contentColor) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    CompositionLocalProvider(LocalContentColor provides onSecondary) {
                         ForecastToolbar(
                             place = forecast.place.asString(),
                             placeVisible = toolbarPlaceVisible,
@@ -115,11 +118,19 @@ fun ForecastScreen(
                             dateTimeVisible = toolbarDateTimeVisible,
                             temperature = forecast.today.temperature.asString(),
                             temperatureVisible = toolbarTemperatureVisible,
-                            modifier = Modifier.background(backgroundColor),
+                            modifier = Modifier
+                                .background(secondary)
+                                .padding(horizontal = 24.dp),
                             onMenuClicked = { scope.launch { drawerState.open() } }
                         )
+                    }
 
-                        NavHost(navController = navController, startDestination = "today") {
+                    CompositionLocalProvider(LocalContentColor provides onPrimary) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = "today",
+                            modifier = Modifier.background(primary).padding(horizontal = 24.dp)
+                        ) {
                             composable("today") {
                                 TodayScreen(
                                     state = forecast.today,
@@ -144,11 +155,4 @@ fun ForecastScreen(
             }
         )
     }
-}
-
-@Composable
-private fun setStatusAndNavigationBarColors(color: Color) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setSystemBarsColor(color)
-    systemUiController.setNavigationBarColor(color)
 }

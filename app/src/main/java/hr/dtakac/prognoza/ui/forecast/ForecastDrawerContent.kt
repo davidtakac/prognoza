@@ -25,8 +25,8 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForecastDrawerContent(
-    backgroundColor: Color = PrognozaTheme.colors.background,
-    contentColor: Color = PrognozaTheme.colors.onBackground,
+    backgroundColor: Color = PrognozaTheme.colors.primary,
+    contentColor: Color = PrognozaTheme.colors.onPrimary,
     onTodayClick: () -> Unit = {},
     onComingClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
