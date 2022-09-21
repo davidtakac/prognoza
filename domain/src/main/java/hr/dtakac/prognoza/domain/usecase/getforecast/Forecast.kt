@@ -6,24 +6,28 @@ import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.lang.IllegalStateException
-import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class Forecast(data: List<ForecastDatum>) {
+    val current: Current
+    val today: Day
+    val coming: List<Day>
+
     init {
         if (data.isEmpty()) {
             throw IllegalStateException("Forecast data must not be empty.")
         }
-    }
 
-    private val dataGroupedByDay: Map<LocalDate, List<ForecastDatum>> = data.groupBy { datum ->
-        datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
-    }
+        current = resolveCurrent(data.first())
 
-    val current: Current = resolveCurrent(datum = dataGroupedByDay.values.first().first())
-    val today: Day = resolveToday(data = dataGroupedByDay.values.first())
-    val coming: List<Day> = resolveComing(listOfData = dataGroupedByDay.values.drop(1))
+        val dataGroupedByDay = data
+            .groupBy { datum ->
+                datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
+            }.values.toList()
+        today = resolveToday(dataGroupedByDay.first() + dataGroupedByDay[1].take(8))
+        coming = resolveComing(dataGroupedByDay.drop(1))
+    }
 
     private fun resolveCurrent(datum: ForecastDatum): Current {
         return Current(

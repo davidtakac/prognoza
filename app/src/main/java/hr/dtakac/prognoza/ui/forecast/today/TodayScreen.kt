@@ -23,6 +23,7 @@ import kotlin.math.max
 @Composable
 fun TodayScreen(
     state: TodayUi,
+    place: TextResource,
     modifier: Modifier = Modifier,
     onPlaceVisibilityChange: (Float) -> Unit = {},
     onDateTimeVisibilityChange: (Float) -> Unit = {},
@@ -39,7 +40,7 @@ fun TodayScreen(
             }
             item(key = "place") {
                 Text(
-                    text = state.place.asString(),
+                    text = place.asString(),
                     style = PrognozaTheme.typography.titleLarge,
                 )
             }
@@ -208,39 +209,38 @@ private fun HourlyItem(
 @Composable
 private fun TodayScreenClearPreview() {
     val state = fakeContent().copy(shortDescription = ForecastDescription.Short.CLEAR)
-    TodayScreen(state)
+    TodayScreen(state, place = TextResource.fromText("Helsinki"))
 }
 
 @Preview
 @Composable
 private fun TodayScreenRainPreview() {
     val state = fakeContent().copy(shortDescription = ForecastDescription.Short.RAIN)
-    TodayScreen(state)
+    TodayScreen(state, place = TextResource.fromText("Helsinki"))
 }
 
 @Preview
 @Composable
 private fun TodayScreenSnowPreview() {
     val state = fakeContent().copy(shortDescription = ForecastDescription.Short.SNOW)
-    TodayScreen(state)
+    TodayScreen(state, place = TextResource.fromText("Helsinki"))
 }
 
 @Preview
 @Composable
 private fun TodayScreenSleetPreview() {
     val state = fakeContent().copy(shortDescription = ForecastDescription.Short.SLEET)
-    TodayScreen(state)
+    TodayScreen(state, place = TextResource.fromText("Helsinki"))
 }
 
 @Preview
 @Composable
 private fun TodayScreenCloudyPreview() {
     val state = fakeContent().copy(shortDescription = ForecastDescription.Short.CLOUDY)
-    TodayScreen(state)
+    TodayScreen(state, place = TextResource.fromText("Helsinki"))
 }
 
 private fun fakeContent(): TodayUi = TodayUi(
-    place = TextResource.fromText("Helsinki"),
     time = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
     feelsLike = TextResource.fromText("Feels like 28°"),

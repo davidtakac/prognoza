@@ -123,6 +123,7 @@ fun ForecastScreen(
                             composable("today") {
                                 TodayScreen(
                                     state = forecast.today,
+                                    place = forecast.place,
                                     onPlaceVisibilityChange = { visibilityPercent ->
                                         toolbarPlaceVisible = visibilityPercent == 0f
                                     },
