@@ -19,8 +19,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.forecast.coming.ComingScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import hr.dtakac.prognoza.ui.theme.ForecastTheme
 import hr.dtakac.prognoza.ui.forecast.today.TodayScreen
+import hr.dtakac.prognoza.ui.theme.applyOverlay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,30 +43,35 @@ fun ForecastScreen(
     val state by remember { viewModel.state }
     val forecast = state.forecast ?: return
 
-    ForecastTheme(forecast.today.shortDescription) {
+    PrognozaTheme(forecast.today.shortDescription) {
         val colorAnimationSpec = remember {
             tween<Color>(durationMillis = 1000)
         }
-        val primary by animateColorAsState(
-            targetValue = PrognozaTheme.colors.primary,
+        val surface by animateColorAsState(
+            targetValue = PrognozaTheme.colors.surface.applyOverlay(
+                overlayColor = PrognozaTheme.colors.weatherDependentOverlay
+            ),
             animationSpec = colorAnimationSpec
         )
-        val onPrimary by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onPrimary,
+        val onSurface by animateColorAsState(
+            targetValue = PrognozaTheme.colors.onSurface,
             animationSpec = colorAnimationSpec
         )
-        val secondary by animateColorAsState(
-            targetValue = PrognozaTheme.colors.secondary,
+        val barSurface by animateColorAsState(
+            targetValue = PrognozaTheme.colors.surface.applyOverlay(
+                overlayColor = PrognozaTheme.colors.weatherDependentOverlay,
+                overlayAlpha = 0.24f
+            ),
             animationSpec = colorAnimationSpec
         )
-        val onSecondary by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onSecondary,
+        val onBarSurface by animateColorAsState(
+            targetValue = PrognozaTheme.colors.onSurface,
             animationSpec = colorAnimationSpec
         )
 
         val systemUiController = rememberSystemUiController()
-        systemUiController.setSystemBarsColor(secondary)
-        systemUiController.setNavigationBarColor(secondary)
+        systemUiController.setSystemBarsColor(barSurface)
+        systemUiController.setNavigationBarColor(barSurface)
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -81,8 +86,8 @@ fun ForecastScreen(
             drawerContent = {
                 ForecastDrawerContent(
                     place = forecast.place.asString(),
-                    backgroundColor = secondary,
-                    onBackgroundColor = onSecondary,
+                    backgroundColor = barSurface,
+                    onBackgroundColor = onBarSurface,
                     onTodayClick = {
                         scope.launch {
                             drawerState.close()
@@ -115,8 +120,8 @@ fun ForecastScreen(
                         dateTimeVisible = toolbarDateTimeVisible,
                         temperature = forecast.today.temperature.asString(),
                         temperatureVisible = toolbarTemperatureVisible,
-                        backgroundColor = secondary,
-                        onBackgroundColor = onSecondary,
+                        backgroundColor = barSurface,
+                        onBackgroundColor = onBarSurface,
                         onMenuClicked = { scope.launch { drawerState.open() } }
                     )
 
@@ -128,8 +133,8 @@ fun ForecastScreen(
                             TodayScreen(
                                 state = forecast.today,
                                 place = forecast.place,
-                                backgroundColor = primary,
-                                onBackgroundColor = onPrimary,
+                                backgroundColor = surface,
+                                onBackgroundColor = onSurface,
                                 onPlaceVisibilityChange = { visibilityPercent ->
                                     toolbarPlaceVisible = visibilityPercent == 0f
                                 },
@@ -144,8 +149,8 @@ fun ForecastScreen(
                         composable("coming") {
                             ComingScreen(
                                 state = forecast.coming,
-                                backgroundColor = primary,
-                                onBackgroundColor = onPrimary,
+                                backgroundColor = surface,
+                                onBackgroundColor = onSurface,
                             )
                         }
                     }

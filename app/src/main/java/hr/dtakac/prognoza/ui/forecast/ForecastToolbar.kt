@@ -22,8 +22,8 @@ fun ForecastToolbar(
     temperature: String,
     temperatureVisible: Boolean,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = PrognozaTheme.colors.secondary,
-    onBackgroundColor: Color = PrognozaTheme.colors.onSecondary,
+    backgroundColor: Color = Color.Unspecified,
+    onBackgroundColor: Color = Color.Unspecified,
     onMenuClicked: () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
@@ -41,7 +41,7 @@ fun ForecastToolbar(
                 )
                 Column(
                     modifier = Modifier
-                        .padding(start = 24.dp)
+                        .padding(start = 16.dp)
                         .weight(1f)
                         .fillMaxHeight(),
                     verticalArrangement = Arrangement.Center
@@ -77,7 +77,7 @@ private fun HamburgerButton(
         modifier = modifier
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.padding(4.dp).fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround
         ) {
             repeat(3) {

@@ -18,7 +18,6 @@ import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import hr.dtakac.prognoza.ui.theme.ForecastTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlin.math.max
@@ -28,8 +27,8 @@ fun TodayScreen(
     state: TodayUi,
     place: TextResource,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = PrognozaTheme.colors.primary,
-    onBackgroundColor: Color = PrognozaTheme.colors.onPrimary,
+    backgroundColor: Color = Color.Unspecified,
+    onBackgroundColor: Color = Color.Unspecified,
     onPlaceVisibilityChange: (Float) -> Unit = {},
     onDateTimeVisibilityChange: (Float) -> Unit = {},
     onTemperatureVisibilityChange: (Float) -> Unit = {}
@@ -98,7 +97,7 @@ fun TodayScreen(
                         hour = hour,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp)
+                            .padding(bottom = 8.dp)
                     )
                 }
             }
@@ -180,7 +179,7 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun TodayScreenPreview() {
-    ForecastTheme(description = ForecastDescription.Short.CLEAR) {
+    PrognozaTheme(description = ForecastDescription.Short.CLEAR) {
         TodayScreen(fakeContent(), place = TextResource.fromText("Helsinki"))
     }
 }
@@ -201,7 +200,8 @@ private fun fakeContent(): TodayUi = TodayUi(
                     time = TextResource.fromText("14:00"),
                     temperature = TextResource.fromText("23°"),
                     precipitation = TextResource.fromText("1.99 mm"),
-                    description = TextResource.fromText("Clear")
+                    description = TextResource.fromText("Clear and some more text"),
+                    icon = R.drawable.heavyrainshowersandthunder_day
                 )
             )
         }

@@ -177,5 +177,6 @@ private fun getDayHourUi(
     precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {
         getPrecipitation(it, precipitationUnit)
     } ?: TextResource.fromText(""),
-    description = TextResource.fromStringId(datum.description.toStringId())
+    description = TextResource.fromStringId(datum.description.toStringId()),
+    icon = datum.description.toDrawableId()
 )

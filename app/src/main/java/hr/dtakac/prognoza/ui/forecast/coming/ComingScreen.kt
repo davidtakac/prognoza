@@ -21,15 +21,14 @@ import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import hr.dtakac.prognoza.ui.theme.ForecastTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ComingScreen(
     state: List<DayUi>,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = PrognozaTheme.colors.primary,
-    onBackgroundColor: Color = PrognozaTheme.colors.onPrimary,
+    backgroundColor: Color = Color.Unspecified,
+    onBackgroundColor: Color = Color.Unspecified,
 ) {
     CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
         Box(modifier = modifier) {
@@ -92,7 +91,7 @@ private fun DateAndLowHighTemperature(
 @Preview
 @Composable
 fun ComingScreenPreview() {
-    ForecastTheme(description = ForecastDescription.Short.CLOUDY) {
+    PrognozaTheme(description = ForecastDescription.Short.CLOUDY) {
         ComingScreen(state = fakeState())
     }
 }

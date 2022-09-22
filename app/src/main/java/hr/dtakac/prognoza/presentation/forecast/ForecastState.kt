@@ -30,10 +30,11 @@ data class TodayUi(
 
 data class DayHourUi(
     val time: TextResource,
-    @DrawableRes
     val temperature: TextResource,
     val precipitation: TextResource,
-    val description: TextResource
+    val description: TextResource,
+    @DrawableRes
+    val icon: Int
 )
 
 data class DayUi(

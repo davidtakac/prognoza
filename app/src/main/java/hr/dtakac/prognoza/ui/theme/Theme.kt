@@ -10,10 +10,9 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
 val LocalPrognozaColors = staticCompositionLocalOf {
     PrognozaColors(
-        primary = Color.Unspecified,
-        onPrimary = Color.Unspecified,
-        secondary = Color.Unspecified,
-        onSecondary = Color.Unspecified
+        surface = Color.Unspecified,
+        onSurface = Color.Unspecified,
+        weatherDependentOverlay = Color.Unspecified
     )
 }
 
@@ -31,7 +30,7 @@ val LocalPrognozaTypography = staticCompositionLocalOf {
 }
 
 @Composable
-fun ForecastTheme(
+fun PrognozaTheme(
     description: ForecastDescription.Short,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
