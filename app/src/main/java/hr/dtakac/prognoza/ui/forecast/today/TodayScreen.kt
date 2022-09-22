@@ -18,6 +18,7 @@ import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.ForecastTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlin.math.max
@@ -179,7 +180,7 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun TodayScreenPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.CLEAR) {
+    ForecastTheme(description = ForecastDescription.Short.CLEAR) {
         TodayScreen(fakeContent(), place = TextResource.fromText("Helsinki"))
     }
 }

@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
+import hr.dtakac.prognoza.ui.places.PlacesScreen
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -17,9 +18,19 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             NavHost(navController = navController, startDestination = "forecast") {
                 composable("forecast") {
-                    ForecastScreen()
+                    ForecastScreen(
+                        onPlacePickerClick = {
+                            navController.navigate("places")
+                        },
+                        onSettingsClick = {
+                            navController.navigate("settings")
+                        }
+                    )
                 }
                 composable("places") {
+                    PlacesScreen()
+                }
+                composable("settings") {
 
                 }
             }

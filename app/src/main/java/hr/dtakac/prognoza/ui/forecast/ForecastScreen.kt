@@ -19,6 +19,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.forecast.coming.ComingScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.ForecastTheme
 import hr.dtakac.prognoza.ui.forecast.today.TodayScreen
 import kotlinx.coroutines.launch
 
@@ -26,7 +27,9 @@ import kotlinx.coroutines.launch
 @Composable
 fun ForecastScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    viewModel: ForecastViewModel = hiltViewModel()
+    viewModel: ForecastViewModel = hiltViewModel(),
+    onPlacePickerClick: () -> Unit = {},
+    onSettingsClick: () -> Unit = {}
 ) {
     // Refresh state every time screen is re-entered
     DisposableEffect(lifecycleOwner) {
@@ -40,7 +43,7 @@ fun ForecastScreen(
     val state by remember { viewModel.state }
     val forecast = state.forecast ?: return
 
-    PrognozaTheme(forecast.today.shortDescription) {
+    ForecastTheme(forecast.today.shortDescription) {
         val colorAnimationSpec = remember {
             tween<Color>(durationMillis = 1000)
         }
@@ -63,7 +66,7 @@ fun ForecastScreen(
 
         val systemUiController = rememberSystemUiController()
         systemUiController.setSystemBarsColor(secondary)
-        systemUiController.setNavigationBarColor(primary)
+        systemUiController.setNavigationBarColor(secondary)
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -99,12 +102,8 @@ fun ForecastScreen(
                             toolbarTemperatureVisible = true
                         }
                     },
-                    onPlacePickerClick = {
-                        // todo
-                    },
-                    onSettingsClick = {
-                        // todo
-                    }
+                    onPlacePickerClick = onPlacePickerClick,
+                    onSettingsClick = onSettingsClick
                 )
             },
             content = {

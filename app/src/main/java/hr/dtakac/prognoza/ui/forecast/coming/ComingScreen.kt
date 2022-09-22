@@ -21,6 +21,7 @@ import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.ForecastTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -91,7 +92,7 @@ private fun DateAndLowHighTemperature(
 @Preview
 @Composable
 fun ComingScreenPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.CLOUDY) {
+    ForecastTheme(description = ForecastDescription.Short.CLOUDY) {
         ComingScreen(state = fakeState())
     }
 }

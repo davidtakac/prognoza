@@ -9,9 +9,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
 import hr.dtakac.prognoza.data.database.PrognozaDatabase
 import hr.dtakac.prognoza.data.network.forecast.ForecastService
+import hr.dtakac.prognoza.data.network.place.PlaceService
 import hr.dtakac.prognoza.data.repository.DefaultForecastRepository
+import hr.dtakac.prognoza.data.repository.DefaultPlaceRepository
 import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
+import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
@@ -41,5 +44,17 @@ class RepositoryModule {
         database.metaDao(),
         userAgent = userAgent,
         defaultDispatcher = Dispatchers.Default
+    )
+
+    @Provides
+    @ViewModelScoped
+    fun providePlaceRepository(
+        placeService: PlaceService,
+        database: PrognozaDatabase,
+        @Named("user_agent") userAgent: String
+    ): PlaceRepository = DefaultPlaceRepository(
+        placeService,
+        placeDao = database.placeDao(),
+        userAgent = userAgent
     )
 }

@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.data.network.forecast.ForecastService
+import hr.dtakac.prognoza.data.network.place.PlaceService
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -25,5 +26,18 @@ class ApiModule {
             .client(okHttpClient)
             .build()
             .create(ForecastService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlaceService(): PlaceService {
+        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
+        val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
+        return Retrofit.Builder()
+            .baseUrl("https://nominatim.openstreetmap.org/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+            .create(PlaceService::class.java)
     }
 }

@@ -31,7 +31,7 @@ val LocalPrognozaTypography = staticCompositionLocalOf {
 }
 
 @Composable
-fun PrognozaTheme(
+fun ForecastTheme(
     description: ForecastDescription.Short,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
