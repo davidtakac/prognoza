@@ -39,6 +39,8 @@ data class DayHourUi(
 
 data class DayUi(
     val date: TextResource,
+    val lowTemperature: TextResource,
+    val highTemperature: TextResource,
     val lowHighTemperature: TextResource,
     val hourly: List<DayHourUi>
 )

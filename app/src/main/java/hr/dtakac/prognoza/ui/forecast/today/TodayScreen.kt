@@ -21,10 +21,10 @@ import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.ui.forecast.ForecastToolbar
 import hr.dtakac.prognoza.ui.forecast.HourItem
+import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlin.math.max
 
 @Composable
 fun TodayScreen(
@@ -209,7 +209,6 @@ private fun RowScope.ToolbarContent(
 ) {
     Column(
         modifier = Modifier
-            .padding(start = 16.dp)
             .weight(1f)
             .fillMaxHeight(),
         verticalArrangement = Arrangement.Center
@@ -285,12 +284,3 @@ private fun fakeContent(): TodayUi = TodayUi(
         }
     }
 )
-
-
-// https://stackoverflow.com/a/69267808
-private fun LazyListLayoutInfo.keyVisibilityPercent(key: String): Float =
-    visibleItemsInfo.firstOrNull { it.key == key }?.let {
-        val cutTop = max(0, viewportStartOffset - it.offset)
-        val cutBottom = max(0, it.offset + it.size - viewportEndOffset)
-        max(0f, 100f - (cutTop + cutBottom) * 100f / it.size)
-    } ?: 0f

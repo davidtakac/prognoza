@@ -106,6 +106,7 @@ fun ForecastScreen(
             },
             content = {
                 Column(modifier = Modifier.fillMaxSize()) {
+                    fun openDrawer() = scope.launch { drawerState.open() }
                     NavHost(
                         navController = navController,
                         startDestination = "today"
@@ -118,11 +119,7 @@ fun ForecastScreen(
                                 contentColor = onSurface,
                                 toolbarSurfaceColor = barSurface,
                                 toolbarContentColor = onBarSurface,
-                                onMenuClick = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
-                                }
+                                onMenuClick = ::openDrawer
                             )
                         }
                         composable("coming") {
@@ -131,6 +128,9 @@ fun ForecastScreen(
                                 state = forecast.coming,
                                 surfaceColor = surface,
                                 contentColor = onSurface,
+                                toolbarSurfaceColor = barSurface,
+                                toolbarContentColor = onBarSurface,
+                                onMenuClick = ::openDrawer
                             )
                         }
                     }

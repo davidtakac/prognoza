@@ -5,6 +5,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.entities.forecast.Current
 import hr.dtakac.prognoza.entities.forecast.Day
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.HourlyDatum
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
@@ -69,7 +70,7 @@ private fun mapToTodayUi(
         id = R.string.template_precipitation,
         getPrecipitation(current.precipitation, precipitationUnit)
     ),
-    shortDescription = current.description.short,
+    shortDescription = ForecastDescription.Short.CLEAR,
     hourly = today.hourly.map { datum ->
         getDayHourUi(
             datum,
@@ -88,6 +89,14 @@ private fun mapToComingUi(
         date = TextResource.fromEpochMillis(
             millis = day.dateTime.toInstant().toEpochMilli(),
             flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY
+        ),
+        lowTemperature = getTemperature(
+            day.lowTemperature,
+            temperatureUnit
+        ),
+        highTemperature = getTemperature(
+            day.highTemperature,
+            temperatureUnit
         ),
         lowHighTemperature = getLowHighTemperature(
             lowTemperature = day.lowTemperature,
