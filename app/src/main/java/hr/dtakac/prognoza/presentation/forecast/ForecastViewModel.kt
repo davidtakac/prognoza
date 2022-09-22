@@ -6,8 +6,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecastResult
-import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecast
+import hr.dtakac.prognoza.domain.usecase.GetForecastResult
+import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive

@@ -12,6 +12,7 @@ import hr.dtakac.prognoza.data.network.forecast.ForecastService
 import hr.dtakac.prognoza.data.network.forecast.LocationForecastResponse
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepositoryResult
+import hr.dtakac.prognoza.entities.forecast.Forecast
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
@@ -59,7 +60,7 @@ class DefaultForecastRepository(
                 end = to,
                 latitude = latitude,
                 longitude = longitude
-            ).map(::mapDbModelToEntity).let { ForecastRepositoryResult.Success(it) }
+            ).map(::mapDbModelToEntity).let { ForecastRepositoryResult.Success(Forecast(it)) }
         } catch (e: Exception) {
             ForecastRepositoryResult.UnknownError
         }

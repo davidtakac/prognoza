@@ -12,7 +12,7 @@ import hr.dtakac.prognoza.domain.usecase.GetSavedPlaces
 import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
 import hr.dtakac.prognoza.domain.usecase.SearchPlaces
 import hr.dtakac.prognoza.domain.usecase.SelectPlace
-import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecast
+import hr.dtakac.prognoza.domain.usecase.GetForecast
 
 @Module
 @InstallIn(ViewModelComponent::class)

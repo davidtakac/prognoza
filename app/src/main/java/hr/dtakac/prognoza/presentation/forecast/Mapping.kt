@@ -2,7 +2,10 @@ package hr.dtakac.prognoza.presentation.forecast
 
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.domain.usecase.getforecast.*
+import hr.dtakac.prognoza.domain.usecase.GetForecastResult
+import hr.dtakac.prognoza.entities.forecast.Current
+import hr.dtakac.prognoza.entities.forecast.Day
+import hr.dtakac.prognoza.entities.forecast.HourlyDatum
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource

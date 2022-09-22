@@ -1,16 +1,16 @@
-package hr.dtakac.prognoza.domain.usecase.getforecast
+package hr.dtakac.prognoza.domain.usecase
 
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepositoryResult
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
-import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import hr.dtakac.prognoza.domain.usecase.getforecast.GetForecastResult.*
+import hr.dtakac.prognoza.entities.forecast.Forecast
+import hr.dtakac.prognoza.domain.usecase.GetForecastResult.Error
 
 class GetForecast(
     private val getSelectedPlace: GetSelectedPlace,
@@ -29,7 +29,10 @@ class GetForecast(
         ).let { mapToResult(selectedPlace, it) }
     }
 
-    private suspend fun mapToResult(place: Place, repositoryResult: ForecastRepositoryResult): GetForecastResult =
+    private suspend fun mapToResult(
+        place: Place,
+        repositoryResult: ForecastRepositoryResult
+    ): GetForecastResult =
         when (repositoryResult) {
             is ForecastRepositoryResult.ThrottleError -> Error.Throttle
             is ForecastRepositoryResult.ClientError -> Error.Client
@@ -37,10 +40,9 @@ class GetForecast(
             is ForecastRepositoryResult.UnknownError -> Error.Unknown
             is ForecastRepositoryResult.DatabaseError -> Error.Database
             is ForecastRepositoryResult.Success -> {
-                if (repositoryResult.data.isEmpty()) Error.Unknown
-                else Success(
+                GetForecastResult.Success(
                     placeName = place.name,
-                    forecast = Forecast(repositoryResult.data),
+                    forecast = repositoryResult.data,
                     temperatureUnit = settingsRepository.getTemperatureUnit(),
                     windUnit = settingsRepository.getWindUnit(),
                     precipitationUnit = settingsRepository.getPrecipitationUnit()

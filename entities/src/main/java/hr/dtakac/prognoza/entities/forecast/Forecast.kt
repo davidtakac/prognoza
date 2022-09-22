@@ -1,7 +1,5 @@
-package hr.dtakac.prognoza.domain.usecase.getforecast
+package hr.dtakac.prognoza.entities.forecast
 
-import hr.dtakac.prognoza.entities.forecast.ForecastDatum
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind

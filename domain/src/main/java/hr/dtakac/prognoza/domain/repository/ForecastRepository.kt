@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.domain.repository
 
-import hr.dtakac.prognoza.entities.forecast.ForecastDatum
+import hr.dtakac.prognoza.entities.forecast.Forecast
 import java.time.ZonedDateTime
 
 interface ForecastRepository {
@@ -20,6 +20,6 @@ sealed interface ForecastRepositoryResult {
     object DatabaseError : ForecastRepositoryResult
 
     data class Success(
-        val data: List<ForecastDatum>
+        val data: Forecast
     ) : ForecastRepositoryResult
 }

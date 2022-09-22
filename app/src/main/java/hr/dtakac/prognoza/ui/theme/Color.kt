@@ -6,8 +6,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
-private val almostBlack = Color(0xFF121212)
-
 @Immutable
 data class PrognozaColors(
     val surface: Color,
@@ -19,13 +17,13 @@ data class PrognozaColors(
             description: ForecastDescription.Short,
             useDarkTheme: Boolean
         ): PrognozaColors = PrognozaColors(
-            surface = if (useDarkTheme) almostBlack else Color.White,
+            surface = if (useDarkTheme) Color(0xFF121212) else Color.White,
             onSurface = if (useDarkTheme) Color.White else Color.Black,
             weatherDependentOverlay = when (description) {
                 ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // blue gray 600
                 ForecastDescription.Short.RAIN -> Color(0xFF1E88E5) // blue 600
                 ForecastDescription.Short.SNOW -> Color(0xFF757575) // gray 600
-                ForecastDescription.Short.SLEET -> Color(0xFF00ACC1) // cyan 600
+                ForecastDescription.Short.SLEET -> Color(0xFF00897B) // teal 600
 
                 ForecastDescription.Short.CLEAR -> if (useDarkTheme) {
                     Color.Black // Clear night sky is pitch black
