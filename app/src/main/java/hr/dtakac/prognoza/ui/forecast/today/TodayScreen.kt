@@ -177,7 +177,12 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
 @Composable
 private fun TodayScreenPreview() {
     PrognozaTheme(description = ForecastDescription.Short.CLEAR) {
-        TodayScreen(fakeContent(), place = TextResource.fromText("Helsinki"))
+        TodayScreen(
+            fakeContent(),
+            place = TextResource.fromText("Helsinki"),
+            surfaceColor = PrognozaTheme.colors.surface,
+            contentColor = PrognozaTheme.colors.onSurface
+        )
     }
 }
 
