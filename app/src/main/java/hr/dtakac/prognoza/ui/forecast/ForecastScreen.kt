@@ -68,13 +68,6 @@ fun ForecastScreen(
             targetValue = PrognozaTheme.colors.onSurface,
             animationSpec = colorAnimationSpec
         )
-        val headerSurface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.surface.applyOverlay(
-                overlayColor = PrognozaTheme.colors.weatherDependentOverlay,
-                overlayAlpha = 0.18f
-            ),
-            animationSpec = colorAnimationSpec
-        )
 
         val systemUiController = rememberSystemUiController()
         systemUiController.setSystemBarsColor(barSurface)
@@ -155,9 +148,8 @@ fun ForecastScreen(
                         }
                         composable("coming") {
                             ComingScreen(
+                                place = forecast.place,
                                 state = forecast.coming,
-                                headerSurface = headerSurface,
-                                headerContentColor = onSurface,
                                 surfaceColor = surface,
                                 contentColor = onSurface,
                             )

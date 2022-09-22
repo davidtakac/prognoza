@@ -1,10 +1,10 @@
 package hr.dtakac.prognoza.ui.forecast.coming
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,40 +22,52 @@ import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ComingScreen(
+    place: TextResource,
     state: List<DayUi>,
     surfaceColor: Color = Color.Unspecified,
-    contentColor: Color = Color.Unspecified,
-    headerSurface: Color = Color.Unspecified,
-    headerContentColor: Color = Color.Unspecified
+    contentColor: Color = Color.Unspecified
 ) {
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .background(surfaceColor)) {
-        state.forEach { dayUi ->
-            stickyHeader {
-                Column(modifier = Modifier.background(headerSurface)) {
-                    CompositionLocalProvider(LocalContentColor provides headerContentColor) {
-                        DateAndLowHighTemperature(
-                            date = dayUi.date.asString(),
-                            lowHighTemperature = dayUi.lowHighTemperature.asString(),
-                            modifier = Modifier
-                                .background(headerSurface)
-                                .padding(vertical = 16.dp)
-                        )
-                    }
-                }
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(surfaceColor)
+                .padding(horizontal = 24.dp)
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(24.dp))
             }
-            item { Spacer(modifier = Modifier.height(16.dp)) }
-            items(dayUi.hourly) { hour ->
-                CompositionLocalProvider(LocalContentColor provides contentColor) {
+            item(key = "place") {
+                Text(
+                    text = place.asString(),
+                    style = PrognozaTheme.typography.titleLarge,
+                )
+            }
+            item {
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            state.forEachIndexed { index, dayUi ->
+                item(key = "time-and-low-high-$index") {
+                    if (index != 0) {
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                    DateAndLowHighTemperature(
+                        date = dayUi.date.asString(),
+                        lowHighTemperature = dayUi.lowHighTemperature.asString()
+                    )
+                    Divider(
+                        modifier = Modifier.padding(vertical = 20.dp),
+                        color = LocalContentColor.current
+                    )
+                }
+                itemsIndexed(dayUi.hourly) { itemIndex, hour ->
                     HourItem(
                         hour = hour,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 16.dp, start = 24.dp, end = 24.dp)
+                            .padding(bottom = if (itemIndex == dayUi.hourly.lastIndex) 0.dp else 12.dp)
                     )
                 }
             }
@@ -66,20 +78,19 @@ fun ComingScreen(
 @Composable
 private fun DateAndLowHighTemperature(
     date: String,
-    lowHighTemperature: String,
-    modifier: Modifier = Modifier
+    lowHighTemperature: String
 ) {
-    Row(modifier = modifier.padding(horizontal = 24.dp)) {
+    Row {
         Text(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(2f),
             text = date,
-            style = PrognozaTheme.typography.subtitleSmall
+            style = PrognozaTheme.typography.subtitleLarge
         )
         Text(
             modifier = Modifier.weight(1f),
             text = lowHighTemperature,
             textAlign = TextAlign.End,
-            style = PrognozaTheme.typography.titleSmall
+            style = PrognozaTheme.typography.titleLarge
         )
     }
 }
@@ -88,7 +99,12 @@ private fun DateAndLowHighTemperature(
 @Composable
 fun ComingScreenPreview() {
     PrognozaTheme(description = ForecastDescription.Short.CLOUDY) {
-        ComingScreen(state = fakeState())
+        ComingScreen(
+            state = fakeState(),
+            place = TextResource.fromText("Tenja"),
+            surfaceColor = PrognozaTheme.colors.surface,
+            contentColor = PrognozaTheme.colors.onSurface
+        )
     }
 }
 

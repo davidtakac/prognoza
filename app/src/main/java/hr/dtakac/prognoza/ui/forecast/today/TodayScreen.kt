@@ -95,7 +95,7 @@ fun TodayScreen(
                     hour = hour,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 8.dp)
+                        .padding(bottom = 12.dp)
                 )
             }
         }
@@ -129,7 +129,7 @@ private fun DescriptionAndLowHighTemperature(
     Row(modifier = modifier) {
         CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.titleLarge) {
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(2f),
                 text = description
             )
             Text(

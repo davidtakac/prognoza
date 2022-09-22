@@ -56,7 +56,7 @@ fun HourItem(
             Image(
                 painter = painterResource(id = hour.icon),
                 contentDescription = null,
-                modifier = Modifier.padding(start = 12.dp).size(36.dp)
+                modifier = Modifier.padding(start = 12.dp).size(32.dp)
             )
         }
     }
