@@ -2,14 +2,12 @@ package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -140,11 +138,9 @@ fun ForecastScreen(
                     ) {
                         composable("today") {
                             TodayScreen(
-                                modifier = Modifier
-                                    .background(surface)
-                                    .padding(horizontal = 24.dp),
                                 state = forecast.today,
                                 place = forecast.place,
+                                surfaceColor = surface,
                                 contentColor = onSurface,
                                 onPlaceVisibilityChange = { visibilityPercent ->
                                     toolbarPlaceVisible = visibilityPercent == 0f
