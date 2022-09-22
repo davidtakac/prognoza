@@ -77,10 +77,6 @@ fun ForecastScreen(
         val scope = rememberCoroutineScope()
         val navController = rememberNavController()
 
-        var toolbarPlaceVisible by remember { mutableStateOf(false) }
-        var toolbarDateTimeVisible by remember { mutableStateOf(false) }
-        var toolbarTemperatureVisible by remember { mutableStateOf(false) }
-
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
@@ -102,9 +98,6 @@ fun ForecastScreen(
                             navController.navigate("coming") {
                                 popUpTo("coming") { inclusive = true }
                             }
-                            toolbarPlaceVisible = true
-                            toolbarDateTimeVisible = true
-                            toolbarTemperatureVisible = true
                         }
                     },
                     onPlacePickerClick = onPlacePickerClick,
@@ -113,18 +106,6 @@ fun ForecastScreen(
             },
             content = {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    ForecastToolbar(
-                        place = forecast.place.asString(),
-                        placeVisible = toolbarPlaceVisible,
-                        dateTime = forecast.today.time.asString(),
-                        dateTimeVisible = toolbarDateTimeVisible,
-                        temperature = forecast.today.temperature.asString(),
-                        temperatureVisible = toolbarTemperatureVisible,
-                        backgroundColor = barSurface,
-                        onBackgroundColor = onBarSurface,
-                        onMenuClicked = { scope.launch { drawerState.open() } }
-                    )
-
                     NavHost(
                         navController = navController,
                         startDestination = "today"
@@ -135,14 +116,12 @@ fun ForecastScreen(
                                 place = forecast.place,
                                 surfaceColor = surface,
                                 contentColor = onSurface,
-                                onPlaceVisibilityChange = { visibilityPercent ->
-                                    toolbarPlaceVisible = visibilityPercent == 0f
-                                },
-                                onDateTimeVisibilityChange = { visibilityPercent ->
-                                    toolbarDateTimeVisible = visibilityPercent == 0f
-                                },
-                                onTemperatureVisibilityChange = { visibilityPercent ->
-                                    toolbarTemperatureVisible = visibilityPercent <= 50f
+                                toolbarSurfaceColor = barSurface,
+                                toolbarContentColor = onBarSurface,
+                                onMenuClick = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
                                 }
                             )
                         }
