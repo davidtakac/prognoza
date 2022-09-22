@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Divider
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,36 +26,37 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun ComingScreen(
     state: List<DayUi>,
-    modifier: Modifier = Modifier,
-    headerSurface: Color = Color.Unspecified,
+    surfaceColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
+    headerSurface: Color = Color.Unspecified,
+    headerContentColor: Color = Color.Unspecified
 ) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Box(modifier = modifier) {
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-                state.forEach { dayUi ->
-                    stickyHeader {
-                        Column(modifier = Modifier.background(headerSurface)) {
-                            DateAndLowHighTemperature(
-                                date = dayUi.date.asString(),
-                                lowHighTemperature = dayUi.lowHighTemperature.asString(),
-                                modifier = Modifier.padding(top = 16.dp)
-                            )
-                            Divider(
-                                color = LocalContentColor.current,
-                                modifier = Modifier.padding(top = 16.dp)
-                            )
-                        }
-                    }
-                    item { Spacer(modifier = Modifier.height(16.dp)) }
-                    items(dayUi.hourly) { hour ->
-                        HourItem(
-                            hour = hour,
+    LazyColumn(modifier = Modifier
+        .fillMaxSize()
+        .background(surfaceColor)) {
+        state.forEach { dayUi ->
+            stickyHeader {
+                Column(modifier = Modifier.background(headerSurface)) {
+                    CompositionLocalProvider(LocalContentColor provides headerContentColor) {
+                        DateAndLowHighTemperature(
+                            date = dayUi.date.asString(),
+                            lowHighTemperature = dayUi.lowHighTemperature.asString(),
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 16.dp)
+                                .background(headerSurface)
+                                .padding(vertical = 16.dp)
                         )
                     }
+                }
+            }
+            item { Spacer(modifier = Modifier.height(16.dp)) }
+            items(dayUi.hourly) { hour ->
+                CompositionLocalProvider(LocalContentColor provides contentColor) {
+                    HourItem(
+                        hour = hour,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp, start = 24.dp, end = 24.dp)
+                    )
                 }
             }
         }
@@ -69,7 +69,7 @@ private fun DateAndLowHighTemperature(
     lowHighTemperature: String,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
+    Row(modifier = modifier.padding(horizontal = 24.dp)) {
         Text(
             modifier = Modifier.weight(1f),
             text = date,
