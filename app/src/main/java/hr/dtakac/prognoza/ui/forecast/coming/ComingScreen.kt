@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
@@ -27,20 +28,15 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 fun ComingScreen(
     state: List<DayUi>,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Unspecified,
-    onBackgroundColor: Color = Color.Unspecified,
+    headerSurface: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
 ) {
-    CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
         Box(modifier = modifier) {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-                    .padding(horizontal = 24.dp)
-            ) {
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
                 state.forEach { dayUi ->
                     stickyHeader {
-                        Column(modifier = Modifier.background(backgroundColor)) {
+                        Column(modifier = Modifier.background(headerSurface)) {
                             DateAndLowHighTemperature(
                                 date = dayUi.date.asString(),
                                 lowHighTemperature = dayUi.lowHighTemperature.asString(),
@@ -107,7 +103,8 @@ private fun fakeState() = listOf(
                         time = TextResource.fromText("7:00"),
                         temperature = TextResource.fromText("16"),
                         precipitation = TextResource.fromText("0.22 mm"),
-                        description = TextResource.fromText("Partly cloudy")
+                        description = TextResource.fromText("Partly cloudy"),
+                        icon = R.drawable.partlycloudy_day
                     )
                 )
             }
@@ -123,7 +120,8 @@ private fun fakeState() = listOf(
                         time = TextResource.fromText("9:00"),
                         temperature = TextResource.fromText("22"),
                         precipitation = TextResource.fromText("1.88 mm"),
-                        description = TextResource.fromText("Cloudy")
+                        description = TextResource.fromText("Cloudy"),
+                        icon = R.drawable.cloudy
                     )
                 )
             }
@@ -139,7 +137,8 @@ private fun fakeState() = listOf(
                         time = TextResource.fromText("8:00"),
                         temperature = TextResource.fromText("18"),
                         precipitation = TextResource.fromText(""),
-                        description = TextResource.fromText("Clear")
+                        description = TextResource.fromText("Clear"),
+                        icon = R.drawable.clearsky_day
                     )
                 )
             }

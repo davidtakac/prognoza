@@ -27,20 +27,16 @@ fun TodayScreen(
     state: TodayUi,
     place: TextResource,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Unspecified,
-    onBackgroundColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
     onPlaceVisibilityChange: (Float) -> Unit = {},
     onDateTimeVisibilityChange: (Float) -> Unit = {},
     onTemperatureVisibilityChange: (Float) -> Unit = {}
 ) {
-    CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
         Box(modifier = modifier) {
             val listState = rememberLazyListState()
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-                    .padding(horizontal = 24.dp),
+                modifier = Modifier.fillMaxSize(),
                 state = listState
             ) {
                 item {
