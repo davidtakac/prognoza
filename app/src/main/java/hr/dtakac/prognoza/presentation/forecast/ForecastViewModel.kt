@@ -18,7 +18,6 @@ import javax.inject.Inject
 class ForecastViewModel @Inject constructor(
     private val getForecast: GetForecast
 ) : ViewModel() {
-
     private val _state: MutableState<ForecastState> = mutableStateOf(ForecastState())
     val state: State<ForecastState> get() = _state
 

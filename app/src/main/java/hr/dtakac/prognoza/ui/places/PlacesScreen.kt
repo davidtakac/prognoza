@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,13 +8,10 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.Divider
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
@@ -31,9 +27,11 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 
 @Composable
-fun PlacesScreen(
-    viewModel: PlacesViewModel = hiltViewModel()
-) {
+fun PlacesScreen(viewModel: PlacesViewModel = hiltViewModel()) {
+    LaunchedEffect(viewModel) {
+        viewModel.getSaved()
+    }
+
     val state by remember { viewModel.state }
     val places = state.places
 
@@ -47,7 +45,14 @@ fun PlacesScreen(
                 PlaceItem(
                     placeUi = placeUi,
                     onClick = { viewModel.select(idx) },
-                    modifier = Modifier.padding(top = if (idx == 0) 16.dp else 0.dp, bottom = 16.dp)
+                    modifier = Modifier.padding(
+                        top = if (idx == 0) {
+                            16.dp
+                        } else {
+                            0.dp
+                        },
+                        bottom = 16.dp
+                    )
                 )
             }
         }
@@ -59,7 +64,7 @@ private fun SearchBar(
     onSubmit: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val style = PrognozaTheme.typography.subtitleSmall
+    val style = PrognozaTheme.typography.subtitleSmall.copy(color = LocalContentColor.current)
     var query by remember { mutableStateOf("") }
     BasicTextField(
         value = query,
@@ -114,18 +119,26 @@ fun PlaceItem(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-                width = 2.dp,
-                color = if (placeUi.isSelected) LocalContentColor.current else Color.Transparent
-            )
             .clickable { onClick() }
     ) {
-        Text(
-            text = placeUi.name.asString(),
-            style = PrognozaTheme.typography.body,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            if (placeUi.isSelected) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_my_location),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(end = 4.dp)
+                        .size(20.dp),
+                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = 0.6f))
+                )
+            }
+            Text(
+                text = placeUi.name.asString(),
+                style = PrognozaTheme.typography.subtitleSmall,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
         Text(
             text = placeUi.details.asString(),
             style = PrognozaTheme.typography.body,
