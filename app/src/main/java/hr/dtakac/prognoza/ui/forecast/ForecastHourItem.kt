@@ -15,7 +15,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
+import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
@@ -56,7 +58,48 @@ fun HourItem(
             Image(
                 painter = painterResource(id = hour.icon),
                 contentDescription = null,
-                modifier = Modifier.padding(start = 12.dp).size(32.dp)
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .size(32.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun ComingItem(
+    day: DayUi,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = day.date.asString(),
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = "0.7 mm",
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = day.lowHighTemperature.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Image(
+                painter = painterResource(id = R.drawable.clearsky_day),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .size(32.dp)
             )
         }
     }

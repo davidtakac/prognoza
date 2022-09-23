@@ -20,15 +20,21 @@ data class PrognozaColors(
             surface = if (useDarkTheme) Color(0xFF121212) else Color.White,
             onSurface = if (useDarkTheme) Color.White else Color.Black,
             weatherDependentOverlay = when (description) {
-                ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // blue gray 600
-                ForecastDescription.Short.RAIN -> Color(0xFF1E88E5) // blue 600
-                ForecastDescription.Short.SNOW -> Color(0xFF757575) // gray 600
-                ForecastDescription.Short.SLEET -> Color(0xFF00897B) // teal 600
+                ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // Blue Gray 600
+                ForecastDescription.Short.RAIN -> Color(0xFF1E88E5) // Blue 600
+                ForecastDescription.Short.SLEET -> Color(0xFF00897B) // Teal 600
+
+                ForecastDescription.Short.SNOW -> if (useDarkTheme) {
+                    Color.White
+                } else {
+                    Color(0xFF757575) // Gray 600
+                }
 
                 ForecastDescription.Short.CLEAR -> if (useDarkTheme) {
-                    Color.Black // Clear night sky is pitch black
-                } else
-                    Color(0xFFFDD835) // yellow 600
+                    Color(0xFF3949AB) // Indigo 600
+                } else {
+                    Color(0xFFFFB300) // Amber 600
+                }
             }
         )
     }

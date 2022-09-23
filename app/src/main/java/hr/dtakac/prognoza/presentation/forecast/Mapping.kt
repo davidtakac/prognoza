@@ -70,7 +70,7 @@ private fun mapToTodayUi(
         id = R.string.template_precipitation,
         getPrecipitation(current.precipitation, precipitationUnit)
     ),
-    shortDescription = ForecastDescription.Short.CLEAR,
+    shortDescription = ForecastDescription.Short.RAIN,//current.description.short,
     hourly = today.hourly.map { datum ->
         getDayHourUi(
             datum,
@@ -88,7 +88,7 @@ private fun mapToComingUi(
     DayUi(
         date = TextResource.fromEpochMillis(
             millis = day.dateTime.toInstant().toEpochMilli(),
-            flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY
+            flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY
         ),
         lowTemperature = getTemperature(
             day.lowTemperature,

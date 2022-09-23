@@ -20,7 +20,7 @@ class GetForecast(
     suspend operator fun invoke(): GetForecastResult {
         val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
         val from = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
-        val to = from.plusDays(10L)
+        val to = from.plusDays(7L)
         return forecastRepository.getForecast(
             latitude = selectedPlace.latitude,
             longitude = selectedPlace.longitude,

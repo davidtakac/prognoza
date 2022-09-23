@@ -23,7 +23,15 @@ class Forecast(data: List<ForecastDatum>) {
             .groupBy { datum ->
                 datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
             }.values.toList()
-        today = resolveToday(dataGroupedByDay.first() + dataGroupedByDay[1].take(8))
+
+        val todayHours = dataGroupedByDay.first().toMutableList()
+        val tomorrowHours = dataGroupedByDay.getOrElse(1) { listOf() }
+        if (todayHours.size <= 5 && tomorrowHours.isNotEmpty()) {
+            // Overflow into next day if there are not many hours left in the day
+            todayHours += tomorrowHours.take(7)
+        }
+        today = resolveToday(todayHours)
+
         coming = resolveComing(dataGroupedByDay.drop(1))
     }
 

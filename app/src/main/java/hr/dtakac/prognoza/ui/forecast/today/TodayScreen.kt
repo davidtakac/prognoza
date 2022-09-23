@@ -19,6 +19,8 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
+import hr.dtakac.prognoza.presentation.forecast.DayUi
+import hr.dtakac.prognoza.ui.forecast.ComingItem
 import hr.dtakac.prognoza.ui.forecast.ForecastToolbar
 import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
@@ -28,7 +30,8 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 fun TodayScreen(
-    state: TodayUi,
+    todayUi: TodayUi,
+    comingUi: List<DayUi>,
     place: TextResource,
     surfaceColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
@@ -50,9 +53,9 @@ fun TodayScreen(
                 ToolbarContent(
                     place = place.asString(),
                     placeVisible = toolbarPlaceVisible,
-                    dateTime = state.time.asString(),
+                    dateTime = todayUi.time.asString(),
                     dateTimeVisible = toolbarDateTimeVisible,
-                    temperature = state.temperature.asString(),
+                    temperature = todayUi.temperature.asString(),
                     temperatureVisible = toolbarTemperatureVisible
                 )
             }
@@ -79,13 +82,13 @@ fun TodayScreen(
                 }
                 item(key = "time") {
                     Text(
-                        text = state.time.asString(),
+                        text = todayUi.time.asString(),
                         style = PrognozaTheme.typography.subtitleLarge
                     )
                 }
                 item(key = "temperature") {
                     AutoSizeText(
-                        text = state.temperature.asString(),
+                        text = todayUi.temperature.asString(),
                         style = PrognozaTheme.typography.headlineLarge,
                         maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
                         maxLines = 1
@@ -93,8 +96,8 @@ fun TodayScreen(
                 }
                 item {
                     DescriptionAndLowHighTemperature(
-                        description = state.description.asString(),
-                        lowHighTemperature = state.lowHighTemperature.asString(),
+                        description = todayUi.description.asString(),
+                        lowHighTemperature = todayUi.lowHighTemperature.asString(),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -103,8 +106,8 @@ fun TodayScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 42.dp),
-                        wind = state.wind.asString(),
-                        precipitation = state.precipitation.asString()
+                        wind = todayUi.wind.asString(),
+                        precipitation = todayUi.precipitation.asString()
                     )
                 }
                 item {
@@ -114,9 +117,24 @@ fun TodayScreen(
                             .padding(top = 42.dp, bottom = 16.dp)
                     )
                 }
-                items(state.hourly) { hour ->
+                items(todayUi.hourly) { hour ->
                     HourItem(
                         hour = hour,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    )
+                }
+                item {
+                    ComingHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp, top = 30.dp)
+                    )
+                }
+                items(comingUi) { day ->
+                    ComingItem(
+                        day = day,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 12.dp)
@@ -194,7 +212,24 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
             text = stringResource(id = R.string.hourly),
             style = PrognozaTheme.typography.label,
         )
-        Divider(color = LocalContentColor.current, modifier = Modifier.padding(top = 16.dp))
+        Divider(
+            color = LocalContentColor.current,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+    }
+}
+
+@Composable
+private fun ComingHeader(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(id = R.string.coming),
+            style = PrognozaTheme.typography.label,
+        )
+        Divider(
+            color = LocalContentColor.current,
+            modifier = Modifier.padding(top = 16.dp)
+        )
     }
 }
 
@@ -253,7 +288,8 @@ private fun SlideUpAppearText(
 private fun TodayScreenPreview() {
     PrognozaTheme(description = ForecastDescription.Short.CLEAR) {
         TodayScreen(
-            fakeContent(),
+            fakeTodayUi(),
+            fakeComingUi(),
             place = TextResource.fromText("Helsinki"),
             surfaceColor = PrognozaTheme.colors.surface,
             contentColor = PrognozaTheme.colors.onSurface
@@ -261,7 +297,7 @@ private fun TodayScreenPreview() {
     }
 }
 
-private fun fakeContent(): TodayUi = TodayUi(
+private fun fakeTodayUi(): TodayUi = TodayUi(
     time = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
@@ -271,16 +307,76 @@ private fun fakeContent(): TodayUi = TodayUi(
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
     shortDescription = ForecastDescription.Short.CLEAR,
     hourly = mutableListOf<DayHourUi>().apply {
-        for (i in 1..100) {
+        for (i in 1..15) {
             add(
                 DayHourUi(
                     time = TextResource.fromText("14:00"),
                     temperature = TextResource.fromText("23°"),
                     precipitation = TextResource.fromText("1.99 mm"),
                     description = TextResource.fromText("Clear and some more text"),
-                    icon = R.drawable.heavyrainshowersandthunder_day
+                    icon = R.drawable.heavysleetshowersandthunder_night
                 )
             )
         }
     }
+)
+
+private fun fakeComingUi(): List<DayUi> = listOf(
+    DayUi(
+        date = TextResource.fromText("Thursday"),
+        lowHighTemperature = TextResource.fromText("16—8"),
+        lowTemperature = TextResource.fromText("18"),
+        highTemperature = TextResource.fromText("19"),
+        hourly = mutableListOf<DayHourUi>().apply {
+            for (i in 0..20) {
+                add(
+                    DayHourUi(
+                        time = TextResource.fromText("7:00"),
+                        temperature = TextResource.fromText("16"),
+                        precipitation = TextResource.fromText("0.22 mm"),
+                        description = TextResource.fromText("Partly cloudy"),
+                        icon = R.drawable.partlycloudy_day
+                    )
+                )
+            }
+        }
+    ),
+    DayUi(
+        date = TextResource.fromText("Friday"),
+        lowHighTemperature = TextResource.fromText("23—9"),
+        lowTemperature = TextResource.fromText("18"),
+        highTemperature = TextResource.fromText("19"),
+        hourly = mutableListOf<DayHourUi>().apply {
+            for (i in 0..20) {
+                add(
+                    DayHourUi(
+                        time = TextResource.fromText("9:00"),
+                        temperature = TextResource.fromText("22"),
+                        precipitation = TextResource.fromText("1.88 mm"),
+                        description = TextResource.fromText("Cloudy"),
+                        icon = R.drawable.cloudy
+                    )
+                )
+            }
+        }
+    ),
+    DayUi(
+        date = TextResource.fromText("Saturday"),
+        lowHighTemperature = TextResource.fromText("19—18"),
+        lowTemperature = TextResource.fromText("18"),
+        highTemperature = TextResource.fromText("19"),
+        hourly = mutableListOf<DayHourUi>().apply {
+            for (i in 0..20) {
+                add(
+                    DayHourUi(
+                        time = TextResource.fromText("8:00"),
+                        temperature = TextResource.fromText("18"),
+                        precipitation = TextResource.fromText(""),
+                        description = TextResource.fromText("Clear"),
+                        icon = R.drawable.clearsky_day
+                    )
+                )
+            }
+        }
+    )
 )

@@ -17,7 +17,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
-import hr.dtakac.prognoza.ui.forecast.coming.ComingScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.forecast.today.TodayScreen
 import hr.dtakac.prognoza.ui.theme.applyOverlay
@@ -93,12 +92,12 @@ fun ForecastScreen(
                         }
                     },
                     onComingClick = {
-                        scope.launch {
+                        /*scope.launch {
                             drawerState.close()
                             navController.navigate("coming") {
                                 popUpTo("coming") { inclusive = true }
                             }
-                        }
+                        }*/
                     },
                     onPlacePickerClick = onPlacePickerClick,
                     onSettingsClick = onSettingsClick
@@ -113,19 +112,9 @@ fun ForecastScreen(
                     ) {
                         composable("today") {
                             TodayScreen(
-                                state = forecast.today,
+                                todayUi = forecast.today,
+                                comingUi = forecast.coming,
                                 place = forecast.place,
-                                surfaceColor = surface,
-                                contentColor = onSurface,
-                                toolbarSurfaceColor = barSurface,
-                                toolbarContentColor = onBarSurface,
-                                onMenuClick = ::openDrawer
-                            )
-                        }
-                        composable("coming") {
-                            ComingScreen(
-                                place = forecast.place,
-                                state = forecast.coming,
                                 surfaceColor = surface,
                                 contentColor = onSurface,
                                 toolbarSurfaceColor = barSurface,
