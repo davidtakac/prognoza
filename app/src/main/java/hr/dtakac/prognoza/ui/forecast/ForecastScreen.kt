@@ -12,9 +12,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -27,7 +24,6 @@ import kotlinx.coroutines.launch
 fun ForecastScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     viewModel: ForecastViewModel = hiltViewModel(),
-    onPlacePickerClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {}
 ) {
     // Refresh state every time screen is re-entered
@@ -74,55 +70,28 @@ fun ForecastScreen(
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
-        val navController = rememberNavController()
 
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
                 ForecastDrawerContent(
-                    place = forecast.place.asString(),
                     backgroundColor = barSurface,
                     onBackgroundColor = onBarSurface,
-                    onTodayClick = {
-                        scope.launch {
-                            drawerState.close()
-                            navController.navigate("today") {
-                                popUpTo("today") { inclusive = true }
-                            }
-                        }
-                    },
-                    onComingClick = {
-                        /*scope.launch {
-                            drawerState.close()
-                            navController.navigate("coming") {
-                                popUpTo("coming") { inclusive = true }
-                            }
-                        }*/
-                    },
-                    onPlacePickerClick = onPlacePickerClick,
                     onSettingsClick = onSettingsClick
                 )
             },
             content = {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    fun openDrawer() = scope.launch { drawerState.open() }
-                    NavHost(
-                        navController = navController,
-                        startDestination = "today"
-                    ) {
-                        composable("today") {
-                            TodayScreen(
-                                todayUi = forecast.today,
-                                comingUi = forecast.coming,
-                                place = forecast.place,
-                                surfaceColor = surface,
-                                contentColor = onSurface,
-                                toolbarSurfaceColor = barSurface,
-                                toolbarContentColor = onBarSurface,
-                                onMenuClick = ::openDrawer
-                            )
-                        }
-                    }
+                    TodayScreen(
+                        todayUi = forecast.today,
+                        comingUi = forecast.coming,
+                        place = forecast.place,
+                        surfaceColor = surface,
+                        contentColor = onSurface,
+                        toolbarSurfaceColor = barSurface,
+                        toolbarContentColor = onBarSurface,
+                        onMenuClick = { scope.launch { drawerState.open() } }
+                    )
                 }
             }
         )

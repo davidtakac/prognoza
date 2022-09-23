@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.ui.forecast.today
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
@@ -9,9 +10,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
@@ -20,9 +23,7 @@ import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
-import hr.dtakac.prognoza.ui.forecast.ComingItem
 import hr.dtakac.prognoza.ui.forecast.ForecastToolbar
-import hr.dtakac.prognoza.ui.forecast.HourItem
 import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -280,6 +281,91 @@ private fun SlideUpAppearText(
         exit = exit
     ) {
         Text(text = text, style = style)
+    }
+}
+
+@Composable
+fun HourItem(
+    hour: DayHourUi,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
+            Text(
+                modifier = Modifier.width(52.dp),
+                text = hour.time.asString(),
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = hour.description.asString(),
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.width(88.dp),
+                text = hour.precipitation.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.width(52.dp),
+                text = hour.temperature.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Image(
+                painter = painterResource(id = hour.icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .size(32.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun ComingItem(
+    day: DayUi,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
+            Text(
+                modifier = Modifier.weight(2f),
+                text = day.date.asString(),
+                textAlign = TextAlign.Start,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = day.precipitation.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = day.lowHighTemperature.asString(),
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Image(
+                painter = painterResource(id = day.icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .size(32.dp)
+            )
+        }
     }
 }
 
