@@ -3,10 +3,7 @@ package hr.dtakac.prognoza.presentation.forecast
 import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
-import hr.dtakac.prognoza.entities.forecast.Current
-import hr.dtakac.prognoza.entities.forecast.Day
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
-import hr.dtakac.prognoza.entities.forecast.HourlyDatum
+import hr.dtakac.prognoza.entities.forecast.*
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource
@@ -15,7 +12,7 @@ import java.time.ZonedDateTime
 fun mapToForecastUi(
     placeName: String,
     current: Current,
-    today: Day,
+    today: Today,
     coming: List<Day>,
     temperatureUnit: TemperatureUnit,
     windUnit: SpeedUnit,
@@ -42,12 +39,12 @@ fun mapToError(
 
 private fun mapToTodayUi(
     current: Current,
-    today: Day,
+    today: Today,
     temperatureUnit: TemperatureUnit,
     windUnit: SpeedUnit,
     precipitationUnit: LengthUnit
 ): TodayUi = TodayUi(
-    time = TextResource.fromEpochMillis(
+    date = TextResource.fromEpochMillis(
         millis = current.dateTime.toInstant().toEpochMilli(),
         flags = DateUtils.FORMAT_SHOW_DATE
     ),
@@ -90,26 +87,15 @@ private fun mapToComingUi(
             millis = day.dateTime.toInstant().toEpochMilli(),
             flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY
         ),
-        lowTemperature = getTemperature(
-            day.lowTemperature,
-            temperatureUnit
-        ),
-        highTemperature = getTemperature(
-            day.highTemperature,
-            temperatureUnit
-        ),
         lowHighTemperature = getLowHighTemperature(
             lowTemperature = day.lowTemperature,
             highTemperature = day.highTemperature,
             temperatureUnit = temperatureUnit
         ),
-        hourly = day.hourly.map { hourlyDatum ->
-            getDayHourUi(
-                datum = hourlyDatum,
-                temperatureUnit = temperatureUnit,
-                precipitationUnit = precipitationUnit
-            )
-        }
+        precipitation = day.totalPrecipitation.takeIf { it.millimeters > 0.0 }?.let {
+            getPrecipitation(it, precipitationUnit)
+        } ?: TextResource.fromText(""),
+        icon = day.description.toDrawableId()
     )
 }
 

@@ -17,7 +17,7 @@ data class ForecastUi(
 )
 
 data class TodayUi(
-    val time: TextResource,
+    val date: TextResource,
     val temperature: TextResource,
     val feelsLike: TextResource,
     val description: TextResource,
@@ -39,9 +39,9 @@ data class DayHourUi(
 
 data class DayUi(
     val date: TextResource,
-    val lowTemperature: TextResource,
-    val highTemperature: TextResource,
     val lowHighTemperature: TextResource,
-    val hourly: List<DayHourUi>
+    val precipitation: TextResource,
+    @DrawableRes
+    val icon: Int
 )
 

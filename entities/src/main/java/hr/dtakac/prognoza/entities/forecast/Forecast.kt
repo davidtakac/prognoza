@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.entities.forecast
 
 import hr.dtakac.prognoza.entities.forecast.units.Length
+import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.lang.IllegalStateException
@@ -9,13 +10,11 @@ import java.time.ZonedDateTime
 
 class Forecast(data: List<ForecastDatum>) {
     val current: Current
-    val today: Day
+    val today: Today
     val coming: List<Day>
 
     init {
-        if (data.isEmpty()) {
-            throw IllegalStateException("Forecast data must not be empty.")
-        }
+        if (data.isEmpty()) throw IllegalStateException("Forecast data must not be empty.")
 
         current = resolveCurrent(data.first())
 
@@ -30,8 +29,7 @@ class Forecast(data: List<ForecastDatum>) {
             // Overflow into next day if there are not many hours left in the day
             todayHours += tomorrowHours.take(7)
         }
-        today = resolveToday(todayHours)
-
+        today = resolveToday(todayHours.drop(1))
         coming = resolveComing(dataGroupedByDay.drop(1))
     }
 
@@ -46,8 +44,8 @@ class Forecast(data: List<ForecastDatum>) {
         )
     }
 
-    private fun resolveToday(data: List<ForecastDatum>): Day {
-        val hourly = data.drop(1).map { datum ->
+    private fun resolveToday(data: List<ForecastDatum>): Today {
+        val hourly = data.map { datum ->
             HourlyDatum(
                 dateTime = datum.start,
                 description = datum.description,
@@ -56,7 +54,7 @@ class Forecast(data: List<ForecastDatum>) {
                 wind = datum.wind
             )
         }
-        return Day(
+        return Today(
             dateTime = data.first().start,
             hourly = hourly,
             highTemperature = hourly.maxOf { it.temperature },
@@ -66,20 +64,19 @@ class Forecast(data: List<ForecastDatum>) {
 
     private fun resolveComing(listOfData: List<List<ForecastDatum>>): List<Day> {
         return listOfData.map { data ->
-            val hourly = data.map { datum ->
-                HourlyDatum(
-                    dateTime = datum.start,
-                    description = datum.description,
-                    temperature = datum.temperature,
-                    precipitation = datum.precipitation,
-                    wind = datum.wind
-                )
-            }
+            val descriptionCounts = data
+                .filter { it.start.withZoneSameInstant(ZoneId.systemDefault()).hour in 6..21 }
+                .groupingBy { it.description }
+                .eachCount()
+
             Day(
                 dateTime = data.first().start,
-                hourly = hourly,
-                highTemperature = hourly.maxOf { it.temperature },
-                lowTemperature = hourly.minOf { it.temperature },
+                highTemperature = data.maxOf { it.temperature },
+                lowTemperature = data.minOf { it.temperature },
+                totalPrecipitation = Length(data.sumOf { it.precipitation.millimeters }, LengthUnit.MM),
+                description = descriptionCounts.maxByOrNull { it.value }?.key
+                    ?: descriptionCounts.keys.firstOrNull()
+                    ?: ForecastDescription.UNKNOWN
             )
         }
     }
@@ -102,9 +99,17 @@ data class HourlyDatum(
     val wind: Wind
 )
 
-data class Day(
+data class Today(
     val dateTime: ZonedDateTime,
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
     val hourly: List<HourlyDatum>
+)
+
+data class Day(
+    val dateTime: ZonedDateTime,
+    val highTemperature: Temperature,
+    val lowTemperature: Temperature,
+    val description: ForecastDescription,
+    val totalPrecipitation: Length,
 )

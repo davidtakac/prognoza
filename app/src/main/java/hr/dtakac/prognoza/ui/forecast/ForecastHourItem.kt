@@ -15,7 +15,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -82,7 +81,7 @@ fun ComingItem(
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "0.7 mm",
+                text = day.precipitation.asString(),
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -95,7 +94,7 @@ fun ComingItem(
                 overflow = TextOverflow.Ellipsis
             )
             Image(
-                painter = painterResource(id = R.drawable.clearsky_day),
+                painter = painterResource(id = day.icon),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 12.dp)

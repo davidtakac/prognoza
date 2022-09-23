@@ -53,7 +53,7 @@ fun TodayScreen(
                 ToolbarContent(
                     place = place.asString(),
                     placeVisible = toolbarPlaceVisible,
-                    dateTime = todayUi.time.asString(),
+                    dateTime = todayUi.date.asString(),
                     dateTimeVisible = toolbarDateTimeVisible,
                     temperature = todayUi.temperature.asString(),
                     temperatureVisible = toolbarTemperatureVisible
@@ -82,7 +82,7 @@ fun TodayScreen(
                 }
                 item(key = "time") {
                     Text(
-                        text = todayUi.time.asString(),
+                        text = todayUi.date.asString(),
                         style = PrognozaTheme.typography.subtitleLarge
                     )
                 }
@@ -298,7 +298,7 @@ private fun TodayScreenPreview() {
 }
 
 private fun fakeTodayUi(): TodayUi = TodayUi(
-    time = TextResource.fromText("September 12"),
+    date = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
     description = TextResource.fromText("Clear sky, sleet soon"),
@@ -323,60 +323,21 @@ private fun fakeTodayUi(): TodayUi = TodayUi(
 
 private fun fakeComingUi(): List<DayUi> = listOf(
     DayUi(
-        date = TextResource.fromText("Thursday"),
+        date = TextResource.fromText("Thu, Sep 13"),
         lowHighTemperature = TextResource.fromText("16—8"),
-        lowTemperature = TextResource.fromText("18"),
-        highTemperature = TextResource.fromText("19"),
-        hourly = mutableListOf<DayHourUi>().apply {
-            for (i in 0..20) {
-                add(
-                    DayHourUi(
-                        time = TextResource.fromText("7:00"),
-                        temperature = TextResource.fromText("16"),
-                        precipitation = TextResource.fromText("0.22 mm"),
-                        description = TextResource.fromText("Partly cloudy"),
-                        icon = R.drawable.partlycloudy_day
-                    )
-                )
-            }
-        }
+        precipitation = TextResource.fromText(""),
+        icon = R.drawable.clearsky_day
     ),
     DayUi(
-        date = TextResource.fromText("Friday"),
-        lowHighTemperature = TextResource.fromText("23—9"),
-        lowTemperature = TextResource.fromText("18"),
-        highTemperature = TextResource.fromText("19"),
-        hourly = mutableListOf<DayHourUi>().apply {
-            for (i in 0..20) {
-                add(
-                    DayHourUi(
-                        time = TextResource.fromText("9:00"),
-                        temperature = TextResource.fromText("22"),
-                        precipitation = TextResource.fromText("1.88 mm"),
-                        description = TextResource.fromText("Cloudy"),
-                        icon = R.drawable.cloudy
-                    )
-                )
-            }
-        }
+        date = TextResource.fromText("Fri, Sep 14"),
+        lowHighTemperature = TextResource.fromText("18—8"),
+        precipitation = TextResource.fromText("0.7 mm"),
+        icon = R.drawable.rainshowers_day
     ),
     DayUi(
-        date = TextResource.fromText("Saturday"),
-        lowHighTemperature = TextResource.fromText("19—18"),
-        lowTemperature = TextResource.fromText("18"),
-        highTemperature = TextResource.fromText("19"),
-        hourly = mutableListOf<DayHourUi>().apply {
-            for (i in 0..20) {
-                add(
-                    DayHourUi(
-                        time = TextResource.fromText("8:00"),
-                        temperature = TextResource.fromText("18"),
-                        precipitation = TextResource.fromText(""),
-                        description = TextResource.fromText("Clear"),
-                        icon = R.drawable.clearsky_day
-                    )
-                )
-            }
-        }
-    )
+        date = TextResource.fromText("Sat, Sep 15"),
+        lowHighTemperature = TextResource.fromText("21—5"),
+        precipitation = TextResource.fromText(""),
+        icon = R.drawable.cloudy
+    ),
 )
