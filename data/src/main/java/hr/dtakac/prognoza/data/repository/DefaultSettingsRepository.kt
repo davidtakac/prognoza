@@ -20,7 +20,7 @@ class DefaultSettingsRepository(
         // Lat possible values are -90 to 90
         val lat = sharedPreferences.getFloat(PLACE_LAT, 91f).toDouble()
         // Lon possible values are -180 to 180
-        val lon = sharedPreferences.getFloat(PLACE_LAT, 181f).toDouble()
+        val lon = sharedPreferences.getFloat(PLACE_LON, 181f).toDouble()
         return placeDao.get(lat, lon)?.let(::mapDbModelToEntity)
     }
 

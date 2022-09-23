@@ -67,7 +67,7 @@ private fun mapToTodayUi(
         id = R.string.template_precipitation,
         getPrecipitation(current.precipitation, precipitationUnit)
     ),
-    shortDescription = ForecastDescription.Short.RAIN,//current.description.short,
+    shortDescription = current.description.short,
     hourly = today.hourly.map { datum ->
         getDayHourUi(
             datum,

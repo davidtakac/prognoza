@@ -100,5 +100,6 @@
     <string name="forecast">Forecast</string>
     <string name="settings">Settings</string>
     <string name="change_place">Change place</string>
+    <string name="search_places">Search places…</string>
 
 </resources>
