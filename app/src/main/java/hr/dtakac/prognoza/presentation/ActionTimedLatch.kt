@@ -6,13 +6,13 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ActionTimedLatch(private val scope: CoroutineScope) {
-    private var actionStartJob: Job? = null
+    private var delayedStart: Job? = null
 
     fun start(
         millisBeforeAction: Long = 300L,
         action: () -> Unit
     ) {
-        actionStartJob = scope.launch {
+        delayedStart = scope.launch {
             delay(millisBeforeAction)
             action()
         }
@@ -22,17 +22,20 @@ class ActionTimedLatch(private val scope: CoroutineScope) {
         millisBeforeAction: Long = 1000L,
         action: () -> Unit
     ) {
-        actionStartJob?.let { job ->
+        delayedStart?.let { job ->
             if (job.isActive) {
+                // If stopped during delayed start, just cancel the start entirely
                 job.cancel()
-                actionStartJob = null
+                delayedStart = null
             } else {
+                // If stopped after delayed start is over, i.e. after start, then wait for
+                // some time before stopping
                 scope.launch {
                     delay(millisBeforeAction)
-                    actionStartJob = null
+                    delayedStart = null
                     action()
                 }
             }
-        }
+        } // If delayed start never happened, do nothing
     }
 }
