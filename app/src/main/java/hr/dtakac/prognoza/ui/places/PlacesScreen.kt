@@ -77,7 +77,7 @@ private fun SearchBar(
     onSubmit: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val style = PrognozaTheme.typography.subtitleSmall.copy(color = LocalContentColor.current)
+    val style = PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)
     var query by remember { mutableStateOf("") }
     BasicTextField(
         value = query,
@@ -136,14 +136,14 @@ fun PlaceItem(
                     painter = painterResource(id = R.drawable.ic_my_location),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(end = 4.dp)
+                        .padding(end = 8.dp)
                         .size(20.dp),
                     colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium))
                 )
             }
             Text(
                 text = placeUi.name.asString(),
-                style = PrognozaTheme.typography.subtitleSmall,
+                style = PrognozaTheme.typography.subtitleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

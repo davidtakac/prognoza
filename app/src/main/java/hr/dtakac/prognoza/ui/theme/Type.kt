@@ -1,10 +1,12 @@
 package hr.dtakac.prognoza.ui.theme
 
 import androidx.compose.runtime.Immutable
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.sp
 import hr.dtakac.prognoza.R
 
@@ -23,10 +25,10 @@ data class PrognozaTypography(
     val headlineSmall: TextStyle,
     val titleLarge: TextStyle,
     val subtitleLarge: TextStyle,
-    val titleSmall: TextStyle,
-    val subtitleSmall: TextStyle,
+    val titleMedium: TextStyle,
+    val subtitleMedium: TextStyle,
     val body: TextStyle,
-    val label: TextStyle
+    val titleSmall: TextStyle
 ) {
     companion object {
         fun get(): PrognozaTypography = PrognozaTypography(
@@ -34,13 +36,23 @@ data class PrognozaTypography(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 200.sp,
-                letterSpacing = (-9).sp
+                letterSpacing = (-9).sp,
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Proportional,
+                    trim = LineHeightStyle.Trim.Both
+                ),
+                platformStyle = PlatformTextStyle(includeFontPadding = false)
             ),
             headlineSmall = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
-                fontSize = 36.sp,
-                letterSpacing = 0.sp
+                fontSize = 42.sp,
+                letterSpacing = 0.sp,
+                lineHeightStyle = LineHeightStyle(
+                    alignment = LineHeightStyle.Alignment.Proportional,
+                    trim = LineHeightStyle.Trim.Both
+                ),
+                platformStyle = PlatformTextStyle(includeFontPadding = false)
             ),
             titleLarge = TextStyle(
                 fontFamily = Manrope,
@@ -54,16 +66,22 @@ data class PrognozaTypography(
                 fontSize = 22.sp,
                 letterSpacing = 0.sp
             ),
-            titleSmall = TextStyle(
+            titleMedium = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 letterSpacing = 0.25.sp
             ),
-            subtitleSmall = TextStyle(
+            subtitleMedium = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Normal,
                 fontSize = 18.sp,
+                letterSpacing = 0.25.sp
+            ),
+            titleSmall = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp,
                 letterSpacing = 0.25.sp
             ),
             body = TextStyle(
@@ -72,12 +90,6 @@ data class PrognozaTypography(
                 fontSize = 16.sp,
                 letterSpacing = 0.sp
             ),
-            label = TextStyle(
-                fontFamily = Manrope,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp,
-                letterSpacing = 0.25.sp
-            )
         )
     }
 }

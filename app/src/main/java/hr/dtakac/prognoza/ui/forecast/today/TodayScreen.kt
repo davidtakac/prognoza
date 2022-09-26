@@ -211,7 +211,7 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = stringResource(id = R.string.hourly),
-            style = PrognozaTheme.typography.label,
+            style = PrognozaTheme.typography.titleSmall,
         )
         Divider(
             color = LocalContentColor.current,
@@ -225,7 +225,7 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = stringResource(id = R.string.coming),
-            style = PrognozaTheme.typography.label,
+            style = PrognozaTheme.typography.titleSmall,
         )
         Divider(
             color = LocalContentColor.current,
@@ -252,12 +252,12 @@ private fun RowScope.ToolbarContent(
         SlideUpAppearText(
             text = place,
             visible = placeVisible,
-            style = PrognozaTheme.typography.titleSmall
+            style = PrognozaTheme.typography.titleMedium
         )
         SlideUpAppearText(
             text = dateTime,
             visible = dateTimeVisible,
-            style = PrognozaTheme.typography.subtitleSmall
+            style = PrognozaTheme.typography.subtitleMedium
         )
     }
     SlideUpAppearText(
