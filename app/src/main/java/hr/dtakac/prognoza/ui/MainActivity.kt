@@ -21,14 +21,7 @@ class MainActivity : ComponentActivity() {
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "forecast") {
                     composable("forecast") {
-                        ForecastScreen(
-                            onSettingsClick = {
-                                navController.navigate("settings")
-                            }
-                        )
-                    }
-                    composable("settings") {
-
+                        ForecastScreen()
                     }
                 }
             }

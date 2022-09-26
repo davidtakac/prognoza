@@ -44,7 +44,7 @@ data class PrognozaColors(
                 }
 
                 ForecastDescription.Short.FAIR -> if (useDarkTheme) {
-                    Color(0xFF3949AB) // Indigo 600
+                    Color(0xFF5E35B1) // Deep Purple 600
                 } else {
                     Color(0xFFFFB300) // Amber 600
                 }
