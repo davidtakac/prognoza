@@ -23,6 +23,7 @@ import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
+import hr.dtakac.prognoza.presentation.forecast.ForecastUi
 import hr.dtakac.prognoza.ui.forecast.ForecastToolbar
 import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -30,10 +31,8 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun TodayScreen(
-    todayUi: TodayUi,
-    comingUi: List<DayUi>,
-    place: TextResource,
+fun ForecastContent(
+    forecast: ForecastUi,
     surfaceColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
     toolbarSurfaceColor: Color = Color.Unspecified,
@@ -52,11 +51,11 @@ fun TodayScreen(
                 onMenuClick = onMenuClick
             ) {
                 ToolbarContent(
-                    place = place.asString(),
+                    place = forecast.place.asString(),
                     placeVisible = toolbarPlaceVisible,
-                    dateTime = todayUi.date.asString(),
+                    dateTime = forecast.today.date.asString(),
                     dateTimeVisible = toolbarDateTimeVisible,
-                    temperature = todayUi.temperature.asString(),
+                    temperature = forecast.today.temperature.asString(),
                     temperatureVisible = toolbarTemperatureVisible
                 )
             }
@@ -74,7 +73,7 @@ fun TodayScreen(
                 }
                 item(key = "place") {
                     Text(
-                        text = place.asString(),
+                        text = forecast.place.asString(),
                         style = PrognozaTheme.typography.titleLarge,
                     )
                 }
@@ -83,13 +82,13 @@ fun TodayScreen(
                 }
                 item(key = "time") {
                     Text(
-                        text = todayUi.date.asString(),
+                        text = forecast.today.date.asString(),
                         style = PrognozaTheme.typography.subtitleLarge
                     )
                 }
                 item(key = "temperature") {
                     AutoSizeText(
-                        text = todayUi.temperature.asString(),
+                        text = forecast.today.temperature.asString(),
                         style = PrognozaTheme.typography.headlineLarge,
                         maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
                         maxLines = 1
@@ -97,8 +96,8 @@ fun TodayScreen(
                 }
                 item {
                     DescriptionAndLowHighTemperature(
-                        description = todayUi.description.asString(),
-                        lowHighTemperature = todayUi.lowHighTemperature.asString(),
+                        description = forecast.today.description.asString(),
+                        lowHighTemperature = forecast.today.lowHighTemperature.asString(),
                         modifier = Modifier.fillMaxWidth()
                     )
                 }
@@ -107,8 +106,8 @@ fun TodayScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 42.dp),
-                        wind = todayUi.wind.asString(),
-                        precipitation = todayUi.precipitation.asString()
+                        wind = forecast.today.wind.asString(),
+                        precipitation = forecast.today.precipitation.asString()
                     )
                 }
                 item {
@@ -118,7 +117,7 @@ fun TodayScreen(
                             .padding(top = 42.dp, bottom = 16.dp)
                     )
                 }
-                items(todayUi.hourly) { hour ->
+                items(forecast.today.hourly) { hour ->
                     HourItem(
                         hour = hour,
                         modifier = Modifier
@@ -133,7 +132,7 @@ fun TodayScreen(
                             .padding(bottom = 16.dp, top = 30.dp)
                     )
                 }
-                items(comingUi) { day ->
+                items(forecast.coming) { day ->
                     ComingItem(
                         day = day,
                         modifier = Modifier
@@ -368,10 +367,12 @@ fun ComingItem(
 @Composable
 private fun TodayScreenPreview() {
     PrognozaTheme(description = ForecastDescription.Short.FAIR) {
-        TodayScreen(
-            fakeTodayUi(),
-            fakeComingUi(),
-            place = TextResource.fromText("Helsinki"),
+        ForecastContent(
+            forecast = ForecastUi(
+                place = TextResource.fromText("Helsinki"),
+                today = fakeTodayUi(),
+                coming = fakeComingUi()
+            ),
             surfaceColor = PrognozaTheme.colors.surface,
             contentColor = PrognozaTheme.colors.onSurface
         )

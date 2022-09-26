@@ -15,7 +15,7 @@ import androidx.lifecycle.LifecycleOwner
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import hr.dtakac.prognoza.ui.forecast.today.TodayScreen
+import hr.dtakac.prognoza.ui.forecast.today.ForecastContent
 import hr.dtakac.prognoza.ui.theme.applyOverlay
 import kotlinx.coroutines.launch
 
@@ -86,10 +86,8 @@ fun ForecastScreen(
             },
             content = {
                 Column(modifier = Modifier.fillMaxSize()) {
-                    TodayScreen(
-                        todayUi = forecast.today,
-                        comingUi = forecast.coming,
-                        place = forecast.place,
+                    ForecastContent(
+                        forecast = forecast,
                         surfaceColor = surface,
                         contentColor = onSurface,
                         toolbarSurfaceColor = barSurface,
