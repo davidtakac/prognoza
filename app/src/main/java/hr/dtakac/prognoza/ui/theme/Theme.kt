@@ -15,7 +15,7 @@ val LocalPrognozaColors = staticCompositionLocalOf {
     PrognozaColors(
         surface = Color.Unspecified,
         onSurface = Color.Unspecified,
-        weatherDependentOverlay = Color.Unspecified
+        moodOverlay = Color.Unspecified
     )
 }
 

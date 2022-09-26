@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 data class PrognozaColors(
     val surface: Color,
     val onSurface: Color,
-    val weatherDependentOverlay: Color
+    val moodOverlay: Color
 ) {
     companion object {
         fun get(
@@ -29,7 +29,7 @@ data class PrognozaColors(
                 Color.Black
             },
 
-            weatherDependentOverlay = when (shortForecastDescription) {
+            moodOverlay = when (shortForecastDescription) {
                 ForecastDescription.Short.FOG,
                 ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // Blue Gray 600
 

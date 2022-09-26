@@ -1,6 +1,5 @@
-package hr.dtakac.prognoza.ui.forecast.today
+package hr.dtakac.prognoza.ui.forecast
 
-import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,7 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,8 +22,6 @@ import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.presentation.forecast.ForecastUi
-import hr.dtakac.prognoza.ui.forecast.ForecastToolbar
-import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -35,31 +31,12 @@ fun ForecastContent(
     forecast: ForecastUi,
     surfaceColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
-    toolbarSurfaceColor: Color = Color.Unspecified,
-    toolbarContentColor: Color = Color.Unspecified,
-    onMenuClick: () -> Unit = {}
+    isPlaceVisible: (Boolean) -> Unit = {},
+    isDateVisible: (Boolean) -> Unit = {},
+    isTemperatureVisible: (Boolean) -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         Column {
-            var toolbarPlaceVisible by remember { mutableStateOf(false) }
-            var toolbarDateTimeVisible by remember { mutableStateOf(false) }
-            var toolbarTemperatureVisible by remember { mutableStateOf(false) }
-
-            ForecastToolbar(
-                backgroundColor = toolbarSurfaceColor,
-                contentColor = toolbarContentColor,
-                onMenuClick = onMenuClick
-            ) {
-                ToolbarContent(
-                    place = forecast.place.asString(),
-                    placeVisible = toolbarPlaceVisible,
-                    dateTime = forecast.today.date.asString(),
-                    dateTimeVisible = toolbarDateTimeVisible,
-                    temperature = forecast.today.temperature.asString(),
-                    temperatureVisible = toolbarTemperatureVisible
-                )
-            }
-
             val listState = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier
@@ -154,9 +131,9 @@ fun ForecastContent(
                     }
                     .distinctUntilChanged()
                     .collect { (placeVis, dateTimeVis, temperatureVis) ->
-                        toolbarPlaceVisible = placeVis == 0f
-                        toolbarDateTimeVisible = dateTimeVis == 0f
-                        toolbarTemperatureVisible = temperatureVis <= 50f
+                        isPlaceVisible(placeVis != 0f)
+                        isDateVisible(dateTimeVis != 0f)
+                        isTemperatureVisible(temperatureVis > 50f)
                     }
             }
         }
@@ -230,56 +207,6 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
             color = LocalContentColor.current,
             modifier = Modifier.padding(top = 16.dp)
         )
-    }
-}
-
-@Composable
-private fun RowScope.ToolbarContent(
-    place: String,
-    placeVisible: Boolean,
-    dateTime: String,
-    dateTimeVisible: Boolean,
-    temperature: String,
-    temperatureVisible: Boolean
-) {
-    Column(
-        modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center
-    ) {
-        SlideUpAppearText(
-            text = place,
-            visible = placeVisible,
-            style = PrognozaTheme.typography.titleMedium
-        )
-        SlideUpAppearText(
-            text = dateTime,
-            visible = dateTimeVisible,
-            style = PrognozaTheme.typography.subtitleMedium
-        )
-    }
-    SlideUpAppearText(
-        text = temperature,
-        visible = temperatureVisible,
-        style = PrognozaTheme.typography.headlineSmall
-    )
-}
-
-@Composable
-private fun SlideUpAppearText(
-    text: String,
-    visible: Boolean,
-    style: TextStyle = LocalTextStyle.current
-) {
-    val enter = fadeIn() + expandVertically(expandFrom = Alignment.Top)
-    val exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-    AnimatedVisibility(
-        visible = visible,
-        enter = enter,
-        exit = exit
-    ) {
-        Text(text = text, style = style)
     }
 }
 

@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.ui.forecast.today
+package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
