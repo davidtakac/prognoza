@@ -1,6 +1,9 @@
 package hr.dtakac.prognoza.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -69,4 +72,18 @@ object PrognozaTheme {
     val alpha: PrognozaContentAlpha
         @Composable
         get() = LocalPrognozaContentAlpha.current
+}
+
+object PrognozaRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = RippleTheme.defaultRippleColor(
+        contentColor = LocalContentColor.current,
+        lightTheme = !isSystemInDarkTheme()
+    )
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
+        contentColor = LocalContentColor.current,
+        lightTheme = !isSystemInDarkTheme()
+    )
 }

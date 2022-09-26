@@ -2,12 +2,14 @@ package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -35,24 +37,27 @@ fun PlacesScreen(viewModel: PlacesViewModel = hiltViewModel()) {
     val state by remember { viewModel.state }
     val places = state.places
 
-    Column(modifier = Modifier.padding(horizontal = 24.dp)) {
+    Column {
         SearchBar(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp),
             onSubmit = viewModel::search
         )
         LazyColumn {
             itemsIndexed(places) { idx, placeUi ->
+                if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
                 PlaceItem(
                     placeUi = placeUi,
-                    onClick = { viewModel.select(idx) },
-                    modifier = Modifier.padding(
-                        top = if (idx == 0) {
-                            16.dp
-                        } else {
-                            0.dp
-                        },
-                        bottom = 16.dp
-                    )
+                    modifier = Modifier
+                        .clickable(
+                            onClick = { viewModel.select(idx) },
+                            indication = rememberRipple(bounded = true),
+                            interactionSource = remember { MutableInteractionSource() }
+                        )
+                        .fillMaxWidth()
+                        .padding(
+                            vertical = 10.dp,
+                            horizontal = 24.dp
+                        )
                 )
             }
         }
@@ -79,48 +84,44 @@ private fun SearchBar(
         keyboardActions = KeyboardActions { onSubmit(query) },
         cursorBrush = SolidColor(LocalContentColor.current),
         decorationBox = { innerTextField ->
-            Row(
-                modifier = Modifier
-                    .padding(bottom = 16.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_search),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
+            Column {
+                Row(
                     modifier = Modifier
-                        .padding(end = 12.dp)
-                        .size(24.dp)
-                )
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    if (query.isEmpty()) {
-                        Text(
-                            stringResource(id = R.string.search_places),
-                            style = style,
-                            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-                        )
+                        .padding(bottom = 16.dp)
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_search),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
+                        modifier = Modifier
+                            .padding(end = 12.dp)
+                            .size(24.dp)
+                    )
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        if (query.isEmpty()) {
+                            Text(
+                                stringResource(id = R.string.search_places),
+                                style = style,
+                                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                            )
+                        }
+                        innerTextField()
                     }
-                    innerTextField()
                 }
+                Divider(color = LocalContentColor.current)
             }
-
         }
     )
-    Divider(color = LocalContentColor.current)
 }
 
 @Composable
 fun PlaceItem(
     placeUi: PlaceUi,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable { onClick() }
-    ) {
+    Column(modifier = modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (placeUi.isSelected) {
                 Image(

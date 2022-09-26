@@ -85,7 +85,7 @@ private fun mapToComingUi(
     DayUi(
         date = TextResource.fromEpochMillis(
             millis = day.dateTime.toInstant().toEpochMilli(),
-            flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_SHOW_WEEKDAY or DateUtils.FORMAT_ABBREV_WEEKDAY
+            flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_SHOW_WEEKDAY
         ),
         lowHighTemperature = getLowHighTemperature(
             lowTemperature = day.lowTemperature,
