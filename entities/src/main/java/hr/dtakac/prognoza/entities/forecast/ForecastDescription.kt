@@ -87,19 +87,21 @@ enum class ForecastDescription {
     SNOW_SHOWERS_POLAR_TWILIGHT;
 
     enum class Short {
-        CLEAR, CLOUDY, RAIN, SNOW, SLEET
+        UNKNOWN, FAIR, FOG, CLOUDY, RAIN, SNOW, SLEET
     }
 
     val short: Short
         get() = when (this) {
+            UNKNOWN -> Short.UNKNOWN
+
+            FOG -> Short.FOG
+
             CLEAR_SKY_DAY,
             CLEAR_SKY_NIGHT,
             CLEAR_SKY_POLAR_TWILIGHT,
             FAIR_DAY,
             FAIR_NIGHT,
-            FAIR_POLAR_TWILIGHT,
-            FOG,
-            UNKNOWN -> Short.CLEAR
+            FAIR_POLAR_TWILIGHT -> Short.FAIR
 
             CLOUDY,
             PARTLY_CLOUDY_DAY,

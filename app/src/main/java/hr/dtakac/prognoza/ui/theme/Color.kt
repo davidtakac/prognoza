@@ -14,7 +14,7 @@ data class PrognozaColors(
 ) {
     companion object {
         fun get(
-            description: ForecastDescription.Short,
+            shortForecastDescription: ForecastDescription.Short,
             useDarkTheme: Boolean
         ): PrognozaColors = PrognozaColors(
             surface = if (useDarkTheme) {
@@ -29,18 +29,21 @@ data class PrognozaColors(
                 Color.Black
             },
 
-            weatherDependentOverlay = when (description) {
+            weatherDependentOverlay = when (shortForecastDescription) {
+                ForecastDescription.Short.FOG,
                 ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // Blue Gray 600
+
                 ForecastDescription.Short.RAIN -> Color(0xFF1E88E5) // Blue 600
                 ForecastDescription.Short.SLEET -> Color(0xFF00897B) // Teal 600
 
+                ForecastDescription.Short.UNKNOWN,
                 ForecastDescription.Short.SNOW -> if (useDarkTheme) {
                     Color.White
                 } else {
                     Color(0xFF757575) // Gray 600
                 }
 
-                ForecastDescription.Short.CLEAR -> if (useDarkTheme) {
+                ForecastDescription.Short.FAIR -> if (useDarkTheme) {
                     Color(0xFF3949AB) // Indigo 600
                 } else {
                     Color(0xFFFFB300) // Amber 600

@@ -47,7 +47,7 @@ fun PrognozaTheme(
 ) {
     val alpha = PrognozaContentAlpha.get()
     val colors = PrognozaColors.get(
-        description = description,
+        shortForecastDescription = description,
         useDarkTheme = useDarkTheme
     )
     val typography = PrognozaTypography.get()

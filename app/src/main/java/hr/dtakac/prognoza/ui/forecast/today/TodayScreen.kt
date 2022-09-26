@@ -367,7 +367,7 @@ fun ComingItem(
 @Preview
 @Composable
 private fun TodayScreenPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.CLEAR) {
+    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
         TodayScreen(
             fakeTodayUi(),
             fakeComingUi(),
@@ -386,7 +386,7 @@ private fun fakeTodayUi(): TodayUi = TodayUi(
     lowHighTemperature = TextResource.fromText("15°—7°"),
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
-    shortDescription = ForecastDescription.Short.CLEAR,
+    shortDescription = ForecastDescription.Short.FAIR,
     hourly = mutableListOf<DayHourUi>().apply {
         for (i in 1..15) {
             add(
