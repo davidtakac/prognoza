@@ -29,17 +29,31 @@ val LocalPrognozaTypography = staticCompositionLocalOf {
     )
 }
 
+val LocalPrognozaContentAlpha = staticCompositionLocalOf {
+    PrognozaContentAlpha(
+        high = 1f,
+        medium = 1f
+    )
+}
+
 @Composable
 fun PrognozaTheme(
     description: ForecastDescription.Short,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = PrognozaColors.get(description, useDarkTheme)
+    val alpha = PrognozaContentAlpha.get()
+    val colors = PrognozaColors.get(
+        defaultAlpha = alpha.high,
+        description = description,
+        useDarkTheme = useDarkTheme
+    )
     val typography = PrognozaTypography.get()
+
     CompositionLocalProvider(
         LocalPrognozaColors provides colors,
         LocalPrognozaTypography provides typography,
+        LocalPrognozaContentAlpha provides alpha,
         content = content
     )
 }
@@ -52,4 +66,8 @@ object PrognozaTheme {
     val typography: PrognozaTypography
         @Composable
         get() = LocalPrognozaTypography.current
+
+    val alpha: PrognozaContentAlpha
+        @Composable
+        get() = LocalPrognozaContentAlpha.current
 }

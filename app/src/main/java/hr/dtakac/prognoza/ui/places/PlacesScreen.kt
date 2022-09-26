@@ -88,7 +88,7 @@ private fun SearchBar(
                 Image(
                     painter = painterResource(id = R.drawable.ic_search),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = 0.6f)),
+                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
                     modifier = Modifier
                         .padding(end = 12.dp)
                         .size(24.dp)
@@ -98,7 +98,7 @@ private fun SearchBar(
                         Text(
                             stringResource(id = R.string.search_places),
                             style = style,
-                            color = LocalContentColor.current.copy(alpha = 0.6f)
+                            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
                         )
                     }
                     innerTextField()
@@ -129,7 +129,7 @@ fun PlaceItem(
                     modifier = Modifier
                         .padding(end = 4.dp)
                         .size(20.dp),
-                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = 0.6f))
+                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium))
                 )
             }
             Text(
@@ -142,7 +142,7 @@ fun PlaceItem(
         Text(
             text = placeUi.details.asString(),
             style = PrognozaTheme.typography.body,
-            color = LocalContentColor.current.copy(alpha = 0.6f),
+            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )

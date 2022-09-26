@@ -14,27 +14,38 @@ data class PrognozaColors(
 ) {
     companion object {
         fun get(
+            defaultAlpha: Float,
             description: ForecastDescription.Short,
             useDarkTheme: Boolean
         ): PrognozaColors = PrognozaColors(
-            surface = if (useDarkTheme) Color(0xFF121212) else Color.White,
-            onSurface = if (useDarkTheme) Color.White else Color.Black,
+            surface = if (useDarkTheme) {
+                Color(0xFF121212)
+            } else {
+                Color.White
+            }.copy(alpha = defaultAlpha),
+
+            onSurface = if (useDarkTheme) {
+                Color.White
+            } else {
+                Color.Black
+            }.copy(alpha = defaultAlpha),
+
             weatherDependentOverlay = when (description) {
-                ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // Blue Gray 600
-                ForecastDescription.Short.RAIN -> Color(0xFF1E88E5) // Blue 600
-                ForecastDescription.Short.SLEET -> Color(0xFF00897B) // Teal 600
+                ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A).copy(alpha = defaultAlpha) // Blue Gray 600
+                ForecastDescription.Short.RAIN -> Color(0xFF1E88E5).copy(alpha = defaultAlpha) // Blue 600
+                ForecastDescription.Short.SLEET -> Color(0xFF00897B).copy(alpha = defaultAlpha) // Teal 600
 
                 ForecastDescription.Short.SNOW -> if (useDarkTheme) {
                     Color.White
                 } else {
                     Color(0xFF757575) // Gray 600
-                }
+                }.copy(alpha = defaultAlpha)
 
                 ForecastDescription.Short.CLEAR -> if (useDarkTheme) {
                     Color(0xFF3949AB) // Indigo 600
                 } else {
                     Color(0xFFFFB300) // Amber 600
-                }
+                }.copy(alpha = defaultAlpha)
             }
         )
     }
