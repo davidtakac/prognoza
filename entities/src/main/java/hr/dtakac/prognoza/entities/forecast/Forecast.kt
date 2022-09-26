@@ -110,6 +110,6 @@ data class Day(
     val dateTime: ZonedDateTime,
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
-    val description: ForecastDescription,
+    val description: ForecastDescription, // todo: remove this if unused
     val totalPrecipitation: Length,
 )

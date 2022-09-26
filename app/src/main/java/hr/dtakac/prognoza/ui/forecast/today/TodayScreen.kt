@@ -138,7 +138,7 @@ fun TodayScreen(
                         day = day,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(bottom = 12.dp)
+                            .padding(bottom = 20.dp)
                     )
                 }
             }
@@ -350,7 +350,8 @@ fun ComingItem(
                 text = day.precipitation.asString(),
                 textAlign = TextAlign.End,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
             )
             Text(
                 modifier = Modifier.weight(1f),
@@ -358,13 +359,6 @@ fun ComingItem(
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
-            )
-            Image(
-                painter = painterResource(id = day.icon),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .size(32.dp)
             )
         }
     }
