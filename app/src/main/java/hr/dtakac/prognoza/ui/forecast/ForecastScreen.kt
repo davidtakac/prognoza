@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -16,6 +17,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.forecast.today.ForecastContent
+import hr.dtakac.prognoza.ui.places.PlacesScreen
 import hr.dtakac.prognoza.ui.theme.applyOverlay
 import kotlinx.coroutines.launch
 
@@ -74,15 +76,18 @@ fun ForecastScreen(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ForecastDrawerContent(
-                    backgroundColor = barSurface,
-                    onBackgroundColor = onBarSurface,
-                    onSettingsClick = onSettingsClick,
-                    onPlaceSelected = {
-                        scope.launch { drawerState.close() }
-                        viewModel.getState()
-                    }
-                )
+                ModalDrawerSheet(
+                    drawerContentColor = onBarSurface,
+                    drawerShape = RectangleShape,
+                    drawerContainerColor = barSurface
+                ) {
+                    PlacesScreen(
+                        onPlaceSelected = {
+                            scope.launch { drawerState.close() }
+                            viewModel.getState()
+                        }
+                    )
+                }
             },
             content = {
                 Column(modifier = Modifier.fillMaxSize()) {
