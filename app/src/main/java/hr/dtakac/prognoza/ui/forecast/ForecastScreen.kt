@@ -22,6 +22,7 @@ import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
 import hr.dtakac.prognoza.ui.theme.applyOverlay
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,6 +42,7 @@ fun ForecastScreen(
 
     val state by remember { viewModel.state }
     val forecast = state.forecast
+    val error = state.error
 
     PrognozaTheme(forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
         val colorAnimationSpec = remember {
@@ -92,13 +94,17 @@ fun ForecastScreen(
                 }
             },
             content = {
-                Column(modifier = Modifier.fillMaxSize().background(surface)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(surface)
+                ) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
                     var toolbarTemperatureVisible by remember { mutableStateOf(false) }
 
                     Box(contentAlignment = Alignment.BottomCenter) {
-                        Toolbar(
+                        ForecastToolbar(
                             place = forecast?.place?.asString() ?: "",
                             placeVisible = toolbarPlaceVisible,
                             date = forecast?.today?.date?.asString() ?: "",
@@ -128,15 +134,46 @@ fun ForecastScreen(
                         }
                     }
 
-                    if (forecast != null) {
-                        Content(
-                            forecast = forecast,
-                            surfaceColor = surface,
-                            contentColor = onSurface,
-                            isPlaceVisible = { toolbarPlaceVisible = !it },
-                            isDateVisible = { toolbarDateVisible = !it },
-                            isTemperatureVisible = { toolbarTemperatureVisible = !it }
-                        )
+                    if (forecast == null) {
+                        if (error != null) {
+                            ForecastError(
+                                text = error.asString(),
+                                surfaceColor = surface,
+                                contentColor = onSurface
+                            )
+                        }
+                    } else {
+                        Box {
+                            ForecastContent(
+                                forecast = forecast,
+                                surfaceColor = surface,
+                                contentColor = onSurface,
+                                isPlaceVisible = { toolbarPlaceVisible = !it },
+                                isDateVisible = { toolbarDateVisible = !it },
+                                isTemperatureVisible = { toolbarTemperatureVisible = !it }
+                            )
+
+                            if (error != null) {
+                                // todo: when snackbar disappears, the "false" value is remembered for future
+                                //  recompositions, and the snackbar remains hidden. Fix this somehow
+                                var showSnackBar by remember { mutableStateOf(false) }
+                                LaunchedEffect(forecast, error) {
+                                    scope.launch {
+                                        showSnackBar = true // this doesn't seem to work for recompositions, it retriggers
+                                        delay(2500L)
+                                        showSnackBar = false
+                                    }
+                                }
+
+                                ForecastSnackBar(
+                                    modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp),
+                                    text = error.asString(),
+                                    visible = showSnackBar,
+                                    surfaceColor = barSurface,
+                                    onSurfaceColor = onBarSurface
+                                )
+                            }
+                        }
                     }
                 }
             }

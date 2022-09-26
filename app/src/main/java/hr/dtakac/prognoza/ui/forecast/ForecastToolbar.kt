@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
-fun Toolbar(
+fun ForecastToolbar(
     place: String,
     placeVisible: Boolean,
     date: String,

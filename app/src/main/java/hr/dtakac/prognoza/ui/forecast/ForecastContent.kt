@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 @Composable
-fun Content(
+fun ForecastContent(
     forecast: ForecastUi,
     surfaceColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
@@ -294,7 +294,7 @@ fun ComingItem(
 @Composable
 private fun TodayScreenPreview() {
     PrognozaTheme(description = ForecastDescription.Short.FAIR) {
-        Content(
+        ForecastContent(
             forecast = ForecastUi(
                 place = TextResource.fromText("Helsinki"),
                 today = fakeTodayUi(),

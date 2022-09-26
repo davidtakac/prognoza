@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
+import hr.dtakac.prognoza.presentation.TextResource
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -34,7 +35,8 @@ class ForecastViewModel @Inject constructor(
                         temperatureUnit = result.temperatureUnit,
                         windUnit = result.windUnit,
                         precipitationUnit = result.precipitationUnit
-                    )
+                    ),
+                    error = TextResource.fromText("An error occurred!")
                 )
                 is GetForecastResult.Error -> _state.value.copy(
                     error = mapToError(result)
