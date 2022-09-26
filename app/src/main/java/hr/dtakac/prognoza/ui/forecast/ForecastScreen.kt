@@ -11,13 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
@@ -40,9 +40,9 @@ fun ForecastScreen(
     }
 
     val state by remember { viewModel.state }
-    val forecast = state.forecast ?: return
+    val forecast = state.forecast
 
-    PrognozaTheme(forecast.today.shortDescription) {
+    PrognozaTheme(forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
         val colorAnimationSpec = remember {
             tween<Color>(durationMillis = 1000)
         }
@@ -92,151 +92,54 @@ fun ForecastScreen(
                 }
             },
             content = {
-                Column(modifier = Modifier.fillMaxSize()) {
+                Column(modifier = Modifier.fillMaxSize().background(surface)) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
                     var toolbarTemperatureVisible by remember { mutableStateOf(false) }
 
-                    ForecastToolbar(
-                        place = forecast.place.asString(),
-                        placeVisible = toolbarPlaceVisible,
-                        date = forecast.today.date.asString(),
-                        dateVisible = toolbarDateVisible,
-                        temperature = forecast.today.temperature.asString(),
-                        temperatureVisible = toolbarTemperatureVisible,
-                        backgroundColor = barSurface,
-                        contentColor = onBarSurface,
-                        onMenuClick = {
-                            scope.launch {
-                                drawerState.open()
+                    Box(contentAlignment = Alignment.BottomCenter) {
+                        Toolbar(
+                            place = forecast?.place?.asString() ?: "",
+                            placeVisible = toolbarPlaceVisible,
+                            date = forecast?.today?.date?.asString() ?: "",
+                            dateVisible = toolbarDateVisible,
+                            temperature = forecast?.today?.temperature?.asString() ?: "",
+                            temperatureVisible = toolbarTemperatureVisible,
+                            backgroundColor = barSurface,
+                            contentColor = onBarSurface,
+                            onMenuClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
                             }
+                        )
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = state.isLoading,
+                            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+                        ) {
+                            LinearProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(2.dp),
+                                color = onBarSurface,
+                                trackColor = barSurface
+                            )
                         }
-                    )
+                    }
 
-                    ForecastContent(
-                        forecast = forecast,
-                        surfaceColor = surface,
-                        contentColor = onSurface,
-                        isPlaceVisible = { toolbarPlaceVisible = !it },
-                        isDateVisible = { toolbarDateVisible = !it },
-                        isTemperatureVisible = { toolbarTemperatureVisible = !it }
-                    )
+                    if (forecast != null) {
+                        Content(
+                            forecast = forecast,
+                            surfaceColor = surface,
+                            contentColor = onSurface,
+                            isPlaceVisible = { toolbarPlaceVisible = !it },
+                            isDateVisible = { toolbarDateVisible = !it },
+                            isTemperatureVisible = { toolbarTemperatureVisible = !it }
+                        )
+                    }
                 }
             }
         )
-    }
-}
-
-@Composable
-private fun ForecastToolbar(
-    place: String,
-    placeVisible: Boolean,
-    date: String,
-    dateVisible: Boolean,
-    temperature: String,
-    temperatureVisible: Boolean,
-    backgroundColor: Color = Color.Unspecified,
-    contentColor: Color = Color.Unspecified,
-    onMenuClick: () -> Unit = {}
-) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Column(modifier = Modifier.background(backgroundColor)) {
-            Row(
-                modifier = Modifier
-                    .height(90.dp)
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                HamburgerButton(
-                    onClick = onMenuClick,
-                    modifier = Modifier.size(42.dp)
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                ToolbarContent(
-                    place = place,
-                    placeVisible = placeVisible,
-                    date = date,
-                    dateVisible = dateVisible,
-                    temperature = temperature,
-                    temperatureVisible = temperatureVisible
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun HamburgerButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = modifier
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceAround
-        ) {
-            repeat(3) {
-                Divider(
-                    color = LocalContentColor.current,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun RowScope.ToolbarContent(
-    place: String,
-    placeVisible: Boolean,
-    date: String,
-    dateVisible: Boolean,
-    temperature: String,
-    temperatureVisible: Boolean
-) {
-    Column(
-        modifier = Modifier
-            .weight(1f)
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Center
-    ) {
-        SlideUpAppearText(
-            text = place,
-            visible = placeVisible,
-            style = PrognozaTheme.typography.titleMedium
-        )
-        SlideUpAppearText(
-            text = date,
-            visible = dateVisible,
-            style = PrognozaTheme.typography.subtitleMedium
-        )
-    }
-    SlideUpAppearText(
-        text = temperature,
-        visible = temperatureVisible,
-        style = PrognozaTheme.typography.headlineSmall
-    )
-}
-
-@Composable
-private fun SlideUpAppearText(
-    text: String,
-    visible: Boolean,
-    style: TextStyle = LocalTextStyle.current
-) {
-    val enter = fadeIn() + expandVertically(expandFrom = Alignment.Top)
-    val exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-    AnimatedVisibility(
-        visible = visible,
-        enter = enter,
-        exit = exit
-    ) {
-        Text(text = text, style = style)
     }
 }

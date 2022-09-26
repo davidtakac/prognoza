@@ -8,22 +8,21 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.domain.usecase.GetForecast
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 @HiltViewModel
 class ForecastViewModel @Inject constructor(
     private val getForecast: GetForecast
 ) : ViewModel() {
+    private var showLoaderJob: Job? = null
+
     private val _state: MutableState<ForecastState> = mutableStateOf(ForecastState())
     val state: State<ForecastState> get() = _state
 
     fun getState() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            showLoader()
             _state.value = when (val result = getForecast()) {
                 is GetForecastResult.Success -> _state.value.copy(
                     forecast = mapToForecastUi(
@@ -34,27 +33,37 @@ class ForecastViewModel @Inject constructor(
                         temperatureUnit = result.temperatureUnit,
                         windUnit = result.windUnit,
                         precipitationUnit = result.precipitationUnit
-                    ),
-                    isLoading = false
-                )
-                is GetForecastResult.Error -> _state.value.copy(
-                    error = mapToError(result),
-                    isLoading = false
-                )
-            }
-        }
-        //testColorChanges()
-    }
-
-    private fun testColorChanges() {
-        viewModelScope.launch {
-            while (isActive) {
-                delay(2000L)
-                _state.value = _state.value.copy(
-                    forecast = _state.value.forecast?.copy(
-                        today = _state.value.forecast!!.today.copy(shortDescription = ForecastDescription.Short.values().random())
                     )
                 )
+                is GetForecastResult.Error -> _state.value.copy(
+                    error = mapToError(result)
+                )
+            }
+            hideLoader()
+        }
+    }
+
+    private fun showLoader() {
+        showLoaderJob = viewModelScope.launch {
+            delay(timeMillis = 300L)
+            _state.value = _state.value.copy(isLoading = true)
+        }
+    }
+
+    private fun hideLoader() {
+        showLoaderJob?.let { job ->
+            if (job.isActive) {
+                // Hidden before debounce period ended, so just cancel showing it
+                job.cancel()
+                showLoaderJob = null
+            } else {
+                // Hidden after debounce period ended, which means that it's currently showing.
+                // Make sure it shows for some time and then hide it
+                viewModelScope.launch {
+                    delay(timeMillis = 1000L)
+                    showLoaderJob = null
+                    _state.value = _state.value.copy(isLoading = false)
+                }
             }
         }
     }
