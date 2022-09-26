@@ -49,7 +49,7 @@ fun ForecastScreen(
             animationSpec = colorAnimationSpec
         )
         val onSurface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onSurface,
+            targetValue = PrognozaTheme.colors.onSurface.copy(alpha = PrognozaTheme.alpha.high),
             animationSpec = colorAnimationSpec
         )
         val barSurface by animateColorAsState(
@@ -60,7 +60,7 @@ fun ForecastScreen(
             animationSpec = colorAnimationSpec
         )
         val onBarSurface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onSurface,
+            targetValue = PrognozaTheme.colors.onSurface.copy(alpha = PrognozaTheme.alpha.high),
             animationSpec = colorAnimationSpec
         )
 

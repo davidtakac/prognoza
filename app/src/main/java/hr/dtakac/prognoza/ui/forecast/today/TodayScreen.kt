@@ -310,7 +310,8 @@ fun HourItem(
                 text = hour.precipitation.asString(),
                 textAlign = TextAlign.End,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
             )
             Text(
                 modifier = Modifier.width(52.dp),
