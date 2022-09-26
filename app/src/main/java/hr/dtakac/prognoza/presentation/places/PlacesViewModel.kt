@@ -27,13 +27,7 @@ class PlacesViewModel @Inject constructor(
 
     fun getSaved() {
         viewModelScope.launch {
-            currentPlaces = getSavedPlaces()
-            val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
-            _state.value = _state.value.copy(
-                places = placesUi,
-                empty = if (placesUi.isEmpty()) PlacesEmpty.NoSavedPlaces else null,
-                isLoading = false
-            )
+            loadSavedPlaces()
         }
     }
 
@@ -56,11 +50,21 @@ class PlacesViewModel @Inject constructor(
         viewModelScope.launch {
             val selectedPlace = currentPlaces[index]
             selectPlace(selectedPlace)
+            loadSavedPlaces()
             _state.value = _state.value.copy(
-                selectedPlace = selectedPlace,
-                places = mapCurrentPlacesToUi(selectedPlace = selectedPlace)
+                selectedPlace = selectedPlace
             )
         }
+    }
+
+    private suspend fun loadSavedPlaces() {
+        currentPlaces = getSavedPlaces()
+        val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
+        _state.value = _state.value.copy(
+            places = placesUi,
+            empty = if (placesUi.isEmpty()) PlacesEmpty.NoSavedPlaces else null,
+            isLoading = false
+        )
     }
 
     private fun mapCurrentPlacesToUi(selectedPlace: Place? = null): List<PlaceUi> =
