@@ -77,7 +77,11 @@ fun ForecastScreen(
                 ForecastDrawerContent(
                     backgroundColor = barSurface,
                     onBackgroundColor = onBarSurface,
-                    onSettingsClick = onSettingsClick
+                    onSettingsClick = onSettingsClick,
+                    onPlaceSelected = {
+                        scope.launch { drawerState.close() }
+                        viewModel.getState()
+                    }
                 )
             },
             content = {

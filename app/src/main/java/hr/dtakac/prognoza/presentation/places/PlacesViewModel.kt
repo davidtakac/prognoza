@@ -54,7 +54,12 @@ class PlacesViewModel @Inject constructor(
 
     fun select(index: Int) {
         viewModelScope.launch {
-            selectPlace(currentPlaces[index])
+            val selectedPlace = currentPlaces[index]
+            selectPlace(selectedPlace)
+            _state.value = _state.value.copy(
+                selectedPlace = selectedPlace,
+                places = mapCurrentPlacesToUi(selectedPlace = selectedPlace)
+            )
         }
     }
 

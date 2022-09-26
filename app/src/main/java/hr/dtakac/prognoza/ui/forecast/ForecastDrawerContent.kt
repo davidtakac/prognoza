@@ -12,12 +12,13 @@ fun ForecastDrawerContent(
     backgroundColor: Color = Color.Unspecified,
     onBackgroundColor: Color = Color.Unspecified,
     onSettingsClick: () -> Unit = {},
+    onPlaceSelected: () -> Unit = {}
 ) {
     ModalDrawerSheet(
         drawerContentColor = onBackgroundColor,
         drawerShape = RectangleShape,
         drawerContainerColor = backgroundColor
     ) {
-        PlacesScreen()
+        PlacesScreen(onPlaceSelected = onPlaceSelected)
     }
 }

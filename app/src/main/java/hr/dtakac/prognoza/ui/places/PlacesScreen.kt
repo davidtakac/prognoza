@@ -29,12 +29,20 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 
 @Composable
-fun PlacesScreen(viewModel: PlacesViewModel = hiltViewModel()) {
+fun PlacesScreen(
+    viewModel: PlacesViewModel = hiltViewModel(),
+    onPlaceSelected: () -> Unit = {}
+) {
     LaunchedEffect(viewModel) {
         viewModel.getSaved()
     }
 
     val state by remember { viewModel.state }
+    LaunchedEffect(state.selectedPlace) {
+        if (state.selectedPlace != null) {
+            onPlaceSelected()
+        }
+    }
     val places = state.places
 
     Column {
