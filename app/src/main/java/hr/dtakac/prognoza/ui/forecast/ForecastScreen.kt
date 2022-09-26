@@ -92,58 +92,51 @@ fun ForecastScreen(
                 }
             },
             content = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(surface)
-                ) {
+                Column(modifier = Modifier.fillMaxSize().background(surface)) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
                     var toolbarTemperatureVisible by remember { mutableStateOf(false) }
 
-                    CompositionLocalProvider(LocalContentColor provides onBarSurface) {
-                        Box(contentAlignment = Alignment.BottomCenter) {
-                            Toolbar(
-                                place = forecast?.place?.asString() ?: "",
-                                placeVisible = toolbarPlaceVisible,
-                                date = forecast?.today?.date?.asString() ?: "",
-                                dateVisible = toolbarDateVisible,
-                                temperature = forecast?.today?.temperature?.asString() ?: "",
-                                temperatureVisible = toolbarTemperatureVisible,
-                                backgroundColor = barSurface,
-                                contentColor = onBarSurface,
-                                onMenuClick = {
-                                    scope.launch {
-                                        drawerState.open()
-                                    }
+                    Box(contentAlignment = Alignment.BottomCenter) {
+                        Toolbar(
+                            place = forecast?.place?.asString() ?: "",
+                            placeVisible = toolbarPlaceVisible,
+                            date = forecast?.today?.date?.asString() ?: "",
+                            dateVisible = toolbarDateVisible,
+                            temperature = forecast?.today?.temperature?.asString() ?: "",
+                            temperatureVisible = toolbarTemperatureVisible,
+                            backgroundColor = barSurface,
+                            contentColor = onBarSurface,
+                            onMenuClick = {
+                                scope.launch {
+                                    drawerState.open()
                                 }
-                            )
-
-                            androidx.compose.animation.AnimatedVisibility(
-                                visible = state.isLoading,
-                                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-                            ) {
-                                LinearProgressIndicator(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(2.dp),
-                                    color = LocalContentColor.current,
-                                    trackColor = barSurface
-                                )
                             }
+                        )
+                        androidx.compose.animation.AnimatedVisibility(
+                            visible = state.isLoading,
+                            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+                        ) {
+                            LinearProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(2.dp),
+                                color = onBarSurface,
+                                trackColor = barSurface
+                            )
                         }
                     }
 
-                    CompositionLocalProvider(LocalContentColor provides onSurface) {
-                        if (forecast != null) {
-                            Content(
-                                forecast = forecast,
-                                isPlaceVisible = { toolbarPlaceVisible = !it },
-                                isDateVisible = { toolbarDateVisible = !it },
-                                isTemperatureVisible = { toolbarTemperatureVisible = !it }
-                            )
-                        }
+                    if (forecast != null) {
+                        Content(
+                            forecast = forecast,
+                            surfaceColor = surface,
+                            contentColor = onSurface,
+                            isPlaceVisible = { toolbarPlaceVisible = !it },
+                            isDateVisible = { toolbarDateVisible = !it },
+                            isTemperatureVisible = { toolbarTemperatureVisible = !it }
+                        )
                     }
                 }
             }
