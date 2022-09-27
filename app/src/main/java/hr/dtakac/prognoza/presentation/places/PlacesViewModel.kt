@@ -23,7 +23,7 @@ class PlacesViewModel @Inject constructor(
     private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
     private var currentPlaces: List<Place> = listOf()
 
-    private val _state = mutableStateOf(PlacesState(places = mapCurrentPlacesToUi(selectedPlace = null)))
+    private val _state = mutableStateOf(PlacesState())
     val state: State<PlacesState> get() = _state
 
     fun getSaved() {
@@ -35,6 +35,7 @@ class PlacesViewModel @Inject constructor(
                     val placesUi = savedPlacesResult.places.map {
                         mapToPlaceUi(it, isSelected = it == selectedPlace)
                     }
+                    currentPlaces = savedPlacesResult.places
                     _state.value = _state.value.copy(
                         places = placesUi,
                         empty = null
@@ -58,15 +59,29 @@ class PlacesViewModel @Inject constructor(
     fun search(query: String) {
         viewModelScope.launch {
             showLoader()
-            currentPlaces = searchPlaces(query)
-            val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
-            _state.value = _state.value.copy(
-                places = placesUi,
-                empty = if (placesUi.isEmpty()) TextResource.fromStringId(
-                    R.string.no_places_found,
-                    query
-                ) else null
-            )
+            when (val searchPlacesResult = searchPlaces(query)) {
+                is SearchPlacesResult.Success -> {
+                    val selectedPlace = getSelectedPlace()
+                    val placesUi = searchPlacesResult.places.map {
+                        mapToPlaceUi(it, isSelected = it == selectedPlace)
+                    }
+                    currentPlaces = searchPlacesResult.places
+                    _state.value = _state.value.copy(
+                        places = placesUi,
+                        empty = null
+                    )
+                }
+                is SearchPlacesResult.None -> {
+                    _state.value = _state.value.copy(
+                        empty = TextResource.fromStringId(R.string.no_places_found, query)
+                    )
+                }
+                is SearchPlacesResult.Error -> {
+                    _state.value = _state.value.copy(
+                        empty = TextResource.fromStringId(R.string.error_search_places)
+                    )
+                }
+            }
             hideLoader()
         }
     }
@@ -76,20 +91,16 @@ class PlacesViewModel @Inject constructor(
             showLoader()
             val selectedPlace = currentPlaces[index]
             selectPlace(selectedPlace)
+            val placesUi = currentPlaces.map {
+                mapToPlaceUi(it, isSelected = it == selectedPlace)
+            }
             _state.value = _state.value.copy(
-                places = mapCurrentPlacesToUi(selectedPlace),
+                places = placesUi,
                 selectedPlace = selectedPlace
             )
             hideLoader()
         }
     }
-
-    // todo remove this one
-    private fun mapCurrentPlacesToUi(
-
-        selectedPlace: Place? = null
-    ): List<PlaceUi> =
-        currentPlaces.map { mapToPlaceUi(it, isSelected = it == selectedPlace) }
 
     private fun showLoader() = loaderTimedLatch.start {
         _state.value = _state.value.copy(isLoading = true)

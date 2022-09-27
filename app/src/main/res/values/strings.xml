@@ -103,6 +103,7 @@
     <string name="search_places">Search places…</string>
     <string name="no_saved_places">The places you search for and select will appear here.</string>
     <string name="no_places_found">No places found that match \"%1$s\".</string>
-    <string name="error_saved_places">An error occurred when getting your saved places.</string>
+    <string name="error_saved_places">An error occurred when getting your saved places. Clear your app data and try again.</string>
+    <string name="error_search_places">An error occurred when searching places. Check your internet and try again.</string>
 
 </resources>
