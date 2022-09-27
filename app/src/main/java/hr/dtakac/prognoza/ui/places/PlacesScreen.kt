@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.ui.places
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,6 +66,28 @@ fun PlacesScreen(
                 onSubmit = viewModel::search,
                 onQueryChange = { if (it.isBlank()) viewModel.getSaved() }
             )
+            Crossfade(targetState = state.isLoading,) { isLoading ->
+                if (isLoading) {
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .padding(horizontal = 24.dp),
+                        color = LocalContentColor.current,
+                        trackColor = backgroundColor
+                    )
+                } else {
+                    LinearProgressIndicator(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .padding(horizontal = 24.dp),
+                        color = LocalContentColor.current,
+                        trackColor = backgroundColor,
+                        progress = 1f
+                    )
+                }
+            }
             LazyColumn {
                 itemsIndexed(state.places) { idx, placeUi ->
                     if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
@@ -141,7 +165,6 @@ private fun SearchBar(
                         innerTextField()
                     }
                 }
-                Divider(color = LocalContentColor.current)
             }
         }
     )

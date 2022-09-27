@@ -10,6 +10,7 @@ import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
 import hr.dtakac.prognoza.domain.usecase.SearchPlaces
 import hr.dtakac.prognoza.domain.usecase.SelectPlace
 import hr.dtakac.prognoza.entities.Place
+import hr.dtakac.prognoza.presentation.ActionTimedLatch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,6 +21,7 @@ class PlacesViewModel @Inject constructor(
     private val selectPlace: SelectPlace,
     private val getSelectedPlace: GetSelectedPlace
 ) : ViewModel() {
+    private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
     private var currentPlaces: List<Place> = listOf()
 
     private val _state = mutableStateOf(PlacesState(places = mapCurrentPlacesToUi(selectedPlace = null)))
@@ -27,43 +29,47 @@ class PlacesViewModel @Inject constructor(
 
     fun getSaved() {
         viewModelScope.launch {
+            showLoader()
             currentPlaces = getSavedPlaces()
             val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
             _state.value = _state.value.copy(
                 places = placesUi,
-                empty = if (placesUi.isEmpty()) PlacesEmpty.NoSavedPlaces else null,
-                isLoading = false
+                empty = if (placesUi.isEmpty()) PlacesEmpty.NoSavedPlaces else null
             )
+            hideLoader()
         }
     }
 
     fun search(query: String) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
-
+            showLoader()
             currentPlaces = searchPlaces(query)
             val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
             _state.value = _state.value.copy(
                 places = placesUi,
-                empty = if (placesUi.isEmpty()) PlacesEmpty.NoPlacesFoundForQuery else null,
-                isLoading = false
+                empty = if (placesUi.isEmpty()) PlacesEmpty.NoPlacesFoundForQuery else null
             )
+            hideLoader()
         }
     }
 
     fun select(index: Int) {
         viewModelScope.launch {
+            showLoader()
             val selectedPlace = currentPlaces[index]
             selectPlace(selectedPlace)
-            val placesUi = mapCurrentPlacesToUi(selectedPlace)
             _state.value = _state.value.copy(
-                places = placesUi,
-                selectedPlace = selectedPlace,
-                isLoading = false
+                places =  mapCurrentPlacesToUi(selectedPlace),
+                selectedPlace = selectedPlace
             )
+            hideLoader()
         }
     }
 
     private fun mapCurrentPlacesToUi(selectedPlace: Place? = null): List<PlaceUi> =
         currentPlaces.map { mapToPlaceUi(it, isSelected = it == selectedPlace) }
+
+    private fun showLoader() = loaderTimedLatch.start { _state.value = _state.value.copy(isLoading = true) }
+
+    private fun hideLoader() = loaderTimedLatch.stop { _state.value = _state.value.copy(isLoading = false) }
 }
