@@ -48,7 +48,6 @@ fun PlacesScreen(
             onPlaceSelected()
         }
     }
-    val places = state.places
 
     Column(
         modifier = Modifier
@@ -62,10 +61,11 @@ fun PlacesScreen(
                     start = 24.dp,
                     end = 24.dp
                 ),
-                onSubmit = viewModel::search
+                onSubmit = viewModel::search,
+                onQueryChange = { if (it.isBlank()) viewModel.getSaved() }
             )
             LazyColumn {
-                itemsIndexed(places) { idx, placeUi ->
+                itemsIndexed(state.places) { idx, placeUi ->
                     if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
                     PlaceItem(
                         placeUi = placeUi,
@@ -89,7 +89,8 @@ fun PlacesScreen(
 
 @Composable
 private fun SearchBar(
-    onSubmit: (String) -> Unit,
+    onSubmit: (String) -> Unit = {},
+    onQueryChange: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     val style = PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)
@@ -97,7 +98,10 @@ private fun SearchBar(
     val focusManager = LocalFocusManager.current
     BasicTextField(
         value = query,
-        onValueChange = { query = it },
+        onValueChange = {
+            query = it
+            onQueryChange(it)
+        },
         maxLines = 1,
         textStyle = style,
         modifier = modifier,
