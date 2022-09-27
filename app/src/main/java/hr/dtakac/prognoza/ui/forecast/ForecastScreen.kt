@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.ui.forecast
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -119,6 +120,7 @@ fun ForecastScreen(
                                 }
                             }
                         )
+
                         androidx.compose.animation.AnimatedVisibility(
                             visible = state.isLoading,
                             enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
@@ -154,24 +156,41 @@ fun ForecastScreen(
                             )
 
                             if (error != null) {
-                                // todo: when snackbar disappears, the "false" value is remembered for future
-                                //  recompositions, and the snackbar remains hidden. Fix this somehow
                                 var showSnackBar by remember { mutableStateOf(false) }
                                 LaunchedEffect(forecast, error) {
                                     scope.launch {
-                                        showSnackBar = true // this doesn't seem to work for recompositions, it retriggers
-                                        delay(2500L)
+                                        showSnackBar = true
+                                        delay(5000L)
                                         showSnackBar = false
                                     }
                                 }
 
-                                ForecastSnackBar(
-                                    modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp),
-                                    text = error.asString(),
-                                    visible = showSnackBar,
-                                    surfaceColor = barSurface,
-                                    onSurfaceColor = onBarSurface
-                                )
+                                // SnackBar needs to be prominent and stand out
+                                PrognozaTheme(
+                                    description = forecast.today.shortDescription,
+                                    useDarkTheme = !isSystemInDarkTheme()
+                                ) {
+                                    val snackBarSurface by animateColorAsState(
+                                        // todo: extract overlay alpha to theme
+                                        targetValue = PrognozaTheme.colors.surface.applyOverlay(
+                                            overlayColor = PrognozaTheme.colors.moodOverlay,
+                                            overlayAlpha = 0.24f
+                                        ),
+                                        animationSpec = colorAnimationSpec
+                                    )
+                                    val onSnackBarSurface by animateColorAsState(
+                                        targetValue = PrognozaTheme.colors.onSurface
+                                    )
+                                    ForecastSnackBar(
+                                        modifier = Modifier
+                                            .align(Alignment.BottomCenter)
+                                            .padding(16.dp),
+                                        text = error.asString(),
+                                        visible = showSnackBar,
+                                        surfaceColor = snackBarSurface,
+                                        onSurfaceColor = onSnackBarSurface
+                                    )
+                                }
                             }
                         }
                     }
