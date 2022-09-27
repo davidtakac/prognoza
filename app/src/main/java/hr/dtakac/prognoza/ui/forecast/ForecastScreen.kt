@@ -28,7 +28,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun ForecastScreen(
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    viewModel: ForecastViewModel = hiltViewModel()
+    viewModel: ForecastViewModel = hiltViewModel(),
+    onSettingsClick: () -> Unit = {}
 ) {
     // Refresh state every time screen is re-entered
     DisposableEffect(lifecycleOwner) {
@@ -70,6 +71,7 @@ fun ForecastScreen(
                             scope.launch { drawerState.close() }
                             viewModel.getState()
                         },
+                        onSettingsClick = onSettingsClick,
                         backgroundColor = elevatedBackgroundColor,
                         contentColor = onBackgroundColor
                     )

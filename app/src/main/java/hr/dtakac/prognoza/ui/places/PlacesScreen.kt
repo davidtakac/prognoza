@@ -36,6 +36,7 @@ import hr.dtakac.prognoza.presentation.places.PlaceUi
 fun PlacesScreen(
     viewModel: PlacesViewModel = hiltViewModel(),
     onPlaceSelected: () -> Unit = {},
+    onSettingsClick: () -> Unit = {},
     backgroundColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified
 ) {
@@ -115,6 +116,14 @@ fun PlacesScreen(
                         )
                     }
                 }
+            }
+            // todo: relocate this somewhere that makes sense
+            IconButton(onClick = onSettingsClick) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_outline_settings),
+                    contentDescription = null,
+                    modifier = Modifier.size(36.dp)
+                )
             }
         }
     }
