@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
@@ -9,7 +8,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -22,7 +20,6 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
-import hr.dtakac.prognoza.ui.theme.applyOverlay
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -45,35 +42,10 @@ fun ForecastScreen(
     val forecast = state.forecast
     val error = state.error
 
-    PrognozaTheme(forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
-        val colorAnimationSpec = remember {
-            tween<Color>(durationMillis = 1000)
-        }
-        val surface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.surface.applyOverlay(
-                overlayColor = PrognozaTheme.colors.moodOverlay
-            ),
-            animationSpec = colorAnimationSpec
-        )
-        val onSurface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onSurface.copy(alpha = PrognozaTheme.alpha.high),
-            animationSpec = colorAnimationSpec
-        )
-        val barSurface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.surface.applyOverlay(
-                overlayColor = PrognozaTheme.colors.moodOverlay,
-                overlayAlpha = 0.24f
-            ),
-            animationSpec = colorAnimationSpec
-        )
-        val onBarSurface by animateColorAsState(
-            targetValue = PrognozaTheme.colors.onSurface.copy(alpha = PrognozaTheme.alpha.high),
-            animationSpec = colorAnimationSpec
-        )
-
+    PrognozaTheme(description = forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
         val systemUiController = rememberSystemUiController()
-        systemUiController.setSystemBarsColor(barSurface)
-        systemUiController.setNavigationBarColor(barSurface)
+        systemUiController.setSystemBarsColor(PrognozaTheme.elevatedSurface)
+        systemUiController.setNavigationBarColor(PrognozaTheme.elevatedSurface)
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -82,9 +54,9 @@ fun ForecastScreen(
             drawerState = drawerState,
             drawerContent = {
                 ModalDrawerSheet(
-                    drawerContentColor = onBarSurface,
+                    drawerContentColor = PrognozaTheme.onSurface,
                     drawerShape = RectangleShape,
-                    drawerContainerColor = barSurface
+                    drawerContainerColor = PrognozaTheme.elevatedSurface
                 ) {
                     PlacesScreen(
                         onPlaceSelected = {
@@ -98,7 +70,7 @@ fun ForecastScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(surface)
+                        .background(PrognozaTheme.surface)
                 ) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
@@ -112,8 +84,8 @@ fun ForecastScreen(
                             dateVisible = toolbarDateVisible,
                             temperature = forecast?.today?.temperature?.asString() ?: "",
                             temperatureVisible = toolbarTemperatureVisible,
-                            backgroundColor = barSurface,
-                            contentColor = onBarSurface,
+                            backgroundColor = PrognozaTheme.elevatedSurface,
+                            contentColor = PrognozaTheme.onSurface,
                             onMenuClick = {
                                 scope.launch {
                                     drawerState.open()
@@ -130,8 +102,8 @@ fun ForecastScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp),
-                                color = onBarSurface,
-                                trackColor = barSurface
+                                color = PrognozaTheme.onSurface,
+                                trackColor = PrognozaTheme.elevatedSurface
                             )
                         }
                     }
@@ -140,16 +112,16 @@ fun ForecastScreen(
                         if (error != null) {
                             ForecastError(
                                 text = error.asString(),
-                                surfaceColor = surface,
-                                contentColor = onSurface
+                                surfaceColor = PrognozaTheme.surface,
+                                contentColor = PrognozaTheme.onSurface
                             )
                         }
                     } else {
                         Box {
                             ForecastContent(
                                 forecast = forecast,
-                                surfaceColor = surface,
-                                contentColor = onSurface,
+                                surfaceColor = PrognozaTheme.surface,
+                                contentColor = PrognozaTheme.onSurface,
                                 isPlaceVisible = { toolbarPlaceVisible = !it },
                                 isDateVisible = { toolbarDateVisible = !it },
                                 isTemperatureVisible = { toolbarTemperatureVisible = !it }
@@ -170,26 +142,14 @@ fun ForecastScreen(
                                     description = forecast.today.shortDescription,
                                     useDarkTheme = !isSystemInDarkTheme()
                                 ) {
-                                    val snackBarSurface by animateColorAsState(
-                                        // todo: extract overlay alpha to theme
-                                        targetValue = PrognozaTheme.colors.surface.applyOverlay(
-                                            overlayColor = PrognozaTheme.colors.moodOverlay,
-                                            overlayAlpha = 0.24f
-                                        ),
-                                        animationSpec = colorAnimationSpec
-                                    )
-                                    val onSnackBarSurface by animateColorAsState(
-                                        targetValue = PrognozaTheme.colors.onSurface,
-                                        animationSpec = colorAnimationSpec
-                                    )
                                     ForecastSnackBar(
                                         modifier = Modifier
                                             .align(Alignment.BottomCenter)
                                             .padding(16.dp),
                                         text = error.asString(),
                                         visible = showSnackBar,
-                                        surfaceColor = snackBarSurface,
-                                        onSurfaceColor = onSnackBarSurface
+                                        surfaceColor = PrognozaTheme.elevatedSurface,
+                                        onSurfaceColor = PrognozaTheme.onSurface
                                     )
                                 }
                             }

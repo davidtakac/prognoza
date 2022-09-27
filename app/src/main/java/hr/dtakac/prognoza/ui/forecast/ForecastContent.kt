@@ -300,8 +300,8 @@ private fun TodayScreenPreview() {
                 today = fakeTodayUi(),
                 coming = fakeComingUi()
             ),
-            surfaceColor = PrognozaTheme.colors.surface,
-            contentColor = PrognozaTheme.colors.onSurface
+            surfaceColor = PrognozaTheme.surface,
+            contentColor = PrognozaTheme.onSurface
         )
     }
 }
