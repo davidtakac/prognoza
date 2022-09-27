@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -47,7 +48,13 @@ fun ForecastScreen(
         systemUiController.setSystemBarsColor(PrognozaTheme.elevatedBackgroundColor)
         systemUiController.setNavigationBarColor(PrognozaTheme.elevatedBackgroundColor)
 
+        val focusManager = LocalFocusManager.current
         val drawerState = rememberDrawerState(DrawerValue.Closed)
+        LaunchedEffect(drawerState.isClosed) {
+            if (drawerState.isClosed) {
+                focusManager.clearFocus()
+            }
+        }
         val scope = rememberCoroutineScope()
 
         ModalNavigationDrawer(

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -49,7 +50,11 @@ fun PlacesScreen(
     }
     val places = state.places
 
-    Column(modifier = Modifier.background(backgroundColor).fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .background(backgroundColor)
+            .fillMaxSize()
+    ) {
         CompositionLocalProvider(LocalContentColor provides contentColor) {
             SearchBar(
                 modifier = Modifier.padding(
@@ -89,6 +94,7 @@ private fun SearchBar(
 ) {
     val style = PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)
     var query by remember { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
     BasicTextField(
         value = query,
         onValueChange = { query = it },
@@ -99,7 +105,10 @@ private fun SearchBar(
             imeAction = ImeAction.Search,
             keyboardType = KeyboardType.Text
         ),
-        keyboardActions = KeyboardActions { onSubmit(query) },
+        keyboardActions = KeyboardActions {
+            onSubmit(query)
+            focusManager.clearFocus()
+        },
         cursorBrush = SolidColor(LocalContentColor.current),
         decorationBox = { innerTextField ->
             Column {

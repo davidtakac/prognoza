@@ -60,7 +60,7 @@ private object PrognozaRippleTheme : RippleTheme {
 
 @Composable
 fun PrognozaTheme(
-    description: ForecastDescription.Short,
+    description: ForecastDescription.Short = ForecastDescription.Short.UNKNOWN,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
