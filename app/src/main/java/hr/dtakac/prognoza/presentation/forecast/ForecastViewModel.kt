@@ -34,7 +34,8 @@ class ForecastViewModel @Inject constructor(
                         temperatureUnit = result.temperatureUnit,
                         windUnit = result.windUnit,
                         precipitationUnit = result.precipitationUnit
-                    )
+                    ),
+                    error = null
                 )
                 is GetForecastResult.Error -> _state.value.copy(
                     error = mapToError(result)
