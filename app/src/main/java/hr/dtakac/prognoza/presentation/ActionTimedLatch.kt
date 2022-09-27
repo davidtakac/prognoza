@@ -12,6 +12,7 @@ class ActionTimedLatch(private val scope: CoroutineScope) {
         millisBeforeAction: Long = 300L,
         action: () -> Unit
     ) {
+        delayedStart?.cancel()
         delayedStart = scope.launch {
             delay(millisBeforeAction)
             action()
