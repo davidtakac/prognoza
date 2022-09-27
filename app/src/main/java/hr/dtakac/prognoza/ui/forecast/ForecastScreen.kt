@@ -179,7 +179,8 @@ fun ForecastScreen(
                                         animationSpec = colorAnimationSpec
                                     )
                                     val onSnackBarSurface by animateColorAsState(
-                                        targetValue = PrognozaTheme.colors.onSurface
+                                        targetValue = PrognozaTheme.colors.onSurface,
+                                        animationSpec = colorAnimationSpec
                                     )
                                     ForecastSnackBar(
                                         modifier = Modifier
