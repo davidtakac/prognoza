@@ -101,7 +101,8 @@
     <string name="settings">Settings</string>
     <string name="change_place">Change place</string>
     <string name="search_places">Search places…</string>
-    <string name="no_saved_places">You have no saved places. Search for some.</string>
-    <string name="no_places_found">No places found that match \"%1$s\". Please try again.</string>
+    <string name="no_saved_places">The places you search for and select will appear here.</string>
+    <string name="no_places_found">No places found that match \"%1$s\".</string>
+    <string name="error_saved_places">An error occurred when getting your saved places.</string>
 
 </resources>

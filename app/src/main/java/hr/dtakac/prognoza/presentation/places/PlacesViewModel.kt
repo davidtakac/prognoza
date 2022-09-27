@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.domain.usecase.GetSavedPlaces
-import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
-import hr.dtakac.prognoza.domain.usecase.SearchPlaces
-import hr.dtakac.prognoza.domain.usecase.SelectPlace
+import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
 import hr.dtakac.prognoza.presentation.TextResource
@@ -32,12 +29,28 @@ class PlacesViewModel @Inject constructor(
     fun getSaved() {
         viewModelScope.launch {
             showLoader()
-            currentPlaces = getSavedPlaces()
-            val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
-            _state.value = _state.value.copy(
-                places = placesUi,
-                empty = if (placesUi.isEmpty()) TextResource.fromStringId(R.string.no_saved_places) else null
-            )
+            when (val savedPlacesResult = getSavedPlaces()) {
+                is GetSavedPlacesResult.Success -> {
+                    val selectedPlace = getSelectedPlace()
+                    val placesUi = savedPlacesResult.places.map {
+                        mapToPlaceUi(it, isSelected = it == selectedPlace)
+                    }
+                    _state.value = _state.value.copy(
+                        places = placesUi,
+                        empty = null
+                    )
+                }
+                is GetSavedPlacesResult.None -> {
+                    _state.value = _state.value.copy(
+                        empty = TextResource.fromStringId(R.string.no_saved_places)
+                    )
+                }
+                is GetSavedPlacesResult.Error -> {
+                    _state.value = _state.value.copy(
+                        empty = TextResource.fromStringId(R.string.error_saved_places)
+                    )
+                }
+            }
             hideLoader()
         }
     }
@@ -49,7 +62,10 @@ class PlacesViewModel @Inject constructor(
             val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
             _state.value = _state.value.copy(
                 places = placesUi,
-                empty = if (placesUi.isEmpty()) TextResource.fromStringId(R.string.no_places_found, query) else null
+                empty = if (placesUi.isEmpty()) TextResource.fromStringId(
+                    R.string.no_places_found,
+                    query
+                ) else null
             )
             hideLoader()
         }
@@ -61,17 +77,25 @@ class PlacesViewModel @Inject constructor(
             val selectedPlace = currentPlaces[index]
             selectPlace(selectedPlace)
             _state.value = _state.value.copy(
-                places =  mapCurrentPlacesToUi(selectedPlace),
+                places = mapCurrentPlacesToUi(selectedPlace),
                 selectedPlace = selectedPlace
             )
             hideLoader()
         }
     }
 
-    private fun mapCurrentPlacesToUi(selectedPlace: Place? = null): List<PlaceUi> =
+    // todo remove this one
+    private fun mapCurrentPlacesToUi(
+
+        selectedPlace: Place? = null
+    ): List<PlaceUi> =
         currentPlaces.map { mapToPlaceUi(it, isSelected = it == selectedPlace) }
 
-    private fun showLoader() = loaderTimedLatch.start { _state.value = _state.value.copy(isLoading = true) }
+    private fun showLoader() = loaderTimedLatch.start {
+        _state.value = _state.value.copy(isLoading = true)
+    }
 
-    private fun hideLoader() = loaderTimedLatch.stop { _state.value = _state.value.copy(isLoading = false) }
+    private fun hideLoader() = loaderTimedLatch.stop {
+        _state.value = _state.value.copy(isLoading = false)
+    }
 }
