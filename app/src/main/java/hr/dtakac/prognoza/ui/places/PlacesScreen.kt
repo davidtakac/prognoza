@@ -148,7 +148,7 @@ private fun SearchBar(
 }
 
 @Composable
-fun PlaceItem(
+private fun PlaceItem(
     placeUi: PlaceUi,
     modifier: Modifier = Modifier
 ) {
