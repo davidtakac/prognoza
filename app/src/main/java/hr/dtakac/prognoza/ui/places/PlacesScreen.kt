@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -66,7 +65,7 @@ fun PlacesScreen(
                 onSubmit = viewModel::search,
                 onQueryChange = { if (it.isBlank()) viewModel.getSaved() }
             )
-            Crossfade(targetState = state.isLoading,) { isLoading ->
+            Crossfade(targetState = state.isLoading) { isLoading ->
                 if (isLoading) {
                     LinearProgressIndicator(
                         modifier = Modifier
@@ -88,23 +87,33 @@ fun PlacesScreen(
                     )
                 }
             }
-            LazyColumn {
-                itemsIndexed(state.places) { idx, placeUi ->
-                    if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
-                    PlaceItem(
-                        placeUi = placeUi,
-                        modifier = Modifier
-                            .clickable(
-                                onClick = { viewModel.select(idx) },
-                                indication = rememberRipple(bounded = true),
-                                interactionSource = remember { MutableInteractionSource() }
-                            )
-                            .fillMaxWidth()
-                            .padding(
-                                vertical = 10.dp,
-                                horizontal = 24.dp
-                            )
-                    )
+            val empty = state.empty
+            if (empty != null) {
+                Text(
+                    text = empty.asString(),
+                    style = PrognozaTheme.typography.subtitleMedium,
+                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
+                )
+            } else {
+                LazyColumn {
+                    itemsIndexed(state.places) { idx, placeUi ->
+                        if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
+                        PlaceItem(
+                            placeUi = placeUi,
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = { viewModel.select(idx) },
+                                    indication = rememberRipple(bounded = true),
+                                    interactionSource = remember { MutableInteractionSource() }
+                                )
+                                .fillMaxWidth()
+                                .padding(
+                                    vertical = 10.dp,
+                                    horizontal = 24.dp
+                                )
+                        )
+                    }
                 }
             }
         }

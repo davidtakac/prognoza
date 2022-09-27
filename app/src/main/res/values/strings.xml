@@ -77,7 +77,7 @@
     <string name="error_unknown">An unexpected error occurred.</string>
     <string name="met_norway_credit">Data from MET Norway</string>
     <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
-    <string name="error_no_selected_place">You haven\'t picked a place yet.</string>
+    <string name="error_no_selected_place">Select a place to see its forecast.</string>
     <string name="wind_calm">Calm</string>
     <string name="wind_light_air">Light air</string>
     <string name="wind_light_breeze">Light breeze</string>
@@ -101,5 +101,7 @@
     <string name="settings">Settings</string>
     <string name="change_place">Change place</string>
     <string name="search_places">Search places…</string>
+    <string name="no_saved_places">You have no saved places. Search for some.</string>
+    <string name="no_places_found">No places found that match \"%1$s\". Please try again.</string>
 
 </resources>

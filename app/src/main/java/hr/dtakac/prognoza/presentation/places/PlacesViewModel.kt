@@ -5,12 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetSavedPlaces
 import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
 import hr.dtakac.prognoza.domain.usecase.SearchPlaces
 import hr.dtakac.prognoza.domain.usecase.SelectPlace
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
+import hr.dtakac.prognoza.presentation.TextResource
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,7 +36,7 @@ class PlacesViewModel @Inject constructor(
             val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
             _state.value = _state.value.copy(
                 places = placesUi,
-                empty = if (placesUi.isEmpty()) PlacesEmpty.NoSavedPlaces else null
+                empty = if (placesUi.isEmpty()) TextResource.fromStringId(R.string.no_saved_places) else null
             )
             hideLoader()
         }
@@ -47,7 +49,7 @@ class PlacesViewModel @Inject constructor(
             val placesUi = mapCurrentPlacesToUi(getSelectedPlace())
             _state.value = _state.value.copy(
                 places = placesUi,
-                empty = if (placesUi.isEmpty()) PlacesEmpty.NoPlacesFoundForQuery else null
+                empty = if (placesUi.isEmpty()) TextResource.fromStringId(R.string.no_places_found, query) else null
             )
             hideLoader()
         }
