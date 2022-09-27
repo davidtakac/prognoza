@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.AnimationSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.LocalContentColor
@@ -43,69 +44,7 @@ private val LocalPrognozaContentAlpha = staticCompositionLocalOf {
     )
 }
 
-@Composable
-fun PrognozaTheme(
-    description: ForecastDescription.Short,
-    useDarkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable() () -> Unit
-) {
-    val alpha = PrognozaContentAlpha.get()
-    val colors = PrognozaColors.get(
-        shortForecastDescription = description,
-        useDarkTheme = useDarkTheme
-    )
-    val typography = PrognozaTypography.get()
-
-    CompositionLocalProvider(
-        LocalPrognozaColors provides colors,
-        LocalPrognozaTypography provides typography,
-        LocalPrognozaContentAlpha provides alpha,
-        content = content
-    )
-}
-
-object PrognozaTheme {
-    private val colorAnimationSpec: AnimationSpec<Color>
-        @Composable
-        get() = remember { tween(durationMillis = 1000) }
-
-    val surface: Color
-        @Composable
-        get() = animateColorAsState(
-            targetValue = LocalPrognozaColors.current.surface.applyOverlay(
-                overlayColor = LocalPrognozaColors.current.moodOverlay,
-                overlayAlpha = 0.12f
-            ),
-            animationSpec = colorAnimationSpec
-        ).value
-
-    val elevatedSurface: Color
-        @Composable
-        get() = animateColorAsState(
-            targetValue = LocalPrognozaColors.current.surface.applyOverlay(
-                overlayColor = LocalPrognozaColors.current.moodOverlay,
-                overlayAlpha = 0.24f
-            ),
-            animationSpec = colorAnimationSpec
-        ).value
-
-    val onSurface: Color
-        @Composable
-        get() = animateColorAsState(
-            targetValue = LocalPrognozaColors.current.onSurface.copy(alpha = alpha.high),
-            animationSpec = colorAnimationSpec
-        ).value
-
-    val typography: PrognozaTypography
-        @Composable
-        get() = LocalPrognozaTypography.current
-
-    val alpha: PrognozaContentAlpha
-        @Composable
-        get() = LocalPrognozaContentAlpha.current
-}
-
-object PrognozaRippleTheme : RippleTheme {
+private object PrognozaRippleTheme : RippleTheme {
     @Composable
     override fun defaultColor() = RippleTheme.defaultRippleColor(
         contentColor = LocalContentColor.current,
@@ -117,4 +56,65 @@ object PrognozaRippleTheme : RippleTheme {
         contentColor = LocalContentColor.current,
         lightTheme = !isSystemInDarkTheme()
     )
+}
+
+@Composable
+fun PrognozaTheme(
+    description: ForecastDescription.Short,
+    useDarkTheme: Boolean = isSystemInDarkTheme(),
+    content: @Composable () -> Unit
+) {
+    val alpha = PrognozaContentAlpha.get()
+    val colors = PrognozaColors.get(
+        shortForecastDescription = description,
+        useDarkTheme = useDarkTheme
+    )
+    val typography = PrognozaTypography.get()
+    CompositionLocalProvider(
+        LocalPrognozaColors provides colors,
+        LocalPrognozaTypography provides typography,
+        LocalPrognozaContentAlpha provides alpha,
+        LocalRippleTheme provides PrognozaRippleTheme,
+        content = content
+    )
+}
+
+object PrognozaTheme {
+    val backgroundColor: Color
+        @Composable
+        get() = animateColorAsState(
+            targetValue = LocalPrognozaColors.current.surface.applyOverlay(
+                overlayColor = LocalPrognozaColors.current.moodOverlay,
+                overlayAlpha = 0.12f
+            ),
+            animationSpec = rememberColorAnimationSpec()
+        ).value
+
+    val elevatedBackgroundColor: Color
+        @Composable
+        get() = animateColorAsState(
+            targetValue = LocalPrognozaColors.current.surface.applyOverlay(
+                overlayColor = LocalPrognozaColors.current.moodOverlay,
+                overlayAlpha = 0.24f
+            ),
+            animationSpec = rememberColorAnimationSpec()
+        ).value
+
+    val onBackgroundColor: Color
+        @Composable
+        get() = animateColorAsState(
+            targetValue = LocalPrognozaColors.current.onSurface.copy(alpha = alpha.high),
+            animationSpec = rememberColorAnimationSpec()
+        ).value
+
+    val typography: PrognozaTypography
+        @Composable
+        get() = LocalPrognozaTypography.current
+
+    val alpha: PrognozaContentAlpha
+        @Composable
+        get() = LocalPrognozaContentAlpha.current
+
+    @Composable
+    private fun rememberColorAnimationSpec(): AnimationSpec<Color> = remember { tween(durationMillis = 1000) }
 }

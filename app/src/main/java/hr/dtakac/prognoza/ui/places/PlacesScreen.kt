@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -14,6 +15,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
@@ -31,7 +33,9 @@ import hr.dtakac.prognoza.presentation.places.PlaceUi
 @Composable
 fun PlacesScreen(
     viewModel: PlacesViewModel = hiltViewModel(),
-    onPlaceSelected: () -> Unit = {}
+    onPlaceSelected: () -> Unit = {},
+    backgroundColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified
 ) {
     LaunchedEffect(viewModel) {
         viewModel.getSaved()
@@ -45,28 +49,34 @@ fun PlacesScreen(
     }
     val places = state.places
 
-    Column {
-        SearchBar(
-            modifier = Modifier.padding(top = 24.dp, start = 24.dp, end = 24.dp),
-            onSubmit = viewModel::search
-        )
-        LazyColumn {
-            itemsIndexed(places) { idx, placeUi ->
-                if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
-                PlaceItem(
-                    placeUi = placeUi,
-                    modifier = Modifier
-                        .clickable(
-                            onClick = { viewModel.select(idx) },
-                            indication = rememberRipple(bounded = true),
-                            interactionSource = remember { MutableInteractionSource() }
-                        )
-                        .fillMaxWidth()
-                        .padding(
-                            vertical = 10.dp,
-                            horizontal = 24.dp
-                        )
-                )
+    Column(modifier = Modifier.background(backgroundColor).fillMaxSize()) {
+        CompositionLocalProvider(LocalContentColor provides contentColor) {
+            SearchBar(
+                modifier = Modifier.padding(
+                    top = 24.dp,
+                    start = 24.dp,
+                    end = 24.dp
+                ),
+                onSubmit = viewModel::search
+            )
+            LazyColumn {
+                itemsIndexed(places) { idx, placeUi ->
+                    if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
+                    PlaceItem(
+                        placeUi = placeUi,
+                        modifier = Modifier
+                            .clickable(
+                                onClick = { viewModel.select(idx) },
+                                indication = rememberRipple(bounded = true),
+                                interactionSource = remember { MutableInteractionSource() }
+                            )
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = 10.dp,
+                                horizontal = 24.dp
+                            )
+                    )
+                }
             }
         }
     }

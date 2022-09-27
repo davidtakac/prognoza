@@ -44,8 +44,8 @@ fun ForecastScreen(
 
     PrognozaTheme(description = forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
         val systemUiController = rememberSystemUiController()
-        systemUiController.setSystemBarsColor(PrognozaTheme.elevatedSurface)
-        systemUiController.setNavigationBarColor(PrognozaTheme.elevatedSurface)
+        systemUiController.setSystemBarsColor(PrognozaTheme.elevatedBackgroundColor)
+        systemUiController.setNavigationBarColor(PrognozaTheme.elevatedBackgroundColor)
 
         val drawerState = rememberDrawerState(DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -53,16 +53,14 @@ fun ForecastScreen(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet(
-                    drawerContentColor = PrognozaTheme.onSurface,
-                    drawerShape = RectangleShape,
-                    drawerContainerColor = PrognozaTheme.elevatedSurface
-                ) {
+                ModalDrawerSheet(drawerShape = RectangleShape) {
                     PlacesScreen(
                         onPlaceSelected = {
                             scope.launch { drawerState.close() }
                             viewModel.getState()
-                        }
+                        },
+                        backgroundColor = PrognozaTheme.elevatedBackgroundColor,
+                        contentColor = PrognozaTheme.onBackgroundColor
                     )
                 }
             },
@@ -70,7 +68,7 @@ fun ForecastScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(PrognozaTheme.surface)
+                        .background(PrognozaTheme.backgroundColor)
                 ) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
@@ -84,8 +82,8 @@ fun ForecastScreen(
                             dateVisible = toolbarDateVisible,
                             temperature = forecast?.today?.temperature?.asString() ?: "",
                             temperatureVisible = toolbarTemperatureVisible,
-                            backgroundColor = PrognozaTheme.elevatedSurface,
-                            contentColor = PrognozaTheme.onSurface,
+                            backgroundColor = PrognozaTheme.elevatedBackgroundColor,
+                            contentColor = PrognozaTheme.onBackgroundColor,
                             onMenuClick = {
                                 scope.launch {
                                     drawerState.open()
@@ -102,8 +100,8 @@ fun ForecastScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp),
-                                color = PrognozaTheme.onSurface,
-                                trackColor = PrognozaTheme.elevatedSurface
+                                color = PrognozaTheme.onBackgroundColor,
+                                trackColor = PrognozaTheme.elevatedBackgroundColor
                             )
                         }
                     }
@@ -112,16 +110,16 @@ fun ForecastScreen(
                         if (error != null) {
                             ForecastError(
                                 text = error.asString(),
-                                surfaceColor = PrognozaTheme.surface,
-                                contentColor = PrognozaTheme.onSurface
+                                backgroundColor = PrognozaTheme.backgroundColor,
+                                contentColor = PrognozaTheme.onBackgroundColor
                             )
                         }
                     } else {
                         Box {
                             ForecastContent(
                                 forecast = forecast,
-                                surfaceColor = PrognozaTheme.surface,
-                                contentColor = PrognozaTheme.onSurface,
+                                backgroundColor = PrognozaTheme.backgroundColor,
+                                contentColor = PrognozaTheme.onBackgroundColor,
                                 isPlaceVisible = { toolbarPlaceVisible = !it },
                                 isDateVisible = { toolbarDateVisible = !it },
                                 isTemperatureVisible = { toolbarTemperatureVisible = !it }
@@ -148,8 +146,8 @@ fun ForecastScreen(
                                             .padding(16.dp),
                                         text = error.asString(),
                                         visible = showSnackBar,
-                                        surfaceColor = PrognozaTheme.elevatedSurface,
-                                        onSurfaceColor = PrognozaTheme.onSurface
+                                        backgroundColor = PrognozaTheme.elevatedBackgroundColor,
+                                        contentColor = PrognozaTheme.onBackgroundColor
                                     )
                                 }
                             }

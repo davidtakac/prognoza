@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun ForecastContent(
     forecast: ForecastUi,
-    surfaceColor: Color = Color.Unspecified,
+    backgroundColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified,
     isPlaceVisible: (Boolean) -> Unit = {},
     isDateVisible: (Boolean) -> Unit = {},
@@ -41,7 +41,7 @@ fun ForecastContent(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(surfaceColor)
+                    .background(backgroundColor)
                     .padding(horizontal = 24.dp),
                 state = listState
             ) {
@@ -300,8 +300,8 @@ private fun TodayScreenPreview() {
                 today = fakeTodayUi(),
                 coming = fakeComingUi()
             ),
-            surfaceColor = PrognozaTheme.surface,
-            contentColor = PrognozaTheme.onSurface
+            backgroundColor = PrognozaTheme.backgroundColor,
+            contentColor = PrognozaTheme.onBackgroundColor
         )
     }
 }

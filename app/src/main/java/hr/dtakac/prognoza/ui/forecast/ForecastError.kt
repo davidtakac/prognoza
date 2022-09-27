@@ -20,14 +20,14 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun ForecastError(
     text: String,
-    surfaceColor: Color = Color.Unspecified,
+    backgroundColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified
 ) {
     CompositionLocalProvider(LocalContentColor provides contentColor) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(surfaceColor),
+                .background(backgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {

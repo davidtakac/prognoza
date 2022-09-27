@@ -20,8 +20,8 @@ fun ForecastSnackBar(
     text: String,
     visible: Boolean,
     modifier: Modifier = Modifier,
-    surfaceColor: Color = Color.Unspecified,
-    onSurfaceColor: Color = Color.Unspecified,
+    backgroundColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
 ) {
     androidx.compose.animation.AnimatedVisibility(
         visible = visible,
@@ -32,7 +32,7 @@ fun ForecastSnackBar(
         Box(
             modifier = Modifier
                 .background(
-                    color = surfaceColor,
+                    color = backgroundColor,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(16.dp)
@@ -43,7 +43,7 @@ fun ForecastSnackBar(
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
-                color = onSurfaceColor
+                color = contentColor
             )
         }
     }
