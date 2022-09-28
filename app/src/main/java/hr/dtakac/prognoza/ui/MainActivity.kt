@@ -63,7 +63,11 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("settings") {
-                        SettingsScreen()
+                        SettingsScreen(
+                            backgroundColor = backgroundColor,
+                            elevatedBackgroundColor = elevatedBackgroundColor,
+                            onBackgroundColor = onBackgroundColor
+                        )
                     }
                 }
             }
