@@ -19,9 +19,7 @@ fun HamburgerButton(
         modifier = modifier
     ) {
         Column(
-            modifier = Modifier
-                .padding(4.dp)
-                .fillMaxSize(),
+            modifier = Modifier.padding(4.dp).fillMaxSize(),
             verticalArrangement = Arrangement.SpaceAround
         ) {
             repeat(3) {

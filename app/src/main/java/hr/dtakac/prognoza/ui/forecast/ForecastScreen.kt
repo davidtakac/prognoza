@@ -8,7 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
 import hr.dtakac.prognoza.ui.places.PlacesScreen
 import kotlinx.coroutines.launch
@@ -61,13 +63,18 @@ fun ForecastScreen(
                     SmallTopAppBar(
                         scrollBehavior = scrollBehavior,
                         navigationIcon = {
-                            HamburgerButton(
+                            IconButton(
                                 onClick = {
                                     scope.launch {
                                         drawerState.open()
                                     }
                                 }
-                            )
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_menu),
+                                    contentDescription = null
+                                )
+                            }
                         },
                         title = {
                             ToolbarContent(
