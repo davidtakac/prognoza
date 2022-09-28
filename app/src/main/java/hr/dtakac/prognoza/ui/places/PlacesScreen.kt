@@ -70,7 +70,7 @@ fun PlacesScreen(
                         .fillMaxWidth()
                         .height(1.dp)
                         .padding(horizontal = 24.dp),
-                    progress = 1f
+                    progress = 0f
                 )
             }
         }

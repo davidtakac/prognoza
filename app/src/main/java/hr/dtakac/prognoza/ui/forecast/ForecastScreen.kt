@@ -6,11 +6,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
 import hr.dtakac.prognoza.ui.places.PlacesScreen
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,9 +50,16 @@ fun ForecastScreen(
             var toolbarDateVisible by remember { mutableStateOf(false) }
             var toolbarTemperatureVisible by remember { mutableStateOf(false) }
 
+            val topAppBarState = rememberTopAppBarState()
+            val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topAppBarState)
+            val snackBarHostState = remember { SnackbarHostState() }
+
             Scaffold(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                snackbarHost = { SnackbarHost(snackBarHostState) },
                 topBar = {
                     SmallTopAppBar(
+                        scrollBehavior = scrollBehavior,
                         navigationIcon = {
                             HamburgerButton(
                                 onClick = {
@@ -75,7 +82,11 @@ fun ForecastScreen(
                     )
                 }
             ) { padding ->
-                Column(modifier = Modifier.fillMaxSize().padding(padding)) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                ) {
                     androidx.compose.animation.AnimatedVisibility(
                         visible = state.isLoading,
                         enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
@@ -89,35 +100,21 @@ fun ForecastScreen(
                     }
 
                     if (forecast == null) {
-                        if (error != null) {
-                            ForecastError(text = error.asString())
-                        }
+                        if (error != null) ForecastError(text = error.asString())
                     } else {
-                        Box {
-                            ForecastContent(
-                                forecast = forecast,
-                                isPlaceVisible = { toolbarPlaceVisible = !it },
-                                isDateVisible = { toolbarDateVisible = !it },
-                                isTemperatureVisible = { toolbarTemperatureVisible = !it }
-                            )
+                        ForecastContent(
+                            forecast = forecast,
+                            isPlaceVisible = { toolbarPlaceVisible = !it },
+                            isDateVisible = { toolbarDateVisible = !it },
+                            isTemperatureVisible = { toolbarTemperatureVisible = !it }
+                        )
 
-                            if (error != null) {
-                                var showSnackBar by remember { mutableStateOf(false) }
-                                LaunchedEffect(forecast, error) {
-                                    scope.launch {
-                                        showSnackBar = true
-                                        delay(5000L)
-                                        showSnackBar = false
-                                    }
+                        if (error != null) {
+                            val errorMessage = error.asString()
+                            LaunchedEffect(forecast, error) {
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(errorMessage)
                                 }
-
-                                ForecastSnackBar(
-                                    modifier = Modifier
-                                        .align(Alignment.BottomCenter)
-                                        .padding(16.dp),
-                                    text = error.asString(),
-                                    visible = showSnackBar
-                                )
                             }
                         }
                     }

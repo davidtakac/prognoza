@@ -1,10 +1,7 @@
 package hr.dtakac.prognoza.ui.theme.cloudy
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.runtime.Composable
 
 val CloudyLightColors = lightColorScheme(
     primary = md_theme_light_primary,
@@ -35,6 +32,7 @@ val CloudyLightColors = lightColorScheme(
     inversePrimary = md_theme_light_inversePrimary,
     surfaceTint = md_theme_light_surfaceTint,
 )
+
 
 val CloudyDarkColors = darkColorScheme(
     primary = md_theme_dark_primary,
