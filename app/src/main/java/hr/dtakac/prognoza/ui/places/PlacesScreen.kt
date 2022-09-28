@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -16,7 +15,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
@@ -28,7 +26,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.presentation.places.PlacesViewModel
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 
@@ -36,9 +33,7 @@ import hr.dtakac.prognoza.presentation.places.PlaceUi
 fun PlacesScreen(
     viewModel: PlacesViewModel = hiltViewModel(),
     onPlaceSelected: () -> Unit = {},
-    onSettingsClick: () -> Unit = {},
-    backgroundColor: Color = Color.Unspecified,
-    contentColor: Color = Color.Unspecified
+    onSettingsClick: () -> Unit = {}
 ) {
     LaunchedEffect(viewModel) {
         viewModel.getSaved()
@@ -51,76 +46,70 @@ fun PlacesScreen(
         }
     }
 
-    Column(modifier = Modifier.background(backgroundColor)) {
-        CompositionLocalProvider(LocalContentColor provides contentColor) {
-            SearchBar(
-                modifier = Modifier.padding(
-                    top = 24.dp,
-                    start = 24.dp,
-                    end = 24.dp
-                ),
-                onSubmit = viewModel::search,
-                onQueryChange = { if (it.isBlank()) viewModel.getSaved() }
-            )
-            Crossfade(targetState = state.isLoading) { isLoading ->
-                if (isLoading) {
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .padding(horizontal = 24.dp),
-                        color = LocalContentColor.current,
-                        trackColor = backgroundColor
-                    )
-                } else {
-                    LinearProgressIndicator(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .padding(horizontal = 24.dp),
-                        color = LocalContentColor.current,
-                        trackColor = backgroundColor,
-                        progress = 1f
-                    )
-                }
-            }
-            val empty = state.empty
-            if (empty != null) {
-                Text(
-                    text = empty.asString(),
-                    style = PrognozaTheme.typography.subtitleMedium,
-                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
+    Column {
+        SearchBar(
+            modifier = Modifier.padding(
+                top = 24.dp,
+                start = 24.dp,
+                end = 24.dp
+            ),
+            onSubmit = viewModel::search,
+            onQueryChange = { if (it.isBlank()) viewModel.getSaved() }
+        )
+        Crossfade(targetState = state.isLoading) { isLoading ->
+            if (isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .padding(horizontal = 24.dp)
                 )
             } else {
-                LazyColumn {
-                    itemsIndexed(state.places) { idx, placeUi ->
-                        if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
-                        PlaceItem(
-                            placeUi = placeUi,
-                            modifier = Modifier
-                                .clickable(
-                                    onClick = { viewModel.select(idx) },
-                                    indication = rememberRipple(bounded = true),
-                                    interactionSource = remember { MutableInteractionSource() }
-                                )
-                                .fillMaxWidth()
-                                .padding(
-                                    vertical = 10.dp,
-                                    horizontal = 24.dp
-                                )
-                        )
-                    }
-                }
-            }
-            // todo: relocate this somewhere that makes sense
-            IconButton(onClick = onSettingsClick) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_outline_settings),
-                    contentDescription = null,
-                    modifier = Modifier.size(36.dp)
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .padding(horizontal = 24.dp),
+                    progress = 1f
                 )
             }
+        }
+        val empty = state.empty
+        if (empty != null) {
+            Text(
+                text = empty.asString(),
+                style = MaterialTheme.typography.bodyLarge,
+                color = LocalContentColor.current.copy(alpha = 0.6f),
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
+            )
+        } else {
+            LazyColumn {
+                itemsIndexed(state.places) { idx, placeUi ->
+                    if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
+                    PlaceItem(
+                        placeUi = placeUi,
+                        modifier = Modifier
+                            .clickable(
+                                onClick = { viewModel.select(idx) },
+                                indication = rememberRipple(bounded = true),
+                                interactionSource = remember { MutableInteractionSource() }
+                            )
+                            .fillMaxWidth()
+                            .padding(
+                                vertical = 10.dp,
+                                horizontal = 24.dp
+                            )
+                    )
+                }
+            }
+        }
+        // todo: relocate this somewhere that makes sense
+        IconButton(onClick = onSettingsClick) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_outline_settings),
+                contentDescription = null,
+                modifier = Modifier.size(36.dp)
+            )
         }
     }
 }
@@ -131,7 +120,7 @@ private fun SearchBar(
     onQueryChange: (String) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val style = PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)
+    val style = MaterialTheme.typography.bodyLarge.copy(color = LocalContentColor.current)
     var query by remember { mutableStateOf("") }
     val focusManager = LocalFocusManager.current
     BasicTextField(
@@ -163,7 +152,7 @@ private fun SearchBar(
                     Image(
                         painter = painterResource(id = R.drawable.ic_search),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
+                        colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = 0.6f)),
                         modifier = Modifier
                             .padding(end = 12.dp)
                             .size(24.dp)
@@ -173,7 +162,7 @@ private fun SearchBar(
                             Text(
                                 stringResource(id = R.string.search_places),
                                 style = style,
-                                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                                color = LocalContentColor.current.copy(alpha = 0.6f)
                             )
                         }
                         innerTextField()
@@ -198,20 +187,20 @@ private fun PlaceItem(
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .size(20.dp),
-                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium))
+                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = 0.6f))
                 )
             }
             Text(
                 text = placeUi.name.asString(),
-                style = PrognozaTheme.typography.subtitleMedium,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
         }
         Text(
             text = placeUi.details.asString(),
-            style = PrognozaTheme.typography.body,
-            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+            style = MaterialTheme.typography.bodyMedium,
+            color = LocalContentColor.current.copy(alpha = 0.6f),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )

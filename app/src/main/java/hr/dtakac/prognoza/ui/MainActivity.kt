@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -18,7 +19,7 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.MaterialPrognozaTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -28,14 +29,10 @@ class MainActivity : ComponentActivity() {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
             val forecastState = remember { forecastViewModel.state }.value
 
-            PrognozaTheme(description = forecastState.forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
-                val backgroundColor = PrognozaTheme.backgroundColor
-                val elevatedBackgroundColor = PrognozaTheme.elevatedBackgroundColor
-                val onBackgroundColor = PrognozaTheme.onBackgroundColor
-
+            MaterialPrognozaTheme(description = forecastState.forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
                 val systemUiController = rememberSystemUiController()
-                systemUiController.setSystemBarsColor(elevatedBackgroundColor)
-                systemUiController.setNavigationBarColor(elevatedBackgroundColor)
+                systemUiController.setSystemBarsColor(MaterialTheme.colorScheme.primaryContainer)
+                systemUiController.setNavigationBarColor(MaterialTheme.colorScheme.primaryContainer)
 
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "forecast") {
@@ -51,9 +48,6 @@ class MainActivity : ComponentActivity() {
 
                         ForecastScreen(
                             state = forecastState,
-                            backgroundColor = backgroundColor,
-                            elevatedBackgroundColor = elevatedBackgroundColor,
-                            onBackgroundColor = onBackgroundColor,
                             onSettingsClick = {
                                 navController.navigate("settings")
                             },
@@ -63,11 +57,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("settings") {
-                        SettingsScreen(
-                            backgroundColor = backgroundColor,
-                            elevatedBackgroundColor = elevatedBackgroundColor,
-                            onBackgroundColor = onBackgroundColor
-                        )
+                        SettingsScreen()
                     }
                 }
             }

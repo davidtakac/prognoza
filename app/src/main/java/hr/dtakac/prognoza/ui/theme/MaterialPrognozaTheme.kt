@@ -30,7 +30,7 @@ fun MaterialPrognozaTheme(
         ForecastDescription.Short.FAIR -> if (useDarkTheme) FairDarkColors else FairLightColors
         ForecastDescription.Short.SLEET -> if (useDarkTheme) SleetDarkColors else SleetLightColors
         ForecastDescription.Short.CLOUDY,
-        ForecastDescription.Short.FOG -> if (useDarkTheme) CloudyLightColors else CloudyDarkColors
+        ForecastDescription.Short.FOG -> if (useDarkTheme) CloudyDarkColors else CloudyLightColors
         ForecastDescription.Short.RAIN -> if (useDarkTheme) RainDarkColors else RainLightColors
         ForecastDescription.Short.SNOW,
         ForecastDescription.Short.UNKNOWN -> if (useDarkTheme) SnowDarkColors else SnowLightColors
@@ -38,6 +38,7 @@ fun MaterialPrognozaTheme(
 
     MaterialTheme(
         colorScheme = colors,
+        typography = PrognozaMaterialTypography,
         content = content
     )
 }
