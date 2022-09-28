@@ -51,11 +51,7 @@ fun PlacesScreen(
         }
     }
 
-    Column(
-        modifier = Modifier
-            .background(backgroundColor)
-            .fillMaxSize()
-    ) {
+    Column(modifier = Modifier.background(backgroundColor)) {
         CompositionLocalProvider(LocalContentColor provides contentColor) {
             SearchBar(
                 modifier = Modifier.padding(

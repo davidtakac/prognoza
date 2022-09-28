@@ -65,7 +65,11 @@ fun ForecastScreen(
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
-                ModalDrawerSheet(drawerShape = RectangleShape) {
+                ModalDrawerSheet(
+                    drawerShape = RectangleShape,
+                    drawerContainerColor = elevatedBackgroundColor,
+                    drawerContentColor = onBackgroundColor
+                ) {
                     PlacesScreen(
                         onPlaceSelected = {
                             scope.launch { drawerState.close() }
