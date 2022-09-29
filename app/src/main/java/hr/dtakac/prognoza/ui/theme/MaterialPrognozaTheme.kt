@@ -15,6 +15,10 @@ import hr.dtakac.prognoza.ui.theme.fair.FairDarkColors
 import hr.dtakac.prognoza.ui.theme.fair.FairLightColors
 import hr.dtakac.prognoza.ui.theme.rain.RainDarkColors
 import hr.dtakac.prognoza.ui.theme.rain.RainLightColors
+import hr.dtakac.prognoza.ui.theme.sleet.SleetDarkColors
+import hr.dtakac.prognoza.ui.theme.sleet.SleetLightColors
+import hr.dtakac.prognoza.ui.theme.snow.SnowDarkColors
+import hr.dtakac.prognoza.ui.theme.snow.SnowLightColors
 
 @Composable
 fun MaterialPrognozaTheme(
@@ -24,8 +28,12 @@ fun MaterialPrognozaTheme(
 ) {
     val colors = when (description) {
         ForecastDescription.Short.FAIR -> if (useDarkTheme) FairDarkColors else FairLightColors
+        ForecastDescription.Short.SLEET -> if (useDarkTheme) SleetDarkColors else SleetLightColors
+        ForecastDescription.Short.CLOUDY,
+        ForecastDescription.Short.FOG -> if (useDarkTheme) CloudyDarkColors else CloudyLightColors
         ForecastDescription.Short.RAIN -> if (useDarkTheme) RainDarkColors else RainLightColors
-        else -> if (useDarkTheme) CloudyDarkColors else CloudyLightColors
+        ForecastDescription.Short.SNOW,
+        ForecastDescription.Short.UNKNOWN -> if (useDarkTheme) SnowDarkColors else SnowLightColors
     }.animate()
 
     MaterialTheme(
