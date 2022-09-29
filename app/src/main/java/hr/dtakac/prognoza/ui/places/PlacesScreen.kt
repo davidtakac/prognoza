@@ -128,16 +128,17 @@ fun PlacesScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp, vertical = 16.dp)
             ) {
-                Image(
+                // todo: remove these comments at some point
+                /*Image(
                     imageVector = Icons.Outlined.Settings,
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
-                    modifier = Modifier.size(24.dp)
-                )
+                    modifier = Modifier.size(28.dp)
+                )*/
                 Text(
                     text = stringResource(id = R.string.settings),
-                    style = PrognozaTheme.typography.titleSmall,
-                    modifier = Modifier.padding(start = 8.dp)
+                    style = PrognozaTheme.typography.subtitleMedium,
+                    //modifier = Modifier.padding(start = 8.dp)
                 )
             }
         }
@@ -215,7 +216,7 @@ private fun PlaceItem(
                     painter = painterResource(id = R.drawable.ic_my_location),
                     contentDescription = null,
                     modifier = Modifier
-                        .padding(end = 8.dp)
+                        .padding(end = 4.dp)
                         .size(20.dp),
                     colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium))
                 )
