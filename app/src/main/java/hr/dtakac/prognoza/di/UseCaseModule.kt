@@ -80,4 +80,20 @@ class UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideGetAllWindUnits(): GetAllWindUnits = GetAllWindUnits()
+
+    @Provides
+    @ViewModelScoped
+    fun provideSetPrecipitationUnit(
+        settingsRepository: SettingsRepository
+    ): SetPrecipitationUnit = SetPrecipitationUnit(settingsRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetPrecipitationUnit(
+        settingsRepository: SettingsRepository
+    ): GetPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetAllPrecipitationUnits(): GetAllPrecipitationUnits = GetAllPrecipitationUnits()
 }

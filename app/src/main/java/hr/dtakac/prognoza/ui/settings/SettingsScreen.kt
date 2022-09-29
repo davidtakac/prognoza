@@ -66,6 +66,14 @@ fun SettingsScreen(
                         )
                     }
                 }
+                state.precipitationUnitSetting?.let {
+                    item {
+                        UnitSetting(
+                            unitSetting = it,
+                            onConfirm = viewModel::setPrecipitationUnit
+                        )
+                    }
+                }
             }
         }
     }
