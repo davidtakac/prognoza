@@ -24,8 +24,7 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit = {},
-    onUnitChanged: () -> Unit = {}
+    onBackClick: () -> Unit = {}
 ) {
     LaunchedEffect(viewModel) { viewModel.getState() }
     val state by remember { viewModel.state }

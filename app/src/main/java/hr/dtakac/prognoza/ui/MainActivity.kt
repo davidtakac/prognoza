@@ -66,10 +66,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("settings") {
-                        SettingsScreen(
-                            onBackClick = navController::navigateUp,
-                            onUnitChanged = forecastViewModel::getState
-                        )
+                        SettingsScreen(onBackClick = navController::navigateUp)
                     }
                 }
             }
