@@ -16,8 +16,8 @@ interface SettingsRepository {
     suspend fun setWindUnit(unit: SpeedUnit)
     suspend fun getWindUnit(): SpeedUnit
 
-    suspend fun setAirPressureUnit(unit: PressureUnit)
-    suspend fun getAirPressureUnit(): PressureUnit
+    suspend fun setPressureUnit(unit: PressureUnit)
+    suspend fun getPressureUnit(): PressureUnit
 
     suspend fun setPlace(place: Place)
     suspend fun getPlace(): Place?

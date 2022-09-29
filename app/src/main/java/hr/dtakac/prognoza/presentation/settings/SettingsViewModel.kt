@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
+import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
@@ -23,13 +24,17 @@ class SettingsViewModel @Inject constructor(
     private val getAllWindUnits: GetAllWindUnits,
     private val setPrecipitationUnit: SetPrecipitationUnit,
     private val getPrecipitationUnit: GetPrecipitationUnit,
-    private val getAllPrecipitationUnits: GetAllPrecipitationUnits
+    private val getAllPrecipitationUnits: GetAllPrecipitationUnits,
+    private val setPressureUnit: SetPressureUnit,
+    private val getPressureUnit: GetPressureUnit,
+    private val getAllPressureUnits: GetAllPressureUnits
 ) : ViewModel() {
     private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
 
     private var availableTemperatureUnits: List<TemperatureUnit> = listOf()
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
+    private var availablePressureUnits: List<PressureUnit> = listOf()
 
     private val _state = mutableStateOf(SettingsState())
     val state: State<SettingsState> get() = _state
@@ -72,10 +77,22 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setPressureUnit(index: Int) {
+        viewModelScope.launch {
+            showLoader()
+            val selected = availablePressureUnits[index]
+            setPressureUnit(selected)
+            getStateActual()
+            hideLoader()
+        }
+    }
+
     private suspend fun getStateActual() {
         availableTemperatureUnits = getAllTemperatureUnits()
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
+        availablePressureUnits = getAllPressureUnits()
+
         _state.value = _state.value.copy(
             temperatureUnitSetting = mapToTemperatureUnitSetting(
                 selectedTemperatureUnit = getTemperatureUnit(),
@@ -85,9 +102,13 @@ class SettingsViewModel @Inject constructor(
                 selectedWindUnit = getWindUnit(),
                 availableWindUnits = availableWindUnits
             ),
-            precipitationUnitSetting = mapToPrecipitationUnitSettings(
+            precipitationUnitSetting = mapToPrecipitationUnitSetting(
                 selectedPrecipitationUnit = getPrecipitationUnit(),
                 availablePrecipitationUnits = availablePrecipitationUnits
+            ),
+            pressureUnitSetting = mapToPressureUnitSetting(
+                selectedPressureUnit = getPressureUnit(),
+                availablePressureUnits = availablePressureUnits
             )
         )
     }

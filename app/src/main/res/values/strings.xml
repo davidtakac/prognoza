@@ -119,5 +119,9 @@
     <string name="settings_label_mph">Miles per hour</string>
     <string name="settings_label_mm">Millimeters</string>
     <string name="settings_label_in">Inches</string>
+    <string name="settings_label_hpa">Hectopascal</string>
+    <string name="settings_label_psi">Pounds per square inch</string>
+    <string name="settings_label_bar">Bar</string>
+    <string name="settings_label_atm">Atmosphere</string>
 
 </resources>

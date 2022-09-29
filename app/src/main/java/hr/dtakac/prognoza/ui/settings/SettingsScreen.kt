@@ -74,6 +74,14 @@ fun SettingsScreen(
                         )
                     }
                 }
+                state.pressureUnitSetting?.let {
+                    item {
+                        UnitSetting(
+                            unitSetting = it,
+                            onConfirm = viewModel::setPressureUnit
+                        )
+                    }
+                }
             }
         }
     }

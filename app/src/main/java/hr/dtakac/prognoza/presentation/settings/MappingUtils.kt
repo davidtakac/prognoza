@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.presentation.settings
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
+import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 
@@ -23,4 +24,12 @@ fun SpeedUnit.toSettingsLabel(): Int = when (this) {
 fun LengthUnit.toSettingsLabel(): Int = when (this) {
     LengthUnit.MM -> R.string.settings_label_mm
     LengthUnit.IN -> R.string.settings_label_in
+}
+
+@StringRes
+fun PressureUnit.toSettingsLabel(): Int = when (this) {
+    PressureUnit.HPA -> R.string.settings_label_hpa
+    PressureUnit.PSI -> R.string.settings_label_psi
+    PressureUnit.BAR -> R.string.settings_label_bar
+    PressureUnit.ATM -> R.string.settings_label_atm
 }

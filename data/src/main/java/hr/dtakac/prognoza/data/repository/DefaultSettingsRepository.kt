@@ -31,18 +31,18 @@ class DefaultSettingsRepository(
         }
     }
 
-    override suspend fun getAirPressureUnit(): PressureUnit {
+    override suspend fun getPressureUnit(): PressureUnit {
         val ordinal = sharedPreferences.getInt(AIR_PRESSURE_UNIT, -1)
         return if (ordinal == -1) {
             val default = PressureUnit.HPA
-            setAirPressureUnit(default)
+            setPressureUnit(default)
             default
         } else {
             PressureUnit.values()[ordinal]
         }
     }
 
-    override suspend fun setAirPressureUnit(unit: PressureUnit) {
+    override suspend fun setPressureUnit(unit: PressureUnit) {
         commit {
             putInt(AIR_PRESSURE_UNIT, unit.ordinal)
         }

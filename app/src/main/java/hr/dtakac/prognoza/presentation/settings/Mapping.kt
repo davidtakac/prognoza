@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.presentation.settings
 
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
+import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.TextResource
@@ -24,11 +25,20 @@ fun mapToWindUnitSetting(
     values = availableWindUnits.map(SpeedUnit::toSettingsLabel).map(TextResource::fromStringId)
 )
 
-fun mapToPrecipitationUnitSettings(
+fun mapToPrecipitationUnitSetting(
     selectedPrecipitationUnit: LengthUnit,
     availablePrecipitationUnits: List<LengthUnit>
 ): UnitSetting = UnitSetting(
     name = TextResource.fromStringId(R.string.precipitation_unit),
     value = TextResource.fromStringId(selectedPrecipitationUnit.toSettingsLabel()),
     values = availablePrecipitationUnits.map(LengthUnit::toSettingsLabel).map(TextResource::fromStringId)
+)
+
+fun mapToPressureUnitSetting(
+    selectedPressureUnit: PressureUnit,
+    availablePressureUnits: List<PressureUnit>
+): UnitSetting = UnitSetting(
+    name = TextResource.fromStringId(R.string.pressure_unit),
+    value = TextResource.fromStringId(selectedPressureUnit.toSettingsLabel()),
+    values = availablePressureUnits.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
 )

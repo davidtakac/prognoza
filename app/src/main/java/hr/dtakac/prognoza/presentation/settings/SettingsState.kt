@@ -6,7 +6,8 @@ data class SettingsState(
     val isLoading: Boolean = false,
     val temperatureUnitSetting: UnitSetting? = null,
     val windUnitSetting: UnitSetting? = null,
-    val precipitationUnitSetting: UnitSetting? = null
+    val precipitationUnitSetting: UnitSetting? = null,
+    val pressureUnitSetting: UnitSetting? = null
 )
 
 data class UnitSetting(
