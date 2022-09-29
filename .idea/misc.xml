@@ -66,6 +66,7 @@
         <entry key="app/src/main/res/drawable-v24/ic_cloud_off.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/app_widget_background.xml" value="0.18090277777777777" />
+        <entry key="app/src/main/res/drawable/arrow_back-48px.xml" value="0.168" />
         <entry key="app/src/main/res/drawable/arrow_upward-48px.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_air.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_arrow_up.xml" value="0.242" />
@@ -84,6 +85,7 @@
         <entry key="app/src/main/res/drawable/ic_thermostat.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_today.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_water_drop.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/menu-48px.xml" value="0.168" />
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/app_widget_current_conditions_medium_empty.xml" value="0.41299429355300554" />
         <entry key="app/src/main/res/layout/cell_day.xml" value="0.75" />

@@ -4,13 +4,14 @@ import hr.dtakac.prognoza.presentation.TextResource
 
 data class SettingsState(
     val isLoading: Boolean = false,
-    val temperatureUnitSetting: UnitSetting? = null,
-    val windUnitSetting: UnitSetting? = null,
-    val precipitationUnitSetting: UnitSetting? = null,
-    val pressureUnitSetting: UnitSetting? = null
+    val temperatureUnitSetting: MultipleChoiceSetting? = null,
+    val windUnitSetting: MultipleChoiceSetting? = null,
+    val precipitationUnitSetting: MultipleChoiceSetting? = null,
+    val pressureUnitSetting: MultipleChoiceSetting? = null,
+    val themeSetting: MultipleChoiceSetting? = null
 )
 
-data class UnitSetting(
+data class MultipleChoiceSetting(
     val name: TextResource,
     val value: TextResource,
     val values: List<TextResource>

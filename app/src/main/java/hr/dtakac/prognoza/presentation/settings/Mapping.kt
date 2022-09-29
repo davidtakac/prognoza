@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.presentation.TextResource
 fun mapToTemperatureUnitSetting(
     selectedTemperatureUnit: TemperatureUnit,
     availableTemperatureUnits: List<TemperatureUnit>
-): UnitSetting = UnitSetting(
+): MultipleChoiceSetting = MultipleChoiceSetting(
     name = TextResource.fromStringId(R.string.temperature_unit),
     value = TextResource.fromStringId(selectedTemperatureUnit.toSettingsLabel()),
     values = availableTemperatureUnits.map(TemperatureUnit::toSettingsLabel).map(TextResource::fromStringId)
@@ -19,7 +19,7 @@ fun mapToTemperatureUnitSetting(
 fun mapToWindUnitSetting(
     selectedWindUnit: SpeedUnit,
     availableWindUnits: List<SpeedUnit>
-): UnitSetting = UnitSetting(
+): MultipleChoiceSetting = MultipleChoiceSetting(
     name = TextResource.fromStringId(R.string.wind_unit),
     value = TextResource.fromStringId(selectedWindUnit.toSettingsLabel()),
     values = availableWindUnits.map(SpeedUnit::toSettingsLabel).map(TextResource::fromStringId)
@@ -28,7 +28,7 @@ fun mapToWindUnitSetting(
 fun mapToPrecipitationUnitSetting(
     selectedPrecipitationUnit: LengthUnit,
     availablePrecipitationUnits: List<LengthUnit>
-): UnitSetting = UnitSetting(
+): MultipleChoiceSetting = MultipleChoiceSetting(
     name = TextResource.fromStringId(R.string.precipitation_unit),
     value = TextResource.fromStringId(selectedPrecipitationUnit.toSettingsLabel()),
     values = availablePrecipitationUnits.map(LengthUnit::toSettingsLabel).map(TextResource::fromStringId)
@@ -37,8 +37,19 @@ fun mapToPrecipitationUnitSetting(
 fun mapToPressureUnitSetting(
     selectedPressureUnit: PressureUnit,
     availablePressureUnits: List<PressureUnit>
-): UnitSetting = UnitSetting(
+): MultipleChoiceSetting = MultipleChoiceSetting(
     name = TextResource.fromStringId(R.string.pressure_unit),
     value = TextResource.fromStringId(selectedPressureUnit.toSettingsLabel()),
     values = availablePressureUnits.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
+)
+
+// todo: fill in with actual logic
+fun mapToThemeSetting(): MultipleChoiceSetting = MultipleChoiceSetting(
+    name = TextResource.fromStringId(R.string.theme),
+    value = TextResource.fromStringId(R.string.settings_label_follow_system),
+    values = listOf(
+        TextResource.fromStringId(R.string.settings_label_light),
+        TextResource.fromStringId(R.string.settings_label_dark),
+        TextResource.fromStringId(R.string.settings_label_follow_system)
+    )
 )

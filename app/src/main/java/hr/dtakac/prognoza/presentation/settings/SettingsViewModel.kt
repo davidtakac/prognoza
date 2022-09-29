@@ -67,6 +67,10 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun setTheme(index: Int) {
+        // todo
+    }
+
     private fun updateState(action: suspend () -> Unit) {
         viewModelScope.launch {
             showLoader()
@@ -98,7 +102,8 @@ class SettingsViewModel @Inject constructor(
             pressureUnitSetting = mapToPressureUnitSetting(
                 selectedPressureUnit = getPressureUnit(),
                 availablePressureUnits = availablePressureUnits
-            )
+            ),
+            themeSetting = mapToThemeSetting()
         )
     }
 

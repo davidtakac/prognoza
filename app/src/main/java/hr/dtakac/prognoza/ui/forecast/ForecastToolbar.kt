@@ -9,9 +9,13 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+
+// todo: make this a proper reusable composable!
 
 @Composable
 fun ForecastToolbar(
@@ -36,7 +40,7 @@ fun ForecastToolbar(
             ) {
                 HamburgerButton(
                     onClick = onMenuClick,
-                    modifier = Modifier.size(42.dp)
+                    modifier = Modifier.size(48.dp)
                 )
                 Spacer(modifier = Modifier.width(16.dp))
                 ToolbarContent(
@@ -61,7 +65,11 @@ private fun HamburgerButton(
         onClick = onClick,
         modifier = modifier
     ) {
-        Column(
+        Icon(
+            painter = painterResource(id = R.drawable.ic_menu),
+            contentDescription = null
+        )
+        /*Column(
             modifier = Modifier
                 .padding(4.dp)
                 .fillMaxSize(),
@@ -73,7 +81,7 @@ private fun HamburgerButton(
                     modifier = Modifier.fillMaxWidth()
                 )
             }
-        }
+        }*/
     }
 }
 
@@ -110,8 +118,9 @@ private fun RowScope.ToolbarContent(
     )
 }
 
+// todo: private this when upper todo is done
 @Composable
-private fun SlideUpAppearText(
+fun SlideUpAppearText(
     text: String,
     visible: Boolean,
     style: TextStyle = LocalTextStyle.current
