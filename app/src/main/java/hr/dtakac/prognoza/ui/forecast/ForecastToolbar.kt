@@ -1,16 +1,59 @@
 package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
-fun HamburgerButton(
+fun ForecastToolbar(
+    place: String,
+    placeVisible: Boolean,
+    date: String,
+    dateVisible: Boolean,
+    temperature: String,
+    temperatureVisible: Boolean,
+    backgroundColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
+    onMenuClick: () -> Unit = {}
+) {
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
+        Column(modifier = Modifier.background(backgroundColor)) {
+            Row(
+                modifier = Modifier
+                    .height(90.dp)
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                HamburgerButton(
+                    onClick = onMenuClick,
+                    modifier = Modifier.size(42.dp)
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                ToolbarContent(
+                    place = place,
+                    placeVisible = placeVisible,
+                    date = date,
+                    dateVisible = dateVisible,
+                    temperature = temperature,
+                    temperatureVisible = temperatureVisible
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun HamburgerButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -35,7 +78,7 @@ fun HamburgerButton(
 }
 
 @Composable
-fun ToolbarContent(
+private fun RowScope.ToolbarContent(
     place: String,
     placeVisible: Boolean,
     date: String,
@@ -43,28 +86,28 @@ fun ToolbarContent(
     temperature: String,
     temperatureVisible: Boolean
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(
-            modifier = Modifier.weight(1f).fillMaxHeight(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            SlideUpAppearText(
-                text = place,
-                visible = placeVisible,
-                style = MaterialTheme.typography.titleMedium
-            )
-            SlideUpAppearText(
-                text = date,
-                visible = dateVisible,
-                style = MaterialTheme.typography.titleSmall
-            )
-        }
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .fillMaxHeight(),
+        verticalArrangement = Arrangement.Center
+    ) {
         SlideUpAppearText(
-            text = temperature,
-            visible = temperatureVisible,
-            style = MaterialTheme.typography.displaySmall
+            text = place,
+            visible = placeVisible,
+            style = PrognozaTheme.typography.titleMedium
+        )
+        SlideUpAppearText(
+            text = date,
+            visible = dateVisible,
+            style = PrognozaTheme.typography.subtitleMedium
         )
     }
+    SlideUpAppearText(
+        text = temperature,
+        visible = temperatureVisible,
+        style = PrognozaTheme.typography.headlineSmall
+    )
 }
 
 @Composable

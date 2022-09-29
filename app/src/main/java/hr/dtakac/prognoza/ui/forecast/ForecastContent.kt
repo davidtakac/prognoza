@@ -1,19 +1,20 @@
 package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
@@ -21,115 +22,120 @@ import hr.dtakac.prognoza.presentation.forecast.TodayUi
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.presentation.forecast.ForecastUi
-import hr.dtakac.prognoza.ui.theme.MaterialPrognozaTheme
+import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
 @Composable
 fun ForecastContent(
     forecast: ForecastUi,
+    backgroundColor: Color = Color.Unspecified,
+    contentColor: Color = Color.Unspecified,
     isPlaceVisible: (Boolean) -> Unit = {},
     isDateVisible: (Boolean) -> Unit = {},
     isTemperatureVisible: (Boolean) -> Unit = {}
 ) {
-    Column {
-        val listState = rememberLazyListState()
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 24.dp),
-            state = listState
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(24.dp))
-            }
-            item(key = "place") {
-                Text(
-                    text = forecast.place.asString(),
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-            }
-            item {
-                Spacer(modifier = Modifier.height(8.dp))
-            }
-            item(key = "time") {
-                Text(
-                    text = forecast.today.date.asString(),
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-            item(key = "temperature") {
-                AutoSizeText(
-                    text = forecast.today.temperature.asString(),
-                    style = MaterialTheme.typography.displayLarge,
-                    maxFontSize = 200.sp,
-                    maxLines = 1
-                )
-            }
-            item {
-                DescriptionAndLowHighTemperature(
-                    description = forecast.today.description.asString(),
-                    lowHighTemperature = forecast.today.lowHighTemperature.asString(),
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
-            item {
-                WindAndPrecipitation(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 42.dp),
-                    wind = forecast.today.wind.asString(),
-                    precipitation = forecast.today.precipitation.asString()
-                )
-            }
-            item {
-                HourlyHeader(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 42.dp, bottom = 16.dp)
-                )
-            }
-            items(forecast.today.hourly) { hour ->
-                HourItem(
-                    hour = hour,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 12.dp)
-                )
-            }
-            item {
-                ComingHeader(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp, top = 30.dp)
-                )
-            }
-            items(forecast.coming) { day ->
-                ComingItem(
-                    day = day,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                )
-            }
-        }
-
-        LaunchedEffect(listState) {
-            snapshotFlow { listState.layoutInfo }
-                .distinctUntilChanged()
-                .map { layoutInfo ->
-                    Triple(
-                        layoutInfo.keyVisibilityPercent("place"),
-                        layoutInfo.keyVisibilityPercent("time"),
-                        layoutInfo.keyVisibilityPercent("temperature")
+    CompositionLocalProvider(LocalContentColor provides contentColor) {
+        Column {
+            val listState = rememberLazyListState()
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(backgroundColor)
+                    .padding(horizontal = 24.dp),
+                state = listState
+            ) {
+                item {
+                    Spacer(modifier = Modifier.height(24.dp))
+                }
+                item(key = "place") {
+                    Text(
+                        text = forecast.place.asString(),
+                        style = PrognozaTheme.typography.titleLarge,
                     )
                 }
-                .distinctUntilChanged()
-                .collect { (placeVis, dateTimeVis, temperatureVis) ->
-                    isPlaceVisible(placeVis != 0f)
-                    isDateVisible(dateTimeVis != 0f)
-                    isTemperatureVisible(temperatureVis > 50f)
+                item {
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
+                item(key = "time") {
+                    Text(
+                        text = forecast.today.date.asString(),
+                        style = PrognozaTheme.typography.subtitleLarge
+                    )
+                }
+                item(key = "temperature") {
+                    AutoSizeText(
+                        text = forecast.today.temperature.asString(),
+                        style = PrognozaTheme.typography.headlineLarge,
+                        maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
+                        maxLines = 1
+                    )
+                }
+                item {
+                    DescriptionAndLowHighTemperature(
+                        description = forecast.today.description.asString(),
+                        lowHighTemperature = forecast.today.lowHighTemperature.asString(),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+                item {
+                    WindAndPrecipitation(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 42.dp),
+                        wind = forecast.today.wind.asString(),
+                        precipitation = forecast.today.precipitation.asString()
+                    )
+                }
+                item {
+                    HourlyHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 42.dp, bottom = 16.dp)
+                    )
+                }
+                items(forecast.today.hourly) { hour ->
+                    HourItem(
+                        hour = hour,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp)
+                    )
+                }
+                item {
+                    ComingHeader(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp, top = 30.dp)
+                    )
+                }
+                items(forecast.coming) { day ->
+                    ComingItem(
+                        day = day,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp)
+                    )
+                }
+            }
+
+            LaunchedEffect(listState) {
+                snapshotFlow { listState.layoutInfo }
+                    .distinctUntilChanged()
+                    .map { layoutInfo ->
+                        Triple(
+                            layoutInfo.keyVisibilityPercent("place"),
+                            layoutInfo.keyVisibilityPercent("time"),
+                            layoutInfo.keyVisibilityPercent("temperature")
+                        )
+                    }
+                    .distinctUntilChanged()
+                    .collect { (placeVis, dateTimeVis, temperatureVis) ->
+                        isPlaceVisible(placeVis != 0f)
+                        isDateVisible(dateTimeVis != 0f)
+                        isTemperatureVisible(temperatureVis > 50f)
+                    }
+            }
         }
     }
 }
@@ -141,7 +147,7 @@ private fun DescriptionAndLowHighTemperature(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.titleLarge) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.titleLarge) {
             Text(
                 modifier = Modifier.weight(2f),
                 text = description
@@ -162,7 +168,7 @@ private fun WindAndPrecipitation(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = wind,
@@ -181,7 +187,7 @@ private fun HourlyHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = stringResource(id = R.string.hourly),
-            style = MaterialTheme.typography.titleSmall,
+            style = PrognozaTheme.typography.titleSmall,
         )
         Divider(
             color = LocalContentColor.current,
@@ -195,7 +201,7 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             text = stringResource(id = R.string.coming),
-            style = MaterialTheme.typography.titleSmall,
+            style = PrognozaTheme.typography.titleSmall,
         )
         Divider(
             color = LocalContentColor.current,
@@ -210,7 +216,7 @@ fun HourItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.width(52.dp),
                 text = hour.time.asString(),
@@ -231,7 +237,7 @@ fun HourItem(
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = LocalContentColor.current.copy(alpha = 0.6f)
+                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
             )
             Text(
                 modifier = Modifier.width(52.dp),
@@ -257,7 +263,7 @@ fun ComingItem(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.weight(2f),
                 text = day.date.asString(),
@@ -271,7 +277,7 @@ fun ComingItem(
                 textAlign = TextAlign.End,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                color = LocalContentColor.current.copy(alpha = 0.6f)
+                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
             )
             Text(
                 modifier = Modifier.weight(1f),
@@ -287,13 +293,15 @@ fun ComingItem(
 @Preview
 @Composable
 private fun TodayScreenPreview() {
-    MaterialPrognozaTheme(description = ForecastDescription.Short.FAIR) {
+    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
         ForecastContent(
             forecast = ForecastUi(
                 place = TextResource.fromText("Helsinki"),
                 today = fakeTodayUi(),
                 coming = fakeComingUi()
-            )
+            ),
+            backgroundColor = PrognozaTheme.backgroundColor,
+            contentColor = PrognozaTheme.onBackgroundColor
         )
     }
 }
