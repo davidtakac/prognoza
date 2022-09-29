@@ -40,48 +40,37 @@ class SettingsViewModel @Inject constructor(
     val state: State<SettingsState> get() = _state
 
     fun getState() {
-        viewModelScope.launch {
-            showLoader()
-            getStateActual()
-            hideLoader()
-        }
+        updateState { }
     }
 
     fun setTemperatureUnit(index: Int) {
-        viewModelScope.launch {
-            showLoader()
-            val selected = availableTemperatureUnits[index]
-            setTemperatureUnit(selected)
-            getStateActual()
-            hideLoader()
+        updateState {
+            setTemperatureUnit(availableTemperatureUnits[index])
         }
     }
 
     fun setWindUnit(index: Int) {
-        viewModelScope.launch {
-            showLoader()
-            val selected = availableWindUnits[index]
-            setWindUnit(selected)
-            getStateActual()
-            hideLoader()
+        updateState {
+            setWindUnit(availableWindUnits[index])
         }
     }
 
     fun setPrecipitationUnit(index: Int) {
-        viewModelScope.launch {
-            showLoader()
-            val selected = availablePrecipitationUnits[index]
-            setPrecipitationUnit(selected)
-            getStateActual()
-            hideLoader()
+        updateState {
+            setPrecipitationUnit(availablePrecipitationUnits[index])
         }
     }
 
     fun setPressureUnit(index: Int) {
+        updateState {
+            setPressureUnit(availablePressureUnits[index])
+        }
+    }
+
+    private fun updateState(action: suspend () -> Unit) {
         viewModelScope.launch {
             showLoader()
-            val selected = availablePressureUnits[index]
-            setPressureUnit(selected)
+            action()
             getStateActual()
             hideLoader()
         }
