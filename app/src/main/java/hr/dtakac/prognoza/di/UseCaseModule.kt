@@ -8,11 +8,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
-import hr.dtakac.prognoza.domain.usecase.GetSavedPlaces
-import hr.dtakac.prognoza.domain.usecase.GetSelectedPlace
-import hr.dtakac.prognoza.domain.usecase.SearchPlaces
-import hr.dtakac.prognoza.domain.usecase.SelectPlace
-import hr.dtakac.prognoza.domain.usecase.GetForecast
+import hr.dtakac.prognoza.domain.usecase.*
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -52,4 +48,20 @@ class UseCaseModule {
         placeRepository,
         settingsRepository
     )
+
+    @Provides
+    @ViewModelScoped
+    fun provideSetTemperatureUnit(
+        settingsRepository: SettingsRepository
+    ): SetTemperatureUnit = SetTemperatureUnit(settingsRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetTemperatureUnit(
+        settingsRepository: SettingsRepository
+    ): GetTemperatureUnit = GetTemperatureUnit(settingsRepository)
+
+    @Provides
+    @ViewModelScoped
+    fun provideGetAllTemperatureUnits(): GetAllTemperatureUnits = GetAllTemperatureUnits()
 }

@@ -28,7 +28,10 @@ class MainActivity : ComponentActivity() {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
             val forecastState = remember { forecastViewModel.state }.value
 
-            PrognozaTheme(description = forecastState.forecast?.today?.shortDescription ?: ForecastDescription.Short.UNKNOWN) {
+            PrognozaTheme(
+                description = forecastState.forecast?.today?.shortDescription
+                    ?: ForecastDescription.Short.UNKNOWN
+            ) {
                 val backgroundColor = PrognozaTheme.backgroundColor
                 val elevatedBackgroundColor = PrognozaTheme.elevatedBackgroundColor
                 val onBackgroundColor = PrognozaTheme.onBackgroundColor
@@ -39,6 +42,7 @@ class MainActivity : ComponentActivity() {
 
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "forecast") {
+
                     composable("forecast") {
                         val lifecycleOwner = LocalLifecycleOwner.current
                         DisposableEffect(lifecycleOwner) {
@@ -57,16 +61,17 @@ class MainActivity : ComponentActivity() {
                             onSettingsClick = {
                                 navController.navigate("settings")
                             },
-                            onPlaceSelected = {
-                                forecastViewModel.getState()
-                            }
+                            onPlaceSelected = forecastViewModel::getState
                         )
                     }
+
                     composable("settings") {
                         SettingsScreen(
                             backgroundColor = backgroundColor,
                             elevatedBackgroundColor = elevatedBackgroundColor,
-                            onBackgroundColor = onBackgroundColor
+                            onBackgroundColor = onBackgroundColor,
+                            onBackClick = navController::navigateUp,
+                            onUnitChanged = forecastViewModel::getState
                         )
                     }
                 }

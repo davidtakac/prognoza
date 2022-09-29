@@ -105,5 +105,12 @@
     <string name="no_places_found">No places found that match \"%1$s\".</string>
     <string name="error_saved_places">An error occurred when getting your saved places. Clear your app data and try again.</string>
     <string name="error_search_places">An error occurred when searching places. Check your internet and try again.</string>
+    <string name="units">Units</string>
+    <string name="precipitation_unit">Precipitation unit</string>
+    <string name="pressure_unit">Pressure unit</string>
+    <string name="wind_unit">Wind unit</string>
+    <string name="temperature_unit">Temperature unit</string>
+    <string name="settings_label_celsius">Celsius</string>
+    <string name="settings_label_fahrenheit">Fahrenheit</string>
 
 </resources>

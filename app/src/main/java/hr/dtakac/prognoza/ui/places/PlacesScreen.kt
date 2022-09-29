@@ -11,6 +11,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -90,10 +92,12 @@ fun PlacesScreen(
                     text = empty.asString(),
                     style = PrognozaTheme.typography.subtitleMedium,
                     color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                    modifier = Modifier.padding(horizontal = 24.dp, vertical = 24.dp)
+                    modifier = Modifier
+                        .padding(horizontal = 24.dp, vertical = 24.dp)
+                        .weight(1f)
                 )
             } else {
-                LazyColumn {
+                LazyColumn(modifier = Modifier.weight(1f)) {
                     itemsIndexed(state.places) { idx, placeUi ->
                         if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
                         PlaceItem(
@@ -113,12 +117,27 @@ fun PlacesScreen(
                     }
                 }
             }
-            // todo: relocate this somewhere that makes sense
-            IconButton(onClick = onSettingsClick) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_outline_settings),
+
+            Row(
+                modifier = Modifier
+                    .clickable(
+                        onClick = onSettingsClick,
+                        indication = rememberRipple(bounded = true),
+                        interactionSource = remember { MutableInteractionSource() }
+                    )
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp, vertical = 16.dp)
+            ) {
+                Image(
+                    imageVector = Icons.Outlined.Settings,
                     contentDescription = null,
-                    modifier = Modifier.size(36.dp)
+                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
+                    modifier = Modifier.size(24.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.settings),
+                    style = PrognozaTheme.typography.titleSmall,
+                    modifier = Modifier.padding(start = 8.dp)
                 )
             }
         }
@@ -168,7 +187,7 @@ private fun SearchBar(
                             .padding(end = 12.dp)
                             .size(24.dp)
                     )
-                    Box(modifier = Modifier.fillMaxWidth()) {
+                    Box(modifier = Modifier.weight(1f)) {
                         if (query.isEmpty()) {
                             Text(
                                 stringResource(id = R.string.search_places),
