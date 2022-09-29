@@ -12,11 +12,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
-import hr.dtakac.prognoza.ui.theme.MaterialPrognozaTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -62,15 +60,6 @@ fun ForecastScreen(
             }
         },
         content = {
-            MaterialPrognozaTheme(
-                description = state.forecast?.today?.shortDescription
-                    ?: ForecastDescription.Short.UNKNOWN
-            ) {
-                Box(modifier = Modifier
-                    .size(64.dp)
-                    .background(MaterialTheme.colorScheme.primary))
-            }
-
             Column(
                 modifier = Modifier
                     .fillMaxSize()
