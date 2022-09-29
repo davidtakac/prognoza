@@ -1,10 +1,6 @@
 package hr.dtakac.prognoza.data.network.forecast
 
 import com.google.gson.annotations.SerializedName
-import hr.dtakac.prognoza.data.database.forecast.model.ForecastDbModel
-import hr.dtakac.prognoza.entities.forecast.units.Temperature
-import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
-import java.time.ZonedDateTime
 
 data class LocationForecastResponse(
     @SerializedName("properties")
