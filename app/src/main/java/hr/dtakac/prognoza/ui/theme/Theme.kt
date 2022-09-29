@@ -40,7 +40,8 @@ private val LocalPrognozaTypography = staticCompositionLocalOf {
 private val LocalPrognozaContentAlpha = staticCompositionLocalOf {
     PrognozaContentAlpha(
         high = 1f,
-        medium = 1f
+        medium = 1f,
+        disabled = 1f
     )
 }
 

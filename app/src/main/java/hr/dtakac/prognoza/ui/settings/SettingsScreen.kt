@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.ripple.rememberRipple
@@ -12,7 +13,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -22,9 +22,6 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun SettingsScreen(
-    backgroundColor: Color,
-    elevatedBackgroundColor: Color,
-    onBackgroundColor: Color,
     viewModel: SettingsViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onUnitChanged: () -> Unit = {}
@@ -32,15 +29,15 @@ fun SettingsScreen(
     LaunchedEffect(viewModel) { viewModel.getState() }
     val state by remember { viewModel.state }
 
-    CompositionLocalProvider(LocalContentColor provides onBackgroundColor) {
+    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.onBackgroundColor) {
         Column {
             Toolbar(
                 onBackClick = onBackClick,
-                modifier = Modifier.background(elevatedBackgroundColor)
+                modifier = Modifier.background(PrognozaTheme.elevatedBackgroundColor)
             )
             LazyColumn(
                 modifier = Modifier
-                    .background(backgroundColor)
+                    .background(PrognozaTheme.backgroundColor)
                     .fillMaxSize()
             ) {
                 item {
@@ -54,10 +51,21 @@ fun SettingsScreen(
                 }
                 state.temperatureUnitSetting?.let {
                     item {
+                        var openDialog by remember { mutableStateOf(false) }
                         Setting(
                             name = it.name.asString(),
-                            value = it.value.asString()
+                            value = it.value.asString(),
+                            onClick = { openDialog = true }
                         )
+                        if (openDialog) {
+                            OptionsDialog(
+                                title = it.name.asString(),
+                                selectedOption = it.value.asString(),
+                                options = it.values.map { it.asString() },
+                                onConfirm = viewModel::setTemperatureUnit,
+                                onDismiss = { openDialog = false }
+                            )
+                        }
                     }
                 }
             }
@@ -127,4 +135,75 @@ private fun Setting(
             style = PrognozaTheme.typography.subtitleMedium,
         )
     }
+}
+
+@Composable
+private fun OptionsDialog(
+    title: String,
+    selectedOption: String,
+    options: List<String>,
+    onConfirm: (Int) -> Unit,
+    onDismiss: () -> Unit
+) {
+    var selectedIndex by remember { mutableStateOf(options.indexOf(selectedOption)) }
+    AlertDialog(
+        containerColor = PrognozaTheme.elevatedBackgroundColor,
+        titleContentColor = PrognozaTheme.onBackgroundColor,
+        onDismissRequest = onDismiss,
+        title = { Text(text = title, style = PrognozaTheme.typography.titleMedium) },
+        text = {
+            CompositionLocalProvider(LocalContentColor provides PrognozaTheme.onBackgroundColor) {
+                LazyColumn {
+                    itemsIndexed(options) { idx, option ->
+                        Row(
+                            modifier = Modifier
+                                .clickable(
+                                    onClick = { selectedIndex = idx },
+                                    indication = rememberRipple(bounded = true),
+                                    interactionSource = remember { MutableInteractionSource() }
+                                )
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(
+                                selected = idx == selectedIndex,
+                                onClick = null,
+                                interactionSource = remember { MutableInteractionSource() },
+                                colors = RadioButtonDefaults.colors(
+                                    selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                                    unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                                    disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
+                                    disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
+                                )
+                            )
+                            Text(
+                                text = option,
+                                style = PrognozaTheme.typography.subtitleMedium,
+                                modifier = Modifier.padding(start = 8.dp)
+                            )
+                        }
+                    }
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onConfirm(selectedIndex); onDismiss() }) {
+                Text(
+                    text = stringResource(id = R.string.ok),
+                    style = PrognozaTheme.typography.titleSmall,
+                    color = PrognozaTheme.onBackgroundColor
+                )
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(
+                    text = stringResource(id = R.string.cancel),
+                    color = PrognozaTheme.onBackgroundColor,
+                    style = PrognozaTheme.typography.titleSmall
+                )
+            }
+        }
+    )
 }

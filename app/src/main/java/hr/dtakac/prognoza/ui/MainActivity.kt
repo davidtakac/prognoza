@@ -67,9 +67,6 @@ class MainActivity : ComponentActivity() {
 
                     composable("settings") {
                         SettingsScreen(
-                            backgroundColor = backgroundColor,
-                            elevatedBackgroundColor = elevatedBackgroundColor,
-                            onBackgroundColor = onBackgroundColor,
                             onBackClick = navController::navigateUp,
                             onUnitChanged = forecastViewModel::getState
                         )
