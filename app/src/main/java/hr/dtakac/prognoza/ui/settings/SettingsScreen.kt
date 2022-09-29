@@ -226,7 +226,7 @@ private fun SettingDialog(
         confirmButton = {
             TextButton(onClick = { onConfirm(selectedIndex); onDismiss() }) {
                 Text(
-                    text = stringResource(id = R.string.ok),
+                    text = stringResource(id = R.string.confirm),
                     style = PrognozaTheme.typography.titleSmall,
                     color = PrognozaTheme.onBackgroundColor
                 )

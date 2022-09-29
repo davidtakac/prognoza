@@ -112,7 +112,7 @@
     <string name="temperature_unit">Temperature unit</string>
     <string name="settings_label_celsius">Celsius</string>
     <string name="settings_label_fahrenheit">Fahrenheit</string>
-    <string name="ok">OK</string>
+    <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="settings_label_mps">Meters per second</string>
     <string name="settings_label_kph">Kilometers per hour</string>
