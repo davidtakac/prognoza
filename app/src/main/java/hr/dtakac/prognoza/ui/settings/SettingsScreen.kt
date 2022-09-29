@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
+import hr.dtakac.prognoza.presentation.settings.UnitSetting
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
@@ -51,21 +52,18 @@ fun SettingsScreen(
                 }
                 state.temperatureUnitSetting?.let {
                     item {
-                        var openDialog by remember { mutableStateOf(false) }
-                        Setting(
-                            name = it.name.asString(),
-                            value = it.value.asString(),
-                            onClick = { openDialog = true }
+                        UnitSetting(
+                            unitSetting = it,
+                            onConfirm = viewModel::setTemperatureUnit
                         )
-                        if (openDialog) {
-                            OptionsDialog(
-                                title = it.name.asString(),
-                                selectedOption = it.value.asString(),
-                                options = it.values.map { it.asString() },
-                                onConfirm = viewModel::setTemperatureUnit,
-                                onDismiss = { openDialog = false }
-                            )
-                        }
+                    }
+                }
+                state.windUnitSetting?.let {
+                    item {
+                        UnitSetting(
+                            unitSetting = it,
+                            onConfirm = viewModel::setWindUnit
+                        )
                     }
                 }
             }
@@ -113,7 +111,29 @@ private fun Header(text: String, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Setting(
+private fun UnitSetting(
+    unitSetting: UnitSetting,
+    onConfirm: (Int) -> Unit
+) {
+    var openDialog by remember { mutableStateOf(false) }
+    SettingItem(
+        name = unitSetting.name.asString(),
+        value = unitSetting.value.asString(),
+        onClick = { openDialog = true }
+    )
+    if (openDialog) {
+        SettingDialog(
+            title = unitSetting.name.asString(),
+            selectedOption = unitSetting.value.asString(),
+            options = unitSetting.values.map { it.asString() },
+            onConfirm = onConfirm,
+            onDismiss = { openDialog = false }
+        )
+    }
+}
+
+@Composable
+private fun SettingItem(
     name: String,
     value: String,
     modifier: Modifier = Modifier,
@@ -138,7 +158,7 @@ private fun Setting(
 }
 
 @Composable
-private fun OptionsDialog(
+private fun SettingDialog(
     title: String,
     selectedOption: String,
     options: List<String>,
