@@ -21,9 +21,17 @@ data class PrognozaColors(
             onSurface = if (useDarkTheme) Color.White else Color.Black,
             moodOverlay = when (shortForecastDescription) {
                 ForecastDescription.Short.FOG,
-                ForecastDescription.Short.CLOUDY -> Color(0xFF546E7A) // Blue Gray 600
-                ForecastDescription.Short.RAIN -> Color(0xFF1E88E5) // Blue 600
-                ForecastDescription.Short.SLEET -> Color(0xFF00897B) // Teal 600
+                ForecastDescription.Short.CLOUDY ->
+                    if (useDarkTheme) Color(0xFF90A4AE) // Blue Gray 300
+                    else Color(0xFF546E7A) // Blue Gray 600
+
+                ForecastDescription.Short.RAIN ->
+                    if (useDarkTheme) Color(0xFF64B5F6) // Blue 300
+                    else Color(0xFF1E88E5) // Blue 600
+
+                ForecastDescription.Short.SLEET ->
+                    if (useDarkTheme) Color(0xFF4DB6AC) // Teal 300
+                    else Color(0xFF00897B) // Teal 600
 
                 ForecastDescription.Short.UNKNOWN,
                 ForecastDescription.Short.SNOW ->
@@ -31,7 +39,7 @@ data class PrognozaColors(
                     else Color(0xFF757575) // Gray 600
 
                 ForecastDescription.Short.FAIR ->
-                    if (useDarkTheme) Color(0xFF5E35B1) // Deep Purple 600
+                    if (useDarkTheme) Color(0xFF9575CD) // Deep Purple 300
                     else Color(0xFFFFB300) // Amber 600
             }
         )
