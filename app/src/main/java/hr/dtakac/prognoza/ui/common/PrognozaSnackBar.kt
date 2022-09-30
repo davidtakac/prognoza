@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.forecast
 
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
@@ -16,17 +16,17 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
-fun ForecastSnackBar(
+fun PrognozaSnackBar(
     text: String,
     visible: Boolean,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = Color.Unspecified,
-    contentColor: Color = Color.Unspecified,
+    backgroundColor: Color = PrognozaTheme.colors.inverseSurface1,
+    contentColor: Color = PrognozaTheme.colors.onInverseSurface,
 ) {
-    androidx.compose.animation.AnimatedVisibility(
+    AnimatedVisibility(
         visible = visible,
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+        exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
         modifier = modifier
     ) {
         Box(
@@ -35,7 +35,7 @@ fun ForecastSnackBar(
                     color = backgroundColor,
                     shape = RoundedCornerShape(8.dp)
                 )
-                .padding(16.dp)
+                .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
                 text = text,

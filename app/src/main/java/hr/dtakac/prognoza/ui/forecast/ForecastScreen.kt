@@ -136,7 +136,7 @@ fun ForecastScreen(
                                         showSnackBar = false
                                     }
                                 }
-                                ForecastSnackBar(
+                                PrognozaSnackBar(
                                     modifier = Modifier
                                         .align(Alignment.BottomCenter)
                                         .padding(16.dp),

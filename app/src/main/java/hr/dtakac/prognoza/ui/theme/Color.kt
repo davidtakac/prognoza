@@ -81,4 +81,4 @@ private fun getPrimary(
 
 private const val surface1Alpha = 0.06f
 private const val surface2Alpha = 0.12f
-private const val surface3Alpha = 0.18f
+private const val surface3Alpha = 0.16f
