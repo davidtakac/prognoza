@@ -5,8 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.themesettings.ThemeSetting
-import hr.dtakac.prognoza.themesettings.usecase.GetThemeSetting
+import hr.dtakac.prognoza.themesetting.ThemeSetting
+import hr.dtakac.prognoza.themesetting.usecase.GetThemeSetting
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

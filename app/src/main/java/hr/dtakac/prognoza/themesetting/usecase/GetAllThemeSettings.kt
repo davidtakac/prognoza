@@ -1,6 +1,6 @@
-package hr.dtakac.prognoza.themesettings.usecase
+package hr.dtakac.prognoza.themesetting.usecase
 
-import hr.dtakac.prognoza.themesettings.ThemeSetting
+import hr.dtakac.prognoza.themesetting.ThemeSetting
 
 class GetAllThemeSettings {
     suspend operator fun invoke(): List<ThemeSetting> = ThemeSetting.values().toList()

@@ -9,10 +9,10 @@ import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.domain.usecase.*
-import hr.dtakac.prognoza.themesettings.repository.ThemeSettingRepository
-import hr.dtakac.prognoza.themesettings.usecase.GetAllThemeSettings
-import hr.dtakac.prognoza.themesettings.usecase.GetThemeSetting
-import hr.dtakac.prognoza.themesettings.usecase.SetThemeSetting
+import hr.dtakac.prognoza.themesetting.repository.ThemeSettingRepository
+import hr.dtakac.prognoza.themesetting.usecase.GetAllThemeSettings
+import hr.dtakac.prognoza.themesetting.usecase.GetThemeSetting
+import hr.dtakac.prognoza.themesetting.usecase.SetThemeSetting
 
 @Module
 @InstallIn(ViewModelComponent::class)

@@ -1,7 +1,7 @@
-package hr.dtakac.prognoza.themesettings.usecase
+package hr.dtakac.prognoza.themesetting.usecase
 
-import hr.dtakac.prognoza.themesettings.ThemeSetting
-import hr.dtakac.prognoza.themesettings.repository.ThemeSettingRepository
+import hr.dtakac.prognoza.themesetting.ThemeSetting
+import hr.dtakac.prognoza.themesetting.repository.ThemeSettingRepository
 
 class GetThemeSetting(
     private val themeSettingRepository: ThemeSettingRepository

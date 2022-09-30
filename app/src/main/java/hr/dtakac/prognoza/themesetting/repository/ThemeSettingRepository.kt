@@ -1,8 +1,8 @@
-package hr.dtakac.prognoza.themesettings.repository
+package hr.dtakac.prognoza.themesetting.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import hr.dtakac.prognoza.themesettings.ThemeSetting
+import hr.dtakac.prognoza.themesetting.ThemeSetting
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine

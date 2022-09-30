@@ -17,7 +17,7 @@ import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
-import hr.dtakac.prognoza.themesettings.repository.ThemeSettingRepository
+import hr.dtakac.prognoza.themesetting.repository.ThemeSettingRepository
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 

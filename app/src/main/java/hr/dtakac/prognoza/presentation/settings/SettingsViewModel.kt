@@ -11,10 +11,10 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
-import hr.dtakac.prognoza.themesettings.ThemeSetting
-import hr.dtakac.prognoza.themesettings.usecase.GetAllThemeSettings
-import hr.dtakac.prognoza.themesettings.usecase.GetThemeSetting
-import hr.dtakac.prognoza.themesettings.usecase.SetThemeSetting
+import hr.dtakac.prognoza.themesetting.ThemeSetting
+import hr.dtakac.prognoza.themesetting.usecase.GetAllThemeSettings
+import hr.dtakac.prognoza.themesetting.usecase.GetThemeSetting
+import hr.dtakac.prognoza.themesetting.usecase.SetThemeSetting
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
