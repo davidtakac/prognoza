@@ -12,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
@@ -106,11 +107,17 @@ fun ForecastScreen(
 
                     if (state.forecast == null) {
                         if (state.error != null) {
-                            ForecastError(
-                                text = state.error.asString(),
-                                backgroundColor = backgroundColor,
-                                contentColor = onBackgroundColor
-                            )
+                            Box(
+                                modifier = Modifier.padding(horizontal = 24.dp).fillMaxSize(),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = state.error.asString(),
+                                    style = PrognozaTheme.typography.subtitleMedium,
+                                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                                    textAlign = TextAlign.Center
+                                )
+                            }
                         }
                     } else {
                         Box {
