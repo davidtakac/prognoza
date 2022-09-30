@@ -28,9 +28,7 @@ fun ForecastScreen(
     onSettingsClick: () -> Unit = {},
     onPlaceSelected: () -> Unit = {}
 ) {
-    val forecast = state.forecast
-    val error = state.error
-
+    // Hide keyboard when drawer is closed
     val focusManager = LocalFocusManager.current
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     LaunchedEffect(drawerState.isClosed) {
@@ -38,8 +36,8 @@ fun ForecastScreen(
             focusManager.clearFocus()
         }
     }
-    val scope = rememberCoroutineScope()
 
+    val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -50,7 +48,9 @@ fun ForecastScreen(
             ) {
                 PlacesScreen(
                     onPlaceSelected = {
-                        scope.launch { drawerState.close() }
+                        scope.launch {
+                            drawerState.close()
+                        }
                         onPlaceSelected()
                     },
                     onSettingsClick = onSettingsClick,
@@ -71,11 +71,11 @@ fun ForecastScreen(
 
                 Box(contentAlignment = Alignment.BottomCenter) {
                     ForecastToolbar(
-                        place = forecast?.place?.asString() ?: "",
+                        place = state.forecast?.place?.asString() ?: "",
                         placeVisible = toolbarPlaceVisible,
-                        date = forecast?.today?.date?.asString() ?: "",
+                        date = state.forecast?.today?.date?.asString() ?: "",
                         dateVisible = toolbarDateVisible,
-                        temperature = forecast?.today?.temperature?.asString() ?: "",
+                        temperature = state.forecast?.today?.temperature?.asString() ?: "",
                         temperatureVisible = toolbarTemperatureVisible,
                         backgroundColor = elevatedBackgroundColor,
                         contentColor = onBackgroundColor,
@@ -101,10 +101,10 @@ fun ForecastScreen(
                     }
                 }
 
-                if (forecast == null) {
-                    if (error != null) {
+                if (state.forecast == null) {
+                    if (state.error != null) {
                         ForecastError(
-                            text = error.asString(),
+                            text = state.error.asString(),
                             backgroundColor = backgroundColor,
                             contentColor = onBackgroundColor
                         )
@@ -112,7 +112,7 @@ fun ForecastScreen(
                 } else {
                     Box {
                         ForecastContent(
-                            forecast = forecast,
+                            forecast = state.forecast,
                             backgroundColor = backgroundColor,
                             contentColor = onBackgroundColor,
                             isPlaceVisible = { toolbarPlaceVisible = !it },
@@ -120,9 +120,9 @@ fun ForecastScreen(
                             isTemperatureVisible = { toolbarTemperatureVisible = !it }
                         )
 
-                        if (error != null) {
+                        if (state.error != null) {
                             var showSnackBar by remember { mutableStateOf(false) }
-                            LaunchedEffect(forecast, error) {
+                            LaunchedEffect(state.forecast, state.error) {
                                 scope.launch {
                                     showSnackBar = true
                                     delay(5000L)
@@ -131,15 +131,17 @@ fun ForecastScreen(
                             }
 
                             // SnackBar needs to be prominent and stand out
+                            // todo: use something like inverseBackground because this doesnt work with
+                            //  theme settings
                             PrognozaTheme(
-                                description = forecast.today.shortDescription,
+                                description = state.forecast.today.shortDescription,
                                 useDarkTheme = !isSystemInDarkTheme()
                             ) {
                                 ForecastSnackBar(
                                     modifier = Modifier
                                         .align(Alignment.BottomCenter)
                                         .padding(16.dp),
-                                    text = error.asString(),
+                                    text = state.error.asString(),
                                     visible = showSnackBar,
                                     backgroundColor = elevatedBackgroundColor,
                                     contentColor = onBackgroundColor

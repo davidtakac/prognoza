@@ -42,10 +42,11 @@ fun PlacesScreen(
     backgroundColor: Color = Color.Unspecified,
     contentColor: Color = Color.Unspecified
 ) {
+    // Get state on first start
     LaunchedEffect(viewModel) {
         viewModel.getSaved()
     }
-
+    // Notify place selected to update forecast state
     val state by remember { viewModel.state }
     LaunchedEffect(state.selectedPlace) {
         if (state.selectedPlace != null) {
@@ -137,7 +138,7 @@ fun PlacesScreen(
                 )*/
                 Text(
                     text = stringResource(id = R.string.settings),
-                    style = PrognozaTheme.typography.subtitleMedium,
+                    style = PrognozaTheme.typography.titleMedium,
                     //modifier = Modifier.padding(start = 8.dp)
                 )
             }
