@@ -24,7 +24,7 @@ fun PrognozaToolbar(
     titleVisible: Boolean = true,
     subtitleVisible: Boolean = false,
     endVisible: Boolean = false,
-    backgroundColor: Color = PrognozaTheme.elevatedBackgroundColor,
+    backgroundColor: Color = PrognozaTheme.colors.surface2,
     contentColor: Color = LocalContentColor.current,
     windowInsets: WindowInsets = WindowInsets.statusBars
 ) {

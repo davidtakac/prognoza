@@ -67,26 +67,15 @@ class MainActivity : ComponentActivity() {
                 systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !useDarkTheme)
                 systemUiController.setNavigationBarColor(Color.Transparent, darkIcons = !useDarkTheme)
 
-                val backgroundColor = PrognozaTheme.backgroundColor
-                val elevatedBackgroundColor = PrognozaTheme.elevatedBackgroundColor
-                val onBackgroundColor = PrognozaTheme.onBackgroundColor
-
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "forecast") {
-
                     composable("forecast") {
                         ForecastScreen(
                             state = forecastState,
-                            backgroundColor = backgroundColor,
-                            elevatedBackgroundColor = elevatedBackgroundColor,
-                            onBackgroundColor = onBackgroundColor,
-                            onSettingsClick = {
-                                navController.navigate("settings")
-                            },
+                            onSettingsClick = { navController.navigate("settings") },
                             onPlaceSelected = forecastViewModel::getState
                         )
                     }
-
                     composable("settings") {
                         SettingsScreen(
                             onBackClick = navController::navigateUp,

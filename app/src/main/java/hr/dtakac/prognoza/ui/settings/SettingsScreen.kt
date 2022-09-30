@@ -37,7 +37,7 @@ fun SettingsScreen(
     }
     val state by remember { viewModel.state }
 
-    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.onBackgroundColor) {
+    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
         Column {
             var toolbarTitleVisible by remember { mutableStateOf(false) }
             PrognozaToolbar(
@@ -59,7 +59,7 @@ fun SettingsScreen(
             val listState = rememberLazyListState()
             LazyColumn(
                 modifier = Modifier
-                    .background(PrognozaTheme.backgroundColor)
+                    .background(PrognozaTheme.colors.surface1)
                     .fillMaxSize(),
                 state = listState
             ) {
@@ -225,12 +225,12 @@ private fun SettingDialog(
 ) {
     var selectedIndex by remember { mutableStateOf(options.indexOf(selectedOption)) }
     AlertDialog(
-        containerColor = PrognozaTheme.elevatedBackgroundColor,
-        titleContentColor = PrognozaTheme.onBackgroundColor,
+        containerColor = PrognozaTheme.colors.surface3,
+        titleContentColor = PrognozaTheme.colors.onSurface,
         onDismissRequest = onDismiss,
         title = { Text(text = title, style = PrognozaTheme.typography.titleMedium) },
         text = {
-            CompositionLocalProvider(LocalContentColor provides PrognozaTheme.onBackgroundColor) {
+            CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
                 LazyColumn {
                     itemsIndexed(options) { idx, option ->
                         Row(
@@ -275,7 +275,7 @@ private fun SettingDialog(
                 Text(
                     text = stringResource(id = R.string.confirm),
                     style = PrognozaTheme.typography.titleSmall,
-                    color = PrognozaTheme.onBackgroundColor
+                    color = PrognozaTheme.colors.onSurface
                 )
             }
         },
@@ -283,7 +283,7 @@ private fun SettingDialog(
             TextButton(onClick = onDismiss) {
                 Text(
                     text = stringResource(id = R.string.cancel),
-                    color = PrognozaTheme.onBackgroundColor,
+                    color = PrognozaTheme.colors.onSurface,
                     style = PrognozaTheme.typography.titleSmall
                 )
             }

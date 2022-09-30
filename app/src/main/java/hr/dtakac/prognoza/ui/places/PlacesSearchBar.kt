@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
@@ -91,14 +92,14 @@ private fun LoadingSearchBarUnderline(isLoading: Boolean = false) {
         if (it) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth().height(1.dp),
-                color = LocalContentColor.current,
-                trackColor = PrognozaTheme.elevatedBackgroundColor
+                color = PrognozaTheme.colors.onSurface,
+                trackColor = Color.Transparent
             )
         } else {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth().height(1.dp),
-                color = LocalContentColor.current,
-                trackColor = PrognozaTheme.elevatedBackgroundColor,
+                color = PrognozaTheme.colors.onSurface,
+                trackColor = Color.Transparent,
                 progress = 1f
             )
         }

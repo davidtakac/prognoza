@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.ui.theme
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -8,45 +7,78 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 
 @Immutable
 data class PrognozaColors(
-    val surface: Color,
+    val surface1: Color,
+    val surface2: Color,
+    val surface3: Color,
     val onSurface: Color,
-    val moodOverlay: Color
+    val inverseSurface1: Color,
+    val onInverseSurface: Color,
+    val primary: Color,
+    val inversePrimary: Color
 ) {
     companion object {
         fun get(
             shortForecastDescription: ForecastDescription.Short,
             useDarkTheme: Boolean
-        ): PrognozaColors = PrognozaColors(
-            surface = if (useDarkTheme) Color(0xFF121212) else Color.White,
-            onSurface = if (useDarkTheme) Color.White else Color.Black,
-            moodOverlay = when (shortForecastDescription) {
-                ForecastDescription.Short.FOG,
-                ForecastDescription.Short.CLOUDY ->
-                    if (useDarkTheme) Color(0xFF90A4AE) // Blue Gray 300
-                    else Color(0xFF546E7A) // Blue Gray 600
+        ): PrognozaColors {
+            val onSurface = if (useDarkTheme) Color.White else Color.Black
+            val surface = getSurface(useDarkTheme)
+            val onInverseSurface = if (useDarkTheme) Color.Black else Color.White
+            val inverseSurface = getSurface(!useDarkTheme)
+            val primary = getPrimary(useDarkTheme, shortForecastDescription)
+            val inversePrimary = getPrimary(!useDarkTheme, shortForecastDescription)
 
-                ForecastDescription.Short.RAIN ->
-                    if (useDarkTheme) Color(0xFF64B5F6) // Blue 300
-                    else Color(0xFF1E88E5) // Blue 600
-
-                ForecastDescription.Short.SLEET ->
-                    if (useDarkTheme) Color(0xFF4DB6AC) // Teal 300
-                    else Color(0xFF00897B) // Teal 600
-
-                ForecastDescription.Short.UNKNOWN,
-                ForecastDescription.Short.SNOW ->
-                    if (useDarkTheme) Color.White
-                    else Color(0xFF757575) // Gray 600
-
-                ForecastDescription.Short.FAIR ->
-                    if (useDarkTheme) Color(0xFF9575CD) // Deep Purple 300
-                    else Color(0xFFFFB300) // Amber 600
-            }
-        )
+            return PrognozaColors(
+                surface1 = surface.overlay(with = primary, alpha = surface1Alpha),
+                surface2 = surface.overlay(with = primary, alpha = surface2Alpha),
+                surface3 = surface.overlay(with = primary, alpha = surface3Alpha),
+                onSurface = onSurface,
+                inverseSurface1 = inverseSurface.overlay(with = inversePrimary, alpha = surface1Alpha),
+                onInverseSurface = onInverseSurface,
+                primary = primary,
+                inversePrimary = inversePrimary
+            )
+        }
     }
 }
 
-@Composable
-fun Color.applyOverlay(overlayColor: Color, overlayAlpha: Float = 0.12f): Color {
-    return overlayColor.copy(alpha = overlayAlpha).compositeOver(this)
+private fun Color.overlay(
+    with: Color,
+    alpha: Float = surface1Alpha
+): Color {
+    return with.copy(alpha = alpha).compositeOver(this)
 }
+
+private fun getSurface(useDarkTheme: Boolean): Color =
+    if (useDarkTheme) Color(0xFF121212) else Color.White
+
+private fun getPrimary(
+    useDarkTheme: Boolean,
+    shortForecastDescription: ForecastDescription.Short
+): Color = when (shortForecastDescription) {
+    ForecastDescription.Short.FOG,
+    ForecastDescription.Short.CLOUDY ->
+        if (useDarkTheme) Color(0xFF90A4AE) // Blue Gray 300
+        else Color(0xFF546E7A) // Blue Gray 600
+
+    ForecastDescription.Short.RAIN ->
+        if (useDarkTheme) Color(0xFF64B5F6) // Blue 300
+        else Color(0xFF1E88E5) // Blue 600
+
+    ForecastDescription.Short.SLEET ->
+        if (useDarkTheme) Color(0xFF4DB6AC) // Teal 300
+        else Color(0xFF00897B) // Teal 600
+
+    ForecastDescription.Short.UNKNOWN,
+    ForecastDescription.Short.SNOW ->
+        if (useDarkTheme) Color.White
+        else Color(0xFF757575) // Gray 600
+
+    ForecastDescription.Short.FAIR ->
+        if (useDarkTheme) Color(0xFF9575CD) // Deep Purple 300
+        else Color(0xFFFFB300) // Amber 600
+}
+
+private const val surface1Alpha = 0.06f
+private const val surface2Alpha = 0.12f
+private const val surface3Alpha = 0.18f

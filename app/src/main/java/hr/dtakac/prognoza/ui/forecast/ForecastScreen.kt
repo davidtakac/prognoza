@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -26,9 +25,6 @@ import kotlinx.coroutines.launch
 @Composable
 fun ForecastScreen(
     state: ForecastState,
-    backgroundColor: Color,
-    elevatedBackgroundColor: Color,
-    onBackgroundColor: Color,
     onSettingsClick: () -> Unit = {},
     onPlaceSelected: () -> Unit = {}
 ) {
@@ -41,14 +37,14 @@ fun ForecastScreen(
         }
     }
 
-    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.onBackgroundColor) {
+    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
         val scope = rememberCoroutineScope()
         ModalNavigationDrawer(
             drawerState = drawerState,
             drawerContent = {
                 ModalDrawerSheet(
                     drawerShape = RectangleShape,
-                    drawerContainerColor = elevatedBackgroundColor
+                    drawerContainerColor = PrognozaTheme.colors.surface2
                 ) {
                     PlacesScreen(
                         onPlaceSelected = {
@@ -63,7 +59,7 @@ fun ForecastScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(backgroundColor)
+                        .background(PrognozaTheme.colors.surface1)
                 ) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
@@ -99,8 +95,8 @@ fun ForecastScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(2.dp),
-                                color = onBackgroundColor,
-                                trackColor = elevatedBackgroundColor
+                                color = PrognozaTheme.colors.onSurface,
+                                trackColor = Color.Transparent
                             )
                         }
                     }
@@ -108,7 +104,9 @@ fun ForecastScreen(
                     if (state.forecast == null) {
                         if (state.error != null) {
                             Box(
-                                modifier = Modifier.padding(horizontal = 24.dp).fillMaxSize(),
+                                modifier = Modifier
+                                    .padding(horizontal = 24.dp)
+                                    .fillMaxSize(),
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
@@ -138,24 +136,15 @@ fun ForecastScreen(
                                         showSnackBar = false
                                     }
                                 }
-
-                                // SnackBar needs to be prominent and stand out
-                                // todo: use something like inverseBackground because this doesnt work with
-                                //  theme settings
-                                PrognozaTheme(
-                                    description = state.forecast.today.shortDescription,
-                                    useDarkTheme = !isSystemInDarkTheme()
-                                ) {
-                                    ForecastSnackBar(
-                                        modifier = Modifier
-                                            .align(Alignment.BottomCenter)
-                                            .padding(16.dp),
-                                        text = state.error.asString(),
-                                        visible = showSnackBar,
-                                        backgroundColor = elevatedBackgroundColor,
-                                        contentColor = onBackgroundColor
-                                    )
-                                }
+                                ForecastSnackBar(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomCenter)
+                                        .padding(16.dp),
+                                    text = state.error.asString(),
+                                    visible = showSnackBar,
+                                    backgroundColor = PrognozaTheme.colors.inverseSurface1,
+                                    contentColor = PrognozaTheme.colors.onInverseSurface
+                                )
                             }
                         }
                     }
