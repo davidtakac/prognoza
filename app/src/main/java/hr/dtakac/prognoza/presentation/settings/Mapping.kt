@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.themesettings.ThemeSetting
 
 fun mapToTemperatureUnitSetting(
     selectedTemperatureUnit: TemperatureUnit,
@@ -43,13 +44,11 @@ fun mapToPressureUnitSetting(
     values = availablePressureUnits.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
 )
 
-// todo: fill in with actual logic
-fun mapToThemeSetting(): MultipleChoiceSetting = MultipleChoiceSetting(
+fun mapToThemeSetting(
+    selectedThemeSetting: ThemeSetting,
+    availableThemeSettings: List<ThemeSetting>
+): MultipleChoiceSetting = MultipleChoiceSetting(
     name = TextResource.fromStringId(R.string.theme),
-    value = TextResource.fromStringId(R.string.settings_label_follow_system),
-    values = listOf(
-        TextResource.fromStringId(R.string.settings_label_light),
-        TextResource.fromStringId(R.string.settings_label_dark),
-        TextResource.fromStringId(R.string.settings_label_follow_system)
-    )
+    value = TextResource.fromStringId(selectedThemeSetting.toSettingsLabel()),
+    values = availableThemeSettings.map(ThemeSetting::toSettingsLabel).map(TextResource::fromStringId)
 )

@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.di
 
 import android.content.Context
+import android.content.SharedPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,19 +17,27 @@ import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
+import hr.dtakac.prognoza.themesettings.repository.ThemeSettingRepository
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
 
 @Module
 @InstallIn(ViewModelComponent::class)
 class RepositoryModule {
+
+    @Provides
+    @ViewModelScoped
+    fun provideSharedPreferences(
+        @ApplicationContext context: Context
+    ): SharedPreferences = context.getSharedPreferences("prognoza_prefs", Context.MODE_PRIVATE)
+
     @Provides
     @ViewModelScoped
     fun provideSettingsRepository(
-        @ApplicationContext context: Context,
+        sharedPreferences: SharedPreferences,
         database: PrognozaDatabase
     ): SettingsRepository = DefaultSettingsRepository(
-        context.getSharedPreferences("prognoza_prefs", Context.MODE_PRIVATE),
+        sharedPreferences,
         database.placeDao()
     )
 
@@ -57,4 +66,10 @@ class RepositoryModule {
         placeDao = database.placeDao(),
         userAgent = userAgent
     )
+
+    @Provides
+    @ViewModelScoped
+    fun provideThemeSettingRepository(
+        sharedPreferences: SharedPreferences
+    ): ThemeSettingRepository = ThemeSettingRepository(sharedPreferences)
 }

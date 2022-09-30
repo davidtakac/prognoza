@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -16,6 +17,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
+import hr.dtakac.prognoza.presentation.themesetting.ThemeSettingViewModel
+import hr.dtakac.prognoza.themesettings.ThemeSetting
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -26,11 +29,19 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
+            val themeSettingViewModel: ThemeSettingViewModel = hiltViewModel()
+
             val forecastState = remember { forecastViewModel.state }.value
+            val themeSetting = remember { themeSettingViewModel.themeSetting }.value
 
             PrognozaTheme(
                 description = forecastState.forecast?.today?.shortDescription
-                    ?: ForecastDescription.Short.UNKNOWN
+                    ?: ForecastDescription.Short.UNKNOWN,
+                useDarkTheme = when (themeSetting) {
+                    ThemeSetting.DARK -> true
+                    ThemeSetting.LIGHT -> false
+                    ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+                }
             ) {
                 val backgroundColor = PrognozaTheme.backgroundColor
                 val elevatedBackgroundColor = PrognozaTheme.elevatedBackgroundColor
@@ -66,7 +77,10 @@ class MainActivity : ComponentActivity() {
                     }
 
                     composable("settings") {
-                        SettingsScreen(onBackClick = navController::navigateUp)
+                        SettingsScreen(
+                            onBackClick = navController::navigateUp,
+                            onThemeSettingChange = themeSettingViewModel::getState
+                        )
                     }
                 }
             }

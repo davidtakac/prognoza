@@ -11,6 +11,10 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
+import hr.dtakac.prognoza.themesettings.ThemeSetting
+import hr.dtakac.prognoza.themesettings.usecase.GetAllThemeSettings
+import hr.dtakac.prognoza.themesettings.usecase.GetThemeSetting
+import hr.dtakac.prognoza.themesettings.usecase.SetThemeSetting
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,7 +31,10 @@ class SettingsViewModel @Inject constructor(
     private val getAllPrecipitationUnits: GetAllPrecipitationUnits,
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
-    private val getAllPressureUnits: GetAllPressureUnits
+    private val getAllPressureUnits: GetAllPressureUnits,
+    private val setThemeSetting: SetThemeSetting,
+    private val getThemeSetting: GetThemeSetting,
+    private val getAllThemeSettings: GetAllThemeSettings
 ) : ViewModel() {
     private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
 
@@ -35,6 +42,7 @@ class SettingsViewModel @Inject constructor(
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
     private var availablePressureUnits: List<PressureUnit> = listOf()
+    private var availableThemeSettings: List<ThemeSetting> = listOf()
 
     private val _state = mutableStateOf(SettingsState())
     val state: State<SettingsState> get() = _state
@@ -68,7 +76,9 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun setTheme(index: Int) {
-        // todo
+        updateState {
+            setThemeSetting(availableThemeSettings[index])
+        }
     }
 
     private fun updateState(action: suspend () -> Unit) {
@@ -85,6 +95,7 @@ class SettingsViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
+        availableThemeSettings = getAllThemeSettings()
 
         _state.value = _state.value.copy(
             temperatureUnitSetting = mapToTemperatureUnitSetting(
@@ -103,7 +114,10 @@ class SettingsViewModel @Inject constructor(
                 selectedPressureUnit = getPressureUnit(),
                 availablePressureUnits = availablePressureUnits
             ),
-            themeSetting = mapToThemeSetting()
+            themeSetting = mapToThemeSetting(
+                selectedThemeSetting = getThemeSetting(),
+                availableThemeSettings = availableThemeSettings
+            )
         )
     }
 

@@ -28,7 +28,8 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onThemeSettingChange: () -> Unit = {}
 ) {
     LaunchedEffect(viewModel) { viewModel.getState() }
     val state by remember { viewModel.state }
@@ -112,6 +113,9 @@ fun SettingsScreen(
                             unitSetting = it,
                             onConfirm = viewModel::setTheme
                         )
+                        LaunchedEffect(it.values.indexOf(it.value)) {
+                            onThemeSettingChange()
+                        }
                     }
                 }
             }
