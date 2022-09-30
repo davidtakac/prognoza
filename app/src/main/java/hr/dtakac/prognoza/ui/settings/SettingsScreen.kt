@@ -19,9 +19,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
 import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSetting
-import hr.dtakac.prognoza.ui.forecast.SlideUpAppearText
 import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.toolbar.PrognozaToolbar
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 
@@ -32,16 +32,28 @@ fun SettingsScreen(
     onThemeSettingChange: () -> Unit = {},
     onUnitChange: () -> Unit = {}
 ) {
-    LaunchedEffect(viewModel) { viewModel.getState() }
+    LaunchedEffect(viewModel) {
+        viewModel.getState()
+    }
     val state by remember { viewModel.state }
 
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.onBackgroundColor) {
         Column {
-            var toolbarSettingsVisible by remember { mutableStateOf(false) }
-            Toolbar(
-                settingsVisible = toolbarSettingsVisible,
-                onBackClick = onBackClick,
-                modifier = Modifier.background(PrognozaTheme.elevatedBackgroundColor)
+            var toolbarTitleVisible by remember { mutableStateOf(false) }
+            PrognozaToolbar(
+                title = { Text(stringResource(id = R.string.settings)) },
+                titleVisible = toolbarTitleVisible,
+                navigationIcon = {
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier.size(48.dp)
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_arrow_back),
+                            contentDescription = null,
+                        )
+                    }
+                }
             )
 
             val listState = rememberLazyListState()
@@ -138,42 +150,9 @@ fun SettingsScreen(
                     .map { it.keyVisibilityPercent("settings") }
                     .distinctUntilChanged()
                     .collect { settingsVis ->
-                        toolbarSettingsVisible = settingsVis == 0f
+                        toolbarTitleVisible = settingsVis == 0f
                     }
             }
-        }
-    }
-}
-
-@Composable
-private fun Toolbar(
-    settingsVisible: Boolean,
-    onBackClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier = modifier) {
-        Row(
-            modifier = Modifier
-                .height(90.dp)
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(
-                onClick = onBackClick,
-                modifier = Modifier.size(48.dp)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_arrow_back),
-                    contentDescription = null,
-                )
-            }
-            Spacer(modifier = Modifier.width(16.dp))
-            SlideUpAppearText(
-                text = stringResource(id = R.string.settings),
-                visible = settingsVisible,
-                style = PrognozaTheme.typography.titleMedium
-            )
         }
     }
 }
@@ -184,9 +163,7 @@ private fun Header(text: String, modifier: Modifier = Modifier) {
         Text(
             text = text,
             style = PrognozaTheme.typography.titleSmall,
-            //color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
         )
-        //Divider(color = LocalContentColor.current, modifier = Modifier.padding(top = 16.dp))
     }
 }
 
@@ -232,7 +209,7 @@ private fun SettingItem(
         Text(text = name, style = PrognozaTheme.typography.subtitleMedium)
         Text(
             text = value,
-            style = PrognozaTheme.typography.subtitleMedium,
+            style = PrognozaTheme.typography.body,
             color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
         )
     }

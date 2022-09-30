@@ -7,7 +7,9 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -28,6 +30,7 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
             val themeSettingViewModel: ThemeSettingViewModel = hiltViewModel()
@@ -50,22 +53,23 @@ class MainActivity : ComponentActivity() {
                 onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
             }
 
+            val useDarkTheme = when (themeSetting) {
+                ThemeSetting.DARK -> true
+                ThemeSetting.LIGHT -> false
+                ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+            }
             PrognozaTheme(
                 description = forecastState.forecast?.today?.shortDescription
                     ?: ForecastDescription.Short.UNKNOWN,
-                useDarkTheme = when (themeSetting) {
-                    ThemeSetting.DARK -> true
-                    ThemeSetting.LIGHT -> false
-                    ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
-                }
+                useDarkTheme = useDarkTheme
             ) {
+                val systemUiController = rememberSystemUiController()
+                systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !useDarkTheme)
+                systemUiController.setNavigationBarColor(Color.Transparent, darkIcons = !useDarkTheme)
+
                 val backgroundColor = PrognozaTheme.backgroundColor
                 val elevatedBackgroundColor = PrognozaTheme.elevatedBackgroundColor
                 val onBackgroundColor = PrognozaTheme.onBackgroundColor
-
-                val systemUiController = rememberSystemUiController()
-                systemUiController.setSystemBarsColor(elevatedBackgroundColor)
-                systemUiController.setNavigationBarColor(elevatedBackgroundColor)
 
                 val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "forecast") {
