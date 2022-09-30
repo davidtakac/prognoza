@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -34,6 +35,21 @@ class MainActivity : ComponentActivity() {
             val forecastState = remember { forecastViewModel.state }.value
             val themeSetting = remember { themeSettingViewModel.themeSetting }.value
 
+            // Check theme on first start
+            LaunchedEffect(themeSettingViewModel) {
+                themeSettingViewModel.getState()
+            }
+
+            // Get state on every resume, ie every app enter
+            val lifecycleOwner = LocalLifecycleOwner.current
+            DisposableEffect(lifecycleOwner) {
+                val observer = LifecycleEventObserver { _, event ->
+                    if (event == Lifecycle.Event.ON_RESUME) forecastViewModel.getState()
+                }
+                lifecycleOwner.lifecycle.addObserver(observer)
+                onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+            }
+
             PrognozaTheme(
                 description = forecastState.forecast?.today?.shortDescription
                     ?: ForecastDescription.Short.UNKNOWN,
@@ -55,15 +71,6 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "forecast") {
 
                     composable("forecast") {
-                        val lifecycleOwner = LocalLifecycleOwner.current
-                        DisposableEffect(lifecycleOwner) {
-                            val observer = LifecycleEventObserver { _, event ->
-                                if (event == Lifecycle.Event.ON_RESUME) forecastViewModel.getState()
-                            }
-                            lifecycleOwner.lifecycle.addObserver(observer)
-                            onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
-                        }
-
                         ForecastScreen(
                             state = forecastState,
                             backgroundColor = backgroundColor,
@@ -79,7 +86,8 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(
                             onBackClick = navController::navigateUp,
-                            onThemeSettingChange = themeSettingViewModel::getState
+                            onThemeSettingChange = themeSettingViewModel::getState,
+                            onUnitChange = forecastViewModel::getState
                         )
                     }
                 }

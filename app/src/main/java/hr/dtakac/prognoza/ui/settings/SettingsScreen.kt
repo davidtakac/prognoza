@@ -29,7 +29,8 @@ import kotlinx.coroutines.flow.map
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
-    onThemeSettingChange: () -> Unit = {}
+    onThemeSettingChange: () -> Unit = {},
+    onUnitChange: () -> Unit = {}
 ) {
     LaunchedEffect(viewModel) { viewModel.getState() }
     val state by remember { viewModel.state }
@@ -75,6 +76,9 @@ fun SettingsScreen(
                             unitSetting = it,
                             onConfirm = viewModel::setTemperatureUnit
                         )
+                        LaunchedEffect(it.values.indexOf(it.value)) {
+                            onUnitChange()
+                        }
                     }
                 }
                 state.windUnitSetting?.let {
@@ -83,6 +87,9 @@ fun SettingsScreen(
                             unitSetting = it,
                             onConfirm = viewModel::setWindUnit
                         )
+                        LaunchedEffect(it.values.indexOf(it.value)) {
+                            onUnitChange()
+                        }
                     }
                 }
                 state.precipitationUnitSetting?.let {
@@ -91,6 +98,9 @@ fun SettingsScreen(
                             unitSetting = it,
                             onConfirm = viewModel::setPrecipitationUnit
                         )
+                        LaunchedEffect(it.values.indexOf(it.value)) {
+                            onUnitChange()
+                        }
                     }
                 }
                 state.pressureUnitSetting?.let {
@@ -99,6 +109,9 @@ fun SettingsScreen(
                             unitSetting = it,
                             onConfirm = viewModel::setPressureUnit
                         )
+                        LaunchedEffect(it.values.indexOf(it.value)) {
+                            onUnitChange()
+                        }
                     }
                 }
                 item {
