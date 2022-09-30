@@ -53,9 +53,7 @@ fun ForecastScreen(
                         }
                         onPlaceSelected()
                     },
-                    onSettingsClick = onSettingsClick,
-                    backgroundColor = elevatedBackgroundColor,
-                    contentColor = onBackgroundColor
+                    onSettingsClick = onSettingsClick
                 )
             }
         },
