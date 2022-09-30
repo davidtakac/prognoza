@@ -1,14 +1,12 @@
 package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -29,114 +27,106 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun ForecastContent(
     forecast: ForecastUi,
-    backgroundColor: Color = Color.Unspecified,
-    contentColor: Color = Color.Unspecified,
+    modifier: Modifier = Modifier,
     isPlaceVisible: (Boolean) -> Unit = {},
     isDateVisible: (Boolean) -> Unit = {},
     isTemperatureVisible: (Boolean) -> Unit = {}
 ) {
-    CompositionLocalProvider(LocalContentColor provides contentColor) {
-        Column {
-            val listState = rememberLazyListState()
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(backgroundColor)
-                    .padding(horizontal = 24.dp),
-                state = listState
-            ) {
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
-                item(key = "place") {
-                    Text(
-                        text = forecast.place.asString(),
-                        style = PrognozaTheme.typography.titleLarge,
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
-                item(key = "time") {
-                    Text(
-                        text = forecast.today.date.asString(),
-                        style = PrognozaTheme.typography.subtitleLarge
-                    )
-                }
-                item(key = "temperature") {
-                    AutoSizeText(
-                        text = forecast.today.temperature.asString(),
-                        style = PrognozaTheme.typography.headlineLarge,
-                        maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
-                        maxLines = 1
-                    )
-                }
-                item {
-                    DescriptionAndLowHighTemperature(
-                        description = forecast.today.description.asString(),
-                        lowHighTemperature = forecast.today.lowHighTemperature.asString(),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                }
-                item {
-                    WindAndPrecipitation(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 42.dp),
-                        wind = forecast.today.wind.asString(),
-                        precipitation = forecast.today.precipitation.asString()
-                    )
-                }
-                item {
-                    HourlyHeader(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 42.dp, bottom = 16.dp)
-                    )
-                }
-                items(forecast.today.hourly) { hour ->
-                    HourItem(
-                        hour = hour,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 12.dp)
-                    )
-                }
-                item {
-                    ComingHeader(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 16.dp, top = 30.dp)
-                    )
-                }
-                items(forecast.coming) { day ->
-                    ComingItem(
-                        day = day,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 20.dp)
-                    )
-                }
-            }
-
-            LaunchedEffect(listState) {
-                snapshotFlow { listState.layoutInfo }
-                    .distinctUntilChanged()
-                    .map { layoutInfo ->
-                        Triple(
-                            layoutInfo.keyVisibilityPercent("place"),
-                            layoutInfo.keyVisibilityPercent("time"),
-                            layoutInfo.keyVisibilityPercent("temperature")
-                        )
-                    }
-                    .distinctUntilChanged()
-                    .collect { (placeVis, dateTimeVis, temperatureVis) ->
-                        isPlaceVisible(placeVis != 0f)
-                        isDateVisible(dateTimeVis != 0f)
-                        isTemperatureVisible(temperatureVis > 50f)
-                    }
-            }
+    val listState = rememberLazyListState()
+    LazyColumn(
+        modifier = modifier,
+        state = listState
+    ) {
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
         }
+        item(key = "place") {
+            Text(
+                text = forecast.place.asString(),
+                style = PrognozaTheme.typography.titleLarge,
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(8.dp))
+        }
+        item(key = "time") {
+            Text(
+                text = forecast.today.date.asString(),
+                style = PrognozaTheme.typography.subtitleLarge
+            )
+        }
+        item(key = "temperature") {
+            AutoSizeText(
+                text = forecast.today.temperature.asString(),
+                style = PrognozaTheme.typography.headlineLarge,
+                maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
+                maxLines = 1
+            )
+        }
+        item {
+            DescriptionAndLowHighTemperature(
+                description = forecast.today.description.asString(),
+                lowHighTemperature = forecast.today.lowHighTemperature.asString(),
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+        item {
+            WindAndPrecipitation(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 42.dp),
+                wind = forecast.today.wind.asString(),
+                precipitation = forecast.today.precipitation.asString()
+            )
+        }
+        item {
+            HourlyHeader(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 42.dp, bottom = 16.dp)
+            )
+        }
+        items(forecast.today.hourly) { hour ->
+            HourItem(
+                hour = hour,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
+            )
+        }
+        item {
+            ComingHeader(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp, top = 30.dp)
+            )
+        }
+        items(forecast.coming) { day ->
+            ComingItem(
+                day = day,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp)
+            )
+        }
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo }
+            .distinctUntilChanged()
+            .map { layoutInfo ->
+                Triple(
+                    layoutInfo.keyVisibilityPercent("place"),
+                    layoutInfo.keyVisibilityPercent("time"),
+                    layoutInfo.keyVisibilityPercent("temperature")
+                )
+            }
+            .distinctUntilChanged()
+            .collect { (placeVis, dateTimeVis, temperatureVis) ->
+                isPlaceVisible(placeVis != 0f)
+                isDateVisible(dateTimeVis != 0f)
+                isTemperatureVisible(temperatureVis > 50f)
+            }
     }
 }
 
@@ -147,7 +137,7 @@ private fun DescriptionAndLowHighTemperature(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.titleLarge) {
+        ProvideTextStyle(PrognozaTheme.typography.titleLarge) {
             Text(
                 modifier = Modifier.weight(2f),
                 text = description
@@ -168,7 +158,7 @@ private fun WindAndPrecipitation(
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
+        ProvideTextStyle(PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = wind,
@@ -211,12 +201,12 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun HourItem(
+private fun HourItem(
     hour: DayHourUi,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
+        ProvideTextStyle(PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.width(52.dp),
                 text = hour.time.asString(),
@@ -258,12 +248,12 @@ fun HourItem(
 }
 
 @Composable
-fun ComingItem(
+private fun ComingItem(
     day: DayUi,
     modifier: Modifier = Modifier
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        CompositionLocalProvider(LocalTextStyle provides PrognozaTheme.typography.body) {
+        ProvideTextStyle(PrognozaTheme.typography.body) {
             Text(
                 modifier = Modifier.weight(2f),
                 text = day.date.asString(),
@@ -300,8 +290,7 @@ private fun TodayScreenPreview() {
                 today = fakeTodayUi(),
                 coming = fakeComingUi()
             ),
-            backgroundColor = PrognozaTheme.backgroundColor,
-            contentColor = PrognozaTheme.onBackgroundColor
+            modifier = Modifier.padding(24.dp)
         )
     }
 }

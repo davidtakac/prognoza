@@ -7,7 +7,7 @@ data class PrognozaContentAlpha(
 ) {
     companion object {
         fun get(): PrognozaContentAlpha = PrognozaContentAlpha(
-            high = 1f,
+            high = 0.87f,
             medium = 0.6f,
             disabled = 0.4f
         )

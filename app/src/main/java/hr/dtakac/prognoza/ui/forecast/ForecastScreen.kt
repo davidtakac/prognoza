@@ -116,8 +116,7 @@ fun ForecastScreen(
                         Box {
                             ForecastContent(
                                 forecast = state.forecast,
-                                backgroundColor = backgroundColor,
-                                contentColor = onBackgroundColor,
+                                modifier = Modifier.padding(horizontal = 24.dp),
                                 isPlaceVisible = { toolbarPlaceVisible = !it },
                                 isDateVisible = { toolbarDateVisible = !it },
                                 isTemperatureVisible = { toolbarTemperatureVisible = !it }
