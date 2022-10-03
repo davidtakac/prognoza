@@ -50,9 +50,11 @@ fun PlacesContent(
                     .weight(1f)
             )
         } else {
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(top = 12.dp)
+            ) {
                 itemsIndexed(state.places) { idx, placeUi ->
-                    if (idx == 0) Spacer(modifier = Modifier.height(12.dp))
                     PlaceItem(
                         placeUi = placeUi,
                         modifier = Modifier
@@ -63,7 +65,7 @@ fun PlacesContent(
                             )
                             .fillMaxWidth()
                             .padding(
-                                vertical = 10.dp,
+                                vertical = 12.dp,
                                 horizontal = 24.dp
                             )
                     )

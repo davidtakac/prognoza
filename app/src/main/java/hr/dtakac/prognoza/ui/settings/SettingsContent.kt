@@ -59,11 +59,9 @@ fun SettingsContent(
                     .background(PrognozaTheme.colors.surface1)
                     .fillMaxSize()
                     .padding(WindowInsets.navigationBars.asPaddingValues()),
+                contentPadding = PaddingValues(vertical = 24.dp),
                 state = listState
             ) {
-                item {
-                    Spacer(modifier = Modifier.height(24.dp))
-                }
                 item(key = "settings") {
                     Text(
                         text = stringResource(id = R.string.settings),

@@ -34,11 +34,8 @@ fun ForecastDataList(
     val listState = rememberLazyListState()
     LazyColumn(
         state = listState,
-        contentPadding = PaddingValues(horizontal = 24.dp)
+        contentPadding = PaddingValues(24.dp)
     ) {
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
         item(key = "place") {
             Text(
                 text = forecast.place.asString(),
@@ -85,27 +82,27 @@ fun ForecastDataList(
                     .padding(top = 42.dp, bottom = 16.dp)
             )
         }
-        items(forecast.today.hourly) { hour ->
+        itemsIndexed(forecast.today.hourly) { idx, hour ->
             HourItem(
                 hour = hour,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 12.dp)
+                    .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp)
             )
         }
         item {
             ComingHeader(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp, top = 30.dp)
+                    .padding(top = 42.dp, bottom = 16.dp)
             )
         }
-        items(forecast.coming) { day ->
+        itemsIndexed(forecast.coming) { idx, day ->
             ComingItem(
                 day = day,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 20.dp)
+                    .padding(bottom = if (idx == forecast.coming.lastIndex) 0.dp else 20.dp)
             )
         }
     }
