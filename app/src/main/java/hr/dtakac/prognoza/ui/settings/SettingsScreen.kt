@@ -60,7 +60,8 @@ fun SettingsScreen(
             LazyColumn(
                 modifier = Modifier
                     .background(PrognozaTheme.colors.surface1)
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .padding(WindowInsets.navigationBars.asPaddingValues()),
                 state = listState
             ) {
                 item {
