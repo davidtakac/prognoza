@@ -47,7 +47,7 @@ data class PrognozaTypography(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
                 fontSize = 42.sp,
-                letterSpacing = 0.sp,
+                letterSpacing = (-1.5).sp,
                 lineHeightStyle = LineHeightStyle(
                     alignment = LineHeightStyle.Alignment.Proportional,
                     trim = LineHeightStyle.Trim.Both

@@ -80,7 +80,7 @@ fun PrognozaToolbar(
 }
 
 @Composable
-private fun Preview(
+private fun ToolbarPreview(
     titleVisible: Boolean = true,
     subtitleVisible: Boolean = true,
     endVisible: Boolean = true
@@ -102,16 +102,16 @@ private fun Preview(
 
 @Preview
 @Composable
-private fun AllVisiblePreview() = hr.dtakac.prognoza.ui.common.Preview()
+private fun AllVisiblePreview() = ToolbarPreview()
 
 @Preview
 @Composable
-private fun EndGonePreview() = Preview(endVisible = false)
+private fun EndGonePreview() = ToolbarPreview(endVisible = false)
 
 @Preview
 @Composable
-private fun TitleVisiblePreview() = Preview(endVisible = false, subtitleVisible = false)
+private fun TitleVisiblePreview() = ToolbarPreview(endVisible = false, subtitleVisible = false)
 
 @Preview
 @Composable
-private fun NoneVisiblePreview() = Preview(endVisible = false, subtitleVisible = false, titleVisible = false)
+private fun NoneVisiblePreview() = ToolbarPreview(endVisible = false, subtitleVisible = false, titleVisible = false)

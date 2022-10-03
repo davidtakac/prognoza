@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
+import hr.dtakac.prognoza.ui.common.PrognozaSnackBar
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
 import hr.dtakac.prognoza.ui.common.PrognozaToolbar
