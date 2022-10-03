@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.ui.toolbar
+package hr.dtakac.prognoza.ui.common
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.background

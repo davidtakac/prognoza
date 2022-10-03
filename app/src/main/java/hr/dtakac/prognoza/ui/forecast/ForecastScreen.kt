@@ -17,7 +17,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
-import hr.dtakac.prognoza.ui.toolbar.PrognozaToolbar
+import hr.dtakac.prognoza.ui.common.PrognozaToolbar
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -79,7 +79,7 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(
                             onBackClick = navController::navigateUp,
-                            onThemeSettingChange = themeSettingViewModel::getState,
+                            onThemeChange = themeSettingViewModel::getState,
                             onUnitChange = forecastViewModel::getState
                         )
                     }
