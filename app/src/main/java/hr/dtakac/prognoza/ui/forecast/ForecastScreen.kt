@@ -60,6 +60,7 @@ fun ForecastScreen(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(PrognozaTheme.colors.surface1)
+                        .padding(WindowInsets.navigationBars.asPaddingValues())
                 ) {
                     var toolbarPlaceVisible by remember { mutableStateOf(false) }
                     var toolbarDateVisible by remember { mutableStateOf(false) }
