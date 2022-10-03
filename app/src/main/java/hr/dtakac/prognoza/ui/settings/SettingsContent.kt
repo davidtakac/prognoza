@@ -130,10 +130,10 @@ fun SettingsContent(
             LaunchedEffect(listState) {
                 snapshotFlow { listState.layoutInfo }
                     .distinctUntilChanged()
-                    .map { it.keyVisibilityPercent("settings") }
+                    .map { it.keyVisibilityPercent("settings") != 0f }
                     .distinctUntilChanged()
-                    .collect { settingsVis ->
-                        toolbarTitleVisible = settingsVis == 0f
+                    .collect { titleVisible ->
+                        toolbarTitleVisible = !titleVisible
                     }
             }
         }

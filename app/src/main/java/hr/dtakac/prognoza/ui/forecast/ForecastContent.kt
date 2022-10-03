@@ -27,16 +27,13 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun ForecastContent(
     forecast: ForecastUi,
-    modifier: Modifier = Modifier,
     isPlaceVisible: (Boolean) -> Unit = {},
     isDateVisible: (Boolean) -> Unit = {},
     isTemperatureVisible: (Boolean) -> Unit = {}
 ) {
+    val horizontalPadding = 24.dp
     val listState = rememberLazyListState()
-    LazyColumn(
-        modifier = modifier,
-        state = listState
-    ) {
+    LazyColumn(state = listState) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
         }
@@ -44,6 +41,7 @@ fun ForecastContent(
             Text(
                 text = forecast.place.asString(),
                 style = PrognozaTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = horizontalPadding)
             )
         }
         item {
@@ -52,7 +50,8 @@ fun ForecastContent(
         item(key = "time") {
             Text(
                 text = forecast.today.date.asString(),
-                style = PrognozaTheme.typography.subtitleLarge
+                style = PrognozaTheme.typography.subtitleLarge,
+                modifier = Modifier.padding(horizontal = horizontalPadding)
             )
         }
         item(key = "temperature") {
@@ -60,19 +59,21 @@ fun ForecastContent(
                 text = forecast.today.temperature.asString(),
                 style = PrognozaTheme.typography.headlineLarge,
                 maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
-                maxLines = 1
+                maxLines = 1,
+                modifier = Modifier.padding(horizontal = horizontalPadding)
             )
         }
         item {
             DescriptionAndLowHighTemperature(
                 description = forecast.today.description.asString(),
                 lowHighTemperature = forecast.today.lowHighTemperature.asString(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.padding(horizontal = horizontalPadding).fillMaxWidth()
             )
         }
         item {
             WindAndPrecipitation(
                 modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(top = 42.dp),
                 wind = forecast.today.wind.asString(),
@@ -82,6 +83,7 @@ fun ForecastContent(
         item {
             HourlyHeader(
                 modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(top = 42.dp, bottom = 16.dp)
             )
@@ -90,6 +92,7 @@ fun ForecastContent(
             HourItem(
                 hour = hour,
                 modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(bottom = 12.dp)
             )
@@ -97,6 +100,7 @@ fun ForecastContent(
         item {
             ComingHeader(
                 modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(bottom = 16.dp, top = 30.dp)
             )
@@ -105,6 +109,7 @@ fun ForecastContent(
             ComingItem(
                 day = day,
                 modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(bottom = 20.dp)
             )
@@ -116,16 +121,16 @@ fun ForecastContent(
             .distinctUntilChanged()
             .map { layoutInfo ->
                 Triple(
-                    layoutInfo.keyVisibilityPercent("place"),
-                    layoutInfo.keyVisibilityPercent("time"),
-                    layoutInfo.keyVisibilityPercent("temperature")
+                    layoutInfo.keyVisibilityPercent("place") != 0f,
+                    layoutInfo.keyVisibilityPercent("time") != 0f,
+                    layoutInfo.keyVisibilityPercent("temperature") > 50f
                 )
             }
             .distinctUntilChanged()
-            .collect { (placeVis, dateTimeVis, temperatureVis) ->
-                isPlaceVisible(placeVis != 0f)
-                isDateVisible(dateTimeVis != 0f)
-                isTemperatureVisible(temperatureVis > 50f)
+            .collect { (isPlaceVisible, isDateVisible, isTemperatureVisible) ->
+                isPlaceVisible(isPlaceVisible)
+                isDateVisible(isDateVisible)
+                isTemperatureVisible(isTemperatureVisible)
             }
     }
 }
@@ -289,8 +294,7 @@ private fun TodayScreenPreview() {
                 place = TextResource.fromText("Helsinki"),
                 today = fakeTodayUi(),
                 coming = fakeComingUi()
-            ),
-            modifier = Modifier.padding(24.dp)
+            )
         )
     }
 }
