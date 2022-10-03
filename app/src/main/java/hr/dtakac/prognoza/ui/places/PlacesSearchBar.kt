@@ -108,7 +108,7 @@ private fun LoadingSearchBarUnderline(isLoading: Boolean = false) {
 
 @Preview
 @Composable
-private fun PlacesSearchBarPreview() {
+private fun Preview() {
     PrognozaTheme {
         PlacesSearchBar(modifier = Modifier.padding(24.dp))
     }
