@@ -31,17 +31,18 @@ fun ForecastDataList(
     isDateVisible: (Boolean) -> Unit = {},
     isTemperatureVisible: (Boolean) -> Unit = {}
 ) {
-    val horizontalPadding = 24.dp
     val listState = rememberLazyListState()
-    LazyColumn(state = listState) {
+    LazyColumn(
+        state = listState,
+        contentPadding = PaddingValues(horizontal = 24.dp)
+    ) {
         item {
             Spacer(modifier = Modifier.height(24.dp))
         }
         item(key = "place") {
             Text(
                 text = forecast.place.asString(),
-                style = PrognozaTheme.typography.titleLarge,
-                modifier = Modifier.padding(horizontal = horizontalPadding)
+                style = PrognozaTheme.typography.titleLarge
             )
         }
         item {
@@ -50,8 +51,7 @@ fun ForecastDataList(
         item(key = "time") {
             Text(
                 text = forecast.today.date.asString(),
-                style = PrognozaTheme.typography.subtitleLarge,
-                modifier = Modifier.padding(horizontal = horizontalPadding)
+                style = PrognozaTheme.typography.subtitleLarge
             )
         }
         item(key = "temperature") {
@@ -59,21 +59,19 @@ fun ForecastDataList(
                 text = forecast.today.temperature.asString(),
                 style = PrognozaTheme.typography.headlineLarge,
                 maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
-                maxLines = 1,
-                modifier = Modifier.padding(horizontal = horizontalPadding)
+                maxLines = 1
             )
         }
         item {
             DescriptionAndLowHighTemperature(
                 description = forecast.today.description.asString(),
                 lowHighTemperature = forecast.today.lowHighTemperature.asString(),
-                modifier = Modifier.padding(horizontal = horizontalPadding).fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
         item {
             WindAndPrecipitation(
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(top = 42.dp),
                 wind = forecast.today.wind.asString(),
@@ -83,7 +81,6 @@ fun ForecastDataList(
         item {
             HourlyHeader(
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(top = 42.dp, bottom = 16.dp)
             )
@@ -92,7 +89,6 @@ fun ForecastDataList(
             HourItem(
                 hour = hour,
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(bottom = 12.dp)
             )
@@ -100,7 +96,6 @@ fun ForecastDataList(
         item {
             ComingHeader(
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(bottom = 16.dp, top = 30.dp)
             )
@@ -109,7 +104,6 @@ fun ForecastDataList(
             ComingItem(
                 day = day,
                 modifier = Modifier
-                    .padding(horizontal = horizontalPadding)
                     .fillMaxWidth()
                     .padding(bottom = 20.dp)
             )
