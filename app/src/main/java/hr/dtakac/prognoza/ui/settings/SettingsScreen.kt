@@ -1,16 +1,11 @@
 package hr.dtakac.prognoza.ui.settings
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -18,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
-import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSetting
 import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.toolbar.PrognozaToolbar
@@ -85,46 +79,46 @@ fun SettingsScreen(
                 }
                 state.temperatureUnitSetting?.let {
                     item {
-                        UnitSetting(
-                            unitSetting = it,
-                            onConfirm = viewModel::setTemperatureUnit
+                        MultipleChoiceSettingItem(
+                            state = it,
+                            onPick = { idx ->
+                                viewModel.setTemperatureUnit(idx)
+                                onUnitChange()
+                            }
                         )
-                        LaunchedEffect(it.values.indexOf(it.value)) {
-                            onUnitChange()
-                        }
                     }
                 }
                 state.windUnitSetting?.let {
                     item {
-                        UnitSetting(
-                            unitSetting = it,
-                            onConfirm = viewModel::setWindUnit
+                        MultipleChoiceSettingItem(
+                            state = it,
+                            onPick = { idx ->
+                                viewModel.setWindUnit(idx)
+                                onUnitChange()
+                            }
                         )
-                        LaunchedEffect(it.values.indexOf(it.value)) {
-                            onUnitChange()
-                        }
                     }
                 }
                 state.precipitationUnitSetting?.let {
                     item {
-                        UnitSetting(
-                            unitSetting = it,
-                            onConfirm = viewModel::setPrecipitationUnit
+                        MultipleChoiceSettingItem(
+                            state = it,
+                            onPick = { idx ->
+                                viewModel.setPrecipitationUnit(idx)
+                                onUnitChange()
+                            }
                         )
-                        LaunchedEffect(it.values.indexOf(it.value)) {
-                            onUnitChange()
-                        }
                     }
                 }
                 state.pressureUnitSetting?.let {
                     item {
-                        UnitSetting(
-                            unitSetting = it,
-                            onConfirm = viewModel::setPressureUnit
+                        MultipleChoiceSettingItem(
+                            state = it,
+                            onPick = { idx ->
+                                viewModel.setPressureUnit(idx)
+                                onUnitChange()
+                            }
                         )
-                        LaunchedEffect(it.values.indexOf(it.value)) {
-                            onUnitChange()
-                        }
                     }
                 }
                 item {
@@ -135,13 +129,13 @@ fun SettingsScreen(
                 }
                 state.themeSetting?.let {
                     item {
-                        UnitSetting(
-                            unitSetting = it,
-                            onConfirm = viewModel::setTheme
+                        MultipleChoiceSettingItem(
+                            state = it,
+                            onPick = { idx ->
+                                viewModel.setTheme(idx)
+                                onThemeSettingChange()
+                            }
                         )
-                        LaunchedEffect(it.values.indexOf(it.value)) {
-                            onThemeSettingChange()
-                        }
                     }
                 }
             }
@@ -166,128 +160,4 @@ private fun Header(text: String, modifier: Modifier = Modifier) {
             style = PrognozaTheme.typography.titleSmall,
         )
     }
-}
-
-@Composable
-private fun UnitSetting(
-    unitSetting: MultipleChoiceSetting,
-    onConfirm: (Int) -> Unit
-) {
-    var openDialog by remember { mutableStateOf(false) }
-    SettingItem(
-        name = unitSetting.name.asString(),
-        value = unitSetting.value.asString(),
-        onClick = { openDialog = true }
-    )
-    if (openDialog) {
-        SettingDialog(
-            title = unitSetting.name.asString(),
-            selectedOption = unitSetting.value.asString(),
-            options = unitSetting.values.map { it.asString() },
-            onConfirm = onConfirm,
-            onDismiss = { openDialog = false }
-        )
-    }
-}
-
-@Composable
-private fun SettingItem(
-    name: String,
-    value: String,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
-) {
-    Column(
-        modifier = modifier
-            .clickable(
-                onClick = onClick,
-                indication = rememberRipple(bounded = true),
-                interactionSource = remember { MutableInteractionSource() }
-            )
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-            .fillMaxWidth()
-    ) {
-        Text(text = name, style = PrognozaTheme.typography.subtitleMedium)
-        Text(
-            text = value,
-            style = PrognozaTheme.typography.body,
-            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-        )
-    }
-}
-
-@Composable
-private fun SettingDialog(
-    title: String,
-    selectedOption: String,
-    options: List<String>,
-    onConfirm: (Int) -> Unit,
-    onDismiss: () -> Unit
-) {
-    var selectedIndex by remember { mutableStateOf(options.indexOf(selectedOption)) }
-    AlertDialog(
-        containerColor = PrognozaTheme.colors.surface3,
-        titleContentColor = PrognozaTheme.colors.onSurface,
-        onDismissRequest = onDismiss,
-        title = { Text(text = title, style = PrognozaTheme.typography.titleMedium) },
-        text = {
-            CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
-                LazyColumn {
-                    itemsIndexed(options) { idx, option ->
-                        Row(
-                            modifier = Modifier
-                                .clickable(
-                                    onClick = { selectedIndex = idx },
-                                    indication = rememberRipple(bounded = true),
-                                    interactionSource = remember { MutableInteractionSource() }
-                                )
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = idx == selectedIndex,
-                                onClick = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                                colors = RadioButtonDefaults.colors(
-                                    selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                                    unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                                    disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
-                                    disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
-                                )
-                            )
-                            Text(
-                                text = option,
-                                style = PrognozaTheme.typography.subtitleMedium,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
-                    }
-                }
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    onConfirm(selectedIndex)
-                    onDismiss()
-                }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.confirm),
-                    style = PrognozaTheme.typography.titleSmall,
-                    color = PrognozaTheme.colors.onSurface
-                )
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(
-                    text = stringResource(id = R.string.cancel),
-                    color = PrognozaTheme.colors.onSurface,
-                    style = PrognozaTheme.typography.titleSmall
-                )
-            }
-        }
-    )
 }
