@@ -36,7 +36,7 @@ fun PlaceItem(
                     modifier = Modifier
                         .padding(end = 4.dp)
                         .size(20.dp),
-                    colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium))
+                    colorFilter = ColorFilter.tint(LocalContentColor.current)
                 )
             }
             Text(

@@ -312,7 +312,7 @@ private fun fakeTodayUi(): TodayUi = TodayUi(
                     temperature = TextResource.fromText("23°"),
                     precipitation = TextResource.fromText("1.99 mm"),
                     description = TextResource.fromText("Clear and some more text"),
-                    icon = R.drawable.heavysleetshowersandthunder_night
+                    icon = if (i % 2 == 0) R.drawable.heavysleetshowersandthunder_night else R.drawable.ic_question_mark
                 )
             )
         }

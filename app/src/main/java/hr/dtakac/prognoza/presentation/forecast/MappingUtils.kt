@@ -128,7 +128,7 @@ fun ForecastDescription.toStringId(): Int = when (this) {
 
 @DrawableRes
 fun ForecastDescription.toDrawableId(): Int = when (this) {
-    UNKNOWN -> R.drawable.ic_cloud
+    UNKNOWN -> R.drawable.ic_question_mark
     CLEAR_SKY_DAY -> R.drawable.clearsky_day
     CLEAR_SKY_NIGHT -> R.drawable.clearsky_night
     CLEAR_SKY_POLAR_TWILIGHT -> R.drawable.clearsky_polartwilight

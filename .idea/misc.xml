@@ -78,6 +78,9 @@
         <entry key="../../../../layout/compose-model-1664789901729.xml" value="0.33" />
         <entry key="../../../../layout/compose-model-1664789901735.xml" value="0.48333333333333334" />
         <entry key="../../../../layout/compose-model-1664790205596.xml" value="0.4560810810810811" />
+        <entry key="../../../../layout/compose-model-1664791995331.xml" value="0.48333333333333334" />
+        <entry key="../../../../layout/compose-model-1664792857213.xml" value="0.24788851351351351" />
+        <entry key="app/src/main/res/drawable-mdpi/search-24px.xml" value="0.261" />
         <entry key="app/src/main/res/drawable-v24/ic_cloud_off.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.16041666666666668" />
         <entry key="app/src/main/res/drawable/app_widget_background.xml" value="0.18090277777777777" />
@@ -93,8 +96,10 @@
         <entry key="app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.14375" />
         <entry key="app/src/main/res/drawable/ic_location_pin.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_menu.xml" value="0.2195" />
+        <entry key="app/src/main/res/drawable/ic_my_location.xml" value="0.261" />
         <entry key="app/src/main/res/drawable/ic_north.xml" value="0.242" />
         <entry key="app/src/main/res/drawable/ic_outline_settings.xml" value="0.23" />
+        <entry key="app/src/main/res/drawable/ic_question_mark.xml" value="0.261" />
         <entry key="app/src/main/res/drawable/ic_search.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_speed.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_thermostat.xml" value="0.1" />

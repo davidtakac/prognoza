@@ -64,7 +64,7 @@ fun PlacesSearchBar(
                     Image(
                         painter = painterResource(id = R.drawable.ic_search),
                         contentDescription = null,
-                        colorFilter = ColorFilter.tint(LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)),
+                        colorFilter = ColorFilter.tint(LocalContentColor.current),
                         modifier = Modifier
                             .padding(end = 12.dp)
                             .size(24.dp)
