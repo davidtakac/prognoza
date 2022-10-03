@@ -3,15 +3,17 @@ package hr.dtakac.prognoza.ui.common
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
@@ -76,3 +78,40 @@ fun PrognozaToolbar(
         }
     }
 }
+
+@Composable
+private fun Preview(
+    titleVisible: Boolean = true,
+    subtitleVisible: Boolean = true,
+    endVisible: Boolean = true
+) = PrognozaTheme {
+    PrognozaToolbar(
+        title = { Text("Tenja") },
+        navigationIcon = {
+            IconButton(onClick = {}) {
+                Icon(painter = painterResource(id = R.drawable.ic_menu), contentDescription = null)
+            }
+        },
+        subtitle = { Text("September 29") },
+        end = { Text("23") },
+        titleVisible = titleVisible,
+        subtitleVisible = subtitleVisible,
+        endVisible = endVisible
+    )
+}
+
+@Preview
+@Composable
+private fun AllVisiblePreview() = hr.dtakac.prognoza.ui.common.Preview()
+
+@Preview
+@Composable
+private fun EndGonePreview() = Preview(endVisible = false)
+
+@Preview
+@Composable
+private fun TitleVisiblePreview() = Preview(endVisible = false, subtitleVisible = false)
+
+@Preview
+@Composable
+private fun NoneVisiblePreview() = Preview(endVisible = false, subtitleVisible = false, titleVisible = false)
