@@ -52,6 +52,7 @@ fun SettingsContent(
                     }
                 }
             )
+
             SettingsList(
                 state = state,
                 isTitleVisible = { toolbarTitleVisible = !it },
@@ -73,11 +74,12 @@ private fun SettingsList(
     onWindUnitPick: (Int) -> Unit,
     onPrecipitationUnitPick: (Int) -> Unit,
     onPressureUnitPick: (Int) -> Unit,
-    onThemePick: (Int) -> Unit
+    onThemePick: (Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(WindowInsets.navigationBars.asPaddingValues()),
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -156,7 +158,10 @@ private fun SettingsList(
 }
 
 @Composable
-private fun Header(text: String, modifier: Modifier = Modifier) {
+private fun Header(
+    text: String,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         Text(
             text = text,

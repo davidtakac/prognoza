@@ -35,7 +35,7 @@ fun MultipleChoiceSettingItem(
 )
 
 @Composable
-fun MultipleChoiceSettingItem(
+private fun MultipleChoiceSettingItem(
     name: String,
     selectedValue: String,
     values: List<String>,
@@ -43,14 +43,14 @@ fun MultipleChoiceSettingItem(
     modifier: Modifier = Modifier
 ) {
     var openDialog by remember { mutableStateOf(false) }
-    Content(
+    ItemContent(
         name = name,
         value = selectedValue,
         onClick = { openDialog = true },
         modifier = modifier
     )
     if (openDialog) {
-        Dialog(
+        ItemDialog(
             title = name,
             selectedOption = selectedValue,
             options = values,
@@ -61,7 +61,7 @@ fun MultipleChoiceSettingItem(
 }
 
 @Composable
-private fun Content(
+private fun ItemContent(
     name: String,
     value: String,
     modifier: Modifier = Modifier,
@@ -87,54 +87,32 @@ private fun Content(
 }
 
 @Composable
-private fun Dialog(
+private fun ItemDialog(
     title: String,
     selectedOption: String,
     options: List<String>,
+    modifier: Modifier = Modifier,
     onConfirm: (Int) -> Unit = {},
     onDismiss: () -> Unit = {}
 ) {
     var selectedIndex by remember { mutableStateOf(options.indexOf(selectedOption)) }
     AlertDialog(
+        modifier = modifier,
         containerColor = PrognozaTheme.colors.surface3,
         titleContentColor = PrognozaTheme.colors.onSurface,
         onDismissRequest = onDismiss,
-        title = { Text(text = title, style = PrognozaTheme.typography.titleMedium) },
+        title = {
+            Text(
+                text = title,
+                style = PrognozaTheme.typography.titleMedium
+            )
+        },
         text = {
-            CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
-                LazyColumn {
-                    itemsIndexed(options) { idx, option ->
-                        Row(
-                            modifier = Modifier
-                                .clickable(
-                                    onClick = { selectedIndex = idx },
-                                    indication = rememberRipple(bounded = true),
-                                    interactionSource = remember { MutableInteractionSource() }
-                                )
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(
-                                selected = idx == selectedIndex,
-                                onClick = null,
-                                interactionSource = remember { MutableInteractionSource() },
-                                colors = RadioButtonDefaults.colors(
-                                    selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                                    unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                                    disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
-                                    disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
-                                )
-                            )
-                            Text(
-                                text = option,
-                                style = PrognozaTheme.typography.subtitleMedium,
-                                modifier = Modifier.padding(start = 8.dp)
-                            )
-                        }
-                    }
-                }
-            }
+            DialogOptions(
+                options = options,
+                onIndexSelect = { selectedIndex = it },
+                selectedIndex = selectedIndex
+            )
         },
         confirmButton = {
             TextButton(
@@ -162,10 +140,53 @@ private fun Dialog(
     )
 }
 
+@Composable
+private fun DialogOptions(
+    options: List<String>,
+    onIndexSelect: (Int) -> Unit,
+    selectedIndex: Int,
+    modifier: Modifier = Modifier
+) {
+    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
+        LazyColumn(modifier = modifier) {
+            itemsIndexed(options) { idx, option ->
+                Row(
+                    modifier = Modifier
+                        .clickable(
+                            onClick = { onIndexSelect(idx) },
+                            indication = rememberRipple(bounded = true),
+                            interactionSource = remember { MutableInteractionSource() }
+                        )
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = idx == selectedIndex,
+                        onClick = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                            unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                            disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
+                            disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
+                        )
+                    )
+                    Text(
+                        text = option,
+                        style = PrognozaTheme.typography.subtitleMedium,
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun ContentPreview() = PrognozaTheme {
-    Content(
+    ItemContent(
         name = fakeState.name.asString(),
         value = fakeState.value.asString()
     )
@@ -174,7 +195,7 @@ private fun ContentPreview() = PrognozaTheme {
 @Preview
 @Composable
 private fun PickerDialogPreview() = PrognozaTheme {
-    Dialog(
+    ItemDialog(
         title = fakeState.name.asString(),
         selectedOption = fakeState.value.asString(),
         options = fakeState.values.map { it.asString() }
