@@ -56,7 +56,9 @@ fun PlacesContent(
             ) {
                 itemsIndexed(state.places) { idx, placeUi ->
                     PlaceItem(
-                        placeUi = placeUi,
+                        name = placeUi.name.asString(),
+                        details = placeUi.details.asString(),
+                        isSelected = placeUi.isSelected,
                         modifier = Modifier
                             .clickable(
                                 onClick = { onPlaceSelected(idx) },
