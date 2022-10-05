@@ -20,7 +20,6 @@ class PlacesViewModel @Inject constructor(
     private val selectPlace: SelectPlace,
     private val getSelectedPlace: GetSelectedPlace
 ) : ViewModel() {
-    private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
     private var currentPlaces: List<Place> = listOf()
 
     private val _state = mutableStateOf(PlacesState())
@@ -102,11 +101,11 @@ class PlacesViewModel @Inject constructor(
         }
     }
 
-    private fun showLoader() = loaderTimedLatch.start {
+    private fun showLoader() {
         _state.value = _state.value.copy(isLoading = true)
     }
 
-    private fun hideLoader() = loaderTimedLatch.stop {
+    private fun hideLoader() {
         _state.value = _state.value.copy(isLoading = false)
     }
 }

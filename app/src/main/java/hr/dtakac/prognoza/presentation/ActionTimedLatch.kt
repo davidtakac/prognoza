@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+// todo: remove this if unused
 class ActionTimedLatch(private val scope: CoroutineScope) {
     private var delayedStart: Job? = null
 

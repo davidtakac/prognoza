@@ -10,7 +10,6 @@ import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
-import hr.dtakac.prognoza.presentation.ActionTimedLatch
 import hr.dtakac.prognoza.ui.ThemeSetting
 import hr.dtakac.prognoza.ui.ThemeChanger
 import kotlinx.coroutines.launch
@@ -32,8 +31,6 @@ class SettingsViewModel @Inject constructor(
     private val getAllPressureUnits: GetAllPressureUnits,
     private val themeChanger: ThemeChanger
 ) : ViewModel() {
-    private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
-
     private var availableTemperatureUnits: List<TemperatureUnit> = listOf()
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
@@ -117,11 +114,11 @@ class SettingsViewModel @Inject constructor(
         )
     }
 
-    private fun showLoader() = loaderTimedLatch.start {
+    private fun showLoader() {
         _state.value = _state.value.copy(isLoading = true)
     }
 
-    private fun hideLoader() = loaderTimedLatch.stop {
+    private fun hideLoader() {
         _state.value = _state.value.copy(isLoading = false)
     }
 }

@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.domain.usecase.GetForecast
-import hr.dtakac.prognoza.presentation.ActionTimedLatch
 import kotlinx.coroutines.*
 import javax.inject.Inject
 
@@ -16,14 +15,12 @@ import javax.inject.Inject
 class ForecastViewModel @Inject constructor(
     private val getForecast: GetForecast
 ) : ViewModel() {
-    private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
-
     private val _state: MutableState<ForecastState> = mutableStateOf(ForecastState())
     val state: State<ForecastState> get() = _state
 
     fun getState() {
         viewModelScope.launch {
-            loaderTimedLatch.start { _state.value = _state.value.copy(isLoading = true) }
+            _state.value = _state.value.copy(isLoading = true)
             _state.value = when (val result = getForecast()) {
                 is GetForecastResult.Success -> _state.value.copy(
                     forecast = mapToForecastUi(
@@ -41,7 +38,7 @@ class ForecastViewModel @Inject constructor(
                     error = mapToError(result)
                 )
             }
-            loaderTimedLatch.stop { _state.value = _state.value.copy(isLoading = false) }
+            _state.value = _state.value.copy(isLoading = false)
         }
     }
 }

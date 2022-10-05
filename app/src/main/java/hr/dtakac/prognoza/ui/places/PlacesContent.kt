@@ -32,6 +32,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 import hr.dtakac.prognoza.presentation.places.PlacesState
+import hr.dtakac.prognoza.ui.common.rememberPrognozaLoadingIndicatorState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
@@ -227,6 +228,10 @@ private fun SearchBar(
                         innerTextField()
                     }
                 }
+
+                val loadingState = rememberPrognozaLoadingIndicatorState()
+                if (isLoading) loadingState.showLoadingIndicator()
+                else loadingState.hideLoadingIndicator()
                 LoadingUnderline(isLoading)
             }
         }
@@ -238,13 +243,17 @@ private fun LoadingUnderline(isLoading: Boolean = false) {
     Crossfade(targetState = isLoading) {
         if (it) {
             LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth().height(1.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp),
                 color = PrognozaTheme.colors.onSurface,
                 trackColor = Color.Transparent
             )
         } else {
             LinearProgressIndicator(
-                modifier = Modifier.fillMaxWidth().height(1.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp),
                 color = PrognozaTheme.colors.onSurface,
                 trackColor = Color.Transparent,
                 progress = 1f
