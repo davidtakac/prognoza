@@ -23,12 +23,11 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.common.PrognozaSnackBar
+import hr.dtakac.prognoza.ui.common.PrognozaSnackBarState
 import hr.dtakac.prognoza.ui.common.PrognozaToolbar
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 
 @Composable
 fun ForecastContent(
@@ -45,57 +44,20 @@ fun ForecastContent(
         var toolbarDateVisible by remember { mutableStateOf(false) }
         var toolbarTemperatureVisible by remember { mutableStateOf(false) }
 
-        Box(contentAlignment = Alignment.BottomCenter) {
-            PrognozaToolbar(
-                title = { Text(state.forecast?.place?.asString() ?: "") },
-                subtitle = { Text(state.forecast?.today?.date?.asString() ?: "") },
-                end = { Text(state.forecast?.today?.temperature?.asString() ?: "") },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onMenuClick,
-                        modifier = Modifier.size(48.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_menu),
-                            contentDescription = null
-                        )
-                    }
-                },
-                titleVisible = toolbarPlaceVisible,
-                subtitleVisible = toolbarDateVisible,
-                endVisible = toolbarTemperatureVisible
-            )
-
-            androidx.compose.animation.AnimatedVisibility(
-                visible = state.isLoading,
-                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-            ) {
-                LinearProgressIndicator(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(2.dp),
-                    color = PrognozaTheme.colors.onSurface,
-                    trackColor = Color.Transparent
-                )
-            }
-        }
+        ToolbarWithLoadingIndicator(
+            title = state.forecast?.place?.asString() ?: "",
+            subtitle = state.forecast?.today?.date?.asString() ?: "",
+            end = state.forecast?.today?.temperature?.asString() ?: "",
+            titleVisible = toolbarPlaceVisible,
+            subtitleVisible = toolbarDateVisible,
+            endVisible = toolbarTemperatureVisible,
+            isLoading = state.isLoading,
+            onMenuClick = onMenuClick
+        )
 
         if (state.forecast == null) {
             if (state.error != null) {
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 24.dp)
-                        .fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = state.error.asString(),
-                        style = PrognozaTheme.typography.subtitleMedium,
-                        color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                FullScreenError(error = state.error.asString())
             }
         } else {
             Box {
@@ -107,28 +69,92 @@ fun ForecastContent(
                 )
 
                 if (state.error != null) {
-                    val scope = rememberCoroutineScope()
-                    var showSnackBar by remember { mutableStateOf(false) }
-                    LaunchedEffect(state.forecast, state.error) {
-                        scope.launch {
-                            showSnackBar = true
-                            delay(5000L)
-                            showSnackBar = false
-                        }
-                    }
-                    PrognozaSnackBar(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(16.dp),
-                        text = state.error.asString(),
-                        visible = showSnackBar,
-                        backgroundColor = PrognozaTheme.colors.inverseSurface1,
-                        contentColor = PrognozaTheme.colors.onInverseSurface
-                    )
+                    SnackBarError(error = state.error.asString())
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ToolbarWithLoadingIndicator(
+    title: String,
+    subtitle: String,
+    end: String,
+    titleVisible: Boolean,
+    subtitleVisible: Boolean,
+    endVisible: Boolean,
+    isLoading: Boolean,
+    onMenuClick: () -> Unit
+) {
+    Box(contentAlignment = Alignment.BottomCenter) {
+        PrognozaToolbar(
+            title = { Text(title) },
+            subtitle = { Text(subtitle) },
+            end = { Text(end) },
+            navigationIcon = {
+                IconButton(
+                    onClick = onMenuClick,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_menu),
+                        contentDescription = null
+                    )
+                }
+            },
+            titleVisible = titleVisible,
+            subtitleVisible = subtitleVisible,
+            endVisible = endVisible
+        )
+        AnimatedVisibility(
+            visible = isLoading,
+            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+        ) {
+            LinearProgressIndicator(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(2.dp),
+                color = PrognozaTheme.colors.onSurface,
+                trackColor = Color.Transparent
+            )
+        }
+    }
+}
+
+@Composable
+private fun FullScreenError(error: String) {
+    Box(
+        modifier = Modifier
+            .padding(horizontal = 24.dp)
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = error,
+            style = PrognozaTheme.typography.subtitleMedium,
+            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+private fun BoxScope.SnackBarError(error: String) {
+    val snackBarState = remember { PrognozaSnackBarState() }
+    LaunchedEffect(error) {
+        snackBarState.showSnackBar(error)
+    }
+
+    PrognozaSnackBar(
+        modifier = Modifier
+            .align(Alignment.BottomCenter)
+            .padding(16.dp),
+        state = snackBarState,
+        backgroundColor = PrognozaTheme.colors.inverseSurface1,
+        contentColor = PrognozaTheme.colors.onInverseSurface
+    )
 }
 
 @Composable

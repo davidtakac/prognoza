@@ -12,20 +12,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import kotlinx.coroutines.delay
+
+class PrognozaSnackBarState {
+    var isVisible: Boolean = false
+        private set
+    
+    var currentText: String = ""
+        private set
+    
+    suspend fun showSnackBar(message: String) {
+        currentText = message
+        isVisible = true
+        delay(5000L)
+        isVisible = false
+    }
+}
 
 @Composable
 fun PrognozaSnackBar(
-    text: String,
-    visible: Boolean,
+    state: PrognozaSnackBarState,
     modifier: Modifier = Modifier,
     backgroundColor: Color = PrognozaTheme.colors.inverseSurface1,
     contentColor: Color = PrognozaTheme.colors.onInverseSurface,
 ) {
     AnimatedVisibility(
-        visible = visible,
+        visible = state.isVisible,
         enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
         exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
         modifier = modifier
@@ -39,7 +53,7 @@ fun PrognozaSnackBar(
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = text,
+                text = state.currentText,
                 style = PrognozaTheme.typography.body,
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 2,
@@ -48,16 +62,4 @@ fun PrognozaSnackBar(
             )
         }
     }
-}
-
-@Preview
-@Composable
-private fun LightPreview() = PrognozaTheme(useDarkTheme = false) {
-    PrognozaSnackBar(text = "An error occurred. Please try again later.", visible = true)
-}
-
-@Preview
-@Composable
-private fun DarkPreview() = PrognozaTheme(useDarkTheme = true) {
-    PrognozaSnackBar(text = "An error occurred. Please try again later.", visible = true)
 }
