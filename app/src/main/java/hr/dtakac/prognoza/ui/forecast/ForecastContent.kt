@@ -57,7 +57,12 @@ fun ForecastContent(
 
         if (state.forecast == null) {
             if (state.error != null) {
-                FullScreenError(error = state.error.asString())
+                FullScreenError(
+                    error = state.error.asString(),
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .fillMaxSize()
+                )
             }
         } else {
             Box {
@@ -69,7 +74,12 @@ fun ForecastContent(
                 )
 
                 if (state.error != null) {
-                    SnackBarError(error = state.error.asString())
+                    SnackBarError(
+                        error = state.error.asString(),
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.BottomCenter)
+                    )
                 }
             }
         }
@@ -85,9 +95,10 @@ private fun ToolbarWithLoadingIndicator(
     subtitleVisible: Boolean,
     endVisible: Boolean,
     isLoading: Boolean,
-    onMenuClick: () -> Unit
+    onMenuClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Box(contentAlignment = Alignment.BottomCenter) {
+    Box(contentAlignment = Alignment.BottomCenter, modifier = modifier) {
         PrognozaToolbar(
             title = { Text(title) },
             subtitle = { Text(subtitle) },
@@ -124,11 +135,12 @@ private fun ToolbarWithLoadingIndicator(
 }
 
 @Composable
-private fun FullScreenError(error: String) {
+private fun FullScreenError(
+    error: String,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
-            .padding(horizontal = 24.dp)
-            .fillMaxSize(),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -141,16 +153,17 @@ private fun FullScreenError(error: String) {
 }
 
 @Composable
-private fun BoxScope.SnackBarError(error: String) {
+private fun SnackBarError(
+    error: String,
+    modifier: Modifier = Modifier
+) {
     val snackBarState = remember { PrognozaSnackBarState() }
     LaunchedEffect(error) {
         snackBarState.showSnackBar(error)
     }
 
     PrognozaSnackBar(
-        modifier = Modifier
-            .align(Alignment.BottomCenter)
-            .padding(16.dp),
+        modifier = modifier,
         state = snackBarState,
         backgroundColor = PrognozaTheme.colors.inverseSurface1,
         contentColor = PrognozaTheme.colors.onInverseSurface
@@ -162,12 +175,14 @@ private fun DataList(
     forecast: ForecastUi,
     isPlaceVisible: (Boolean) -> Unit = {},
     isDateVisible: (Boolean) -> Unit = {},
-    isTemperatureVisible: (Boolean) -> Unit = {}
+    isTemperatureVisible: (Boolean) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
     LazyColumn(
         state = listState,
-        contentPadding = PaddingValues(24.dp)
+        contentPadding = PaddingValues(24.dp),
+        modifier = modifier
     ) {
         item(key = "place") {
             Text(
