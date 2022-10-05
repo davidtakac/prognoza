@@ -76,7 +76,8 @@ fun ForecastDataList(
             )
         }
         item {
-            HourlyHeader(
+            Header(
+                text = stringResource(id = R.string.hourly),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 42.dp, bottom = 16.dp)
@@ -91,7 +92,8 @@ fun ForecastDataList(
             )
         }
         item {
-            ComingHeader(
+            Header(
+                text = stringResource(id = R.string.coming),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 42.dp, bottom = 16.dp)
@@ -169,24 +171,13 @@ private fun WindAndPrecipitation(
 }
 
 @Composable
-private fun HourlyHeader(modifier: Modifier = Modifier) {
+private fun Header(
+    text: String,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         Text(
-            text = stringResource(id = R.string.hourly),
-            style = PrognozaTheme.typography.titleSmall,
-        )
-        Divider(
-            color = LocalContentColor.current,
-            modifier = Modifier.padding(top = 16.dp)
-        )
-    }
-}
-
-@Composable
-private fun ComingHeader(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(id = R.string.coming),
+            text = text,
             style = PrognozaTheme.typography.titleSmall,
         )
         Divider(

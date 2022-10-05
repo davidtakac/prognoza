@@ -27,9 +27,9 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun PlacesSearchBar(
+    isLoading: Boolean = false,
     onQuerySubmit: (String) -> Unit = {},
     onQueryChange: (String) -> Unit = {},
-    isLoading: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val style = PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)
