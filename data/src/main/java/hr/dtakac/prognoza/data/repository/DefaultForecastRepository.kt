@@ -25,7 +25,7 @@ class DefaultForecastRepository(
     private val forecastDao: ForecastDao,
     private val metaDao: MetaDao,
     private val userAgent: String,
-    private val defaultDispatcher: CoroutineDispatcher
+    private val computationDispatcher: CoroutineDispatcher
 ) : ForecastRepository {
     override suspend fun getForecast(
         latitude: Double,
@@ -103,7 +103,7 @@ class DefaultForecastRepository(
         longitude: Double
     ) {
         val result = mutableListOf<ForecastDbModel>()
-        val dbModels = withContext(defaultDispatcher) {
+        val dbModels = withContext(computationDispatcher) {
             locationForecastResponse?.forecast?.forecastTimeSteps?.let { timeSteps ->
                 for (i in timeSteps.indices) {
                     mapResponseToDbModel(

@@ -10,11 +10,14 @@ import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import kotlin.coroutines.suspendCoroutine
 
 class DefaultSettingsRepository(
     private val sharedPreferences: SharedPreferences,
-    private val placeDao: PlaceDao
+    private val placeDao: PlaceDao,
+    private val ioDispatcher: CoroutineDispatcher
 ) : SettingsRepository {
     override suspend fun getPlace(): Place? {
         // Lat possible values are -90 to 90
@@ -101,9 +104,11 @@ class DefaultSettingsRepository(
 
     private suspend fun commit(
         action: SharedPreferences.Editor.() -> Unit
-    ) = suspendCoroutine {
-        sharedPreferences.edit(commit = true, action = action)
-        it.resumeWith(Result.success(Unit))
+    ) = withContext(ioDispatcher) {
+        suspendCoroutine {
+            sharedPreferences.edit(commit = true, action = action)
+            it.resumeWith(Result.success(Unit))
+        }
     }
 }
 

@@ -38,7 +38,8 @@ class RepositoryModule {
         database: PrognozaDatabase
     ): SettingsRepository = DefaultSettingsRepository(
         sharedPreferences,
-        database.placeDao()
+        database.placeDao(),
+        ioDispatcher = Dispatchers.Default
     )
 
     @Provides
@@ -52,7 +53,7 @@ class RepositoryModule {
         database.forecastDao(),
         database.metaDao(),
         userAgent = userAgent,
-        defaultDispatcher = Dispatchers.Default
+        computationDispatcher = Dispatchers.Default
     )
 
     @Provides
