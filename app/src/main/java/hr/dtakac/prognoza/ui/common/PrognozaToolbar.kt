@@ -83,13 +83,21 @@ fun PrognozaToolbar(
 private fun ToolbarPreview(
     titleVisible: Boolean = true,
     subtitleVisible: Boolean = true,
-    endVisible: Boolean = true
+    endVisible: Boolean = true,
+    navVisible: Boolean = true
 ) = PrognozaTheme {
     PrognozaToolbar(
         title = { Text("Tenja") },
-        navigationIcon = {
-            IconButton(onClick = {}) {
-                Icon(painter = painterResource(id = R.drawable.ic_menu), contentDescription = null)
+        navigationIcon = if (!navVisible) {
+            null
+        } else {
+            {
+                IconButton(onClick = {}) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_menu),
+                        contentDescription = null
+                    )
+                }
             }
         },
         subtitle = { Text("September 29") },
@@ -115,3 +123,7 @@ private fun TitleVisiblePreview() = ToolbarPreview(endVisible = false, subtitleV
 @Preview
 @Composable
 private fun NoneVisiblePreview() = ToolbarPreview(endVisible = false, subtitleVisible = false, titleVisible = false)
+
+@Preview
+@Composable
+private fun NavGonePreview() = ToolbarPreview(navVisible = false)
