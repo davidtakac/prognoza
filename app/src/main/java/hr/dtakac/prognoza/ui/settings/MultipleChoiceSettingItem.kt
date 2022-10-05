@@ -26,19 +26,34 @@ fun MultipleChoiceSettingItem(
     state: MultipleChoiceSetting,
     onPick: (Int) -> Unit = {},
     modifier: Modifier = Modifier
+) = MultipleChoiceSettingItem(
+    name = state.name.asString(),
+    selectedValue = state.value.asString(),
+    values = state.values.map { it.asString() },
+    onPick = onPick,
+    modifier = modifier
+)
+
+@Composable
+fun MultipleChoiceSettingItem(
+    name: String,
+    selectedValue: String,
+    values: List<String>,
+    onPick: (Int) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     var openDialog by remember { mutableStateOf(false) }
     Content(
-        name = state.name.asString(),
-        value = state.value.asString(),
+        name = name,
+        value = selectedValue,
         onClick = { openDialog = true },
         modifier = modifier
     )
     if (openDialog) {
-        PickerDialog(
-            title = state.name.asString(),
-            selectedOption = state.value.asString(),
-            options = state.values.map { it.asString() },
+        Dialog(
+            title = name,
+            selectedOption = selectedValue,
+            options = values,
             onConfirm = onPick,
             onDismiss = { openDialog = false }
         )
@@ -72,7 +87,7 @@ private fun Content(
 }
 
 @Composable
-private fun PickerDialog(
+private fun Dialog(
     title: String,
     selectedOption: String,
     options: List<String>,
@@ -150,13 +165,16 @@ private fun PickerDialog(
 @Preview
 @Composable
 private fun ContentPreview() = PrognozaTheme {
-    Content(name = fakeState.name.asString(), value = fakeState.value.asString())
+    Content(
+        name = fakeState.name.asString(),
+        value = fakeState.value.asString()
+    )
 }
 
 @Preview
 @Composable
 private fun PickerDialogPreview() = PrognozaTheme {
-    PickerDialog(
+    Dialog(
         title = fakeState.name.asString(),
         selectedOption = fakeState.value.asString(),
         options = fakeState.values.map { it.asString() }
