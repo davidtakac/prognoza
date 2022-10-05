@@ -11,10 +11,8 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.ActionTimedLatch
-import hr.dtakac.prognoza.themesetting.ThemeSetting
-import hr.dtakac.prognoza.themesetting.usecase.GetAllThemeSettings
-import hr.dtakac.prognoza.themesetting.usecase.GetThemeSetting
-import hr.dtakac.prognoza.themesetting.usecase.SetThemeSetting
+import hr.dtakac.prognoza.ui.ThemeSetting
+import hr.dtakac.prognoza.ui.ThemeChanger
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,9 +30,7 @@ class SettingsViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
-    private val setThemeSetting: SetThemeSetting,
-    private val getThemeSetting: GetThemeSetting,
-    private val getAllThemeSettings: GetAllThemeSettings
+    private val themeChanger: ThemeChanger
 ) : ViewModel() {
     private val loaderTimedLatch = ActionTimedLatch(viewModelScope)
 
@@ -77,7 +73,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setTheme(index: Int) {
         updateState {
-            setThemeSetting(availableThemeSettings[index])
+            themeChanger.setTheme(availableThemeSettings[index])
         }
     }
 
@@ -95,7 +91,7 @@ class SettingsViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
-        availableThemeSettings = getAllThemeSettings()
+        availableThemeSettings = themeChanger.getAvailableThemes()
 
         _state.value = _state.value.copy(
             temperatureUnitSetting = mapToTemperatureUnitSetting(
@@ -115,7 +111,7 @@ class SettingsViewModel @Inject constructor(
                 availablePressureUnits = availablePressureUnits
             ),
             themeSetting = mapToThemeSetting(
-                selectedThemeSetting = getThemeSetting(),
+                selectedThemeSetting = themeChanger.getCurrentTheme(),
                 availableThemeSettings = availableThemeSettings
             )
         )

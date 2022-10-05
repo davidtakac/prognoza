@@ -6,7 +6,7 @@ import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
-import hr.dtakac.prognoza.themesetting.ThemeSetting
+import hr.dtakac.prognoza.ui.ThemeSetting
 
 @StringRes
 fun TemperatureUnit.toSettingsLabel(): Int = when (this) {

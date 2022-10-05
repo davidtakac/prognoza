@@ -17,8 +17,8 @@ import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
-import hr.dtakac.prognoza.themesetting.repository.ThemeSettingRepository
-import kotlinx.coroutines.Dispatchers
+import hr.dtakac.prognoza.ui.ThemeChanger
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
 @Module
@@ -35,11 +35,12 @@ class RepositoryModule {
     @ViewModelScoped
     fun provideSettingsRepository(
         sharedPreferences: SharedPreferences,
-        database: PrognozaDatabase
+        database: PrognozaDatabase,
+        @Named("io") ioDispatcher: CoroutineDispatcher
     ): SettingsRepository = DefaultSettingsRepository(
         sharedPreferences,
         database.placeDao(),
-        ioDispatcher = Dispatchers.Default
+        ioDispatcher
     )
 
     @Provides
@@ -47,13 +48,14 @@ class RepositoryModule {
     fun provideForecastRepository(
         forecastService: ForecastService,
         database: PrognozaDatabase,
-        @Named("user_agent") userAgent: String
+        @Named("user_agent") userAgent: String,
+        @Named("computation") computationDispatcher: CoroutineDispatcher
     ): ForecastRepository = DefaultForecastRepository(
         forecastService,
         database.forecastDao(),
         database.metaDao(),
-        userAgent = userAgent,
-        computationDispatcher = Dispatchers.Default
+        userAgent,
+        computationDispatcher
     )
 
     @Provides
@@ -70,7 +72,8 @@ class RepositoryModule {
 
     @Provides
     @ViewModelScoped
-    fun provideThemeSettingRepository(
-        sharedPreferences: SharedPreferences
-    ): ThemeSettingRepository = ThemeSettingRepository(sharedPreferences)
+    fun provideThemeChanger(
+        sharedPreferences: SharedPreferences,
+        @Named("io") ioDispatcher: CoroutineDispatcher
+    ): ThemeChanger = ThemeChanger(sharedPreferences, ioDispatcher)
 }

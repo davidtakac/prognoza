@@ -20,8 +20,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
-import hr.dtakac.prognoza.presentation.themesetting.ThemeSettingViewModel
-import hr.dtakac.prognoza.themesetting.ThemeSetting
+import hr.dtakac.prognoza.presentation.settings.ThemeSettingViewModel
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -36,7 +35,7 @@ class MainActivity : ComponentActivity() {
             val themeSettingViewModel: ThemeSettingViewModel = hiltViewModel()
 
             val forecastState = remember { forecastViewModel.state }.value
-            val themeSetting = remember { themeSettingViewModel.themeSetting }.value
+            val themeSetting = remember { themeSettingViewModel.currentTheme }.value
 
             // Check theme on first start
             LaunchedEffect(themeSettingViewModel) {

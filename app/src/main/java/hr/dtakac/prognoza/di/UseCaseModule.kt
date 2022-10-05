@@ -9,10 +9,6 @@ import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.domain.usecase.*
-import hr.dtakac.prognoza.themesetting.repository.ThemeSettingRepository
-import hr.dtakac.prognoza.themesetting.usecase.GetAllThemeSettings
-import hr.dtakac.prognoza.themesetting.usecase.GetThemeSetting
-import hr.dtakac.prognoza.themesetting.usecase.SetThemeSetting
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -116,20 +112,4 @@ class UseCaseModule {
     @Provides
     @ViewModelScoped
     fun provideGetAllPressureUnits(): GetAllPressureUnits = GetAllPressureUnits()
-
-    @Provides
-    @ViewModelScoped
-    fun provideSetThemeSetting(
-        themeSettingRepository: ThemeSettingRepository
-    ): SetThemeSetting = SetThemeSetting(themeSettingRepository)
-
-    @Provides
-    @ViewModelScoped
-    fun provideGetThemeSetting(
-        themeSettingRepository: ThemeSettingRepository
-    ): GetThemeSetting = GetThemeSetting(themeSettingRepository)
-
-    @Provides
-    @ViewModelScoped
-    fun provideGetAllThemeSettings(): GetAllThemeSettings = GetAllThemeSettings()
 }

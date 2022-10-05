@@ -1,25 +1,25 @@
-package hr.dtakac.prognoza.presentation.themesetting
+package hr.dtakac.prognoza.presentation.settings
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.themesetting.ThemeSetting
-import hr.dtakac.prognoza.themesetting.usecase.GetThemeSetting
+import hr.dtakac.prognoza.ui.ThemeSetting
+import hr.dtakac.prognoza.ui.ThemeChanger
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ThemeSettingViewModel @Inject constructor(
-    private val getThemeSetting: GetThemeSetting
+    private val themeChanger: ThemeChanger
 ): ViewModel() {
-    private val _themeSetting = mutableStateOf(ThemeSetting.FOLLOW_SYSTEM)
-    val themeSetting: State<ThemeSetting> get() = _themeSetting
+    private val _currentTheme = mutableStateOf(ThemeSetting.FOLLOW_SYSTEM)
+    val currentTheme: State<ThemeSetting> get() = _currentTheme
 
     fun getState() {
         viewModelScope.launch {
-            _themeSetting.value = getThemeSetting()
+            _currentTheme.value = themeChanger.getCurrentTheme()
         }
     }
 }
