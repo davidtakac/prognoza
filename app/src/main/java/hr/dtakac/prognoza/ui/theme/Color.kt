@@ -19,14 +19,14 @@ data class PrognozaColors(
     companion object {
         fun get(
             shortForecastDescription: ForecastDescription.Short,
-            useDarkTheme: Boolean
+            darkColors: Boolean
         ): PrognozaColors {
-            val onSurface = if (useDarkTheme) Color.White else Color.Black
-            val surface = getSurface(useDarkTheme)
-            val onInverseSurface = if (useDarkTheme) Color.Black else Color.White
-            val inverseSurface = getSurface(!useDarkTheme)
-            val primary = getPrimary(useDarkTheme, shortForecastDescription)
-            val inversePrimary = getPrimary(!useDarkTheme, shortForecastDescription)
+            val onSurface = if (darkColors) Color.White else Color.Black
+            val surface = getSurface(darkColors)
+            val onInverseSurface = if (darkColors) Color.Black else Color.White
+            val inverseSurface = getSurface(!darkColors)
+            val primary = getPrimary(darkColors, shortForecastDescription)
+            val inversePrimary = getPrimary(!darkColors, shortForecastDescription)
 
             return PrognozaColors(
                 surface1 = surface.overlay(with = primary, alpha = surface1Alpha),
@@ -49,33 +49,33 @@ private fun Color.overlay(
     return with.copy(alpha = alpha).compositeOver(this)
 }
 
-private fun getSurface(useDarkTheme: Boolean): Color =
-    if (useDarkTheme) Color(0xFF121212) else Color.White
+private fun getSurface(darkColors: Boolean): Color =
+    if (darkColors) Color(0xFF121212) else Color.White
 
 private fun getPrimary(
-    useDarkTheme: Boolean,
+    darkColors: Boolean,
     shortForecastDescription: ForecastDescription.Short
 ): Color = when (shortForecastDescription) {
     ForecastDescription.Short.FOG,
     ForecastDescription.Short.CLOUDY ->
-        if (useDarkTheme) Color(0xFF90A4AE) // Blue Gray 300
+        if (darkColors) Color(0xFF90A4AE) // Blue Gray 300
         else Color(0xFF546E7A) // Blue Gray 600
 
     ForecastDescription.Short.RAIN ->
-        if (useDarkTheme) Color(0xFF64B5F6) // Blue 300
+        if (darkColors) Color(0xFF64B5F6) // Blue 300
         else Color(0xFF1E88E5) // Blue 600
 
     ForecastDescription.Short.SLEET ->
-        if (useDarkTheme) Color(0xFF4DB6AC) // Teal 300
+        if (darkColors) Color(0xFF4DB6AC) // Teal 300
         else Color(0xFF00897B) // Teal 600
 
     ForecastDescription.Short.UNKNOWN,
     ForecastDescription.Short.SNOW ->
-        if (useDarkTheme) Color.White
+        if (darkColors) Color.White
         else Color(0xFF757575) // Gray 600
 
     ForecastDescription.Short.FAIR ->
-        if (useDarkTheme) Color(0xFF9575CD) // Deep Purple 300
+        if (darkColors) Color(0xFF9575CD) // Deep Purple 300
         else Color(0xFFFFB300) // Amber 600
 }
 

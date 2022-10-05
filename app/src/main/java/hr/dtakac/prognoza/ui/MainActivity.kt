@@ -60,11 +60,12 @@ class MainActivity : ComponentActivity() {
                     ?: ForecastDescription.Short.UNKNOWN,
                 useDarkTheme = useDarkTheme
             ) {
+                val navController = rememberNavController()
                 val systemUiController = rememberSystemUiController()
+
                 systemUiController.setSystemBarsColor(Color.Transparent, darkIcons = !useDarkTheme)
                 systemUiController.setNavigationBarColor(Color.Transparent, darkIcons = !useDarkTheme)
 
-                val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "forecast") {
                     composable("forecast") {
                         ForecastScreen(

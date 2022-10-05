@@ -48,17 +48,19 @@ private val LocalPrognozaContentAlpha = staticCompositionLocalOf {
     )
 }
 
-private object PrognozaRippleTheme : RippleTheme {
+private class PrognozaRippleTheme(
+    private val useDarkTheme: Boolean
+) : RippleTheme {
     @Composable
     override fun defaultColor() = RippleTheme.defaultRippleColor(
         contentColor = LocalContentColor.current,
-        lightTheme = !isSystemInDarkTheme()
+        lightTheme = !useDarkTheme
     )
 
     @Composable
     override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
         contentColor = LocalContentColor.current,
-        lightTheme = !isSystemInDarkTheme()
+        lightTheme = !useDarkTheme
     )
 }
 
@@ -71,14 +73,14 @@ fun PrognozaTheme(
     val alpha = PrognozaContentAlpha.get()
     val colors = PrognozaColors.get(
         shortForecastDescription = description,
-        useDarkTheme = useDarkTheme
+        darkColors = useDarkTheme
     ).switch()
     val typography = PrognozaTypography.get()
     CompositionLocalProvider(
         LocalPrognozaColors provides colors,
         LocalPrognozaTypography provides typography,
         LocalPrognozaContentAlpha provides alpha,
-        LocalRippleTheme provides PrognozaRippleTheme,
+        LocalRippleTheme provides PrognozaRippleTheme(useDarkTheme),
         content = content
     )
 }
