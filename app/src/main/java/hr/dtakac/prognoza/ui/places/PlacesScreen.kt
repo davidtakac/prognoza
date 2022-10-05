@@ -10,17 +10,8 @@ fun PlacesScreen(
     onPlaceSelected: () -> Unit = {},
     onSettingsClick: () -> Unit = {}
 ) {
-    // Get state on first start
-    LaunchedEffect(viewModel) {
-        viewModel.getSaved()
-    }
-    // Notify place selected to update forecast state
-    val state by remember { viewModel.state }
-    LaunchedEffect(state.selectedPlace) {
-        if (state.selectedPlace != null) {
-            onPlaceSelected()
-        }
-    }
+    LaunchedEffect(true) { viewModel.getSaved() }
+    val state by viewModel.state
 
     PlacesContent(
         state = state,

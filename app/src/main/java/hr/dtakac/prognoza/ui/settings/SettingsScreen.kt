@@ -11,10 +11,8 @@ fun SettingsScreen(
     onThemeChange: () -> Unit = {},
     onUnitChange: () -> Unit = {}
 ) {
-    LaunchedEffect(viewModel) {
-        viewModel.getState()
-    }
-    val state by remember { viewModel.state }
+    LaunchedEffect(true) { viewModel.getState() }
+    val state by viewModel.state
 
     SettingsContent(
         state = state,

@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.view.WindowCompat
@@ -34,19 +34,17 @@ class MainActivity : ComponentActivity() {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
             val themeSettingViewModel: ThemeSettingViewModel = hiltViewModel()
 
-            val forecastState = remember { forecastViewModel.state }.value
-            val themeSetting = remember { themeSettingViewModel.currentTheme }.value
+            val forecastState by forecastViewModel.state
+            val themeSetting by themeSettingViewModel.currentTheme
 
-            // Check theme on first start
-            LaunchedEffect(themeSettingViewModel) {
-                themeSettingViewModel.getState()
-            }
-
-            // Get state on every resume, ie every app enter
+            LaunchedEffect(true) { themeSettingViewModel.getState() }
+            // Refresh forecast on every resume, ie every app enter
             val lifecycleOwner = LocalLifecycleOwner.current
             DisposableEffect(lifecycleOwner) {
                 val observer = LifecycleEventObserver { _, event ->
-                    if (event == Lifecycle.Event.ON_RESUME) forecastViewModel.getState()
+                    if (event == Lifecycle.Event.ON_RESUME) {
+                        forecastViewModel.getState()
+                    }
                 }
                 lifecycleOwner.lifecycle.addObserver(observer)
                 onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }

@@ -35,7 +35,7 @@ fun SettingsContent(
     onThemePick: (Int) -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
-        Column {
+        Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             var toolbarTitleVisible by remember { mutableStateOf(false) }
             PrognozaToolbar(
                 title = { Text(stringResource(id = R.string.settings)) },
@@ -52,89 +52,106 @@ fun SettingsContent(
                     }
                 }
             )
+            SettingsList(
+                state = state,
+                isTitleVisible = { toolbarTitleVisible = !it },
+                onTemperatureUnitPick = onTemperatureUnitPick,
+                onWindUnitPick = onWindUnitPick,
+                onPrecipitationUnitPick = onPrecipitationUnitPick,
+                onPressureUnitPick = onPressureUnitPick,
+                onThemePick = onThemePick
+            )
+        }
+    }
+}
 
-            val listState = rememberLazyListState()
-            LazyColumn(
-                modifier = Modifier
-                    .background(PrognozaTheme.colors.surface1)
-                    .fillMaxSize()
-                    .padding(WindowInsets.navigationBars.asPaddingValues()),
-                contentPadding = PaddingValues(vertical = 24.dp),
-                state = listState
-            ) {
-                item(key = "settings") {
-                    Text(
-                        text = stringResource(id = R.string.settings),
-                        style = PrognozaTheme.typography.titleLarge,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
-                }
-                item {
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-                item {
-                    Header(
-                        text = stringResource(id = R.string.units),
-                        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-                    )
-                }
-                state.temperatureUnitSetting?.let {
-                    item {
-                        MultipleChoiceSettingItem(
-                            state = it,
-                            onPick = onTemperatureUnitPick
-                        )
-                    }
-                }
-                state.windUnitSetting?.let {
-                    item {
-                        MultipleChoiceSettingItem(
-                            state = it,
-                            onPick = onWindUnitPick
-                        )
-                    }
-                }
-                state.precipitationUnitSetting?.let {
-                    item {
-                        MultipleChoiceSettingItem(
-                            state = it,
-                            onPick = onPrecipitationUnitPick
-                        )
-                    }
-                }
-                state.pressureUnitSetting?.let {
-                    item {
-                        MultipleChoiceSettingItem(
-                            state = it,
-                            onPick = onPressureUnitPick
-                        )
-                    }
-                }
-                item {
-                    Header(
-                        text = stringResource(id = R.string.appearance),
-                        modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-                    )
-                }
-                state.themeSetting?.let {
-                    item {
-                        MultipleChoiceSettingItem(
-                            state = it,
-                            onPick = onThemePick
-                        )
-                    }
-                }
-            }
-            LaunchedEffect(listState) {
-                snapshotFlow { listState.layoutInfo }
-                    .distinctUntilChanged()
-                    .map { it.keyVisibilityPercent("settings") != 0f }
-                    .distinctUntilChanged()
-                    .collect { titleVisible ->
-                        toolbarTitleVisible = !titleVisible
-                    }
+@Composable
+private fun SettingsList(
+    state: SettingsState,
+    isTitleVisible: (Boolean) -> Unit,
+    onTemperatureUnitPick: (Int) -> Unit,
+    onWindUnitPick: (Int) -> Unit,
+    onPrecipitationUnitPick: (Int) -> Unit,
+    onPressureUnitPick: (Int) -> Unit,
+    onThemePick: (Int) -> Unit
+) {
+    val listState = rememberLazyListState()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(WindowInsets.navigationBars.asPaddingValues()),
+        contentPadding = PaddingValues(vertical = 24.dp),
+        state = listState
+    ) {
+        item(key = "settings") {
+            Text(
+                text = stringResource(id = R.string.settings),
+                style = PrognozaTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+        }
+        item {
+            Spacer(modifier = Modifier.height(16.dp))
+        }
+        item {
+            Header(
+                text = stringResource(id = R.string.units),
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+            )
+        }
+        state.temperatureUnitSetting?.let {
+            item {
+                MultipleChoiceSettingItem(
+                    state = it,
+                    onPick = onTemperatureUnitPick
+                )
             }
         }
+        state.windUnitSetting?.let {
+            item {
+                MultipleChoiceSettingItem(
+                    state = it,
+                    onPick = onWindUnitPick
+                )
+            }
+        }
+        state.precipitationUnitSetting?.let {
+            item {
+                MultipleChoiceSettingItem(
+                    state = it,
+                    onPick = onPrecipitationUnitPick
+                )
+            }
+        }
+        state.pressureUnitSetting?.let {
+            item {
+                MultipleChoiceSettingItem(
+                    state = it,
+                    onPick = onPressureUnitPick
+                )
+            }
+        }
+        item {
+            Header(
+                text = stringResource(id = R.string.appearance),
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+            )
+        }
+        state.themeSetting?.let {
+            item {
+                MultipleChoiceSettingItem(
+                    state = it,
+                    onPick = onThemePick
+                )
+            }
+        }
+    }
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo }
+            .distinctUntilChanged()
+            .map { it.keyVisibilityPercent("settings") != 0f }
+            .distinctUntilChanged()
+            .collect(isTitleVisible)
     }
 }
 
