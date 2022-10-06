@@ -85,4 +85,14 @@ dependencies {
 
     // Core library desugaring
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.core_library_desugaring"
+
+    // Testing
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$versions.compose"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:$versions.compose"
+    androidTestImplementation "androidx.test.ext:junit:$versions.androidx_test_junit"
+    androidTestImplementation "androidx.test:core:$versions.androidx_test"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$versions.androidx_test_espresso"
+    androidTestImplementation "androidx.test:runner:$versions.androidx_test"
+    androidTestImplementation "androidx.test:rules:$versions.androidx_test"
+    androidTestImplementation "junit:junit:$versions.junit"
 }

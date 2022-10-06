@@ -20,7 +20,12 @@ buildscript {
                 compose_navigation      : '2.5.2',
                 coil                    : '1.4.0',
                 appcompat               : '1.5.0',
-                accompanist             : '0.26.3-beta'
+                accompanist             : '0.26.3-beta',
+                espresso                : '3.4.0',
+                androidx_test           : '1.4.0',
+                androidx_test_junit     : '1.1.2',
+                androidx_test_espresso  : '3.2.0',
+                junit                   : '4.13'
         ]
     }
     repositories {

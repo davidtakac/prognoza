@@ -3,10 +3,10 @@ package hr.dtakac.prognoza.ui.common
 import androidx.compose.runtime.*
 import kotlinx.coroutines.*
 
-private const val ShowDelayMillis = 500L
-private const val HideDelayMillis = 500L
-
-private class ContentLoadingIndicatorState {
+private class ContentLoadingIndicatorState(
+    private val deferVisibilityForMillis: Long,
+    private val showForAtLeastMillis: Long
+) {
     private val _isVisible: MutableState<Boolean> = mutableStateOf(false)
     val isVisible: Boolean by _isVisible
 
@@ -36,16 +36,16 @@ private class ContentLoadingIndicatorState {
 
     private suspend fun showActual() {
         startTime = -1
-        delay(ShowDelayMillis)
+        delay(deferVisibilityForMillis)
         startTime = System.currentTimeMillis()
         _isVisible.value = true
     }
 
     private suspend fun hideActual() {
         val diff = System.currentTimeMillis() - startTime
-        if (diff < HideDelayMillis && startTime != -1L) {
+        if (diff < showForAtLeastMillis && startTime != -1L) {
             // Ensure that indicator is visible for at least HideDelayMillis
-            delay(HideDelayMillis - diff)
+            delay(showForAtLeastMillis - diff)
         }
         _isVisible.value = false
     }
@@ -66,9 +66,13 @@ private class ContentLoadingIndicatorState {
 @Composable
 fun ContentLoadingIndicatorHost(
     isLoading: Boolean,
+    deferVisibilityForMillis: Long = 500L,
+    showForAtLeastMillis: Long = 500L,
     contentLoadingIndicator: @Composable (isVisible: Boolean) -> Unit
 ) {
-    val state = remember { ContentLoadingIndicatorState() }
+    val state = remember {
+        ContentLoadingIndicatorState(deferVisibilityForMillis, showForAtLeastMillis)
+    }
     LaunchedEffect(isLoading) {
         if (isLoading) state.show(this)
         else state.hide(this)
