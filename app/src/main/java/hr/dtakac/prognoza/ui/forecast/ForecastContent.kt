@@ -22,10 +22,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.forecast.*
-import hr.dtakac.prognoza.ui.common.PrognozaSnackBar
-import hr.dtakac.prognoza.ui.common.PrognozaSnackBarState
-import hr.dtakac.prognoza.ui.common.PrognozaToolbar
-import hr.dtakac.prognoza.ui.common.rememberPrognozaLoadingIndicatorState
+import hr.dtakac.prognoza.ui.common.*
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -120,9 +117,11 @@ private fun ToolbarWithLoadingIndicator(
             endVisible = endVisible
         )
 
-        val loadingIndicatorState = rememberPrognozaLoadingIndicatorState()
-        if (isLoading) loadingIndicatorState.showLoadingIndicator()
-        else loadingIndicatorState.hideLoadingIndicator()
+        val loadingIndicatorState = remember { ContentLoadingIndicatorState() }
+        LaunchedEffect(isLoading) {
+            if (isLoading) loadingIndicatorState.show(this)
+            else loadingIndicatorState.hide(this)
+        }
 
         AnimatedVisibility(
             visible = loadingIndicatorState.isVisible,

@@ -32,13 +32,14 @@ class ForecastViewModel @Inject constructor(
                         windUnit = result.windUnit,
                         precipitationUnit = result.precipitationUnit
                     ),
-                    error = null
+                    error = null,
+                    isLoading = false
                 )
                 is GetForecastResult.Error -> _state.value.copy(
-                    error = mapToError(result)
+                    error = mapToError(result),
+                    isLoading = false
                 )
             }
-            _state.value = _state.value.copy(isLoading = false)
         }
     }
 }

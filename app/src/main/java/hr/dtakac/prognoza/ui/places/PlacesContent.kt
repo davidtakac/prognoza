@@ -32,7 +32,6 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 import hr.dtakac.prognoza.presentation.places.PlacesState
-import hr.dtakac.prognoza.ui.common.rememberPrognozaLoadingIndicatorState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
@@ -229,9 +228,10 @@ private fun SearchBar(
                     }
                 }
 
-                val loadingState = rememberPrognozaLoadingIndicatorState()
+                // todo: fix this
+                /*val loadingState = rememberFlashFreeLoadingIndicatorState()
                 if (isLoading) loadingState.showLoadingIndicator()
-                else loadingState.hideLoadingIndicator()
+                else loadingState.hideLoadingIndicator()*/
                 LoadingUnderline(isLoading)
             }
         }
