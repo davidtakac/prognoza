@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
-import hr.dtakac.prognoza.presentation.ActionTimedLatch
 import hr.dtakac.prognoza.presentation.TextResource
 import kotlinx.coroutines.launch
 import javax.inject.Inject

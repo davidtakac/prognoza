@@ -10,15 +10,19 @@ fun PlacesScreen(
     onPlaceSelected: () -> Unit = {},
     onSettingsClick: () -> Unit = {}
 ) {
-    LaunchedEffect(true) { viewModel.getSaved() }
     val state by viewModel.state
+    LaunchedEffect(true) {
+        viewModel.getSaved()
+    }
+    LaunchedEffect(state.selectedPlace) {
+        if (state.selectedPlace != null) {
+            onPlaceSelected()
+        }
+    }
 
     PlacesContent(
         state = state,
-        onPlaceSelected = { idx ->
-            viewModel.select(idx)
-            onPlaceSelected()
-        },
+        onPlaceSelected = viewModel::select,
         onSettingsClick = onSettingsClick,
         onQuerySubmit = viewModel::search,
         onQueryChange = { query -> if (query.isBlank()) viewModel.getSaved() }

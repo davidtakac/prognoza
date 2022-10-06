@@ -117,24 +117,20 @@ private fun ToolbarWithLoadingIndicator(
             endVisible = endVisible
         )
 
-        val loadingIndicatorState = remember { ContentLoadingIndicatorState() }
-        LaunchedEffect(isLoading) {
-            if (isLoading) loadingIndicatorState.show(this)
-            else loadingIndicatorState.hide(this)
-        }
-
-        AnimatedVisibility(
-            visible = loadingIndicatorState.isVisible,
-            enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
-            exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
-        ) {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(2.dp),
-                color = PrognozaTheme.colors.onSurface,
-                trackColor = Color.Transparent
-            )
+        ContentLoadingIndicatorHost(isLoading = isLoading) { isVisible ->
+            AnimatedVisibility(
+                visible = isVisible,
+                enter = fadeIn() + expandVertically(expandFrom = Alignment.Top),
+                exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top)
+            ) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(2.dp),
+                    color = PrognozaTheme.colors.onSurface,
+                    trackColor = Color.Transparent
+                )
+            }
         }
     }
 }

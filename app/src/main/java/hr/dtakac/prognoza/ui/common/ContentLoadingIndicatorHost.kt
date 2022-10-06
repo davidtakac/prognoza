@@ -1,14 +1,12 @@
 package hr.dtakac.prognoza.ui.common
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.*
 import kotlinx.coroutines.*
 
 private const val ShowDelayMillis = 500L
 private const val HideDelayMillis = 500L
 
-class ContentLoadingIndicatorState {
+private class ContentLoadingIndicatorState {
     private val _isVisible: MutableState<Boolean> = mutableStateOf(false)
     val isVisible: Boolean by _isVisible
 
@@ -29,6 +27,7 @@ class ContentLoadingIndicatorState {
             cancelDelayedShow()
         } else {
             // Show did happen, so hide it after some time
+            delayedShow = null
             delayedHide = scope.launch {
                 hideActual()
             }
@@ -62,4 +61,17 @@ class ContentLoadingIndicatorState {
         delayedHide = null
         startTime = -1
     }
+}
+
+@Composable
+fun ContentLoadingIndicatorHost(
+    isLoading: Boolean,
+    contentLoadingIndicator: @Composable (isVisible: Boolean) -> Unit
+) {
+    val state = remember { ContentLoadingIndicatorState() }
+    LaunchedEffect(isLoading) {
+        if (isLoading) state.show(this)
+        else state.hide(this)
+    }
+    contentLoadingIndicator(state.isVisible)
 }
