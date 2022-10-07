@@ -430,6 +430,22 @@ private fun TodayScreenPreview() {
     }
 }
 
+@Preview
+@Composable
+private fun ToolbarWithLoadingIndicatorPreview() {
+    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+        ToolbarWithLoadingIndicator(
+            title = "Tenja",
+            subtitle = "September 29",
+            end = "23",
+            titleVisible = true,
+            subtitleVisible = true,
+            endVisible = true,
+            isLoading = true,
+            onMenuClick = { /*TODO*/ })
+    }
+}
+
 private fun fakeTodayUi(): TodayUi = TodayUi(
     date = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
