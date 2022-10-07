@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,35 +33,33 @@ fun SettingsContent(
     onPressureUnitPick: (Int) -> Unit = {},
     onThemePick: (Int) -> Unit = {}
 ) {
-    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
-        Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
-            var toolbarTitleVisible by remember { mutableStateOf(false) }
-            PrognozaToolbar(
-                title = { Text(stringResource(id = R.string.settings)) },
-                titleVisible = toolbarTitleVisible,
-                navigationIcon = {
-                    IconButton(
-                        onClick = onBackClick,
-                        modifier = Modifier.size(48.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_back),
-                            contentDescription = null,
-                        )
-                    }
+    Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
+        var toolbarTitleVisible by remember { mutableStateOf(false) }
+        PrognozaToolbar(
+            title = { Text(stringResource(id = R.string.settings)) },
+            titleVisible = toolbarTitleVisible,
+            navigationIcon = {
+                IconButton(
+                    onClick = onBackClick,
+                    modifier = Modifier.size(48.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_arrow_back),
+                        contentDescription = null,
+                    )
                 }
-            )
+            }
+        )
 
-            SettingsList(
-                state = state,
-                isTitleVisible = { toolbarTitleVisible = !it },
-                onTemperatureUnitPick = onTemperatureUnitPick,
-                onWindUnitPick = onWindUnitPick,
-                onPrecipitationUnitPick = onPrecipitationUnitPick,
-                onPressureUnitPick = onPressureUnitPick,
-                onThemePick = onThemePick
-            )
-        }
+        SettingsList(
+            state = state,
+            isTitleVisible = { toolbarTitleVisible = !it },
+            onTemperatureUnitPick = onTemperatureUnitPick,
+            onWindUnitPick = onWindUnitPick,
+            onPrecipitationUnitPick = onPrecipitationUnitPick,
+            onPressureUnitPick = onPressureUnitPick,
+            onThemePick = onThemePick
+        )
     }
 }
 
@@ -178,9 +175,29 @@ private fun Preview() = PrognozaTheme {
 
 private val fakeState: SettingsState = SettingsState(
     isLoading = false,
-    temperatureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Temperature unit"), value = TextResource.fromText("Celsius"), values = listOf()),
-    windUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Wind unit"), value = TextResource.fromText("Kilometers per hour"), values = listOf()),
-    precipitationUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Precipitation unit"), value = TextResource.fromText("Millimeters"), values = listOf()),
-    pressureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Pressure unit"), value = TextResource.fromText("Hectopascal"), values = listOf()),
-    themeSetting = MultipleChoiceSetting(name = TextResource.fromText("Theme"), value = TextResource.fromText("Follow system setting"), values = listOf())
+    temperatureUnitSetting = MultipleChoiceSetting(
+        name = TextResource.fromText("Temperature unit"),
+        value = TextResource.fromText("Celsius"),
+        values = listOf()
+    ),
+    windUnitSetting = MultipleChoiceSetting(
+        name = TextResource.fromText("Wind unit"),
+        value = TextResource.fromText("Kilometers per hour"),
+        values = listOf()
+    ),
+    precipitationUnitSetting = MultipleChoiceSetting(
+        name = TextResource.fromText("Precipitation unit"),
+        value = TextResource.fromText("Millimeters"),
+        values = listOf()
+    ),
+    pressureUnitSetting = MultipleChoiceSetting(
+        name = TextResource.fromText("Pressure unit"),
+        value = TextResource.fromText("Hectopascal"),
+        values = listOf()
+    ),
+    themeSetting = MultipleChoiceSetting(
+        name = TextResource.fromText("Theme"),
+        value = TextResource.fromText("Follow system setting"),
+        values = listOf()
+    )
 )

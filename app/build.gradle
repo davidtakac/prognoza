@@ -49,6 +49,7 @@ dependencies {
     implementation project(":data")
 
     implementation "androidx.core:core-ktx:$versions.core"
+    implementation "androidx.core:core-splashscreen:$versions.splash_screen"
 
     // Room
     implementation "androidx.room:room-ktx:$versions.room"

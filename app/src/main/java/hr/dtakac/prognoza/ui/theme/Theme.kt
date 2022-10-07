@@ -81,6 +81,7 @@ fun PrognozaTheme(
         LocalPrognozaTypography provides typography,
         LocalPrognozaContentAlpha provides alpha,
         LocalRippleTheme provides PrognozaRippleTheme(useDarkTheme),
+        LocalContentColor provides colors.onSurface.copy(alpha = alpha.high),
         content = content
     )
 }
