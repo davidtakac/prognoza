@@ -14,6 +14,7 @@ fun PlacesScreen(
     LaunchedEffect(true) {
         viewModel.getSaved()
     }
+
     LaunchedEffect(state.selectedPlace) {
         if (state.selectedPlace != null) {
             onPlaceSelected()
@@ -25,6 +26,10 @@ fun PlacesScreen(
         onPlaceSelected = viewModel::select,
         onSettingsClick = onSettingsClick,
         onQuerySubmit = viewModel::search,
-        onQueryChange = { query -> if (query.isBlank()) viewModel.getSaved() }
+        onQueryChange = { query ->
+            if (query.isBlank()) {
+                viewModel.getSaved()
+            }
+        }
     )
 }

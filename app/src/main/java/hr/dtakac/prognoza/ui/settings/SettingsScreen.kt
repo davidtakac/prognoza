@@ -11,31 +11,32 @@ fun SettingsScreen(
     onThemeChange: () -> Unit = {},
     onUnitChange: () -> Unit = {}
 ) {
-    LaunchedEffect(true) { viewModel.getState() }
+    LaunchedEffect(true) {
+        viewModel.getState()
+    }
     val state by viewModel.state
+
+    val themeChanged by viewModel.themeChanged
+    LaunchedEffect(themeChanged) {
+        if (themeChanged != null) {
+            onThemeChange()
+        }
+    }
+
+    val unitChanged by viewModel.unitChanged
+    LaunchedEffect(unitChanged) {
+        if (unitChanged != null) {
+            onUnitChange()
+        }
+    }
 
     SettingsContent(
         state = state,
         onBackClick = onBackClick,
-        onTemperatureUnitPick = { idx ->
-            viewModel.setTemperatureUnit(idx)
-            onUnitChange()
-        },
-        onWindUnitPick = { idx ->
-            viewModel.setWindUnit(idx)
-            onUnitChange()
-        },
-        onPrecipitationUnitPick = { idx ->
-            viewModel.setPrecipitationUnit(idx)
-            onUnitChange()
-        },
-        onPressureUnitPick = { idx ->
-            viewModel.setPressureUnit(idx)
-            onUnitChange()
-        },
-        onThemePick = { idx ->
-            viewModel.setTheme(idx)
-            onThemeChange()
-        }
+        onTemperatureUnitPick = viewModel::setTemperatureUnit,
+        onWindUnitPick = viewModel::setWindUnit,
+        onPrecipitationUnitPick = viewModel::setPrecipitationUnit,
+        onPressureUnitPick = viewModel::setPressureUnit,
+        onThemePick = viewModel::setTheme
     )
 }

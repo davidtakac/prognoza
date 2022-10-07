@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.presentation.settings
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -13,6 +14,7 @@ import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.ui.ThemeSetting
 import hr.dtakac.prognoza.ui.ThemeChanger
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,6 +42,12 @@ class SettingsViewModel @Inject constructor(
     private val _state = mutableStateOf(SettingsState())
     val state: State<SettingsState> get() = _state
 
+    private val _unitChanged: MutableState<String?> = mutableStateOf(null)
+    val unitChanged: State<String?> get() = _unitChanged
+
+    private val _themeChanged: MutableState<String?> = mutableStateOf(null)
+    val themeChanged: State<String?> get() = _themeChanged
+
     fun getState() {
         updateState { }
     }
@@ -47,30 +55,35 @@ class SettingsViewModel @Inject constructor(
     fun setTemperatureUnit(index: Int) {
         updateState {
             setTemperatureUnit(availableTemperatureUnits[index])
+            fireUnitChanged()
         }
     }
 
     fun setWindUnit(index: Int) {
         updateState {
             setWindUnit(availableWindUnits[index])
+            fireUnitChanged()
         }
     }
 
     fun setPrecipitationUnit(index: Int) {
         updateState {
             setPrecipitationUnit(availablePrecipitationUnits[index])
+            fireUnitChanged()
         }
     }
 
     fun setPressureUnit(index: Int) {
         updateState {
             setPressureUnit(availablePressureUnits[index])
+            fireUnitChanged()
         }
     }
 
     fun setTheme(index: Int) {
         updateState {
             themeChanger.setTheme(availableThemeSettings[index])
+            fireThemeChanged()
         }
     }
 
@@ -120,5 +133,13 @@ class SettingsViewModel @Inject constructor(
 
     private fun hideLoader() {
         _state.value = _state.value.copy(isLoading = false)
+    }
+
+    private fun fireUnitChanged() {
+        _unitChanged.value = UUID.randomUUID().toString()
+    }
+
+    private fun fireThemeChanged() {
+        _themeChanged.value = UUID.randomUUID().toString()
     }
 }
