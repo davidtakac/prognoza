@@ -21,9 +21,9 @@ class DefaultSettingsRepository(
 ) : SettingsRepository {
     override suspend fun getPlace(): Place? {
         // Lat possible values are -90 to 90
-        val lat = sharedPreferences.getFloat(PLACE_LAT, 91f).toDouble()
+        val lat = getFloat(PLACE_LAT, 91f).toDouble()
         // Lon possible values are -180 to 180
-        val lon = sharedPreferences.getFloat(PLACE_LON, 181f).toDouble()
+        val lon = getFloat(PLACE_LON, 181f).toDouble()
         return placeDao.get(lat, lon)?.let(::mapDbModelToEntity)
     }
 
@@ -35,7 +35,7 @@ class DefaultSettingsRepository(
     }
 
     override suspend fun getPressureUnit(): PressureUnit {
-        val ordinal = sharedPreferences.getInt(AIR_PRESSURE_UNIT, -1)
+        val ordinal = getInt(AIR_PRESSURE_UNIT)
         return if (ordinal == -1) {
             val default = PressureUnit.HPA
             setPressureUnit(default)
@@ -52,7 +52,7 @@ class DefaultSettingsRepository(
     }
 
     override suspend fun getPrecipitationUnit(): LengthUnit {
-        val ordinal = sharedPreferences.getInt(PRECIPITATION_UNIT, -1)
+        val ordinal = getInt(PRECIPITATION_UNIT)
         return if (ordinal == -1) {
             val default = LengthUnit.MM
             setPrecipitationUnit(default)
@@ -69,7 +69,7 @@ class DefaultSettingsRepository(
     }
 
     override suspend fun getTemperatureUnit(): TemperatureUnit {
-        val ordinal = sharedPreferences.getInt(TEMPERATURE_UNIT, -1)
+        val ordinal = getInt(TEMPERATURE_UNIT)
         return if (ordinal == -1) {
             val default = TemperatureUnit.C
             setTemperatureUnit(default)
@@ -86,7 +86,7 @@ class DefaultSettingsRepository(
     }
 
     override suspend fun getWindUnit(): SpeedUnit {
-        val ordinal = sharedPreferences.getInt(WIND_UNIT, -1)
+        val ordinal = getInt(WIND_UNIT)
         return if (ordinal == -1) {
             val default = SpeedUnit.MPS
             setWindUnit(default)
@@ -108,6 +108,24 @@ class DefaultSettingsRepository(
         suspendCoroutine {
             sharedPreferences.edit(commit = true, action = action)
             it.resumeWith(Result.success(Unit))
+        }
+    }
+
+    private suspend fun getInt(
+        key: String,
+        default: Int = -1
+    ): Int = withContext(ioDispatcher) {
+        suspendCoroutine {
+            it.resumeWith(Result.success(sharedPreferences.getInt(key, default)))
+        }
+    }
+
+    private suspend fun getFloat(
+        key: String,
+        default: Float = -1f
+    ) = withContext(ioDispatcher) {
+        suspendCoroutine {
+            it.resumeWith(Result.success(sharedPreferences.getFloat(key, default)))
         }
     }
 }

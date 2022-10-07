@@ -20,7 +20,11 @@ class ThemeChanger(
     fun getAvailableThemes(): List<ThemeSetting> = ThemeSetting.values().toList()
 
     suspend fun getCurrentTheme(): ThemeSetting {
-        val settingOrdinal = sharedPreferences.getInt(THEME_SETTING_KEY, -1)
+        val settingOrdinal = withContext(ioDispatcher) {
+            suspendCoroutine {
+                it.resumeWith(Result.success(sharedPreferences.getInt(THEME_SETTING_KEY, -1)))
+            }
+        }
         return if (settingOrdinal == -1) {
             val default = ThemeSetting.FOLLOW_SYSTEM
             setTheme(default)
