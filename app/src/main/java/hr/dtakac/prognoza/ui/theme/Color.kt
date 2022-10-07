@@ -19,7 +19,8 @@ data class PrognozaColors(
     companion object {
         fun get(
             shortForecastDescription: ForecastDescription.Short,
-            darkColors: Boolean
+            darkColors: Boolean,
+            contentAlpha: Float
         ): PrognozaColors {
             val onSurface = if (darkColors) Color.White else Color.Black
             val surface = getSurface(darkColors)
@@ -32,9 +33,9 @@ data class PrognozaColors(
                 surface1 = surface.overlay(with = primary, alpha = surface1Alpha),
                 surface2 = surface.overlay(with = primary, alpha = surface2Alpha),
                 surface3 = surface.overlay(with = primary, alpha = surface3Alpha),
-                onSurface = onSurface,
+                onSurface = onSurface.copy(alpha = contentAlpha),
                 inverseSurface1 = inverseSurface.overlay(with = inversePrimary, alpha = surface1Alpha),
-                onInverseSurface = onInverseSurface,
+                onInverseSurface = onInverseSurface.copy(alpha = contentAlpha),
                 primary = primary,
                 inversePrimary = inversePrimary
             )
