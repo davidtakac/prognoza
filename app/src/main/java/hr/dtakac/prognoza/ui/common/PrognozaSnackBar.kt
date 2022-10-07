@@ -26,7 +26,7 @@ class PrognozaSnackBarState {
     suspend fun showSnackBar(message: String) {
         currentText = message
         isVisible = true
-        delay(5000L)
+        delay(4000L)
         isVisible = false
     }
 }
