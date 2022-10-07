@@ -77,10 +77,7 @@ private fun ItemContent(
             .padding(horizontal = 24.dp, vertical = 16.dp)
             .fillMaxWidth()
     ) {
-        Text(
-            text = name,
-            style = PrognozaTheme.typography.subtitleMedium
-        )
+        Text(text = name, style = PrognozaTheme.typography.subtitleMedium)
         Text(
             text = value,
             style = PrognozaTheme.typography.body,
@@ -103,7 +100,6 @@ private fun ItemDialog(
         modifier = modifier,
         containerColor = PrognozaTheme.colors.surface3,
         titleContentColor = PrognozaTheme.colors.onSurface,
-        textContentColor = PrognozaTheme.colors.onSurface,
         onDismissRequest = onDismiss,
         title = {
             Text(
@@ -151,35 +147,37 @@ private fun DialogOptions(
     selectedIndex: Int,
     modifier: Modifier = Modifier
 ) {
-    LazyColumn(modifier = modifier) {
-        itemsIndexed(options) { idx, option ->
-            Row(
-                modifier = Modifier
-                    .clickable(
-                        onClick = { onIndexSelect(idx) },
-                        indication = rememberRipple(bounded = true),
-                        interactionSource = remember { MutableInteractionSource() }
+    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
+        LazyColumn(modifier = modifier) {
+            itemsIndexed(options) { idx, option ->
+                Row(
+                    modifier = Modifier
+                        .clickable(
+                            onClick = { onIndexSelect(idx) },
+                            indication = rememberRipple(bounded = true),
+                            interactionSource = remember { MutableInteractionSource() }
+                        )
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    RadioButton(
+                        selected = idx == selectedIndex,
+                        onClick = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        colors = RadioButtonDefaults.colors(
+                            selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                            unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                            disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
+                            disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
+                        )
                     )
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                RadioButton(
-                    selected = idx == selectedIndex,
-                    onClick = null,
-                    interactionSource = remember { MutableInteractionSource() },
-                    colors = RadioButtonDefaults.colors(
-                        selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                        unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                        disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
-                        disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
+                    Text(
+                        text = option,
+                        style = PrognozaTheme.typography.subtitleMedium,
+                        modifier = Modifier.padding(start = 8.dp)
                     )
-                )
-                Text(
-                    text = option,
-                    style = PrognozaTheme.typography.subtitleMedium,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
+                }
             }
         }
     }

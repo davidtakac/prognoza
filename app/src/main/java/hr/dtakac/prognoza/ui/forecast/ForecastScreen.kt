@@ -25,32 +25,34 @@ fun ForecastScreen(
         }
     }
 
-    val scope = rememberCoroutineScope()
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet(
-                drawerShape = RectangleShape,
-                drawerContainerColor = PrognozaTheme.colors.surface2
-            ) {
-                PlacesScreen(
-                    onPlaceSelected = {
-                        scope.launch { drawerState.close() }
-                        onPlaceSelected()
-                    },
-                    onSettingsClick = onSettingsClick
+    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
+        val scope = rememberCoroutineScope()
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet(
+                    drawerShape = RectangleShape,
+                    drawerContainerColor = PrognozaTheme.colors.surface2
+                ) {
+                    PlacesScreen(
+                        onPlaceSelected = {
+                            scope.launch { drawerState.close() }
+                            onPlaceSelected()
+                        },
+                        onSettingsClick = onSettingsClick
+                    )
+                }
+            },
+            content = {
+                ForecastContent(
+                    state = state,
+                    onMenuClick = {
+                        scope.launch {
+                            drawerState.open()
+                        }
+                    }
                 )
             }
-        },
-        content = {
-            ForecastContent(
-                state = state,
-                onMenuClick = {
-                    scope.launch {
-                        drawerState.open()
-                    }
-                }
-            )
-        }
-    )
+        )
+    }
 }

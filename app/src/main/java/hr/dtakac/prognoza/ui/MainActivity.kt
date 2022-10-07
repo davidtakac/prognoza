@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -29,10 +28,8 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
         setContent {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
             val themeSettingViewModel: ThemeSettingViewModel = hiltViewModel()
@@ -40,10 +37,7 @@ class MainActivity : ComponentActivity() {
             val forecastState by forecastViewModel.state
             val themeSetting by themeSettingViewModel.currentTheme
 
-            LaunchedEffect(true) {
-                themeSettingViewModel.getState()
-            }
-
+            LaunchedEffect(true) { themeSettingViewModel.getState() }
             // Refresh forecast on every resume, ie every app enter
             val lifecycleOwner = LocalLifecycleOwner.current
             DisposableEffect(lifecycleOwner) {
@@ -61,7 +55,6 @@ class MainActivity : ComponentActivity() {
                 ThemeSetting.LIGHT -> false
                 ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
             }
-
             PrognozaTheme(
                 description = forecastState.forecast?.today?.shortDescription
                     ?: ForecastDescription.Short.UNKNOWN,
