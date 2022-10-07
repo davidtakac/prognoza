@@ -11,23 +11,23 @@ private class ContentLoadingIndicatorState(
     val isVisible: Boolean by _isVisible
 
     private var startTime: Long = -1L
-    private var delayedShow: Job? = null
-    private var delayedHide: Job? = null
+    private var showJob: Job? = null
+    private var hideJob: Job? = null
 
     fun show(scope: CoroutineScope) {
         cancelDelayedHide()
-        delayedShow = scope.launch {
+        showJob = scope.launch {
             delayShow()
         }
     }
 
     fun hide(scope: CoroutineScope) {
-        if (delayedShow?.isActive == true) {
+        if (showJob?.isActive == true) {
             // Show didn't happen yet, so just cancel it
             cancelDelayedShow()
         } else {
             // Show did happen, so hide it after some time
-            delayedHide = scope.launch {
+            hideJob = scope.launch {
                 delayHide()
             }
         }
@@ -50,14 +50,14 @@ private class ContentLoadingIndicatorState(
     }
 
     private fun cancelDelayedShow() {
-        delayedShow?.cancel()
-        delayedShow = null
+        showJob?.cancel()
+        showJob = null
         startTime = -1
     }
 
     private fun cancelDelayedHide() {
-        delayedHide?.cancel()
-        delayedHide = null
+        hideJob?.cancel()
+        hideJob = null
     }
 }
 

@@ -230,35 +230,30 @@ private fun SearchBar(
                 }
 
                 ContentLoadingIndicatorHost(isLoading = isLoading) { isVisible ->
-                    LoadingUnderline(isVisible)
+                    Crossfade(targetState = isVisible) {
+                        if (it) {
+                            LinearProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp),
+                                color = PrognozaTheme.colors.onSurface,
+                                trackColor = Color.Transparent
+                            )
+                        } else {
+                            LinearProgressIndicator(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(1.dp),
+                                color = PrognozaTheme.colors.onSurface,
+                                trackColor = Color.Transparent,
+                                progress = 1f
+                            )
+                        }
+                    }
                 }
             }
         }
     )
-}
-
-@Composable
-private fun LoadingUnderline(isLoading: Boolean = false) {
-    Crossfade(targetState = isLoading) {
-        if (it) {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp),
-                color = PrognozaTheme.colors.onSurface,
-                trackColor = Color.Transparent
-            )
-        } else {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp),
-                color = PrognozaTheme.colors.onSurface,
-                trackColor = Color.Transparent,
-                progress = 1f
-            )
-        }
-    }
 }
 
 @Preview
