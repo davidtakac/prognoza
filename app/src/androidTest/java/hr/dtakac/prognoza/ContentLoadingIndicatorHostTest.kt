@@ -90,6 +90,7 @@ class ContentLoadingIndicatorHostTest {
         }
 
         repeat(6) {
+            // last idx is 5. 5 mod 2 = 1, so this sequence ends with hide
             isLoading.value = it % 2 == 0
             composeTestRule.mainClock.advanceTimeByFrame()
         }
@@ -105,12 +106,12 @@ class ContentLoadingIndicatorHostTest {
             TestContentLoadingIndicatorHost(isLoading.value)
         }
 
-        repeat(6) {
+        repeat(7) {
+            // last idx is 6. 6 mod 2 = 0, so this sequence ends with show
             isLoading.value = it % 2 == 0
             composeTestRule.mainClock.advanceTimeByFrame()
         }
 
-        isLoading.value = true
         composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
         composeTestRule.onNodeWithText(loaderText).assertExists()
     }
