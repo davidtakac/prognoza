@@ -48,6 +48,7 @@ dependencies {
     implementation project(":domain")
     implementation project(":data")
 
+    implementation "androidx.appcompat:appcompat:$versions.appcompat"
     implementation "androidx.core:core-ktx:$versions.core"
     implementation "androidx.core:core-splashscreen:$versions.splash_screen"
 
@@ -83,6 +84,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$versions.lifecycle"
     implementation "io.coil-kt:coil-compose:$versions.coil"
     implementation "com.google.accompanist:accompanist-systemuicontroller:$versions.accompanist"
+    implementation "androidx.glance:glance-appwidget:$versions.glance_appwidget"
 
     // Core library desugaring
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.core_library_desugaring"

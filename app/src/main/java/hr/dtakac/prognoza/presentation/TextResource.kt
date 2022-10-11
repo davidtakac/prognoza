@@ -4,8 +4,6 @@ import android.content.Context
 import android.icu.text.NumberFormat
 import android.text.format.DateUtils
 import androidx.annotation.StringRes
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 
 sealed class TextResource {
     companion object {
@@ -26,9 +24,6 @@ sealed class TextResource {
     }
 
     abstract fun asString(context: Context): String
-
-    @Composable
-    fun asString(): String = asString(LocalContext.current)
 }
 
 private data class SimpleTextResource(

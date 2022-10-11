@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.di
 
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,12 +18,12 @@ import javax.inject.Singleton
 class ApiModule {
     @Provides
     @Singleton
-    fun provideForecastService(): ForecastService {
+    fun provideForecastService(gson: Gson): ForecastService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
         return Retrofit.Builder()
             .baseUrl("https://api.met.no/weatherapi/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
             .create(ForecastService::class.java)
@@ -30,14 +31,18 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun providePlaceService(): PlaceService {
+    fun providePlaceService(gson: Gson): PlaceService {
         val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
         val okHttpClient = OkHttpClient.Builder().addInterceptor(loggingInterceptor).build()
         return Retrofit.Builder()
             .baseUrl("https://nominatim.openstreetmap.org/")
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
             .create(PlaceService::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideGson(): Gson = Gson()
 }

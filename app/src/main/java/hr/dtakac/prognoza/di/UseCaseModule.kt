@@ -3,18 +3,16 @@ package hr.dtakac.prognoza.di
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ViewModelComponent
-import dagger.hilt.android.scopes.ViewModelScoped
+import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.domain.usecase.*
 
 @Module
-@InstallIn(ViewModelComponent::class)
+@InstallIn(SingletonComponent::class)
 class UseCaseModule {
     @Provides
-    @ViewModelScoped
     fun provideGetTodayForecastUseCase(
         getSelectedPlaceUseCase: GetSelectedPlace,
         forecastRepository: ForecastRepository,
@@ -22,25 +20,21 @@ class UseCaseModule {
     ): GetForecast = GetForecast(getSelectedPlaceUseCase, forecastRepository, settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetSelectedPlaceUseCase(
         settingsRepository: SettingsRepository
     ): GetSelectedPlace = GetSelectedPlace(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideSearchPlacesUseCase(
         placeRepository: PlaceRepository
     ): SearchPlaces = SearchPlaces(placeRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetSavedPlacesUseCase(
         placeRepository: PlaceRepository
     ): GetSavedPlaces = GetSavedPlaces(placeRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideSelectPlaceUseCase(
         placeRepository: PlaceRepository,
         settingsRepository: SettingsRepository
@@ -50,66 +44,54 @@ class UseCaseModule {
     )
 
     @Provides
-    @ViewModelScoped
     fun provideSetTemperatureUnit(
         settingsRepository: SettingsRepository
     ): SetTemperatureUnit = SetTemperatureUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetTemperatureUnit(
         settingsRepository: SettingsRepository
     ): GetTemperatureUnit = GetTemperatureUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetAllTemperatureUnits(): GetAllTemperatureUnits = GetAllTemperatureUnits()
 
     @Provides
-    @ViewModelScoped
     fun provideSetWindUnit(
         settingsRepository: SettingsRepository
     ): SetWindUnit = SetWindUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetWindUnit(
         settingsRepository: SettingsRepository
     ): GetWindUnit = GetWindUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetAllWindUnits(): GetAllWindUnits = GetAllWindUnits()
 
     @Provides
-    @ViewModelScoped
     fun provideSetPrecipitationUnit(
         settingsRepository: SettingsRepository
     ): SetPrecipitationUnit = SetPrecipitationUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetPrecipitationUnit(
         settingsRepository: SettingsRepository
     ): GetPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetAllPrecipitationUnits(): GetAllPrecipitationUnits = GetAllPrecipitationUnits()
 
     @Provides
-    @ViewModelScoped
     fun provideSetPressureUnit(
         settingsRepository: SettingsRepository
     ): SetPressureUnit = SetPressureUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetPressureUnit(
         settingsRepository: SettingsRepository
     ): GetPressureUnit = GetPressureUnit(settingsRepository)
 
     @Provides
-    @ViewModelScoped
     fun provideGetAllPressureUnits(): GetAllPressureUnits = GetAllPressureUnits()
 }

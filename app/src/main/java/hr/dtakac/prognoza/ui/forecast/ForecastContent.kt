@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.common.*
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme

@@ -121,6 +121,9 @@
         <entry key="../../../../layout/compose-model-1665133717070.xml" value="0.5" />
         <entry key="../../../../layout/compose-model-1665133767309.xml" value="0.33" />
         <entry key="../../../../layout/compose-model-1665138140253.xml" value="0.25" />
+        <entry key="../../../../layout/compose-model-1665480994284.xml" value="0.23885586924219912" />
+        <entry key="../../../../layout/compose-model-1665481010995.xml" value="0.21214120752226986" />
+        <entry key="../../../../layout/compose-model-1665481020001.xml" value="0.3287037037037037" />
         <entry key="app/src/main/res/drawable-mdpi/search-24px.xml" value="0.261" />
         <entry key="app/src/main/res/drawable-v24/ic_cloud_off.xml" value="0.1" />
         <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.16041666666666668" />
@@ -149,6 +152,7 @@
         <entry key="app/src/main/res/drawable/menu-48px.xml" value="0.168" />
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/app_widget_current_conditions_medium_empty.xml" value="0.41299429355300554" />
+        <entry key="app/src/main/res/layout/app_widget_forecast_initial.xml" value="0.26145833333333335" />
         <entry key="app/src/main/res/layout/cell_day.xml" value="0.75" />
         <entry key="app/src/main/res/layout/cell_hour.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_days.xml" value="0.159375" />

@@ -99,7 +99,7 @@ private fun mapToComingUi(
     )
 }
 
-private fun getLowHighTemperature(
+fun getLowHighTemperature(
     lowTemperature: Temperature,
     highTemperature: Temperature,
     temperatureUnit: TemperatureUnit
@@ -114,7 +114,8 @@ private fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromE
     flags = DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
 )
 
-private fun getTemperature(
+// todo extract public funs into a common file?
+fun getTemperature(
     temperature: Temperature,
     unit: TemperatureUnit
 ): TextResource = TextResource.fromStringId(
@@ -129,7 +130,7 @@ private fun getTemperature(
     )
 )
 
-private fun getWind(
+fun getWind(
     wind: Wind,
     unit: SpeedUnit
 ): TextResource = TextResource.fromStringId(
@@ -149,7 +150,7 @@ private fun getWind(
     )
 )
 
-private fun getPrecipitation(
+fun getPrecipitation(
     precipitation: Length,
     unit: LengthUnit
 ): TextResource = TextResource.fromStringId(
