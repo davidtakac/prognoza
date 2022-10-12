@@ -17,6 +17,4 @@
 <!-- todo add these params later
 android:previewLayout="@layout/widget_weather_forecast_small"
 android:previewImage="@drawable/weather_forecast_widget_preview"
-android:initialKeyguardLayout="@layout/widget_weather_forecast_small"
-android:initialLayout="@layout/widget_weather_forecast_small"
 -->
