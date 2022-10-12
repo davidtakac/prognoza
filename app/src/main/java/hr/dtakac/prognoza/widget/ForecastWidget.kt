@@ -21,6 +21,7 @@ import androidx.glance.text.*
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.entities.forecast.Forecast
@@ -69,10 +70,9 @@ class ForecastWidget : GlanceAppWidget() {
             contentAlignment = Alignment.Center
         ) {
             val state = ForecastWidgetReceiver.getWidgetState(prefs)
-
-            if (state is ForecastWidgetState.Empty) {
+            if (state !is ForecastWidgetState.Success) {
                 Empty(colors)
-            } else if (state is ForecastWidgetState.Success) {
+            } else {
                 val placeName = state.placeName
                 val temperatureUnit = state.temperatureUnit
                 val icon = state.description.toDrawableId()
@@ -116,8 +116,11 @@ class ForecastWidget : GlanceAppWidget() {
 
     @Composable
     private fun Empty(colors: ColorProviders) {
-        // todo: make actual empty screen
-        Text("empty")
+        Text(
+            // Glance does not support stringResource
+            text = LocalContext.current.getString(R.string.widget_empty),
+            style = TextStyle(color = colors.onSurface, fontSize = 14.sp)
+        )
     }
 
     @Composable
@@ -280,6 +283,7 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
         }
     }
 
+    // todo: schedule this to run every hour with 15min jitter
     private fun refreshData(context: Context) {
         scope.launch {
             val result = getForecast()
@@ -316,7 +320,6 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
     companion object {
         fun getWidgetState(prefs: Preferences): ForecastWidgetState {
             val isEmpty = prefs[isEmptyKey] ?: true
-
             return if (isEmpty) ForecastWidgetState.Empty else ForecastWidgetState.Success(
                 placeName = prefs[placeNameKey]!!,
                 temperatureUnit = TemperatureUnit.values()[prefs[temperatureUnitOrdinalKey]!!],
