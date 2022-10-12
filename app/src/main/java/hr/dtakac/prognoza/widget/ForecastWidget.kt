@@ -10,6 +10,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.*
 import androidx.glance.*
+import androidx.glance.action.actionStartActivity
+import androidx.glance.action.clickable
 import androidx.glance.appwidget.*
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.color.ColorProviders
@@ -30,6 +32,7 @@ import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.asGlanceString
 import hr.dtakac.prognoza.presentation.forecast.*
+import hr.dtakac.prognoza.ui.MainActivity
 import kotlinx.coroutines.*
 import java.lang.IllegalStateException
 import java.time.Instant
@@ -66,7 +69,8 @@ class ForecastWidget : GlanceAppWidget() {
                 .background(colors.surface)
                 .appWidgetBackground()
                 .padding(16.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .clickable(actionStartActivity<MainActivity>()),
             contentAlignment = Alignment.Center
         ) {
             val state = ForecastWidgetReceiver.getWidgetState(prefs)
