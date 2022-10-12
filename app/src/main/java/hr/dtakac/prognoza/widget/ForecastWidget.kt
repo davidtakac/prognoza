@@ -18,6 +18,8 @@ import androidx.glance.layout.*
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.*
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
@@ -25,22 +27,28 @@ import hr.dtakac.prognoza.entities.forecast.Forecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
-import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asGlanceString
 import hr.dtakac.prognoza.presentation.forecast.*
 import kotlinx.coroutines.*
+import java.lang.IllegalStateException
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class ForecastWidget : GlanceAppWidget() {
 
     companion object {
         // https://developer.android.com/develop/ui/views/appwidgets/layouts#anatomy_determining_size
+        private val tiny = DpSize(width = 57.dp, height = 102.dp) // 1x1
         private val small = DpSize(width = 130.dp, height = 102.dp) // 2x1
         private val normal = DpSize(width = 130.dp, height = 220.dp) // 2x2
+        private val normalWide = DpSize(width = 203.dp, height = 220.dp) // 3x2
+        private val normalExtraWide = DpSize(width = 276.dp, height = 220.dp) // 4x2
     }
 
     override val sizeMode: SizeMode = SizeMode.Responsive(
-        setOf(small, normal)
+        setOf(tiny, small, normal, normalWide, normalExtraWide)
     )
 
     override val stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
@@ -67,55 +75,41 @@ class ForecastWidget : GlanceAppWidget() {
             } else if (state is ForecastWidgetState.Success) {
                 val placeName = state.placeName
                 val temperatureUnit = state.temperatureUnit
-                val precipitationUnit = state.precipitationUnit
-                val windUnit = state.windUnit
                 val icon = state.description.toDrawableId()
-
-                val description = TextResource.fromStringId(
-                    state.description.toStringId()
-                ).asGlanceString()
-
                 val currentTemperature = getTemperature(
                     temperature = state.temperature,
                     unit = temperatureUnit
                 ).asGlanceString()
 
-                val lowHighTemperature = getLowHighTemperature(
-                    lowTemperature = state.lowTemperature,
-                    highTemperature = state.highTemperature,
-                    temperatureUnit = temperatureUnit
-                ).asGlanceString()
-
-                val precipitation = getPrecipitation(
-                    precipitation = state.precipitation,
-                    unit = precipitationUnit
-                ).asGlanceString()
-
-                val wind = getWind(
-                    wind = state.wind,
-                    unit = windUnit
-                ).asGlanceString()
-
                 when (size) {
-                    small -> PlaceTempAndIcon(
+                    tiny -> PlaceAndTemp(
+                        placeName = placeName,
+                        currentTemperature = currentTemperature,
+                        colors = colors
+                    )
+                    small -> PlaceAndTempAndIcon(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         iconResId = icon,
                         colors = colors,
                         modifier = GlanceModifier.fillMaxSize()
                     )
-                    normal -> Normal(
+                    else -> PlaceAndTempAndIconAndHours(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
-                        lowHighTemperature = lowHighTemperature,
-                        precipitation = precipitation,
-                        wind = wind,
-                        description = description,
                         iconResId = icon,
+                        hours = state.hours.take(
+                            when (size) {
+                                normal -> 3
+                                normalWide -> 5
+                                normalExtraWide -> 6
+                                else -> throw IllegalStateException("Unsupported widget size.")
+                            }
+                        ),
+                        temperatureUnit = temperatureUnit,
                         colors = colors
                     )
                 }
-
             }
         }
     }
@@ -127,7 +121,38 @@ class ForecastWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun PlaceTempAndIcon(
+    private fun PlaceAndTemp(
+        placeName: String,
+        currentTemperature: String,
+        colors: ColorProviders,
+        modifier: GlanceModifier = GlanceModifier
+    ) {
+        Column(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                placeName,
+                style = TextStyle(
+                    color = colors.onSurface,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontStyle = FontStyle.Normal
+                ),
+                maxLines = 1
+            )
+            Text(
+                currentTemperature,
+                style = TextStyle(
+                    color = colors.onSurface,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal
+                ),
+                maxLines = 1
+            )
+        }
+    }
+
+    @Composable
+    private fun PlaceAndTempAndIcon(
         placeName: String,
         currentTemperature: String,
         @DrawableRes
@@ -139,31 +164,12 @@ class ForecastWidget : GlanceAppWidget() {
             modifier = modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = GlanceModifier.defaultWeight(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    placeName,
-                    style = TextStyle(
-                        color = colors.onSurface,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    maxLines = 1
-                )
-                Text(
-                    currentTemperature,
-                    style = TextStyle(
-                        color = colors.onSurface,
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    maxLines = 1
-                )
-            }
+            PlaceAndTemp(
+                placeName = placeName,
+                currentTemperature = currentTemperature,
+                colors = colors,
+                modifier = GlanceModifier.defaultWeight()
+            )
             Image(
                 provider = ImageProvider(iconResId),
                 contentDescription = null,
@@ -173,20 +179,18 @@ class ForecastWidget : GlanceAppWidget() {
     }
 
     @Composable
-    private fun Normal(
+    private fun PlaceAndTempAndIconAndHours(
         placeName: String,
         currentTemperature: String,
-        description: String,
-        lowHighTemperature: String,
-        wind: String,
-        precipitation: String,
         @DrawableRes
         iconResId: Int,
+        hours: List<WidgetHour>,
+        temperatureUnit: TemperatureUnit,
         colors: ColorProviders,
         modifier: GlanceModifier = GlanceModifier
     ) {
         Column(modifier = modifier) {
-            PlaceTempAndIcon(
+            PlaceAndTempAndIcon(
                 placeName = placeName,
                 currentTemperature = currentTemperature,
                 iconResId = iconResId,
@@ -194,78 +198,59 @@ class ForecastWidget : GlanceAppWidget() {
                 modifier = GlanceModifier.fillMaxWidth()
             )
             Spacer(modifier = GlanceModifier.height(16.dp))
-            DescriptionLowHighTempWindAndPrecipitation(
-                description = description,
-                lowHighTemperature = lowHighTemperature,
-                wind = wind,
-                precipitation = precipitation,
+            HoursRow(
+                data = hours,
+                temperatureUnit = temperatureUnit,
                 colors = colors,
-                modifier = GlanceModifier
-                    .appWidgetInnerRadius()
-                    .background(colors.surfaceVariant)
-                    .padding(12.dp)
+                modifier = GlanceModifier.fillMaxWidth()
             )
         }
     }
 
     @Composable
-    private fun DescriptionLowHighTempWindAndPrecipitation(
-        description: String,
-        lowHighTemperature: String,
-        wind: String,
-        precipitation: String,
+    private fun HoursRow(
+        data: List<WidgetHour>,
+        temperatureUnit: TemperatureUnit,
         colors: ColorProviders,
         modifier: GlanceModifier = GlanceModifier
     ) {
-        Column(modifier = modifier) {
-            Row(modifier = GlanceModifier.fillMaxWidth()) {
-                Text(
-                    description,
-                    style = TextStyle(
-                        color = colors.onSurfaceVariant,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    maxLines = 1,
+        Row(modifier = modifier) {
+            data.forEach { hour ->
+                val temperature = getTemperature(
+                    temperature = hour.temperature,
+                    unit = temperatureUnit
+                ).asGlanceString()
+                val iconResId = hour.description.toDrawableId()
+                val time = getShortTime(time = hour.dateTime).asGlanceString()
+
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = GlanceModifier.defaultWeight()
-                )
-                Spacer(modifier = GlanceModifier.width(8.dp))
-                Text(
-                    lowHighTemperature,
-                    style = TextStyle(
-                        color = colors.onSurfaceVariant,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    maxLines = 1
-                )
-            }
-            Spacer(modifier = GlanceModifier.height(8.dp))
-            Row(modifier = GlanceModifier.fillMaxWidth()) {
-                Text(
-                    wind,
-                    style = TextStyle(
-                        color = colors.onSurfaceVariant,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    maxLines = 1,
-                    modifier = GlanceModifier.defaultWeight()
-                )
-                Spacer(modifier = GlanceModifier.width(8.dp))
-                Text(
-                    precipitation,
-                    style = TextStyle(
-                        color = colors.onSurfaceVariant,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontStyle = FontStyle.Normal
-                    ),
-                    maxLines = 1
-                )
+                ) {
+                    Text(
+                        text = temperature,
+                        maxLines = 1,
+                        style = TextStyle(
+                            color = colors.onSurfaceVariant,
+                            fontSize = 14.sp
+                        ),
+                        modifier = GlanceModifier.padding(bottom = 2.dp)
+                    )
+                    Image(
+                        provider = ImageProvider(iconResId),
+                        contentDescription = null,
+                        modifier = GlanceModifier.size(24.dp)
+                    )
+                    Text(
+                        text = time,
+                        maxLines = 1,
+                        style = TextStyle(
+                            color = colors.onSurfaceVariant,
+                            fontSize = 14.sp
+                        ),
+                        modifier = GlanceModifier.padding(top = 2.dp)
+                    )
+                }
             }
         }
     }
@@ -359,11 +344,23 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
                         unit = SpeedUnit.MPS
                     ),
                     fromDirection = Angle(
-                        value = prefs[windFromDirectionDegreesKey]!!.toDouble(),
+                        value = prefs[windDegreesKey]!!.toDouble(),
                         unit = AngleUnit.DEG
                     )
                 ),
-                description = ForecastDescription.values()[prefs[descriptionOrdinalKey]!!]
+                description = ForecastDescription.values()[prefs[descriptionOrdinalKey]!!],
+                // todo: inject a gson instance or just use the kotlin library?
+                hours = Gson().fromJson<List<WidgetHourSerialized>>(
+                    prefs[hours]!!,
+                    object : TypeToken<List<WidgetHourSerialized>>() {}.type
+                ).map {
+                    WidgetHour(
+                        dateTime = Instant.ofEpochMilli(it.dateTimeEpochMillis)
+                            .atZone(ZoneId.systemDefault()),
+                        temperature = Temperature(it.temperatureCelsius, TemperatureUnit.C),
+                        description = ForecastDescription.values()[it.descriptionOrdinal]
+                    )
+                }
             )
         }
 
@@ -385,13 +382,24 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
             this[precipUnitKey] = precipitationUnit.ordinal
             this[precipMillimetersKey] = forecast.current.precipitation.millimeters.toFloat()
             this[windMetersPerSecondKey] = forecast.current.wind.speed.metersPerSecond.toFloat()
-            this[windFromDirectionDegreesKey] = forecast.current.wind.fromDirection.degrees.toFloat()
+            this[windDegreesKey] =
+                forecast.current.wind.fromDirection.degrees.toFloat()
             this[windUnitOrdinalKey] = windUnit.ordinal
+
+            val widgetHours = forecast.today.hourly.map {
+                WidgetHourSerialized(
+                    dateTimeEpochMillis = it.dateTime.toInstant().toEpochMilli(),
+                    temperatureCelsius = it.temperature.celsius,
+                    descriptionOrdinal = it.description.ordinal
+                )
+            }
+            this[hours] = Gson().toJson(widgetHours)
         }
 
-        fun setWidgetStateEmpty(prefs: Preferences): Preferences = prefs.toMutablePreferences().apply {
-            this[isEmptyKey] = true
-        }
+        fun setWidgetStateEmpty(prefs: Preferences): Preferences =
+            prefs.toMutablePreferences().apply {
+                this[isEmptyKey] = true
+            }
 
         private val isEmptyKey = booleanPreferencesKey("widget_is_empty")
         private val currTempCelsiusKey = floatPreferencesKey("widget_curr_temp_celsius")
@@ -404,7 +412,14 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
         private val descriptionOrdinalKey = intPreferencesKey("widget_description_ordinal")
         private val temperatureUnitOrdinalKey = intPreferencesKey("widget_temperature_unit_ordinal")
         private val windUnitOrdinalKey = intPreferencesKey("widget_wind_unit_ordinal")
-        private val windFromDirectionDegreesKey = floatPreferencesKey("widget_wind_from_direction_degrees")
+        private val windDegreesKey = floatPreferencesKey("widget_wind_from_direction_degrees")
+        private val hours = stringPreferencesKey("widget_hours")
+
+        private data class WidgetHourSerialized(
+            val dateTimeEpochMillis: Long,
+            val temperatureCelsius: Double,
+            val descriptionOrdinal: Int
+        )
     }
 }
 
@@ -421,6 +436,13 @@ sealed interface ForecastWidgetState {
         val precipitation: Length,
         val windUnit: SpeedUnit,
         val wind: Wind,
-        val description: ForecastDescription
+        val description: ForecastDescription,
+        val hours: List<WidgetHour>
     ) : ForecastWidgetState
 }
+
+data class WidgetHour(
+    val dateTime: ZonedDateTime,
+    val temperature: Temperature,
+    val description: ForecastDescription
+)

@@ -109,7 +109,7 @@ fun getLowHighTemperature(
     getTemperature(lowTemperature, temperatureUnit)
 )
 
-private fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
+fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromEpochMillis(
     millis = time.toInstant().toEpochMilli(),
     flags = DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
 )
