@@ -129,5 +129,7 @@
     <string name="settings_label_dark">Dark</string>
     <string name="settings_label_follow_system">Follow system setting</string>
     <string name="widget_empty">No forecast data. Make sure that you have a selected place and are online</string>
+    <string name="widget_description">Weather forecast for right now and the next couple of hours</string>
+    <string name="widget_name">Current forecast</string>
 
 </resources>

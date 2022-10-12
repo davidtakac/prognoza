@@ -443,7 +443,8 @@ private fun ToolbarWithLoadingIndicatorPreview() {
             subtitleVisible = true,
             endVisible = true,
             isLoading = true,
-            onMenuClick = { /*TODO*/ })
+            onMenuClick = {}
+        )
     }
 }
 
