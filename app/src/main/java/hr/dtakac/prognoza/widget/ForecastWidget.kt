@@ -21,23 +21,16 @@ import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.text.*
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
-import hr.dtakac.prognoza.entities.forecast.Forecast
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.*
-import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.asGlanceString
 import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.MainActivity
 import kotlinx.coroutines.*
 import java.lang.IllegalStateException
-import java.time.Instant
-import java.time.ZoneId
-import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class ForecastWidget : GlanceAppWidget() {
@@ -73,7 +66,11 @@ class ForecastWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>()),
             contentAlignment = Alignment.Center
         ) {
-            val state = ForecastWidgetReceiver.getWidgetState(prefs)
+            val state = ForecastWidgetStateRepository(
+                prefs = prefs.toMutablePreferences(),
+                gson = Gson()
+            ).getState()
+
             if (state !is ForecastWidgetState.Success) {
                 Empty(colors)
             } else {
@@ -294,162 +291,20 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
             val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(ForecastWidget::class.java)
 
             glanceIds.forEach { glanceId ->
-                if (result is GetForecastResult.Success) {
-                    updateAppWidgetState(
-                        context,
-                        PreferencesGlanceStateDefinition,
-                        glanceId
-                    ) {
-                        setWidgetStateSuccess(
-                            prefs = it,
-                            forecast = result.forecast,
-                            placeName = result.placeName,
-                            temperatureUnit = result.temperatureUnit,
-                            windUnit = result.windUnit,
-                            precipitationUnit = result.precipitationUnit
-                        )
-                    }
-                } else {
-                    updateAppWidgetState(
-                        context,
-                        PreferencesGlanceStateDefinition,
-                        glanceId
-                    ) { setWidgetStateEmpty(prefs = it) }
+                updateAppWidgetState(
+                    context,
+                    PreferencesGlanceStateDefinition,
+                    glanceId
+                ) { prefs ->
+                    val mutablePrefs = prefs.toMutablePreferences()
+                    ForecastWidgetStateRepository(
+                        prefs = mutablePrefs,
+                        gson = Gson()
+                    ).setState(result as? GetForecastResult.Success)
+                    mutablePrefs
                 }
                 glanceAppWidget.update(context, glanceId)
             }
         }
     }
-
-    companion object {
-        fun getWidgetState(prefs: Preferences): ForecastWidgetState {
-            val isEmpty = prefs[isEmptyKey] ?: true
-            return if (isEmpty) ForecastWidgetState.Empty else ForecastWidgetState.Success(
-                placeName = prefs[placeNameKey]!!,
-                temperatureUnit = TemperatureUnit.values()[prefs[temperatureUnitOrdinalKey]!!],
-                temperature = Temperature(
-                    value = prefs[currTempCelsiusKey]!!.toDouble(),
-                    unit = TemperatureUnit.C
-                ),
-                lowTemperature = Temperature(
-                    value = prefs[lowTempCelsiusKey]!!.toDouble(),
-                    unit = TemperatureUnit.C
-                ),
-                highTemperature = Temperature(
-                    value = prefs[highTempCelsiusKey]!!.toDouble(),
-                    unit = TemperatureUnit.C
-                ),
-                precipitationUnit = LengthUnit.values()[prefs[precipUnitKey]!!],
-                precipitation = Length(
-                    value = prefs[precipMillimetersKey]!!.toDouble(),
-                    unit = LengthUnit.MM
-                ),
-                windUnit = SpeedUnit.values()[prefs[windUnitOrdinalKey]!!],
-                wind = Wind(
-                    speed = Speed(
-                        value = prefs[windMetersPerSecondKey]!!.toDouble(),
-                        unit = SpeedUnit.MPS
-                    ),
-                    fromDirection = Angle(
-                        value = prefs[windDegreesKey]!!.toDouble(),
-                        unit = AngleUnit.DEG
-                    )
-                ),
-                description = ForecastDescription.values()[prefs[descriptionOrdinalKey]!!],
-                // todo: inject a gson instance or just use the kotlin library?
-                hours = Gson().fromJson<List<WidgetHourSerialized>>(
-                    prefs[hours]!!,
-                    object : TypeToken<List<WidgetHourSerialized>>() {}.type
-                ).map {
-                    WidgetHour(
-                        dateTime = Instant.ofEpochMilli(it.dateTimeEpochMillis)
-                            .atZone(ZoneId.systemDefault()),
-                        temperature = Temperature(it.temperatureCelsius, TemperatureUnit.C),
-                        description = ForecastDescription.values()[it.descriptionOrdinal]
-                    )
-                }
-            )
-        }
-
-        fun setWidgetStateSuccess(
-            prefs: Preferences,
-            forecast: Forecast,
-            placeName: String,
-            temperatureUnit: TemperatureUnit,
-            windUnit: SpeedUnit,
-            precipitationUnit: LengthUnit
-        ): Preferences = prefs.toMutablePreferences().apply {
-            this[isEmptyKey] = false
-            this[currTempCelsiusKey] = forecast.current.temperature.celsius.toFloat()
-            this[placeNameKey] = placeName
-            this[lowTempCelsiusKey] = forecast.today.lowTemperature.celsius.toFloat()
-            this[highTempCelsiusKey] = forecast.today.highTemperature.celsius.toFloat()
-            this[descriptionOrdinalKey] = forecast.current.description.ordinal
-            this[temperatureUnitOrdinalKey] = temperatureUnit.ordinal
-            this[precipUnitKey] = precipitationUnit.ordinal
-            this[precipMillimetersKey] = forecast.current.precipitation.millimeters.toFloat()
-            this[windMetersPerSecondKey] = forecast.current.wind.speed.metersPerSecond.toFloat()
-            this[windDegreesKey] =
-                forecast.current.wind.fromDirection.degrees.toFloat()
-            this[windUnitOrdinalKey] = windUnit.ordinal
-
-            val widgetHours = forecast.today.hourly.map {
-                WidgetHourSerialized(
-                    dateTimeEpochMillis = it.dateTime.toInstant().toEpochMilli(),
-                    temperatureCelsius = it.temperature.celsius,
-                    descriptionOrdinal = it.description.ordinal
-                )
-            }
-            this[hours] = Gson().toJson(widgetHours)
-        }
-
-        fun setWidgetStateEmpty(prefs: Preferences): Preferences =
-            prefs.toMutablePreferences().apply {
-                this[isEmptyKey] = true
-            }
-
-        private val isEmptyKey = booleanPreferencesKey("widget_is_empty")
-        private val currTempCelsiusKey = floatPreferencesKey("widget_curr_temp_celsius")
-        private val placeNameKey = stringPreferencesKey("widget_place_name")
-        private val lowTempCelsiusKey = floatPreferencesKey("widget_low_temp_celsius")
-        private val highTempCelsiusKey = floatPreferencesKey("widget_high_temp_celsius")
-        private val precipMillimetersKey = floatPreferencesKey("widget_precipitation_millimeters")
-        private val precipUnitKey = intPreferencesKey("widget_precipitation_unit_ordinal")
-        private val windMetersPerSecondKey = floatPreferencesKey("widget_wind_meters_per_second")
-        private val descriptionOrdinalKey = intPreferencesKey("widget_description_ordinal")
-        private val temperatureUnitOrdinalKey = intPreferencesKey("widget_temperature_unit_ordinal")
-        private val windUnitOrdinalKey = intPreferencesKey("widget_wind_unit_ordinal")
-        private val windDegreesKey = floatPreferencesKey("widget_wind_from_direction_degrees")
-        private val hours = stringPreferencesKey("widget_hours")
-
-        private data class WidgetHourSerialized(
-            val dateTimeEpochMillis: Long,
-            val temperatureCelsius: Double,
-            val descriptionOrdinal: Int
-        )
-    }
 }
-
-sealed interface ForecastWidgetState {
-    object Empty : ForecastWidgetState
-
-    data class Success(
-        val placeName: String,
-        val temperatureUnit: TemperatureUnit,
-        val temperature: Temperature,
-        val lowTemperature: Temperature,
-        val highTemperature: Temperature,
-        val precipitationUnit: LengthUnit,
-        val precipitation: Length,
-        val windUnit: SpeedUnit,
-        val wind: Wind,
-        val description: ForecastDescription,
-        val hours: List<WidgetHour>
-    ) : ForecastWidgetState
-}
-
-data class WidgetHour(
-    val dateTime: ZonedDateTime,
-    val temperature: Temperature,
-    val description: ForecastDescription
-)
