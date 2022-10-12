@@ -1,8 +1,11 @@
 package hr.dtakac.prognoza.widget
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
@@ -32,6 +35,7 @@ import hr.dtakac.prognoza.ui.MainActivity
 import kotlinx.coroutines.*
 import java.lang.IllegalStateException
 import javax.inject.Inject
+import kotlin.random.Random
 
 class ForecastWidget : GlanceAppWidget() {
 
@@ -146,7 +150,7 @@ class ForecastWidget : GlanceAppWidget() {
                 currentTemperature,
                 style = TextStyle(
                     color = colors.onSurface,
-                    fontSize = 28.sp,
+                    fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Normal
                 ),
@@ -177,7 +181,7 @@ class ForecastWidget : GlanceAppWidget() {
             Image(
                 provider = ImageProvider(iconResId),
                 contentDescription = null,
-                modifier = GlanceModifier.size(58.dp)
+                modifier = GlanceModifier.size(64.dp)
             )
         }
     }
@@ -243,7 +247,7 @@ class ForecastWidget : GlanceAppWidget() {
                     Image(
                         provider = ImageProvider(iconResId),
                         contentDescription = null,
-                        modifier = GlanceModifier.size(24.dp)
+                        modifier = GlanceModifier.size(32.dp)
                     )
                     Text(
                         text = time,
@@ -274,17 +278,22 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
+        scheduleNextRefresh(context)
         refreshData(context)
     }
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == ForecastWidgetRefreshCallback.REFRESH_ACTION) {
+        if (intent.action == REFRESH_ACTION) {
             refreshData(context)
         }
     }
 
-    // todo: schedule this to run every hour with 15min jitter
+    override fun onDisabled(context: Context?) {
+        super.onDisabled(context)
+        cancelScheduledRefresh(context)
+    }
+
     private fun refreshData(context: Context) {
         scope.launch {
             val result = getForecast()
@@ -307,4 +316,44 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
             }
         }
     }
+
+    companion object {
+        fun refresh(context: Context) {
+            context.sendBroadcast(getRefreshIntent(context))
+        }
+    }
+}
+
+private const val REFRESH_ACTION = "refresh_action"
+
+private fun getRefreshIntent(context: Context) = Intent(
+    context,
+    ForecastWidgetReceiver::class.java
+).apply { action = REFRESH_ACTION }
+
+private fun scheduleNextRefresh(context: Context?) {
+    val jitter = Random.nextLong(
+        0L, 1000L * 60L * 5
+    )
+    val interval = AlarmManager.INTERVAL_HOUR + jitter
+    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.set(
+        AlarmManager.ELAPSED_REALTIME,
+        SystemClock.elapsedRealtime() + interval,
+        getRefreshPendingIntent(context)
+    )
+}
+
+private fun cancelScheduledRefresh(context: Context?) {
+    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.cancel(
+        getRefreshPendingIntent(context)
+    )
+}
+
+private fun getRefreshPendingIntent(context: Context): PendingIntent {
+    return PendingIntent.getBroadcast(
+        context,
+        0,
+        getRefreshIntent(context),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
 }

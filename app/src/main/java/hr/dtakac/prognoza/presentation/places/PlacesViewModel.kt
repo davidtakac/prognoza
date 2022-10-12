@@ -9,6 +9,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,7 +18,8 @@ class PlacesViewModel @Inject constructor(
     private val searchPlaces: SearchPlaces,
     private val getSavedPlaces: GetSavedPlaces,
     private val selectPlace: SelectPlace,
-    private val getSelectedPlace: GetSelectedPlace
+    private val getSelectedPlace: GetSelectedPlace,
+    private val widgetRefresher: WidgetRefresher
 ) : ViewModel() {
     private var currentPlaces: List<Place> = listOf()
 
@@ -96,6 +98,7 @@ class PlacesViewModel @Inject constructor(
                 places = placesUi,
                 selectedPlace = selectedPlace
             )
+            widgetRefresher.refresh()
             hideLoader()
         }
     }

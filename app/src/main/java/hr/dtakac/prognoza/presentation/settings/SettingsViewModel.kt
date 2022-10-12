@@ -13,6 +13,7 @@ import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.ui.ThemeSetting
 import hr.dtakac.prognoza.ui.ThemeChanger
+import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -31,7 +32,8 @@ class SettingsViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
-    private val themeChanger: ThemeChanger
+    private val themeChanger: ThemeChanger,
+    private val widgetRefresher: WidgetRefresher
 ) : ViewModel() {
     private var availableTemperatureUnits: List<TemperatureUnit> = listOf()
     private var availableWindUnits: List<SpeedUnit> = listOf()
@@ -136,6 +138,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun fireUnitChanged() {
+        widgetRefresher.refresh()
         _unitChanged.value = UUID.randomUUID().toString()
     }
 

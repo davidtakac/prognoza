@@ -17,6 +17,7 @@ import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.ui.ThemeChanger
+import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
@@ -70,4 +71,9 @@ class RepositoryModule {
         sharedPreferences: SharedPreferences,
         @Named("io") ioDispatcher: CoroutineDispatcher
     ): ThemeChanger = ThemeChanger(sharedPreferences, ioDispatcher)
+
+    @Provides
+    fun provideWidgetRefresher(
+        @ApplicationContext context: Context
+    ): WidgetRefresher = WidgetRefresher(context)
 }
