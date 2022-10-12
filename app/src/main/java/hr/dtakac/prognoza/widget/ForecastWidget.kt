@@ -6,7 +6,6 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
-import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -17,18 +16,14 @@ import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.*
 import androidx.glance.appwidget.state.updateAppWidgetState
-import androidx.glance.color.ColorProviders
 import androidx.glance.color.dynamicThemeColorProviders
 import androidx.glance.layout.*
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
-import androidx.glance.text.*
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
-import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.presentation.asGlanceString
 import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.MainActivity
@@ -36,6 +31,40 @@ import kotlinx.coroutines.*
 import java.lang.IllegalStateException
 import javax.inject.Inject
 import kotlin.random.Random
+
+private const val REFRESH_ACTION = "refresh_action"
+
+private fun getRefreshIntent(context: Context) = Intent(
+    context,
+    ForecastWidgetReceiver::class.java
+).apply { action = REFRESH_ACTION }
+
+private fun scheduleNextRefresh(context: Context?) {
+    val jitter = Random.nextLong(
+        0L, 1000L * 60L * 5
+    )
+    val interval = AlarmManager.INTERVAL_HOUR + jitter
+    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.set(
+        AlarmManager.ELAPSED_REALTIME,
+        SystemClock.elapsedRealtime() + interval,
+        getRefreshPendingIntent(context)
+    )
+}
+
+private fun cancelScheduledRefresh(context: Context?) {
+    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.cancel(
+        getRefreshPendingIntent(context)
+    )
+}
+
+private fun getRefreshPendingIntent(context: Context): PendingIntent {
+    return PendingIntent.getBroadcast(
+        context,
+        0,
+        getRefreshIntent(context),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
+}
 
 class ForecastWidget : GlanceAppWidget() {
 
@@ -76,7 +105,7 @@ class ForecastWidget : GlanceAppWidget() {
             ).getState()
 
             if (state !is ForecastWidgetState.Success) {
-                Empty(colors)
+                EmptyWidget(colors)
             } else {
                 val placeName = state.placeName
                 val temperatureUnit = state.temperatureUnit
@@ -87,19 +116,21 @@ class ForecastWidget : GlanceAppWidget() {
                 ).asGlanceString()
 
                 when (size) {
-                    tiny -> PlaceAndTemp(
+                    tiny -> PlaceAndTempWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
-                        colors = colors
+                        colors = colors,
+                        placeSize = 14.sp,
+                        temperatureSize = 22.sp
                     )
-                    small -> PlaceAndTempAndIcon(
+                    small -> PlaceAndTempAndIconWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         iconResId = icon,
                         colors = colors,
                         modifier = GlanceModifier.fillMaxSize()
                     )
-                    else -> PlaceAndTempAndIconAndHours(
+                    else -> PlaceAndTempAndIconAndHoursWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         iconResId = icon,
@@ -113,150 +144,6 @@ class ForecastWidget : GlanceAppWidget() {
                         ),
                         temperatureUnit = temperatureUnit,
                         colors = colors
-                    )
-                }
-            }
-        }
-    }
-
-    @Composable
-    private fun Empty(colors: ColorProviders) {
-        Text(
-            // Glance does not support stringResource
-            text = LocalContext.current.getString(R.string.widget_empty),
-            style = TextStyle(color = colors.onSurface, fontSize = 14.sp)
-        )
-    }
-
-    @Composable
-    private fun PlaceAndTemp(
-        placeName: String,
-        currentTemperature: String,
-        colors: ColorProviders,
-        modifier: GlanceModifier = GlanceModifier
-    ) {
-        Column(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                placeName,
-                style = TextStyle(
-                    color = colors.onSurface,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Normal,
-                    fontStyle = FontStyle.Normal
-                ),
-                maxLines = 1
-            )
-            Text(
-                currentTemperature,
-                style = TextStyle(
-                    color = colors.onSurface,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Normal
-                ),
-                maxLines = 1
-            )
-        }
-    }
-
-    @Composable
-    private fun PlaceAndTempAndIcon(
-        placeName: String,
-        currentTemperature: String,
-        @DrawableRes
-        iconResId: Int,
-        colors: ColorProviders,
-        modifier: GlanceModifier = GlanceModifier
-    ) {
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            PlaceAndTemp(
-                placeName = placeName,
-                currentTemperature = currentTemperature,
-                colors = colors,
-                modifier = GlanceModifier.defaultWeight()
-            )
-            Image(
-                provider = ImageProvider(iconResId),
-                contentDescription = null,
-                modifier = GlanceModifier.size(64.dp)
-            )
-        }
-    }
-
-    @Composable
-    private fun PlaceAndTempAndIconAndHours(
-        placeName: String,
-        currentTemperature: String,
-        @DrawableRes
-        iconResId: Int,
-        hours: List<WidgetHour>,
-        temperatureUnit: TemperatureUnit,
-        colors: ColorProviders,
-        modifier: GlanceModifier = GlanceModifier
-    ) {
-        Column(modifier = modifier) {
-            PlaceAndTempAndIcon(
-                placeName = placeName,
-                currentTemperature = currentTemperature,
-                iconResId = iconResId,
-                colors = colors,
-                modifier = GlanceModifier.fillMaxWidth()
-            )
-            Spacer(modifier = GlanceModifier.height(16.dp))
-            HoursRow(
-                data = hours,
-                temperatureUnit = temperatureUnit,
-                colors = colors,
-                modifier = GlanceModifier.fillMaxWidth()
-            )
-        }
-    }
-
-    @Composable
-    private fun HoursRow(
-        data: List<WidgetHour>,
-        temperatureUnit: TemperatureUnit,
-        colors: ColorProviders,
-        modifier: GlanceModifier = GlanceModifier
-    ) {
-        Row(modifier = modifier) {
-            data.forEach { hour ->
-                val temperature = getTemperature(
-                    temperature = hour.temperature,
-                    unit = temperatureUnit
-                ).asGlanceString()
-                val iconResId = hour.description.toDrawableId()
-                val time = getShortTime(time = hour.dateTime).asGlanceString()
-
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = GlanceModifier.defaultWeight()
-                ) {
-                    Text(
-                        text = temperature,
-                        maxLines = 1,
-                        style = TextStyle(
-                            color = colors.onSurfaceVariant,
-                            fontSize = 14.sp
-                        ),
-                        modifier = GlanceModifier.padding(bottom = 2.dp)
-                    )
-                    Image(
-                        provider = ImageProvider(iconResId),
-                        contentDescription = null,
-                        modifier = GlanceModifier.size(32.dp)
-                    )
-                    Text(
-                        text = time,
-                        maxLines = 1,
-                        style = TextStyle(
-                            color = colors.onSurfaceVariant,
-                            fontSize = 14.sp
-                        ),
-                        modifier = GlanceModifier.padding(top = 2.dp)
                     )
                 }
             }
@@ -322,38 +209,4 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
             context.sendBroadcast(getRefreshIntent(context))
         }
     }
-}
-
-private const val REFRESH_ACTION = "refresh_action"
-
-private fun getRefreshIntent(context: Context) = Intent(
-    context,
-    ForecastWidgetReceiver::class.java
-).apply { action = REFRESH_ACTION }
-
-private fun scheduleNextRefresh(context: Context?) {
-    val jitter = Random.nextLong(
-        0L, 1000L * 60L * 5
-    )
-    val interval = AlarmManager.INTERVAL_HOUR + jitter
-    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.set(
-        AlarmManager.ELAPSED_REALTIME,
-        SystemClock.elapsedRealtime() + interval,
-        getRefreshPendingIntent(context)
-    )
-}
-
-private fun cancelScheduledRefresh(context: Context?) {
-    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.cancel(
-        getRefreshPendingIntent(context)
-    )
-}
-
-private fun getRefreshPendingIntent(context: Context): PendingIntent {
-    return PendingIntent.getBroadcast(
-        context,
-        0,
-        getRefreshIntent(context),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    )
 }
