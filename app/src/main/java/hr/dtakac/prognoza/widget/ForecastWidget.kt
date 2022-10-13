@@ -32,40 +32,6 @@ import java.lang.IllegalStateException
 import javax.inject.Inject
 import kotlin.random.Random
 
-private const val REFRESH_ACTION = "refresh_action"
-
-private fun getRefreshIntent(context: Context) = Intent(
-    context,
-    ForecastWidgetReceiver::class.java
-).apply { action = REFRESH_ACTION }
-
-private fun scheduleNextRefresh(context: Context?) {
-    val jitter = Random.nextLong(
-        0L, 1000L * 60L * 5
-    )
-    val interval = AlarmManager.INTERVAL_HOUR + jitter
-    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.set(
-        AlarmManager.ELAPSED_REALTIME,
-        SystemClock.elapsedRealtime() + interval,
-        getRefreshPendingIntent(context)
-    )
-}
-
-private fun cancelScheduledRefresh(context: Context?) {
-    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.cancel(
-        getRefreshPendingIntent(context)
-    )
-}
-
-private fun getRefreshPendingIntent(context: Context): PendingIntent {
-    return PendingIntent.getBroadcast(
-        context,
-        0,
-        getRefreshIntent(context),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-    )
-}
-
 class ForecastWidget : GlanceAppWidget() {
 
     companion object {
@@ -209,4 +175,38 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
             context.sendBroadcast(getRefreshIntent(context))
         }
     }
+}
+
+private const val REFRESH_ACTION = "refresh_action"
+
+private fun getRefreshIntent(context: Context) = Intent(
+    context,
+    ForecastWidgetReceiver::class.java
+).apply { action = REFRESH_ACTION }
+
+private fun scheduleNextRefresh(context: Context?) {
+    val jitter = Random.nextLong(
+        0L, 1000L * 60L * 5
+    )
+    val interval = AlarmManager.INTERVAL_HOUR + jitter
+    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.set(
+        AlarmManager.ELAPSED_REALTIME,
+        SystemClock.elapsedRealtime() + interval,
+        getRefreshPendingIntent(context)
+    )
+}
+
+private fun cancelScheduledRefresh(context: Context?) {
+    (context?.getSystemService(Context.ALARM_SERVICE) as? AlarmManager)?.cancel(
+        getRefreshPendingIntent(context)
+    )
+}
+
+private fun getRefreshPendingIntent(context: Context): PendingIntent {
+    return PendingIntent.getBroadcast(
+        context,
+        0,
+        getRefreshIntent(context),
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    )
 }
