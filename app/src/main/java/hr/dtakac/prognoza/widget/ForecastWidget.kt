@@ -138,7 +138,7 @@ class ForecastWidget : GlanceAppWidget() {
                             when (size) {
                                 normal -> 3
                                 normalWide -> 5
-                                normalExtraWide -> 6
+                                normalExtraWide -> 7
                                 else -> throw IllegalStateException("Unsupported widget size.")
                             }
                         ),

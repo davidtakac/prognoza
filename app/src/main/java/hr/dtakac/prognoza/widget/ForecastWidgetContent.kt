@@ -127,7 +127,7 @@ private fun HoursRow(
     colors: ColorProviders,
     modifier: GlanceModifier = GlanceModifier
 ) {
-    Row(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Row(modifier = modifier) {
         data.forEachIndexed { idx, hour ->
             val temperature = getTemperature(
                 temperature = hour.temperature,
