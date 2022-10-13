@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.widget
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
@@ -32,20 +31,21 @@ fun EmptyWidget(colors: ColorProviders) {
 }
 
 @Composable
-fun PlaceAndTempWidget(
+fun PlaceTempWidget(
     placeName: String,
     currentTemperature: String,
     colors: ColorProviders,
-    placeSize: TextUnit = 16.sp,
-    temperatureSize: TextUnit = 32.sp,
     modifier: GlanceModifier = GlanceModifier
 ) {
-    Column(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+    Column(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             placeName,
             style = TextStyle(
                 color = colors.onSurface,
-                fontSize = placeSize,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
             ),
@@ -55,7 +55,7 @@ fun PlaceAndTempWidget(
             currentTemperature,
             style = TextStyle(
                 color = colors.onSurface,
-                fontSize = temperatureSize,
+                fontSize = 22.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Normal
             ),
@@ -65,7 +65,7 @@ fun PlaceAndTempWidget(
 }
 
 @Composable
-fun PlaceAndTempAndIconWidget(
+fun PlaceTempIconWidget(
     placeName: String,
     currentTemperature: String,
     @DrawableRes
@@ -73,26 +73,47 @@ fun PlaceAndTempAndIconWidget(
     colors: ColorProviders,
     modifier: GlanceModifier = GlanceModifier
 ) {
-    Row(
+    Column(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PlaceAndTempWidget(
-            placeName = placeName,
-            currentTemperature = currentTemperature,
-            colors = colors,
-            modifier = GlanceModifier.defaultWeight()
+        Text(
+            placeName,
+            style = TextStyle(
+                color = colors.onSurface,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal
+            ),
+            maxLines = 1
         )
-        Image(
-            provider = ImageProvider(iconResId),
-            contentDescription = null,
-            modifier = GlanceModifier.size(64.dp)
-        )
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                currentTemperature,
+                style = TextStyle(
+                    color = colors.onSurface,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal
+                ),
+                maxLines = 1
+            )
+            Image(
+                provider = ImageProvider(iconResId),
+                contentDescription = null,
+                modifier = GlanceModifier.size(48.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun PlaceAndTempAndIconAndHoursWidget(
+fun PlaceTempIconHoursWidget(
     placeName: String,
     currentTemperature: String,
     @DrawableRes
@@ -102,20 +123,46 @@ fun PlaceAndTempAndIconAndHoursWidget(
     colors: ColorProviders,
     modifier: GlanceModifier = GlanceModifier
 ) {
-    Column(modifier = modifier) {
-        PlaceAndTempAndIconWidget(
-            placeName = placeName,
-            currentTemperature = currentTemperature,
-            iconResId = iconResId,
-            colors = colors,
-            modifier = GlanceModifier.fillMaxWidth()
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            placeName,
+            style = TextStyle(
+                color = colors.onSurface,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                fontStyle = FontStyle.Normal
+            ),
+            maxLines = 1
         )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                currentTemperature,
+                style = TextStyle(
+                    color = colors.onSurface,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Normal
+                ),
+                maxLines = 1
+            )
+            Image(
+                provider = ImageProvider(iconResId),
+                contentDescription = null,
+                modifier = GlanceModifier.size(48.dp)
+            )
+        }
         Spacer(modifier = GlanceModifier.height(16.dp))
         HoursRow(
             data = hours,
             temperatureUnit = temperatureUnit,
-            colors = colors,
-            modifier = GlanceModifier.fillMaxWidth()
+            colors = colors
         )
     }
 }
@@ -139,9 +186,9 @@ private fun HoursRow(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = when (idx) {
-                    0 -> GlanceModifier.padding(end = 8.dp)
-                    data.lastIndex -> GlanceModifier.padding(start = 8.dp)
-                    else -> GlanceModifier.padding(horizontal = 8.dp)
+                    0 -> GlanceModifier.padding(end = 6.dp)
+                    data.lastIndex -> GlanceModifier.padding(start = 6.dp)
+                    else -> GlanceModifier.padding(horizontal = 6.dp)
                 }
             ) {
                 Text(

@@ -9,7 +9,6 @@ import android.os.SystemClock
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.*
 import androidx.glance.*
 import androidx.glance.action.actionStartActivity
@@ -82,21 +81,20 @@ class ForecastWidget : GlanceAppWidget() {
                 ).asGlanceString()
 
                 when (size) {
-                    tiny -> PlaceAndTempWidget(
+                    tiny -> PlaceTempWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         colors = colors,
-                        placeSize = 14.sp,
-                        temperatureSize = 22.sp
+                        modifier = GlanceModifier.fillMaxSize()
                     )
-                    small -> PlaceAndTempAndIconWidget(
+                    small -> PlaceTempIconWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         iconResId = icon,
                         colors = colors,
                         modifier = GlanceModifier.fillMaxSize()
                     )
-                    else -> PlaceAndTempAndIconAndHoursWidget(
+                    else -> PlaceTempIconHoursWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         iconResId = icon,
@@ -109,7 +107,8 @@ class ForecastWidget : GlanceAppWidget() {
                             }
                         ),
                         temperatureUnit = temperatureUnit,
-                        colors = colors
+                        colors = colors,
+                        modifier = GlanceModifier.fillMaxSize()
                     )
                 }
             }
