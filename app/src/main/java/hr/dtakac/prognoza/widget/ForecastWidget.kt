@@ -154,9 +154,9 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
 
             glanceIds.forEach { glanceId ->
                 updateAppWidgetState(
-                    context,
-                    PreferencesGlanceStateDefinition,
-                    glanceId
+                    context = context,
+                    definition = PreferencesGlanceStateDefinition,
+                    glanceId = glanceId
                 ) { prefs ->
                     val mutablePrefs = prefs.toMutablePreferences()
                     ForecastWidgetStateRepository(
