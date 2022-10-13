@@ -36,7 +36,8 @@ private val LocalPrognozaTypography = staticCompositionLocalOf {
         subtitleLarge = TextStyle.Default,
         subtitleMedium = TextStyle.Default,
         body = TextStyle.Default,
-        titleSmall = TextStyle.Default
+        titleSmall = TextStyle.Default,
+        bodySmall = TextStyle.Default
     )
 }
 

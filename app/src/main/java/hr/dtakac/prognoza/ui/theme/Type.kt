@@ -28,6 +28,7 @@ data class PrognozaTypography(
     val titleMedium: TextStyle,
     val subtitleMedium: TextStyle,
     val body: TextStyle,
+    val bodySmall: TextStyle,
     val titleSmall: TextStyle
 ) {
     companion object {
@@ -88,6 +89,12 @@ data class PrognozaTypography(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Normal,
                 fontSize = 16.sp,
+                letterSpacing = 0.sp
+            ),
+            bodySmall = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.Normal,
+                fontSize = 14.sp,
                 letterSpacing = 0.sp
             ),
         )

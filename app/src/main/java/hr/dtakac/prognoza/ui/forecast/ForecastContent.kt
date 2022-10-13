@@ -1,6 +1,8 @@
 package hr.dtakac.prognoza.ui.forecast
 
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,6 +15,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -256,7 +260,9 @@ private fun DataList(
                 day = day,
                 isExpanded = isExpanded,
                 onClick = { isExpanded = !isExpanded },
-                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 10.dp)
             )
         }
     }
@@ -386,6 +392,7 @@ private fun HourItem(
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 private fun ComingItem(
     day: DayUi,
@@ -393,14 +400,20 @@ private fun ComingItem(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    ProvideTextStyle(PrognozaTheme.typography.body) {
-        Column(
-            modifier = Modifier.clickable(
+    val expandTransition = updateTransition(label = "Expand coming item", targetState = isExpanded)
+    val chevronRotation by expandTransition.animateFloat(label = "Rotate chevron") {
+        if (it) 180f else 0f
+    }
+    Column(
+        modifier = Modifier
+            .clickable(
                 onClick = onClick,
                 indication = rememberRipple(bounded = true),
                 interactionSource = remember { MutableInteractionSource() }
-            ).then(modifier)
-        ) {
+            )
+            .then(modifier)
+    ) {
+        ProvideTextStyle(PrognozaTheme.typography.body) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
@@ -427,9 +440,23 @@ private fun ComingItem(
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                Spacer(modifier = Modifier.width(4.dp))
+                Image(
+                    painter = painterResource(id = R.drawable.ic_expand_more),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .graphicsLayer { rotationZ = chevronRotation },
+                    colorFilter = ColorFilter.tint(LocalContentColor.current)
+                )
             }
-
-            AnimatedVisibility(visible = isExpanded,) {
+        }
+        ProvideTextStyle(PrognozaTheme.typography.bodySmall) {
+            expandTransition.AnimatedVisibility(
+                visible = { targetIsExpanded -> targetIsExpanded },
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
                 LazyRow(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.padding(top = 16.dp)
@@ -447,7 +474,7 @@ private fun ComingItem(
                                 text = hour.temperature.asString(),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(bottom = 2.dp)
+                                modifier = Modifier.padding(bottom = 4.dp)
                             )
                             Image(
                                 painter = painterResource(id = hour.icon),
@@ -458,8 +485,8 @@ private fun ComingItem(
                                 text = hour.time.asString(),
                                 maxLines = 1,
                                 overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(top = 2.dp),
-                                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                                modifier = Modifier.padding(top = 4.dp),
+                                color = LocalContentColor.current
                             )
                         }
                     }
