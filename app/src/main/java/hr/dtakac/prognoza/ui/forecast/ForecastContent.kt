@@ -500,13 +500,15 @@ private fun ComingItem(
 @Composable
 private fun TodayScreenPreview() {
     PrognozaTheme(description = ForecastDescription.Short.FAIR) {
-        DataList(
-            forecast = ForecastUi(
-                place = TextResource.fromText("Helsinki"),
-                today = fakeTodayUi(),
-                coming = fakeComingUi()
+        Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
+            DataList(
+                forecast = ForecastUi(
+                    place = TextResource.fromText("Helsinki"),
+                    today = fakeTodayUi(),
+                    coming = fakeComingUi()
+                )
             )
-        )
+        }
     }
 }
 
@@ -537,7 +539,7 @@ private fun fakeTodayUi(): TodayUi = TodayUi(
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
     shortDescription = ForecastDescription.Short.FAIR,
     hourly = mutableListOf<DayHourUi>().apply {
-        for (i in 1..15) {
+        for (i in 1..4) {
             add(
                 DayHourUi(
                     time = TextResource.fromText("14:00"),
@@ -556,7 +558,17 @@ private fun fakeComingUi(): List<DayUi> = listOf(
         date = TextResource.fromText("Thu, Sep 13"),
         lowHighTemperature = TextResource.fromText("16—8"),
         precipitation = TextResource.fromText(""),
-        hours = listOf()
+        hours = mutableListOf<ComingHourUi>().apply {
+            for (i in 1..12) {
+                add(
+                    ComingHourUi(
+                        time = TextResource.fromText("$i:00"),
+                        temperature = TextResource.fromText("20"),
+                        icon = R.drawable.partlycloudy_day
+                    )
+                )
+            }
+        }
     ),
     DayUi(
         date = TextResource.fromText("Fri, Sep 14"),
