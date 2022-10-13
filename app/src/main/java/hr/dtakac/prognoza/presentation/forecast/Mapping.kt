@@ -93,7 +93,16 @@ private fun mapToComingUi(
         precipitation = day.totalPrecipitation.takeIf { it.millimeters > 0.0 }?.let {
             getPrecipitation(it, precipitationUnit)
         } ?: TextResource.fromText(""),
-        icon = day.description.toDrawableId()
+        hours = day.hours.map {
+            ComingHourUi(
+                time = getShortTime(it.dateTime),
+                temperature = getTemperature(
+                    temperature = it.temperature,
+                    unit = temperatureUnit
+                ),
+                icon = it.description.toDrawableId()
+            )
+        }
     )
 }
 

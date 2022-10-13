@@ -41,7 +41,12 @@ data class DayUi(
     val date: TextResource,
     val lowHighTemperature: TextResource,
     val precipitation: TextResource,
+    val hours: List<ComingHourUi>
+)
+
+data class ComingHourUi(
+    val time: TextResource,
+    val temperature: TextResource,
     @DrawableRes
     val icon: Int
 )
-

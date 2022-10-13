@@ -3,10 +3,11 @@ package hr.dtakac.prognoza.ui.forecast
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.*
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -246,15 +247,16 @@ private fun DataList(
                 text = stringResource(id = R.string.coming),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 42.dp, bottom = 16.dp)
+                    .padding(top = 42.dp, bottom = 6.dp)
             )
         }
-        itemsIndexed(forecast.coming) { idx, day ->
+        items(forecast.coming) { day ->
+            var isExpanded by remember { mutableStateOf(false) }
             ComingItem(
                 day = day,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = if (idx == forecast.coming.lastIndex) 0.dp else 20.dp)
+                isExpanded = isExpanded,
+                onClick = { isExpanded = !isExpanded },
+                modifier = Modifier.fillMaxWidth().padding(vertical = 10.dp)
             )
         }
     }
@@ -387,32 +389,82 @@ private fun HourItem(
 @Composable
 private fun ComingItem(
     day: DayUi,
+    isExpanded: Boolean = false,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        ProvideTextStyle(PrognozaTheme.typography.body) {
-            Text(
-                modifier = Modifier.weight(2f),
-                text = day.date.asString(),
-                textAlign = TextAlign.Start,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = day.precipitation.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = day.lowHighTemperature.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+    ProvideTextStyle(PrognozaTheme.typography.body) {
+        Column(
+            modifier = Modifier.clickable(
+                onClick = onClick,
+                indication = rememberRipple(bounded = true),
+                interactionSource = remember { MutableInteractionSource() }
+            ).then(modifier)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    modifier = Modifier.weight(2f),
+                    text = day.date.asString(),
+                    textAlign = TextAlign.Start,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = day.precipitation.asString(),
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                )
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = day.lowHighTemperature.asString(),
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+
+            AnimatedVisibility(visible = isExpanded,) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.padding(top = 16.dp)
+                ) {
+                    itemsIndexed(day.hours) { idx, hour ->
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = when (idx) {
+                                0 -> Modifier.padding(end = 8.dp)
+                                day.hours.lastIndex -> Modifier.padding(start = 8.dp)
+                                else -> Modifier.padding(horizontal = 8.dp)
+                            }
+                        ) {
+                            Text(
+                                text = hour.temperature.asString(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(bottom = 2.dp)
+                            )
+                            Image(
+                                painter = painterResource(id = hour.icon),
+                                contentDescription = null,
+                                modifier = Modifier.size(32.dp)
+                            )
+                            Text(
+                                text = hour.time.asString(),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier.padding(top = 2.dp),
+                                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -477,18 +529,18 @@ private fun fakeComingUi(): List<DayUi> = listOf(
         date = TextResource.fromText("Thu, Sep 13"),
         lowHighTemperature = TextResource.fromText("16—8"),
         precipitation = TextResource.fromText(""),
-        icon = R.drawable.clearsky_day
+        hours = listOf()
     ),
     DayUi(
         date = TextResource.fromText("Fri, Sep 14"),
         lowHighTemperature = TextResource.fromText("18—8"),
         precipitation = TextResource.fromText("0.7 mm"),
-        icon = R.drawable.rainshowers_day
+        hours = listOf()
     ),
     DayUi(
         date = TextResource.fromText("Sat, Sep 15"),
         lowHighTemperature = TextResource.fromText("21—5"),
         precipitation = TextResource.fromText(""),
-        icon = R.drawable.cloudy
+        hours = listOf()
     ),
 )

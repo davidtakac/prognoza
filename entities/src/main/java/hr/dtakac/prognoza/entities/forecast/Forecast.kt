@@ -64,19 +64,20 @@ class Forecast(data: List<ForecastDatum>) {
 
     private fun resolveComing(listOfData: List<List<ForecastDatum>>): List<Day> {
         return listOfData.map { data ->
-            val descriptionCounts = data
-                .filter { it.start.withZoneSameInstant(ZoneId.systemDefault()).hour in 6..21 }
-                .groupingBy { it.description }
-                .eachCount()
-
             Day(
                 dateTime = data.first().start,
                 highTemperature = data.maxOf { it.temperature },
                 lowTemperature = data.minOf { it.temperature },
                 totalPrecipitation = Length(data.sumOf { it.precipitation.millimeters }, LengthUnit.MM),
-                description = descriptionCounts.maxByOrNull { it.value }?.key
-                    ?: descriptionCounts.keys.firstOrNull()
-                    ?: ForecastDescription.UNKNOWN
+                hours = data.map { datum ->
+                    HourlyDatum(
+                        dateTime = datum.start,
+                        description = datum.description,
+                        temperature = datum.temperature,
+                        precipitation = datum.precipitation,
+                        wind = datum.wind
+                    )
+                }
             )
         }
     }
@@ -110,6 +111,6 @@ data class Day(
     val dateTime: ZonedDateTime,
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
-    val description: ForecastDescription, // todo: remove this if unused
     val totalPrecipitation: Length,
+    val hours: List<HourlyDatum>
 )
