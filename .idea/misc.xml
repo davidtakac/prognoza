@@ -155,6 +155,7 @@
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/app_widget_current_conditions_medium_empty.xml" value="0.41299429355300554" />
         <entry key="app/src/main/res/layout/app_widget_forecast_initial.xml" value="0.26145833333333335" />
+        <entry key="app/src/main/res/layout/app_widget_forecast_preview.xml" value="0.36902800658978585" />
         <entry key="app/src/main/res/layout/cell_day.xml" value="0.75" />
         <entry key="app/src/main/res/layout/cell_hour.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/fragment_days.xml" value="0.159375" />

@@ -4,7 +4,6 @@
     android:maxResizeHeight="220dp"
     android:minWidth="40dp"
     android:minHeight="40dp"
-    android:initialLayout="@layout/app_widget_forecast_initial"
     android:minResizeWidth="40dp"
     android:minResizeHeight="40dp"
     android:resizeMode="horizontal|vertical"
@@ -14,7 +13,8 @@
     android:description="@string/widget_description"
     android:widgetCategory="home_screen" />
 
-<!-- todo add these params later
+<!-- todo add these params later, or dont and just wait for Glance to support non-xml previews etc
 android:previewLayout="@layout/widget_weather_forecast_small"
 android:previewImage="@drawable/weather_forecast_widget_preview"
+android:initialLayout="@layout/app_widget_forecast_initial"
 -->
