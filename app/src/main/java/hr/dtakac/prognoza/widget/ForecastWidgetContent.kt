@@ -127,8 +127,8 @@ private fun HoursRow(
     colors: ColorProviders,
     modifier: GlanceModifier = GlanceModifier
 ) {
-    Row(modifier = modifier) {
-        data.forEach { hour ->
+    Row(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        data.forEachIndexed { idx, hour ->
             val temperature = getTemperature(
                 temperature = hour.temperature,
                 unit = temperatureUnit
@@ -138,13 +138,17 @@ private fun HoursRow(
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = GlanceModifier.defaultWeight()
+                modifier = when (idx) {
+                    0 -> GlanceModifier.padding(end = 8.dp)
+                    data.lastIndex -> GlanceModifier.padding(start = 8.dp)
+                    else -> GlanceModifier.padding(horizontal = 8.dp)
+                }
             ) {
                 Text(
                     text = temperature,
                     maxLines = 1,
                     style = TextStyle(
-                        color = colors.onSurfaceVariant,
+                        color = colors.onSurface,
                         fontSize = 14.sp
                     ),
                     modifier = GlanceModifier.padding(bottom = 2.dp)
@@ -158,7 +162,7 @@ private fun HoursRow(
                     text = time,
                     maxLines = 1,
                     style = TextStyle(
-                        color = colors.onSurfaceVariant,
+                        color = colors.onSurface,
                         fontSize = 14.sp
                     ),
                     modifier = GlanceModifier.padding(top = 2.dp)
