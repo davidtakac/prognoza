@@ -136,7 +136,8 @@ private fun TinyWidget(
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
             ),
-            maxLines = 1
+            maxLines = 1,
+            modifier = GlanceModifier.padding(bottom = 2.dp)
         )
         Text(
             currentTemperature,
@@ -173,7 +174,8 @@ private fun SmallWidget(
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
             ),
-            maxLines = 1
+            maxLines = 1,
+            modifier = GlanceModifier.padding(bottom = 4.dp)
         )
         Row(
             modifier = modifier,
@@ -188,7 +190,8 @@ private fun SmallWidget(
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Normal
                 ),
-                maxLines = 1
+                maxLines = 1,
+                modifier = GlanceModifier.padding(end = 4.dp)
             )
             Image(
                 provider = ImageProvider(iconResId),
@@ -223,7 +226,8 @@ private fun NormalWidget(
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
             ),
-            maxLines = 1
+            maxLines = 1,
+            modifier = GlanceModifier.padding(bottom = 4.dp)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -237,7 +241,8 @@ private fun NormalWidget(
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Normal
                 ),
-                maxLines = 1
+                maxLines = 1,
+                modifier = GlanceModifier.padding(end = 4.dp)
             )
             Image(
                 provider = ImageProvider(iconResId),
@@ -245,7 +250,7 @@ private fun NormalWidget(
                 modifier = GlanceModifier.size(48.dp)
             )
         }
-        Spacer(modifier = GlanceModifier.height(16.dp))
+        Spacer(modifier = GlanceModifier.height(12.dp))
         HoursRow(
             data = hours,
             temperatureUnit = temperatureUnit,
