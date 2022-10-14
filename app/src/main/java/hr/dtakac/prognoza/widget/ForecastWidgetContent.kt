@@ -39,7 +39,8 @@ fun PlaceTempWidget(
 ) {
     Column(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             placeName,

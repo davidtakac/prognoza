@@ -85,14 +85,12 @@ class ForecastWidget : GlanceAppWidget() {
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         colors = colors,
-                        modifier = GlanceModifier.fillMaxSize()
                     )
                     small -> PlaceTempIconWidget(
                         placeName = placeName,
                         currentTemperature = currentTemperature,
                         iconResId = icon,
                         colors = colors,
-                        modifier = GlanceModifier.fillMaxSize()
                     )
                     else -> PlaceTempIconHoursWidget(
                         placeName = placeName,
@@ -108,7 +106,6 @@ class ForecastWidget : GlanceAppWidget() {
                         ),
                         temperatureUnit = temperatureUnit,
                         colors = colors,
-                        modifier = GlanceModifier.fillMaxSize()
                     )
                 }
             }
