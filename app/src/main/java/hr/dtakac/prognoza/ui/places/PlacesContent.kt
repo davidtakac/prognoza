@@ -11,9 +11,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -183,13 +181,16 @@ private fun SearchBar(
 ) {
     val style = PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)
     var query by remember { mutableStateOf("") }
+
+    fun setQuery(newQuery: String) {
+        query = newQuery
+        onQueryChange(newQuery)
+    }
+
     val focusManager = LocalFocusManager.current
     BasicTextField(
         value = query,
-        onValueChange = {
-            query = it
-            onQueryChange(it)
-        },
+        onValueChange = ::setQuery,
         maxLines = 1,
         textStyle = style,
         modifier = modifier,
@@ -227,6 +228,21 @@ private fun SearchBar(
                             )
                         }
                         innerTextField()
+                    }
+                    if (query.isNotEmpty()) {
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_cancel),
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(LocalContentColor.current),
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                                .size(24.dp)
+                                .clickable(
+                                    onClick = { setQuery("") },
+                                    indication = rememberRipple(bounded = true),
+                                    interactionSource = remember { MutableInteractionSource() }
+                                )
+                        )
                     }
                 }
 
