@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.data.mapping
 
-import hr.dtakac.prognoza.apimodel.PlaceResponse
+import hr.dtakac.prognoza.data.network.place.PlaceResponse
 import hr.dtakac.prognoza.data.database.place.PlaceDbModel
 import hr.dtakac.prognoza.entities.Place
 

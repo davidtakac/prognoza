@@ -3,6 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'kotlinx-serialization'
 }
 
 android {
@@ -52,9 +53,9 @@ dependencies {
     implementation "androidx.room:room-ktx:$versions.room"
 
     // Network
-    implementation "com.google.code.gson:gson:$versions.gson"
+    implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$versions.rft_ktx_serialization"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$versions.retrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
 
     // Dependency injection
@@ -87,6 +88,9 @@ dependencies {
 
     // Core library desugaring
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.core_library_desugaring"
+
+    // Logging
+    implementation "com.jakewharton.timber:timber:$versions.timber"
 
     // Testing
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$versions.compose"

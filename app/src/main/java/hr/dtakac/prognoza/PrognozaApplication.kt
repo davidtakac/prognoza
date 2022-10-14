@@ -3,6 +3,7 @@ package hr.dtakac.prognoza
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 import hr.dtakac.prognoza.ui.WidgetRefresher
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -14,6 +15,7 @@ class PrognozaApplication : Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) {
             widgetRefresher.refresh()
+            Timber.plant(Timber.DebugTree())
         }
     }
 }

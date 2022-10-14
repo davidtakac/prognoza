@@ -18,6 +18,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
 import retrofit2.HttpException
+import timber.log.Timber
 import java.time.ZonedDateTime
 
 class DefaultForecastRepository(
@@ -46,11 +47,15 @@ class DefaultForecastRepository(
                     longitude = longitude,
                     lastModified = meta?.lastModified
                 )
+                // todo: make these catches a single method that checks exception type and returns object and, most importantly, only calls timber once
             } catch (e: HttpException) {
+                Timber.e(e)
                 return getResultFromHttpException(e)
             } catch (e: SQLiteException) {
+                Timber.e(e)
                 return ForecastRepositoryResult.DatabaseError
             } catch (e: Exception) {
+                Timber.e(e)
                 return ForecastRepositoryResult.UnknownError
             }
         }
@@ -62,6 +67,7 @@ class DefaultForecastRepository(
                 longitude = longitude
             ).map(::mapDbModelToEntity).let { ForecastRepositoryResult.Success(Forecast(it)) }
         } catch (e: Exception) {
+            Timber.e(e)
             ForecastRepositoryResult.UnknownError
         }
     }

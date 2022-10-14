@@ -8,6 +8,7 @@ import hr.dtakac.prognoza.data.network.place.PlaceService
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepositoryResult
 import hr.dtakac.prognoza.entities.Place
+import timber.log.Timber
 import java.util.*
 
 class DefaultPlaceRepository(
@@ -23,6 +24,7 @@ class DefaultPlaceRepository(
         val entities = try {
             placeDao.getPlaces().map { mapDbModelToEntity(it) }
         } catch (e: Exception) {
+            Timber.e(e)
             null
         }
         return entities?.let {
@@ -39,6 +41,7 @@ class DefaultPlaceRepository(
                 query = query
             ).map(::mapResponseToEntity)
         } catch (e: Exception) {
+            Timber.e(e)
             null
         }
         return entities?.let {

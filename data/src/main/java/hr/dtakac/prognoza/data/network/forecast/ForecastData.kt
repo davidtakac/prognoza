@@ -1,134 +1,176 @@
 package hr.dtakac.prognoza.data.network.forecast
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class LocationForecastResponse(
-    @SerializedName("properties")
+    @SerialName("properties")
     val forecast: Forecast
 )
 
+@Serializable
 data class Forecast(
-    @SerializedName("meta")
+    @SerialName("meta")
     val meta: ForecastMeta,
-    @SerializedName("timeseries")
+    @SerialName("timeseries")
     val forecastTimeSteps: List<ForecastTimeStep>
 )
 
+@Serializable
 data class ForecastTimeStep(
-    @SerializedName("time")
+    @SerialName("time")
     val time: String,
-    @SerializedName("data")
+    @SerialName("data")
     val data: ForecastTimeStepData
 )
 
+@Serializable
 data class ForecastTimeStepData(
-    @SerializedName("instant")
+    @SerialName("instant")
     val instant: ForecastTimeInstant,
-    @SerializedName("next_1_hours")
-    val next1Hours: ForecastTimePeriod?,
-    @SerializedName("next_6_hours")
-    val next6Hours: ForecastTimePeriod?,
-    @SerializedName("next_12_hours")
-    val next12Hours: ForecastTimePeriod?
+
+    @SerialName("next_1_hours")
+    val next1Hours: ForecastTimePeriod? = null,
+
+    @SerialName("next_6_hours")
+    val next6Hours: ForecastTimePeriod? = null,
+
+    @SerialName("next_12_hours")
+    val next12Hours: ForecastTimePeriod? = null
 )
 
+@Serializable
 data class ForecastTimeInstant(
-    @SerializedName("details")
+    @SerialName("details")
     val data: ForecastInstantData,
 )
 
+@Serializable
 data class ForecastInstantData(
-    @SerializedName("air_temperature")
+    @SerialName("air_temperature")
     val airTemperature: Double,
-    @SerializedName("cloud_area_fraction")
+    @SerialName("cloud_area_fraction")
     val cloudAreaFraction: Double,
-    @SerializedName("wind_from_direction")
+    @SerialName("wind_from_direction")
     val windFromDirection: Double,
-    @SerializedName("air_pressure_at_sea_level")
+    @SerialName("air_pressure_at_sea_level")
     val airPressureAtSeaLevel: Double,
-    @SerializedName("relative_humidity")
+    @SerialName("relative_humidity")
     val relativeHumidity: Double,
-    @SerializedName("wind_speed")
+    @SerialName("wind_speed")
     val windSpeed: Double
 )
 
+@Serializable
 data class ForecastTimePeriod(
-    @SerializedName("details")
-    val data: ForecastTimePeriodData?,
-    @SerializedName("summary")
+    @SerialName("details")
+    val data: ForecastTimePeriodData? = null,
+
+    @SerialName("summary")
     val summary: ForecastTimePeriodSummary
 )
 
+@Serializable
 data class ForecastTimePeriodSummary(
-    @SerializedName("symbol_code")
+    @SerialName("symbol_code")
     val symbolCode: String
 )
 
+@Serializable
 data class ForecastTimePeriodData(
-    @SerializedName("probability_of_thunder")
-    val probabilityOfThunder: Double?,
-    @SerializedName("ultraviolet_index_clear_sky_max")
-    val ultravioletIndexClearSkyMax: Double?,
-    @SerializedName("air_temperature_min")
-    val airTemperatureMin: Double?,
-    @SerializedName("precipitation_amount_min")
-    val precipitationAmountMin: Double?,
-    @SerializedName("precipitation_amount_max")
-    val precipitationAmountMax: Double?,
-    @SerializedName("precipitation_amount")
-    val precipitationAmount: Double?,
-    @SerializedName("air_temperature_max")
-    val airTemperatureMax: Double?,
-    @SerializedName("probability_of_precipitation")
-    val probabilityOfPrecipitation: Double?
+    @SerialName("probability_of_thunder")
+    val probabilityOfThunder: Double? = null,
+
+    @SerialName("ultraviolet_index_clear_sky_max")
+    val ultravioletIndexClearSkyMax: Double? = null,
+
+    @SerialName("air_temperature_min")
+    val airTemperatureMin: Double? = null,
+
+    @SerialName("precipitation_amount_min")
+    val precipitationAmountMin: Double? = null,
+
+    @SerialName("precipitation_amount_max")
+    val precipitationAmountMax: Double? = null,
+
+    @SerialName("precipitation_amount")
+    val precipitationAmount: Double? = null,
+
+    @SerialName("air_temperature_max")
+    val airTemperatureMax: Double? = null,
+
+    @SerialName("probability_of_precipitation")
+    val probabilityOfPrecipitation: Double? = null
 )
 
+@Serializable
 data class ForecastMeta(
-    @SerializedName("units")
+    @SerialName("units")
     val units: ForecastUnits,
-    @SerializedName("updated_at")
+    @SerialName("updated_at")
     val updatedAt: String
 )
 
+@Serializable
 data class ForecastUnits(
-    @SerializedName("fog_area_fraction")
-    val fogAreaFraction: String?,
-    @SerializedName("dew_point_temperature")
-    val dewPointTemperature: String?,
-    @SerializedName("air_temperature_min")
-    val airTemperatureMin: String?,
-    @SerializedName("relative_humidity")
-    val relativeHumidity: String?,
-    @SerializedName("air_temperature_max")
-    val airTemperatureMax: String?,
-    @SerializedName("cloud_area_fraction")
-    val cloudAreaFraction: String?,
-    @SerializedName("air_pressure_at_sea_level")
-    val airPressureAtSeaLevel: String?,
-    @SerializedName("cloud_area_fraction_high")
-    val cloudAreaFractionHigh: String?,
-    @SerializedName("cloud_area_fraction_low")
-    val cloudAreaFractionLow: String?,
-    @SerializedName("air_temperature")
-    val airTemperature: String?,
-    @SerializedName("wind_speed")
-    val windSpeed: String?,
-    @SerializedName("precipitation_amount_min")
-    val precipitationAmountMin: String?,
-    @SerializedName("precipitation_amount_max")
-    val precipitationAmountMax: String?,
-    @SerializedName("precipitation_amount")
-    val precipitationAmount: String?,
-    @SerializedName("probability_of_precipitation")
-    val probabilityOfPrecipitation: String?,
-    @SerializedName("wind_speed_of_gust")
-    val windSpeedOfGust: String?,
-    @SerializedName("ultraviolet_index_clear_sky_max")
-    val ultravioletIndexClearSkyMax: Int,
-    @SerializedName("probability_of_thunder")
-    val probabilityOfThunder: String?,
-    @SerializedName("wind_from_direction")
-    val windFromDirection: String?,
-    @SerializedName("cloud_area_fraction_medium")
-    val cloudAreaFractionMedium: String?
+    @SerialName("fog_area_fraction")
+    val fogAreaFraction: String? = null,
+
+    @SerialName("dew_point_temperature")
+    val dewPointTemperature: String? = null,
+
+    @SerialName("air_temperature_min")
+    val airTemperatureMin: String? = null,
+
+    @SerialName("relative_humidity")
+    val relativeHumidity: String? = null,
+
+    @SerialName("air_temperature_max")
+    val airTemperatureMax: String? = null,
+
+    @SerialName("cloud_area_fraction")
+    val cloudAreaFraction: String? = null,
+
+    @SerialName("air_pressure_at_sea_level")
+    val airPressureAtSeaLevel: String? = null,
+
+    @SerialName("cloud_area_fraction_high")
+    val cloudAreaFractionHigh: String? = null,
+
+    @SerialName("cloud_area_fraction_low")
+    val cloudAreaFractionLow: String? = null,
+
+    @SerialName("air_temperature")
+    val airTemperature: String? = null,
+
+    @SerialName("wind_speed")
+    val windSpeed: String? = null,
+
+    @SerialName("precipitation_amount_min")
+    val precipitationAmountMin: String? = null,
+
+    @SerialName("precipitation_amount_max")
+    val precipitationAmountMax: String? = null,
+
+    @SerialName("precipitation_amount")
+    val precipitationAmount: String? = null,
+
+    @SerialName("probability_of_precipitation")
+    val probabilityOfPrecipitation: String? = null,
+
+    @SerialName("wind_speed_of_gust")
+    val windSpeedOfGust: String? = null,
+
+    @SerialName("ultraviolet_index_clear_sky_max")
+    val ultravioletIndexClearSkyMax: Int? = null,
+
+    @SerialName("probability_of_thunder")
+    val probabilityOfThunder: String? = null,
+
+    @SerialName("wind_from_direction")
+    val windFromDirection: String? = null,
+
+    @SerialName("cloud_area_fraction_medium")
+    val cloudAreaFractionMedium: String? = null
 )

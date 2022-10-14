@@ -1,8 +1,6 @@
 package hr.dtakac.prognoza.widget
 
 import androidx.datastore.preferences.core.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.*
@@ -13,7 +11,6 @@ import java.time.ZonedDateTime
 
 class ForecastWidgetStateRepository(
     private val prefs: MutablePreferences,
-    private val gson: Gson = Gson()
 ) {
     fun setState(forecastResultSuccess: GetForecastResult.Success?) {
         if (forecastResultSuccess != null) {
@@ -46,7 +43,7 @@ class ForecastWidgetStateRepository(
                     descriptionOrdinal = it.description.ordinal
                 )
             }
-            prefs[hours] = gson.toJson(widgetHours)
+            //prefs[hours] = gson.toJson(widgetHours) todo fix
         } else {
             prefs[isEmptyKey] = true
         }
@@ -86,7 +83,7 @@ class ForecastWidgetStateRepository(
                 )
             ),
             description = ForecastDescription.values()[prefs[descriptionOrdinalKey]!!],
-            hours = gson.fromJson<List<WidgetHourSerialized>>(
+            hours = listOf()/* todo fix gson.fromJson<List<WidgetHourSerialized>>(
                 prefs[hours]!!,
                 object : TypeToken<List<WidgetHourSerialized>>() {}.type
             ).map {
@@ -96,7 +93,7 @@ class ForecastWidgetStateRepository(
                     temperature = Temperature(it.temperatureCelsius, TemperatureUnit.C),
                     description = ForecastDescription.values()[it.descriptionOrdinal]
                 )
-            }
+            }*/
         )
     }
 

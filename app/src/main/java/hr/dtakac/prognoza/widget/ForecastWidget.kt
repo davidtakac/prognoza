@@ -19,10 +19,8 @@ import androidx.glance.color.dynamicThemeColorProviders
 import androidx.glance.layout.*
 import androidx.glance.state.GlanceStateDefinition
 import androidx.glance.state.PreferencesGlanceStateDefinition
-import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.domain.usecase.GetForecast
-import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.presentation.asGlanceString
 import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.MainActivity
@@ -64,10 +62,7 @@ class ForecastWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>()),
             contentAlignment = Alignment.Center
         ) {
-            val state = ForecastWidgetStateRepository(
-                prefs = prefs.toMutablePreferences(),
-                gson = Gson()
-            ).getState()
+            val state: ForecastWidgetState = ForecastWidgetState.Empty // todo: change this to actual access
 
             if (state !is ForecastWidgetState.Success) {
                 EmptyWidget(colors)
@@ -155,10 +150,11 @@ class ForecastWidgetReceiver : GlanceAppWidgetReceiver() {
                     glanceId = glanceId
                 ) { prefs ->
                     val mutablePrefs = prefs.toMutablePreferences()
-                    ForecastWidgetStateRepository(
+                    // todo: fix this
+                    /*ForecastWidgetStateRepository(
                         prefs = mutablePrefs,
                         gson = Gson()
-                    ).setState(result as? GetForecastResult.Success)
+                    ).setState(result as? GetForecastResult.Success)*/
                     mutablePrefs
                 }
                 glanceAppWidget.update(context, glanceId)

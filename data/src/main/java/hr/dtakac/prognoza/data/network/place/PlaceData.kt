@@ -1,14 +1,16 @@
-package hr.dtakac.prognoza.apimodel
+package hr.dtakac.prognoza.data.network.place
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PlaceResponse(
-    @SerializedName("place_id")
+    @SerialName("place_id")
     val id: String,
-    @SerializedName("lat")
+    @SerialName("lat")
     val latitude: Double,
-    @SerializedName("lon")
+    @SerialName("lon")
     val longitude: Double,
-    @SerializedName("display_name")
+    @SerialName("display_name")
     val displayName: String
 )

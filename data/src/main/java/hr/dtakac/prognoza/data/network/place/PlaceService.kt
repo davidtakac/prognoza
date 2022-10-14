@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.data.network.place
 
-import hr.dtakac.prognoza.apimodel.PlaceResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
