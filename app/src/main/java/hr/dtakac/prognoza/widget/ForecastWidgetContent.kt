@@ -8,6 +8,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.color.ColorProviders
 import androidx.glance.layout.*
 import androidx.glance.text.FontStyle
@@ -28,6 +29,11 @@ fun EmptyWidget(colors: ColorProviders) {
         text = LocalContext.current.getString(R.string.widget_empty),
         style = TextStyle(color = colors.onSurface, fontSize = 14.sp)
     )
+}
+
+@Composable
+fun LoadingWidget() {
+    CircularProgressIndicator()
 }
 
 @Composable
