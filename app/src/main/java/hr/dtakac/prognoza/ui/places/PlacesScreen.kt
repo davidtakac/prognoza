@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import hr.dtakac.prognoza.presentation.OnEvent
 import hr.dtakac.prognoza.presentation.places.PlacesViewModel
 
 @Composable
@@ -14,11 +15,8 @@ fun PlacesScreen(
     LaunchedEffect(true) {
         viewModel.getSaved()
     }
-
-    LaunchedEffect(state.selectedPlace) {
-        if (state.selectedPlace != null) {
-            onPlaceSelected()
-        }
+    OnEvent(state.placeSelected) {
+        onPlaceSelected()
     }
 
     PlacesContent(

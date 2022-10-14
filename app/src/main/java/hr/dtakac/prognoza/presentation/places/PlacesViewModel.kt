@@ -9,6 +9,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -96,7 +97,7 @@ class PlacesViewModel @Inject constructor(
             }
             _state.value = _state.value.copy(
                 places = placesUi,
-                selectedPlace = selectedPlace
+                placeSelected = simpleEvent()
             )
             widgetRefresher.refresh()
             hideLoader()
