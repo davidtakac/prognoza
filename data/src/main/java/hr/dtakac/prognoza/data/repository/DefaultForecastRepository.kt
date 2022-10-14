@@ -37,6 +37,7 @@ class DefaultForecastRepository(
         val meta = try {
             metaDao.get(latitude, longitude)
         } catch (e: Exception) {
+            Timber.e(e)
             null
         }
 
@@ -47,16 +48,9 @@ class DefaultForecastRepository(
                     longitude = longitude,
                     lastModified = meta?.lastModified
                 )
-                // todo: make these catches a single method that checks exception type and returns object and, most importantly, only calls timber once
-            } catch (e: HttpException) {
-                Timber.e(e)
-                return getResultFromHttpException(e)
-            } catch (e: SQLiteException) {
-                Timber.e(e)
-                return ForecastRepositoryResult.DatabaseError
             } catch (e: Exception) {
                 Timber.e(e)
-                return ForecastRepositoryResult.UnknownError
+                return mapToResult(e)
             }
         }
         return try {
@@ -124,6 +118,14 @@ class DefaultForecastRepository(
         } ?: return
         forecastDao.delete(latitude, longitude)
         forecastDao.insert(dbModels)
+    }
+
+    private fun mapToResult(exception: Exception): ForecastRepositoryResult {
+        return when (exception) {
+            is HttpException -> getResultFromHttpException(exception)
+            is SQLiteException -> ForecastRepositoryResult.DatabaseError
+            else -> ForecastRepositoryResult.UnknownError
+        }
     }
 
     private fun getResultFromHttpException(httpException: HttpException): ForecastRepositoryResult {
