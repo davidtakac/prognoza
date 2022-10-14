@@ -118,10 +118,7 @@ class SettingsViewModel @Inject constructor(
                 selectedPrecipitationUnit = getPrecipitationUnit(),
                 availablePrecipitationUnits = availablePrecipitationUnits
             ),
-            pressureUnitSetting = mapToPressureUnitSetting(
-                selectedPressureUnit = getPressureUnit(),
-                availablePressureUnits = availablePressureUnits
-            ),
+            pressureUnitSetting = null,
             themeSetting = mapToThemeSetting(
                 selectedThemeSetting = themeChanger.getCurrentTheme(),
                 availableThemeSettings = availableThemeSettings
