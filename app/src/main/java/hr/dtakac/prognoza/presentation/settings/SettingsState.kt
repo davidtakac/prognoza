@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.presentation.settings
 
+import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.TextResource
 
 data class SettingsState(
@@ -8,7 +9,9 @@ data class SettingsState(
     val windUnitSetting: MultipleChoiceSetting? = null,
     val precipitationUnitSetting: MultipleChoiceSetting? = null,
     val pressureUnitSetting: MultipleChoiceSetting? = null,
-    val themeSetting: MultipleChoiceSetting? = null
+    val themeSetting: MultipleChoiceSetting? = null,
+    val unitChanged: Event<Unit>? = null,
+    val themeChanged: Event<Unit>? = null
 )
 
 data class MultipleChoiceSetting(

@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.presentation.settings
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -11,11 +10,11 @@ import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.ui.ThemeSetting
 import hr.dtakac.prognoza.ui.ThemeChanger
 import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,12 +42,6 @@ class SettingsViewModel @Inject constructor(
 
     private val _state = mutableStateOf(SettingsState())
     val state: State<SettingsState> get() = _state
-
-    private val _unitChanged: MutableState<String?> = mutableStateOf(null)
-    val unitChanged: State<String?> get() = _unitChanged
-
-    private val _themeChanged: MutableState<String?> = mutableStateOf(null)
-    val themeChanged: State<String?> get() = _themeChanged
 
     fun getState() {
         updateState { }
@@ -136,10 +129,14 @@ class SettingsViewModel @Inject constructor(
 
     private fun fireUnitChanged() {
         widgetRefresher.refresh()
-        _unitChanged.value = UUID.randomUUID().toString()
+        _state.value = _state.value.copy(
+            unitChanged = simpleEvent()
+        )
     }
 
     private fun fireThemeChanged() {
-        _themeChanged.value = UUID.randomUUID().toString()
+        _state.value = _state.value.copy(
+            themeChanged = simpleEvent()
+        )
     }
 }

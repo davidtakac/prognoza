@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.ui.settings
 
 import androidx.compose.runtime.*
 import androidx.hilt.navigation.compose.hiltViewModel
+import hr.dtakac.prognoza.presentation.OnEvent
 import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
 
 @Composable
@@ -11,23 +12,15 @@ fun SettingsScreen(
     onThemeChange: () -> Unit = {},
     onUnitChange: () -> Unit = {}
 ) {
+    val state by viewModel.state
     LaunchedEffect(true) {
         viewModel.getState()
     }
-    val state by viewModel.state
-
-    val themeChanged by viewModel.themeChanged
-    LaunchedEffect(themeChanged) {
-        if (themeChanged != null) {
-            onThemeChange()
-        }
+    OnEvent(event = state.themeChanged) {
+        onThemeChange()
     }
-
-    val unitChanged by viewModel.unitChanged
-    LaunchedEffect(unitChanged) {
-        if (unitChanged != null) {
-            onUnitChange()
-        }
+    OnEvent(event = state.unitChanged) {
+        onUnitChange()
     }
 
     SettingsContent(
