@@ -50,7 +50,6 @@ class DefaultForecastRepository(
                 )
             } catch (e: Exception) {
                 Timber.e(e)
-                return mapToResult(e)
             }
         }
 
