@@ -15,7 +15,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 class ForecastWidgetWorker @Inject constructor(
-    context: Context,
+    private val context: Context,
     workerParameters: WorkerParameters,
     private val getForecast: GetForecast
 ) : CoroutineWorker(context, workerParameters) {
@@ -24,7 +24,12 @@ class ForecastWidgetWorker @Inject constructor(
 
         fun enqueue(context: Context) {
             val manager = WorkManager.getInstance(context)
-            val requestBuilder = PeriodicWorkRequestBuilder<ForecastWidgetWorker>(Duration.ofHours(1L))
+            val repeatInterval = Duration.ofHours(1L)
+            val requestBuilder = PeriodicWorkRequestBuilder<ForecastWidgetWorker>(repeatInterval)
+                // todo: ForecastWidgetReceiver's onEnabled is called before any glanceIds are
+                //  added, which causes the widget update to miss the newly added widget. This
+                //  is a workaround. Remove it once the API is fixed.
+                .setInitialDelay(Duration.ofSeconds(1L))
             val workPolicy = ExistingPeriodicWorkPolicy.REPLACE
             manager.enqueueUniquePeriodicWork(
                 uniqueWorkName,
@@ -39,7 +44,7 @@ class ForecastWidgetWorker @Inject constructor(
     }
 
     override suspend fun doWork(): Result {
-        val manager = GlanceAppWidgetManager(applicationContext)
+        val manager = GlanceAppWidgetManager(context)
         val glanceIds = manager.getGlanceIds(ForecastWidget::class.java)
         return try {
             setWidgetState(glanceIds, ForecastWidgetState.Loading)
@@ -81,21 +86,24 @@ class ForecastWidgetWorker @Inject constructor(
     ) {
         glanceIds.forEach { glanceId ->
             updateAppWidgetState(
-                context = applicationContext,
+                context = context,
                 definition = ForecastWidgetStateDefinition,
                 glanceId = glanceId,
                 updateState = { newState }
             )
         }
-        ForecastWidget().updateAll(applicationContext)
+        ForecastWidget().updateAll(context)
     }
 
     class Factory @Inject constructor(
         private val getForecast: Provider<GetForecast>
     ) : ChildWorkerFactory {
-        override fun create(appContext: Context, params: WorkerParameters): ListenableWorker {
+        override fun create(
+            context: Context,
+            params: WorkerParameters
+        ): ListenableWorker {
             return ForecastWidgetWorker(
-                appContext,
+                context,
                 params,
                 getForecast.get()
             )

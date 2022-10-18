@@ -53,6 +53,7 @@ class DefaultForecastRepository(
                 return mapToResult(e)
             }
         }
+
         return try {
             forecastDao.getForecasts(
                 start = from,
@@ -78,7 +79,6 @@ class DefaultForecastRepository(
             latitude = format("%.2f", latitude),
             longitude = format("%.2f", longitude)
         )
-        forecastDao.deleteExpired()
         updateForecast(forecastResponse.body(), latitude, longitude)
         updateMeta(forecastResponse.headers(), latitude, longitude)
     }

@@ -13,9 +13,6 @@ interface ForecastDao {
     @Query("DELETE FROM forecast WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001")
     suspend fun delete(latitude: Double, longitude: Double)
 
-    @Query("DELETE FROM forecast WHERE DATE(start_time) < DATE('now')")
-    suspend fun deleteExpired()
-
     @Query(
         value = """
             SELECT * FROM forecast 
