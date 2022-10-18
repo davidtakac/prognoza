@@ -11,6 +11,6 @@ interface MetaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(forecastMeta: MetaDbModel)
 
-    @Query("SELECT * FROM meta WHERE latitude == :latitude AND longitude == :longitude")
+    @Query("SELECT * FROM meta WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001")
     suspend fun get(latitude: Double, longitude: Double): MetaDbModel?
 }

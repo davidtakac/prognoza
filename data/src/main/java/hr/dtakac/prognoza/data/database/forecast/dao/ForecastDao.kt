@@ -10,7 +10,7 @@ interface ForecastDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(dbModels: List<ForecastDbModel>)
 
-    @Query("DELETE FROM forecast WHERE latitude == :latitude AND longitude == :longitude")
+    @Query("DELETE FROM forecast WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001")
     suspend fun delete(latitude: Double, longitude: Double)
 
     @Query("DELETE FROM forecast WHERE DATE(start_time) < DATE('now')")
@@ -20,7 +20,7 @@ interface ForecastDao {
         value = """
             SELECT * FROM forecast 
             WHERE DATETIME(start_time) BETWEEN DATETIME(:start) AND DATETIME(:end) 
-            AND latitude == :latitude AND longitude == :longitude 
+            AND abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001
             ORDER BY DATETIME(start_time) ASC
         """
     )
