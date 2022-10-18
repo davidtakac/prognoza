@@ -1,8 +1,8 @@
 # Prognoza
 Weather app with widgets and offline support.
 
-[<img src="screenshots/light.png" width=250>](screenshots/prognoza-main.png)
-[<img src="screenshots/coming_light.png" width=250>](screenshots/prognoza-widgets.png)
+[<img src="screenshots/prognoza-main.png" width=250>](screenshots/prognoza-main.png)
+[<img src="screenshots/prognoza-widgets.png" width=250>](screenshots/prognoza-widgets.png)
 
 ## Features
 - Weather forecast for today and coming days
