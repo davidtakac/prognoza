@@ -49,12 +49,8 @@ class ForecastWidgetWorker @Inject constructor(
         return try {
             setWidgetState(glanceIds, ForecastWidgetState.Loading)
             val widgetState = when (val result = getForecast()) {
-                GetForecastResult.Error.Client,
-                GetForecastResult.Error.Database,
-                GetForecastResult.Error.NoSelectedPlace,
-                GetForecastResult.Error.Server,
-                GetForecastResult.Error.Throttle,
-                GetForecastResult.Error.Unknown -> ForecastWidgetState.Error
+                GetForecastResult.Empty.Error,
+                GetForecastResult.Empty.NoSelectedPlace -> ForecastWidgetState.Error
                 is GetForecastResult.Success -> ForecastWidgetState.Success(
                     placeName = result.placeName,
                     temperatureUnit = result.temperatureUnit,

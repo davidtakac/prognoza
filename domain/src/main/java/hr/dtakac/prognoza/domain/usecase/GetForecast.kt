@@ -10,7 +10,6 @@ import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import hr.dtakac.prognoza.entities.forecast.Forecast
-import hr.dtakac.prognoza.domain.usecase.GetForecastResult.Error
 
 class GetForecast(
     private val getSelectedPlace: GetSelectedPlace,
@@ -18,7 +17,7 @@ class GetForecast(
     private val settingsRepository: SettingsRepository
 ) {
     suspend operator fun invoke(): GetForecastResult {
-        val selectedPlace = getSelectedPlace() ?: return Error.NoSelectedPlace
+        val selectedPlace = getSelectedPlace() ?: return GetForecastResult.Empty.NoSelectedPlace
         val from = ZonedDateTime.now().truncatedTo(ChronoUnit.HOURS)
         val to = from.plusDays(7L)
         return forecastRepository.getForecast(
@@ -32,23 +31,18 @@ class GetForecast(
     private suspend fun mapToResult(
         place: Place,
         repositoryResult: ForecastRepositoryResult
-    ): GetForecastResult =
-        when (repositoryResult) {
-            is ForecastRepositoryResult.ThrottleError -> Error.Throttle
-            is ForecastRepositoryResult.ClientError -> Error.Client
-            is ForecastRepositoryResult.ServerError -> Error.Server
-            is ForecastRepositoryResult.UnknownError -> Error.Unknown
-            is ForecastRepositoryResult.DatabaseError -> Error.Database
-            is ForecastRepositoryResult.Success -> {
-                GetForecastResult.Success(
-                    placeName = place.name,
-                    forecast = repositoryResult.data,
-                    temperatureUnit = settingsRepository.getTemperatureUnit(),
-                    windUnit = settingsRepository.getWindUnit(),
-                    precipitationUnit = settingsRepository.getPrecipitationUnit()
-                )
-            }
+    ): GetForecastResult = when (repositoryResult) {
+        is ForecastRepositoryResult.Empty -> GetForecastResult.Empty.Error
+        is ForecastRepositoryResult.Success -> {
+            GetForecastResult.Success(
+                placeName = place.name,
+                forecast = repositoryResult.data,
+                temperatureUnit = settingsRepository.getTemperatureUnit(),
+                windUnit = settingsRepository.getWindUnit(),
+                precipitationUnit = settingsRepository.getPrecipitationUnit()
+            )
         }
+    }
 }
 
 sealed interface GetForecastResult {
@@ -60,12 +54,8 @@ sealed interface GetForecastResult {
         val precipitationUnit: LengthUnit
     ) : GetForecastResult
 
-    sealed interface Error : GetForecastResult {
-        object NoSelectedPlace : Error
-        object Throttle : Error
-        object Client : Error
-        object Server : Error
-        object Database : Error
-        object Unknown : Error
+    sealed interface Empty : GetForecastResult {
+        object Error : Empty
+        object NoSelectedPlace : Empty
     }
 }

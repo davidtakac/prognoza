@@ -13,12 +13,7 @@ interface ForecastRepository {
 }
 
 sealed interface ForecastRepositoryResult {
-    object ThrottleError : ForecastRepositoryResult
-    object ClientError : ForecastRepositoryResult
-    object ServerError : ForecastRepositoryResult
-    object UnknownError : ForecastRepositoryResult
-    object DatabaseError : ForecastRepositoryResult
-
+    object Empty : ForecastRepositoryResult
     data class Success(
         val data: Forecast
     ) : ForecastRepositoryResult

@@ -22,15 +22,11 @@ fun mapToForecastUi(
 )
 
 fun mapToError(
-    error: GetForecastResult.Error
+    error: GetForecastResult.Empty
 ): TextResource {
     val stringId = when (error) {
-        GetForecastResult.Error.Client -> R.string.error_client
-        GetForecastResult.Error.Database -> R.string.error_database
-        GetForecastResult.Error.NoSelectedPlace -> R.string.error_no_selected_place
-        GetForecastResult.Error.Server -> R.string.error_server
-        GetForecastResult.Error.Throttle -> R.string.error_throttling
-        GetForecastResult.Error.Unknown -> R.string.error_unknown
+        GetForecastResult.Empty.NoSelectedPlace -> R.string.error_no_selected_place
+        GetForecastResult.Empty.Error -> R.string.error_unknown
     }
     return TextResource.fromStringId(stringId)
 }

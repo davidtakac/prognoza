@@ -34,7 +34,7 @@ class ForecastViewModel @Inject constructor(
                     ),
                     error = null
                 )
-                is GetForecastResult.Error -> _state.value.copy(
+                is GetForecastResult.Empty -> _state.value.copy(
                     error = mapToError(result)
                 )
             }

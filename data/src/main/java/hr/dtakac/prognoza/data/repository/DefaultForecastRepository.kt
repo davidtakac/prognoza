@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.data.repository
 
-import android.database.sqlite.SQLiteException
 import hr.dtakac.prognoza.data.database.converter.Rfc1123DateTimeConverter
 import hr.dtakac.prognoza.data.database.forecast.dao.ForecastDao
 import hr.dtakac.prognoza.data.database.forecast.dao.MetaDao
@@ -17,7 +16,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import okhttp3.Headers
 import okhttp3.internal.format
-import retrofit2.HttpException
 import timber.log.Timber
 import java.time.ZonedDateTime
 
@@ -34,13 +32,7 @@ class DefaultForecastRepository(
         from: ZonedDateTime,
         to: ZonedDateTime
     ): ForecastRepositoryResult {
-        val meta = try {
-            metaDao.get(latitude, longitude)
-        } catch (e: Exception) {
-            Timber.e(e)
-            null
-        }
-
+        val meta = metaDao.get(latitude, longitude)
         if (meta?.expires?.let { ZonedDateTime.now() > it } != false) {
             try {
                 updateDatabase(
@@ -54,15 +46,17 @@ class DefaultForecastRepository(
         }
 
         return try {
-            forecastDao.getForecasts(
+            val forecastData = forecastDao.getForecasts(
                 start = from,
                 end = to,
                 latitude = latitude,
                 longitude = longitude
-            ).map(::mapDbModelToEntity).let { ForecastRepositoryResult.Success(Forecast(it)) }
+            )
+            if (forecastData.isEmpty()) ForecastRepositoryResult.Empty
+            else forecastData.map(::mapDbModelToEntity).let { ForecastRepositoryResult.Success(Forecast(it)) }
         } catch (e: Exception) {
             Timber.e(e)
-            ForecastRepositoryResult.UnknownError
+            ForecastRepositoryResult.Empty
         }
     }
 
@@ -117,22 +111,5 @@ class DefaultForecastRepository(
         } ?: return
         forecastDao.delete(latitude, longitude)
         forecastDao.insert(dbModels)
-    }
-
-    private fun mapToResult(exception: Exception): ForecastRepositoryResult {
-        return when (exception) {
-            is HttpException -> getResultFromHttpException(exception)
-            is SQLiteException -> ForecastRepositoryResult.DatabaseError
-            else -> ForecastRepositoryResult.UnknownError
-        }
-    }
-
-    private fun getResultFromHttpException(httpException: HttpException): ForecastRepositoryResult {
-        return when (httpException.code()) {
-            429 -> ForecastRepositoryResult.ThrottleError
-            in 400..499 -> ForecastRepositoryResult.ClientError
-            in 500..504 -> ForecastRepositoryResult.ServerError
-            else -> ForecastRepositoryResult.UnknownError
-        }
     }
 }
