@@ -23,6 +23,8 @@ class ForecastWidgetWorker @Inject constructor(
     private val getForecast: GetForecast
 ) : CoroutineWorker(context, workerParameters) {
     companion object {
+        // Do not just change or delete these values; make sure you cancel them first so leftover
+        // jobs aren't still left in the air.
         private const val updateNowName = "update_now"
         private const val updateNextHourName = "update_next_hour"
 
