@@ -32,7 +32,9 @@ fun SettingsContent(
     onWindUnitPick: (Int) -> Unit = {},
     onPrecipitationUnitPick: (Int) -> Unit = {},
     onPressureUnitPick: (Int) -> Unit = {},
-    onThemePick: (Int) -> Unit = {}
+    onThemePick: (Int) -> Unit = {},
+    onWeatherDataClick: () -> Unit = {},
+    onPlaceDataClick: () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
         Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
@@ -60,7 +62,9 @@ fun SettingsContent(
                 onWindUnitPick = onWindUnitPick,
                 onPrecipitationUnitPick = onPrecipitationUnitPick,
                 onPressureUnitPick = onPressureUnitPick,
-                onThemePick = onThemePick
+                onThemePick = onThemePick,
+                onWeatherDataClick = onWeatherDataClick,
+                onPlaceDataClick = onPlaceDataClick
             )
         }
     }
@@ -75,6 +79,8 @@ private fun SettingsList(
     onPrecipitationUnitPick: (Int) -> Unit,
     onPressureUnitPick: (Int) -> Unit,
     onThemePick: (Int) -> Unit,
+    onWeatherDataClick: () -> Unit,
+    onPlaceDataClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -156,13 +162,15 @@ private fun SettingsList(
         item {
             SettingItem(
                 name = stringResource(id = R.string.weather_data),
-                value = stringResource(id = R.string.met_norway_credit)
+                value = stringResource(id = R.string.met_norway_credit),
+                onClick = onWeatherDataClick
             )
         }
         item {
             SettingItem(
                 name = stringResource(id = R.string.geolocation_data),
-                value = stringResource(id = R.string.osm_nominatim_credit)
+                value = stringResource(id = R.string.osm_nominatim_credit),
+                onClick = onPlaceDataClick
             )
         }
     }
