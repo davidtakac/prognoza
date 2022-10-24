@@ -75,8 +75,8 @@
     <string name="error_throttling">Heavy traffic from other users.</string>
     <string name="error_database">Failed to read local forecast data.</string>
     <string name="error_unknown">An unexpected error occurred.</string>
-    <string name="met_norway_credit">Data from MET Norway</string>
-    <string name="osm_nominatim_credit">Data from OSM Nominatim</string>
+    <string name="met_norway_credit">The Norwegian Meteorological Institute</string>
+    <string name="osm_nominatim_credit">OpenStreetMap</string>
     <string name="error_no_selected_place">Select a place to see its forecast.</string>
     <string name="wind_calm">Calm</string>
     <string name="wind_light_air">Light air</string>
@@ -131,5 +131,8 @@
     <string name="widget_empty">No forecast data. Make sure that you have a selected place and are online</string>
     <string name="widget_description">Weather forecast for right now and the next couple of hours</string>
     <string name="widget_name">Current forecast</string>
+    <string name="credit">Credit</string>
+    <string name="weather_data">Weather data</string>
+    <string name="geolocation_data">Place data</string>
 
 </resources>

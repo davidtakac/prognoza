@@ -44,7 +44,7 @@ private fun MultipleChoiceSettingItem(
     modifier: Modifier = Modifier
 ) {
     var openDialog by remember { mutableStateOf(false) }
-    ItemContent(
+    SettingItem(
         name = name,
         value = selectedValue,
         onClick = { openDialog = true },
@@ -62,7 +62,7 @@ private fun MultipleChoiceSettingItem(
 }
 
 @Composable
-private fun ItemContent(
+fun SettingItem(
     name: String,
     value: String,
     modifier: Modifier = Modifier,
@@ -187,7 +187,7 @@ private fun DialogOptions(
 @Preview
 @Composable
 private fun ContentPreview() = PrognozaTheme {
-    ItemContent(
+    SettingItem(
         name = fakeState.name.asString(),
         value = fakeState.value.asString()
     )

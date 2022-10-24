@@ -147,6 +147,24 @@ private fun SettingsList(
                 )
             }
         }
+        item {
+            Header(
+                text = stringResource(id = R.string.credit),
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+            )
+        }
+        item {
+            SettingItem(
+                name = stringResource(id = R.string.weather_data),
+                value = stringResource(id = R.string.met_norway_credit)
+            )
+        }
+        item {
+            SettingItem(
+                name = stringResource(id = R.string.geolocation_data),
+                value = stringResource(id = R.string.osm_nominatim_credit)
+            )
+        }
     }
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
