@@ -11,8 +11,11 @@ import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import timber.log.Timber
 import java.time.Duration
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Provider
+import kotlin.random.Random
 
 class ForecastWidgetWorker @Inject constructor(
     private val context: Context,
@@ -20,26 +23,48 @@ class ForecastWidgetWorker @Inject constructor(
     private val getForecast: GetForecast
 ) : CoroutineWorker(context, workerParameters) {
     companion object {
-        private const val uniqueWorkName = "forecast_widget_worker"
+        private const val updateNowName = "update_now"
+        private const val updateNextHourName = "update_next_hour"
 
-        fun enqueue(context: Context) {
-            val manager = WorkManager.getInstance(context)
-            val repeatInterval = Duration.ofHours(1L)
-            val requestBuilder = PeriodicWorkRequestBuilder<ForecastWidgetWorker>(repeatInterval)
-                // todo: ForecastWidgetReceiver's onEnabled is called before any glanceIds are
-                //  added, which causes the widget update to miss the newly added widget. This
-                //  is a workaround. Remove it once the API is fixed.
-                .setInitialDelay(Duration.ofSeconds(1L))
-            val workPolicy = ExistingPeriodicWorkPolicy.REPLACE
-            manager.enqueueUniquePeriodicWork(
-                uniqueWorkName,
-                workPolicy,
-                requestBuilder.build()
+        fun updateNow(context: Context) {
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                updateNowName,
+                ExistingWorkPolicy.REPLACE,
+                getUpdateNowRequest()
+            )
+        }
+
+        fun updateNextHour(context: Context) {
+            WorkManager.getInstance(context).enqueueUniqueWork(
+                updateNextHourName,
+                ExistingWorkPolicy.KEEP,
+                getUpdateNextHourRequest()
             )
         }
 
         fun cancel(context: Context) {
-            WorkManager.getInstance(context).cancelUniqueWork(uniqueWorkName)
+            WorkManager.getInstance(context).run {
+                cancelUniqueWork(updateNowName)
+                cancelUniqueWork(updateNextHourName)
+            }
+        }
+
+        private fun getUpdateNowRequest(): OneTimeWorkRequest =
+            OneTimeWorkRequestBuilder<ForecastWidgetWorker>()
+                // todo: ForecastWidgetReceiver's onEnabled is called before any glanceIds are
+                //  added, which causes the widget update to miss the newly added widget. This
+                //  is a workaround. Remove it once the API is fixed.
+                .setInitialDelay(Duration.ofSeconds(1L))
+                .build()
+
+        private fun getUpdateNextHourRequest(): OneTimeWorkRequest {
+            val now = ZonedDateTime.now()
+            val untilNextFullHour = Duration.between(now, now.truncatedTo(ChronoUnit.HOURS).plusHours(1L))
+            // Required to avoid all instances of the app making a request at the same time and DDoSing the server
+            val jitter = Duration.ofSeconds(Random.nextLong(from = 0L, until = 5L * 60L))
+            return OneTimeWorkRequestBuilder<ForecastWidgetWorker>()
+                .setInitialDelay(untilNextFullHour + jitter)
+                .build()
         }
     }
 

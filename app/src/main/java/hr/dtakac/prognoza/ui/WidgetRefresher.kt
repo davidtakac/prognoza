@@ -4,7 +4,5 @@ import android.content.Context
 import hr.dtakac.prognoza.widget.ForecastWidgetWorker
 
 class WidgetRefresher(private val appContext: Context) {
-    fun refresh() {
-        ForecastWidgetWorker.enqueue(appContext)
-    }
+    fun refresh() = ForecastWidgetWorker.updateNow(context = appContext)
 }
