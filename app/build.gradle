@@ -18,6 +18,15 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    /**
+     * To make this work, you need to:
+     *  1. Place your keystore file (keystore.jks) in the root of the app module.
+     *  2. Create a keystore.properties file in the root of the project. Its content should be:
+     *     storeFile=./keystore.jks
+     *     storePassword=my_store_password
+     *     keyAlias=my_key_alias
+     *     keyPassword=my_keystore_password
+     */
     signingConfigs {
         release {
             def keystoreProperties = new Properties()
