@@ -11,16 +11,18 @@ class GetSavedPlaces(
         val results = placeRepository.getSaved()
         return if (results is PlaceRepositoryResult.Success) {
             if (results.data.isEmpty()) {
-                GetSavedPlacesResult.None
+                GetSavedPlacesResult.Empty.None
             } else {
                 GetSavedPlacesResult.Success(results.data)
             }
-        } else GetSavedPlacesResult.Error
+        } else GetSavedPlacesResult.Empty.Error
     }
 }
 
 sealed interface GetSavedPlacesResult {
-    object None : GetSavedPlacesResult
-    object Error : GetSavedPlacesResult
     data class Success(val places: List<Place>) : GetSavedPlacesResult
+    sealed interface Empty : GetSavedPlacesResult {
+        object None : Empty
+        object Error : Empty
+    }
 }

@@ -39,16 +39,9 @@ class PlacesViewModel @Inject constructor(
                         empty = null
                     )
                 }
-                is GetSavedPlacesResult.None -> {
-                    _state.value = _state.value.copy(
-                        empty = TextResource.fromStringId(R.string.no_saved_places)
-                    )
-                }
-                is GetSavedPlacesResult.Error -> {
-                    _state.value = _state.value.copy(
-                        empty = TextResource.fromStringId(R.string.error_saved_places)
-                    )
-                }
+                is GetSavedPlacesResult.Empty -> _state.value = _state.value.copy(
+                    empty = mapper.mapToGetSavedPlacesError(savedPlacesResult)
+                )
             }
             hideLoader()
         }

@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.presentation.places
 
+import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.domain.usecase.GetSavedPlacesResult
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.presentation.TextResource
 import kotlinx.coroutines.CoroutineDispatcher
@@ -22,5 +24,16 @@ class PlacesUiMapper @Inject constructor(
                 isSelected = it == selectedPlace
             )
         }
+    }
+
+    suspend fun mapToGetSavedPlacesError(
+        error: GetSavedPlacesResult.Empty
+    ): TextResource = withContext(computationDispatcher) {
+        TextResource.fromStringId(
+            when (error) {
+                GetSavedPlacesResult.Empty.None -> R.string.no_saved_places
+                GetSavedPlacesResult.Empty.Error -> R.string.error_saved_places
+            }
+        )
     }
 }
