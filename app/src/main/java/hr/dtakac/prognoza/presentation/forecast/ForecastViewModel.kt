@@ -13,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ForecastViewModel @Inject constructor(
-    private val getForecast: GetForecast
+    private val getForecast: GetForecast,
+    private val mapper: ForecastUiMapper
 ) : ViewModel() {
     private val _state: MutableState<ForecastState> = mutableStateOf(ForecastState())
     val state: State<ForecastState> get() = _state
@@ -23,7 +24,7 @@ class ForecastViewModel @Inject constructor(
             _state.value = _state.value.copy(isLoading = true)
             _state.value = when (val result = getForecast()) {
                 is GetForecastResult.Success -> _state.value.copy(
-                    forecast = mapToForecastUi(
+                    forecast = mapper.mapToForecastUi(
                         placeName = result.placeName,
                         current = result.forecast.current,
                         today = result.forecast.today,
@@ -35,7 +36,7 @@ class ForecastViewModel @Inject constructor(
                     error = null
                 )
                 is GetForecastResult.Empty -> _state.value.copy(
-                    error = mapToError(result)
+                    error = mapper.mapToError(result)
                 )
             }
             _state.value = _state.value.copy(isLoading = false)

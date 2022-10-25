@@ -16,15 +16,12 @@ import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.domain.repository.ForecastRepository
 import hr.dtakac.prognoza.domain.repository.PlaceRepository
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
-import hr.dtakac.prognoza.ui.ThemeChanger
-import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
 @Module
 @InstallIn(SingletonComponent::class)
 class RepositoryModule {
-
     @Provides
     fun provideSharedPreferences(
         @ApplicationContext context: Context
@@ -65,15 +62,4 @@ class RepositoryModule {
         placeDao = database.placeDao(),
         userAgent = userAgent
     )
-
-    @Provides
-    fun provideThemeChanger(
-        sharedPreferences: SharedPreferences,
-        @Named("io") ioDispatcher: CoroutineDispatcher
-    ): ThemeChanger = ThemeChanger(sharedPreferences, ioDispatcher)
-
-    @Provides
-    fun provideWidgetRefresher(
-        @ApplicationContext context: Context
-    ): WidgetRefresher = WidgetRefresher(context)
 }

@@ -4,6 +4,8 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Named
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -13,8 +15,9 @@ enum class ThemeSetting {
     DARK, LIGHT, FOLLOW_SYSTEM
 }
 
-class ThemeChanger(
+class ThemeChanger @Inject constructor(
     private val sharedPreferences: SharedPreferences,
+    @Named("io")
     private val ioDispatcher: CoroutineDispatcher
 ) {
     fun getAvailableThemes(): List<ThemeSetting> = ThemeSetting.values().toList()
