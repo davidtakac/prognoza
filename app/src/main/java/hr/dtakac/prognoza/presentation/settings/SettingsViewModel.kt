@@ -32,7 +32,8 @@ class SettingsViewModel @Inject constructor(
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
     private val themeChanger: ThemeChanger,
-    private val widgetRefresher: WidgetRefresher
+    private val widgetRefresher: WidgetRefresher,
+    private val mapper: SettingsUiMapper
 ) : ViewModel() {
     private var availableTemperatureUnits: List<TemperatureUnit> = listOf()
     private var availableWindUnits: List<SpeedUnit> = listOf()
@@ -99,20 +100,20 @@ class SettingsViewModel @Inject constructor(
         availableThemeSettings = themeChanger.getAvailableThemes()
 
         _state.value = _state.value.copy(
-            temperatureUnitSetting = mapToTemperatureUnitSetting(
+            temperatureUnitSetting = mapper.mapToTemperatureUnitSetting(
                 selectedTemperatureUnit = getTemperatureUnit(),
                 availableTemperatureUnits = availableTemperatureUnits
             ),
-            windUnitSetting = mapToWindUnitSetting(
+            windUnitSetting = mapper.mapToWindUnitSetting(
                 selectedWindUnit = getWindUnit(),
                 availableWindUnits = availableWindUnits
             ),
-            precipitationUnitSetting = mapToPrecipitationUnitSetting(
+            precipitationUnitSetting = mapper.mapToPrecipitationUnitSetting(
                 selectedPrecipitationUnit = getPrecipitationUnit(),
                 availablePrecipitationUnits = availablePrecipitationUnits
             ),
             pressureUnitSetting = null,
-            themeSetting = mapToThemeSetting(
+            themeSetting = mapper.mapToThemeSetting(
                 selectedThemeSetting = themeChanger.getCurrentTheme(),
                 availableThemeSettings = availableThemeSettings
             )
