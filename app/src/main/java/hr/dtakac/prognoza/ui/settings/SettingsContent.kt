@@ -98,17 +98,17 @@ private fun SettingsList(
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
         }
-        item {
+        item(key = "settings-units-spacer") {
             Spacer(modifier = Modifier.height(16.dp))
         }
-        item {
+        item(key = "units-spacer") {
             Header(
                 text = stringResource(id = R.string.units),
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
             )
         }
         state.temperatureUnitSetting?.let {
-            item {
+            item(key = "temperature-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = onTemperatureUnitPick
@@ -116,7 +116,7 @@ private fun SettingsList(
             }
         }
         state.windUnitSetting?.let {
-            item {
+            item(key = "wind-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = onWindUnitPick
@@ -124,7 +124,7 @@ private fun SettingsList(
             }
         }
         state.precipitationUnitSetting?.let {
-            item {
+            item(key = "precipitation-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = onPrecipitationUnitPick
@@ -132,41 +132,41 @@ private fun SettingsList(
             }
         }
         state.pressureUnitSetting?.let {
-            item {
+            item(key = "pressure-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = onPressureUnitPick
                 )
             }
         }
-        item {
+        item(key = "appearance-header") {
             Header(
                 text = stringResource(id = R.string.appearance),
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
             )
         }
         state.themeSetting?.let {
-            item {
+            item(key = "theme-setting") {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = onThemePick
                 )
             }
         }
-        item {
+        item(key = "credit-header") {
             Header(
                 text = stringResource(id = R.string.credit),
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
             )
         }
-        item {
+        item(key = "weather-credit") {
             SettingItem(
                 name = stringResource(id = R.string.weather_data),
                 value = stringResource(id = R.string.met_norway_credit),
                 onClick = onWeatherDataClick
             )
         }
-        item {
+        item(key = "place-credit") {
             SettingItem(
                 name = stringResource(id = R.string.geolocation_data),
                 value = stringResource(id = R.string.osm_nominatim_credit),

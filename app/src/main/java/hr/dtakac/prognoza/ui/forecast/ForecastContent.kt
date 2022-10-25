@@ -197,7 +197,7 @@ private fun DataList(
                 style = PrognozaTheme.typography.titleLarge
             )
         }
-        item {
+        item(key = "place-time-spacer") {
             Spacer(modifier = Modifier.height(8.dp))
         }
         item(key = "time") {
@@ -214,14 +214,14 @@ private fun DataList(
                 maxLines = 1
             )
         }
-        item {
+        item(key = "description-low-high") {
             DescriptionAndLowHighTemperature(
                 description = forecast.today.description.asString(),
                 lowHighTemperature = forecast.today.lowHighTemperature.asString(),
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        item {
+        item(key = "wind-and-precipitation") {
             WindAndPrecipitation(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -230,7 +230,7 @@ private fun DataList(
                 precipitation = forecast.today.precipitation.asString()
             )
         }
-        item {
+        item(key = "hourly-header") {
             Header(
                 text = stringResource(id = R.string.hourly),
                 modifier = Modifier
@@ -246,7 +246,7 @@ private fun DataList(
                     .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp)
             )
         }
-        item {
+        item(key = "coming-header") {
             Header(
                 text = stringResource(id = R.string.coming),
                 modifier = Modifier
