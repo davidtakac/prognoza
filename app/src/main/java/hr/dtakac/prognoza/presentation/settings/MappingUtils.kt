@@ -25,6 +25,7 @@ fun SpeedUnit.toSettingsLabel(): Int = when (this) {
 fun LengthUnit.toSettingsLabel(): Int = when (this) {
     LengthUnit.MM -> R.string.settings_label_mm
     LengthUnit.IN -> R.string.settings_label_in
+    LengthUnit.CM -> R.string.settings_label_cm
 }
 
 @StringRes

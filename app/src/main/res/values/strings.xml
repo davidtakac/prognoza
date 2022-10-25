@@ -59,6 +59,7 @@
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_precipitation_mm">%1$s mm</string>
     <string name="template_precipitation_in">%1$s in</string>
+    <string name="template_precipitation_cm">%1$s cm</string>
     <string name="template_precipitation">Precipitation: %1$s</string>
     <string name="template_precipitation_at">%1$s at %2$s</string>
     <string name="template_wind_kmh">%1$s km/h</string>
@@ -119,6 +120,7 @@
     <string name="settings_label_mph">Miles per hour</string>
     <string name="settings_label_mm">Millimeters</string>
     <string name="settings_label_in">Inches</string>
+    <string name="settings_label_cm">Centimeters</string>
     <string name="settings_label_hpa">Hectopascal</string>
     <string name="settings_label_psi">Pounds per square inch</string>
     <string name="settings_label_bar">Bar</string>

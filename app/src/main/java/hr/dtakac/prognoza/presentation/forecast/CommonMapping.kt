@@ -64,11 +64,13 @@ fun getPrecipitation(
     id = when (unit) {
         LengthUnit.MM -> R.string.template_precipitation_mm
         LengthUnit.IN -> R.string.template_precipitation_in
+        LengthUnit.CM -> R.string.template_precipitation_cm
     },
     TextResource.fromNumber(precipitation.run {
         when (unit) {
             LengthUnit.MM -> millimeters
             LengthUnit.IN -> inches
+            LengthUnit.CM -> centimeters
         }
     }, decimalPlaces = 2)
 )
