@@ -20,7 +20,8 @@ class PlacesViewModel @Inject constructor(
     private val getSavedPlaces: GetSavedPlaces,
     private val selectPlace: SelectPlace,
     private val getSelectedPlace: GetSelectedPlace,
-    private val widgetRefresher: WidgetRefresher
+    private val widgetRefresher: WidgetRefresher,
+    private val mapper: PlacesUiMapper
 ) : ViewModel() {
     private var currentPlaces: List<Place> = listOf()
 
@@ -32,13 +33,9 @@ class PlacesViewModel @Inject constructor(
             showLoader()
             when (val savedPlacesResult = getSavedPlaces()) {
                 is GetSavedPlacesResult.Success -> {
-                    val selectedPlace = getSelectedPlace()
-                    val placesUi = savedPlacesResult.places.map {
-                        mapToPlaceUi(it, isSelected = it == selectedPlace)
-                    }
                     currentPlaces = savedPlacesResult.places
                     _state.value = _state.value.copy(
-                        places = placesUi,
+                        places = mapper.mapToPlaceUi(savedPlacesResult.places, getSelectedPlace()),
                         empty = null
                     )
                 }
@@ -62,13 +59,9 @@ class PlacesViewModel @Inject constructor(
             showLoader()
             when (val searchPlacesResult = searchPlaces(query)) {
                 is SearchPlacesResult.Success -> {
-                    val selectedPlace = getSelectedPlace()
-                    val placesUi = searchPlacesResult.places.map {
-                        mapToPlaceUi(it, isSelected = it == selectedPlace)
-                    }
                     currentPlaces = searchPlacesResult.places
                     _state.value = _state.value.copy(
-                        places = placesUi,
+                        places = mapper.mapToPlaceUi(searchPlacesResult.places, getSelectedPlace()),
                         empty = null
                     )
                 }
@@ -92,11 +85,8 @@ class PlacesViewModel @Inject constructor(
             showLoader()
             val selectedPlace = currentPlaces[index]
             selectPlace(selectedPlace)
-            val placesUi = currentPlaces.map {
-                mapToPlaceUi(it, isSelected = it == selectedPlace)
-            }
             _state.value = _state.value.copy(
-                places = placesUi,
+                places = mapper.mapToPlaceUi(currentPlaces, selectedPlace),
                 placeSelected = simpleEvent()
             )
             widgetRefresher.refresh()
