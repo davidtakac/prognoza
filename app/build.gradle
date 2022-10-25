@@ -20,6 +20,8 @@ android {
 
     signingConfigs {
         release {
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(rootProject.file("./keystore.properties")))
             storeFile file(keystoreProperties['storeFile'])
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
@@ -31,6 +33,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 
@@ -51,7 +54,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion "$versions.compose"
     }
-    
+
     kotlinOptions {
         jvmTarget = "11"
     }

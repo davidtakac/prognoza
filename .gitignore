@@ -16,4 +16,4 @@ local.properties
 
 # Signing
 keystore.properties
-keystore.jks
+/app/prognoza.jks
