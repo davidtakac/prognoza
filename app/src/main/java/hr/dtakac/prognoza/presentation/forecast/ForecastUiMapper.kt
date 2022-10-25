@@ -31,15 +31,14 @@ class ForecastUiMapper @Inject constructor(
         )
     }
 
-    suspend fun mapToError(
+    fun mapToError(
         error: GetForecastResult.Empty
-    ): TextResource = withContext(computationDispatcher) {
-        val stringId = when (error) {
+    ): TextResource = TextResource.fromStringId(
+        when (error) {
             GetForecastResult.Empty.NoSelectedPlace -> R.string.error_no_selected_place
             GetForecastResult.Empty.Error -> R.string.error_unknown
         }
-        TextResource.fromStringId(stringId)
-    }
+    )
 
     private fun mapToTodayUi(
         current: Current,

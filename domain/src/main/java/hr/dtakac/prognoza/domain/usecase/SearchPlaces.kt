@@ -11,16 +11,18 @@ class SearchPlaces(
         val result = placeRepository.search(query)
         return if (result is PlaceRepositoryResult.Success) {
             if (result.data.isEmpty()) {
-                SearchPlacesResult.None
+                SearchPlacesResult.Empty.None
             } else {
                 SearchPlacesResult.Success(result.data)
             }
-        } else SearchPlacesResult.Error
+        } else SearchPlacesResult.Empty.Error
     }
 }
 
 sealed interface SearchPlacesResult {
-    object None : SearchPlacesResult
-    object Error : SearchPlacesResult
     data class Success(val places: List<Place>) : SearchPlacesResult
+    sealed interface Empty : SearchPlacesResult {
+        object None : Empty
+        object Error : Empty
+    }
 }

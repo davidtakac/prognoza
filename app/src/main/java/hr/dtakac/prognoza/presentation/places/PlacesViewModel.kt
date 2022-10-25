@@ -5,10 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
-import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.launch
@@ -58,16 +56,9 @@ class PlacesViewModel @Inject constructor(
                         empty = null
                     )
                 }
-                is SearchPlacesResult.None -> {
-                    _state.value = _state.value.copy(
-                        empty = TextResource.fromStringId(R.string.no_places_found, query)
-                    )
-                }
-                is SearchPlacesResult.Error -> {
-                    _state.value = _state.value.copy(
-                        empty = TextResource.fromStringId(R.string.error_search_places)
-                    )
-                }
+                is SearchPlacesResult.Empty -> _state.value = _state.value.copy(
+                    empty = mapper.mapToSearchPlacesError(searchPlacesResult, query)
+                )
             }
             hideLoader()
         }
