@@ -24,8 +24,9 @@ jobs:
         alias: ${{ secrets.KEYSTORE_ALIAS }}
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
-    - uses: actions/upload-artifact@v2
-      name: Upload APK
+    - uses: svenstaro/upload-release-action@v2
+      name: Upload APK to release
       with:
-        name: Signed release APK
-        path: ${{steps.sign_release.outputs.signedReleaseFile}}
+        file: ${{steps.sign_release.outputs.signedReleaseFile}}
+        tag: ${{ grep versionName ./app/build.gradle | cut -d \" -f2 | cut -d \" -f1 }}
+        asset_name: prognoza-$tag.apk
