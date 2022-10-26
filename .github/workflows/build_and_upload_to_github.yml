@@ -1,9 +1,9 @@
 name: Build, sign and upload to Github Releases
 
 on:
-  [workflow_dispatch]
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 env:
   GITHUB_WORKFLOW: true
