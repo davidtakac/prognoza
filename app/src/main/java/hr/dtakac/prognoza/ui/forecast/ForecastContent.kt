@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.TextResource
@@ -305,7 +306,7 @@ private fun DescriptionAndLowHighTemperature(
             Row {
                 Text(description)
                 Image(
-                    painter = painterResource(id = icon),
+                    painter = rememberAsyncImagePainter(model = icon),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(start = 8.dp)
@@ -388,7 +389,7 @@ private fun HourItem(
                 overflow = TextOverflow.Ellipsis
             )
             Image(
-                painter = painterResource(id = hour.icon),
+                painter = rememberAsyncImagePainter(model = hour.icon),
                 contentDescription = null,
                 modifier = Modifier
                     .padding(start = 12.dp)
@@ -483,7 +484,7 @@ private fun ComingItem(
                                 modifier = Modifier.padding(bottom = 4.dp)
                             )
                             Image(
-                                painter = painterResource(id = hour.icon),
+                                painter = rememberAsyncImagePainter(model = hour.icon),
                                 contentDescription = null,
                                 modifier = Modifier.size(32.dp)
                             )
