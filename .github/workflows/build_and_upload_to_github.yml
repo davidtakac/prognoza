@@ -5,9 +5,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-env:
-  version_name: ${{ grep versionName ../../app/build.gradle | cut -d \" -f2 | cut -d \" -f1 }}
-
 jobs:
   build:
     name: Build, sign and upload to Github Releases
@@ -31,5 +28,5 @@ jobs:
       name: Upload APK to release
       with:
         file: ${{ steps.sign_release.outputs.signedReleaseFile }}
-        tag: $ {{ version_name }}
+        tag: ${{ grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1 }}
         asset_name: prognoza-$tag.apk
