@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.ui.forecast
 
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
@@ -217,6 +218,7 @@ private fun DataList(
         item(key = "description-low-high") {
             DescriptionAndLowHighTemperature(
                 description = forecast.today.description.asString(),
+                icon = forecast.today.iconResId,
                 lowHighTemperature = forecast.today.lowHighTemperature.asString(),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -289,20 +291,28 @@ private fun DataList(
 @Composable
 private fun DescriptionAndLowHighTemperature(
     description: String,
+    @DrawableRes
+    icon: Int,
     lowHighTemperature: String,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         ProvideTextStyle(PrognozaTheme.typography.titleLarge) {
-            Text(
-                modifier = Modifier.weight(2f),
-                text = description
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = lowHighTemperature,
-                textAlign = TextAlign.End
-            )
+            Row {
+                Text(description)
+                Image(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .size(36.dp)
+                )
+            }
+            Text(lowHighTemperature)
         }
     }
 }
@@ -313,17 +323,13 @@ private fun WindAndPrecipitation(
     precipitation: String,
     modifier: Modifier = Modifier
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
-            Text(
-                modifier = Modifier.weight(1f),
-                text = wind,
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = precipitation,
-                textAlign = TextAlign.End
-            )
+            Text(wind)
+            Text(precipitation)
         }
     }
 }
@@ -534,6 +540,7 @@ private fun fakeTodayUi(): TodayUi = TodayUi(
     temperature = TextResource.fromText("1°"),
     feelsLike = TextResource.fromText("Feels like 28°"),
     description = TextResource.fromText("Clear sky, sleet soon"),
+    iconResId = R.drawable.clearsky_day,
     lowHighTemperature = TextResource.fromText("15°—7°"),
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),

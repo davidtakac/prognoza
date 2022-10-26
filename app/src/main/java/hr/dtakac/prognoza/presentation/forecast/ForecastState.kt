@@ -21,6 +21,8 @@ data class TodayUi(
     val temperature: TextResource,
     val feelsLike: TextResource,
     val description: TextResource,
+    @DrawableRes
+    val iconResId: Int,
     val lowHighTemperature: TextResource,
     val wind: TextResource,
     val precipitation: TextResource,

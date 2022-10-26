@@ -57,6 +57,7 @@ class ForecastUiMapper @Inject constructor(
             getTemperature(current.feelsLike, temperatureUnit)
         ),
         description = TextResource.fromStringId(current.description.toStringId()),
+        iconResId = current.description.toDrawableId(),
         lowHighTemperature = getLowHighTemperature(
             today.lowTemperature,
             today.highTemperature,
