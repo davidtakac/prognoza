@@ -44,7 +44,15 @@ android {
             shrinkResources true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
+            if (System.getenv("GITHUB_WORKFLOW") == null) {
+                /**
+                 * Github Workflow handles signing the release with r0adkll's action, so we need to
+                 * disable the signing config. When assembling the release locally, it needs to use
+                 * the defined signing config that pulls the keystore and its credentials from
+                 * local storage. For the workflow, see /.github/workflows/build_and_upload_to_github.yml
+                 */
+                signingConfig signingConfigs.release
+            }
         }
 
         debug {

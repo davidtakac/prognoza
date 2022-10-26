@@ -1,0 +1,32 @@
+name: Build, sign and upload to Github Releases
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  GITHUB_WORKFLOW: true
+
+jobs:
+  build:
+    name: Build, sign and upload to Github Releases
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the code
+      uses: actions/checkout@v2
+    - name: Assemble release
+      run: ./gradlew assembleRelease
+    - uses: r0adkll/sign-android-release@v1
+      name: Sign release
+      id: sign_release
+      with:
+        releaseDirectory: app/build/outputs/apk/release
+        signingKeyBase64: ${{ secrets.KEYSTOREBASE64 }}
+        alias: ${{ secrets.ALIAS }}
+        keyStorePassword: ${{ secrets.KEYSTOREPASSWORD }}
+        keyPassword: ${{ secrets.KEYPASSWORD }}
+    - uses: actions/upload-artifact@v2
+      with:
+        name: Signed release APK
+        path: ${{steps.sign_release.outputs.signedReleaseFile}}
