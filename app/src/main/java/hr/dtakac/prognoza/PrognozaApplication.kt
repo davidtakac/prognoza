@@ -24,8 +24,11 @@ class PrognozaApplication : Application() {
             Configuration.Builder().setWorkerFactory(workerFactory).build()
         )
         if (BuildConfig.DEBUG) {
-            widgetRefresher.refresh()
             Timber.plant(Timber.DebugTree())
         }
+
+        // todo: move this to DEBUG conditional once Glance is more stable, this is currently
+        //  needed to avoid the "Can't load widget" error that happens on process recreation.
+        widgetRefresher.refresh()
     }
 }
