@@ -7,7 +7,7 @@ plugins {
 }
 
 def isInGithubWorkflow() {
-    return System.getenv("GITHUB_WORKFLOW") != null
+    return System.getenv("CI") != null
 }
 
 android {
