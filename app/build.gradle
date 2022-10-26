@@ -6,6 +6,10 @@ plugins {
     id 'kotlinx-serialization'
 }
 
+def isInGithubWorkflow() {
+    return System.getenv("GITHUB_WORKFLOW") != null
+}
+
 android {
     compileSdk 33
 
@@ -27,14 +31,16 @@ android {
      *     keyAlias=my_key_alias
      *     keyPassword=my_keystore_password
      */
-    signingConfigs {
-        release {
-            def keystoreProperties = new Properties()
-            keystoreProperties.load(new FileInputStream(rootProject.file("./keystore.properties")))
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
+    if (!isInGithubWorkflow()) {
+        signingConfigs {
+            release {
+                def keystoreProperties = new Properties()
+                keystoreProperties.load(new FileInputStream(rootProject.file("./keystore.properties")))
+                storeFile file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+            }
         }
     }
 
@@ -44,7 +50,7 @@ android {
             shrinkResources true
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            if (System.getenv("GITHUB_WORKFLOW") == null) {
+            if (!isInGithubWorkflow()) {
                 /**
                  * Github Workflow handles signing the release with r0adkll's action, so we need to
                  * disable the signing config. When assembling the release locally, it needs to use
