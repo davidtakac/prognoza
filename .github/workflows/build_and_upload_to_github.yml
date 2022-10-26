@@ -24,9 +24,11 @@ jobs:
         alias: ${{ secrets.KEYSTORE_ALIAS }}
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
         keyPassword: ${{ secrets.KEY_PASSWORD }}
+    - name: Evaluate version name
+      run: echo "VERSION_NAME=$(grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
     - uses: svenstaro/upload-release-action@v2
       name: Upload APK to release
       with:
         file: ${{ steps.sign_release.outputs.signedReleaseFile }}
-        tag: ${{ grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1 }}
+        tag: ${{ env.VERSION_NAME }}
         asset_name: prognoza-$tag.apk
