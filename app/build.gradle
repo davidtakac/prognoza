@@ -6,7 +6,7 @@ plugins {
     id 'kotlinx-serialization'
 }
 
-def isInGithubWorkflow() {
+static def isInGithubWorkflow() {
     return System.getenv("CI") != null
 }
 
