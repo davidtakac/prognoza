@@ -107,7 +107,7 @@
     <string name="theme">Tema</string>
     <string name="settings_label_light">Svijetla</string>
     <string name="settings_label_dark">Tamna</string>
-    <string name="settings_label_follow_system">Prati postavku sustava</string>
+    <string name="settings_label_follow_system">Prati sustav</string>
     <string name="widget_empty">Nema podataka. Provjeri imaš li odabrano mjesto i internetsku vezu.</string>
     <string name="widget_description">Vremenska prognoza sljedećih nekoliko sati.</string>
     <string name="widget_name">Trenutna prognoza</string>

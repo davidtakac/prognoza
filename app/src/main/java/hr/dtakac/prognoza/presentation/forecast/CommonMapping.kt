@@ -5,7 +5,6 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource
-import java.lang.IllegalStateException
 import java.time.ZonedDateTime
 
 fun getLowHighTemperature(
@@ -41,46 +40,40 @@ fun getTemperature(
 fun getWind(
     wind: Wind,
     unit: SpeedUnit
-): TextResource = TextResource.fromStringId(
-    id = when (unit) {
-        SpeedUnit.KPH -> R.string.template_wind_kmh
-        SpeedUnit.MPH -> R.string.template_wind_mph
-        SpeedUnit.MPS -> R.string.template_wind_mps
-        SpeedUnit.KNOTS -> R.string.template_wind_knots
-        SpeedUnit.BEAUFORT -> R.string.template_wind_beaufort
-    },
-    if (unit == SpeedUnit.BEAUFORT) {
-        TextResource.fromStringId(wind.speed.beaufort.toStringId())
-    } else TextResource.fromNumber(
-        wind.speed.run {
-            when (unit) {
-                SpeedUnit.KPH -> kilometersPerHour
-                SpeedUnit.MPH -> milesPerHour
-                SpeedUnit.MPS -> metersPerSecond
-                SpeedUnit.KNOTS -> knots
-                else -> throw IllegalStateException("Unsupported unit.")
-            }
-        },
-        decimalPlaces = 2
+): TextResource = when (unit) {
+    SpeedUnit.BEAUFORT -> TextResource.fromStringId(wind.speed.beaufort.toStringId())
+    SpeedUnit.KPH -> TextResource.fromStringId(
+        R.string.template_wind_kmh,
+        TextResource.fromNumber(wind.speed.kilometersPerHour, decimalPlaces = 0)
     )
-)
+    SpeedUnit.MPH -> TextResource.fromStringId(
+        R.string.template_wind_mph,
+        TextResource.fromNumber(wind.speed.milesPerHour, decimalPlaces = 0)
+    )
+    SpeedUnit.MPS -> TextResource.fromStringId(
+        R.string.template_wind_mps,
+        TextResource.fromNumber(wind.speed.metersPerSecond, decimalPlaces = 0)
+    )
+    SpeedUnit.KNOTS -> TextResource.fromStringId(
+        R.string.template_wind_knots,
+        TextResource.fromNumber(wind.speed.knots, decimalPlaces = 1)
+    )
+}
 
 fun getPrecipitation(
     precipitation: Length,
     unit: LengthUnit
-): TextResource = TextResource.fromStringId(
-    id = when (unit) {
-        LengthUnit.MM -> R.string.template_precipitation_mm
-        LengthUnit.IN -> R.string.template_precipitation_in
-        LengthUnit.CM -> R.string.template_precipitation_cm
-    },
-    TextResource.fromNumber(
-        precipitation.run {
-            when (unit) {
-                LengthUnit.MM -> millimeters
-                LengthUnit.IN -> inches
-                LengthUnit.CM -> centimeters
-            }
-        }, decimalPlaces = 2
+): TextResource = when (unit) {
+    LengthUnit.MM -> TextResource.fromStringId(
+        R.string.template_precipitation_mm,
+        TextResource.fromNumber(precipitation.millimeters, decimalPlaces = 1)
     )
-)
+    LengthUnit.IN -> TextResource.fromStringId(
+        R.string.template_precipitation_in,
+        TextResource.fromNumber(precipitation.inches, decimalPlaces = 2)
+    )
+    LengthUnit.CM -> TextResource.fromStringId(
+        R.string.template_precipitation_cm,
+        TextResource.fromNumber(precipitation.centimeters, decimalPlaces = 2)
+    )
+}
