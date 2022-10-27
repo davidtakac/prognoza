@@ -188,15 +188,19 @@ private fun DataList(
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
+    // This isn't included in contentPadding because the click ripple on the Coming day items
+    // looks better when it goes edge-to-edge
+    val itemPadding = PaddingValues(horizontal = 24.dp)
     LazyColumn(
         state = listState,
-        contentPadding = PaddingValues(24.dp),
+        contentPadding = PaddingValues(vertical = 24.dp),
         modifier = modifier
     ) {
         item(key = "place") {
             Text(
                 text = forecast.current.place.asString(),
-                style = PrognozaTheme.typography.titleLarge
+                style = PrognozaTheme.typography.titleLarge,
+                modifier = Modifier.padding(itemPadding)
             )
         }
         item(key = "place-time-spacer") {
@@ -205,7 +209,8 @@ private fun DataList(
         item(key = "time") {
             Text(
                 text = forecast.current.date.asString(),
-                style = PrognozaTheme.typography.subtitleLarge
+                style = PrognozaTheme.typography.subtitleLarge,
+                modifier = Modifier.padding(itemPadding)
             )
         }
         item(key = "temperature") {
@@ -213,7 +218,8 @@ private fun DataList(
                 text = forecast.current.temperature.asString(),
                 style = PrognozaTheme.typography.headlineLarge,
                 maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
-                maxLines = 1
+                maxLines = 1,
+                modifier = Modifier.padding(itemPadding)
             )
         }
         item(key = "description-low-high") {
@@ -221,13 +227,14 @@ private fun DataList(
                 description = forecast.current.description.asString(),
                 icon = forecast.current.icon,
                 lowHighTemperature = forecast.today?.lowHighTemperature?.asString() ?: "",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.padding(itemPadding).fillMaxWidth()
             )
         }
         item(key = "wind-and-precipitation") {
             WindAndPrecipitation(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(itemPadding)
                     .padding(top = 42.dp),
                 wind = forecast.current.wind.asString(),
                 precipitation = forecast.current.precipitation.asString()
@@ -239,6 +246,7 @@ private fun DataList(
                     text = stringResource(id = R.string.hourly),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(itemPadding)
                         .padding(top = 42.dp, bottom = 16.dp)
                 )
             }
@@ -247,6 +255,7 @@ private fun DataList(
                     hour = hour,
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(itemPadding)
                         .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp)
                 )
             }
@@ -257,6 +266,7 @@ private fun DataList(
                     text = stringResource(id = R.string.coming),
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(itemPadding)
                         .padding(top = 42.dp, bottom = 6.dp)
                 )
             }
@@ -268,6 +278,7 @@ private fun DataList(
                     onClick = { isExpanded = !isExpanded },
                     modifier = Modifier
                         .fillMaxWidth()
+                        .padding(itemPadding)
                         .padding(vertical = 10.dp)
                 )
             }
