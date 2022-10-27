@@ -170,6 +170,7 @@
         <entry key="app/src/main/res/drawable/ic_today.xml" value="0.201" />
         <entry key="app/src/main/res/drawable/ic_water_drop.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/menu-48px.xml" value="0.168" />
+        <entry key="app/src/main/res/drawable/settings-24px.xml" value="0.2065" />
         <entry key="app/src/main/res/layout/activity_forecast.xml" value="0.159375" />
         <entry key="app/src/main/res/layout/app_widget_current_conditions_medium_empty.xml" value="0.41299429355300554" />
         <entry key="app/src/main/res/layout/app_widget_forecast_initial.xml" value="0.26145833333333335" />

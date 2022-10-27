@@ -122,9 +122,7 @@ private fun SettingsButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Text(
-        text = stringResource(id = R.string.settings),
-        style = PrognozaTheme.typography.subtitleMedium,
+    Row(
         modifier = modifier
             .clickable(
                 onClick = onClick,
@@ -132,8 +130,21 @@ private fun SettingsButton(
                 interactionSource = remember { MutableInteractionSource() }
             )
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-    )
+            .padding(horizontal = 24.dp, vertical = 16.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_settings),
+            contentDescription = null,
+            modifier = Modifier.size(24.dp),
+            colorFilter = ColorFilter.tint(PrognozaTheme.colors.onSurface)
+        )
+        Text(
+            text = stringResource(id = R.string.settings),
+            style = PrognozaTheme.typography.subtitleMedium,
+            modifier = Modifier.padding(start = 12.dp)
+        )
+    }
 }
 
 @Composable
