@@ -23,14 +23,14 @@ class Forecast(data: List<ForecastDatum>) {
             datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
         }.values.toList()
 
-        val todayHours = dataGroupedByDay.getOrElse(1) { listOf() }.toMutableList()
-        val tomorrowHours = dataGroupedByDay.getOrElse(1) { listOf() }
+        val todayHours = dataGroupedByDay.getOrElse(index = 0) { listOf() }.toMutableList()
+        val tomorrowHours = dataGroupedByDay.getOrElse(index = 1) { listOf() }
         if (todayHours.size <= 5 && tomorrowHours.isNotEmpty()) {
             // Overflow into next day if there are not many hours left in the day
-            todayHours += tomorrowHours.take(7)
+            todayHours += tomorrowHours.take(n = 7)
         }
-        today = todayHours.drop(1).takeIf { it.isNotEmpty() }?.let { resolveToday(it) }
-        coming = dataGroupedByDay.drop(1).takeIf { it.isNotEmpty() }?.let { resolveComing(it) }
+        today = todayHours.drop(n = 1).takeIf { it.isNotEmpty() }?.let { resolveToday(it) }
+        coming = dataGroupedByDay.drop(n = 1).takeIf { it.isNotEmpty() }?.let { resolveComing(it) }
     }
 
     private fun resolveCurrent(datum: ForecastDatum): Current {
