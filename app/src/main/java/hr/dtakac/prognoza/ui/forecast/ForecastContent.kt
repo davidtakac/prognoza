@@ -10,6 +10,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,10 +22,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
@@ -314,21 +320,38 @@ private fun DescriptionAndLowHighTemperature(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ProvideTextStyle(PrognozaTheme.typography.titleLarge) {
-            Row {
-                Text(description)
-                Image(
-                    painter = rememberAsyncImagePainter(model = icon),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .size(36.dp)
-                )
+            val annotatedString = buildAnnotatedString {
+                append("$description ")
+                appendInlineContent(id = "icon")
             }
-            Text(lowHighTemperature)
+            val inlineContentMap = mapOf(
+                "icon" to InlineTextContent(
+                    Placeholder(
+                        36.sp,
+                        36.sp,
+                        PlaceholderVerticalAlign.TextCenter
+                    )
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(model = icon),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+            )
+            Text(
+                text = annotatedString,
+                inlineContent = inlineContentMap,
+                modifier = Modifier.weight(2f)
+            )
+            Text(
+                text = lowHighTemperature,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
@@ -344,8 +367,8 @@ private fun WindAndPrecipitation(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
-            Text(wind)
-            Text(precipitation)
+            Text(text = wind, modifier = Modifier.weight(1f))
+            Text(text = precipitation, modifier = Modifier.weight(1f), textAlign = TextAlign.End)
         }
     }
 }
@@ -611,7 +634,7 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
 )
 
 private fun fakeTodayUi(): TodayUi = TodayUi(
-    lowHighTemperature = TextResource.fromText("15°—7°"),
+    lowHighTemperature = TextResource.fromText("135°—197°"),
     hourly = mutableListOf<DayHourUi>().apply {
         for (i in 1..4) {
             add(
