@@ -5,7 +5,7 @@ import android.icu.text.NumberFormat
 import android.text.format.DateUtils
 import androidx.annotation.StringRes
 
-sealed class TextResource {
+sealed interface TextResource {
     companion object {
         fun fromText(text: String): TextResource =
             SimpleTextResource(text)
@@ -23,25 +23,25 @@ sealed class TextResource {
             NumberTextResource(number, decimalPlaces)
     }
 
-    abstract fun asString(context: Context): String
+    fun asString(context: Context): String
 }
 
 private data class SimpleTextResource(
     val text: String
-) : TextResource() {
+) : TextResource {
     override fun asString(context: Context): String = text
 }
 
 private data class IdTextResource(
     @StringRes val id: Int
-) : TextResource() {
+) : TextResource {
     override fun asString(context: Context): String = context.getString(id)
 }
 
 private data class DateTimeTextResource(
     val millis: Long,
     val flags: Int
-) : TextResource() {
+) : TextResource {
     override fun asString(context: Context): String =
         DateUtils.formatDateTime(context, millis, flags)
 }
@@ -49,7 +49,7 @@ private data class DateTimeTextResource(
 private data class NumberTextResource(
     val number: Number,
     val decimalPlaces: Int
-) : TextResource() {
+) : TextResource {
     override fun asString(context: Context): String = NumberFormat.getInstance().apply {
         maximumFractionDigits = decimalPlaces
     }.format(number)
@@ -58,7 +58,7 @@ private data class NumberTextResource(
 private data class IdTextResourceWithArgs(
     @StringRes val id: Int,
     val args: List<Any>
-) : TextResource() {
+) : TextResource {
     override fun asString(context: Context): String = context.getString(
         id,
         *args.map { if (it is TextResource) it.asString(context) else it }.toTypedArray()
