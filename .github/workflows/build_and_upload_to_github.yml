@@ -2,7 +2,7 @@ name: Build, sign and upload to Github Releases
 
 on:
   push:
-    branches: [ main ]
+    branches: [ release ]
   workflow_dispatch:
 
 jobs:
