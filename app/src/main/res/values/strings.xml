@@ -65,7 +65,7 @@
     <string name="template_wind_mps">%1$s m/s</string>
     <string name="template_wind_mph">%1$s mi/h</string>
     <string name="template_wind_knots">%1$s kt</string>
-    <string name="template_wind_beaufort">%1$s</string>
+    <string name="template_wind_beaufort" translatable="false">%1$s</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
     <string name="template_wind">Wind: %1$s</string>
     <string name="template_humidity_percent">%1$s%%</string>
@@ -99,8 +99,8 @@
     <string name="pressure_unit">Pressure unit</string>
     <string name="wind_unit">Wind unit</string>
     <string name="temperature_unit">Temperature unit</string>
-    <string name="settings_label_celsius">Celsius</string>
-    <string name="settings_label_fahrenheit">Fahrenheit</string>
+    <string name="settings_label_celsius">Degrees Celsius</string>
+    <string name="settings_label_fahrenheit">Degrees Fahrenheit</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="settings_label_mps">Meters per second</string>

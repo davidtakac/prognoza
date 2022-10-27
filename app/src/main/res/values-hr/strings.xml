@@ -89,8 +89,8 @@
     <string name="pressure_unit">Pritisak</string>
     <string name="wind_unit">Vjetar</string>
     <string name="temperature_unit">Temperatura</string>
-    <string name="settings_label_celsius">Celzij</string>
-    <string name="settings_label_fahrenheit">Fahrenheit</string>
+    <string name="settings_label_celsius">Stupnjevi Celzijusa</string>
+    <string name="settings_label_fahrenheit">Stupnjevi Fahrenheita</string>
     <string name="confirm">Potvrdi</string>
     <string name="cancel">Odustani</string>
     <string name="settings_label_mps">Metri u sekundi</string>
