@@ -29,6 +29,6 @@ Weather app with widgets and offline support.
 - Splash screen
 
 ## Credit
-- [Neil Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2) for design inspiration
+- [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2) for design inspiration
 - [MET Norway](https://www.met.no/en) for forecast data
 - [OSM Nominatim](https://nominatim.org/) for geographic location data
