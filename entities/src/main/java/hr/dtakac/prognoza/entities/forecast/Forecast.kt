@@ -10,27 +10,27 @@ import java.time.ZonedDateTime
 
 class Forecast(data: List<ForecastDatum>) {
     val current: Current
-    val today: Today
-    val coming: List<Day>
+    val today: Today?
+    val coming: List<Day>?
 
     init {
-        if (data.isEmpty()) throw IllegalStateException("Forecast data must not be empty.")
+        if (data.isEmpty()) {
+            throw IllegalStateException("Forecast data must not be empty.")
+        }
 
         current = resolveCurrent(data.first())
+        val dataGroupedByDay = data.groupBy { datum ->
+            datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
+        }.values.toList()
 
-        val dataGroupedByDay = data
-            .groupBy { datum ->
-                datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
-            }.values.toList()
-
-        val todayHours = dataGroupedByDay.first().toMutableList()
+        val todayHours = dataGroupedByDay.getOrElse(1) { listOf() }.toMutableList()
         val tomorrowHours = dataGroupedByDay.getOrElse(1) { listOf() }
         if (todayHours.size <= 5 && tomorrowHours.isNotEmpty()) {
             // Overflow into next day if there are not many hours left in the day
             todayHours += tomorrowHours.take(7)
         }
-        today = resolveToday(todayHours.drop(1))
-        coming = resolveComing(dataGroupedByDay.drop(1))
+        today = todayHours.drop(1).takeIf { it.isNotEmpty() }?.let { resolveToday(it) }
+        coming = dataGroupedByDay.drop(1).takeIf { it.isNotEmpty() }?.let { resolveComing(it) }
     }
 
     private fun resolveCurrent(datum: ForecastDatum): Current {
@@ -55,7 +55,6 @@ class Forecast(data: List<ForecastDatum>) {
             )
         }
         return Today(
-            dateTime = data.first().start,
             hourly = hourly,
             highTemperature = hourly.maxOf { it.temperature },
             lowTemperature = hourly.minOf { it.temperature },
@@ -68,7 +67,10 @@ class Forecast(data: List<ForecastDatum>) {
                 dateTime = data.first().start,
                 highTemperature = data.maxOf { it.temperature },
                 lowTemperature = data.minOf { it.temperature },
-                totalPrecipitation = Length(data.sumOf { it.precipitation.millimeters }, LengthUnit.MM),
+                totalPrecipitation = Length(
+                    data.sumOf { it.precipitation.millimeters },
+                    LengthUnit.MM
+                ),
                 hours = data.map { datum ->
                     HourlyDatum(
                         dateTime = datum.start,
@@ -101,7 +103,6 @@ data class HourlyDatum(
 )
 
 data class Today(
-    val dateTime: ZonedDateTime,
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
     val hourly: List<HourlyDatum>

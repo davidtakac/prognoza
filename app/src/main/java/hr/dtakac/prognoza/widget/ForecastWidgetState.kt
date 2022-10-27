@@ -30,10 +30,6 @@ sealed interface ForecastWidgetState {
         val temperatureUnit: TemperatureUnit,
         @Serializable(with = TemperatureSerializer::class)
         val temperature: Temperature,
-        @Serializable(with = TemperatureSerializer::class)
-        val lowTemperature: Temperature,
-        @Serializable(with = TemperatureSerializer::class)
-        val highTemperature: Temperature,
         val description: ForecastDescription,
         val hours: List<WidgetHour>
     ) : ForecastWidgetState

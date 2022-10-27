@@ -82,16 +82,14 @@ class ForecastWidgetWorker @Inject constructor(
                     placeName = result.placeName,
                     temperatureUnit = result.temperatureUnit,
                     temperature = result.forecast.current.temperature,
-                    lowTemperature = result.forecast.today.lowTemperature,
-                    highTemperature = result.forecast.today.highTemperature,
                     description = result.forecast.current.description,
-                    hours = result.forecast.today.hourly.map {
+                    hours = result.forecast.today?.hourly?.map {
                         WidgetHour(
                             dateTime = it.dateTime,
                             temperature = it.temperature,
                             description = it.description
                         )
-                    }
+                    } ?: listOf()
                 )
             }
             setWidgetState(glanceIds, widgetState)

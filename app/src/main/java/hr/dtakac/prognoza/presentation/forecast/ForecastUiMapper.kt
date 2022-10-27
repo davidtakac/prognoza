@@ -18,16 +18,16 @@ class ForecastUiMapper @Inject constructor(
     suspend fun mapToForecastUi(
         placeName: String,
         current: Current,
-        today: Today,
-        coming: List<Day>,
+        today: Today?,
+        coming: List<Day>?,
         temperatureUnit: TemperatureUnit,
         windUnit: SpeedUnit,
         precipitationUnit: LengthUnit
     ): ForecastUi = withContext(computationDispatcher) {
         ForecastUi(
-            place = TextResource.fromText(placeName),
-            today = mapToTodayUi(current, today, temperatureUnit, windUnit, precipitationUnit),
-            coming = mapToComingUi(coming, temperatureUnit, precipitationUnit)
+            current = mapToCurrentUi(placeName, current, temperatureUnit, windUnit, precipitationUnit),
+            today = today?.let { mapToTodayUi(it, temperatureUnit, precipitationUnit) },
+            coming = coming?.let { mapToComingUi(it, temperatureUnit, precipitationUnit) }
         )
     }
 
@@ -40,29 +40,22 @@ class ForecastUiMapper @Inject constructor(
         }
     )
 
-    private fun mapToTodayUi(
+    private fun mapToCurrentUi(
+        placeName: String,
         current: Current,
-        today: Today,
         temperatureUnit: TemperatureUnit,
         windUnit: SpeedUnit,
         precipitationUnit: LengthUnit
-    ): TodayUi = TodayUi(
+    ): CurrentUi = CurrentUi(
+        place = TextResource.fromText(placeName),
+        shortDescription = current.description.short,
         date = TextResource.fromEpochMillis(
             millis = current.dateTime.toInstant().toEpochMilli(),
             flags = DateUtils.FORMAT_SHOW_DATE
         ),
         temperature = getTemperature(current.temperature, temperatureUnit),
-        feelsLike = TextResource.fromStringId(
-            R.string.template_feels_like,
-            getTemperature(current.feelsLike, temperatureUnit)
-        ),
         description = TextResource.fromStringId(current.description.toStringId()),
-        iconResId = current.description.toDrawableId(),
-        lowHighTemperature = getLowHighTemperature(
-            today.lowTemperature,
-            today.highTemperature,
-            temperatureUnit
-        ),
+        icon = current.description.toDrawableId(),
         wind = TextResource.fromStringId(
             id = R.string.template_wind,
             getWind(current.wind, windUnit)
@@ -70,8 +63,19 @@ class ForecastUiMapper @Inject constructor(
         precipitation = TextResource.fromStringId(
             id = R.string.template_precipitation,
             getPrecipitation(current.precipitation, precipitationUnit)
+        )
+    )
+
+    private fun mapToTodayUi(
+        today: Today,
+        temperatureUnit: TemperatureUnit,
+        precipitationUnit: LengthUnit
+    ): TodayUi = TodayUi(
+        lowHighTemperature = getLowHighTemperature(
+            today.lowTemperature,
+            today.highTemperature,
+            temperatureUnit
         ),
-        shortDescription = current.description.short,
         hourly = today.hourly.map { datum ->
             getDayHourUi(
                 datum,

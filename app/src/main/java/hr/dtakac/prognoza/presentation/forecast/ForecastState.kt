@@ -11,22 +11,25 @@ data class ForecastState(
 )
 
 data class ForecastUi(
+    val current: CurrentUi,
+    val today: TodayUi?,
+    val coming: List<DayUi>?
+)
+
+data class CurrentUi(
     val place: TextResource,
-    val today: TodayUi,
-    val coming: List<DayUi>
+    val shortDescription: ForecastDescription.Short,
+    val date: TextResource,
+    val temperature: TextResource,
+    val description: TextResource,
+    @DrawableRes
+    val icon: Int,
+    val wind: TextResource,
+    val precipitation: TextResource
 )
 
 data class TodayUi(
-    val date: TextResource,
-    val temperature: TextResource,
-    val feelsLike: TextResource,
-    val description: TextResource,
-    @DrawableRes
-    val iconResId: Int,
     val lowHighTemperature: TextResource,
-    val wind: TextResource,
-    val precipitation: TextResource,
-    val shortDescription: ForecastDescription.Short,
     val hourly: List<DayHourUi>
 )
 

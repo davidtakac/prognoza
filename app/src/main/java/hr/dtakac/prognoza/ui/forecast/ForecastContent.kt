@@ -51,9 +51,9 @@ fun ForecastContent(
         var toolbarTemperatureVisible by remember { mutableStateOf(false) }
 
         ToolbarWithLoadingIndicator(
-            title = state.forecast?.place?.asString() ?: "",
-            subtitle = state.forecast?.today?.date?.asString() ?: "",
-            end = state.forecast?.today?.temperature?.asString() ?: "",
+            title = state.forecast?.current?.place?.asString() ?: "",
+            subtitle = state.forecast?.current?.date?.asString() ?: "",
+            end = state.forecast?.current?.temperature?.asString() ?: "",
             titleVisible = toolbarPlaceVisible,
             subtitleVisible = toolbarDateVisible,
             endVisible = toolbarTemperatureVisible,
@@ -195,7 +195,7 @@ private fun DataList(
     ) {
         item(key = "place") {
             Text(
-                text = forecast.place.asString(),
+                text = forecast.current.place.asString(),
                 style = PrognozaTheme.typography.titleLarge
             )
         }
@@ -204,13 +204,13 @@ private fun DataList(
         }
         item(key = "time") {
             Text(
-                text = forecast.today.date.asString(),
+                text = forecast.current.date.asString(),
                 style = PrognozaTheme.typography.subtitleLarge
             )
         }
         item(key = "temperature") {
             AutoSizeText(
-                text = forecast.today.temperature.asString(),
+                text = forecast.current.temperature.asString(),
                 style = PrognozaTheme.typography.headlineLarge,
                 maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
                 maxLines = 1
@@ -218,9 +218,9 @@ private fun DataList(
         }
         item(key = "description-low-high") {
             DescriptionAndLowHighTemperature(
-                description = forecast.today.description.asString(),
-                icon = forecast.today.iconResId,
-                lowHighTemperature = forecast.today.lowHighTemperature.asString(),
+                description = forecast.current.description.asString(),
+                icon = forecast.current.icon,
+                lowHighTemperature = forecast.today?.lowHighTemperature?.asString() ?: "",
                 modifier = Modifier.fillMaxWidth()
             )
         }
@@ -229,44 +229,48 @@ private fun DataList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 42.dp),
-                wind = forecast.today.wind.asString(),
-                precipitation = forecast.today.precipitation.asString()
+                wind = forecast.current.wind.asString(),
+                precipitation = forecast.current.precipitation.asString()
             )
         }
-        item(key = "hourly-header") {
-            Header(
-                text = stringResource(id = R.string.hourly),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 42.dp, bottom = 16.dp)
-            )
+        forecast.today?.hourly?.let {
+            item(key = "hourly-header") {
+                Header(
+                    text = stringResource(id = R.string.hourly),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 42.dp, bottom = 16.dp)
+                )
+            }
+            itemsIndexed(it) { idx, hour ->
+                HourItem(
+                    hour = hour,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp)
+                )
+            }
         }
-        itemsIndexed(forecast.today.hourly) { idx, hour ->
-            HourItem(
-                hour = hour,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp)
-            )
-        }
-        item(key = "coming-header") {
-            Header(
-                text = stringResource(id = R.string.coming),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 42.dp, bottom = 6.dp)
-            )
-        }
-        items(forecast.coming) { day ->
-            var isExpanded by remember { mutableStateOf(false) }
-            ComingItem(
-                day = day,
-                isExpanded = isExpanded,
-                onClick = { isExpanded = !isExpanded },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 10.dp)
-            )
+        forecast.coming?.let {
+            item(key = "coming-header") {
+                Header(
+                    text = stringResource(id = R.string.coming),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 42.dp, bottom = 6.dp)
+                )
+            }
+            items(it) { day ->
+                var isExpanded by remember { mutableStateOf(false) }
+                ComingItem(
+                    day = day,
+                    isExpanded = isExpanded,
+                    onClick = { isExpanded = !isExpanded },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 10.dp)
+                )
+            }
         }
     }
 
@@ -510,8 +514,56 @@ private fun TodayScreenPreview() {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
-                    place = TextResource.fromText("Helsinki"),
+                    current = fakeCurrentUi(),
                     today = fakeTodayUi(),
+                    coming = fakeComingUi()
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TodayScreenJustCurrentPreview() {
+    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+        Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
+            DataList(
+                forecast = ForecastUi(
+                    current = fakeCurrentUi(),
+                    today = null,
+                    coming = null
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TodayScreenCurrentPlusTodayPreview() {
+    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+        Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
+            DataList(
+                forecast = ForecastUi(
+                    current = fakeCurrentUi(),
+                    today = fakeTodayUi(),
+                    coming = null
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TodayScreenCurrentPlusComingPreview() {
+    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+        Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
+            DataList(
+                forecast = ForecastUi(
+                    current = fakeCurrentUi(),
+                    today = null,
                     coming = fakeComingUi()
                 )
             )
@@ -524,7 +576,7 @@ private fun TodayScreenPreview() {
 private fun ToolbarWithLoadingIndicatorPreview() {
     PrognozaTheme(description = ForecastDescription.Short.FAIR) {
         ToolbarWithLoadingIndicator(
-            title = "Tenja",
+            title = "Helsinki",
             subtitle = "September 29",
             end = "23",
             titleVisible = true,
@@ -536,16 +588,19 @@ private fun ToolbarWithLoadingIndicatorPreview() {
     }
 }
 
-private fun fakeTodayUi(): TodayUi = TodayUi(
+private fun fakeCurrentUi(): CurrentUi = CurrentUi(
+    place = TextResource.fromText("Tenja"),
     date = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
-    feelsLike = TextResource.fromText("Feels like 28°"),
     description = TextResource.fromText("Clear sky, sleet soon"),
-    iconResId = R.drawable.clearsky_day,
-    lowHighTemperature = TextResource.fromText("15°—7°"),
+    icon = R.drawable.clearsky_day,
     wind = TextResource.fromText("Wind: 15 km/h"),
     precipitation = TextResource.fromText("Precipitation: 0 mm"),
     shortDescription = ForecastDescription.Short.FAIR,
+)
+
+private fun fakeTodayUi(): TodayUi = TodayUi(
+    lowHighTemperature = TextResource.fromText("15°—7°"),
     hourly = mutableListOf<DayHourUi>().apply {
         for (i in 1..4) {
             add(

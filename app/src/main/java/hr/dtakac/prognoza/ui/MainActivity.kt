@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
             }
 
             PrognozaTheme(
-                description = forecastState.forecast?.today?.shortDescription
+                description = forecastState.forecast?.current?.shortDescription
                     ?: ForecastDescription.Short.UNKNOWN,
                 useDarkTheme = useDarkTheme
             ) {
