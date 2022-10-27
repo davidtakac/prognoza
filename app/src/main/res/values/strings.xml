@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Prognoza</string>
+    <string name="app_name" translatable="false">Prognoza</string>
 
     <!--Weather descriptions-->
     <string name="description_unknown">Unknown</string>
@@ -61,23 +61,15 @@
     <string name="template_precipitation_in">%1$s in</string>
     <string name="template_precipitation_cm">%1$s cm</string>
     <string name="template_precipitation">Precipitation: %1$s</string>
-    <string name="template_precipitation_at">%1$s at %2$s</string>
     <string name="template_wind_kmh">%1$s km/h</string>
     <string name="template_wind_mps">%1$s m/s</string>
     <string name="template_wind_mph">%1$s mi/h</string>
-    <string name="template_current_description">%1$s. %2$s</string>
-    <string name="template_rest_of_day_description">%1$s. %2$s</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
-    <string name="precipitation_none">No precipitation</string>
     <string name="template_wind">Wind: %1$s</string>
     <string name="template_humidity_percent">%1$s%%</string>
-    <string name="error_client">Something is wrong with your request.</string>
-    <string name="error_server">The server is currently unable to process your request.</string>
-    <string name="error_throttling">Heavy traffic from other users.</string>
-    <string name="error_database">Failed to read local forecast data.</string>
     <string name="error_unknown">An unexpected error occurred.</string>
-    <string name="met_norway_credit">The Norwegian Meteorological Institute</string>
-    <string name="osm_nominatim_credit">OpenStreetMap</string>
+    <string name="met_norway_credit" translatable="false">The Norwegian Meteorological Institute</string>
+    <string name="osm_nominatim_credit" translatable="false">OpenStreetMap</string>
     <string name="error_no_selected_place">Select a place to see its forecast.</string>
     <string name="wind_calm">Calm</string>
     <string name="wind_light_air">Light air</string>
@@ -92,15 +84,9 @@
     <string name="wind_storm">Storm</string>
     <string name="wind_violent_storm">Violent storm</string>
     <string name="wind_hurricane">Hurricane</string>
-    <string name="rest_of_the_day">Rest of the day</string>
-    <string name="now">Now</string>
-    <string name="today_loading">Getting today\'s forecast…</string>
     <string name="hourly">Hourly</string>
-    <string name="today">Today</string>
     <string name="coming">Coming</string>
-    <string name="forecast">Forecast</string>
     <string name="settings">Settings</string>
-    <string name="change_place">Change place</string>
     <string name="search_places">Search places…</string>
     <string name="no_saved_places">The places you search for and select will appear here.</string>
     <string name="no_places_found">No places found that match \"%1$s\".</string>
@@ -131,7 +117,7 @@
     <string name="settings_label_dark">Dark</string>
     <string name="settings_label_follow_system">Follow system setting</string>
     <string name="widget_empty">No forecast data. Make sure that you have a selected place and are online</string>
-    <string name="widget_description">Weather forecast for right now and the next couple of hours</string>
+    <string name="widget_description">Weather forecast for the next couple of hours.</string>
     <string name="widget_name">Current forecast</string>
     <string name="credit">Credit</string>
     <string name="weather_data">Weather data</string>
