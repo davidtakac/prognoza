@@ -15,7 +15,8 @@ import hr.dtakac.prognoza.data.database.place.PlaceDbModel
         PlaceDbModel::class,
         MetaDbModel::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = true
 )
 abstract class PrognozaDatabase : RoomDatabase() {
     abstract fun metaDao(): MetaDao
