@@ -19,6 +19,7 @@ fun SpeedUnit.toSettingsLabel(): Int = when (this) {
     SpeedUnit.MPS -> R.string.settings_label_mps
     SpeedUnit.KPH -> R.string.settings_label_kph
     SpeedUnit.MPH -> R.string.settings_label_mph
+    SpeedUnit.KNOTS -> R.string.settings_label_knots
 }
 
 @StringRes

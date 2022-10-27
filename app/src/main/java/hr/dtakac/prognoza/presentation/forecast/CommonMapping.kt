@@ -45,6 +45,7 @@ fun getWind(
         SpeedUnit.KPH -> R.string.template_wind_kmh
         SpeedUnit.MPH -> R.string.template_wind_mph
         SpeedUnit.MPS -> R.string.template_wind_mps
+        SpeedUnit.KNOTS -> R.string.template_wind_knots
     },
     TextResource.fromNumber(
         wind.speed.run {
@@ -52,8 +53,10 @@ fun getWind(
                 SpeedUnit.KPH -> kilometersPerHour
                 SpeedUnit.MPH -> milesPerHour
                 SpeedUnit.MPS -> metersPerSecond
+                SpeedUnit.KNOTS -> knots
             }
-        }
+        },
+        decimalPlaces = 2
     )
 )
 
@@ -66,11 +69,13 @@ fun getPrecipitation(
         LengthUnit.IN -> R.string.template_precipitation_in
         LengthUnit.CM -> R.string.template_precipitation_cm
     },
-    TextResource.fromNumber(precipitation.run {
-        when (unit) {
-            LengthUnit.MM -> millimeters
-            LengthUnit.IN -> inches
-            LengthUnit.CM -> centimeters
-        }
-    }, decimalPlaces = 2)
+    TextResource.fromNumber(
+        precipitation.run {
+            when (unit) {
+                LengthUnit.MM -> millimeters
+                LengthUnit.IN -> inches
+                LengthUnit.CM -> centimeters
+            }
+        }, decimalPlaces = 2
+    )
 )
