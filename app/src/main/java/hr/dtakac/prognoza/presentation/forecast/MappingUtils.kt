@@ -5,9 +5,9 @@ import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription.*
+import hr.dtakac.prognoza.entities.forecast.units.BeaufortScale
+import hr.dtakac.prognoza.entities.forecast.units.BeaufortScale.*
 import hr.dtakac.prognoza.entities.forecast.units.CompassDirection
-import hr.dtakac.prognoza.entities.forecast.wind.WindDescription
-import hr.dtakac.prognoza.entities.forecast.wind.WindDescription.*
 
 @StringRes
 fun CompassDirection.toCompassDirectionStringId(): Int = when (this) {
@@ -22,7 +22,7 @@ fun CompassDirection.toCompassDirectionStringId(): Int = when (this) {
 }
 
 @StringRes
-fun WindDescription.toStringId(): Int = when (this) {
+fun BeaufortScale.toStringId(): Int = when (this) {
     CALM -> R.string.wind_calm
     LIGHT_AIR -> R.string.wind_light_air
     LIGHT_BREEZE -> R.string.wind_light_breeze

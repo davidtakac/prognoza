@@ -117,4 +117,6 @@
     <string name="error_saved_places">Dogodila se pogreška prilikom dohvaćanja tvojih spremljenih mjesta. Očisti podatke aplikacije i pokušaj ponovo.</string>
     <string name="template_wind_knots">%1$s čv</string>
     <string name="settings_label_knots">Čvorovi</string>
+    <string name="template_wind_beaufort">%1$s</string>
+    <string name="settings_label_beaufort">Beaufortova ljestvica</string>
 </resources>

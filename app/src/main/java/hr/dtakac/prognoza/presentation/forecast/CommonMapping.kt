@@ -5,6 +5,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import hr.dtakac.prognoza.presentation.TextResource
+import java.lang.IllegalStateException
 import java.time.ZonedDateTime
 
 fun getLowHighTemperature(
@@ -46,14 +47,18 @@ fun getWind(
         SpeedUnit.MPH -> R.string.template_wind_mph
         SpeedUnit.MPS -> R.string.template_wind_mps
         SpeedUnit.KNOTS -> R.string.template_wind_knots
+        SpeedUnit.BEAUFORT -> R.string.template_wind_beaufort
     },
-    TextResource.fromNumber(
+    if (unit == SpeedUnit.BEAUFORT) {
+        TextResource.fromStringId(wind.speed.beaufort.toStringId())
+    } else TextResource.fromNumber(
         wind.speed.run {
             when (unit) {
                 SpeedUnit.KPH -> kilometersPerHour
                 SpeedUnit.MPH -> milesPerHour
                 SpeedUnit.MPS -> metersPerSecond
                 SpeedUnit.KNOTS -> knots
+                else -> throw IllegalStateException("Unsupported unit.")
             }
         },
         decimalPlaces = 2

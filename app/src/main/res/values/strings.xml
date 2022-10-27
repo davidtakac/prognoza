@@ -65,6 +65,7 @@
     <string name="template_wind_mps">%1$s m/s</string>
     <string name="template_wind_mph">%1$s mi/h</string>
     <string name="template_wind_knots">%1$s kt</string>
+    <string name="template_wind_beaufort">%1$s</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
     <string name="template_wind">Wind: %1$s</string>
     <string name="template_humidity_percent">%1$s%%</string>
@@ -106,6 +107,7 @@
     <string name="settings_label_kph">Kilometers per hour</string>
     <string name="settings_label_mph">Miles per hour</string>
     <string name="settings_label_knots">Knots</string>
+    <string name="settings_label_beaufort">Beaufort scale</string>
     <string name="settings_label_mm">Millimeters</string>
     <string name="settings_label_in">Inches</string>
     <string name="settings_label_cm">Centimeters</string>
