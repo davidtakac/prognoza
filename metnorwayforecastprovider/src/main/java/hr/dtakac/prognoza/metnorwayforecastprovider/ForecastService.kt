@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.data.network.forecast
+package hr.dtakac.prognoza.metnorwayforecastprovider
 
 import retrofit2.Response
 import retrofit2.http.GET

@@ -1,17 +1,16 @@
-package hr.dtakac.prognoza.data.database.forecast.model
+package hr.dtakac.prognoza.metnorwayforecastprovider.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.TypeConverters
-import hr.dtakac.prognoza.data.database.converter.Rfc1123DateTimeConverter
 import java.time.ZonedDateTime
 
 @Entity(
-    tableName = "meta",
+    tableName = "forecast_meta",
     primaryKeys = ["latitude", "longitude"]
 )
 @TypeConverters(Rfc1123DateTimeConverter::class)
-data class MetaDbModel(
+data class ForecastMetaDbModel(
     @ColumnInfo(name = "latitude")
     val latitude: Double,
     @ColumnInfo(name = "longitude")

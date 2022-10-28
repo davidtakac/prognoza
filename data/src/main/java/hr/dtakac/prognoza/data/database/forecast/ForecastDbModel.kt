@@ -1,11 +1,13 @@
-package hr.dtakac.prognoza.data.database.forecast.model
+package hr.dtakac.prognoza.data.database.forecast
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.TypeConverters
 import hr.dtakac.prognoza.data.database.converter.*
+import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.*
+import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.time.ZonedDateTime
 
 @Entity(
@@ -44,4 +46,32 @@ data class ForecastDbModel(
     val humidity: Percentage,
     @ColumnInfo(name = "air_pressure_at_sea_level")
     val airPressureAtSeaLevel: Pressure
+)
+
+fun ForecastDbModel.toEntity(): ForecastDatum = ForecastDatum(
+    start = startTime,
+    end = endTime,
+    temperature = temperature,
+    precipitation = precipitation,
+    wind = Wind(speed = wind, fromDirection = windFromDirection),
+    airPressure = airPressureAtSeaLevel,
+    description = forecastDescription,
+    humidity = humidity
+)
+
+fun ForecastDatum.toDbModel(
+    latitude: Double,
+    longitude: Double
+): ForecastDbModel = ForecastDbModel(
+    startTime = start,
+    endTime = end,
+    latitude = latitude,
+    longitude = longitude,
+    temperature = temperature,
+    forecastDescription = description,
+    precipitation = precipitation,
+    wind = wind.speed,
+    windFromDirection = wind.fromDirection,
+    humidity = humidity,
+    airPressureAtSeaLevel = airPressure
 )

@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.data.database.converter
+package hr.dtakac.prognoza.metnorwayforecastprovider.database
 
 import androidx.room.TypeConverter
 import java.time.ZonedDateTime

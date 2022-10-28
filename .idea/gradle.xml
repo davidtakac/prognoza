@@ -15,6 +15,7 @@
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/entities" />
+            <option value="$PROJECT_DIR$/metnorwayforecastprovider" />
             <option value="$PROJECT_DIR$/osmplacesearcher" />
           </set>
         </option>

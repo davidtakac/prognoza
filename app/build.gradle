@@ -97,6 +97,7 @@ dependencies {
     implementation project(":domain")
     implementation project(":data")
     implementation project(':osmplacesearcher')
+    implementation project(":metnorwayforecastprovider")
 
     // Room
     implementation "androidx.room:room-ktx:$versions.room"

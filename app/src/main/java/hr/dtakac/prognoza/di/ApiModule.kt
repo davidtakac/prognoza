@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import hr.dtakac.prognoza.data.network.forecast.ForecastService
+import hr.dtakac.prognoza.metnorwayforecastprovider.ForecastService
 import hr.dtakac.prognoza.osmplacesearcher.PlaceService
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -21,14 +21,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class ApiModule {
-    // The json converter factory is a singleton, so the Json instance gets created only once
-    @Suppress("JSON_FORMAT_REDUNDANT")
     @Provides
     @Singleton
-    fun provideJsonConverterFactory(): Converter.Factory = Json {
+    fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         isLenient = true
-    }.asConverterFactory("application/json".toMediaType())
+    }
+
+    @Provides
+    @Singleton
+    fun provideJsonConverterFactory(
+        json: Json
+    ): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
 
     @Provides
     @Singleton
