@@ -35,12 +35,13 @@ class DefaultSettingsRepository(
 
     override suspend fun getPressureUnit(): PressureUnit {
         val ordinal = getInt(AIR_PRESSURE_UNIT)
-        return if (ordinal == -1) {
+        val saved = PressureUnit.values().getOrNull(ordinal)
+        return if (saved == null) {
             val default = PressureUnit.HPA
             setPressureUnit(default)
             default
         } else {
-            PressureUnit.values()[ordinal]
+            saved
         }
     }
 
@@ -52,12 +53,13 @@ class DefaultSettingsRepository(
 
     override suspend fun getPrecipitationUnit(): LengthUnit {
         val ordinal = getInt(PRECIPITATION_UNIT)
-        return if (ordinal == -1) {
+        val saved = LengthUnit.values().getOrNull(ordinal)
+        return if (saved == null) {
             val default = LengthUnit.MM
             setPrecipitationUnit(default)
             default
         } else {
-            LengthUnit.values()[ordinal]
+            saved
         }
     }
 
@@ -69,12 +71,13 @@ class DefaultSettingsRepository(
 
     override suspend fun getTemperatureUnit(): TemperatureUnit {
         val ordinal = getInt(TEMPERATURE_UNIT)
-        return if (ordinal == -1) {
+        val saved = TemperatureUnit.values().getOrNull(ordinal)
+        return if (saved == null) {
             val default = TemperatureUnit.C
             setTemperatureUnit(default)
             default
         } else {
-            TemperatureUnit.values()[ordinal]
+            saved
         }
     }
 
@@ -86,12 +89,13 @@ class DefaultSettingsRepository(
 
     override suspend fun getWindUnit(): SpeedUnit {
         val ordinal = getInt(WIND_UNIT)
-        return if (ordinal == -1) {
+        val saved = SpeedUnit.values().getOrNull(ordinal)
+        return if (saved == null) {
             val default = SpeedUnit.MPS
             setWindUnit(default)
             default
         } else {
-            SpeedUnit.values()[ordinal]
+            saved
         }
     }
 
