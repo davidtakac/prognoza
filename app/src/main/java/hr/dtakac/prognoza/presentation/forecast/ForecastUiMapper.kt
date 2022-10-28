@@ -61,10 +61,25 @@ class ForecastUiMapper @Inject constructor(
             TextResource.fromStringId(current.wind.speed.beaufort.toStringId()),
             getWind(current.wind, windUnit)
         ),
-        precipitation = TextResource.fromStringId(
-            id = R.string.template_precipitation,
-            getPrecipitation(current.precipitation, precipitationUnit)
-        )
+        precipitation = when (current.description.short) {
+            ForecastDescription.Short.RAIN -> TextResource.fromStringId(
+                R.string.template_amount_of_rain,
+                getPrecipitation(current.precipitation, precipitationUnit)
+            )
+            ForecastDescription.Short.SNOW -> TextResource.fromStringId(
+                R.string.template_amount_of_snow,
+                getPrecipitation(current.precipitation, precipitationUnit)
+            )
+            ForecastDescription.Short.SLEET -> TextResource.fromStringId(
+                R.string.template_amount_of_sleet,
+                getPrecipitation(current.precipitation, precipitationUnit)
+            )
+
+            ForecastDescription.Short.UNKNOWN,
+            ForecastDescription.Short.FAIR,
+            ForecastDescription.Short.FOG,
+            ForecastDescription.Short.CLOUDY -> TextResource.fromStringId(R.string.no_precipitation)
+        }
     )
 
     private fun mapToTodayUi(

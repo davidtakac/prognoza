@@ -57,14 +57,16 @@
 
     <string name="template_temperature_degrees">%1$s°</string>
     <string name="template_feels_like">Feels like %1$s</string>
-    <string name="template_precipitation_mm">%1$s mm</string>
-    <string name="template_precipitation_in">%1$s in</string>
-    <string name="template_precipitation_cm">%1$s cm</string>
-    <string name="template_precipitation">Precipitation: %1$s</string>
-    <string name="template_wind_kmh">%1$s km/h</string>
-    <string name="template_wind_mps">%1$s m/s</string>
-    <string name="template_wind_mph">%1$s mi/h</string>
-    <string name="template_wind_knots">%1$s kt</string>
+    <string name="template_precipitation_mm">%1$s\u00A0mm</string>
+    <string name="template_precipitation_in">%1$s\u00A0in</string>
+    <string name="template_precipitation_cm">%1$s\u00A0cm</string>
+    <string name="template_amount_of_rain">%1$s of rain</string>
+    <string name="template_amount_of_sleet">%1$s of sleet</string>
+    <string name="template_amount_of_snow">%1$s of snow</string>
+    <string name="template_wind_kmh">%1$s\u00A0km\u2215h</string>
+    <string name="template_wind_mps">%1$s\u00A0m\u2215s</string>
+    <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>
+    <string name="template_wind_knots">%1$s\u00A0kt</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
     <string name="template_wind">%1$s (%2$s)</string>
     <string name="template_humidity_percent">%1$s%%</string>
@@ -125,5 +127,7 @@
     <string name="credit">Credit</string>
     <string name="weather_data">Weather data</string>
     <string name="geolocation_data">Place data</string>
+    <string name="template_wind_beaufort">%1$s</string>
+    <string name="no_precipitation">No precipitation</string>
 
 </resources>

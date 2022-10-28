@@ -52,15 +52,14 @@
     <string name="direction_nw">Sjeverozapad</string>
     <string name="template_temperature_degrees">%1$s°</string>
     <string name="template_feels_like">Osjet %1$s°</string>
-    <string name="template_precipitation_mm">%1$s mm</string>
-    <string name="template_precipitation_in">%1$s in</string>
-    <string name="template_precipitation_cm">%1$s cm</string>
-    <string name="template_precipitation">Oborine: %1$s</string>
-    <string name="template_wind_kmh">%1$s km/h</string>
-    <string name="template_wind_mps">%1$s m/s</string>
-    <string name="template_wind_mph">%1$s mi/h</string>
+    <string name="template_precipitation_mm">%1$s\u00A0mm</string>
+    <string name="template_precipitation_in">%1$s\u00A0in</string>
+    <string name="template_precipitation_cm">%1$s\u00A0cm</string>
+    <string name="template_wind_kmh">%1$s\u00A0km\u2215h</string>
+    <string name="template_wind_mps">%1$s\u00A0m\u2215s</string>
+    <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
-    <string name="template_wind">Vjetar: %1$s</string>
+    <string name="template_wind">%1$s (%2$s)</string>
     <string name="template_humidity_percent">%1$s%%</string>
     <string name="error_unknown">Dogodila se neočekivana pogreška.</string>
     <string name="error_no_selected_place">Odaberi mjesto i vidi njegovu vremensku prognozu.</string>
@@ -115,8 +114,12 @@
     <string name="weather_data">Meteorološki podaci</string>
     <string name="geolocation_data">Geolokacijski podaci</string>
     <string name="error_saved_places">Dogodila se pogreška prilikom dohvaćanja tvojih spremljenih mjesta. Očisti podatke aplikacije i pokušaj ponovo.</string>
-    <string name="template_wind_knots">%1$s čv</string>
+    <string name="template_wind_knots">%1$s\u00A0čv</string>
     <string name="settings_label_knots">Čvorovi</string>
     <string name="template_wind_beaufort">%1$s</string>
     <string name="settings_label_beaufort">Beaufortova ljestvica</string>
+    <string name="template_amount_of_sleet">%1$s susnježice</string>
+    <string name="template_amount_of_snow">%1$s snijega</string>
+    <string name="template_amount_of_rain">%1$s kiše</string>
+    <string name="no_precipitation">Bez oborina</string>
 </resources>
