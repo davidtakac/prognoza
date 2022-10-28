@@ -20,7 +20,9 @@ class DatabaseModule {
     @Singleton
     fun providePrognozaDatabase(
         @ApplicationContext context: Context
-    ): PrognozaDatabase = Room.databaseBuilder(context, PrognozaDatabase::class.java, "prognoza_database").build()
+    ): PrognozaDatabase = Room.databaseBuilder(context, PrognozaDatabase::class.java, "prognoza_database")
+        .fallbackToDestructiveMigrationFrom(1)
+        .build()
 
     @Provides
     @Singleton
