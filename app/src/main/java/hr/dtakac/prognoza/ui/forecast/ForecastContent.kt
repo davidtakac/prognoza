@@ -228,7 +228,7 @@ private fun DataList(
                 modifier = Modifier.padding(itemPadding)
             )
         }
-        item(key = "description-low-high") {
+        item(key = "description-and-precipitation") {
             DescriptionAndPrecipitation(
                 description = forecast.current.description.asString(),
                 icon = forecast.current.icon,
@@ -238,8 +238,8 @@ private fun DataList(
                     .fillMaxWidth()
             )
         }
-        item(key = "wind-and-precipitation") {
-            FeelsLikeAndWind(
+        item(key = "wind-and-feels-like") {
+            WindAndFeelsLike(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(itemPadding)
@@ -250,8 +250,8 @@ private fun DataList(
         }
         forecast.today?.hourly?.let {
             item(key = "hourly-header") {
-                Header(
-                    text = stringResource(id = R.string.hourly),
+                HourlyHeader(
+                    lowHighTemperature = forecast.today.lowHighTemperature.asString(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(itemPadding)
@@ -270,8 +270,7 @@ private fun DataList(
         }
         forecast.coming?.let {
             item(key = "coming-header") {
-                Header(
-                    text = stringResource(id = R.string.coming),
+                ComingHeader(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(itemPadding)
@@ -324,42 +323,43 @@ private fun DescriptionAndPrecipitation(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        ProvideTextStyle(PrognozaTheme.typography.titleLarge) {
-            val annotatedString = buildAnnotatedString {
-                append("$description ")
-                appendInlineContent(id = "icon")
-            }
-            val inlineContentMap = mapOf(
-                "icon" to InlineTextContent(
-                    Placeholder(
-                        36.sp,
-                        36.sp,
-                        PlaceholderVerticalAlign.TextCenter
-                    )
-                ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(model = icon),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize()
-                    )
-                }
-            )
-            Text(
-                text = annotatedString,
-                inlineContent = inlineContentMap,
-                modifier = Modifier.weight(3f)
-            )
-            Text(
-                text = precipitation,
-                textAlign = TextAlign.End,
-                modifier = Modifier.weight(1f)
-            )
+        val annotatedString = buildAnnotatedString {
+            append("$description ")
+            appendInlineContent(id = "icon")
         }
+        val inlineContentMap = mapOf(
+            "icon" to InlineTextContent(
+                Placeholder(
+                    36.sp,
+                    36.sp,
+                    PlaceholderVerticalAlign.TextCenter
+                )
+            ) {
+                Image(
+                    painter = rememberAsyncImagePainter(model = icon),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+        )
+        Text(
+            text = annotatedString,
+            inlineContent = inlineContentMap,
+            modifier = Modifier.weight(3f),
+            style = PrognozaTheme.typography.titleLarge
+        )
+        Text(
+            text = precipitation,
+            textAlign = TextAlign.End,
+            modifier = Modifier.weight(1f),
+            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+            style = PrognozaTheme.typography.subtitleLarge
+        )
     }
 }
 
 @Composable
-private fun FeelsLikeAndWind(
+private fun WindAndFeelsLike(
     feelsLike: String,
     wind: String,
     modifier: Modifier = Modifier
@@ -376,13 +376,32 @@ private fun FeelsLikeAndWind(
 }
 
 @Composable
-private fun Header(
-    text: String,
+private fun HourlyHeader(
+    lowHighTemperature: String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            ProvideTextStyle(PrognozaTheme.typography.titleSmall) {
+                Text(stringResource(id = R.string.hourly))
+                Text(lowHighTemperature)
+            }
+        }
+        Divider(
+            color = LocalContentColor.current,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+    }
+}
+
+@Composable
+private fun ComingHeader(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Text(
-            text = text,
+            text = stringResource(id = R.string.coming),
             style = PrognozaTheme.typography.titleSmall,
         )
         Divider(
