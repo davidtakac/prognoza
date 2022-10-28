@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.domain.repository
+package hr.dtakac.prognoza.domain.place
 
 import hr.dtakac.prognoza.entities.Place
 

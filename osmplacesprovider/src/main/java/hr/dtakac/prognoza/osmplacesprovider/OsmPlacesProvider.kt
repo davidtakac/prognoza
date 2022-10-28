@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.osmplacesprovider
 
-import hr.dtakac.prognoza.domain.repository.PlaceSearcher
-import hr.dtakac.prognoza.domain.repository.PlaceSearcherResult
+import hr.dtakac.prognoza.domain.place.PlaceSearcher
+import hr.dtakac.prognoza.domain.place.PlaceSearcherResult
 import java.util.*
 
 class OsmPlaceSearcher(

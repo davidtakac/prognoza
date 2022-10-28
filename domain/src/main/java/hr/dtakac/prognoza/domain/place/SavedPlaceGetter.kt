@@ -1,8 +1,8 @@
-package hr.dtakac.prognoza.domain.repository
+package hr.dtakac.prognoza.domain.place
 
 import hr.dtakac.prognoza.entities.Place
 
-interface PlaceGetter {
+interface SavedPlaceGetter {
     suspend fun get(latitude: Double, longitude: Double): Place?
     suspend fun getAll(): List<Place>
 }

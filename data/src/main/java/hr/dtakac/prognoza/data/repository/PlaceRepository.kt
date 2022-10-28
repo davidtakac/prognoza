@@ -4,13 +4,13 @@ import hr.dtakac.prognoza.data.database.place.PlaceDao
 import hr.dtakac.prognoza.data.database.place.PlaceDbModel
 import hr.dtakac.prognoza.data.database.place.toDbModel
 import hr.dtakac.prognoza.data.database.place.toEntity
-import hr.dtakac.prognoza.domain.repository.PlaceGetter
-import hr.dtakac.prognoza.domain.repository.PlaceSaver
+import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
+import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.entities.Place
 
 class PlaceRepository(
     private val placeDao: PlaceDao
-) : PlaceGetter, PlaceSaver {
+) : SavedPlaceGetter, PlaceSaver {
     override suspend fun get(latitude: Double, longitude: Double): Place? {
         return placeDao.get(latitude, longitude)?.toEntity()
     }

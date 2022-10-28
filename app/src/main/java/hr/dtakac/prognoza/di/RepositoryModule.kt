@@ -12,6 +12,9 @@ import hr.dtakac.prognoza.data.network.forecast.ForecastService
 import hr.dtakac.prognoza.data.repository.DefaultForecastRepository
 import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.data.repository.PlaceRepository
+import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
+import hr.dtakac.prognoza.domain.place.PlaceSaver
+import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.domain.repository.*
 import hr.dtakac.prognoza.osmplacesprovider.OsmPlaceSearcher
 import hr.dtakac.prognoza.osmplacesprovider.PlaceService
@@ -29,11 +32,11 @@ class RepositoryModule {
     @Provides
     fun provideSettingsRepository(
         sharedPreferences: SharedPreferences,
-        placeGetter: PlaceGetter,
+        savedPlaceGetter: SavedPlaceGetter,
         @Named("io") ioDispatcher: CoroutineDispatcher
     ): SettingsRepository = DefaultSettingsRepository(
         sharedPreferences,
-        placeGetter,
+        savedPlaceGetter,
         ioDispatcher
     )
 
@@ -59,7 +62,7 @@ class RepositoryModule {
     @Provides
     fun providePlaceGetter(
         placeRepository: PlaceRepository
-    ): PlaceGetter = placeRepository
+    ): SavedPlaceGetter = placeRepository
 
     @Provides
     fun providePlaceSearcher(

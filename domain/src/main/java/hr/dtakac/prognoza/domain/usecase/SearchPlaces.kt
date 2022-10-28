@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.domain.usecase
 
-import hr.dtakac.prognoza.domain.repository.PlaceSearcher
-import hr.dtakac.prognoza.domain.repository.PlaceSearcherResult
+import hr.dtakac.prognoza.domain.place.PlaceSearcher
+import hr.dtakac.prognoza.domain.place.PlaceSearcherResult
 import hr.dtakac.prognoza.entities.Place
 
 class SearchPlaces(private val placeSearcher: PlaceSearcher) {
