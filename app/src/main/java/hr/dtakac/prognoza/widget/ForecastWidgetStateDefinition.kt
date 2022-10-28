@@ -6,8 +6,8 @@ import androidx.datastore.core.Serializer
 import androidx.datastore.dataStore
 import androidx.datastore.dataStoreFile
 import androidx.glance.state.GlanceStateDefinition
+import io.github.aakira.napier.Napier
 import kotlinx.serialization.json.Json
-import timber.log.Timber
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
@@ -35,7 +35,7 @@ object ForecastWidgetStateDefinition : GlanceStateDefinition<ForecastWidgetState
                 input.readBytes().decodeToString()
             )
         } catch (e: Exception) {
-            Timber.e(e)
+            Napier.e(message = "Widget error", e)
             ForecastWidgetState.Error
         }
 

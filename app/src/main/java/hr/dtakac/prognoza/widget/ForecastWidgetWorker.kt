@@ -9,7 +9,7 @@ import androidx.work.*
 import hr.dtakac.prognoza.di.work.ChildWorkerFactory
 import hr.dtakac.prognoza.domain.usecase.GetForecast
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
-import timber.log.Timber
+import io.github.aakira.napier.Napier
 import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
@@ -95,7 +95,7 @@ class ForecastWidgetWorker @Inject constructor(
             setWidgetState(glanceIds, widgetState)
             Result.success()
         } catch (e: Exception) {
-            Timber.e(e)
+            Napier.e(message = "Widget error", e)
             setWidgetState(glanceIds, ForecastWidgetState.Unavailable)
             Result.failure()
         }

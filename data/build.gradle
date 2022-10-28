@@ -51,5 +51,5 @@ dependencies {
     kapt "androidx.room:room-compiler:$versions.room"
 
     // Logging
-    implementation "com.jakewharton.timber:timber:$versions.timber"
+    implementation "io.github.aakira:napier:$versions.napier"
 }

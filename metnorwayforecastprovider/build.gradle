@@ -55,4 +55,7 @@ dependencies {
 
     // Desugaring
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
+
+    // Logging
+    implementation "io.github.aakira:napier:$versions.napier"
 }

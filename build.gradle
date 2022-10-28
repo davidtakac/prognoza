@@ -30,7 +30,7 @@ buildscript {
                 glance_appwidget        : '1.0.0-alpha05',
                 kotlinx_serialization   : '1.4.0',
                 rft_ktx_serialization   : '0.8.0',
-                timber                  : '5.0.1',
+                napier                  : '2.6.1',
                 work                    : '2.7.1'
         ]
     }

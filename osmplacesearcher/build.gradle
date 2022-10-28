@@ -18,4 +18,7 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
+
+    // Logging
+    implementation "io.github.aakira:napier:$versions.napier"
 }

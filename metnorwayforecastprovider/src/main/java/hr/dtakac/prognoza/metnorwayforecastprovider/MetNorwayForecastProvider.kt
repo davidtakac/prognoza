@@ -5,6 +5,7 @@ import hr.dtakac.prognoza.domain.forecast.ForecastProviderResult
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.*
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.converter.Rfc1123DateTimeConverter
+import io.github.aakira.napier.Napier
 import okhttp3.Headers
 import java.time.ZonedDateTime
 import java.util.*
@@ -28,7 +29,7 @@ class MetNorwayForecastProvider(
                     lastModified = meta?.lastModified
                 )
             } catch (e: Exception) {
-                // todo: log
+                Napier.e(message = "MET Norway error", e)
             }
         }
 
@@ -53,7 +54,7 @@ class MetNorwayForecastProvider(
                 ForecastProviderResult.Success(data)
             }
         } catch (e: Exception) {
-            // todo: log
+            Napier.e(message = "MET Norway error", e)
             ForecastProviderResult.Error
         }
     }

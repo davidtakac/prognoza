@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.osmplacesearcher
 
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.domain.place.PlaceSearcherResult
+import io.github.aakira.napier.Napier
 import java.util.*
 
 class OsmPlaceSearcher(
@@ -17,7 +18,7 @@ class OsmPlaceSearcher(
                 query = query
             ).map(PlaceResponse::toEntity)
         } catch (e: Exception) {
-            // todo: implement logging
+            Napier.e(message = "OSM error", e)
             null
         }
         return entities?.let {

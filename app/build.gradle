@@ -143,7 +143,7 @@ dependencies {
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.core_library_desugaring"
 
     // Logging
-    implementation "com.jakewharton.timber:timber:$versions.timber"
+    implementation "io.github.aakira:napier:$versions.napier"
 
     // Testing
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$versions.compose"
