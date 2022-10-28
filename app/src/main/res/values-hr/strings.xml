@@ -60,7 +60,6 @@
     <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
     <string name="template_wind">%1$s (%2$s)</string>
-    <string name="template_humidity_percent">%1$s%%</string>
     <string name="error_unknown">Dogodila se neočekivana pogreška.</string>
     <string name="error_no_selected_place">Odaberi mjesto i vidi njegovu vremensku prognozu.</string>
     <string name="wind_calm">Tišina</string>
@@ -113,10 +112,6 @@
     <string name="credit">Priznanja</string>
     <string name="weather_data">Meteorološki podaci</string>
     <string name="geolocation_data">Geolokacijski podaci</string>
-    <string name="error_saved_places">Dogodila se pogreška prilikom dohvaćanja tvojih spremljenih mjesta. Očisti podatke aplikacije i pokušaj ponovo.</string>
     <string name="template_wind_knots">%1$s\u00A0čv</string>
     <string name="settings_label_knots">Čvorovi</string>
-    <string name="template_wind_beaufort">%1$s</string>
-    <string name="settings_label_beaufort">Beaufortova ljestvica</string>
-    <string name="no_precipitation">Bez oborina</string>
 </resources>

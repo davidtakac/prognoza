@@ -66,7 +66,6 @@
     <string name="template_wind_knots">%1$s\u00A0kt</string>
     <string name="template_high_low_temperature">%1$s\u00A0\u00B7\u00A0%2$s</string>
     <string name="template_wind">%1$s\u00A0\u00B7\u00A0%2$s</string>
-    <string name="template_humidity_percent">%1$s%%</string>
     <string name="error_unknown">An unexpected error occurred.</string>
     <string name="met_norway_credit" translatable="false">MET Norway</string>
     <string name="osm_nominatim_credit" translatable="false">OpenStreetMap</string>
@@ -90,7 +89,6 @@
     <string name="search_places">Search places…</string>
     <string name="no_saved_places">The places you search for and select will appear here.</string>
     <string name="no_places_found">No places found that match \"%1$s\".</string>
-    <string name="error_saved_places">An error occurred when getting your saved places. Clear your app data and try again.</string>
     <string name="error_search_places">An error occurred when searching places. Check your internet and try again.</string>
     <string name="units">Units</string>
     <string name="precipitation_unit">Precipitation unit</string>
@@ -105,7 +103,6 @@
     <string name="settings_label_kph">Kilometers per hour</string>
     <string name="settings_label_mph">Miles per hour</string>
     <string name="settings_label_knots">Knots</string>
-    <string name="settings_label_beaufort">Beaufort scale</string>
     <string name="settings_label_mm">Millimeters</string>
     <string name="settings_label_in">Inches</string>
     <string name="settings_label_cm">Centimeters</string>
@@ -124,7 +121,5 @@
     <string name="credit">Credit</string>
     <string name="weather_data">Weather data</string>
     <string name="geolocation_data">Place data</string>
-    <string name="template_wind_beaufort">%1$s</string>
-    <string name="no_precipitation">No precipitation</string>
 
 </resources>
