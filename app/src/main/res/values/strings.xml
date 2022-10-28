@@ -70,7 +70,7 @@
     <string name="template_wind">Wind: %1$s</string>
     <string name="template_humidity_percent">%1$s%%</string>
     <string name="error_unknown">An unexpected error occurred.</string>
-    <string name="met_norway_credit" translatable="false">The Norwegian Meteorological Institute</string>
+    <string name="met_norway_credit" translatable="false">MET Norway</string>
     <string name="osm_nominatim_credit" translatable="false">OpenStreetMap</string>
     <string name="error_no_selected_place">Select a place to see its forecast.</string>
     <string name="wind_calm">Calm</string>
