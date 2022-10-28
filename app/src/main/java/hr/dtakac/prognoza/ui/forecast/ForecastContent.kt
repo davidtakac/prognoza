@@ -229,21 +229,23 @@ private fun DataList(
             )
         }
         item(key = "description-low-high") {
-            DescriptionAndLowHighTemperature(
+            DescriptionAndPrecipitation(
                 description = forecast.current.description.asString(),
                 icon = forecast.current.icon,
-                lowHighTemperature = forecast.today?.lowHighTemperature?.asString() ?: "",
-                modifier = Modifier.padding(itemPadding).fillMaxWidth()
+                precipitation = forecast.current.precipitation.asString(),
+                modifier = Modifier
+                    .padding(itemPadding)
+                    .fillMaxWidth()
             )
         }
         item(key = "wind-and-precipitation") {
-            WindAndPrecipitation(
+            FeelsLikeAndWind(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(itemPadding)
                     .padding(top = 42.dp),
-                wind = forecast.current.wind.asString(),
-                precipitation = forecast.current.precipitation.asString()
+                feelsLike = forecast.current.feelsLike.asString(),
+                wind = forecast.current.wind.asString()
             )
         }
         forecast.today?.hourly?.let {
@@ -311,11 +313,11 @@ private fun DataList(
 }
 
 @Composable
-private fun DescriptionAndLowHighTemperature(
+private fun DescriptionAndPrecipitation(
     description: String,
     @DrawableRes
     icon: Int,
-    lowHighTemperature: String,
+    precipitation: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -345,10 +347,10 @@ private fun DescriptionAndLowHighTemperature(
             Text(
                 text = annotatedString,
                 inlineContent = inlineContentMap,
-                modifier = Modifier.weight(2f)
+                modifier = Modifier.weight(3f)
             )
             Text(
-                text = lowHighTemperature,
+                text = precipitation,
                 textAlign = TextAlign.End,
                 modifier = Modifier.weight(1f)
             )
@@ -357,9 +359,9 @@ private fun DescriptionAndLowHighTemperature(
 }
 
 @Composable
-private fun WindAndPrecipitation(
+private fun FeelsLikeAndWind(
+    feelsLike: String,
     wind: String,
-    precipitation: String,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -367,8 +369,8 @@ private fun WindAndPrecipitation(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
-            Text(text = wind, modifier = Modifier.weight(1f))
-            Text(text = precipitation, modifier = Modifier.weight(1f), textAlign = TextAlign.End)
+            Text(text = wind, modifier = Modifier.weight(2f))
+            Text(text = feelsLike, modifier = Modifier.weight(1f), textAlign = TextAlign.End)
         }
     }
 }
@@ -629,8 +631,9 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
     description = TextResource.fromText("Clear sky, sleet soon"),
     icon = R.drawable.clearsky_day,
     wind = TextResource.fromText("Wind: 15 km/h"),
-    precipitation = TextResource.fromText("Precipitation: 0 mm"),
+    feelsLike = TextResource.fromText("Feels like: -21°"),
     shortDescription = ForecastDescription.Short.FAIR,
+    precipitation = TextResource.fromText("12 mm")
 )
 
 private fun fakeTodayUi(): TodayUi = TodayUi(
@@ -654,7 +657,7 @@ private fun fakeComingUi(): List<DayUi> = listOf(
     DayUi(
         date = TextResource.fromText("Thu, Sep 13"),
         lowHighTemperature = TextResource.fromText("16—8"),
-        precipitation = TextResource.fromText(""),
+        precipitation = TextResource.empty(),
         hours = mutableListOf<ComingHourUi>().apply {
             for (i in 1..12) {
                 add(
@@ -676,7 +679,7 @@ private fun fakeComingUi(): List<DayUi> = listOf(
     DayUi(
         date = TextResource.fromText("Sat, Sep 15"),
         lowHighTemperature = TextResource.fromText("21—5"),
-        precipitation = TextResource.fromText(""),
+        precipitation = TextResource.empty(),
         hours = listOf()
     ),
 )

@@ -61,25 +61,13 @@ class ForecastUiMapper @Inject constructor(
             TextResource.fromStringId(current.wind.speed.beaufort.toStringId()),
             getWind(current.wind, windUnit)
         ),
-        precipitation = when (current.description.short) {
-            ForecastDescription.Short.RAIN -> TextResource.fromStringId(
-                R.string.template_amount_of_rain,
-                getPrecipitation(current.precipitation, precipitationUnit)
-            )
-            ForecastDescription.Short.SNOW -> TextResource.fromStringId(
-                R.string.template_amount_of_snow,
-                getPrecipitation(current.precipitation, precipitationUnit)
-            )
-            ForecastDescription.Short.SLEET -> TextResource.fromStringId(
-                R.string.template_amount_of_sleet,
-                getPrecipitation(current.precipitation, precipitationUnit)
-            )
-
-            ForecastDescription.Short.UNKNOWN,
-            ForecastDescription.Short.FAIR,
-            ForecastDescription.Short.FOG,
-            ForecastDescription.Short.CLOUDY -> TextResource.fromStringId(R.string.no_precipitation)
-        }
+        feelsLike = TextResource.fromStringId(
+            id = R.string.template_feels_like,
+            getTemperature(current.temperature, temperatureUnit)
+        ),
+        precipitation = current.precipitation.takeIf { it.millimeters > 0 }?.let {
+            getPrecipitation(it, precipitationUnit)
+        } ?: TextResource.empty()
     )
 
     private fun mapToTodayUi(
@@ -118,7 +106,7 @@ class ForecastUiMapper @Inject constructor(
             ),
             precipitation = day.totalPrecipitation.takeIf { it.millimeters > 0.0 }?.let {
                 getPrecipitation(it, precipitationUnit)
-            } ?: TextResource.fromText(""),
+            } ?: TextResource.empty(),
             hours = day.hours.map {
                 ComingHourUi(
                     time = getShortTime(it.dateTime),
@@ -141,7 +129,7 @@ class ForecastUiMapper @Inject constructor(
         temperature = getTemperature(datum.temperature, temperatureUnit),
         precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {
             getPrecipitation(it, precipitationUnit)
-        } ?: TextResource.fromText(""),
+        } ?: TextResource.empty(),
         description = TextResource.fromStringId(datum.description.toStringId()),
         icon = datum.description.toDrawableId()
     )

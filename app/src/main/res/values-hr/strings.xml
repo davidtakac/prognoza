@@ -51,7 +51,7 @@
     <string name="direction_w">Zapad</string>
     <string name="direction_nw">Sjeverozapad</string>
     <string name="template_temperature_degrees">%1$s°</string>
-    <string name="template_feels_like">Osjet %1$s°</string>
+    <string name="template_feels_like">Osjet %1$s</string>
     <string name="template_precipitation_mm">%1$s\u00A0mm</string>
     <string name="template_precipitation_in">%1$s\u00A0in</string>
     <string name="template_precipitation_cm">%1$s\u00A0cm</string>
@@ -118,8 +118,5 @@
     <string name="settings_label_knots">Čvorovi</string>
     <string name="template_wind_beaufort">%1$s</string>
     <string name="settings_label_beaufort">Beaufortova ljestvica</string>
-    <string name="template_amount_of_sleet">Susnježica (%1$s)</string>
-    <string name="template_amount_of_snow">Snijeg (%1$s)</string>
-    <string name="template_amount_of_rain">Kiša (%1$s)</string>
     <string name="no_precipitation">Bez oborina</string>
 </resources>

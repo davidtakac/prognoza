@@ -25,6 +25,7 @@ data class CurrentUi(
     @DrawableRes
     val icon: Int,
     val wind: TextResource,
+    val feelsLike: TextResource,
     val precipitation: TextResource
 )
 

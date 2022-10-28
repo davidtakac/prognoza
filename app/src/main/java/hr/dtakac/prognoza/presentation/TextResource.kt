@@ -7,6 +7,8 @@ import androidx.annotation.StringRes
 
 sealed interface TextResource {
     companion object {
+        fun empty(): TextResource = fromText("")
+
         fun fromText(text: String): TextResource =
             SimpleTextResource(text)
 
