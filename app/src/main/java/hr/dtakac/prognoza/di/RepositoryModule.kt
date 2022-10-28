@@ -62,13 +62,11 @@ class RepositoryModule {
         userAgent: String,
         forecastService: ForecastService,
         metNorwayDatabase: MetNorwayDatabase,
-        json: Json
     ): ForecastProvider = MetNorwayForecastProvider(
         userAgent = userAgent,
         forecastService = forecastService,
         metaDao = metNorwayDatabase.metaDao(),
-        forecastResponseDao = metNorwayDatabase.forecastResponseDao(),
-        json = json
+        forecastResponseDao = metNorwayDatabase.forecastResponseDao()
     )
 
     @Provides

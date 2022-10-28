@@ -4,9 +4,7 @@ import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastProviderResult
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.*
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
+import hr.dtakac.prognoza.metnorwayforecastprovider.database.converter.Rfc1123DateTimeConverter
 import okhttp3.Headers
 import java.time.ZonedDateTime
 import java.util.*
@@ -15,9 +13,7 @@ class MetNorwayForecastProvider(
     private val userAgent: String,
     private val forecastService: ForecastService,
     private val metaDao: ForecastMetaDao,
-    private val forecastResponseDao: ForecastResponseDao,
-    // todo: move json serialization to a converter
-    private val json: Json
+    private val forecastResponseDao: ForecastResponseDao
 ) : ForecastProvider {
     override suspend fun provide(
         latitude: Double,
@@ -45,7 +41,7 @@ class MetNorwayForecastProvider(
             if (dbModel == null) {
                 ForecastProviderResult.Error
             } else {
-                val timeSteps = json.decodeFromString<LocationForecastResponse>(dbModel.json).forecast.forecastTimeSteps
+                val timeSteps = dbModel.response.forecast.forecastTimeSteps
                 val data = mutableListOf<ForecastDatum>()
                 for (i in timeSteps.indices) {
                     val datum = mapAdjacentTimeStepsToEntity(
@@ -88,7 +84,7 @@ class MetNorwayForecastProvider(
                 ForecastResponseDbModel(
                     latitude = latitude,
                     longitude = longitude,
-                    json = json.encodeToString(response)
+                    response = it
                 )
             )
         }

@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.metnorwayforecastprovider.database
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.TypeConverters
+import hr.dtakac.prognoza.metnorwayforecastprovider.database.converter.Rfc1123DateTimeConverter
 import java.time.ZonedDateTime
 
 @Entity(
