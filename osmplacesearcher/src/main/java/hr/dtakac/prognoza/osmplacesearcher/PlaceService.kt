@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.osmplacesprovider
+package hr.dtakac.prognoza.osmplacesearcher
 
 import retrofit2.http.GET
 import retrofit2.http.Header

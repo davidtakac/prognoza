@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.osmplacesprovider
+package hr.dtakac.prognoza.osmplacesearcher
 
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.domain.place.PlaceSearcherResult

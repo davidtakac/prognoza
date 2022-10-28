@@ -16,8 +16,8 @@ import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.domain.repository.*
-import hr.dtakac.prognoza.osmplacesprovider.OsmPlaceSearcher
-import hr.dtakac.prognoza.osmplacesprovider.PlaceService
+import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceSearcher
+import hr.dtakac.prognoza.osmplacesearcher.PlaceService
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 

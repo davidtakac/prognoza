@@ -41,7 +41,7 @@ android {
 dependencies {
     implementation project(":entities")
     implementation project(":domain")
-    implementation project(":osmplacesprovider")
+    implementation project(':osmplacesearcher')
 
     // Needed for shared prefs
     implementation "androidx.core:core-ktx:$versions.core"
