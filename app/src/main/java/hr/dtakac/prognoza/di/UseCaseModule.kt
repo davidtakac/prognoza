@@ -4,9 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import hr.dtakac.prognoza.domain.repository.ForecastRepository
-import hr.dtakac.prognoza.domain.repository.PlaceRepository
-import hr.dtakac.prognoza.domain.repository.SettingsRepository
+import hr.dtakac.prognoza.domain.repository.*
 import hr.dtakac.prognoza.domain.usecase.*
 
 @Module
@@ -26,20 +24,20 @@ class UseCaseModule {
 
     @Provides
     fun provideSearchPlacesUseCase(
-        placeRepository: PlaceRepository
-    ): SearchPlaces = SearchPlaces(placeRepository)
+        placeSearcher: PlaceSearcher
+    ): SearchPlaces = SearchPlaces(placeSearcher)
 
     @Provides
     fun provideGetSavedPlacesUseCase(
-        placeRepository: PlaceRepository
-    ): GetSavedPlaces = GetSavedPlaces(placeRepository)
+        placeGetter: PlaceGetter
+    ): GetSavedPlaces = GetSavedPlaces(placeGetter)
 
     @Provides
     fun provideSelectPlaceUseCase(
-        placeRepository: PlaceRepository,
+        placeSaver: PlaceSaver,
         settingsRepository: SettingsRepository
     ): SelectPlace = SelectPlace(
-        placeRepository,
+        placeSaver,
         settingsRepository
     )
 

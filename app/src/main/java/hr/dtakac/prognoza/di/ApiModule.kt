@@ -6,7 +6,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.data.network.forecast.ForecastService
-import hr.dtakac.prognoza.data.network.place.PlaceService
+import hr.dtakac.prognoza.osmplacesprovider.PlaceService
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType

@@ -2,8 +2,7 @@ package hr.dtakac.prognoza.data.repository
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import hr.dtakac.prognoza.data.database.place.PlaceDao
-import hr.dtakac.prognoza.data.mapping.mapDbModelToEntity
+import hr.dtakac.prognoza.domain.repository.PlaceGetter
 import hr.dtakac.prognoza.domain.repository.SettingsRepository
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
@@ -16,7 +15,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class DefaultSettingsRepository(
     private val sharedPreferences: SharedPreferences,
-    private val placeDao: PlaceDao,
+    private val placeGetter: PlaceGetter,
     private val ioDispatcher: CoroutineDispatcher
 ) : SettingsRepository {
     override suspend fun getPlace(): Place? {
@@ -24,7 +23,7 @@ class DefaultSettingsRepository(
         val lat = getFloat(PLACE_LAT, 91f).toDouble()
         // Lon possible values are -180 to 180
         val lon = getFloat(PLACE_LON, 181f).toDouble()
-        return placeDao.get(lat, lon)?.let(::mapDbModelToEntity)
+        return placeGetter.get(lat, lon)
     }
 
     override suspend fun setPlace(place: Place) {

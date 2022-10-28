@@ -9,13 +9,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.data.database.PrognozaDatabase
 import hr.dtakac.prognoza.data.network.forecast.ForecastService
-import hr.dtakac.prognoza.data.network.place.PlaceService
 import hr.dtakac.prognoza.data.repository.DefaultForecastRepository
-import hr.dtakac.prognoza.data.repository.DefaultPlaceRepository
 import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
-import hr.dtakac.prognoza.domain.repository.ForecastRepository
-import hr.dtakac.prognoza.domain.repository.PlaceRepository
-import hr.dtakac.prognoza.domain.repository.SettingsRepository
+import hr.dtakac.prognoza.data.repository.PlaceRepository
+import hr.dtakac.prognoza.domain.repository.*
+import hr.dtakac.prognoza.osmplacesprovider.OsmPlaceSearcher
+import hr.dtakac.prognoza.osmplacesprovider.PlaceService
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
@@ -30,11 +29,11 @@ class RepositoryModule {
     @Provides
     fun provideSettingsRepository(
         sharedPreferences: SharedPreferences,
-        database: PrognozaDatabase,
+        placeGetter: PlaceGetter,
         @Named("io") ioDispatcher: CoroutineDispatcher
     ): SettingsRepository = DefaultSettingsRepository(
         sharedPreferences,
-        database.placeDao(),
+        placeGetter,
         ioDispatcher
     )
 
@@ -53,13 +52,24 @@ class RepositoryModule {
     )
 
     @Provides
-    fun providePlaceRepository(
+    fun providePlaceSaver(
+        placeRepository: PlaceRepository
+    ): PlaceSaver = placeRepository
+
+    @Provides
+    fun providePlaceGetter(
+        placeRepository: PlaceRepository
+    ): PlaceGetter = placeRepository
+
+    @Provides
+    fun providePlaceSearcher(
         placeService: PlaceService,
+        @Named("user_agent")
+        userAgent: String
+    ): PlaceSearcher = OsmPlaceSearcher(userAgent, placeService)
+
+    @Provides
+    fun providePlaceRepository(
         database: PrognozaDatabase,
-        @Named("user_agent") userAgent: String
-    ): PlaceRepository = DefaultPlaceRepository(
-        placeService,
-        placeDao = database.placeDao(),
-        userAgent = userAgent
-    )
+    ): PlaceRepository = PlaceRepository(database.placeDao())
 }

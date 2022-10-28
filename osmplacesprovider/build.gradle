@@ -1,0 +1,21 @@
+plugins {
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'kotlinx-serialization'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+dependencies {
+    implementation project(":entities")
+    implementation project(":domain")
+
+    // Network
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
+    implementation("com.squareup.okhttp3:logging-interceptor")
+    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
+}

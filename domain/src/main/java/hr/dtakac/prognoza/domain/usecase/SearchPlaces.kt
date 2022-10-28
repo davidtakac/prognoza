@@ -1,19 +1,17 @@
 package hr.dtakac.prognoza.domain.usecase
 
-import hr.dtakac.prognoza.domain.repository.PlaceRepository
-import hr.dtakac.prognoza.domain.repository.PlaceRepositoryResult
+import hr.dtakac.prognoza.domain.repository.PlaceSearcher
+import hr.dtakac.prognoza.domain.repository.PlaceSearcherResult
 import hr.dtakac.prognoza.entities.Place
 
-class SearchPlaces(
-    private val placeRepository: PlaceRepository
-) {
+class SearchPlaces(private val placeSearcher: PlaceSearcher) {
     suspend operator fun invoke(query: String): SearchPlacesResult {
-        val result = placeRepository.search(query)
-        return if (result is PlaceRepositoryResult.Success) {
-            if (result.data.isEmpty()) {
+        val result = placeSearcher.search(query)
+        return if (result is PlaceSearcherResult.Success) {
+            if (result.places.isEmpty()) {
                 SearchPlacesResult.Empty.None
             } else {
-                SearchPlacesResult.Success(result.data)
+                SearchPlacesResult.Success(result.places)
             }
         } else SearchPlacesResult.Empty.Error
     }

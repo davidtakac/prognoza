@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.data.network.place
+package hr.dtakac.prognoza.osmplacesprovider
 
 import retrofit2.http.GET
 import retrofit2.http.Header

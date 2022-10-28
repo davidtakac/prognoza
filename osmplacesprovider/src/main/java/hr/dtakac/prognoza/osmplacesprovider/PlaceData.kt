@@ -1,5 +1,6 @@
-package hr.dtakac.prognoza.data.network.place
+package hr.dtakac.prognoza.osmplacesprovider
 
+import hr.dtakac.prognoza.entities.Place
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -14,3 +15,12 @@ data class PlaceResponse(
     @SerialName("display_name")
     val displayName: String
 )
+
+fun PlaceResponse.toEntity(): Place {
+    return Place(
+        name = displayName.split(", ").getOrNull(0) ?: displayName,
+        details = displayName,
+        latitude = latitude,
+        longitude = longitude
+    )
+}

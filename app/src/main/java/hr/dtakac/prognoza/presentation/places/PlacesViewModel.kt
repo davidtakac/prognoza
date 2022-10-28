@@ -5,8 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
+import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.ui.WidgetRefresher
 import kotlinx.coroutines.launch
@@ -29,16 +31,16 @@ class PlacesViewModel @Inject constructor(
     fun getSaved() {
         viewModelScope.launch {
             showLoader()
-            when (val savedPlacesResult = getSavedPlaces()) {
-                is GetSavedPlacesResult.Success -> {
-                    currentPlaces = savedPlacesResult.places
-                    _state.value = _state.value.copy(
-                        places = mapper.mapToPlaceUi(savedPlacesResult.places, getSelectedPlace()),
-                        empty = null
-                    )
-                }
-                is GetSavedPlacesResult.Empty -> _state.value = _state.value.copy(
-                    empty = mapper.mapToGetSavedPlacesError(savedPlacesResult)
+            val savedPlaces = getSavedPlaces()
+            if (savedPlaces.isEmpty()) {
+                _state.value = _state.value.copy(
+                    empty = TextResource.fromStringId(R.string.no_saved_places)
+                )
+            } else {
+                currentPlaces = savedPlaces
+                _state.value = _state.value.copy(
+                    places = mapper.mapToPlaceUi(savedPlaces, getSelectedPlace()),
+                    empty = null
                 )
             }
             hideLoader()
