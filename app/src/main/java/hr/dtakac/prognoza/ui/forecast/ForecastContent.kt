@@ -367,7 +367,7 @@ private fun WindAndPrecipitation(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
-            Text(text = wind, modifier = Modifier.weight(1f))
+            Text(text = wind, modifier = Modifier.weight(2f))
             Text(text = precipitation, modifier = Modifier.weight(1f), textAlign = TextAlign.End)
         }
     }
