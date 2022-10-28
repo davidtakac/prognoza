@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.ui
+package hr.dtakac.prognoza.presentation.theme
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
@@ -15,7 +15,7 @@ enum class ThemeSetting {
     DARK, LIGHT, FOLLOW_SYSTEM
 }
 
-class ThemeChanger @Inject constructor(
+class ThemeSettingRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences,
     @Named("io")
     private val ioDispatcher: CoroutineDispatcher

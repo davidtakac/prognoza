@@ -21,7 +21,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
-import hr.dtakac.prognoza.presentation.settings.ThemeSettingViewModel
+import hr.dtakac.prognoza.presentation.theme.ThemeSetting
+import hr.dtakac.prognoza.presentation.theme.ThemeSettingViewModel
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme

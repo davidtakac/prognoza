@@ -6,7 +6,7 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.ui.ThemeSetting
+import hr.dtakac.prognoza.presentation.theme.ThemeSetting
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

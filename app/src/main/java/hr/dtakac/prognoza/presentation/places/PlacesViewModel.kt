@@ -10,7 +10,7 @@ import hr.dtakac.prognoza.domain.usecase.*
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.simpleEvent
-import hr.dtakac.prognoza.ui.WidgetRefresher
+import hr.dtakac.prognoza.presentation.WidgetRefresher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

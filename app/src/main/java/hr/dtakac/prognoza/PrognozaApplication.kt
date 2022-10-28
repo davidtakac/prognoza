@@ -5,7 +5,7 @@ import androidx.work.Configuration
 import androidx.work.WorkManager
 import dagger.hilt.android.HiltAndroidApp
 import hr.dtakac.prognoza.di.work.WorkerFactory
-import hr.dtakac.prognoza.ui.WidgetRefresher
+import hr.dtakac.prognoza.presentation.WidgetRefresher
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
 import javax.inject.Inject

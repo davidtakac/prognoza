@@ -11,9 +11,9 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.simpleEvent
-import hr.dtakac.prognoza.ui.ThemeSetting
-import hr.dtakac.prognoza.ui.ThemeChanger
-import hr.dtakac.prognoza.ui.WidgetRefresher
+import hr.dtakac.prognoza.presentation.theme.ThemeSetting
+import hr.dtakac.prognoza.presentation.theme.ThemeSettingRepository
+import hr.dtakac.prognoza.presentation.WidgetRefresher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,7 +31,7 @@ class SettingsViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
-    private val themeChanger: ThemeChanger,
+    private val themeSettingRepository: ThemeSettingRepository,
     private val widgetRefresher: WidgetRefresher,
     private val mapper: SettingsUiMapper
 ) : ViewModel() {
@@ -78,7 +78,7 @@ class SettingsViewModel @Inject constructor(
 
     fun setTheme(index: Int) {
         updateState {
-            themeChanger.setTheme(availableThemeSettings[index])
+            themeSettingRepository.setTheme(availableThemeSettings[index])
             fireThemeChanged()
         }
     }
@@ -97,7 +97,7 @@ class SettingsViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
-        availableThemeSettings = themeChanger.getAvailableThemes()
+        availableThemeSettings = themeSettingRepository.getAvailableThemes()
 
         _state.value = _state.value.copy(
             temperatureUnitSetting = mapper.mapToTemperatureUnitSetting(
@@ -114,7 +114,7 @@ class SettingsViewModel @Inject constructor(
             ),
             pressureUnitSetting = null,
             themeSetting = mapper.mapToThemeSetting(
-                selectedThemeSetting = themeChanger.getCurrentTheme(),
+                selectedThemeSetting = themeSettingRepository.getCurrentTheme(),
                 availableThemeSettings = availableThemeSettings
             )
         )

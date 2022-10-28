@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.ui
+package hr.dtakac.prognoza.presentation
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
