@@ -29,7 +29,6 @@ android {
         }
     }
     compileOptions {
-        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -46,12 +45,6 @@ dependencies {
     // Needed for shared prefs
     implementation "androidx.core:core-ktx:$versions.core"
 
-    // Network
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
-    implementation("com.squareup.okhttp3:logging-interceptor")
-    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
-
     // Database
     implementation "androidx.room:room-runtime:$versions.room"
     implementation "androidx.room:room-ktx:$versions.room"
@@ -59,7 +52,4 @@ dependencies {
 
     // Logging
     implementation "com.jakewharton.timber:timber:$versions.timber"
-
-    // Desugaring
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
 }
