@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastProviderResult
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
-import hr.dtakac.prognoza.domain.repository.SettingsRepository
+import hr.dtakac.prognoza.domain.settings.SettingsRepository
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit

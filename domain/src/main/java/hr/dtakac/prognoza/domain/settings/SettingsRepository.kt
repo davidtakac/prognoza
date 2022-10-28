@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.domain.repository
+package hr.dtakac.prognoza.domain.settings
 
 import hr.dtakac.prognoza.entities.Place
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit

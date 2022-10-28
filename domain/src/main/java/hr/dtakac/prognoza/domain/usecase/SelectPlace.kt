@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.domain.usecase
 
 import hr.dtakac.prognoza.domain.place.PlaceSaver
-import hr.dtakac.prognoza.domain.repository.SettingsRepository
+import hr.dtakac.prognoza.domain.settings.SettingsRepository
 import hr.dtakac.prognoza.entities.Place
 
 class SelectPlace(

@@ -11,20 +11,19 @@ import hr.dtakac.prognoza.data.database.PrognozaDatabase
 import hr.dtakac.prognoza.data.repository.ForecastRepository
 import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.data.repository.PlaceRepository
+import hr.dtakac.prognoza.domain.settings.SettingsRepository
 import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
 import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
-import hr.dtakac.prognoza.domain.repository.*
 import hr.dtakac.prognoza.metnorwayforecastprovider.ForecastService
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastProvider
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.MetNorwayDatabase
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceSearcher
 import hr.dtakac.prognoza.osmplacesearcher.PlaceService
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.serialization.json.Json
 import javax.inject.Named
 
 @Module
