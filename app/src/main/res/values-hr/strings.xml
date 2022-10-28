@@ -3,7 +3,7 @@
     <string name="description_unknown">Nepoznato</string>
     <string name="description_clear_sky">Vedro</string>
     <string name="description_cloudy">Oblačno</string>
-    <string name="description_fair">Lijepo</string>
+    <string name="description_fair">Pretežito vedro</string>
     <string name="description_fog">Magla</string>
     <string name="description_heavy_rain">Jaka kiša</string>
     <string name="description_heavy_rain_and_thunder">Jaka kiša i grmljavina</string>
