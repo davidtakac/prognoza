@@ -41,7 +41,6 @@ fun getWind(
     wind: Wind,
     unit: SpeedUnit
 ): TextResource = when (unit) {
-    SpeedUnit.BEAUFORT -> TextResource.fromStringId(wind.speed.beaufort.toStringId())
     SpeedUnit.KPH -> TextResource.fromStringId(
         R.string.template_wind_kmh,
         TextResource.fromNumber(wind.speed.kilometersPerHour, decimalPlaces = 0)

@@ -20,7 +20,6 @@ fun SpeedUnit.toSettingsLabel(): Int = when (this) {
     SpeedUnit.KPH -> R.string.settings_label_kph
     SpeedUnit.MPH -> R.string.settings_label_mph
     SpeedUnit.KNOTS -> R.string.settings_label_knots
-    SpeedUnit.BEAUFORT -> R.string.settings_label_beaufort
 }
 
 @StringRes

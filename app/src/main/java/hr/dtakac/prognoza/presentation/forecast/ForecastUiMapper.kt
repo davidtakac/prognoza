@@ -58,6 +58,7 @@ class ForecastUiMapper @Inject constructor(
         icon = current.description.toDrawableId(),
         wind = TextResource.fromStringId(
             id = R.string.template_wind,
+            TextResource.fromStringId(current.wind.speed.beaufort.toStringId()),
             getWind(current.wind, windUnit)
         ),
         precipitation = TextResource.fromStringId(

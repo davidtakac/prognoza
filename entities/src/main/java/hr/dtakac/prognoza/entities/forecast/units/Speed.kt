@@ -11,9 +11,6 @@ class Speed(
         if (value < 0) {
             throw IllegalStateException("Speed must be >= 0, was $value.")
         }
-        if (unit == SpeedUnit.BEAUFORT) {
-            throw IllegalStateException("Cannot initialize speed in Beaufort scale. Use an exact unit, such as m/s.")
-        }
     }
 
     val metersPerSecond: Double = when (unit) {
@@ -21,7 +18,6 @@ class Speed(
         SpeedUnit.KPH -> value / 3.6
         SpeedUnit.MPH -> value / 2.2369
         SpeedUnit.KNOTS -> value / 1.9438
-        else -> throw IllegalStateException("Unsupported unit.")
     }
     val kilometersPerHour: Double = if (unit == SpeedUnit.KPH) value else metersPerSecond * 3.6
     val milesPerHour: Double = if (unit == SpeedUnit.MPH) value else metersPerSecond * 2.2369
@@ -46,7 +42,7 @@ class Speed(
 }
 
 enum class SpeedUnit {
-    MPS, KPH, MPH, KNOTS, BEAUFORT
+    MPS, KPH, MPH, KNOTS
 }
 
 enum class BeaufortScale {
