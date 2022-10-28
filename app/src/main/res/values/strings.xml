@@ -60,9 +60,9 @@
     <string name="template_precipitation_mm">%1$s\u00A0mm</string>
     <string name="template_precipitation_in">%1$s\u00A0in</string>
     <string name="template_precipitation_cm">%1$s\u00A0cm</string>
-    <string name="template_amount_of_rain">%1$s of rain</string>
-    <string name="template_amount_of_sleet">%1$s of sleet</string>
-    <string name="template_amount_of_snow">%1$s of snow</string>
+    <string name="template_amount_of_rain">Rain (%1$s)</string>
+    <string name="template_amount_of_sleet">Sleet (%1$s)</string>
+    <string name="template_amount_of_snow">Snow (%1$s)</string>
     <string name="template_wind_kmh">%1$s\u00A0km\u2215h</string>
     <string name="template_wind_mps">%1$s\u00A0m\u2215s</string>
     <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>

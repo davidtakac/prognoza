@@ -118,8 +118,8 @@
     <string name="settings_label_knots">Čvorovi</string>
     <string name="template_wind_beaufort">%1$s</string>
     <string name="settings_label_beaufort">Beaufortova ljestvica</string>
-    <string name="template_amount_of_sleet">%1$s susnježice</string>
-    <string name="template_amount_of_snow">%1$s snijega</string>
-    <string name="template_amount_of_rain">%1$s kiše</string>
+    <string name="template_amount_of_sleet">Susnježica (%1$s)</string>
+    <string name="template_amount_of_snow">Snijeg (%1$s)</string>
+    <string name="template_amount_of_rain">Kiša (%1$s)</string>
     <string name="no_precipitation">Bez oborina</string>
 </resources>
