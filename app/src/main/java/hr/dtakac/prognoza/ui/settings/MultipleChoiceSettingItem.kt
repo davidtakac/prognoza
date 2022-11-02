@@ -209,5 +209,5 @@ private val fakeState: MultipleChoiceSetting = MultipleChoiceSetting(
     values = listOf(
         TextResource.fromText("Celsius"),
         TextResource.fromText("Fahrenheit")
-    )
+    ), {}
 )

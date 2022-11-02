@@ -28,15 +28,7 @@ import kotlinx.coroutines.flow.map
 @Composable
 fun SettingsContent(
     state: SettingsState,
-    onBackClick: () -> Unit = {},
-    onTemperatureUnitPick: (Int) -> Unit = {},
-    onWindUnitPick: (Int) -> Unit = {},
-    onPrecipitationUnitPick: (Int) -> Unit = {},
-    onPressureUnitPick: (Int) -> Unit = {},
-    onThemePick: (Int) -> Unit = {},
-    onWeatherDataClick: () -> Unit = {},
-    onPlaceDataClick: () -> Unit = {},
-    onDesignCreditClick: () -> Unit = {}
+    onBackClick: () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
         Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
@@ -59,15 +51,7 @@ fun SettingsContent(
 
             SettingsList(
                 state = state,
-                isTitleVisible = { toolbarTitleVisible = !it },
-                onTemperatureUnitPick = onTemperatureUnitPick,
-                onWindUnitPick = onWindUnitPick,
-                onPrecipitationUnitPick = onPrecipitationUnitPick,
-                onPressureUnitPick = onPressureUnitPick,
-                onThemePick = onThemePick,
-                onWeatherDataClick = onWeatherDataClick,
-                onPlaceDataClick = onPlaceDataClick,
-                onDesignCreditClick = onDesignCreditClick
+                isTitleVisible = { toolbarTitleVisible = !it }
             )
         }
     }
@@ -77,14 +61,6 @@ fun SettingsContent(
 private fun SettingsList(
     state: SettingsState,
     isTitleVisible: (Boolean) -> Unit,
-    onTemperatureUnitPick: (Int) -> Unit,
-    onWindUnitPick: (Int) -> Unit,
-    onPrecipitationUnitPick: (Int) -> Unit,
-    onPressureUnitPick: (Int) -> Unit,
-    onThemePick: (Int) -> Unit,
-    onWeatherDataClick: () -> Unit,
-    onPlaceDataClick: () -> Unit,
-    onDesignCreditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -115,7 +91,7 @@ private fun SettingsList(
             item(key = "temperature-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
-                    onPick = onTemperatureUnitPick
+                    onPick = it.onValuePick
                 )
             }
         }
@@ -123,7 +99,7 @@ private fun SettingsList(
             item(key = "wind-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
-                    onPick = onWindUnitPick
+                    onPick = it.onValuePick
                 )
             }
         }
@@ -131,7 +107,7 @@ private fun SettingsList(
             item(key = "precipitation-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
-                    onPick = onPrecipitationUnitPick
+                    onPick = it.onValuePick
                 )
             }
         }
@@ -139,7 +115,7 @@ private fun SettingsList(
             item(key = "pressure-unit") {
                 MultipleChoiceSettingItem(
                     state = it,
-                    onPick = onPressureUnitPick
+                    onPick = it.onValuePick
                 )
             }
         }
@@ -153,7 +129,7 @@ private fun SettingsList(
             item(key = "theme-setting") {
                 MultipleChoiceSettingItem(
                     state = it,
-                    onPick = onThemePick
+                    onPick = it.onValuePick
                 )
             }
         }
@@ -168,7 +144,7 @@ private fun SettingsList(
                 SettingItem(
                     name = it.name.asString(),
                     value = it.value.asString(),
-                    onClick = onWeatherDataClick
+                    onClick = it.onClick
                 )
             }
         }
@@ -177,7 +153,7 @@ private fun SettingsList(
                 SettingItem(
                     name = it.name.asString(),
                     value = it.value.asString(),
-                    onClick = onPlaceDataClick
+                    onClick = it.onClick
                 )
             }
         }
@@ -186,7 +162,7 @@ private fun SettingsList(
                 SettingItem(
                     name = it.name.asString(),
                     value = it.value.asString(),
-                    onClick = onDesignCreditClick
+                    onClick = it.onClick
                 )
             }
         }
@@ -221,9 +197,9 @@ private fun Preview() = PrognozaTheme {
 
 private val fakeState: SettingsState = SettingsState(
     isLoading = false,
-    temperatureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Temperature unit"), value = TextResource.fromText("Celsius"), values = listOf()),
-    windUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Wind unit"), value = TextResource.fromText("Kilometers per hour"), values = listOf()),
-    precipitationUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Precipitation unit"), value = TextResource.fromText("Millimeters"), values = listOf()),
-    pressureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Pressure unit"), value = TextResource.fromText("Hectopascal"), values = listOf()),
-    themeSetting = MultipleChoiceSetting(name = TextResource.fromText("Theme"), value = TextResource.fromText("Follow system setting"), values = listOf())
+    temperatureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Temperature unit"), value = TextResource.fromText("Celsius"), values = listOf(), {}),
+    windUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Wind unit"), value = TextResource.fromText("Kilometers per hour"), values = listOf(), {}),
+    precipitationUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Precipitation unit"), value = TextResource.fromText("Millimeters"), values = listOf(), {}),
+    pressureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Pressure unit"), value = TextResource.fromText("Hectopascal"), values = listOf(), {}),
+    themeSetting = MultipleChoiceSetting(name = TextResource.fromText("Theme"), value = TextResource.fromText("Follow system setting"), values = listOf(), {})
 )

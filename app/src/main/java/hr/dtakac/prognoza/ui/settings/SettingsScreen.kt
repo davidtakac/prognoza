@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.*
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.presentation.OnEvent
 import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
@@ -27,38 +26,15 @@ fun SettingsScreen(
         onUnitChange()
     }
 
-    val context = LocalContext.current
     SettingsContent(
         state = state,
-        onBackClick = onBackClick,
-        onTemperatureUnitPick = viewModel::setTemperatureUnit,
-        onWindUnitPick = viewModel::setWindUnit,
-        onPrecipitationUnitPick = viewModel::setPrecipitationUnit,
-        onPressureUnitPick = viewModel::setPressureUnit,
-        onThemePick = viewModel::setTheme,
-        onWeatherDataClick = { openMetNorwayWebsite(context) },
-        onPlaceDataClick = { openOsmWebsite(context) },
-        onDesignCreditClick = { openNealHamptonDribble(context) }
+        onBackClick = onBackClick
     )
 }
 
-private fun openMetNorwayWebsite(context: Context) {
+private fun openLink(url: String, context: Context) {
     try {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.met.no/en")))
-    } catch (e: Exception) {
-    }
-}
-
-private fun openOsmWebsite(context: Context) {
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.openstreetmap.org")))
-    } catch (e: Exception) {
-    }
-}
-
-private fun openNealHamptonDribble(context: Context) {
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2")))
     } catch (e: Exception) {
     }
 }

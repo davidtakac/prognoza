@@ -48,35 +48,35 @@ class SettingsViewModel @Inject constructor(
         updateState { }
     }
 
-    fun setTemperatureUnit(index: Int) {
+    private fun setTemperatureUnit(index: Int) {
         updateState {
             setTemperatureUnit(availableTemperatureUnits[index])
             fireUnitChanged()
         }
     }
 
-    fun setWindUnit(index: Int) {
+    private fun setWindUnit(index: Int) {
         updateState {
             setWindUnit(availableWindUnits[index])
             fireUnitChanged()
         }
     }
 
-    fun setPrecipitationUnit(index: Int) {
+    private fun setPrecipitationUnit(index: Int) {
         updateState {
             setPrecipitationUnit(availablePrecipitationUnits[index])
             fireUnitChanged()
         }
     }
 
-    fun setPressureUnit(index: Int) {
+    private fun setPressureUnit(index: Int) {
         updateState {
             setPressureUnit(availablePressureUnits[index])
             fireUnitChanged()
         }
     }
 
-    fun setTheme(index: Int) {
+    private fun setTheme(index: Int) {
         updateState {
             themeSettingRepository.setTheme(availableThemeSettings[index])
             fireThemeChanged()
@@ -102,24 +102,34 @@ class SettingsViewModel @Inject constructor(
         _state.value = _state.value.copy(
             temperatureUnitSetting = mapper.mapToTemperatureUnitSetting(
                 selectedTemperatureUnit = getTemperatureUnit(),
-                availableTemperatureUnits = availableTemperatureUnits
+                availableTemperatureUnits = availableTemperatureUnits,
+                onValuePick = ::setTemperatureUnit
             ),
             windUnitSetting = mapper.mapToWindUnitSetting(
                 selectedWindUnit = getWindUnit(),
-                availableWindUnits = availableWindUnits
+                availableWindUnits = availableWindUnits,
+                onValuePick = ::setWindUnit
             ),
             precipitationUnitSetting = mapper.mapToPrecipitationUnitSetting(
                 selectedPrecipitationUnit = getPrecipitationUnit(),
-                availablePrecipitationUnits = availablePrecipitationUnits
+                availablePrecipitationUnits = availablePrecipitationUnits,
+                onValuePick = ::setPrecipitationUnit
             ),
             pressureUnitSetting = null,
             themeSetting = mapper.mapToThemeSetting(
                 selectedThemeSetting = themeSettingRepository.getCurrentTheme(),
-                availableThemeSettings = availableThemeSettings
+                availableThemeSettings = availableThemeSettings,
+                onValuePick = ::setTheme
             ),
-            forecastCredit = mapper.getForecastCreditDisplaySetting(),
-            geolocationCredit = mapper.getGeolocationCreditDisplaySetting(),
-            designCredit = mapper.getDesignCreditDisplaySetting()
+            forecastCredit = mapper.getForecastCreditDisplaySetting(
+                onClick = { openLink("https://www.met.no/en") }
+            ),
+            geolocationCredit = mapper.getGeolocationCreditDisplaySetting(
+                onClick = { openLink("https://www.openstreetmap.org") }
+            ),
+            designCredit = mapper.getDesignCreditDisplaySetting(
+                onClick = { openLink("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2") }
+            )
         )
     }
 
@@ -142,5 +152,9 @@ class SettingsViewModel @Inject constructor(
         _state.value = _state.value.copy(
             themeChanged = simpleEvent()
         )
+    }
+
+    private fun openLink(url: String) {
+        // todo
     }
 }

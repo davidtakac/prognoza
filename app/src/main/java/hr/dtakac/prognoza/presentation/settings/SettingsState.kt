@@ -20,10 +20,12 @@ data class SettingsState(
 data class MultipleChoiceSetting(
     val name: TextResource,
     val value: TextResource,
-    val values: List<TextResource>
+    val values: List<TextResource>,
+    val onValuePick: (Int) -> Unit
 )
 
 data class DisplaySetting(
     val name: TextResource,
-    val value: TextResource
+    val value: TextResource,
+    val onClick: () -> Unit
 )
