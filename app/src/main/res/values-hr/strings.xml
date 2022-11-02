@@ -59,7 +59,7 @@
     <string name="template_wind_mps">%1$s\u00A0m\u2215s</string>
     <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>
     <string name="template_high_low_temperature">%1$s—%2$s</string>
-    <string name="template_wind">%1$s (%2$s)</string>
+    <string name="template_wind">%1$s\u00A0\u00B7\u00A0%2$s</string>
     <string name="error_unknown">Dogodila se neočekivana pogreška.</string>
     <string name="error_no_selected_place">Odaberi mjesto i vidi njegovu vremensku prognozu.</string>
     <string name="wind_calm">Tišina</string>
