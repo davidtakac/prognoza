@@ -15,8 +15,8 @@ jobs:
       uses: actions/checkout@v2
     - name: Assemble release
       run: ./gradlew assembleRelease
-    - uses: r0adkll/sign-android-release@v1
-      name: Sign release
+    - name: Sign release
+      uses: r0adkll/sign-android-release@v1
       id: sign_release
       with:
         releaseDirectory: app/build/outputs/apk/release
@@ -26,8 +26,8 @@ jobs:
         keyPassword: ${{ secrets.KEY_PASSWORD }}
     - name: Evaluate version name
       run: echo "VERSION_NAME=$(grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
-    - uses: svenstaro/upload-release-action@v2
-      name: Upload APK to release
+    - name: Upload APK to release
+      uses: svenstaro/upload-release-action@v2
       with:
         file: ${{ steps.sign_release.outputs.signedReleaseFile }}
         tag: ${{ env.VERSION_NAME }}
