@@ -342,19 +342,18 @@ private fun DescriptionAndPrecipitation(
                 )
             }
         )
-        Text(
-            text = annotatedString,
-            inlineContent = inlineContentMap,
-            modifier = Modifier.weight(3f),
-            style = PrognozaTheme.typography.titleLarge
-        )
-        Text(
-            text = precipitation,
-            textAlign = TextAlign.End,
-            modifier = Modifier.weight(1f),
-            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-            style = PrognozaTheme.typography.subtitleLarge
-        )
+        ProvideTextStyle(value = PrognozaTheme.typography.titleLarge) {
+            Text(
+                text = annotatedString,
+                inlineContent = inlineContentMap,
+                modifier = Modifier.weight(3f),
+            )
+            Text(
+                text = precipitation,
+                textAlign = TextAlign.End,
+                modifier = Modifier.weight(1f),
+            )
+        }
     }
 }
 
