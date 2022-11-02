@@ -70,4 +70,19 @@ class SettingsUiMapper @Inject constructor(
             availableThemeSettings.map(ThemeSetting::toSettingsLabel).map(TextResource::fromStringId)
         }
     )
+
+    fun getForecastCreditDisplaySetting(): DisplaySetting = DisplaySetting(
+        name = TextResource.fromStringId(R.string.weather_data),
+        value = TextResource.fromStringId(R.string.met_norway_credit)
+    )
+
+    fun getGeolocationCreditDisplaySetting(): DisplaySetting = DisplaySetting(
+        name = TextResource.fromStringId(R.string.geolocation_data),
+        value = TextResource.fromStringId(R.string.osm_nominatim_credit)
+    )
+
+    fun getDesignCreditDisplaySetting(): DisplaySetting = DisplaySetting(
+        name = TextResource.fromStringId(R.string.design_credit),
+        value = TextResource.fromStringId(R.string.neal_hampton_credit)
+    )
 }

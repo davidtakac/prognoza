@@ -37,7 +37,8 @@ fun SettingsScreen(
         onPressureUnitPick = viewModel::setPressureUnit,
         onThemePick = viewModel::setTheme,
         onWeatherDataClick = { openMetNorwayWebsite(context) },
-        onPlaceDataClick = { openOsmWebsite(context) }
+        onPlaceDataClick = { openOsmWebsite(context) },
+        onDesignCreditClick = { openNealHamptonDribble(context) }
     )
 }
 
@@ -51,6 +52,13 @@ private fun openMetNorwayWebsite(context: Context) {
 private fun openOsmWebsite(context: Context) {
     try {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.openstreetmap.org")))
+    } catch (e: Exception) {
+    }
+}
+
+private fun openNealHamptonDribble(context: Context) {
+    try {
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2")))
     } catch (e: Exception) {
     }
 }

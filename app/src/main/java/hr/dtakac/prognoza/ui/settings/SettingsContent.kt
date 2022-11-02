@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSetting
 import hr.dtakac.prognoza.presentation.settings.SettingsState
 import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
@@ -34,7 +35,8 @@ fun SettingsContent(
     onPressureUnitPick: (Int) -> Unit = {},
     onThemePick: (Int) -> Unit = {},
     onWeatherDataClick: () -> Unit = {},
-    onPlaceDataClick: () -> Unit = {}
+    onPlaceDataClick: () -> Unit = {},
+    onDesignCreditClick: () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
         Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
@@ -64,7 +66,8 @@ fun SettingsContent(
                 onPressureUnitPick = onPressureUnitPick,
                 onThemePick = onThemePick,
                 onWeatherDataClick = onWeatherDataClick,
-                onPlaceDataClick = onPlaceDataClick
+                onPlaceDataClick = onPlaceDataClick,
+                onDesignCreditClick = onDesignCreditClick
             )
         }
     }
@@ -81,6 +84,7 @@ private fun SettingsList(
     onThemePick: (Int) -> Unit,
     onWeatherDataClick: () -> Unit,
     onPlaceDataClick: () -> Unit,
+    onDesignCreditClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -159,19 +163,32 @@ private fun SettingsList(
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
             )
         }
-        item(key = "weather-credit") {
-            SettingItem(
-                name = stringResource(id = R.string.weather_data),
-                value = stringResource(id = R.string.met_norway_credit),
-                onClick = onWeatherDataClick
-            )
+        state.forecastCredit?.let {
+            item(key = "weather-credit") {
+                SettingItem(
+                    name = it.name.asString(),
+                    value = it.value.asString(),
+                    onClick = onWeatherDataClick
+                )
+            }
         }
-        item(key = "place-credit") {
-            SettingItem(
-                name = stringResource(id = R.string.geolocation_data),
-                value = stringResource(id = R.string.osm_nominatim_credit),
-                onClick = onPlaceDataClick
-            )
+        state.geolocationCredit?.let {
+            item(key = "place-credit") {
+                SettingItem(
+                    name = it.name.asString(),
+                    value = it.value.asString(),
+                    onClick = onPlaceDataClick
+                )
+            }
+        }
+        state.designCredit?.let {
+            item(key = "design-credit") {
+                SettingItem(
+                    name = it.name.asString(),
+                    value = it.value.asString(),
+                    onClick = onDesignCreditClick
+                )
+            }
         }
     }
     LaunchedEffect(listState) {

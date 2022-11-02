@@ -114,4 +114,5 @@
     <string name="geolocation_data">Geolokacijski podaci</string>
     <string name="template_wind_knots">%1$s\u00A0čv</string>
     <string name="settings_label_knots">Čvorovi</string>
+    <string name="design_credit">Dizajn</string>
 </resources>

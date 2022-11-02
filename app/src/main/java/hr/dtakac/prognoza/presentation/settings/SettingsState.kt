@@ -10,6 +10,9 @@ data class SettingsState(
     val precipitationUnitSetting: MultipleChoiceSetting? = null,
     val pressureUnitSetting: MultipleChoiceSetting? = null,
     val themeSetting: MultipleChoiceSetting? = null,
+    val forecastCredit: DisplaySetting? = null,
+    val geolocationCredit: DisplaySetting? = null,
+    val designCredit: DisplaySetting? = null,
     val unitChanged: Event<Unit>? = null,
     val themeChanged: Event<Unit>? = null
 )
@@ -18,4 +21,9 @@ data class MultipleChoiceSetting(
     val name: TextResource,
     val value: TextResource,
     val values: List<TextResource>
+)
+
+data class DisplaySetting(
+    val name: TextResource,
+    val value: TextResource
 )

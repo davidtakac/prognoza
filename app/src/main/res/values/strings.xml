@@ -121,5 +121,7 @@
     <string name="credit">Credit</string>
     <string name="weather_data">Weather data</string>
     <string name="geolocation_data">Place data</string>
+    <string name="design_credit">Design</string>
+    <string name="neal_hampton_credit" translatable="false">Neal Hampton</string>
 
 </resources>

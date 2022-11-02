@@ -116,7 +116,10 @@ class SettingsViewModel @Inject constructor(
             themeSetting = mapper.mapToThemeSetting(
                 selectedThemeSetting = themeSettingRepository.getCurrentTheme(),
                 availableThemeSettings = availableThemeSettings
-            )
+            ),
+            forecastCredit = mapper.getForecastCreditDisplaySetting(),
+            geolocationCredit = mapper.getGeolocationCreditDisplaySetting(),
+            designCredit = mapper.getDesignCreditDisplaySetting()
         )
     }
 
