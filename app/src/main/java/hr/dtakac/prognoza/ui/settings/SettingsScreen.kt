@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.presentation.OnEvent
 import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
@@ -19,11 +20,15 @@ fun SettingsScreen(
     LaunchedEffect(true) {
         viewModel.getState()
     }
-    OnEvent(event = state.themeChanged) {
+    OnEvent(event = state.themeChangedEvent) {
         onThemeChange()
     }
-    OnEvent(event = state.unitChanged) {
+    OnEvent(event = state.unitChangedEvent) {
         onUnitChange()
+    }
+    val context = LocalContext.current
+    OnEvent(event = state.openLinkEvent) {
+        openLink(link = it, context)
     }
 
     SettingsContent(
@@ -32,9 +37,9 @@ fun SettingsScreen(
     )
 }
 
-private fun openLink(url: String, context: Context) {
+private fun openLink(link: String, context: Context) {
     try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://www.met.no/en")))
+        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
     } catch (e: Exception) {
     }
 }

@@ -5,16 +5,12 @@ import hr.dtakac.prognoza.presentation.TextResource
 
 data class SettingsState(
     val isLoading: Boolean = false,
-    val temperatureUnitSetting: MultipleChoiceSetting? = null,
-    val windUnitSetting: MultipleChoiceSetting? = null,
-    val precipitationUnitSetting: MultipleChoiceSetting? = null,
-    val pressureUnitSetting: MultipleChoiceSetting? = null,
-    val themeSetting: MultipleChoiceSetting? = null,
-    val forecastCredit: DisplaySetting? = null,
-    val geolocationCredit: DisplaySetting? = null,
-    val designCredit: DisplaySetting? = null,
-    val unitChanged: Event<Unit>? = null,
-    val themeChanged: Event<Unit>? = null
+    val unitSettings: List<MultipleChoiceSetting> = listOf(),
+    val appearanceSettings: List<MultipleChoiceSetting> = listOf(),
+    val creditSettings: List<DisplaySetting> = listOf(),
+    val unitChangedEvent: Event<Unit>? = null,
+    val themeChangedEvent: Event<Unit>? = null,
+    val openLinkEvent: Event<String>? = null
 )
 
 data class MultipleChoiceSetting(

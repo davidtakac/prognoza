@@ -10,6 +10,7 @@ import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.presentation.theme.ThemeSetting
 import hr.dtakac.prognoza.presentation.theme.ThemeSettingRepository
@@ -100,35 +101,40 @@ class SettingsViewModel @Inject constructor(
         availableThemeSettings = themeSettingRepository.getAvailableThemes()
 
         _state.value = _state.value.copy(
-            temperatureUnitSetting = mapper.mapToTemperatureUnitSetting(
-                selectedTemperatureUnit = getTemperatureUnit(),
-                availableTemperatureUnits = availableTemperatureUnits,
-                onValuePick = ::setTemperatureUnit
+            unitSettings = listOf(
+                mapper.mapToTemperatureUnitSetting(
+                    selectedTemperatureUnit = getTemperatureUnit(),
+                    availableTemperatureUnits = availableTemperatureUnits,
+                    onValuePick = ::setTemperatureUnit
+                ),
+                mapper.mapToWindUnitSetting(
+                    selectedWindUnit = getWindUnit(),
+                    availableWindUnits = availableWindUnits,
+                    onValuePick = ::setWindUnit
+                ),
+                mapper.mapToPrecipitationUnitSetting(
+                    selectedPrecipitationUnit = getPrecipitationUnit(),
+                    availablePrecipitationUnits = availablePrecipitationUnits,
+                    onValuePick = ::setPrecipitationUnit
+                )
             ),
-            windUnitSetting = mapper.mapToWindUnitSetting(
-                selectedWindUnit = getWindUnit(),
-                availableWindUnits = availableWindUnits,
-                onValuePick = ::setWindUnit
+            appearanceSettings = listOf(
+                mapper.mapToThemeSetting(
+                    selectedThemeSetting = themeSettingRepository.getCurrentTheme(),
+                    availableThemeSettings = availableThemeSettings,
+                    onValuePick = ::setTheme
+                )
             ),
-            precipitationUnitSetting = mapper.mapToPrecipitationUnitSetting(
-                selectedPrecipitationUnit = getPrecipitationUnit(),
-                availablePrecipitationUnits = availablePrecipitationUnits,
-                onValuePick = ::setPrecipitationUnit
-            ),
-            pressureUnitSetting = null,
-            themeSetting = mapper.mapToThemeSetting(
-                selectedThemeSetting = themeSettingRepository.getCurrentTheme(),
-                availableThemeSettings = availableThemeSettings,
-                onValuePick = ::setTheme
-            ),
-            forecastCredit = mapper.getForecastCreditDisplaySetting(
-                onClick = { openLink("https://www.met.no/en") }
-            ),
-            geolocationCredit = mapper.getGeolocationCreditDisplaySetting(
-                onClick = { openLink("https://www.openstreetmap.org") }
-            ),
-            designCredit = mapper.getDesignCreditDisplaySetting(
-                onClick = { openLink("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2") }
+            creditSettings = listOf(
+                mapper.getForecastCreditDisplaySetting(
+                    onClick = { openLink("https://www.met.no/en") }
+                ),
+                mapper.getGeolocationCreditDisplaySetting(
+                    onClick = { openLink("https://www.openstreetmap.org") }
+                ),
+                mapper.getDesignCreditDisplaySetting(
+                    onClick = { openLink("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2") }
+                )
             )
         )
     }
@@ -144,17 +150,19 @@ class SettingsViewModel @Inject constructor(
     private fun fireUnitChanged() {
         widgetRefresher.refresh()
         _state.value = _state.value.copy(
-            unitChanged = simpleEvent()
+            unitChangedEvent = simpleEvent()
         )
     }
 
     private fun fireThemeChanged() {
         _state.value = _state.value.copy(
-            themeChanged = simpleEvent()
+            themeChangedEvent = simpleEvent()
         )
     }
 
     private fun openLink(url: String) {
-        // todo
+        _state.value = _state.value.copy(
+            openLinkEvent = Event(url)
+        )
     }
 }

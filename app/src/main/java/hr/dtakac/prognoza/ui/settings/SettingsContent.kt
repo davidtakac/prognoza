@@ -3,6 +3,7 @@ package hr.dtakac.prognoza.ui.settings
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -78,87 +79,48 @@ private fun SettingsList(
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
         }
-        item(key = "settings-units-spacer") {
+        item(key = "settings-spacer") {
             Spacer(modifier = Modifier.height(16.dp))
         }
-        item(key = "units-spacer") {
-            Header(
-                text = stringResource(id = R.string.units),
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-            )
-        }
-        state.temperatureUnitSetting?.let {
-            item(key = "temperature-unit") {
+
+        state.unitSettings.takeIf { it.isNotEmpty() }?.let { settings ->
+            item(key = "units-spacer") {
+                Header(
+                    text = stringResource(id = R.string.units),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+                )
+            }
+            items(settings) {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = it.onValuePick
                 )
             }
         }
-        state.windUnitSetting?.let {
-            item(key = "wind-unit") {
+
+        state.appearanceSettings.takeIf { it.isNotEmpty() }?.let { settings ->
+            item(key = "appearance-header") {
+                Header(
+                    text = stringResource(id = R.string.appearance),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+                )
+            }
+            items(settings) {
                 MultipleChoiceSettingItem(
                     state = it,
                     onPick = it.onValuePick
                 )
             }
         }
-        state.precipitationUnitSetting?.let {
-            item(key = "precipitation-unit") {
-                MultipleChoiceSettingItem(
-                    state = it,
-                    onPick = it.onValuePick
+
+        state.creditSettings.takeIf { it.isNotEmpty() }?.let { settings ->
+            item(key = "credit-header") {
+                Header(
+                    text = stringResource(id = R.string.credit),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
                 )
             }
-        }
-        state.pressureUnitSetting?.let {
-            item(key = "pressure-unit") {
-                MultipleChoiceSettingItem(
-                    state = it,
-                    onPick = it.onValuePick
-                )
-            }
-        }
-        item(key = "appearance-header") {
-            Header(
-                text = stringResource(id = R.string.appearance),
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-            )
-        }
-        state.themeSetting?.let {
-            item(key = "theme-setting") {
-                MultipleChoiceSettingItem(
-                    state = it,
-                    onPick = it.onValuePick
-                )
-            }
-        }
-        item(key = "credit-header") {
-            Header(
-                text = stringResource(id = R.string.credit),
-                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-            )
-        }
-        state.forecastCredit?.let {
-            item(key = "weather-credit") {
-                SettingItem(
-                    name = it.name.asString(),
-                    value = it.value.asString(),
-                    onClick = it.onClick
-                )
-            }
-        }
-        state.geolocationCredit?.let {
-            item(key = "place-credit") {
-                SettingItem(
-                    name = it.name.asString(),
-                    value = it.value.asString(),
-                    onClick = it.onClick
-                )
-            }
-        }
-        state.designCredit?.let {
-            item(key = "design-credit") {
+            items(settings) {
                 SettingItem(
                     name = it.name.asString(),
                     value = it.value.asString(),
@@ -197,9 +159,16 @@ private fun Preview() = PrognozaTheme {
 
 private val fakeState: SettingsState = SettingsState(
     isLoading = false,
-    temperatureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Temperature unit"), value = TextResource.fromText("Celsius"), values = listOf(), {}),
-    windUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Wind unit"), value = TextResource.fromText("Kilometers per hour"), values = listOf(), {}),
-    precipitationUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Precipitation unit"), value = TextResource.fromText("Millimeters"), values = listOf(), {}),
-    pressureUnitSetting = MultipleChoiceSetting(name = TextResource.fromText("Pressure unit"), value = TextResource.fromText("Hectopascal"), values = listOf(), {}),
-    themeSetting = MultipleChoiceSetting(name = TextResource.fromText("Theme"), value = TextResource.fromText("Follow system setting"), values = listOf(), {})
+    unitSettings = mutableListOf<MultipleChoiceSetting>().apply {
+        repeat(5) {
+            add(
+                MultipleChoiceSetting(
+                    name = TextResource.fromText("Setting $it"),
+                    value = TextResource.fromText("Value $it"),
+                    values = listOf(),
+                    onValuePick = {}
+                )
+            )
+        }
+    }
 )
