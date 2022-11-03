@@ -1,47 +1,18 @@
 plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
+    id 'java-library'
+    id 'org.jetbrains.kotlin.jvm'
     id 'kotlinx-serialization'
     id 'com.squareup.sqldelight'
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 sqldelight {
     MetNorwayDatabase {
         packageName = "hr.dtakac.prognoza"
-    }
-}
-
-android {
-    compileSdk 32
-
-    defaultConfig {
-        minSdk 24
-        targetSdk 32
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-            }
-        }
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        coreLibraryDesugaringEnabled true
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
     }
 }
 
@@ -52,9 +23,6 @@ dependencies {
     // Network
     implementation "io.ktor:ktor-client-core:$versions.ktor"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
-
-    // Desugaring
-    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.desugar"
 
     // Logging
     implementation "io.github.aakira:napier:$versions.napier"
