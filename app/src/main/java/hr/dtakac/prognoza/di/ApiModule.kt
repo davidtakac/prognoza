@@ -7,6 +7,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.metnorwayforecastprovider.ForecastService
 import hr.dtakac.prognoza.osmplacesearcher.PlaceService
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,6 +20,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Converter
 import retrofit2.Retrofit
 import java.time.Duration
+import javax.inject.Named
 import javax.inject.Singleton
 
 @OptIn(ExperimentalSerializationApi::class)
@@ -26,6 +32,20 @@ class ApiModule {
     fun provideJson(): Json = Json {
         ignoreUnknownKeys = true
         isLenient = true
+    }
+
+    @Provides
+    @Singleton
+    fun provideHttpClient(
+        json: Json
+    ): HttpClient = HttpClient(CIO) {
+        install(Logging) {
+            logger = Logger.DEFAULT
+            level = LogLevel.ALL
+        }
+        install(ContentNegotiation) {
+            json(json)
+        }
     }
 
     @Provides
@@ -64,14 +84,14 @@ class ApiModule {
     @Provides
     @Singleton
     fun providePlaceService(
-        okHttpClient: OkHttpClient,
-        jsonConverterFactory: Converter.Factory
+        httpClient: HttpClient,
+        @Named("user_agent")
+        userAgent: String
     ): PlaceService {
-        return Retrofit.Builder()
-            .baseUrl("https://nominatim.openstreetmap.org/")
-            .addConverterFactory(jsonConverterFactory)
-            .client(okHttpClient)
-            .build()
-            .create(PlaceService::class.java)
+        return PlaceService(
+            client = httpClient,
+            userAgent = userAgent,
+            baseUrl = "https://nominatim.openstreetmap.org/"
+        )
     }
 }

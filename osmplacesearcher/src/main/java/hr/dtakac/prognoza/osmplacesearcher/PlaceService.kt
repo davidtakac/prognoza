@@ -1,15 +1,22 @@
 package hr.dtakac.prognoza.osmplacesearcher
 
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Query
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import java.util.*
 
-interface PlaceService {
-    @GET("search")
-    suspend fun search(
-        @Header("User-Agent") userAgent: String,
-        @Header("Accept-Language") acceptLanguage: String,
-        @Query("q") query: String,
-        @Query("format") format: String
-    ): List<PlaceResponse>
+class PlaceService(
+    private val client: HttpClient,
+    private val baseUrl: String,
+    private val userAgent: String
+) {
+    suspend fun search(query: String): List<PlaceResponse> = client
+        .get(urlString = "$baseUrl/search") {
+            header(HttpHeaders.UserAgent, userAgent)
+            header(HttpHeaders.AcceptLanguage, Locale.getDefault().language)
+            parameter("q", query)
+            parameter("format", "jsonv2")
+        }
+        .body()
 }

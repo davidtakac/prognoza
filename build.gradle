@@ -31,7 +31,8 @@ buildscript {
                 kotlinx_serialization   : '1.4.0',
                 rft_ktx_serialization   : '0.8.0',
                 napier                  : '2.6.1',
-                work                    : '2.7.1'
+                work                    : '2.7.1',
+                ktor                    : '2.1.3'
         ]
     }
     repositories {

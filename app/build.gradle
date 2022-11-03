@@ -102,11 +102,17 @@ dependencies {
     // Room
     implementation "androidx.room:room-ktx:$versions.room"
 
-    // Network
+    // Network todo remove retrofit :)
     implementation "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$versions.rft_ktx_serialization"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
     implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+
+    implementation "io.ktor:ktor-client-core:$versions.ktor"
+    implementation "io.ktor:ktor-client-cio:$versions.ktor"
+    implementation "io.ktor:ktor-client-logging:$versions.ktor"
+    implementation "io.ktor:ktor-client-content-negotiation:$versions.ktor"
+    implementation "io.ktor:ktor-serialization-kotlinx-json:$versions.ktor"
 
     // Dependency injection
     implementation "com.google.dagger:hilt-android:$versions.dagger"

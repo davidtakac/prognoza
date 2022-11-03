@@ -14,9 +14,7 @@ dependencies {
     implementation project(":domain")
 
     // Network
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:$versions.okhttp"))
-    implementation("com.squareup.okhttp3:logging-interceptor")
-    implementation "com.squareup.retrofit2:retrofit:$versions.retrofit"
+    implementation "io.ktor:ktor-client-core:$versions.ktor"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
 
     // Logging
