@@ -1,20 +1,29 @@
+import hr.dtakac.prognoza.entities.forecast.ForecastDescription;
+import hr.dtakac.prognoza.entities.forecast.units.Angle;
+import hr.dtakac.prognoza.entities.forecast.units.Length;
+import hr.dtakac.prognoza.entities.forecast.units.Percentage;
+import hr.dtakac.prognoza.entities.forecast.units.Pressure;
+import hr.dtakac.prognoza.entities.forecast.units.Speed;
+import hr.dtakac.prognoza.entities.forecast.units.Temperature;
+import java.time.ZonedDateTime;
+
 CREATE TABLE Forecast (
-    `startTime` TEXT NOT NULL,
-    `endTime` TEXT NOT NULL,
+    `startTime` TEXT AS ZonedDateTime NOT NULL,
+    `endTime` TEXT AS ZonedDateTime NOT NULL,
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
-    `temperature` REAL NOT NULL,
-    `forecastDescription` TEXT NOT NULL,
-    `precipitation` REAL NOT NULL,
-    `wind` REAL NOT NULL,
-    `windFromDirection` REAL NOT NULL,
-    `humidity` REAL NOT NULL,
-    `airPressureAtSeaLevel` REAL NOT NULL,
+    `temperature` REAL AS Temperature NOT NULL,
+    `forecastDescription` TEXT AS ForecastDescription NOT NULL,
+    `precipitation` REAL AS Length NOT NULL,
+    `windSpeed` REAL AS Speed NOT NULL,
+    `windFromDirection` REAL AS Angle NOT NULL,
+    `humidity` REAL AS Percentage NOT NULL,
+    `airPressureAtSeaLevel` REAL AS Pressure NOT NULL,
     PRIMARY KEY(`startTime`, `endTime`, `latitude`, `longitude`)
 );
 
 insert:
-INSERT OR REPLACE INTO Forecast (startTime, endTime, latitude, longitude, temperature, forecastDescription, precipitation, wind, windFromDirection, humidity, airPressureAtSeaLevel)
+INSERT OR REPLACE INTO Forecast (startTime, endTime, latitude, longitude, temperature, forecastDescription, precipitation, windSpeed, windFromDirection, humidity, airPressureAtSeaLevel)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 delete:

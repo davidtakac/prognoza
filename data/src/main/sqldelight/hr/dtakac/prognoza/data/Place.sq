@@ -13,3 +13,6 @@ VALUES (?, ?, ?, ?);
 get:
 SELECT * FROM Place
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
+
+getAll:
+SELECT * FROM Place;

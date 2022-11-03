@@ -1,7 +1,5 @@
 package hr.dtakac.prognoza.data.repository
 
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.settings.SettingsRepository
 import hr.dtakac.prognoza.entities.Place

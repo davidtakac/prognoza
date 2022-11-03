@@ -1,26 +1,40 @@
 package hr.dtakac.prognoza.data.repository
 
-import hr.dtakac.prognoza.data.database.forecast.ForecastDao
-import hr.dtakac.prognoza.data.database.forecast.ForecastDbModel
-import hr.dtakac.prognoza.data.database.forecast.toDbModel
-import hr.dtakac.prognoza.data.database.forecast.toEntity
+import hr.dtakac.prognoza.PrognozaDatabase
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
+import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class ForecastRepository(
-    private val forecastDao: ForecastDao,
-    private val computationDispatcher: CoroutineDispatcher
+    private val database: PrognozaDatabase,
+    private val computationDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ForecastSaver, SavedForecastGetter {
     override suspend fun get(
         latitude: Double,
         longitude: Double
     ): List<ForecastDatum> {
-        val data = forecastDao.getAll(latitude, longitude)
+        val data = withContext(ioDispatcher) {
+            database.forecastQueries
+                .get(latitude, longitude)
+                .executeAsList()
+        }
         return withContext(computationDispatcher) {
-            data.map(ForecastDbModel::toEntity)
+            data.map {
+                ForecastDatum(
+                    start = it.startTime,
+                    end = it.endTime,
+                    temperature = it.temperature,
+                    precipitation = it.precipitation,
+                    wind = Wind(speed = it.windSpeed, fromDirection = it.windFromDirection),
+                    airPressure = it.airPressureAtSeaLevel,
+                    description = it.forecastDescription,
+                    humidity = it.humidity
+                )
+            }
         }
     }
 
@@ -29,7 +43,23 @@ class ForecastRepository(
         longitude: Double,
         data: List<ForecastDatum>
     ) {
-        forecastDao.delete(latitude, longitude)
-        forecastDao.insert(data.map { it.toDbModel(latitude, longitude) })
+        withContext(ioDispatcher) {
+            database.forecastQueries.delete(latitude, longitude)
+            data.forEach {
+                database.forecastQueries.insert(
+                    startTime = it.start,
+                    endTime = it.end,
+                    latitude = latitude,
+                    longitude = longitude,
+                    temperature = it.temperature,
+                    forecastDescription = it.description,
+                    precipitation = it.precipitation,
+                    windSpeed = it.wind.speed,
+                    windFromDirection = it.wind.fromDirection,
+                    humidity = it.humidity,
+                    airPressureAtSeaLevel = it.airPressure
+                )
+            }
+        }
     }
 }

@@ -1,0 +1,18 @@
+import hr.dtakac.prognoza.entities.forecast.units.LengthUnit;
+import hr.dtakac.prognoza.entities.forecast.units.PressureUnit;
+import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit;
+import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit;
+
+CREATE TABLE Settings (
+    `id` INTEGER NOT NULL PRIMARY KEY,
+    `temperatureUnit` INTEGER AS TemperatureUnit NOT NULL,
+    `precipitationUnit` INTEGER AS LengthUnit NOT NULL,
+    `windUnit` INTEGER AS SpeedUnit NOT NULL,
+    `pressureUnit` INTEGER AS PressureUnit NOT NULL,
+    `placeLatitude` REAL,
+    `placeLongitude` REAL
+);
+
+-- Prepopulated database
+INSERT INTO Settings (id, temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude)
+VALUES (1, 0, 0, 0, 0, NULL, NULL);
