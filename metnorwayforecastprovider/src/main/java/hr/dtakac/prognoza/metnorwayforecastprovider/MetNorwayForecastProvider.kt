@@ -6,13 +6,12 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.*
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.converter.Rfc1123DateTimeConverter
 import io.github.aakira.napier.Napier
-import okhttp3.Headers
+import io.ktor.client.call.*
+import io.ktor.http.*
 import java.time.ZonedDateTime
-import java.util.*
 
 class MetNorwayForecastProvider(
-    private val userAgent: String,
-    private val forecastService: ForecastService,
+    private val metNorwayForecastService: MetNorwayForecastService,
     private val metaDao: ForecastMetaDao,
     private val forecastResponseDao: ForecastResponseDao
 ) : ForecastProvider {
@@ -64,15 +63,13 @@ class MetNorwayForecastProvider(
         longitude: Double,
         lastModified: ZonedDateTime?
     ) {
-        val lastModifiedTimestamp = Rfc1123DateTimeConverter.toTimestamp(lastModified)
-        val forecastResponse = forecastService.getCompactLocationForecast(
-            userAgent = userAgent,
-            ifModifiedSince = lastModifiedTimestamp,
-            latitude = String.format(Locale.ROOT,"%.2f", latitude),
-            longitude = String.format(Locale.ROOT,"%.2f", longitude)
+        val forecastResponse = metNorwayForecastService.getForecast(
+            ifModifiedSince = lastModified,
+            latitude = latitude,
+            longitude = longitude
         )
         updateForecast(forecastResponse.body(), latitude, longitude)
-        updateMeta(forecastResponse.headers(), latitude, longitude)
+        updateMeta(forecastResponse.headers, latitude, longitude)
     }
 
     private suspend fun updateForecast(

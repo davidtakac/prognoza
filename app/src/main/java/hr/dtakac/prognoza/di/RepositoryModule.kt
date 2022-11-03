@@ -18,11 +18,11 @@ import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
 import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
-import hr.dtakac.prognoza.metnorwayforecastprovider.ForecastService
+import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastService
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastProvider
 import hr.dtakac.prognoza.metnorwayforecastprovider.database.MetNorwayDatabase
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceSearcher
-import hr.dtakac.prognoza.osmplacesearcher.PlaceService
+import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceService
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
@@ -57,13 +57,10 @@ class RepositoryModule {
 
     @Provides
     fun provideForecastProvider(
-        @Named("user_agent")
-        userAgent: String,
-        forecastService: ForecastService,
+        metNorwayForecastService: MetNorwayForecastService,
         metNorwayDatabase: MetNorwayDatabase,
     ): ForecastProvider = MetNorwayForecastProvider(
-        userAgent = userAgent,
-        forecastService = forecastService,
+        metNorwayForecastService = metNorwayForecastService,
         metaDao = metNorwayDatabase.metaDao(),
         forecastResponseDao = metNorwayDatabase.forecastResponseDao()
     )
@@ -89,10 +86,8 @@ class RepositoryModule {
 
     @Provides
     fun providePlaceSearcher(
-        placeService: PlaceService,
-        @Named("user_agent")
-        userAgent: String
-    ): PlaceSearcher = OsmPlaceSearcher(userAgent, placeService)
+        osmPlaceService: OsmPlaceService
+    ): PlaceSearcher = OsmPlaceSearcher(osmPlaceService)
 
     @Provides
     fun providePlaceRepository(

@@ -1,29 +1,20 @@
 package hr.dtakac.prognoza.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import hr.dtakac.prognoza.metnorwayforecastprovider.ForecastService
-import hr.dtakac.prognoza.osmplacesearcher.PlaceService
+import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastService
+import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceService
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Converter
-import retrofit2.Retrofit
-import java.time.Duration
 import javax.inject.Named
 import javax.inject.Singleton
 
-@OptIn(ExperimentalSerializationApi::class)
 @Module
 @InstallIn(SingletonComponent::class)
 class ApiModule {
@@ -50,35 +41,16 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideJsonConverterFactory(
-        json: Json
-    ): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
-
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
-        val timeout = Duration.ofSeconds(10L)
-        return OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .callTimeout(timeout)
-            .readTimeout(timeout)
-            .writeTimeout(timeout)
-            .build()
-    }
-
-    @Provides
-    @Singleton
     fun provideForecastService(
-        okHttpClient: OkHttpClient,
-        jsonConverterFactory: Converter.Factory
-    ): ForecastService {
-        return Retrofit.Builder()
-            .baseUrl("https://api.met.no/weatherapi/")
-            .addConverterFactory(jsonConverterFactory)
-            .client(okHttpClient)
-            .build()
-            .create(ForecastService::class.java)
+        httpClient: HttpClient,
+        @Named("user_agent")
+        userAgent: String
+    ): MetNorwayForecastService {
+        return MetNorwayForecastService(
+            client = httpClient,
+            userAgent = userAgent,
+            baseUrl = "https://api.met.no/weatherapi"
+        )
     }
 
     @Provides
@@ -87,11 +59,11 @@ class ApiModule {
         httpClient: HttpClient,
         @Named("user_agent")
         userAgent: String
-    ): PlaceService {
-        return PlaceService(
+    ): OsmPlaceService {
+        return OsmPlaceService(
             client = httpClient,
             userAgent = userAgent,
-            baseUrl = "https://nominatim.openstreetmap.org/"
+            baseUrl = "https://nominatim.openstreetmap.org"
         )
     }
 }

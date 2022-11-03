@@ -18,8 +18,7 @@ Weather app with widgets and offline support.
 - Jetpack Compose
 - Jetpack Glance
 - Room database
-- Retrofit 2
-- OkHttp
+- ktor-client
 - Kotlin Serialization
 - Work Manager
 - Jetpack Compose tests

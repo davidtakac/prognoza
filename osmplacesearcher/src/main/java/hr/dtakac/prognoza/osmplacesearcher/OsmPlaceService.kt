@@ -6,7 +6,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import java.util.*
 
-class PlaceService(
+class OsmPlaceService(
     private val client: HttpClient,
     private val baseUrl: String,
     private val userAgent: String
