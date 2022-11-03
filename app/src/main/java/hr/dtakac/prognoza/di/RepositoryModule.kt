@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import hr.dtakac.prognoza.MetNorwayDatabase
 import hr.dtakac.prognoza.data.database.PrognozaDatabase
 import hr.dtakac.prognoza.data.repository.ForecastRepository
 import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
@@ -20,7 +21,6 @@ import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastService
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastProvider
-import hr.dtakac.prognoza.metnorwayforecastprovider.database.MetNorwayDatabase
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceSearcher
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -59,10 +59,12 @@ class RepositoryModule {
     fun provideForecastProvider(
         metNorwayForecastService: MetNorwayForecastService,
         metNorwayDatabase: MetNorwayDatabase,
+        @Named("io")
+        ioDispatcher: CoroutineDispatcher
     ): ForecastProvider = MetNorwayForecastProvider(
-        metNorwayForecastService = metNorwayForecastService,
-        metaDao = metNorwayDatabase.metaDao(),
-        forecastResponseDao = metNorwayDatabase.forecastResponseDao()
+        apiService = metNorwayForecastService,
+        database = metNorwayDatabase,
+        ioDispatcher = ioDispatcher
     )
 
     @Provides

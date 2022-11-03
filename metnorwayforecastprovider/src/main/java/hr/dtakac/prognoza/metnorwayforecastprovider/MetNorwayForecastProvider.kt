@@ -1,31 +1,34 @@
 package hr.dtakac.prognoza.metnorwayforecastprovider
 
+import hr.dtakac.prognoza.MetNorwayDatabase
 import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastProviderResult
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
-import hr.dtakac.prognoza.metnorwayforecastprovider.database.*
-import hr.dtakac.prognoza.metnorwayforecastprovider.database.converter.Rfc1123DateTimeConverter
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.http.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 
 class MetNorwayForecastProvider(
-    private val metNorwayForecastService: MetNorwayForecastService,
-    private val metaDao: ForecastMetaDao,
-    private val forecastResponseDao: ForecastResponseDao
+    private val apiService: MetNorwayForecastService,
+    private val database: MetNorwayDatabase,
+    private val ioDispatcher: CoroutineDispatcher
 ) : ForecastProvider {
     override suspend fun provide(
         latitude: Double,
         longitude: Double
     ): ForecastProviderResult {
-        val meta = metaDao.get(latitude, longitude)
-        if (meta?.expires?.let { ZonedDateTime.now() > it } != false) {
+        val meta = getMeta(latitude, longitude)
+        if (meta?.expires?.let { ZonedDateTime.now() > fromRfc1123(meta.expires) } != false) {
             try {
                 updateDatabase(
                     latitude = latitude,
                     longitude = longitude,
-                    lastModified = meta?.lastModified
+                    lastModified = meta?.lastModified?.let(::fromRfc1123)
                 )
             } catch (e: Exception) {
                 Napier.e(message = "MET Norway error", e)
@@ -33,15 +36,11 @@ class MetNorwayForecastProvider(
         }
 
         return try {
-            val dbModel = forecastResponseDao.get(
-                latitude = latitude,
-                longitude = longitude
-            )
-
-            if (dbModel == null) {
+            val response = getForecastResponse(latitude, longitude)
+            if (response == null) {
                 ForecastProviderResult.Error
             } else {
-                val timeSteps = dbModel.response.forecast.forecastTimeSteps
+                val timeSteps = response.forecast.forecastTimeSteps
                 val data = mutableListOf<ForecastDatum>()
                 for (i in timeSteps.indices) {
                     val datum = mapAdjacentTimeStepsToEntity(
@@ -63,7 +62,7 @@ class MetNorwayForecastProvider(
         longitude: Double,
         lastModified: ZonedDateTime?
     ) {
-        val forecastResponse = metNorwayForecastService.getForecast(
+        val forecastResponse = apiService.getForecast(
             ifModifiedSince = lastModified,
             latitude = latitude,
             longitude = longitude
@@ -78,13 +77,13 @@ class MetNorwayForecastProvider(
         longitude: Double
     ) {
         response?.let {
-            forecastResponseDao.insert(
-                ForecastResponseDbModel(
+            withContext(ioDispatcher) {
+                database.forecastResponseDbModelQueries.insert(
                     latitude = latitude,
                     longitude = longitude,
-                    response = it
+                    json = Json.encodeToString(LocationForecastResponse.serializer(), response)
                 )
-            )
+            }
         }
     }
 
@@ -93,13 +92,35 @@ class MetNorwayForecastProvider(
         latitude: Double,
         longitude: Double
     ) {
-        metaDao.insert(
-            ForecastMetaDbModel(
+        withContext(ioDispatcher) {
+            database.forecastMetaDbModelQueries.insert(
                 latitude = latitude,
                 longitude = longitude,
-                expires = Rfc1123DateTimeConverter.fromTimestamp(headers["Expires"]),
-                lastModified = Rfc1123DateTimeConverter.fromTimestamp(headers["Last-Modified"])
+                expires = headers[HttpHeaders.Expires],
+                lastModified = headers[HttpHeaders.LastModified]
             )
-        )
+        }
     }
+
+    private suspend fun getMeta(
+        latitude: Double,
+        longitude: Double
+    ): ForecastMetaDbModel? = withContext(ioDispatcher) {
+        database.forecastMetaDbModelQueries
+            .get(latitude, longitude)
+            .executeAsOneOrNull()
+    }
+
+    private suspend fun getForecastResponse(
+        latitude: Double,
+        longitude: Double
+    ): LocationForecastResponse? = withContext(ioDispatcher) {
+        database.forecastResponseDbModelQueries
+            .get(latitude, longitude)
+            .executeAsOneOrNull()
+            ?.let { Json.decodeFromString(LocationForecastResponse.serializer(), it.json) }
+    }
+
+    private fun fromRfc1123(rfc1123ZonedDateTime: String): ZonedDateTime =
+        ZonedDateTime.parse(rfc1123ZonedDateTime, DateTimeFormatter.RFC_1123_DATE_TIME)
 }

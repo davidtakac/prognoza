@@ -1,11 +1,11 @@
 package hr.dtakac.prognoza.metnorwayforecastprovider
 
-import hr.dtakac.prognoza.metnorwayforecastprovider.database.converter.Rfc1123DateTimeConverter
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MetNorwayForecastService(
@@ -19,10 +19,15 @@ class MetNorwayForecastService(
         longitude: Double
     ): HttpResponse = client.get(urlString = "$baseUrl/locationforecast/2.0/compact") {
         header(HttpHeaders.UserAgent, userAgent)
-        header(HttpHeaders.IfModifiedSince, Rfc1123DateTimeConverter.toTimestamp(ifModifiedSince))
+        ifModifiedSince?.let {
+            header(HttpHeaders.IfModifiedSince, toRfc1123(it))
+        }
         parameter("lat", formatCoordinate(latitude))
         parameter("lon", formatCoordinate(longitude))
     }
 
     private fun formatCoordinate(value: Double): String = String.format(Locale.ROOT, "%.2f", value)
+
+    private fun toRfc1123(zonedDateTime: ZonedDateTime): String =
+        zonedDateTime.format(DateTimeFormatter.RFC_1123_DATE_TIME)
 }

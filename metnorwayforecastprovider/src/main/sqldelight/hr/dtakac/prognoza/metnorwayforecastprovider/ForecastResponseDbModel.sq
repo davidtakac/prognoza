@@ -1,0 +1,14 @@
+CREATE TABLE ForecastResponseDbModel (
+    `latitude` REAL NOT NULL,
+    `longitude` REAL NOT NULL,
+    `json` TEXT NOT NULL,
+    PRIMARY KEY(`latitude`, `longitude`)
+);
+
+get:
+SELECT * FROM ForecastResponseDbModel
+WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
+
+insert:
+INSERT OR REPLACE INTO ForecastResponseDbModel (latitude, longitude, json)
+VALUES (?, ?, ?);
