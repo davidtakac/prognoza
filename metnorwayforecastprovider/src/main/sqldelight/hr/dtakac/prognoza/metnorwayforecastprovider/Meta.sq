@@ -1,4 +1,4 @@
-CREATE TABLE ForecastMetaDbModel (
+CREATE TABLE Meta (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
     `expires` TEXT,
@@ -7,9 +7,9 @@ CREATE TABLE ForecastMetaDbModel (
 );
 
 get:
-SELECT * FROM ForecastMetaDbModel
+SELECT * FROM Meta
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
 
 insert:
-REPLACE INTO ForecastMetaDbModel (latitude, longitude, expires, lastModified)
+REPLACE INTO Meta (latitude, longitude, expires, lastModified)
 VALUES (?, ?, ?, ?);

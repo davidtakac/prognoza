@@ -78,7 +78,7 @@ class MetNorwayForecastProvider(
     ) {
         response?.let {
             withContext(ioDispatcher) {
-                database.forecastResponseDbModelQueries.insert(
+                database.cachedResponseQueries.insert(
                     latitude = latitude,
                     longitude = longitude,
                     json = Json.encodeToString(LocationForecastResponse.serializer(), response)
@@ -93,7 +93,7 @@ class MetNorwayForecastProvider(
         longitude: Double
     ) {
         withContext(ioDispatcher) {
-            database.forecastMetaDbModelQueries.insert(
+            database.metaQueries.insert(
                 latitude = latitude,
                 longitude = longitude,
                 expires = headers[HttpHeaders.Expires],
@@ -105,8 +105,8 @@ class MetNorwayForecastProvider(
     private suspend fun getMeta(
         latitude: Double,
         longitude: Double
-    ): ForecastMetaDbModel? = withContext(ioDispatcher) {
-        database.forecastMetaDbModelQueries
+    ): Meta? = withContext(ioDispatcher) {
+        database.metaQueries
             .get(latitude, longitude)
             .executeAsOneOrNull()
     }
@@ -115,7 +115,7 @@ class MetNorwayForecastProvider(
         latitude: Double,
         longitude: Double
     ): LocationForecastResponse? = withContext(ioDispatcher) {
-        database.forecastResponseDbModelQueries
+        database.cachedResponseQueries
             .get(latitude, longitude)
             .executeAsOneOrNull()
             ?.let { Json.decodeFromString(LocationForecastResponse.serializer(), it.json) }

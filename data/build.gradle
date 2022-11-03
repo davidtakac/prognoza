@@ -3,6 +3,13 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlinx-serialization'
+    id 'com.squareup.sqldelight'
+}
+
+sqldelight {
+    MetNorwayDatabase {
+        packageName = "hr.dtakac.prognoza"
+    }
 }
 
 android {
@@ -40,15 +47,9 @@ android {
 dependencies {
     implementation project(":entities")
     implementation project(":domain")
-    implementation project(':osmplacesearcher')
 
     // Needed for shared prefs
     implementation "androidx.core:core-ktx:$versions.core"
-
-    // Database
-    implementation "androidx.room:room-runtime:$versions.room"
-    implementation "androidx.room:room-ktx:$versions.room"
-    kapt "androidx.room:room-compiler:$versions.room"
 
     // Logging
     implementation "io.github.aakira:napier:$versions.napier"

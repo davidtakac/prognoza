@@ -1,4 +1,4 @@
-CREATE TABLE ForecastResponseDbModel (
+CREATE TABLE CachedResponse (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
     `json` TEXT NOT NULL,
@@ -6,9 +6,9 @@ CREATE TABLE ForecastResponseDbModel (
 );
 
 get:
-SELECT * FROM ForecastResponseDbModel
+SELECT * FROM CachedResponse
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
 
 insert:
-INSERT OR REPLACE INTO ForecastResponseDbModel (latitude, longitude, json)
+INSERT OR REPLACE INTO CachedResponse (latitude, longitude, json)
 VALUES (?, ?, ?);
