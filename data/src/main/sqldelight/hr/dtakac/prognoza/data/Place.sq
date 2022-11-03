@@ -1,0 +1,15 @@
+CREATE TABLE Place (
+    `latitude` REAL NOT NULL,
+    `longitude` REAL NOT NULL,
+    `name` TEXT NOT NULL,
+    `details` TEXT,
+    PRIMARY KEY(`latitude`, `longitude`)
+);
+
+insert:
+INSERT OR REPLACE INTO Place (latitude, longitude, name, details)
+VALUES (?, ?, ?, ?);
+
+get:
+SELECT * FROM Place
+WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
