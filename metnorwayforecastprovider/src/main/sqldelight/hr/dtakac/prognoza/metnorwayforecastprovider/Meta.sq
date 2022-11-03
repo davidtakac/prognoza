@@ -1,8 +1,10 @@
+import java.time.ZonedDateTime;
+
 CREATE TABLE Meta (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
-    `expires` TEXT,
-    `lastModified` TEXT,
+    `expires` TEXT AS ZonedDateTime,
+    `lastModified` TEXT AS ZonedDateTime,
     PRIMARY KEY(`latitude`, `longitude`)
 );
 

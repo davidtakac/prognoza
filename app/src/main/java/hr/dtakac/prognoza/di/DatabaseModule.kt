@@ -10,6 +10,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.MetNorwayDatabase
 import hr.dtakac.prognoza.data.database.PrognozaDatabase
+import hr.dtakac.prognoza.metnorwayforecastprovider.CachedResponse
+import hr.dtakac.prognoza.metnorwayforecastprovider.Meta
+import hr.dtakac.prognoza.metnorwayforecastprovider.responseSqlAdapter
+import hr.dtakac.prognoza.metnorwayforecastprovider.zonedDateTimeSqlAdapter
 import javax.inject.Singleton
 
 @Module
@@ -27,5 +31,14 @@ class DatabaseModule {
     @Singleton
     fun provideMetNorwayDatabase(
         @ApplicationContext context: Context
-    ): MetNorwayDatabase = MetNorwayDatabase(AndroidSqliteDriver(MetNorwayDatabase.Schema, context, "met_norway.db"))
+    ): MetNorwayDatabase = MetNorwayDatabase(
+        driver = AndroidSqliteDriver(MetNorwayDatabase.Schema, context, "met_norway.db"),
+        CachedResponseAdapter = CachedResponse.Adapter(
+            responseAdapter = responseSqlAdapter
+        ),
+        MetaAdapter = Meta.Adapter(
+            expiresAdapter = zonedDateTimeSqlAdapter,
+            lastModifiedAdapter = zonedDateTimeSqlAdapter
+        )
+    )
 }

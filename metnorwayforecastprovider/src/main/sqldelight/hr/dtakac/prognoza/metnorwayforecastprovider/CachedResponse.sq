@@ -1,7 +1,9 @@
+import hr.dtakac.prognoza.metnorwayforecastprovider.LocationForecastResponse;
+
 CREATE TABLE CachedResponse (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
-    `json` TEXT NOT NULL,
+    `response` TEXT AS LocationForecastResponse NOT NULL,
     PRIMARY KEY(`latitude`, `longitude`)
 );
 
@@ -10,5 +12,5 @@ SELECT * FROM CachedResponse
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
 
 insert:
-INSERT OR REPLACE INTO CachedResponse (latitude, longitude, json)
+INSERT OR REPLACE INTO CachedResponse (latitude, longitude, response)
 VALUES (?, ?, ?);

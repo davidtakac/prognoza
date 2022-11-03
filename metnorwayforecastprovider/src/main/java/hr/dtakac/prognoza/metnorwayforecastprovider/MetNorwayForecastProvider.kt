@@ -9,9 +9,7 @@ import io.ktor.client.call.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 
 class MetNorwayForecastProvider(
     private val apiService: MetNorwayForecastService,
@@ -23,12 +21,12 @@ class MetNorwayForecastProvider(
         longitude: Double
     ): ForecastProviderResult {
         val meta = getMeta(latitude, longitude)
-        if (meta?.expires?.let { ZonedDateTime.now() > fromRfc1123(meta.expires) } != false) {
+        if (meta?.expires?.let { ZonedDateTime.now() > meta.expires } != false) {
             try {
                 updateDatabase(
                     latitude = latitude,
                     longitude = longitude,
-                    lastModified = meta?.lastModified?.let(::fromRfc1123)
+                    lastModified = meta?.lastModified
                 )
             } catch (e: Exception) {
                 Napier.e(message = "MET Norway error", e)
@@ -36,7 +34,7 @@ class MetNorwayForecastProvider(
         }
 
         return try {
-            val response = getForecastResponse(latitude, longitude)
+            val response = getCachedResponse(latitude, longitude)
             if (response == null) {
                 ForecastProviderResult.Error
             } else {
@@ -81,7 +79,7 @@ class MetNorwayForecastProvider(
                 database.cachedResponseQueries.insert(
                     latitude = latitude,
                     longitude = longitude,
-                    json = Json.encodeToString(LocationForecastResponse.serializer(), response)
+                    response = it
                 )
             }
         }
@@ -96,8 +94,8 @@ class MetNorwayForecastProvider(
             database.metaQueries.insert(
                 latitude = latitude,
                 longitude = longitude,
-                expires = headers[HttpHeaders.Expires],
-                lastModified = headers[HttpHeaders.LastModified]
+                expires = headers[HttpHeaders.Expires]?.let(zonedDateTimeSqlAdapter::decode),
+                lastModified = headers[HttpHeaders.LastModified]?.let(zonedDateTimeSqlAdapter::decode)
             )
         }
     }
@@ -111,16 +109,13 @@ class MetNorwayForecastProvider(
             .executeAsOneOrNull()
     }
 
-    private suspend fun getForecastResponse(
+    private suspend fun getCachedResponse(
         latitude: Double,
         longitude: Double
     ): LocationForecastResponse? = withContext(ioDispatcher) {
         database.cachedResponseQueries
             .get(latitude, longitude)
             .executeAsOneOrNull()
-            ?.let { Json.decodeFromString(LocationForecastResponse.serializer(), it.json) }
+            ?.response
     }
-
-    private fun fromRfc1123(rfc1123ZonedDateTime: String): ZonedDateTime =
-        ZonedDateTime.parse(rfc1123ZonedDateTime, DateTimeFormatter.RFC_1123_DATE_TIME)
 }

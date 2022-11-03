@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.data.database.converter
 
-import androidx.room.TypeConverter
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -11,7 +10,6 @@ object IsoLocalDateTimeConverter {
     private val zoneId = ZoneId.of("Etc/GMT")
 
     @JvmStatic
-    @TypeConverter
     fun fromTimestamp(timestamp: String?): ZonedDateTime? {
         return timestamp?.let {
             try {
@@ -23,7 +21,6 @@ object IsoLocalDateTimeConverter {
     }
 
     @JvmStatic
-    @TypeConverter
     fun toTimestamp(dateTime: ZonedDateTime?): String? {
         return try {
             dateTime

@@ -99,8 +99,7 @@ dependencies {
     implementation project(':osmplacesearcher')
     implementation project(":metnorwayforecastprovider")
 
-    // Database todo remove room
-    implementation "androidx.room:room-ktx:$versions.room"
+    // Database
     implementation "com.squareup.sqldelight:android-driver:$versions.sqldelight"
 
     // Network

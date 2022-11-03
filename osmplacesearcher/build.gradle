@@ -13,10 +13,8 @@ dependencies {
     implementation project(":entities")
     implementation project(":domain")
 
-    // Network
     implementation "io.ktor:ktor-client-core:$versions.ktor"
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinx_serialization"
-
-    // Logging
     implementation "io.github.aakira:napier:$versions.napier"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
 }
