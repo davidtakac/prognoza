@@ -1,3 +1,5 @@
+name: Build, sign and upload to Github Releases
+
 on:
   workflow_dispatch:
 
@@ -8,4 +10,4 @@ jobs:
     - name: Evaluate changelog
       run: echo "CHANGELOG=$(sed -n '/## \[$VERSION_NAME.*/,/## \[/p' CHANGELOG.md | head -n -2)" >> $GITHUB_ENV
     - name: Print changelog
-      run: echo $CHANGELOG
+      run: echo "$CHANGELOG"
