@@ -10,9 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.MetNorwayDatabase
 import hr.dtakac.prognoza.PrognozaDatabase
 import hr.dtakac.prognoza.data.repository.ForecastRepository
-import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.data.repository.PlaceRepository
-import hr.dtakac.prognoza.domain.settings.SettingsRepository
 import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
@@ -39,7 +37,7 @@ class RepositoryModule {
         database: PrognozaDatabase,
         savedPlaceGetter: SavedPlaceGetter,
         @Named("io") ioDispatcher: CoroutineDispatcher
-    ): SettingsRepository = DefaultSettingsRepository(
+    ): hr.dtakac.prognoza.domain.settings.SettingsRepository = hr.dtakac.prognoza.data.repository.SettingsRepository(
         settingsQueries = database.settingsQueries,
         savedPlaceGetter = savedPlaceGetter,
         ioDispatcher = ioDispatcher

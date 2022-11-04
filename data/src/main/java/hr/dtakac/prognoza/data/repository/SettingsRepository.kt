@@ -12,7 +12,7 @@ import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class DefaultSettingsRepository(
+class SettingsRepository(
     private val settingsQueries: SettingsQueries,
     private val savedPlaceGetter: SavedPlaceGetter,
     private val ioDispatcher: CoroutineDispatcher
