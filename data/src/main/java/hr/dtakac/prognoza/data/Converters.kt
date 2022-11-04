@@ -85,42 +85,42 @@ val pressureSqlAdapter = object : ColumnAdapter<Pressure, Double> {
     }
 }
 
-val temperatureUnitSqlAdapter = object : ColumnAdapter<TemperatureUnit, Int> {
-    override fun decode(databaseValue: Int): TemperatureUnit {
-        return TemperatureUnit.values()[databaseValue]
+val temperatureUnitSqlAdapter = object : ColumnAdapter<TemperatureUnit, Long> {
+    override fun decode(databaseValue: Long): TemperatureUnit {
+        return TemperatureUnit.values()[databaseValue.toInt()]
     }
 
-    override fun encode(value: TemperatureUnit): Int {
-        return value.ordinal
-    }
-}
-
-val lengthUnitSqlAdapter = object : ColumnAdapter<LengthUnit, Int> {
-    override fun decode(databaseValue: Int): LengthUnit {
-        return LengthUnit.values()[databaseValue]
-    }
-
-    override fun encode(value: LengthUnit): Int {
-        return value.ordinal
+    override fun encode(value: TemperatureUnit): Long {
+        return value.ordinal.toLong()
     }
 }
 
-val speedUnitSqlAdapter = object : ColumnAdapter<SpeedUnit, Int> {
-    override fun decode(databaseValue: Int): SpeedUnit {
-        return SpeedUnit.values()[databaseValue]
+val lengthUnitSqlAdapter = object : ColumnAdapter<LengthUnit, Long> {
+    override fun decode(databaseValue: Long): LengthUnit {
+        return LengthUnit.values()[databaseValue.toInt()]
     }
 
-    override fun encode(value: SpeedUnit): Int {
-        return value.ordinal
+    override fun encode(value: LengthUnit): Long {
+        return value.ordinal.toLong()
     }
 }
 
-val pressureUnitSqlAdapter = object : ColumnAdapter<PressureUnit, Int> {
-    override fun decode(databaseValue: Int): PressureUnit {
-        return PressureUnit.values()[databaseValue]
+val speedUnitSqlAdapter = object : ColumnAdapter<SpeedUnit, Long> {
+    override fun decode(databaseValue: Long): SpeedUnit {
+        return SpeedUnit.values()[databaseValue.toInt()]
     }
 
-    override fun encode(value: PressureUnit): Int {
-        return value.ordinal
+    override fun encode(value: SpeedUnit): Long {
+        return value.ordinal.toLong()
+    }
+}
+
+val pressureUnitSqlAdapter = object : ColumnAdapter<PressureUnit, Long> {
+    override fun decode(databaseValue: Long): PressureUnit {
+        return PressureUnit.values()[databaseValue.toInt()]
+    }
+
+    override fun encode(value: PressureUnit): Long {
+        return value.ordinal.toLong()
     }
 }

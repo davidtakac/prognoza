@@ -1,4 +1,4 @@
-CREATE TABLE Place (
+CREATE TABLE IF NOT EXISTS Place (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
     `name` TEXT NOT NULL,

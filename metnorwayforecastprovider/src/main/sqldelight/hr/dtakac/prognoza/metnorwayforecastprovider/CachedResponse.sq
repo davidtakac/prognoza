@@ -1,6 +1,6 @@
 import hr.dtakac.prognoza.metnorwayforecastprovider.LocationForecastResponse;
 
-CREATE TABLE CachedResponse (
+CREATE TABLE IF NOT EXISTS CachedResponse (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
     `response` TEXT AS LocationForecastResponse NOT NULL,

@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.data.repository
 
-import hr.dtakac.prognoza.PrognozaDatabase
+import hr.dtakac.prognoza.data.ForecastQueries
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
 class ForecastRepository(
-    private val database: PrognozaDatabase,
+    private val forecastQueries: ForecastQueries,
     private val computationDispatcher: CoroutineDispatcher,
     private val ioDispatcher: CoroutineDispatcher
 ) : ForecastSaver, SavedForecastGetter {
@@ -18,7 +18,7 @@ class ForecastRepository(
         longitude: Double
     ): List<ForecastDatum> {
         val data = withContext(ioDispatcher) {
-            database.forecastQueries
+            forecastQueries
                 .get(latitude, longitude)
                 .executeAsList()
         }
@@ -44,9 +44,9 @@ class ForecastRepository(
         data: List<ForecastDatum>
     ) {
         withContext(ioDispatcher) {
-            database.forecastQueries.delete(latitude, longitude)
+            forecastQueries.delete(latitude, longitude)
             data.forEach {
-                database.forecastQueries.insert(
+                forecastQueries.insert(
                     startTime = it.start,
                     endTime = it.end,
                     latitude = latitude,

@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.MetNorwayDatabase
-import hr.dtakac.prognoza.data.database.PrognozaDatabase
+import hr.dtakac.prognoza.PrognozaDatabase
 import hr.dtakac.prognoza.data.repository.ForecastRepository
 import hr.dtakac.prognoza.data.repository.DefaultSettingsRepository
 import hr.dtakac.prognoza.data.repository.PlaceRepository
@@ -36,13 +36,13 @@ class RepositoryModule {
 
     @Provides
     fun provideSettingsRepository(
-        sharedPreferences: SharedPreferences,
+        database: PrognozaDatabase,
         savedPlaceGetter: SavedPlaceGetter,
         @Named("io") ioDispatcher: CoroutineDispatcher
     ): SettingsRepository = DefaultSettingsRepository(
-        sharedPreferences,
-        savedPlaceGetter,
-        ioDispatcher
+        settingsQueries = database.settingsQueries,
+        savedPlaceGetter = savedPlaceGetter,
+        ioDispatcher = ioDispatcher
     )
 
     @Provides
@@ -70,10 +70,12 @@ class RepositoryModule {
     @Provides
     fun provideForecastRepository(
         database: PrognozaDatabase,
-        @Named("computation") computationDispatcher: CoroutineDispatcher
+        @Named("computation") computationDispatcher: CoroutineDispatcher,
+        @Named("io") ioDispatcher: CoroutineDispatcher
     ): ForecastRepository = ForecastRepository(
-        forecastDao = database.forecastDao(),
-        computationDispatcher = computationDispatcher
+        forecastQueries = database.forecastQueries,
+        computationDispatcher = computationDispatcher,
+        ioDispatcher = ioDispatcher
     )
 
     @Provides
@@ -94,5 +96,11 @@ class RepositoryModule {
     @Provides
     fun providePlaceRepository(
         database: PrognozaDatabase,
-    ): PlaceRepository = PlaceRepository(database.placeDao())
+        @Named("io") ioDispatcher: CoroutineDispatcher,
+        @Named("computation") computationDispatcher: CoroutineDispatcher
+    ): PlaceRepository = PlaceRepository(
+        placeQueries = database.placeQueries,
+        ioDispatcher = ioDispatcher,
+        computationDispatcher = computationDispatcher
+    )
 }

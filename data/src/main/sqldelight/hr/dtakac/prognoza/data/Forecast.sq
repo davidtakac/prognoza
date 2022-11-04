@@ -7,7 +7,7 @@ import hr.dtakac.prognoza.entities.forecast.units.Speed;
 import hr.dtakac.prognoza.entities.forecast.units.Temperature;
 import java.time.ZonedDateTime;
 
-CREATE TABLE Forecast (
+CREATE TABLE IF NOT EXISTS Forecast (
     `startTime` TEXT AS ZonedDateTime NOT NULL,
     `endTime` TEXT AS ZonedDateTime NOT NULL,
     `latitude` REAL NOT NULL,

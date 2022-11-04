@@ -3,7 +3,7 @@ import hr.dtakac.prognoza.entities.forecast.units.PressureUnit;
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit;
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit;
 
-CREATE TABLE Settings (
+CREATE TABLE IF NOT EXISTS Settings (
     `id` INTEGER NOT NULL PRIMARY KEY,
     `temperatureUnit` INTEGER AS TemperatureUnit NOT NULL,
     `precipitationUnit` INTEGER AS LengthUnit NOT NULL,
@@ -14,5 +14,25 @@ CREATE TABLE Settings (
 );
 
 -- Prepopulated database
-INSERT INTO Settings (id, temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude)
-VALUES (1, 0, 0, 0, 0, NULL, NULL);
+INSERT OR IGNORE INTO Settings (id, temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude)
+VALUES (0, 0, 0, 0, 0, NULL, NULL);
+
+getSettings:
+SELECT temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude
+FROM Settings
+WHERE id = 0;
+
+setPlace:
+UPDATE Settings SET placeLatitude = ?, placeLongitude = ? WHERE id = 0;
+
+setTemperatureUnit:
+UPDATE Settings SET temperatureUnit = ? WHERE id = 0;
+
+setPrecipitationUnit:
+UPDATE Settings SET precipitationUnit = ? WHERE id = 0;
+
+setWindUnit:
+UPDATE Settings SET windUnit = ? WHERE id = 0;
+
+setPressureUnit:
+UPDATE Settings SET pressureUnit = ? WHERE id = 0;
