@@ -28,7 +28,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 delete:
 DELETE FROM Forecast
-WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.0000;
+WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
 
 get:
 SELECT * FROM Forecast
