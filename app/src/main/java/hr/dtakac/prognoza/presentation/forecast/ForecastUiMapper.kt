@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.presentation.forecast
 
-import android.text.format.DateUtils
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.domain.usecase.GetForecastResult
 import hr.dtakac.prognoza.entities.forecast.*
@@ -49,10 +48,7 @@ class ForecastUiMapper @Inject constructor(
     ): CurrentUi = CurrentUi(
         place = TextResource.fromText(placeName),
         shortDescription = current.description.short,
-        date = TextResource.fromEpochMillis(
-            millis = current.dateTime.toInstant().toEpochMilli(),
-            flags = DateUtils.FORMAT_SHOW_DATE
-        ),
+        date = TextResource.fromDate(current.dateTime.toInstant().toEpochMilli()),
         temperature = getTemperature(current.temperature, temperatureUnit),
         description = TextResource.fromStringId(current.description.toStringId()),
         icon = current.description.toDrawableId(),
@@ -95,10 +91,7 @@ class ForecastUiMapper @Inject constructor(
         precipitationUnit: LengthUnit
     ): List<DayUi> = days.map { day ->
         DayUi(
-            date = TextResource.fromEpochMillis(
-                millis = day.dateTime.toInstant().toEpochMilli(),
-                flags = DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_ABBREV_MONTH or DateUtils.FORMAT_SHOW_WEEKDAY
-            ),
+            date = TextResource.fromShortDateAndWeekday(day.dateTime.toInstant().toEpochMilli()),
             lowHighTemperature = getLowHighTemperature(
                 lowTemperature = day.lowTemperature,
                 highTemperature = day.highTemperature,

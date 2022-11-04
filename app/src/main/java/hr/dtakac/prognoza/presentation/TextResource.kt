@@ -20,8 +20,22 @@ sealed interface TextResource {
         fun fromStringId(@StringRes id: Int, vararg args: Any): TextResource =
             IdTextResourceWithArgs(id, args.toList())
 
-        fun fromEpochMillis(millis: Long, flags: Int): TextResource =
-            DateTimeTextResource(millis, flags)
+        fun fromTime(epochMillis: Long): TextResource =
+            DateTimeTextResource(
+                epochMillis,
+                DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
+            )
+
+        fun fromDate(epochMillis: Long): TextResource =
+            DateTimeTextResource(epochMillis, DateUtils.FORMAT_SHOW_DATE)
+
+        fun fromShortDateAndWeekday(epochMillis: Long): TextResource =
+            DateTimeTextResource(
+                millis = epochMillis,
+                flags = DateUtils.FORMAT_SHOW_DATE or
+                        DateUtils.FORMAT_SHOW_WEEKDAY or
+                        DateUtils.FORMAT_ABBREV_MONTH
+            )
 
         fun fromNumber(number: BigDecimal): TextResource = NumberTextResource(number)
     }
