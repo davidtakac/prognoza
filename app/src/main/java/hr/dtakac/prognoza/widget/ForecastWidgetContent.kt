@@ -39,7 +39,7 @@ fun ForecastWidgetContent(
             .appWidgetBackgroundRadius()
             .background(colors.surface)
             .appWidgetBackground()
-            .padding(16.dp)
+            .padding(8.dp)
             .fillMaxSize()
             .clickable(onClick),
         contentAlignment = Alignment.Center
