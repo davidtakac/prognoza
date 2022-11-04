@@ -26,9 +26,12 @@ jobs:
         keyPassword: ${{ secrets.KEY_PASSWORD }}
     - name: Evaluate version name
       run: echo "VERSION_NAME=$(grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
+    - name: Evaluate changelog
+      run: echo "CHANGELOG=$(sed -n '/## \[$VERSION_NAME.*/,/## \[/p' CHANGELOG.md | head -n -2)" >> $GITHUB_ENV
     - name: Upload APK to release
       uses: svenstaro/upload-release-action@v2
       with:
         file: ${{ steps.sign_release.outputs.signedReleaseFile }}
         tag: ${{ env.VERSION_NAME }}
+        body: ${{ env.CHANGELOG }}
         asset_name: prognoza-$tag.apk

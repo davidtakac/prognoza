@@ -1,0 +1,11 @@
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    - name: Evaluate version name
+      run: echo "VERSION_NAME=$(grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
+    - name: Evaluate changelog
+      run: echo "CHANGELOG=$(sed -n '/## \[$VERSION_NAME.*/,/## \[/p' CHANGELOG.md | head -n -2)" >> $GITHUB_ENV
+    - name: Print changelog
+      run: echo $CHANGELOG
