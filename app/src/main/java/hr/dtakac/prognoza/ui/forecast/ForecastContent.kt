@@ -431,14 +431,16 @@ private fun HourItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Text(
-                modifier = Modifier.width(88.dp),
-                text = hour.precipitation.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-            )
+            hour.precipitation.asString().takeIf { it.isNotBlank() }?.let {
+                Text(
+                    modifier = Modifier.width(88.dp),
+                    text = it,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                )
+            }
             Text(
                 modifier = Modifier.width(52.dp),
                 text = hour.temperature.asString(),
@@ -484,22 +486,24 @@ private fun ComingItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    modifier = Modifier.weight(2f),
+                    modifier = Modifier.weight(1f),
                     text = day.date.asString(),
                     textAlign = TextAlign.Start,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
+                day.precipitation.asString().takeIf { it.isNotBlank() }?.let {
+                    Text(
+                        modifier = Modifier.width(88.dp),
+                        text = it,
+                        textAlign = TextAlign.End,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                    )
+                }
                 Text(
-                    modifier = Modifier.weight(1f),
-                    text = day.precipitation.asString(),
-                    textAlign = TextAlign.End,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-                )
-                Text(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.width(88.dp),
                     text = day.lowHighTemperature.asString(),
                     textAlign = TextAlign.End,
                     maxLines = 1,
