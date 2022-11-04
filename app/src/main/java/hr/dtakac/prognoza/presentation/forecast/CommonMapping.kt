@@ -42,39 +42,84 @@ fun getTemperature(
 fun getWind(
     wind: Wind,
     unit: SpeedUnit
-): TextResource = when (unit) {
-    SpeedUnit.KPH -> TextResource.fromStringId(
-        R.string.template_wind_kmh,
-        TextResource.fromNumber(BigDecimal(wind.speed.kilometersPerHour).setScale(0, RoundingMode.HALF_EVEN))
-    )
-    SpeedUnit.MPH -> TextResource.fromStringId(
-        R.string.template_wind_mph,
-        TextResource.fromNumber(BigDecimal(wind.speed.milesPerHour).setScale(0, RoundingMode.HALF_EVEN))
-    )
-    SpeedUnit.MPS -> TextResource.fromStringId(
-        R.string.template_wind_mps,
-        TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).setScale(0, RoundingMode.HALF_EVEN))
-    )
-    SpeedUnit.KNOTS -> TextResource.fromStringId(
-        R.string.template_wind_knots,
-        TextResource.fromNumber(BigDecimal(wind.speed.knots).setScale(1, RoundingMode.HALF_EVEN))
-    )
+): TextResource {
+    val roundingMode = RoundingMode.HALF_EVEN
+    return when (unit) {
+        SpeedUnit.KPH -> TextResource.fromStringId(
+            R.string.template_wind_kmh,
+            TextResource.fromNumber(
+                BigDecimal(wind.speed.kilometersPerHour).setScale(
+                    0,
+                    roundingMode
+                )
+            )
+        )
+        SpeedUnit.MPH -> TextResource.fromStringId(
+            R.string.template_wind_mph,
+            TextResource.fromNumber(
+                BigDecimal(wind.speed.milesPerHour).setScale(
+                    0, roundingMode
+                )
+            )
+        )
+        SpeedUnit.MPS -> TextResource.fromStringId(
+            R.string.template_wind_mps,
+            TextResource.fromNumber(
+                BigDecimal(wind.speed.metersPerSecond).setScale(
+                    0,
+                    roundingMode
+                )
+            )
+        )
+        SpeedUnit.KNOTS -> TextResource.fromStringId(
+            R.string.template_wind_knots,
+            TextResource.fromNumber(
+                BigDecimal(wind.speed.knots).setScale(
+                    1,
+                    roundingMode)
+            )
+        )
+    }
 }
 
 fun getPrecipitation(
     precipitation: Length,
     unit: LengthUnit
-): TextResource = when (unit) {
-    LengthUnit.MM -> TextResource.fromStringId(
-        R.string.template_precipitation_mm,
-        TextResource.fromNumber(BigDecimal(precipitation.millimeters).setScale(1, RoundingMode.HALF_EVEN))
-    )
-    LengthUnit.IN -> TextResource.fromStringId(
-        R.string.template_precipitation_in,
-        TextResource.fromNumber(BigDecimal(precipitation.inches).setScale(2, RoundingMode.HALF_EVEN))
-    )
-    LengthUnit.CM -> TextResource.fromStringId(
-        R.string.template_precipitation_cm,
-        TextResource.fromNumber(BigDecimal(precipitation.centimeters).setScale(2, RoundingMode.HALF_EVEN))
-    )
+): TextResource {
+    val roundingMode = RoundingMode.HALF_EVEN
+    val zero = BigDecimal(0.0)
+    return when (unit) {
+        LengthUnit.MM -> BigDecimal(precipitation.millimeters)
+            .setScale(1, roundingMode)
+            .takeUnless { it.compareTo(zero) == 0 }
+            ?.let {
+                TextResource.fromStringId(
+                    id = R.string.template_precipitation_mm,
+                    TextResource.fromNumber(it)
+                )
+            }
+            ?: TextResource.empty()
+
+        LengthUnit.IN -> BigDecimal(precipitation.inches)
+            .setScale(1, roundingMode)
+            .takeUnless { it.compareTo(zero) == 0 }
+            ?.let {
+                TextResource.fromStringId(
+                    id = R.string.template_precipitation_in,
+                    TextResource.fromNumber(it)
+                )
+            }
+            ?: TextResource.empty()
+
+        LengthUnit.CM -> BigDecimal(precipitation.centimeters)
+            .setScale(1, roundingMode)
+            .takeUnless { it.compareTo(zero) == 0 }
+            ?.let {
+                TextResource.fromStringId(
+                    id = R.string.template_precipitation_cm,
+                    TextResource.fromNumber(it)
+                )
+            }
+            ?: TextResource.empty()
+    }
 }
