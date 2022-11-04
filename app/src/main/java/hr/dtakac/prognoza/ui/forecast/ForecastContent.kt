@@ -348,11 +348,13 @@ private fun DescriptionAndPrecipitation(
                 inlineContent = inlineContentMap,
                 modifier = Modifier.weight(3f),
             )
-            Text(
-                text = precipitation,
-                textAlign = TextAlign.End,
-                modifier = Modifier.weight(1f),
-            )
+            precipitation.takeIf { it.isNotBlank() }?.let {
+                Text(
+                    text = it,
+                    textAlign = TextAlign.End,
+                    modifier = Modifier.weight(1f),
+                )
+            }
         }
     }
 }
