@@ -17,8 +17,8 @@ Weather app with widgets and offline support.
 - Use cases
 - Jetpack Compose
 - Jetpack Glance
-- Room database
-- ktor-client
+- SQLDelight
+- Ktor
 - Kotlin Serialization
 - Work Manager
 - Jetpack Compose tests
@@ -28,6 +28,6 @@ Weather app with widgets and offline support.
 - Splash screen
 
 ## Credit
-- [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2) for design inspiration
-- [MET Norway](https://www.met.no/en) for forecast data
-- [OSM Nominatim](https://nominatim.org/) for geographic location data
+- Design by [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2)
+- Forecast data by [MET Norway](https://www.met.no/en)
+- Geolocation data by [OSM Nominatim](https://nominatim.org/)
