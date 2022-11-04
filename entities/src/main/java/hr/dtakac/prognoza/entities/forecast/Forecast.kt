@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.entities.forecast
 import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
-import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.lang.IllegalStateException
 import java.time.ZoneId
 import java.time.ZonedDateTime

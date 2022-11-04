@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.entities.forecast
 
 import hr.dtakac.prognoza.entities.forecast.units.*
-import hr.dtakac.prognoza.entities.forecast.wind.Wind
 import java.time.ZonedDateTime
 import kotlin.math.abs
 import kotlin.math.pow

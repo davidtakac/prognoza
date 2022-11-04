@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.data.ForecastQueries
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
-import hr.dtakac.prognoza.entities.forecast.wind.Wind
+import hr.dtakac.prognoza.entities.forecast.Wind
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 

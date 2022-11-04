@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.metnorwayforecastprovider
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.ForecastDescription
 import hr.dtakac.prognoza.entities.forecast.units.*
-import hr.dtakac.prognoza.entities.forecast.wind.Wind
+import hr.dtakac.prognoza.entities.forecast.Wind
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.ZonedDateTime
