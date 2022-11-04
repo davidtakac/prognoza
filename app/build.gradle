@@ -12,7 +12,6 @@ static def isInGithubWorkflow() {
 
 android {
     compileSdk 33
-
     defaultConfig {
         applicationId "hr.dtakac.prognoza"
         minSdk 24
@@ -61,32 +60,23 @@ android {
                 signingConfig signingConfigs.release
             }
         }
-
         debug {
             minifyEnabled false
             debuggable true
             applicationIdSuffix ".debug"
         }
     }
-
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
-
-    buildFeatures {
-        viewBinding true
-    }
-
     buildFeatures {
         compose true
     }
-
     composeOptions {
         kotlinCompilerExtensionVersion "$versions.compose"
     }
-
     kotlinOptions {
         jvmTarget = "11"
     }
