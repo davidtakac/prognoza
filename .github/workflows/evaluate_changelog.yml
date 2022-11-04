@@ -1,10 +1,10 @@
-name: Build, sign and upload to Github Releases
+name: Evaluate changelog
 
 on:
-  workflow_dispatch:
+  workflow_dispatch
 
 jobs:
-  test:
+  evaluate:
     - name: Evaluate version name
       run: echo "VERSION_NAME=$(grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
     - name: Evaluate changelog
