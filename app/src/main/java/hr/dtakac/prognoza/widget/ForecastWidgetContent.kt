@@ -250,11 +250,11 @@ private fun NormalWidget(
                 modifier = GlanceModifier.size(48.dp)
             )
         }
-        Spacer(modifier = GlanceModifier.height(12.dp))
         HoursRow(
             data = hours,
             temperatureUnit = temperatureUnit,
-            colors = colors
+            colors = colors,
+            modifier = GlanceModifier.padding(top = 8.dp)
         )
     }
 }
