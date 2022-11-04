@@ -4,6 +4,8 @@ import android.content.Context
 import android.icu.text.NumberFormat
 import android.text.format.DateUtils
 import androidx.annotation.StringRes
+import java.math.BigDecimal
+import java.util.*
 
 sealed interface TextResource {
     companion object {
@@ -21,8 +23,7 @@ sealed interface TextResource {
         fun fromEpochMillis(millis: Long, flags: Int): TextResource =
             DateTimeTextResource(millis, flags)
 
-        fun fromNumber(number: Number, decimalPlaces: Int = 0): TextResource =
-            NumberTextResource(number, decimalPlaces)
+        fun fromNumber(number: BigDecimal): TextResource = NumberTextResource(number)
     }
 
     fun asString(context: Context): String
@@ -49,12 +50,11 @@ private data class DateTimeTextResource(
 }
 
 private data class NumberTextResource(
-    val number: Number,
-    val decimalPlaces: Int
+    val number: BigDecimal
 ) : TextResource {
-    override fun asString(context: Context): String = NumberFormat.getInstance().apply {
-        maximumFractionDigits = decimalPlaces
-    }.format(number)
+    override fun asString(context: Context): String = NumberFormat
+        .getInstance(Locale.getDefault())
+        .format(number)
 }
 
 private data class IdTextResourceWithArgs(

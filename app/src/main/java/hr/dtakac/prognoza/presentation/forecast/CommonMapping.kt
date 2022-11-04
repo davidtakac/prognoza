@@ -5,6 +5,8 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.Wind
 import hr.dtakac.prognoza.presentation.TextResource
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.time.ZonedDateTime
 
 fun getLowHighTemperature(
@@ -28,12 +30,12 @@ fun getTemperature(
 ): TextResource = TextResource.fromStringId(
     id = R.string.template_temperature_degrees,
     TextResource.fromNumber(
-        temperature.run {
+        BigDecimal(
             when (unit) {
-                TemperatureUnit.C -> celsius
-                TemperatureUnit.F -> fahrenheit
+                TemperatureUnit.C -> temperature.celsius
+                TemperatureUnit.F -> temperature.fahrenheit
             }
-        }
+        ).setScale(0, RoundingMode.HALF_EVEN)
     )
 )
 
@@ -43,19 +45,19 @@ fun getWind(
 ): TextResource = when (unit) {
     SpeedUnit.KPH -> TextResource.fromStringId(
         R.string.template_wind_kmh,
-        TextResource.fromNumber(wind.speed.kilometersPerHour, decimalPlaces = 0)
+        TextResource.fromNumber(BigDecimal(wind.speed.kilometersPerHour).setScale(0, RoundingMode.HALF_EVEN))
     )
     SpeedUnit.MPH -> TextResource.fromStringId(
         R.string.template_wind_mph,
-        TextResource.fromNumber(wind.speed.milesPerHour, decimalPlaces = 0)
+        TextResource.fromNumber(BigDecimal(wind.speed.milesPerHour).setScale(0, RoundingMode.HALF_EVEN))
     )
     SpeedUnit.MPS -> TextResource.fromStringId(
         R.string.template_wind_mps,
-        TextResource.fromNumber(wind.speed.metersPerSecond, decimalPlaces = 0)
+        TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).setScale(0, RoundingMode.HALF_EVEN))
     )
     SpeedUnit.KNOTS -> TextResource.fromStringId(
         R.string.template_wind_knots,
-        TextResource.fromNumber(wind.speed.knots, decimalPlaces = 1)
+        TextResource.fromNumber(BigDecimal(wind.speed.knots).setScale(1, RoundingMode.HALF_EVEN))
     )
 }
 
@@ -65,14 +67,14 @@ fun getPrecipitation(
 ): TextResource = when (unit) {
     LengthUnit.MM -> TextResource.fromStringId(
         R.string.template_precipitation_mm,
-        TextResource.fromNumber(precipitation.millimeters, decimalPlaces = 1)
+        TextResource.fromNumber(BigDecimal(precipitation.millimeters).setScale(1, RoundingMode.HALF_EVEN))
     )
     LengthUnit.IN -> TextResource.fromStringId(
         R.string.template_precipitation_in,
-        TextResource.fromNumber(precipitation.inches, decimalPlaces = 2)
+        TextResource.fromNumber(BigDecimal(precipitation.inches).setScale(2, RoundingMode.HALF_EVEN))
     )
     LengthUnit.CM -> TextResource.fromStringId(
         R.string.template_precipitation_cm,
-        TextResource.fromNumber(precipitation.centimeters, decimalPlaces = 2)
+        TextResource.fromNumber(BigDecimal(precipitation.centimeters).setScale(2, RoundingMode.HALF_EVEN))
     )
 }
