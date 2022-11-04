@@ -32,6 +32,10 @@ data class PrognozaTypography(
     val titleSmall: TextStyle
 ) {
     companion object {
+        // Despite what linter says, removing the PlatformTextStyle line still causes the text
+        // to have excessive top padding which is most noticeable on very large text, such as
+        // headlineLarge and headlineSmall
+        @Suppress("DEPRECATION")
         fun get(): PrognozaTypography = PrognozaTypography(
             headlineLarge = TextStyle(
                 fontFamily = Manrope,
