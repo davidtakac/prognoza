@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.metnorwayforecastprovider
 
-import hr.dtakac.prognoza.MetNorwayDatabase
 import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastProviderResult
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
@@ -11,9 +10,12 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.time.ZonedDateTime
 
+private val TAG = MetNorwayForecastProvider::class.java.simpleName
+
 class MetNorwayForecastProvider(
     private val apiService: MetNorwayForecastService,
-    private val database: MetNorwayDatabase,
+    private val metaQueries: MetaQueries,
+    private val cachedResponseQueries: CachedResponseQueries,
     private val ioDispatcher: CoroutineDispatcher
 ) : ForecastProvider {
     override suspend fun provide(
@@ -29,7 +31,7 @@ class MetNorwayForecastProvider(
                     lastModified = meta?.lastModified
                 )
             } catch (e: Exception) {
-                Napier.e(message = "MET Norway error", e)
+                Napier.e(TAG, e)
             }
         }
 
@@ -50,7 +52,7 @@ class MetNorwayForecastProvider(
                 ForecastProviderResult.Success(data)
             }
         } catch (e: Exception) {
-            Napier.e(message = "MET Norway error", e)
+            Napier.e(TAG, e)
             ForecastProviderResult.Error
         }
     }
@@ -76,7 +78,7 @@ class MetNorwayForecastProvider(
     ) {
         response?.let {
             withContext(ioDispatcher) {
-                database.cachedResponseQueries.insert(
+                cachedResponseQueries.insert(
                     latitude = latitude,
                     longitude = longitude,
                     response = it
@@ -91,7 +93,7 @@ class MetNorwayForecastProvider(
         longitude: Double
     ) {
         withContext(ioDispatcher) {
-            database.metaQueries.insert(
+            metaQueries.insert(
                 latitude = latitude,
                 longitude = longitude,
                 expires = headers[HttpHeaders.Expires]?.let(zonedDateTimeSqlAdapter::decode),
@@ -104,7 +106,7 @@ class MetNorwayForecastProvider(
         latitude: Double,
         longitude: Double
     ): Meta? = withContext(ioDispatcher) {
-        database.metaQueries
+        metaQueries
             .get(latitude, longitude)
             .executeAsOneOrNull()
     }
@@ -113,7 +115,7 @@ class MetNorwayForecastProvider(
         latitude: Double,
         longitude: Double
     ): LocationForecastResponse? = withContext(ioDispatcher) {
-        database.cachedResponseQueries
+        cachedResponseQueries
             .get(latitude, longitude)
             .executeAsOneOrNull()
             ?.response

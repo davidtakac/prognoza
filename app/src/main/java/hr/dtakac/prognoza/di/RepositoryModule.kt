@@ -57,14 +57,14 @@ class RepositoryModule {
 
     @Provides
     fun provideForecastProvider(
-        metNorwayForecastService: MetNorwayForecastService,
-        metNorwayDatabase: MetNorwayDatabase,
-        @Named("io")
-        ioDispatcher: CoroutineDispatcher
+        apiService: MetNorwayForecastService,
+        database: MetNorwayDatabase,
+        @Named("io") ioDispatcher: CoroutineDispatcher
     ): ForecastProvider = MetNorwayForecastProvider(
-        apiService = metNorwayForecastService,
-        database = metNorwayDatabase,
-        ioDispatcher = ioDispatcher
+        apiService = apiService,
+        ioDispatcher = ioDispatcher,
+        metaQueries = database.metaQueries,
+        cachedResponseQueries = database.cachedResponseQueries
     )
 
     @Provides
