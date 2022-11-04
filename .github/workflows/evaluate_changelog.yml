@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout the code
         uses: actions/checkout@v2
+      - name: List dir structure
+        run: ls
       - name: Evaluate version name
         run: echo "VERSION_NAME=$(grep versionName ../../app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
       - name: Evaluate changelog
