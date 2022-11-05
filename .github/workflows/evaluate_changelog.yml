@@ -14,8 +14,14 @@ jobs:
       - name: List dir structure
         run: ls
       - name: Evaluate version name
-        run: echo "VERSION_NAME=$(grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1)" >> $GITHUB_ENV
+        run: |
+          echo 'VERSION_NAME<<EOF' >> $GITHUB_ENV
+          grep versionName app/build.gradle | cut -d \" -f2 | cut -d \" -f1 >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: Evaluate changelog
-        run: echo "CHANGELOG=$(sed -n '/## \[2.2.1.*/,/## \[/p' CHANGELOG.md | head -n -2)" >> $GITHUB_ENV
+        run: |
+          echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
+          sed -n '/## \[${{ env.VERSION_NAME }}.*/,/## \[/p' app/CHANGELOG.md | head -n -2 >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: Print changelog
         run: echo "$CHANGELOG"
