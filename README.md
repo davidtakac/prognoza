@@ -2,13 +2,17 @@
 Weather app with widgets and offline support.
 [Latest release - on GitHub](https://github.com/davidtakac/prognoza/releases/latest)
 
-<img src="screenshots/rain_dark.png" width=150>
-<img src="screenshots/cloudy_dark.png" width=150>
-<img src="screenshots/widgets_dark.png" width=150>
+<p align="center">
+    <img src="screenshots/rain_dark.png" width=32%/>
+    <img src="screenshots/cloudy_dark.png" width=32%/>
+    <img src="screenshots/widgets_dark.png" width=32%/>
+</p>
 
-<img src="screenshots/rain_light.png" width=150>
-<img src="screenshots/cloudy_light.png" width=150>
-<img src="screenshots/widgets_light.png" width=150>
+<p align="center">
+    <img src="screenshots/rain_light.png" width=32%/>
+    <img src="screenshots/cloudy_light.png" width=32%/>
+    <img src="screenshots/widgets_light.png" width=32%/>
+</p>
 
 ## Features
 - Weather for today and coming days
