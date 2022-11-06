@@ -7,8 +7,7 @@ CREATE TABLE IF NOT EXISTS Place (
 );
 
 insert:
-INSERT OR REPLACE INTO Place (latitude, longitude, name, details)
-VALUES (?, ?, ?, ?);
+INSERT OR REPLACE INTO Place VALUES ?;
 
 get:
 SELECT * FROM Place

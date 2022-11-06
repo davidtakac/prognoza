@@ -14,13 +14,12 @@ CREATE TABLE IF NOT EXISTS Settings (
 );
 
 -- Prepopulated database
-INSERT OR IGNORE INTO Settings (id, temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude)
+INSERT OR IGNORE INTO Settings
 VALUES (0, 0, 0, 0, 0, NULL, NULL);
 
-getSettings:
+get:
 SELECT temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude
-FROM Settings
-WHERE id = 0;
+FROM Settings WHERE id = 0;
 
 setPlace:
 UPDATE Settings SET placeLatitude = ?, placeLongitude = ? WHERE id = 0;

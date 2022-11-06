@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.data.repository
 
-import hr.dtakac.prognoza.data.GetSettings
+import hr.dtakac.prognoza.data.Get
 import hr.dtakac.prognoza.data.SettingsQueries
 import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.settings.SettingsRepository
@@ -56,7 +56,7 @@ class SettingsRepository(
         settingsQueries.setWindUnit(unit)
     }
 
-    private suspend fun getSettings(): GetSettings = withContext(ioDispatcher) {
-        settingsQueries.getSettings().executeAsOne()
+    private suspend fun getSettings(): Get = withContext(ioDispatcher) {
+        settingsQueries.get().executeAsOne()
     }
 }

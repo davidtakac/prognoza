@@ -4,6 +4,7 @@ import hr.dtakac.prognoza.data.PlaceQueries
 import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.entities.Place
+import hr.dtakac.prognoza.data.Place as PlaceDbModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
@@ -50,10 +51,12 @@ class PlaceRepository(
     override suspend fun save(place: Place) {
         withContext(ioDispatcher) {
             placeQueries.insert(
-                latitude = place.latitude,
-                longitude = place.longitude,
-                name = place.name,
-                details = place.details
+                PlaceDbModel(
+                    latitude = place.latitude,
+                    longitude = place.longitude,
+                    name = place.name,
+                    details = place.details
+                )
             )
         }
     }
