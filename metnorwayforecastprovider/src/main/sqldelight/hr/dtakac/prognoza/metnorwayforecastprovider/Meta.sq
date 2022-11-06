@@ -13,5 +13,4 @@ SELECT * FROM Meta
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
 
 insert:
-REPLACE INTO Meta (latitude, longitude, expires, lastModified)
-VALUES (?, ?, ?, ?);
+REPLACE INTO Meta VALUES ?;

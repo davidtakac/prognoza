@@ -79,9 +79,11 @@ class MetNorwayForecastProvider(
         response?.let {
             withContext(ioDispatcher) {
                 cachedResponseQueries.insert(
-                    latitude = latitude,
-                    longitude = longitude,
-                    response = it
+                    CachedResponse(
+                        latitude = latitude,
+                        longitude = longitude,
+                        response = it
+                    )
                 )
             }
         }
@@ -94,10 +96,12 @@ class MetNorwayForecastProvider(
     ) {
         withContext(ioDispatcher) {
             metaQueries.insert(
-                latitude = latitude,
-                longitude = longitude,
-                expires = headers[HttpHeaders.Expires]?.let(zonedDateTimeSqlAdapter::decode),
-                lastModified = headers[HttpHeaders.LastModified]?.let(zonedDateTimeSqlAdapter::decode)
+                Meta(
+                    latitude = latitude,
+                    longitude = longitude,
+                    expires = headers[HttpHeaders.Expires]?.let(zonedDateTimeSqlAdapter::decode),
+                    lastModified = headers[HttpHeaders.LastModified]?.let(zonedDateTimeSqlAdapter::decode)
+                )
             )
         }
     }

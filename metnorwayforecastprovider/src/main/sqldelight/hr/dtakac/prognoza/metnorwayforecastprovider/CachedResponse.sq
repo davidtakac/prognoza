@@ -12,5 +12,4 @@ SELECT * FROM CachedResponse
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
 
 insert:
-INSERT OR REPLACE INTO CachedResponse (latitude, longitude, response)
-VALUES (?, ?, ?);
+INSERT OR REPLACE INTO CachedResponse VALUES ?;
