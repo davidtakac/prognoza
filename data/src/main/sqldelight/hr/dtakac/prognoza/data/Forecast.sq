@@ -23,8 +23,7 @@ CREATE TABLE IF NOT EXISTS Forecast (
 );
 
 insert:
-INSERT OR REPLACE INTO Forecast (startTime, endTime, latitude, longitude, temperature, forecastDescription, precipitation, windSpeed, windFromDirection, humidity, airPressureAtSeaLevel)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+INSERT OR REPLACE INTO Forecast VALUES ?;
 
 delete:
 DELETE FROM Forecast
@@ -33,4 +32,5 @@ WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00
 get:
 SELECT * FROM Forecast
 WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001
+AND DATETIME(startTime) >= DATETIME('now', '-1 hour')
 ORDER BY DATETIME(startTime) ASC;

@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.data.repository
 
+import hr.dtakac.prognoza.data.Forecast
 import hr.dtakac.prognoza.data.ForecastQueries
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
 import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
@@ -46,7 +47,7 @@ class ForecastRepository(
         withContext(ioDispatcher) {
             forecastQueries.delete(latitude, longitude)
             data.forEach {
-                forecastQueries.insert(
+                val dbModel = Forecast(
                     startTime = it.start,
                     endTime = it.end,
                     latitude = latitude,
@@ -59,6 +60,7 @@ class ForecastRepository(
                     humidity = it.humidity,
                     airPressureAtSeaLevel = it.airPressure
                 )
+                forecastQueries.insert(dbModel)
             }
         }
     }
