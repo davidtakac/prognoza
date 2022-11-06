@@ -4,6 +4,19 @@ All notable changes to the Android app will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- Widget rounded corners on <= Android 11
+- Widget text reacts to system dark/light theme on <= Android 11
+- Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
+### Added
+- iOS support
+- OpenWeatherMap as forecast provider
+
+## [2.2.2] - 2022-11-06
+### Fixed
+- Forecast not updating to show the current hour when offline
+
 ## [2.2.1] - 2022-11-5
 ### Added
 - This changelog :)
