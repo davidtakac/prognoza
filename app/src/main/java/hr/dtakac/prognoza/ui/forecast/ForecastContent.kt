@@ -20,7 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
@@ -200,7 +201,12 @@ private fun DataList(
     // looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
 
-    val timeWidth = remember { mutableStateOf(0.dp) }
+    val timeWidthPx = remember { mutableStateOf(0) }
+    val newTimeWidthCallback = { newWidth: Int ->
+        if (newWidth > timeWidthPx.value) {
+            timeWidthPx.value = newWidth
+        }
+    }
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -269,12 +275,8 @@ private fun DataList(
                         .fillMaxWidth()
                         .padding(itemPadding)
                         .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp),
-                    timeWidth = timeWidth.value,
-                    timeWidthCallback = {
-                        if (it > timeWidth.value) {
-                            timeWidth.value = it
-                        }
-                    }
+                    timeWidthPx = timeWidthPx.value,
+                    timeWidthCallback = newTimeWidthCallback
                 )
             }
         }
@@ -422,23 +424,26 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
     }
 }
 
+// https://stackoverflow.com/a/70901858 This answer works!
 @Composable
 private fun HourItem(
     hour: DayHourUi,
-    timeWidth: Dp,
-    timeWidthCallback: (Dp) -> Unit,
+    timeWidthPx: Int,
+    timeWidthCallback: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
+            val widthInDp = with(LocalDensity.current) {
+                timeWidthPx.toDp()
+            }
             Text(
-                modifier = if (timeWidth == 0.dp) Modifier.onSizeChanged {
-                    timeWidthCallback(it.width.dp)
-                } else Modifier.width(timeWidth),
+                modifier = if (widthInDp == 0.dp) Modifier.wrapContentWidth().onGloballyPositioned {
+                    timeWidthCallback(it.size.width)
+                } else Modifier.width(widthInDp),
                 text = hour.time.asString(),
                 textAlign = TextAlign.Start,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                maxLines = 1
             )
             Text(
                 modifier = Modifier.weight(1f),
