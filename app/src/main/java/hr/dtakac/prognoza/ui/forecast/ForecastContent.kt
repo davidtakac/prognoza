@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -197,6 +199,8 @@ private fun DataList(
     // This isn't included in contentPadding because the click ripple on the Coming day items
     // looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
+
+    val timeWidth = remember { mutableStateOf(0.dp) }
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -248,7 +252,7 @@ private fun DataList(
                 wind = forecast.current.wind.asString()
             )
         }
-        forecast.today?.hourly?.let {
+        forecast.today?.hourly?.let { hours ->
             item(key = "hourly-header") {
                 HourlyHeader(
                     lowHighTemperature = forecast.today.lowHighTemperature.asString(),
@@ -258,13 +262,19 @@ private fun DataList(
                         .padding(top = 42.dp, bottom = 16.dp)
                 )
             }
-            itemsIndexed(it) { idx, hour ->
+            itemsIndexed(hours) { idx, hour ->
                 HourItem(
                     hour = hour,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(itemPadding)
-                        .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp)
+                        .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp),
+                    timeWidth = timeWidth.value,
+                    timeWidthCallback = {
+                        if (it > timeWidth.value) {
+                            timeWidth.value = it
+                        }
+                    }
                 )
             }
         }
@@ -415,12 +425,16 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
 @Composable
 private fun HourItem(
     hour: DayHourUi,
-    modifier: Modifier = Modifier
+    timeWidth: Dp,
+    timeWidthCallback: (Dp) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
             Text(
-                modifier = Modifier.width(52.dp),
+                modifier = if (timeWidth == 0.dp) Modifier.onSizeChanged {
+                    timeWidthCallback(it.width.dp)
+                } else Modifier.width(timeWidth),
                 text = hour.time.asString(),
                 textAlign = TextAlign.Start,
                 maxLines = 1,
