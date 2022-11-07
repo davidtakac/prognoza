@@ -201,12 +201,13 @@ private fun DataList(
     // looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
 
-    val timeWidthPx = remember { mutableStateOf(0) }
-    val newTimeWidthCallback = { newWidth: Int ->
-        if (newWidth > timeWidthPx.value) {
-            timeWidthPx.value = newWidth
+    val timeWidthState = remember { mutableStateOf(0.dp) }
+    val onTimeWidthWithWrappedContentResolved = { newWidth: Dp ->
+        if (newWidth > timeWidthState.value) {
+            timeWidthState.value = newWidth
         }
     }
+
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -275,8 +276,8 @@ private fun DataList(
                         .fillMaxWidth()
                         .padding(itemPadding)
                         .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp),
-                    timeWidthPx = timeWidthPx.value,
-                    timeWidthCallback = newTimeWidthCallback
+                    timeWidthState = timeWidthState,
+                    onTimeWidthWithWrappedContentResolved = onTimeWidthWithWrappedContentResolved
                 )
             }
         }
@@ -428,19 +429,25 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
 @Composable
 private fun HourItem(
     hour: DayHourUi,
-    timeWidthPx: Int,
-    timeWidthCallback: (Int) -> Unit,
+    timeWidthState: State<Dp>,
+    onTimeWidthWithWrappedContentResolved: (Dp) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
-            val widthInDp = with(LocalDensity.current) {
-                timeWidthPx.toDp()
-            }
+            val density = LocalDensity.current
             Text(
-                modifier = if (widthInDp == 0.dp) Modifier.wrapContentWidth().onGloballyPositioned {
-                    timeWidthCallback(it.size.width)
-                } else Modifier.width(widthInDp),
+                modifier = if (timeWidthState.value == 0.dp) {
+                    Modifier
+                        .wrapContentWidth()
+                        .onGloballyPositioned {
+                            with(density) {
+                                onTimeWidthWithWrappedContentResolved(it.size.width.toDp())
+                            }
+                        }
+                } else {
+                    Modifier.width(timeWidthState.value)
+                },
                 text = hour.time.asString(),
                 textAlign = TextAlign.Start,
                 maxLines = 1

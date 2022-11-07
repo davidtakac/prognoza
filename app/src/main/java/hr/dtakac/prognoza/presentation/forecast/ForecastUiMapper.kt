@@ -118,7 +118,7 @@ class ForecastUiMapper @Inject constructor(
         temperatureUnit: TemperatureUnit,
         precipitationUnit: LengthUnit
     ): DayHourUi = DayHourUi(
-        time = TextResource.fromText(listOf("1", "12", "123", "1234", "12345").random()),
+        time = getShortTime(datum.dateTime),
         temperature = getTemperature(datum.temperature, temperatureUnit),
         precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {
             getPrecipitation(it, precipitationUnit)
