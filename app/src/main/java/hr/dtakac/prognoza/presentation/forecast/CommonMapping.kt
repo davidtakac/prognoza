@@ -24,7 +24,7 @@ fun getLowHighTemperature(
     getTemperature(lowTemperature, temperatureUnit)
 )
 
-fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromTime(
+fun getShortTime(time: ZonedDateTime): TextResource = TextResource.fromShortTime(
     time.toInstant().toEpochMilli()
 )
 

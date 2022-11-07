@@ -2,9 +2,13 @@ package hr.dtakac.prognoza.presentation
 
 import android.content.Context
 import android.icu.text.NumberFormat
+import android.text.format.DateFormat
 import android.text.format.DateUtils
 import androidx.annotation.StringRes
 import java.math.BigDecimal
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 sealed interface TextResource {
@@ -20,21 +24,18 @@ sealed interface TextResource {
         fun fromStringId(@StringRes id: Int, vararg args: Any): TextResource =
             IdTextResourceWithArgs(id, args.toList())
 
-        fun fromTime(epochMillis: Long): TextResource =
-            DateTimeTextResource(
-                epochMillis,
-                DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_TIME
-            )
+        fun fromShortTime(epochMillis: Long): TextResource =
+            ShortTimeTextResource(epochMillis)
 
         fun fromDate(epochMillis: Long): TextResource =
-            DateTimeTextResource(epochMillis, DateUtils.FORMAT_SHOW_DATE)
+            DateUtilsTextResource(epochMillis, DateUtils.FORMAT_SHOW_DATE)
 
         fun fromShortDateAndWeekday(epochMillis: Long): TextResource =
-            DateTimeTextResource(
+            DateUtilsTextResource(
                 millis = epochMillis,
                 flags = DateUtils.FORMAT_SHOW_DATE or
                         DateUtils.FORMAT_SHOW_WEEKDAY or
-                        DateUtils.FORMAT_ABBREV_MONTH
+                        DateUtils.FORMAT_ABBREV_ALL
             )
 
         fun fromNumber(number: BigDecimal): TextResource = NumberTextResource(number)
@@ -55,7 +56,22 @@ private data class IdTextResource(
     override fun asString(context: Context): String = context.getString(id)
 }
 
-private data class DateTimeTextResource(
+private data class ShortTimeTextResource(
+    val epochMillis: Long
+) : TextResource {
+    override fun asString(context: Context): String {
+        val zonedDateTime = Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault())
+        return DateTimeFormatter.ofPattern(
+            if (DateFormat.is24HourFormat(context)) {
+                "H:mm"
+            } else {
+                if (zonedDateTime.minute > 0) "h:mm a" else "h a"
+            }
+        ).format(zonedDateTime)
+    }
+}
+
+private data class DateUtilsTextResource(
     val millis: Long,
     val flags: Int
 ) : TextResource {
