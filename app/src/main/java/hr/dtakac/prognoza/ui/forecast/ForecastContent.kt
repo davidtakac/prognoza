@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Mood
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.*
@@ -570,7 +570,7 @@ private fun ComingItem(
 @Preview
 @Composable
 private fun TodayScreenPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+    PrognozaTheme(description = Mood.SUNNY) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -586,7 +586,7 @@ private fun TodayScreenPreview() {
 @Preview
 @Composable
 private fun TodayScreenJustCurrentPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+    PrognozaTheme(description = Mood.SUNNY) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -602,7 +602,7 @@ private fun TodayScreenJustCurrentPreview() {
 @Preview
 @Composable
 private fun TodayScreenCurrentPlusTodayPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+    PrognozaTheme(description = Mood.SUNNY) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -618,7 +618,7 @@ private fun TodayScreenCurrentPlusTodayPreview() {
 @Preview
 @Composable
 private fun TodayScreenCurrentPlusComingPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+    PrognozaTheme(description = Mood.SUNNY) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -634,7 +634,7 @@ private fun TodayScreenCurrentPlusComingPreview() {
 @Preview
 @Composable
 private fun ToolbarWithLoadingIndicatorPreview() {
-    PrognozaTheme(description = ForecastDescription.Short.FAIR) {
+    PrognozaTheme(description = Mood.SUNNY) {
         ToolbarWithLoadingIndicator(
             title = "Helsinki",
             subtitle = "September 29",
@@ -656,7 +656,7 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
     icon = R.drawable.clearsky_day,
     wind = TextResource.fromText("Wind: 15 km/h"),
     feelsLike = TextResource.fromText("Feels like: -21°"),
-    shortDescription = ForecastDescription.Short.FAIR,
+    mood = Mood.SUNNY,
     precipitation = TextResource.fromText("12 mm")
 )
 

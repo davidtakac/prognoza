@@ -1,4 +1,5 @@
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription;
+import hr.dtakac.prognoza.entities.forecast.Description;
+import hr.dtakac.prognoza.entities.forecast.Mood;
 import hr.dtakac.prognoza.entities.forecast.units.Angle;
 import hr.dtakac.prognoza.entities.forecast.units.Length;
 import hr.dtakac.prognoza.entities.forecast.units.Percentage;
@@ -13,7 +14,8 @@ CREATE TABLE IF NOT EXISTS Forecast (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
     `temperature` REAL AS Temperature NOT NULL,
-    `forecastDescription` TEXT AS ForecastDescription NOT NULL,
+    `description` INTEGER AS Description NOT NULL,
+    `mood` INTEGER AS Mood NOT NULL,
     `precipitation` REAL AS Length NOT NULL,
     `windSpeed` REAL AS Speed NOT NULL,
     `windFromDirection` REAL AS Angle NOT NULL,

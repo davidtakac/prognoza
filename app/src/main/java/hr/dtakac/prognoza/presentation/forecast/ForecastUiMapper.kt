@@ -47,7 +47,7 @@ class ForecastUiMapper @Inject constructor(
         precipitationUnit: LengthUnit
     ): CurrentUi = CurrentUi(
         place = TextResource.fromText(placeName),
-        shortDescription = current.description.short,
+        mood = current.mood,
         date = TextResource.fromDate(current.dateTime.toInstant().toEpochMilli()),
         temperature = getTemperature(current.temperature, temperatureUnit),
         description = TextResource.fromStringId(current.description.toStringId()),

@@ -1,7 +1,8 @@
 package hr.dtakac.prognoza.data
 
 import com.squareup.sqldelight.ColumnAdapter
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Description
+import hr.dtakac.prognoza.entities.forecast.Mood
 import hr.dtakac.prognoza.entities.forecast.units.*
 import java.time.ZonedDateTime
 
@@ -25,13 +26,23 @@ val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double> {
     }
 }
 
-val forecastDescriptionSqlAdapter = object : ColumnAdapter<ForecastDescription, String> {
-    override fun decode(databaseValue: String): ForecastDescription {
-        return ForecastDescription.valueOf(databaseValue)
+val descriptionSqlAdapter = object : ColumnAdapter<Description, Long> {
+    override fun decode(databaseValue: Long): Description {
+        return Description.values()[databaseValue.toInt()]
     }
 
-    override fun encode(value: ForecastDescription): String {
-        return value.name
+    override fun encode(value: Description): Long {
+        return value.ordinal.toLong()
+    }
+}
+
+val moodSqlAdapter = object : ColumnAdapter<Mood, Long> {
+    override fun decode(databaseValue: Long): Mood {
+        return Mood.values()[databaseValue.toInt()]
+    }
+
+    override fun encode(value: Mood): Long {
+        return value.ordinal.toLong()
     }
 }
 

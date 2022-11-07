@@ -32,7 +32,8 @@ class ForecastRepository(
                     precipitation = it.precipitation,
                     wind = Wind(speed = it.windSpeed, fromDirection = it.windFromDirection),
                     airPressure = it.airPressureAtSeaLevel,
-                    description = it.forecastDescription,
+                    description = it.description,
+                    mood = it.mood,
                     humidity = it.humidity
                 )
             }
@@ -53,7 +54,8 @@ class ForecastRepository(
                     latitude = latitude,
                     longitude = longitude,
                     temperature = it.temperature,
-                    forecastDescription = it.description,
+                    description = it.description,
+                    mood = it.mood,
                     precipitation = it.precipitation,
                     windSpeed = it.wind.speed,
                     windFromDirection = it.wind.fromDirection,

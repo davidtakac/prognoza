@@ -19,7 +19,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Mood
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.presentation.theme.ThemeSetting
 import hr.dtakac.prognoza.presentation.theme.ThemeSettingViewModel
@@ -64,8 +64,7 @@ class MainActivity : ComponentActivity() {
             }
 
             PrognozaTheme(
-                description = forecastState.forecast?.current?.shortDescription
-                    ?: ForecastDescription.Short.UNKNOWN,
+                description = forecastState.forecast?.current?.mood ?: Mood.DEFAULT,
                 useDarkTheme = useDarkTheme
             ) {
                 val navController = rememberNavController()

@@ -9,8 +9,8 @@ import hr.dtakac.prognoza.presentation.TextResource
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.ZonedDateTime
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription.*
+import hr.dtakac.prognoza.entities.forecast.Description
+import hr.dtakac.prognoza.entities.forecast.Description.*
 import hr.dtakac.prognoza.entities.forecast.units.BeaufortScale
 import hr.dtakac.prognoza.entities.forecast.units.BeaufortScale.*
 
@@ -140,7 +140,7 @@ fun BeaufortScale.toStringId(): Int = when (this) {
 }
 
 @StringRes
-fun ForecastDescription.toStringId(): Int = when (this) {
+fun Description.toStringId(): Int = when (this) {
     UNKNOWN -> R.string.description_unknown
     CLEAR_SKY_DAY,
     CLEAR_SKY_NIGHT,
@@ -228,7 +228,7 @@ fun ForecastDescription.toStringId(): Int = when (this) {
 }
 
 @DrawableRes
-fun ForecastDescription.toDrawableId(): Int = when (this) {
+fun Description.toDrawableId(): Int = when (this) {
     UNKNOWN -> R.drawable.ic_question_mark
     CLEAR_SKY_DAY -> R.drawable.clearsky_day
     CLEAR_SKY_NIGHT -> R.drawable.clearsky_night

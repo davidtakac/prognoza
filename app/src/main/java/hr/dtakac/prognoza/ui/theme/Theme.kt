@@ -12,7 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Mood
 
 private val LocalPrognozaColors = staticCompositionLocalOf {
     PrognozaColors(
@@ -67,13 +67,13 @@ private class PrognozaRippleTheme(
 
 @Composable
 fun PrognozaTheme(
-    description: ForecastDescription.Short = ForecastDescription.Short.UNKNOWN,
+    description: Mood = Mood.DEFAULT,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val alpha = PrognozaContentAlpha.get()
     val colors = PrognozaColors.get(
-        shortForecastDescription = description,
+        mood = description,
         darkColors = useDarkTheme,
         contentAlpha = alpha.high
     ).switch()

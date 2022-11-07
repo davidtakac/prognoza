@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.metnorwayforecastprovider
 
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Description
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.Wind
 import kotlinx.serialization.SerialName
@@ -180,8 +180,8 @@ fun mapAdjacentTimeStepsToEntity(
             unit = TemperatureUnit.C
         ),
         description = details?.summary?.symbolCode?.let {
-            mapToForecastDescription(it)
-        } ?: ForecastDescription.UNKNOWN,
+            mapToDescription(it)
+        } ?: Description.UNKNOWN,
         precipitation = Length(
             value = details?.data?.precipitationAmount ?: 0.0,
             unit = LengthUnit.MM
@@ -207,89 +207,89 @@ fun mapAdjacentTimeStepsToEntity(
     )
 }
 
-private fun mapToForecastDescription(symbolCode: String): ForecastDescription = when (symbolCode) {
-    "clearsky_day" -> ForecastDescription.CLEAR_SKY_DAY
-    "clearsky_night" -> ForecastDescription.CLEAR_SKY_NIGHT
-    "clearsky_polartwilight" -> ForecastDescription.CLEAR_SKY_POLAR_TWILIGHT
-    "cloudy" -> ForecastDescription.CLOUDY
-    "fair_day" -> ForecastDescription.FAIR_DAY
-    "fair_night" -> ForecastDescription.FAIR_NIGHT
-    "fair_polartwilight" -> ForecastDescription.FAIR_POLAR_TWILIGHT
-    "fog" -> ForecastDescription.FOG
-    "heavyrainandthunder" -> ForecastDescription.HEAVY_RAIN_AND_THUNDER
-    "heavyrain" -> ForecastDescription.HEAVY_RAIN
-    "heavyrainshowersandthunder_day" -> ForecastDescription.HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY
-    "heavyrainshowersandthunder_night" -> ForecastDescription.HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT
-    "heavyrainshowersandthunder_polartwilight" -> ForecastDescription.HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "heavyrainshowers_day" -> ForecastDescription.HEAVY_RAIN_SHOWERS_DAY
-    "heavyrainshowers_night" -> ForecastDescription.HEAVY_RAIN_SHOWERS_NIGHT
-    "heavyrainshowers_polartwilight" -> ForecastDescription.HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT
-    "heavysleetandthunder" -> ForecastDescription.HEAVY_SLEET_AND_THUNDER
-    "heavysleet" -> ForecastDescription.HEAVY_SLEET
-    "heavysleetshowersandthunder_day" -> ForecastDescription.HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY
-    "heavysleetshowersandthunder_night" -> ForecastDescription.HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT
-    "heavysleetshowersandthunder_polartwilight" -> ForecastDescription.HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "heavysleetshowers_day" -> ForecastDescription.HEAVY_SLEET_SHOWERS_DAY
-    "heavysleetshowers_night" -> ForecastDescription.HEAVY_SLEET_SHOWERS_NIGHT
-    "heavysleetshowers_polartwilight" -> ForecastDescription.HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT
-    "heavysnowandthunder" -> ForecastDescription.HEAVY_SNOW_AND_THUNDER
-    "heavysnow" -> ForecastDescription.HEAVY_SNOW
-    "heavysnowshowersandthunder_day" -> ForecastDescription.HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY
-    "heavysnowshowersandthunder_night" -> ForecastDescription.HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT
-    "heavysnowshowersandthunder_polartwilight" -> ForecastDescription.HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "heavysnowshowers_day" -> ForecastDescription.HEAVY_SNOW_SHOWERS_DAY
-    "heavysnowshowers_night" -> ForecastDescription.HEAVY_SNOW_SHOWERS_NIGHT
-    "heavysnowshowers_polartwilight" -> ForecastDescription.HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT
-    "lightrainandthunder" -> ForecastDescription.LIGHT_RAIN_AND_THUNDER
-    "lightrain" -> ForecastDescription.LIGHT_RAIN
-    "lightrainshowersandthunder_day" -> ForecastDescription.LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY
-    "lightrainshowersandthunder_night" -> ForecastDescription.LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT
-    "lightrainshowersandthunder_polartwilight" -> ForecastDescription.LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "lightrainshowers_day" -> ForecastDescription.LIGHT_RAIN_SHOWERS_DAY
-    "lightrainshowers_night" -> ForecastDescription.LIGHT_RAIN_SHOWERS_NIGHT
-    "lightrainshowers_polartwilight" -> ForecastDescription.LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT
-    "lightsleetandthunder" -> ForecastDescription.LIGHT_SLEET_AND_THUNDER
-    "lightsleet" -> ForecastDescription.LIGHT_SLEET
-    "lightsleetshowers_day" -> ForecastDescription.LIGHT_SLEET_SHOWERS_DAY
-    "lightsleetshowers_night" -> ForecastDescription.LIGHT_SLEET_SHOWERS_NIGHT
-    "lightsleetshowers_polartwilight" -> ForecastDescription.LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT
-    "lightsnowandthunder" -> ForecastDescription.LIGHT_SNOW_AND_THUNDER
-    "lightsnow" -> ForecastDescription.LIGHT_SNOW
-    "lightsnowshowers_day" -> ForecastDescription.LIGHT_SNOW_SHOWERS_DAY
-    "lightsnowshowers_night" -> ForecastDescription.LIGHT_SNOW_SHOWERS_NIGHT
-    "lightsnowshowers_polartwilight" -> ForecastDescription.LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT
-    "lightssleetshowersandthunder_day" -> ForecastDescription.LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY
-    "lightssleetshowersandthunder_night" -> ForecastDescription.LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT
-    "lightssleetshowersandthunder_polartwilight" -> ForecastDescription.LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "lightssnowshowersandthunder_day" -> ForecastDescription.LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY
-    "lightssnowshowersandthunder_night" -> ForecastDescription.LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT
-    "lightssnowshowersandthunder_polartwilight" -> ForecastDescription.LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "partlycloudy_day" -> ForecastDescription.PARTLY_CLOUDY_DAY
-    "partlycloudy_night" -> ForecastDescription.PARTLY_CLOUDY_NIGHT
-    "partlycloudy_polartwilight" -> ForecastDescription.PARTLY_CLOUDY_POLAR_TWILIGHT
-    "rainandthunder" -> ForecastDescription.RAIN_AND_THUNDER
-    "rain" -> ForecastDescription.RAIN
-    "rainshowersandthunder_day" -> ForecastDescription.RAIN_SHOWERS_AND_THUNDER_DAY
-    "rainshowersandthunder_night" -> ForecastDescription.RAIN_SHOWERS_AND_THUNDER_NIGHT
-    "rainshowersandthunder_polartwilight" -> ForecastDescription.RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "rainshowers_day" -> ForecastDescription.RAIN_SHOWERS_DAY
-    "rainshowers_night" -> ForecastDescription.RAIN_SHOWERS_NIGHT
-    "rainshowers_polartwilight" -> ForecastDescription.RAIN_SHOWERS_POLAR_TWILIGHT
-    "sleetandthunder" -> ForecastDescription.SLEET_AND_THUNDER
-    "sleet" -> ForecastDescription.SLEET
-    "sleetshowersandthunder_day" -> ForecastDescription.SLEET_SHOWERS_AND_THUNDER_DAY
-    "sleetshowersandthunder_night" -> ForecastDescription.SLEET_SHOWERS_AND_THUNDER_NIGHT
-    "sleetshowersandthunder_polartwilight" -> ForecastDescription.SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "sleetshowers_day" -> ForecastDescription.SLEET_SHOWERS_DAY
-    "sleetshowers_night" -> ForecastDescription.SLEET_SHOWERS_NIGHT
-    "sleetshowers_polartwilight" -> ForecastDescription.SLEET_SHOWERS_POLAR_TWILIGHT
-    "snowandthunder" -> ForecastDescription.SNOW_AND_THUNDER
-    "snow" -> ForecastDescription.SNOW
-    "snowshowersandthunder_day" -> ForecastDescription.SNOW_SHOWERS_AND_THUNDER_DAY
-    "snowshowersandthunder_night" -> ForecastDescription.SNOW_SHOWERS_AND_THUNDER_NIGHT
-    "snowshowersandthunder_polartwilight" -> ForecastDescription.SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
-    "snowshowers_day" -> ForecastDescription.SNOW_SHOWERS_DAY
-    "snowshowers_night" -> ForecastDescription.SNOW_SHOWERS_NIGHT
-    "snowshowers_polartwilight" -> ForecastDescription.SNOW_SHOWERS_POLAR_TWILIGHT
-    else -> ForecastDescription.UNKNOWN
+private fun mapToDescription(symbolCode: String): Description = when (symbolCode) {
+    "clearsky_day" -> Description.CLEAR_SKY_DAY
+    "clearsky_night" -> Description.CLEAR_SKY_NIGHT
+    "clearsky_polartwilight" -> Description.CLEAR_SKY_POLAR_TWILIGHT
+    "cloudy" -> Description.CLOUDY
+    "fair_day" -> Description.FAIR_DAY
+    "fair_night" -> Description.FAIR_NIGHT
+    "fair_polartwilight" -> Description.FAIR_POLAR_TWILIGHT
+    "fog" -> Description.FOG
+    "heavyrainandthunder" -> Description.HEAVY_RAIN_AND_THUNDER
+    "heavyrain" -> Description.HEAVY_RAIN
+    "heavyrainshowersandthunder_day" -> Description.HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY
+    "heavyrainshowersandthunder_night" -> Description.HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT
+    "heavyrainshowersandthunder_polartwilight" -> Description.HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "heavyrainshowers_day" -> Description.HEAVY_RAIN_SHOWERS_DAY
+    "heavyrainshowers_night" -> Description.HEAVY_RAIN_SHOWERS_NIGHT
+    "heavyrainshowers_polartwilight" -> Description.HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT
+    "heavysleetandthunder" -> Description.HEAVY_SLEET_AND_THUNDER
+    "heavysleet" -> Description.HEAVY_SLEET
+    "heavysleetshowersandthunder_day" -> Description.HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY
+    "heavysleetshowersandthunder_night" -> Description.HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT
+    "heavysleetshowersandthunder_polartwilight" -> Description.HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "heavysleetshowers_day" -> Description.HEAVY_SLEET_SHOWERS_DAY
+    "heavysleetshowers_night" -> Description.HEAVY_SLEET_SHOWERS_NIGHT
+    "heavysleetshowers_polartwilight" -> Description.HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT
+    "heavysnowandthunder" -> Description.HEAVY_SNOW_AND_THUNDER
+    "heavysnow" -> Description.HEAVY_SNOW
+    "heavysnowshowersandthunder_day" -> Description.HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY
+    "heavysnowshowersandthunder_night" -> Description.HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT
+    "heavysnowshowersandthunder_polartwilight" -> Description.HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "heavysnowshowers_day" -> Description.HEAVY_SNOW_SHOWERS_DAY
+    "heavysnowshowers_night" -> Description.HEAVY_SNOW_SHOWERS_NIGHT
+    "heavysnowshowers_polartwilight" -> Description.HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT
+    "lightrainandthunder" -> Description.LIGHT_RAIN_AND_THUNDER
+    "lightrain" -> Description.LIGHT_RAIN
+    "lightrainshowersandthunder_day" -> Description.LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY
+    "lightrainshowersandthunder_night" -> Description.LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT
+    "lightrainshowersandthunder_polartwilight" -> Description.LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "lightrainshowers_day" -> Description.LIGHT_RAIN_SHOWERS_DAY
+    "lightrainshowers_night" -> Description.LIGHT_RAIN_SHOWERS_NIGHT
+    "lightrainshowers_polartwilight" -> Description.LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT
+    "lightsleetandthunder" -> Description.LIGHT_SLEET_AND_THUNDER
+    "lightsleet" -> Description.LIGHT_SLEET
+    "lightsleetshowers_day" -> Description.LIGHT_SLEET_SHOWERS_DAY
+    "lightsleetshowers_night" -> Description.LIGHT_SLEET_SHOWERS_NIGHT
+    "lightsleetshowers_polartwilight" -> Description.LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT
+    "lightsnowandthunder" -> Description.LIGHT_SNOW_AND_THUNDER
+    "lightsnow" -> Description.LIGHT_SNOW
+    "lightsnowshowers_day" -> Description.LIGHT_SNOW_SHOWERS_DAY
+    "lightsnowshowers_night" -> Description.LIGHT_SNOW_SHOWERS_NIGHT
+    "lightsnowshowers_polartwilight" -> Description.LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT
+    "lightssleetshowersandthunder_day" -> Description.LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY
+    "lightssleetshowersandthunder_night" -> Description.LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT
+    "lightssleetshowersandthunder_polartwilight" -> Description.LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "lightssnowshowersandthunder_day" -> Description.LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY
+    "lightssnowshowersandthunder_night" -> Description.LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT
+    "lightssnowshowersandthunder_polartwilight" -> Description.LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "partlycloudy_day" -> Description.PARTLY_CLOUDY_DAY
+    "partlycloudy_night" -> Description.PARTLY_CLOUDY_NIGHT
+    "partlycloudy_polartwilight" -> Description.PARTLY_CLOUDY_POLAR_TWILIGHT
+    "rainandthunder" -> Description.RAIN_AND_THUNDER
+    "rain" -> Description.RAIN
+    "rainshowersandthunder_day" -> Description.RAIN_SHOWERS_AND_THUNDER_DAY
+    "rainshowersandthunder_night" -> Description.RAIN_SHOWERS_AND_THUNDER_NIGHT
+    "rainshowersandthunder_polartwilight" -> Description.RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "rainshowers_day" -> Description.RAIN_SHOWERS_DAY
+    "rainshowers_night" -> Description.RAIN_SHOWERS_NIGHT
+    "rainshowers_polartwilight" -> Description.RAIN_SHOWERS_POLAR_TWILIGHT
+    "sleetandthunder" -> Description.SLEET_AND_THUNDER
+    "sleet" -> Description.SLEET
+    "sleetshowersandthunder_day" -> Description.SLEET_SHOWERS_AND_THUNDER_DAY
+    "sleetshowersandthunder_night" -> Description.SLEET_SHOWERS_AND_THUNDER_NIGHT
+    "sleetshowersandthunder_polartwilight" -> Description.SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "sleetshowers_day" -> Description.SLEET_SHOWERS_DAY
+    "sleetshowers_night" -> Description.SLEET_SHOWERS_NIGHT
+    "sleetshowers_polartwilight" -> Description.SLEET_SHOWERS_POLAR_TWILIGHT
+    "snowandthunder" -> Description.SNOW_AND_THUNDER
+    "snow" -> Description.SNOW
+    "snowshowersandthunder_day" -> Description.SNOW_SHOWERS_AND_THUNDER_DAY
+    "snowshowersandthunder_night" -> Description.SNOW_SHOWERS_AND_THUNDER_NIGHT
+    "snowshowersandthunder_polartwilight" -> Description.SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT
+    "snowshowers_day" -> Description.SNOW_SHOWERS_DAY
+    "snowshowers_night" -> Description.SNOW_SHOWERS_NIGHT
+    "snowshowers_polartwilight" -> Description.SNOW_SHOWERS_POLAR_TWILIGHT
+    else -> Description.UNKNOWN
 }

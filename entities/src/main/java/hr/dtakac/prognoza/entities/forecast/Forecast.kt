@@ -39,6 +39,7 @@ class Forecast(data: List<ForecastDatum>) {
             feelsLike = datum.feelsLike,
             wind = datum.wind,
             description = datum.description,
+            mood = datum.mood,
             precipitation = datum.precipitation
         )
     }
@@ -89,13 +90,14 @@ data class Current(
     val temperature: Temperature,
     val feelsLike: Temperature,
     val wind: Wind,
-    val description: ForecastDescription,
+    val description: Description,
+    val mood: Mood,
     val precipitation: Length,
 )
 
 data class HourlyDatum(
     val dateTime: ZonedDateTime,
-    val description: ForecastDescription,
+    val description: Description,
     val temperature: Temperature,
     val precipitation: Length,
     val wind: Wind

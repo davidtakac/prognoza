@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.presentation.forecast
 
 import androidx.annotation.DrawableRes
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Mood
 import hr.dtakac.prognoza.presentation.TextResource
 
 data class ForecastState(
@@ -18,7 +18,7 @@ data class ForecastUi(
 
 data class CurrentUi(
     val place: TextResource,
-    val shortDescription: ForecastDescription.Short,
+    val mood: Mood,
     val date: TextResource,
     val temperature: TextResource,
     val description: TextResource,

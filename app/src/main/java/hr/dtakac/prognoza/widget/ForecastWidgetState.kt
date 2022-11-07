@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.widget
 
-import hr.dtakac.prognoza.entities.forecast.ForecastDescription
+import hr.dtakac.prognoza.entities.forecast.Description
 import hr.dtakac.prognoza.entities.forecast.units.*
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -30,7 +30,7 @@ sealed interface ForecastWidgetState {
         val temperatureUnit: TemperatureUnit,
         @Serializable(with = TemperatureSerializer::class)
         val temperature: Temperature,
-        val description: ForecastDescription,
+        val description: Description,
         val hours: List<WidgetHour>
     ) : ForecastWidgetState
 }
@@ -41,7 +41,7 @@ data class WidgetHour(
     val dateTime: ZonedDateTime,
     @Serializable(with = TemperatureSerializer::class)
     val temperature: Temperature,
-    val description: ForecastDescription
+    val description: Description
 )
 
 private object TemperatureSerializer : KSerializer<Temperature> {
