@@ -338,7 +338,8 @@ private fun DescriptionAndPrecipitation(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         val annotatedString = buildAnnotatedString {
             append("$description ")
@@ -363,13 +364,14 @@ private fun DescriptionAndPrecipitation(
             Text(
                 text = annotatedString,
                 inlineContent = inlineContentMap,
-                modifier = Modifier.weight(3f),
+                modifier = Modifier.weight(1f),
             )
             precipitation.takeIf { it.isNotBlank() }?.let {
                 Text(
                     text = it,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.weight(1f),
+                    maxLines = 1,
+                    modifier = Modifier.padding(start = 16.dp).width(IntrinsicSize.Min),
                 )
             }
         }
