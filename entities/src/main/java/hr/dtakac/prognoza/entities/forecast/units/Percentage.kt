@@ -7,15 +7,15 @@ class Percentage(
     unit: PercentageUnit
 ) {
     init {
-        val percent = resolvePercent(value, unit)
+        val percent = calculatePercent(value, unit)
         if (percent !in 0.0..100.0) {
             throw IllegalStateException("Value in percent must be in [0, 100], was $percent.")
         }
     }
 
-    val percent: Double = resolvePercent(value, unit)
+    val percent: Double = calculatePercent(value, unit)
 
-    private fun resolvePercent(
+    private fun calculatePercent(
         value: Double,
         unit: PercentageUnit
     ): Double = if (unit == PercentageUnit.PERCENT) value else value * 100

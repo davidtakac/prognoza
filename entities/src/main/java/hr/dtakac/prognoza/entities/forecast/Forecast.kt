@@ -17,7 +17,7 @@ class Forecast(data: List<ForecastDatum>) {
             throw IllegalStateException("Forecast data must not be empty.")
         }
 
-        current = resolveCurrent(data.first())
+        current = getCurrent(data.first())
         val dataGroupedByDay = data.groupBy { datum ->
             datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
         }.values.toList()
@@ -28,11 +28,11 @@ class Forecast(data: List<ForecastDatum>) {
             // Overflow into next day if there are not many hours left in the day
             todayHours += tomorrowHours.take(n = 7)
         }
-        today = todayHours.drop(n = 1).takeIf { it.isNotEmpty() }?.let { resolveToday(it) }
-        coming = dataGroupedByDay.drop(n = 1).takeIf { it.isNotEmpty() }?.let { resolveComing(it) }
+        today = todayHours.drop(n = 1).takeIf { it.isNotEmpty() }?.let { getToday(it) }
+        coming = dataGroupedByDay.drop(n = 1).takeIf { it.isNotEmpty() }?.let { getComing(it) }
     }
 
-    private fun resolveCurrent(datum: ForecastDatum): Current {
+    private fun getCurrent(datum: ForecastDatum): Current {
         return Current(
             dateTime = datum.start,
             temperature = datum.temperature,
@@ -44,7 +44,7 @@ class Forecast(data: List<ForecastDatum>) {
         )
     }
 
-    private fun resolveToday(data: List<ForecastDatum>): Today {
+    private fun getToday(data: List<ForecastDatum>): Today {
         val hourly = data.map { datum ->
             HourlyDatum(
                 dateTime = datum.start,
@@ -61,7 +61,7 @@ class Forecast(data: List<ForecastDatum>) {
         )
     }
 
-    private fun resolveComing(listOfData: List<List<ForecastDatum>>): List<Day> {
+    private fun getComing(listOfData: List<List<ForecastDatum>>): List<Day> {
         return listOfData.map { data ->
             Day(
                 dateTime = data.first().start,
