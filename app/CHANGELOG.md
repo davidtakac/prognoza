@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Widget text reacts to system dark/light theme on <= Android 11
 - Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
 - Current hour pairs too close together
+- Inconsistent spacing between hour and coming data columns
+- Forecast not scrolling in horizontal orientation
 ### Added
 - iOS support
 - OpenWeatherMap as forecast provider
