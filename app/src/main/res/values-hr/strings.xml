@@ -97,10 +97,7 @@
     <string name="settings_label_mm">Milimetri</string>
     <string name="settings_label_in">Inči</string>
     <string name="settings_label_cm">Centimetri</string>
-    <string name="settings_label_hpa">Hektopaskal</string>
-    <string name="settings_label_psi">Funti po kvadratnom inču</string>
-    <string name="settings_label_bar">Bar</string>
-    <string name="settings_label_atm">Atmosfera</string>
+    <string name="settings_label_mbar">Milibar</string>
     <string name="appearance">Izgled</string>
     <string name="theme">Tema</string>
     <string name="settings_label_light">Svijetla</string>
@@ -115,4 +112,5 @@
     <string name="template_wind_knots">%1$s\u00A0čv</string>
     <string name="settings_label_knots">Čvorovi</string>
     <string name="design_credit">Dizajn</string>
+    <string name="settings_label_inhg">Inči žive</string>
 </resources>

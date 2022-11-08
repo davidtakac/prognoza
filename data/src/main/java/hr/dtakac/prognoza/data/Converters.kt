@@ -88,11 +88,11 @@ val percentageSqlAdapter = object : ColumnAdapter<Percentage, Double> {
 
 val pressureSqlAdapter = object : ColumnAdapter<Pressure, Double> {
     override fun decode(databaseValue: Double): Pressure {
-        return Pressure(databaseValue, PressureUnit.HPA)
+        return Pressure(databaseValue, PressureUnit.MBAR)
     }
 
     override fun encode(value: Pressure): Double {
-        return value.hectoPascal
+        return value.millibar
     }
 }
 

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make app mood a business rule
 - Allow external feels like and mood
 - Shorter time format (prevent stuff like 2 Uhr PM in German)
+- Measure pressure in mbar and inHg
 ### Fixed
 - Widget rounded corners on <= Android 11
 - Widget text reacts to system dark/light theme on <= Android 11

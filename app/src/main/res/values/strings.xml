@@ -106,10 +106,8 @@
     <string name="settings_label_mm">Millimeters</string>
     <string name="settings_label_in">Inches</string>
     <string name="settings_label_cm">Centimeters</string>
-    <string name="settings_label_hpa">Hectopascal</string>
-    <string name="settings_label_psi">Pounds per square inch</string>
-    <string name="settings_label_bar">Bar</string>
-    <string name="settings_label_atm">Atmosphere</string>
+    <string name="settings_label_mbar">Millibar</string>
+    <string name="settings_label_inhg">Inches of mercury</string>
     <string name="appearance">Appearance</string>
     <string name="theme">Theme</string>
     <string name="settings_label_light">Light</string>

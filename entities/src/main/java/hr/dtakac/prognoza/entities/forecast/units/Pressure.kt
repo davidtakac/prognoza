@@ -12,17 +12,14 @@ class Pressure(
         }
     }
 
-    val hectoPascal: Double = when (unit) {
-        PressureUnit.HPA -> value
-        PressureUnit.PSI -> value * 6894.76
-        PressureUnit.BAR -> value * 1000
-        PressureUnit.ATM -> value * 1013.25
+    val millibar: Double = when (unit) {
+        PressureUnit.MBAR -> value
+        PressureUnit.INHG -> value * 33.8639
     }
-    val poundsPerSquareInch: Double = if (unit == PressureUnit.PSI) value else hectoPascal / 68.9475728
-    val bar: Double = if (unit == PressureUnit.BAR) value else hectoPascal / 1000
-    val atm: Double = if (unit == PressureUnit.ATM) value else hectoPascal / 1013
+    val inchesOfMercury: Double = if (unit == PressureUnit.INHG) value else millibar / 33.8639
 }
 
+@Suppress("SpellCheckingInspection")
 enum class PressureUnit {
-    HPA, PSI, BAR, ATM
+    MBAR, INHG
 }
