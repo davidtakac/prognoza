@@ -98,7 +98,7 @@ fun ComingItem(
                     overflow = TextOverflow.Ellipsis
                 )
                 day.precipitation.asString().takeIf { it.isNotBlank() }?.let {
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.width(12.dp))
                     Text(
                         modifier = Modifier.width(dimensions.precipitationWidth),
                         text = it,
@@ -108,7 +108,7 @@ fun ComingItem(
                         color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
                     )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     modifier = Modifier.width(dimensions.lowHighTemperatureWidth),
                     text = day.lowHighTemperature.asString(),
