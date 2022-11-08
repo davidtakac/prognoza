@@ -1,7 +1,5 @@
 package hr.dtakac.prognoza.entities.forecast.units
 
-import java.lang.IllegalStateException
-
 class Temperature(
     value: Double,
     unit: TemperatureUnit

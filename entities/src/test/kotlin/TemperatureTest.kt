@@ -2,6 +2,7 @@ import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import org.testng.annotations.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class TemperatureTest {
     @Test
@@ -54,5 +55,12 @@ class TemperatureTest {
                     absoluteTolerance = 0.001
                 )
             }
+    }
+
+    @Test
+    fun `when celsius less than 0K, throws exception`() {
+        assertFailsWith<IllegalStateException> {
+            Temperature(-280.0, TemperatureUnit.C)
+        }
     }
 }
