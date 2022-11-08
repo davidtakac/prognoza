@@ -54,7 +54,7 @@ class SpeedTest { // Not Ookla ;)
 
     @Test
     fun `converts knots to others`() {
-        val speed = Speed(2.0, SpeedUnit.KT)
+        val speed = Speed(2.0, SpeedUnit.KN)
         assertSpeedsAreAsExpected(
             speed = speed,
             expectedMps = 1.0289,

@@ -61,7 +61,7 @@ fun getWind(
             R.string.template_wind_mps,
             TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).format())
         )
-        SpeedUnit.KT -> TextResource.fromStringId(
+        SpeedUnit.KN -> TextResource.fromStringId(
             R.string.template_wind_knots,
             TextResource.fromNumber(BigDecimal(wind.speed.knots).format())
         )
