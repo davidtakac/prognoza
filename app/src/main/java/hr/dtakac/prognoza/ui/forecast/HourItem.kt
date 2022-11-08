@@ -84,7 +84,7 @@ fun HourItem(
                 overflow = TextOverflow.Ellipsis
             )
             hour.precipitation.asString().takeIf { it.isNotBlank() }?.let {
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(12.dp))
                 Text(
                     modifier = Modifier.width(dimensions.precipitationWidth),
                     text = it,
@@ -94,7 +94,7 @@ fun HourItem(
                     color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
                 )
             }
-            Spacer(modifier = Modifier.width(16.dp))
+            Spacer(modifier = Modifier.width(12.dp))
             Text(
                 modifier = Modifier.width(dimensions.temperatureWidth),
                 text = hour.temperature.asString(),
