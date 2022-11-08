@@ -63,7 +63,7 @@ private data class ShortTimeTextResource(
         val zonedDateTime = Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault())
         return DateTimeFormatter.ofPattern(
             if (DateFormat.is24HourFormat(context)) {
-                "H:mm"
+                "HH:mm"
             } else {
                 if (zonedDateTime.minute > 0) "h:mm a" else "h a"
             }
