@@ -22,14 +22,17 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.Paragraph
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -201,11 +204,16 @@ private fun DataList(
     // looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
 
-    val timeWidthState = remember { mutableStateOf(0.dp) }
-    val onTimeWidthWithWrappedContentResolved = { newWidth: Dp ->
-        if (newWidth > timeWidthState.value) {
-            timeWidthState.value = newWidth
-        }
+    val timeWidth = with(LocalDensity.current) {
+        forecast.today?.hourly?.map {
+            Paragraph(
+                text = it.time.asString(),
+                style = PrognozaTheme.typography.body,
+                density = this,
+                fontFamilyResolver = LocalFontFamilyResolver.current,
+                constraints = Constraints(maxWidth = Int.MAX_VALUE)
+            )
+        }?.maxOf { it.getLineWidth(lineIndex = 0) }?.toDp() ?: 0.dp
     }
 
     LazyColumn(
@@ -272,12 +280,11 @@ private fun DataList(
             itemsIndexed(hours) { idx, hour ->
                 HourItem(
                     hour = hour,
+                    timeWidth = timeWidth,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(itemPadding)
                         .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp),
-                    timeWidthState = timeWidthState,
-                    onTimeWidthWithWrappedContentResolved = onTimeWidthWithWrappedContentResolved
                 )
             }
         }
@@ -425,29 +432,16 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
     }
 }
 
-// https://stackoverflow.com/a/70901858 This answer works!
 @Composable
 private fun HourItem(
     hour: DayHourUi,
-    timeWidthState: State<Dp>,
-    onTimeWidthWithWrappedContentResolved: (Dp) -> Unit,
+    timeWidth: Dp,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
-            val density = LocalDensity.current
             Text(
-                modifier = if (timeWidthState.value == 0.dp) {
-                    Modifier
-                        .wrapContentWidth()
-                        .onGloballyPositioned {
-                            with(density) {
-                                onTimeWidthWithWrappedContentResolved(it.size.width.toDp())
-                            }
-                        }
-                } else {
-                    Modifier.width(timeWidthState.value)
-                },
+                modifier = Modifier.width(timeWidth),
                 text = hour.time.asString(),
                 textAlign = TextAlign.Start,
                 maxLines = 1
