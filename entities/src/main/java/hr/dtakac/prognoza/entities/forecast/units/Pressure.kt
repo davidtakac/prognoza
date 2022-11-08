@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.entities.forecast.units
 
 import java.lang.IllegalStateException
 
+// todo add test
 class Pressure(
     value: Double,
     unit: PressureUnit
