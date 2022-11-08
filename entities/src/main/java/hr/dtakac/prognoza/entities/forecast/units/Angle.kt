@@ -8,17 +8,8 @@ class Angle(
     unit: AngleUnit
 ) {
     val degrees: Double = if (unit == DEG) value else value * 180/PI
-    val compassDirection: CompassDirection = when (degrees) {
-        in 0.0..45.0 -> CompassDirection.N
-        in 45.0..90.0 -> CompassDirection.NE
-        in 90.0..135.0 -> CompassDirection.E
-        in 135.0..180.0 -> CompassDirection.SE
-        in 180.0..225.0 -> CompassDirection.S
-        in 225.0..270.0 -> CompassDirection.SW
-        in 270.0..315.0 -> CompassDirection.W
-        in 315.0..360.0 -> CompassDirection.NW
-        else -> throw IllegalStateException("Angle exceeds 360 degrees.")
-    }
+    val radians: Double = if (unit == RAD) value else value * PI/180
+    val compassDirection: CompassDirection = CompassDirection.fromDegrees(degrees)
 }
 
 enum class AngleUnit {
@@ -26,5 +17,21 @@ enum class AngleUnit {
 }
 
 enum class CompassDirection {
-    N, NE, E, SE, S, SW, W, NW
+    N, NE, E, SE, S, SW, W, NW;
+
+    companion object {
+        internal fun fromDegrees(degrees: Double): CompassDirection {
+            val normalizedDegrees = (degrees % 360 + 360) % 360
+            return when {
+                normalizedDegrees < 45 -> N
+                normalizedDegrees < 90 -> NE
+                normalizedDegrees < 135 -> E
+                normalizedDegrees < 180 -> SE
+                normalizedDegrees < 225 -> S
+                normalizedDegrees < 270 -> SW
+                normalizedDegrees < 315 -> W
+                else -> NW
+            }
+        }
+    }
 }

@@ -26,24 +26,23 @@ val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double> {
     }
 }
 
-// todo: change this and mood to save by name
-val descriptionSqlAdapter = object : ColumnAdapter<Description, Long> {
-    override fun decode(databaseValue: Long): Description {
-        return Description.values()[databaseValue.toInt()]
+val descriptionSqlAdapter = object : ColumnAdapter<Description, String> {
+    override fun decode(databaseValue: String): Description {
+        return Description.valueOf(databaseValue)
     }
 
-    override fun encode(value: Description): Long {
-        return value.ordinal.toLong()
+    override fun encode(value: Description): String {
+        return value.name
     }
 }
 
-val moodSqlAdapter = object : ColumnAdapter<Mood, Long> {
-    override fun decode(databaseValue: Long): Mood {
-        return Mood.values()[databaseValue.toInt()]
+val moodSqlAdapter = object : ColumnAdapter<Mood, String> {
+    override fun decode(databaseValue: String): Mood {
+        return Mood.valueOf(databaseValue)
     }
 
-    override fun encode(value: Mood): Long {
-        return value.ordinal.toLong()
+    override fun encode(value: Mood): String {
+        return value.name
     }
 }
 
