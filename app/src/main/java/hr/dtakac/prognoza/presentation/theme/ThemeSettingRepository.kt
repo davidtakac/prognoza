@@ -28,6 +28,7 @@ class ThemeSettingRepository @Inject constructor(
                 it.resumeWith(Result.success(sharedPreferences.getInt(THEME_SETTING_KEY, -1)))
             }
         }
+        // todo: save by name
         return if (settingOrdinal == -1) {
             val default = ThemeSetting.FOLLOW_SYSTEM
             setTheme(default)
