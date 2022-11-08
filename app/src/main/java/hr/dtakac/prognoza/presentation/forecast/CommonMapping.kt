@@ -49,7 +49,7 @@ fun getWind(
 ): TextResource {
     fun BigDecimal.format() = setScale(0, RoundingMode.HALF_EVEN)
     return when (unit) {
-        SpeedUnit.KPH -> TextResource.fromStringId(
+        SpeedUnit.KMH -> TextResource.fromStringId(
             R.string.template_wind_kmh,
             TextResource.fromNumber(BigDecimal(wind.speed.kilometersPerHour).format())
         )
@@ -61,7 +61,7 @@ fun getWind(
             R.string.template_wind_mps,
             TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).format())
         )
-        SpeedUnit.KNOTS -> TextResource.fromStringId(
+        SpeedUnit.KT -> TextResource.fromStringId(
             R.string.template_wind_knots,
             TextResource.fromNumber(BigDecimal(wind.speed.knots).format())
         )

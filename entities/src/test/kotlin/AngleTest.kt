@@ -6,6 +6,8 @@ import kotlin.math.PI
 import kotlin.test.assertEquals
 
 class AngleTest {
+    private val tolerance = 0.0001
+
     @Test
     fun `when angles are on compass rose, directions are correct`() {
         val degreesToExpectedDirections = mapOf(
@@ -65,13 +67,13 @@ class AngleTest {
     fun `when angle is 180 deg, radians are pi`() = assertEquals(
         expected = PI,
         actual = Angle(180.0, AngleUnit.DEG).radians,
-        absoluteTolerance = 0.001
+        absoluteTolerance = tolerance
     )
 
     @Test
     fun `when angle is pi rad, degrees are 180`() = assertEquals(
         expected = 180.0,
         actual = Angle(PI, AngleUnit.RAD).degrees,
-        absoluteTolerance = 0.001
+        absoluteTolerance = tolerance
     )
 }

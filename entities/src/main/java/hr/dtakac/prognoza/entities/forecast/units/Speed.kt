@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.entities.forecast.units
 
-import java.lang.IllegalStateException
 import hr.dtakac.prognoza.entities.forecast.units.BeaufortScale.*
 
 class Speed(
@@ -15,18 +14,18 @@ class Speed(
 
     val metersPerSecond: Double = when (unit) {
         SpeedUnit.MPS -> value
-        SpeedUnit.KPH -> value / 3.6
+        SpeedUnit.KMH -> value / 3.6
         SpeedUnit.MPH -> value / 2.2369
-        SpeedUnit.KNOTS -> value / 1.9438
+        SpeedUnit.KT -> value / 1.9438
     }
-    val kilometersPerHour: Double = if (unit == SpeedUnit.KPH) value else metersPerSecond * 3.6
+    val kilometersPerHour: Double = if (unit == SpeedUnit.KMH) value else metersPerSecond * 3.6
     val milesPerHour: Double = if (unit == SpeedUnit.MPH) value else metersPerSecond * 2.2369
-    val knots: Double = if (unit == SpeedUnit.KNOTS) value else metersPerSecond * 1.9438
+    val knots: Double = if (unit == SpeedUnit.KT) value else metersPerSecond * 1.9438
     val beaufort: BeaufortScale = Companion.fromMilesPerHour(milesPerHour)
 }
 
 enum class SpeedUnit {
-    MPS, KPH, MPH, KNOTS
+    MPS, KMH, MPH, KT
 }
 
 enum class BeaufortScale {

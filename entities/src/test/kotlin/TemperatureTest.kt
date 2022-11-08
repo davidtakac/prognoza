@@ -5,6 +5,8 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class TemperatureTest {
+    private val tolerance = 0.0001
+
     @Test
     fun `when celsius in -50,50, fahrenheit is correct`() {
         val celsiusToExpectedFahrenheit = mapOf(
@@ -26,7 +28,7 @@ class TemperatureTest {
                 assertEquals(
                     expected = celsiusToExpectedFahrenheit[celsius]!!,
                     actual = actualFahrenheit,
-                    absoluteTolerance = 0.001
+                    absoluteTolerance = tolerance
                 )
             }
     }
@@ -52,7 +54,7 @@ class TemperatureTest {
                 assertEquals(
                     expected = fahrenheitToExpectedCelsius[fahrenheit]!!,
                     actual = actualCelsius,
-                    absoluteTolerance = 0.001
+                    absoluteTolerance = tolerance
                 )
             }
     }
