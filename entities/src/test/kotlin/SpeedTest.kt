@@ -16,67 +16,51 @@ class SpeedTest { // Not Ookla ;)
     @Test
     fun `converts meters per second to others`() {
         val speed = Speed(2.0, SpeedUnit.MPS)
-        val expectedKmh = 7.2
-        val expectedMph = 4.4738
-        val expectedKt = 3.8876
-        val expectedBeaufort = BeaufortScale.LIGHT_BREEZE
         assertSpeedsAreAsExpected(
             speed = speed,
             expectedMps = 2.0,
-            expectedKmh = expectedKmh,
-            expectedMph = expectedMph,
-            expectedBeaufort = expectedBeaufort,
-            expectedKt = expectedKt
+            expectedKmh = 7.2,
+            expectedMph = 4.4738,
+            expectedBeaufort = BeaufortScale.LIGHT_BREEZE,
+            expectedKt = 3.8876
         )
     }
 
     @Test
     fun `converts miles per hour to others`() {
         val speed = Speed(2.0, SpeedUnit.MPH)
-        val expectedMps = 0.8940
-        val expectedKmh = 3.2187
-        val expectedKt = 1.7380
-        val expectedBeaufort = BeaufortScale.LIGHT_AIR
         assertSpeedsAreAsExpected(
             speed = speed,
-            expectedMps = expectedMps,
-            expectedKmh = expectedKmh,
+            expectedMps = 0.8940,
+            expectedKmh = 3.2187,
             expectedMph = 2.0,
-            expectedBeaufort = expectedBeaufort,
-            expectedKt = expectedKt
+            expectedBeaufort = BeaufortScale.LIGHT_AIR,
+            expectedKt = 1.7380
         )
     }
 
     @Test
     fun `converts kilometers per hour to others`() {
         val speed = Speed(2.0, SpeedUnit.KMH)
-        val expectedMps = 0.5556
-        val expectedMph = 1.2427
-        val expectedKt = 1.0799
-        val expectedBeaufort = BeaufortScale.LIGHT_AIR
         assertSpeedsAreAsExpected(
             speed = speed,
-            expectedMps = expectedMps,
+            expectedMps = 0.5556,
             expectedKmh = 2.0,
-            expectedMph = expectedMph,
-            expectedBeaufort = expectedBeaufort,
-            expectedKt = expectedKt
+            expectedMph = 1.2427,
+            expectedBeaufort = BeaufortScale.LIGHT_AIR,
+            expectedKt = 1.0799
         )
     }
 
     @Test
     fun `converts knots to others`() {
         val speed = Speed(2.0, SpeedUnit.KT)
-        val expectedMps = 1.0289
-        val expectedKmh = 3.7040
-        val expectedMph = 2.3016
-        val expectedBeaufort = BeaufortScale.LIGHT_AIR
         assertSpeedsAreAsExpected(
             speed = speed,
-            expectedMps = expectedMps,
-            expectedKmh = expectedKmh,
-            expectedMph = expectedMph,
-            expectedBeaufort = expectedBeaufort,
+            expectedMps = 1.0289,
+            expectedKmh = 3.7040,
+            expectedMph = 2.3016,
+            expectedBeaufort = BeaufortScale.LIGHT_AIR,
             expectedKt = 2.0
         )
     }

@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.entities.forecast.units
 
-import java.lang.IllegalStateException
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit.*
 
 class Length(
@@ -18,7 +17,7 @@ class Length(
         IN -> value * 25.4
         CM -> value * 10.0
     }
-    val inches: Double = if (unit == IN) value else millimeters * 0.03937
+    val inches: Double = if (unit == IN) value else millimeters / 25.4
     val centimeters: Double = if (unit == CM) value else millimeters / 10
 }
 
