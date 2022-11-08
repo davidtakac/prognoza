@@ -77,7 +77,8 @@ fun ForecastContent(
                     forecast = state.forecast,
                     isPlaceVisible = { toolbarPlaceVisible = !it },
                     isDateVisible = { toolbarDateVisible = !it },
-                    isTemperatureVisible = { toolbarTemperatureVisible = !it }
+                    isTemperatureVisible = { toolbarTemperatureVisible = !it },
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 if (state.error != null) {
