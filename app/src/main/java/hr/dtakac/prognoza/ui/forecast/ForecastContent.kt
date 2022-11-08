@@ -200,22 +200,10 @@ private fun DataList(
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
-    // This isn't included in contentPadding because the click ripple on the Coming day items
-    // looks better when it goes edge-to-edge
+    // Horizontal padding isn't included in contentPadding because the click ripple on the Coming
+    // day items looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
-
-    val timeWidth = with(LocalDensity.current) {
-        forecast.today?.hourly?.map {
-            Paragraph(
-                text = it.time.asString(),
-                style = PrognozaTheme.typography.body,
-                density = this,
-                fontFamilyResolver = LocalFontFamilyResolver.current,
-                constraints = Constraints(maxWidth = Int.MAX_VALUE)
-            )
-        }?.maxOf { it.getLineWidth(lineIndex = 0) }?.toDp() ?: 0.dp
-    }
-
+    val hourItemDimensions = rememberHourItemDimensions(hours = forecast.today?.hourly ?: listOf())
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -280,7 +268,7 @@ private fun DataList(
             itemsIndexed(hours) { idx, hour ->
                 HourItem(
                     hour = hour,
-                    timeWidth = timeWidth,
+                    dimensions = hourItemDimensions,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(itemPadding)
@@ -429,55 +417,6 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
             color = LocalContentColor.current,
             modifier = Modifier.padding(top = 16.dp)
         )
-    }
-}
-
-@Composable
-private fun HourItem(
-    hour: DayHourUi,
-    timeWidth: Dp,
-    modifier: Modifier = Modifier,
-) {
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
-        ProvideTextStyle(PrognozaTheme.typography.body) {
-            Text(
-                modifier = Modifier.width(timeWidth),
-                text = hour.time.asString(),
-                textAlign = TextAlign.Start,
-                maxLines = 1
-            )
-            Text(
-                modifier = Modifier.weight(1f),
-                text = hour.description.asString(),
-                textAlign = TextAlign.Start,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            hour.precipitation.asString().takeIf { it.isNotBlank() }?.let {
-                Text(
-                    modifier = Modifier.width(88.dp),
-                    text = it,
-                    textAlign = TextAlign.End,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-                )
-            }
-            Text(
-                modifier = Modifier.width(52.dp),
-                text = hour.temperature.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Image(
-                painter = rememberAsyncImagePainter(model = hour.icon),
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .size(32.dp)
-            )
-        }
     }
 }
 
