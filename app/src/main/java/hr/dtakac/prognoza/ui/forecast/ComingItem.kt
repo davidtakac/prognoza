@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.asString
+import hr.dtakac.prognoza.presentation.forecast.ComingHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
@@ -134,33 +135,14 @@ fun ComingItem(
                     modifier = Modifier.padding(top = 16.dp)
                 ) {
                     itemsIndexed(day.hours) { idx, hour ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
+                        ComingHourItem(
+                            hour = hour,
                             modifier = when (idx) {
                                 0 -> Modifier.padding(end = 8.dp)
                                 day.hours.lastIndex -> Modifier.padding(start = 8.dp)
                                 else -> Modifier.padding(horizontal = 8.dp)
                             }
-                        ) {
-                            Text(
-                                text = hour.temperature.asString(),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(bottom = 4.dp)
-                            )
-                            Image(
-                                painter = rememberAsyncImagePainter(model = hour.icon),
-                                contentDescription = null,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            Text(
-                                text = hour.time.asString(),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(top = 4.dp),
-                                color = LocalContentColor.current
-                            )
-                        }
+                        )
                     }
                 }
             }
@@ -172,3 +154,33 @@ data class ComingItemDimensions(
     val precipitationWidth: Dp,
     val lowHighTemperatureWidth: Dp
 )
+
+@Composable
+private fun ComingHourItem(
+    hour: ComingHourUi,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            text = hour.temperature.asString(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+        Image(
+            painter = rememberAsyncImagePainter(model = hour.icon),
+            contentDescription = null,
+            modifier = Modifier.size(32.dp)
+        )
+        Text(
+            text = hour.time.asString(),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(top = 4.dp),
+            color = LocalContentColor.current
+        )
+    }
+}
