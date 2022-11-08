@@ -41,6 +41,8 @@ import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.common.*
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 @Composable
 fun ForecastContent(
@@ -53,12 +55,17 @@ fun ForecastContent(
             .background(PrognozaTheme.colors.surface1)
             .padding(WindowInsets.navigationBars.asPaddingValues())
     ) {
-        val forecastContentState = rememberForecastContentState()
+        var toolbarPlaceVisible by remember { mutableStateOf(false) }
+        var toolbarDateVisible by remember { mutableStateOf(false) }
+        var toolbarTemperatureVisible by remember { mutableStateOf(false) }
+
         ToolbarWithLoadingIndicator(
             title = state.forecast?.current?.place?.asString() ?: "",
             subtitle = state.forecast?.current?.date?.asString() ?: "",
             end = state.forecast?.current?.temperature?.asString() ?: "",
-            state = forecastContentState.toolbarState,
+            titleVisible = toolbarPlaceVisible,
+            subtitleVisible = toolbarDateVisible,
+            endVisible = toolbarTemperatureVisible,
             isLoading = state.isLoading,
             onMenuClick = onMenuClick
         )
@@ -76,8 +83,9 @@ fun ForecastContent(
             Box {
                 DataList(
                     forecast = state.forecast,
-                    lazyListState = forecastContentState.lazyListState,
-                    todayHoursState = forecastContentState.todayHoursState
+                    isPlaceVisible = { toolbarPlaceVisible = !it },
+                    isDateVisible = { toolbarDateVisible = !it },
+                    isTemperatureVisible = { toolbarTemperatureVisible = !it }
                 )
 
                 if (state.error != null) {
@@ -98,9 +106,11 @@ private fun ToolbarWithLoadingIndicator(
     title: String,
     subtitle: String,
     end: String,
+    titleVisible: Boolean,
+    subtitleVisible: Boolean,
+    endVisible: Boolean,
     isLoading: Boolean,
     onMenuClick: () -> Unit,
-    state: ToolbarState = rememberToolbarState(),
     modifier: Modifier = Modifier
 ) {
     Box(contentAlignment = Alignment.BottomCenter, modifier = modifier) {
@@ -119,9 +129,9 @@ private fun ToolbarWithLoadingIndicator(
                     )
                 }
             },
-            titleVisible = state.isTitleVisible.value,
-            subtitleVisible = state.isSubtitleVisible.value,
-            endVisible = state.isEndVisible.value
+            titleVisible = titleVisible,
+            subtitleVisible = subtitleVisible,
+            endVisible = endVisible
         )
 
         ContentLoadingIndicatorHost(isLoading = isLoading) { isVisible ->
@@ -181,15 +191,25 @@ private fun SnackBarError(
 @Composable
 private fun DataList(
     forecast: ForecastUi,
-    lazyListState: LazyListState = rememberLazyListState(),
-    todayHoursState: TodayHoursState = rememberTodayHoursLazyTableState(),
+    isPlaceVisible: (Boolean) -> Unit = {},
+    isDateVisible: (Boolean) -> Unit = {},
+    isTemperatureVisible: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    val listState = rememberLazyListState()
     // This isn't included in contentPadding because the click ripple on the Coming day items
     // looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
+
+    val timeWidthState = remember { mutableStateOf(0.dp) }
+    val onTimeWidthWithWrappedContentResolved = { newWidth: Dp ->
+        if (newWidth > timeWidthState.value) {
+            timeWidthState.value = newWidth
+        }
+    }
+
     LazyColumn(
-        state = lazyListState,
+        state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
         modifier = modifier
     ) {
@@ -256,8 +276,8 @@ private fun DataList(
                         .fillMaxWidth()
                         .padding(itemPadding)
                         .padding(bottom = if (idx == forecast.today.hourly.lastIndex) 0.dp else 12.dp),
-                    timeWidth = todayHoursState.timeWidth,
-                    onTimeWidthChanged = todayHoursState::stretchTimeTo
+                    timeWidthState = timeWidthState,
+                    onTimeWidthWithWrappedContentResolved = onTimeWidthWithWrappedContentResolved
                 )
             }
         }
@@ -283,6 +303,24 @@ private fun DataList(
                 )
             }
         }
+    }
+
+    LaunchedEffect(listState) {
+        snapshotFlow { listState.layoutInfo }
+            .distinctUntilChanged()
+            .map { layoutInfo ->
+                Triple(
+                    layoutInfo.keyVisibilityPercent("place") != 0f,
+                    layoutInfo.keyVisibilityPercent("time") != 0f,
+                    layoutInfo.keyVisibilityPercent("temperature") > 50f
+                )
+            }
+            .distinctUntilChanged()
+            .collect { (isPlaceVisible, isDateVisible, isTemperatureVisible) ->
+                isPlaceVisible(isPlaceVisible)
+                isDateVisible(isDateVisible)
+                isTemperatureVisible(isTemperatureVisible)
+            }
     }
 }
 
@@ -374,32 +412,46 @@ private fun HourlyHeader(
 }
 
 @Composable
-fun HourItem(
+private fun ComingHeader(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(id = R.string.coming),
+            style = PrognozaTheme.typography.titleSmall,
+        )
+        Divider(
+            color = LocalContentColor.current,
+            modifier = Modifier.padding(top = 16.dp)
+        )
+    }
+}
+
+// https://stackoverflow.com/a/70901858 This answer works!
+@Composable
+private fun HourItem(
     hour: DayHourUi,
-    timeWidth: State<Dp>,
-    onTimeWidthChanged: (Dp) -> Unit,
+    timeWidthState: State<Dp>,
+    onTimeWidthWithWrappedContentResolved: (Dp) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
             val density = LocalDensity.current
             Text(
-                modifier = if (timeWidth.value == 0.dp) {
+                modifier = if (timeWidthState.value == 0.dp) {
                     Modifier
                         .wrapContentWidth()
                         .onGloballyPositioned {
                             with(density) {
-                                onTimeWidthChanged(it.size.width.toDp())
+                                onTimeWidthWithWrappedContentResolved(it.size.width.toDp())
                             }
                         }
                 } else {
-                    Modifier.width(timeWidth.value)
+                    Modifier.width(timeWidthState.value)
                 },
                 text = hour.time.asString(),
                 textAlign = TextAlign.Start,
                 maxLines = 1
             )
-            Spacer(modifier = Modifier.width(8.dp))
             Text(
                 modifier = Modifier.weight(1f),
                 text = hour.description.asString(),
@@ -432,20 +484,6 @@ fun HourItem(
                     .size(32.dp)
             )
         }
-    }
-}
-
-@Composable
-private fun ComingHeader(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
-        Text(
-            text = stringResource(id = R.string.coming),
-            style = PrognozaTheme.typography.titleSmall,
-        )
-        Divider(
-            color = LocalContentColor.current,
-            modifier = Modifier.padding(top = 16.dp)
-        )
     }
 }
 
@@ -627,6 +665,9 @@ private fun ToolbarWithLoadingIndicatorPreview() {
             title = "Helsinki",
             subtitle = "September 29",
             end = "23",
+            titleVisible = true,
+            subtitleVisible = true,
+            endVisible = true,
             isLoading = true,
             onMenuClick = {}
         )
