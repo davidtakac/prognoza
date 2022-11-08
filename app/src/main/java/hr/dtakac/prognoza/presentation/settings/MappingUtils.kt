@@ -31,10 +31,8 @@ fun LengthUnit.toSettingsLabel(): Int = when (this) {
 
 @StringRes
 fun PressureUnit.toSettingsLabel(): Int = when (this) {
-    PressureUnit.HPA -> R.string.settings_label_hpa
-    PressureUnit.PSI -> R.string.settings_label_psi
-    PressureUnit.BAR -> R.string.settings_label_bar
-    PressureUnit.ATM -> R.string.settings_label_atm
+    PressureUnit.MBAR -> R.string.settings_label_mbar
+    PressureUnit.INHG -> R.string.settings_label_inhg
 }
 
 @StringRes

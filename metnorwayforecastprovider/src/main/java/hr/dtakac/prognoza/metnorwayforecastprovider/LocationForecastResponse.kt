@@ -202,7 +202,7 @@ fun mapAdjacentTimeStepsToEntity(
         ),
         airPressure = Pressure(
             value = current.data.instant.data.airPressureAtSeaLevel,
-            unit = PressureUnit.HPA
+            unit = PressureUnit.MBAR
         )
     )
 }
