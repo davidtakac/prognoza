@@ -2,38 +2,24 @@ package hr.dtakac.prognoza.ui.forecast
 
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFontFamilyResolver
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.Paragraph
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -45,6 +31,8 @@ import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.common.*
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.map
 
 @Composable
@@ -199,12 +187,22 @@ private fun DataList(
     isTemperatureVisible: (Boolean) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
+    // The caller needs info on whether certain parts of the list are visible or not so it can
+    // update the toolbar.
     val listState = rememberLazyListState()
+    OnItemVisibilityChange(
+        listState = listState,
+        isPlaceVisible = isPlaceVisible,
+        isDateVisible = isDateVisible,
+        isTemperatureVisible = isTemperatureVisible
+    )
+    // Hour and coming parts of the UI are like tables where some columns need to be as wide as
+    // the widest one in the list.
+    val hourItemDimensions = rememberHourItemDimensions(hours = forecast.today?.hourly ?: listOf())
+    val comingItemDimensions = rememberComingItemDimensions(days = forecast.coming ?: listOf())
     // Horizontal padding isn't included in contentPadding because the click ripple on the Coming
     // day items looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
-    val hourItemDimensions = rememberHourItemDimensions(hours = forecast.today?.hourly ?: listOf())
-    val comingItemDimensions = rememberComingItemDimensions(days = forecast.coming ?: listOf())
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -301,10 +299,19 @@ private fun DataList(
             }
         }
     }
+}
 
+@Composable
+fun OnItemVisibilityChange(
+    listState: LazyListState,
+    isPlaceVisible: (Boolean) -> Unit,
+    isDateVisible: (Boolean) -> Unit,
+    isTemperatureVisible: (Boolean) -> Unit
+) {
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
             .distinctUntilChanged()
+            .dropWhile { it.totalItemsCount == 0 }
             .map { layoutInfo ->
                 Triple(
                     layoutInfo.keyVisibilityPercent("place") != 0f,

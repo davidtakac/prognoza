@@ -83,15 +83,17 @@ fun HourItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                modifier = Modifier.width(dimensions.precipitationWidth),
-                text = hour.precipitation.asString(),
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-            )
+            hour.precipitation.asString().takeIf { it.isNotBlank() }?.let {
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    modifier = Modifier.width(dimensions.precipitationWidth),
+                    text = it,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+                )
+            }
             Spacer(modifier = Modifier.width(16.dp))
             Text(
                 modifier = Modifier.width(dimensions.temperatureWidth),
