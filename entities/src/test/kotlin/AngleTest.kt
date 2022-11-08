@@ -4,7 +4,6 @@ import hr.dtakac.prognoza.entities.forecast.units.CompassDirection
 import org.testng.annotations.Test
 import kotlin.math.PI
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
 class AngleTest {
     @Test
@@ -34,13 +33,14 @@ class AngleTest {
             315.0 to CompassDirection.NW,
             345.0 to CompassDirection.NW
         )
-        assertTrue {
-            degreesToExpectedDirections.keys
-                .map { it to Angle(it, AngleUnit.DEG).compassDirection }
-                .all { (degrees, actualDirection) ->
-                    actualDirection == degreesToExpectedDirections[degrees]!!
-                }
-        }
+        degreesToExpectedDirections.keys
+            .map { it to Angle(it, AngleUnit.DEG).compassDirection }
+            .forEach { (degrees, actualDirection) ->
+                assertEquals(
+                    expected = degreesToExpectedDirections[degrees]!!,
+                    actual = actualDirection
+                )
+            }
     }
 
     @Test
