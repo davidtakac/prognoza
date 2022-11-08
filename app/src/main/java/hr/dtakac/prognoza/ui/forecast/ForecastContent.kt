@@ -204,6 +204,7 @@ private fun DataList(
     // day items looks better when it goes edge-to-edge
     val itemPadding = PaddingValues(horizontal = 24.dp)
     val hourItemDimensions = rememberHourItemDimensions(hours = forecast.today?.hourly ?: listOf())
+    val comingItemDimensions = rememberComingItemDimensions(days = forecast.coming ?: listOf())
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -289,6 +290,7 @@ private fun DataList(
                 var isExpanded by remember { mutableStateOf(false) }
                 ComingItem(
                     day = day,
+                    dimensions = comingItemDimensions,
                     isExpanded = isExpanded,
                     onClick = { isExpanded = !isExpanded },
                     modifier = Modifier
@@ -417,112 +419,6 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
             color = LocalContentColor.current,
             modifier = Modifier.padding(top = 16.dp)
         )
-    }
-}
-
-@OptIn(ExperimentalAnimationApi::class)
-@Composable
-private fun ComingItem(
-    day: DayUi,
-    isExpanded: Boolean = false,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
-) {
-    val expandTransition = updateTransition(label = "Expand coming item", targetState = isExpanded)
-    val chevronRotation by expandTransition.animateFloat(label = "Rotate chevron") {
-        if (it) 180f else 0f
-    }
-    Column(
-        modifier = Modifier
-            .clickable(
-                onClick = onClick,
-                indication = rememberRipple(bounded = true),
-                interactionSource = remember { MutableInteractionSource() }
-            )
-            .then(modifier)
-    ) {
-        ProvideTextStyle(PrognozaTheme.typography.body) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    modifier = Modifier.weight(1f),
-                    text = day.date.asString(),
-                    textAlign = TextAlign.Start,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                day.precipitation.asString().takeIf { it.isNotBlank() }?.let {
-                    Text(
-                        modifier = Modifier.width(88.dp),
-                        text = it,
-                        textAlign = TextAlign.End,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-                    )
-                }
-                Text(
-                    modifier = Modifier.width(88.dp),
-                    text = day.lowHighTemperature.asString(),
-                    textAlign = TextAlign.End,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                Image(
-                    painter = painterResource(id = R.drawable.ic_expand_more),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(24.dp)
-                        .graphicsLayer { rotationZ = chevronRotation },
-                    colorFilter = ColorFilter.tint(LocalContentColor.current)
-                )
-            }
-        }
-        ProvideTextStyle(PrognozaTheme.typography.bodySmall) {
-            expandTransition.AnimatedVisibility(
-                visible = { targetIsExpanded -> targetIsExpanded },
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                LazyRow(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.padding(top = 16.dp)
-                ) {
-                    itemsIndexed(day.hours) { idx, hour ->
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            modifier = when (idx) {
-                                0 -> Modifier.padding(end = 8.dp)
-                                day.hours.lastIndex -> Modifier.padding(start = 8.dp)
-                                else -> Modifier.padding(horizontal = 8.dp)
-                            }
-                        ) {
-                            Text(
-                                text = hour.temperature.asString(),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(bottom = 4.dp)
-                            )
-                            Image(
-                                painter = rememberAsyncImagePainter(model = hour.icon),
-                                contentDescription = null,
-                                modifier = Modifier.size(32.dp)
-                            )
-                            Text(
-                                text = hour.time.asString(),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                                modifier = Modifier.padding(top = 4.dp),
-                                color = LocalContentColor.current
-                            )
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
