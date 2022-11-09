@@ -10,12 +10,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Allow external feels like and mood
 - Shorter time format (prevent stuff like 2 Uhr PM in German)
 - Measure pressure in mbar and inHg
+- Feels like calculated by wind chill
 ### Fixed
 - Widget rounded corners on <= Android 11
 - Widget text reacts to system dark/light theme on <= Android 11
 - Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
 - Device default theme changes to one from settings on first start
 ### Added
+- Unit conversion tests
 - iOS support
 - OpenWeatherMap as forecast provider
 
