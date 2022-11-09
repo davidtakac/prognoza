@@ -14,13 +14,13 @@ class Pressure(
     }
 
     val millibar: Double = when (unit) {
-        PressureUnit.MBAR -> value
-        PressureUnit.INHG -> value * 33.8639
+        PressureUnit.MILLIBAR -> value
+        PressureUnit.INCH_OF_MERCURY -> value * 33.8639
     }
-    val inchesOfMercury: Double = if (unit == PressureUnit.INHG) value else millibar / 33.8639
+    val inchesOfMercury: Double = if (unit == PressureUnit.INCH_OF_MERCURY) value else millibar / 33.8639
 }
 
-@Suppress("SpellCheckingInspection")
 enum class PressureUnit {
-    MBAR, INHG
+    MILLIBAR,
+    INCH_OF_MERCURY
 }

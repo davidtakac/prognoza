@@ -177,23 +177,23 @@ fun mapAdjacentTimeStepsToEntity(
         end = endTime,
         temperature = Temperature(
             value = current.data.instant.data.airTemperature,
-            unit = TemperatureUnit.C
+            unit = TemperatureUnit.DEGREE_CELSIUS
         ),
         description = details?.summary?.symbolCode?.let {
             mapToDescription(it)
         } ?: Description.UNKNOWN,
         precipitation = Length(
             value = details?.data?.precipitationAmount ?: 0.0,
-            unit = LengthUnit.MM
+            unit = LengthUnit.MILLIMETER
         ),
         wind = Wind(
             speed = Speed(
                 value = current.data.instant.data.windSpeed,
-                unit = SpeedUnit.MPS
+                unit = SpeedUnit.METER_PER_SECOND
             ),
             fromDirection = Angle(
                 value = current.data.instant.data.windFromDirection,
-                unit = AngleUnit.DEG
+                unit = AngleUnit.DEGREE
             )
         ),
         humidity = Percentage(
@@ -202,7 +202,7 @@ fun mapAdjacentTimeStepsToEntity(
         ),
         airPressure = Pressure(
             value = current.data.instant.data.airPressureAtSeaLevel,
-            unit = PressureUnit.MBAR
+            unit = PressureUnit.MILLIBAR
         )
     )
 }

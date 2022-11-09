@@ -36,8 +36,8 @@ fun getTemperature(
     TextResource.fromNumber(
         BigDecimal(
             when (unit) {
-                TemperatureUnit.C -> temperature.celsius
-                TemperatureUnit.F -> temperature.fahrenheit
+                TemperatureUnit.DEGREE_CELSIUS -> temperature.celsius
+                TemperatureUnit.DEGREE_FAHRENHEIT -> temperature.fahrenheit
             }
         ).setScale(0, RoundingMode.HALF_EVEN)
     )
@@ -49,19 +49,19 @@ fun getWind(
 ): TextResource {
     fun BigDecimal.format() = setScale(0, RoundingMode.HALF_EVEN)
     return when (unit) {
-        SpeedUnit.KMH -> TextResource.fromStringId(
+        SpeedUnit.KILOMETER_PER_HOUR -> TextResource.fromStringId(
             R.string.template_wind_kmh,
             TextResource.fromNumber(BigDecimal(wind.speed.kilometersPerHour).format())
         )
-        SpeedUnit.MPH -> TextResource.fromStringId(
+        SpeedUnit.MILE_PER_HOUR -> TextResource.fromStringId(
             R.string.template_wind_mph,
             TextResource.fromNumber(BigDecimal(wind.speed.milesPerHour).format())
         )
-        SpeedUnit.MPS -> TextResource.fromStringId(
+        SpeedUnit.METER_PER_SECOND -> TextResource.fromStringId(
             R.string.template_wind_mps,
             TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).format())
         )
-        SpeedUnit.KN -> TextResource.fromStringId(
+        SpeedUnit.KNOT -> TextResource.fromStringId(
             R.string.template_wind_knots,
             TextResource.fromNumber(BigDecimal(wind.speed.knots).format())
         )
@@ -75,7 +75,7 @@ fun getPrecipitation(
     val zero = BigDecimal(0.0)
     fun BigDecimal.format() = setScale(1, RoundingMode.HALF_EVEN)
     return when (unit) {
-        LengthUnit.MM -> BigDecimal(precipitation.millimeters)
+        LengthUnit.MILLIMETER -> BigDecimal(precipitation.millimeters)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {
@@ -86,7 +86,7 @@ fun getPrecipitation(
             }
             ?: TextResource.empty()
 
-        LengthUnit.IN -> BigDecimal(precipitation.inches)
+        LengthUnit.INCH -> BigDecimal(precipitation.inches)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {
@@ -97,7 +97,7 @@ fun getPrecipitation(
             }
             ?: TextResource.empty()
 
-        LengthUnit.CM -> BigDecimal(precipitation.centimeters)
+        LengthUnit.CENTIMETER -> BigDecimal(precipitation.centimeters)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {

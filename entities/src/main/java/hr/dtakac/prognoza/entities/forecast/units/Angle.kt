@@ -7,13 +7,13 @@ class Angle(
     value: Double,
     unit: AngleUnit
 ) {
-    val degrees: Double = if (unit == DEG) value else value * 180/PI
-    val radians: Double = if (unit == RAD) value else value * PI/180
+    val degrees: Double = if (unit == DEGREE) value else value * 180/PI
+    val radians: Double = if (unit == RADIAN) value else value * PI/180
     val compassDirection: CompassDirection = CompassDirection.fromDegrees(degrees)
 }
 
 enum class AngleUnit {
-    DEG, RAD
+    DEGREE, RADIAN
 }
 
 enum class CompassDirection {

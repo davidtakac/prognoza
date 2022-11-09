@@ -30,7 +30,7 @@ private fun calculateFeelsLike(
     } else {
         calculateHeatIndex(tempFahrenheit, humidity.percent)
     }
-    return Temperature(feelsLikeFahrenheit, TemperatureUnit.F)
+    return Temperature(feelsLikeFahrenheit, TemperatureUnit.DEGREE_FAHRENHEIT)
 }
 
 /**
