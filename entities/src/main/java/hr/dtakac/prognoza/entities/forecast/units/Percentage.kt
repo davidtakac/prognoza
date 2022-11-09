@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.entities.forecast.units
 
-// todo add test
 class Percentage(
     value: Double,
     unit: PercentageUnit
