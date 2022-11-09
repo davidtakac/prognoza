@@ -13,7 +13,7 @@ import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.presentation.theme.ThemeSetting
-import hr.dtakac.prognoza.presentation.theme.ThemeSettingRepository
+import hr.dtakac.prognoza.presentation.theme.SharedPrefsThemeSettingRepository
 import hr.dtakac.prognoza.presentation.WidgetRefresher
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,7 +32,7 @@ class SettingsViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
-    private val themeSettingRepository: ThemeSettingRepository,
+    private val sharedPrefsThemeSettingRepository: SharedPrefsThemeSettingRepository,
     private val widgetRefresher: WidgetRefresher,
     private val mapper: SettingsUiMapper
 ) : ViewModel() {
@@ -79,7 +79,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun setTheme(index: Int) {
         updateState {
-            themeSettingRepository.setTheme(availableThemeSettings[index])
+            sharedPrefsThemeSettingRepository.setTheme(availableThemeSettings[index])
             fireThemeChanged()
         }
     }
@@ -98,7 +98,7 @@ class SettingsViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
-        availableThemeSettings = themeSettingRepository.getAvailableThemes()
+        availableThemeSettings = sharedPrefsThemeSettingRepository.getAvailableThemes()
 
         _state.value = _state.value.copy(
             unitSettings = listOf(
@@ -120,7 +120,7 @@ class SettingsViewModel @Inject constructor(
             ),
             appearanceSettings = listOf(
                 mapper.mapToThemeSetting(
-                    selectedThemeSetting = themeSettingRepository.getCurrentTheme(),
+                    selectedThemeSetting = sharedPrefsThemeSettingRepository.getTheme(),
                     availableThemeSettings = availableThemeSettings,
                     onValuePick = ::setTheme
                 )
