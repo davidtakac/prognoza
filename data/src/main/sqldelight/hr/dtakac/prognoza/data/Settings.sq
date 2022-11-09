@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS Settings (
 
 -- Prepopulated database
 INSERT OR IGNORE INTO Settings
-VALUES (0, "C", "MM", "KPH", "MBAR", NULL, NULL);
+VALUES (0, "DEGREE_CELSIUS", "MILLIMETER", "KILOMETER_PER_HOUR", "MILLIBAR", NULL, NULL);
 
 get:
 SELECT temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude
