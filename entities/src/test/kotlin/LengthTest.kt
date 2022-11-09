@@ -8,7 +8,7 @@ class LengthTest {
     @Test
     fun `throws when less than zero`() {
         assertFailsWith<IllegalStateException> {
-            Length(-1.0, LengthUnit.MILLIMETER)
+            Length(-1.0, LengthUnit.MILLIMETRE)
         }
     }
 
@@ -25,7 +25,7 @@ class LengthTest {
 
     @Test
     fun `converts millimeters to others`() {
-        val length = Length(2.0, LengthUnit.MILLIMETER)
+        val length = Length(2.0, LengthUnit.MILLIMETRE)
         assertLengthsAreAsExpected(
             length = length,
             expectedMm = 2.0,
@@ -36,7 +36,7 @@ class LengthTest {
 
     @Test
     fun `converts centimeters to others`() {
-        val length = Length(2.0, LengthUnit.CENTIMETER)
+        val length = Length(2.0, LengthUnit.CENTIMETRE)
         assertLengthsAreAsExpected(
             length = length,
             expectedMm = 20.0,

@@ -13,14 +13,14 @@ class Length(
     }
 
     val millimeters: Double = when (unit) {
-        MILLIMETER -> value
+        MILLIMETRE -> value
         INCH -> value * 25.4
-        CENTIMETER -> value * 10.0
+        CENTIMETRE -> value * 10.0
     }
     val inches: Double = if (unit == INCH) value else millimeters / 25.4
-    val centimeters: Double = if (unit == CENTIMETER) value else millimeters / 10
+    val centimeters: Double = if (unit == CENTIMETRE) value else millimeters / 10
 }
 
 enum class LengthUnit {
-    MILLIMETER, INCH, CENTIMETER
+    MILLIMETRE, INCH, CENTIMETRE
 }

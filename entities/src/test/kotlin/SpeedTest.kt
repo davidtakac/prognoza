@@ -9,13 +9,13 @@ class SpeedTest { // Not Ookla ;)
     @Test
     fun `throws exception when less than 0`() {
         assertFailsWith<IllegalStateException> {
-            Speed(-20.0, SpeedUnit.METER_PER_SECOND)
+            Speed(-20.0, SpeedUnit.METRE_PER_SECOND)
         }
     }
 
     @Test
     fun `converts meters per second to others`() {
-        val speed = Speed(2.0, SpeedUnit.METER_PER_SECOND)
+        val speed = Speed(2.0, SpeedUnit.METRE_PER_SECOND)
         assertSpeedsAreAsExpected(
             speed = speed,
             expectedMps = 2.0,
@@ -41,7 +41,7 @@ class SpeedTest { // Not Ookla ;)
 
     @Test
     fun `converts kilometers per hour to others`() {
-        val speed = Speed(2.0, SpeedUnit.KILOMETER_PER_HOUR)
+        val speed = Speed(2.0, SpeedUnit.KILOMETRE_PER_HOUR)
         assertSpeedsAreAsExpected(
             speed = speed,
             expectedMps = 0.5556,

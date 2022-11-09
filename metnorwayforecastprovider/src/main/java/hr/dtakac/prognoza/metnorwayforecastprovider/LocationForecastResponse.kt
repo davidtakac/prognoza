@@ -184,12 +184,12 @@ fun mapAdjacentTimeStepsToEntity(
         } ?: Description.UNKNOWN,
         precipitation = Length(
             value = details?.data?.precipitationAmount ?: 0.0,
-            unit = LengthUnit.MILLIMETER
+            unit = LengthUnit.MILLIMETRE
         ),
         wind = Wind(
             speed = Speed(
                 value = current.data.instant.data.windSpeed,
-                unit = SpeedUnit.METER_PER_SECOND
+                unit = SpeedUnit.METRE_PER_SECOND
             ),
             fromDirection = Angle(
                 value = current.data.instant.data.windFromDirection,

@@ -61,8 +61,8 @@ class ForecastTest {
         start = start,
         end = start.plusHours(1L),
         temperature = Temperature(0.0, TemperatureUnit.DEGREE_CELSIUS),
-        precipitation = Length(0.0, LengthUnit.MILLIMETER),
-        wind = Wind(Speed(0.0, SpeedUnit.KILOMETER_PER_HOUR), Angle(45.0, AngleUnit.DEGREE)),
+        precipitation = Length(0.0, LengthUnit.MILLIMETRE),
+        wind = Wind(Speed(0.0, SpeedUnit.KILOMETRE_PER_HOUR), Angle(45.0, AngleUnit.DEGREE)),
         airPressure = Pressure(0.25, PressureUnit.MILLIBAR),
         description = Description.CLEAR_SKY_DAY,
         humidity = Percentage(0.5, PercentageUnit.FRACTION)

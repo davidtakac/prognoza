@@ -48,7 +48,7 @@ val moodSqlAdapter = object : ColumnAdapter<Mood, String> {
 
 val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
     override fun decode(databaseValue: Double): Length {
-        return Length(databaseValue, LengthUnit.MILLIMETER)
+        return Length(databaseValue, LengthUnit.MILLIMETRE)
     }
 
     override fun encode(value: Length): Double {
@@ -58,7 +58,7 @@ val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
 
 val speedSqlAdapter = object : ColumnAdapter<Speed, Double> {
     override fun decode(databaseValue: Double): Speed {
-        return Speed(databaseValue, SpeedUnit.METER_PER_SECOND)
+        return Speed(databaseValue, SpeedUnit.METRE_PER_SECOND)
     }
 
     override fun encode(value: Speed): Double {

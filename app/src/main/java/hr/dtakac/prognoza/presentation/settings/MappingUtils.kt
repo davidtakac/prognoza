@@ -16,17 +16,17 @@ fun TemperatureUnit.toSettingsLabel(): Int = when (this) {
 
 @StringRes
 fun SpeedUnit.toSettingsLabel(): Int = when (this) {
-    SpeedUnit.METER_PER_SECOND -> R.string.settings_label_mps
-    SpeedUnit.KILOMETER_PER_HOUR -> R.string.settings_label_kph
+    SpeedUnit.METRE_PER_SECOND -> R.string.settings_label_mps
+    SpeedUnit.KILOMETRE_PER_HOUR -> R.string.settings_label_kph
     SpeedUnit.MILE_PER_HOUR -> R.string.settings_label_mph
     SpeedUnit.KNOT -> R.string.settings_label_knots
 }
 
 @StringRes
 fun LengthUnit.toSettingsLabel(): Int = when (this) {
-    LengthUnit.MILLIMETER -> R.string.settings_label_mm
+    LengthUnit.MILLIMETRE -> R.string.settings_label_mm
     LengthUnit.INCH -> R.string.settings_label_in
-    LengthUnit.CENTIMETER -> R.string.settings_label_cm
+    LengthUnit.CENTIMETRE -> R.string.settings_label_cm
 }
 
 @StringRes

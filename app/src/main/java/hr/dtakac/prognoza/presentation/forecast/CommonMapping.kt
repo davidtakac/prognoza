@@ -49,7 +49,7 @@ fun getWind(
 ): TextResource {
     fun BigDecimal.format() = setScale(0, RoundingMode.HALF_EVEN)
     return when (unit) {
-        SpeedUnit.KILOMETER_PER_HOUR -> TextResource.fromStringId(
+        SpeedUnit.KILOMETRE_PER_HOUR -> TextResource.fromStringId(
             R.string.template_wind_kmh,
             TextResource.fromNumber(BigDecimal(wind.speed.kilometersPerHour).format())
         )
@@ -57,7 +57,7 @@ fun getWind(
             R.string.template_wind_mph,
             TextResource.fromNumber(BigDecimal(wind.speed.milesPerHour).format())
         )
-        SpeedUnit.METER_PER_SECOND -> TextResource.fromStringId(
+        SpeedUnit.METRE_PER_SECOND -> TextResource.fromStringId(
             R.string.template_wind_mps,
             TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).format())
         )
@@ -75,7 +75,7 @@ fun getPrecipitation(
     val zero = BigDecimal(0.0)
     fun BigDecimal.format() = setScale(1, RoundingMode.HALF_EVEN)
     return when (unit) {
-        LengthUnit.MILLIMETER -> BigDecimal(precipitation.millimeters)
+        LengthUnit.MILLIMETRE -> BigDecimal(precipitation.millimeters)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {
@@ -97,7 +97,7 @@ fun getPrecipitation(
             }
             ?: TextResource.empty()
 
-        LengthUnit.CENTIMETER -> BigDecimal(precipitation.centimeters)
+        LengthUnit.CENTIMETRE -> BigDecimal(precipitation.centimeters)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {
