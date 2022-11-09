@@ -54,14 +54,14 @@ class ForecastUiMapper @Inject constructor(
         icon = current.description.toDrawableId(),
         wind = TextResource.fromStringId(
             id = R.string.template_wind,
-            TextResource.fromStringId(current.wind.speed.beaufort.toStringId()),
+            TextResource.fromStringId(current.wind.speed.beaufortScale.toStringId()),
             getWind(current.wind, windUnit)
         ),
         feelsLike = TextResource.fromStringId(
             id = R.string.template_feels_like,
             getTemperature(current.temperature, temperatureUnit)
         ),
-        precipitation = current.precipitation.takeIf { it.millimeters > 0 }?.let {
+        precipitation = current.precipitation.takeIf { it.millimetre > 0 }?.let {
             getPrecipitation(it, precipitationUnit)
         } ?: TextResource.empty()
     )
@@ -97,7 +97,7 @@ class ForecastUiMapper @Inject constructor(
                 highTemperature = day.highTemperature,
                 temperatureUnit = temperatureUnit
             ),
-            precipitation = day.totalPrecipitation.takeIf { it.millimeters > 0.0 }?.let {
+            precipitation = day.totalPrecipitation.takeIf { it.millimetre > 0.0 }?.let {
                 getPrecipitation(it, precipitationUnit)
             } ?: TextResource.empty(),
             hours = day.hours.map {
@@ -120,7 +120,7 @@ class ForecastUiMapper @Inject constructor(
     ): DayHourUi = DayHourUi(
         time = getShortTime(datum.dateTime),
         temperature = getTemperature(datum.temperature, temperatureUnit),
-        precipitation = datum.precipitation.takeIf { it.millimeters > 0.0 }?.let {
+        precipitation = datum.precipitation.takeIf { it.millimetre > 0.0 }?.let {
             getPrecipitation(it, precipitationUnit)
         } ?: TextResource.empty(),
         description = TextResource.fromStringId(datum.description.toStringId()),

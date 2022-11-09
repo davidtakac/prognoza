@@ -36,8 +36,8 @@ fun getTemperature(
     TextResource.fromNumber(
         BigDecimal(
             when (unit) {
-                TemperatureUnit.C -> temperature.celsius
-                TemperatureUnit.F -> temperature.fahrenheit
+                TemperatureUnit.DEGREE_CELSIUS -> temperature.celsius
+                TemperatureUnit.DEGREE_FAHRENHEIT -> temperature.fahrenheit
             }
         ).setScale(0, RoundingMode.HALF_EVEN)
     )
@@ -49,21 +49,21 @@ fun getWind(
 ): TextResource {
     fun BigDecimal.format() = setScale(0, RoundingMode.HALF_EVEN)
     return when (unit) {
-        SpeedUnit.KPH -> TextResource.fromStringId(
+        SpeedUnit.KILOMETRE_PER_HOUR -> TextResource.fromStringId(
             R.string.template_wind_kmh,
-            TextResource.fromNumber(BigDecimal(wind.speed.kilometersPerHour).format())
+            TextResource.fromNumber(BigDecimal(wind.speed.kilometrePerHour).format())
         )
-        SpeedUnit.MPH -> TextResource.fromStringId(
+        SpeedUnit.MILE_PER_HOUR -> TextResource.fromStringId(
             R.string.template_wind_mph,
-            TextResource.fromNumber(BigDecimal(wind.speed.milesPerHour).format())
+            TextResource.fromNumber(BigDecimal(wind.speed.milePerHour).format())
         )
-        SpeedUnit.MPS -> TextResource.fromStringId(
+        SpeedUnit.METRE_PER_SECOND -> TextResource.fromStringId(
             R.string.template_wind_mps,
-            TextResource.fromNumber(BigDecimal(wind.speed.metersPerSecond).format())
+            TextResource.fromNumber(BigDecimal(wind.speed.metrePerSecond).format())
         )
-        SpeedUnit.KNOTS -> TextResource.fromStringId(
+        SpeedUnit.KNOT -> TextResource.fromStringId(
             R.string.template_wind_knots,
-            TextResource.fromNumber(BigDecimal(wind.speed.knots).format())
+            TextResource.fromNumber(BigDecimal(wind.speed.knot).format())
         )
     }
 }
@@ -75,7 +75,7 @@ fun getPrecipitation(
     val zero = BigDecimal(0.0)
     fun BigDecimal.format() = setScale(1, RoundingMode.HALF_EVEN)
     return when (unit) {
-        LengthUnit.MM -> BigDecimal(precipitation.millimeters)
+        LengthUnit.MILLIMETRE -> BigDecimal(precipitation.millimetre)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {
@@ -86,7 +86,7 @@ fun getPrecipitation(
             }
             ?: TextResource.empty()
 
-        LengthUnit.IN -> BigDecimal(precipitation.inches)
+        LengthUnit.INCH -> BigDecimal(precipitation.inch)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {
@@ -97,7 +97,7 @@ fun getPrecipitation(
             }
             ?: TextResource.empty()
 
-        LengthUnit.CM -> BigDecimal(precipitation.centimeters)
+        LengthUnit.CENTIMETRE -> BigDecimal(precipitation.centimetre)
             .format()
             .takeUnless { it.compareTo(zero) == 0 }
             ?.let {

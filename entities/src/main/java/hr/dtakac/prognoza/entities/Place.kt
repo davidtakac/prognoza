@@ -1,7 +1,5 @@
 package hr.dtakac.prognoza.entities
 
-import java.lang.IllegalStateException
-
 data class Place(
     val name: String,
     val details: String?,

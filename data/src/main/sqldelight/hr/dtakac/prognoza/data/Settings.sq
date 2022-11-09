@@ -5,17 +5,17 @@ import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit;
 
 CREATE TABLE IF NOT EXISTS Settings (
     `id` INTEGER NOT NULL PRIMARY KEY,
-    `temperatureUnit` INTEGER AS TemperatureUnit NOT NULL,
-    `precipitationUnit` INTEGER AS LengthUnit NOT NULL,
-    `windUnit` INTEGER AS SpeedUnit NOT NULL,
-    `pressureUnit` INTEGER AS PressureUnit NOT NULL,
+    `temperatureUnit` TEXT AS TemperatureUnit NOT NULL,
+    `precipitationUnit` TEXT AS LengthUnit NOT NULL,
+    `windUnit` TEXT AS SpeedUnit NOT NULL,
+    `pressureUnit` TEXT AS PressureUnit NOT NULL,
     `placeLatitude` REAL,
     `placeLongitude` REAL
 );
 
 -- Prepopulated database
 INSERT OR IGNORE INTO Settings
-VALUES (0, 0, 0, 0, 0, NULL, NULL);
+VALUES (0, "DEGREE_CELSIUS", "MILLIMETRE", "KILOMETRE_PER_HOUR", "MILLIBAR", NULL, NULL);
 
 get:
 SELECT temperatureUnit, precipitationUnit, windUnit, pressureUnit, placeLatitude, placeLongitude

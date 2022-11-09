@@ -32,7 +32,6 @@ import hr.dtakac.prognoza.presentation.forecast.*
 import hr.dtakac.prognoza.ui.common.*
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.map
 
@@ -440,7 +439,7 @@ private fun ComingHeader(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun TodayScreenPreview() {
-    PrognozaTheme(description = Mood.SUNNY) {
+    PrognozaTheme(description = Mood.CLEAR) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -456,7 +455,7 @@ private fun TodayScreenPreview() {
 @Preview
 @Composable
 private fun TodayScreenJustCurrentPreview() {
-    PrognozaTheme(description = Mood.SUNNY) {
+    PrognozaTheme(description = Mood.CLEAR) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -472,7 +471,7 @@ private fun TodayScreenJustCurrentPreview() {
 @Preview
 @Composable
 private fun TodayScreenCurrentPlusTodayPreview() {
-    PrognozaTheme(description = Mood.SUNNY) {
+    PrognozaTheme(description = Mood.CLEAR) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -488,7 +487,7 @@ private fun TodayScreenCurrentPlusTodayPreview() {
 @Preview
 @Composable
 private fun TodayScreenCurrentPlusComingPreview() {
-    PrognozaTheme(description = Mood.SUNNY) {
+    PrognozaTheme(description = Mood.CLEAR) {
         Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
             DataList(
                 forecast = ForecastUi(
@@ -504,7 +503,7 @@ private fun TodayScreenCurrentPlusComingPreview() {
 @Preview
 @Composable
 private fun ToolbarWithLoadingIndicatorPreview() {
-    PrognozaTheme(description = Mood.SUNNY) {
+    PrognozaTheme(description = Mood.CLEAR) {
         ToolbarWithLoadingIndicator(
             title = "Helsinki",
             subtitle = "September 29",
@@ -526,7 +525,7 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
     icon = R.drawable.clearsky_day,
     wind = TextResource.fromText("Wind: 15 km/h"),
     feelsLike = TextResource.fromText("Feels like: -21°"),
-    mood = Mood.SUNNY,
+    mood = Mood.CLEAR,
     precipitation = TextResource.fromText("12 mm")
 )
 

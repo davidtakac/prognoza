@@ -48,7 +48,7 @@ private object TemperatureSerializer : KSerializer<Temperature> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("temperature", PrimitiveKind.DOUBLE)
 
     override fun deserialize(decoder: Decoder): Temperature {
-        return Temperature(value = decoder.decodeDouble(), unit = TemperatureUnit.C)
+        return Temperature(value = decoder.decodeDouble(), unit = TemperatureUnit.DEGREE_CELSIUS)
     }
 
     override fun serialize(encoder: Encoder, value: Temperature) {

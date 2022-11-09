@@ -87,16 +87,16 @@
     <string name="pressure_unit">Pritisak</string>
     <string name="wind_unit">Vjetar</string>
     <string name="temperature_unit">Temperatura</string>
-    <string name="settings_label_celsius">Stupnjevi Celzijusa</string>
-    <string name="settings_label_fahrenheit">Stupnjevi Fahrenheita</string>
+    <string name="settings_label_celsius">Celzijev stupanj</string>
+    <string name="settings_label_fahrenheit">Fahrenheitov stupanj</string>
     <string name="confirm">Potvrdi</string>
     <string name="cancel">Odustani</string>
-    <string name="settings_label_mps">Metri u sekundi</string>
-    <string name="settings_label_kph">Kilometri na sat</string>
-    <string name="settings_label_mph">Milje na sat</string>
-    <string name="settings_label_mm">Milimetri</string>
-    <string name="settings_label_in">Inči</string>
-    <string name="settings_label_cm">Centimetri</string>
+    <string name="settings_label_mps">Metar u sekundi</string>
+    <string name="settings_label_kph">Kilometar na sat</string>
+    <string name="settings_label_mph">Milja na sat</string>
+    <string name="settings_label_mm">Milimetar</string>
+    <string name="settings_label_in">Inč</string>
+    <string name="settings_label_cm">Centimetar</string>
     <string name="settings_label_mbar">Milibar</string>
     <string name="appearance">Izgled</string>
     <string name="theme">Tema</string>
@@ -112,5 +112,5 @@
     <string name="template_wind_knots">%1$s\u00A0čv</string>
     <string name="settings_label_knots">Čvorovi</string>
     <string name="design_credit">Dizajn</string>
-    <string name="settings_label_inhg">Inči žive</string>
+    <string name="settings_label_inhg">Inč žive</string>
 </resources>

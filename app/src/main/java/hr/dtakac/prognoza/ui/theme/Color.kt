@@ -75,7 +75,7 @@ private fun getPrimary(
         if (darkColors) Color.White
         else Color(0xFF757575) // Gray 600
 
-    Mood.SUNNY ->
+    Mood.CLEAR ->
         if (darkColors) Color(0xFF9575CD) // Deep Purple 300
         else Color(0xFFFFB300) // Amber 600
 }
