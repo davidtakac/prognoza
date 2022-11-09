@@ -45,6 +45,18 @@ class ForecastTest {
         assertNull(forecast.coming)
     }
 
+    @Test
+    fun `when data points span multiple days, none are null`() {
+        val now = getStartOfDay()
+        val data = (0L..23L).map { getHourDatum(now.plusHours(it)) } +
+                (0L..23L).map { getHourDatum(now.plusDays(1L).plusHours(it)) } +
+                (0L..23L).map { getHourDatum(now.plusDays(2L).plusHours(it)) }
+        val forecast = Forecast(data)
+        assertNotNull(forecast.current)
+        assertNotNull(forecast.today)
+        assertNotNull(forecast.coming)
+    }
+
     private fun getHourDatum(start: ZonedDateTime): ForecastDatum = ForecastDatum(
         start = start,
         end = start.plusHours(1L),
