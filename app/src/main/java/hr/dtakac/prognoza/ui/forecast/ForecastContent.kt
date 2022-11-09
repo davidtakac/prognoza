@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.FirstBaseline
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.Placeholder
@@ -75,7 +76,8 @@ fun ForecastContent(
                     forecast = state.forecast,
                     isPlaceVisible = { toolbarPlaceVisible = !it },
                     isDateVisible = { toolbarDateVisible = !it },
-                    isTemperatureVisible = { toolbarTemperatureVisible = !it }
+                    isTemperatureVisible = { toolbarTemperatureVisible = !it },
+                    modifier = Modifier.fillMaxWidth()
                 )
 
                 if (state.error != null) {
@@ -362,13 +364,19 @@ private fun DescriptionAndPrecipitation(
             Text(
                 text = annotatedString,
                 inlineContent = inlineContentMap,
-                modifier = Modifier.weight(3f),
+                modifier = Modifier
+                    .weight(1f)
+                    .alignBy(FirstBaseline),
             )
             precipitation.takeIf { it.isNotBlank() }?.let {
                 Text(
                     text = it,
                     textAlign = TextAlign.End,
-                    modifier = Modifier.weight(1f),
+                    maxLines = 1,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .width(IntrinsicSize.Min)
+                        .alignBy(FirstBaseline),
                 )
             }
         }
