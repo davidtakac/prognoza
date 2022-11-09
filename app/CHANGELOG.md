@@ -4,6 +4,14 @@ All notable changes to the Android app will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Backlog]
+### Fixed
+- Widget rounded corners on <= Android 11
+- Widget text reacts to system dark/light theme on <= Android 11
+### Added
+- iOS support
+- OpenWeatherMap as forecast provider
+
 ## [Unreleased]
 ### Changed
 - Make app mood a business rule
@@ -12,14 +20,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Measure pressure in mbar and inHg
 - Feels like calculated by wind chill
 ### Fixed
-- Widget rounded corners on <= Android 11
-- Widget text reacts to system dark/light theme on <= Android 11
 - Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
 - Device default theme changes to one from settings on first start
 ### Added
 - Unit conversion tests
-- iOS support
-- OpenWeatherMap as forecast provider
 
 ## [2.2.2] - 2022-11-06
 ### Fixed
