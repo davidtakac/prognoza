@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.Place
 import org.testng.annotations.Test
 import kotlin.test.assertFailsWith

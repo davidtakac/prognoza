@@ -52,7 +52,7 @@ val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
     }
 
     override fun encode(value: Length): Double {
-        return value.millimeters
+        return value.millimetre
     }
 }
 
@@ -62,7 +62,7 @@ val speedSqlAdapter = object : ColumnAdapter<Speed, Double> {
     }
 
     override fun encode(value: Speed): Double {
-        return value.metersPerSecond
+        return value.metrePerSecond
     }
 }
 
@@ -72,7 +72,7 @@ val angleSqlAdapter = object : ColumnAdapter<Angle, Double> {
     }
 
     override fun encode(value: Angle): Double {
-        return value.degrees
+        return value.degree
     }
 }
 

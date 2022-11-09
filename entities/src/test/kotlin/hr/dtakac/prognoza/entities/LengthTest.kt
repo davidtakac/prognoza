@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import org.testng.annotations.Test
@@ -54,17 +56,17 @@ class LengthTest {
         val tolerance = 0.0001
         assertEquals(
             expected = expectedCm,
-            actual = length.centimeters,
+            actual = length.centimetre,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedMm,
-            actual = length.millimeters,
+            actual = length.millimetre,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedIn,
-            actual = length.inches,
+            actual = length.inch,
             absoluteTolerance = tolerance
         )
     }

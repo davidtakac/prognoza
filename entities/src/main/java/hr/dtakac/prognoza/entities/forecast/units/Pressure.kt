@@ -14,7 +14,7 @@ class Pressure(
         PressureUnit.MILLIBAR -> value
         PressureUnit.INCH_OF_MERCURY -> value * 33.8639
     }
-    val inchesOfMercury: Double = if (unit == PressureUnit.INCH_OF_MERCURY) value else millibar / 33.8639
+    val inchOfMercury: Double = if (unit == PressureUnit.INCH_OF_MERCURY) value else millibar / 33.8639
 }
 
 enum class PressureUnit {

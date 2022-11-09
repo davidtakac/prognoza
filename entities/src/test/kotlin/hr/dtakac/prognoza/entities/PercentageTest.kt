@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.units.Percentage
 import hr.dtakac.prognoza.entities.forecast.units.PercentageUnit
 import org.testng.annotations.Test

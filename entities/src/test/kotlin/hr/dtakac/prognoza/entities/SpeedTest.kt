@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.units.BeaufortScale
 import hr.dtakac.prognoza.entities.forecast.units.Speed
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
@@ -76,22 +78,22 @@ class SpeedTest { // Not Ookla ;)
         val tolerance = 0.0001
         assertEquals(
             expected = expectedKt,
-            actual = speed.knots,
+            actual = speed.knot,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedMph,
-            actual = speed.milesPerHour,
+            actual = speed.milePerHour,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedMps,
-            actual = speed.metersPerSecond,
+            actual = speed.metrePerSecond,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedKmh,
-            actual = speed.kilometersPerHour,
+            actual = speed.kilometrePerHour,
             absoluteTolerance = tolerance
         )
         assertEquals(

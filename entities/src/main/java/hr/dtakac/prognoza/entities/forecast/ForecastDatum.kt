@@ -25,7 +25,7 @@ fun calculateWindChill(
 ): Temperature = Temperature(
     value = 35.74 +
             (0.6215 * temperature.fahrenheit) -
-            (35.75 * windSpeed.milesPerHour.pow(0.16)) +
-            (0.4275 * temperature.fahrenheit * windSpeed.milesPerHour.pow(0.16)),
+            (35.75 * windSpeed.milePerHour.pow(0.16)) +
+            (0.4275 * temperature.fahrenheit * windSpeed.milePerHour.pow(0.16)),
     unit = TemperatureUnit.DEGREE_FAHRENHEIT
 )

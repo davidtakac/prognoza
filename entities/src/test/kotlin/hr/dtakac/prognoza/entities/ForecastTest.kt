@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.Description
 import hr.dtakac.prognoza.entities.forecast.Forecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum

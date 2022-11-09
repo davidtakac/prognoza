@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.units.Angle
 import hr.dtakac.prognoza.entities.forecast.units.AngleUnit
 import hr.dtakac.prognoza.entities.forecast.units.CompassDirection
@@ -66,14 +68,14 @@ class AngleTest {
     @Test
     fun `when angle is 180 deg, radians are pi`() = assertEquals(
         expected = PI,
-        actual = Angle(180.0, AngleUnit.DEGREE).radians,
+        actual = Angle(180.0, AngleUnit.DEGREE).radian,
         absoluteTolerance = tolerance
     )
 
     @Test
     fun `when angle is pi rad, degrees are 180`() = assertEquals(
         expected = 180.0,
-        actual = Angle(PI, AngleUnit.RADIAN).degrees,
+        actual = Angle(PI, AngleUnit.RADIAN).degree,
         absoluteTolerance = tolerance
     )
 }

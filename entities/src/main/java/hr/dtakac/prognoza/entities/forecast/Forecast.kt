@@ -67,7 +67,7 @@ class Forecast(data: List<ForecastDatum>) {
                 highTemperature = data.maxOf { it.temperature },
                 lowTemperature = data.minOf { it.temperature },
                 totalPrecipitation = Length(
-                    data.sumOf { it.precipitation.millimeters },
+                    data.sumOf { it.precipitation.millimetre },
                     LengthUnit.MILLIMETRE
                 ),
                 hours = data.map { datum ->

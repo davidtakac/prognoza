@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.calculateWindChill
 import hr.dtakac.prognoza.entities.forecast.units.Speed
 import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit

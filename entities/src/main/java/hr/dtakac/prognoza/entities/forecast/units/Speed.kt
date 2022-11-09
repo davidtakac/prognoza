@@ -12,16 +12,16 @@ class Speed(
         }
     }
 
-    val metersPerSecond: Double = when (unit) {
+    val metrePerSecond: Double = when (unit) {
         SpeedUnit.METRE_PER_SECOND -> value
         SpeedUnit.KILOMETRE_PER_HOUR -> value / 3.6
         SpeedUnit.MILE_PER_HOUR -> value / 2.2369
         SpeedUnit.KNOT -> value / 1.9438
     }
-    val kilometersPerHour: Double = if (unit == SpeedUnit.KILOMETRE_PER_HOUR) value else metersPerSecond * 3.6
-    val milesPerHour: Double = if (unit == SpeedUnit.MILE_PER_HOUR) value else metersPerSecond * 2.2369
-    val knots: Double = if (unit == SpeedUnit.KNOT) value else metersPerSecond * 1.9438
-    val beaufortScale: BeaufortScale = Companion.fromMilesPerHour(milesPerHour)
+    val kilometrePerHour: Double = if (unit == SpeedUnit.KILOMETRE_PER_HOUR) value else metrePerSecond * 3.6
+    val milePerHour: Double = if (unit == SpeedUnit.MILE_PER_HOUR) value else metrePerSecond * 2.2369
+    val knot: Double = if (unit == SpeedUnit.KNOT) value else metrePerSecond * 1.9438
+    val beaufortScale: BeaufortScale = Companion.fromMilesPerHour(milePerHour)
 }
 
 enum class SpeedUnit {

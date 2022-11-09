@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.units.Pressure
 import hr.dtakac.prognoza.entities.forecast.units.PressureUnit
 import org.testng.annotations.Test
@@ -17,7 +19,7 @@ class PressureTest {
     @Test
     fun `converts from millxkibar to inches of mercury`() = assertEquals(
         expected = 0.0886,
-        actual = Pressure(3.0, PressureUnit.MILLIBAR).inchesOfMercury,
+        actual = Pressure(3.0, PressureUnit.MILLIBAR).inchOfMercury,
         absoluteTolerance = tolerance
     )
 

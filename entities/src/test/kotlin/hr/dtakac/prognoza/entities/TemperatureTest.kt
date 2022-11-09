@@ -1,3 +1,5 @@
+package hr.dtakac.prognoza.entities
+
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import org.testng.annotations.Test
