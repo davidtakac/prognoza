@@ -1,7 +1,5 @@
 package hr.dtakac.prognoza.entities.forecast.units
 
-import java.lang.IllegalStateException
-
 // todo add test
 class Percentage(
     value: Double,
@@ -15,6 +13,7 @@ class Percentage(
     }
 
     val percent: Double = calculatePercent(value, unit)
+    val fraction: Double = if (unit == PercentageUnit.FRACTION) value else value / 100
 
     private fun calculatePercent(
         value: Double,
