@@ -1,12 +1,19 @@
 package hr.dtakac.prognoza.domain.usecase
 
+import hr.dtakac.prognoza.domain.place.Rfc2616LanguageGetter
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.domain.place.PlaceSearcherResult
 import hr.dtakac.prognoza.entities.Place
 
-class SearchPlaces(private val placeSearcher: PlaceSearcher) {
+class SearchPlaces(
+    private val placeSearcher: PlaceSearcher,
+    private val rfc2616LanguageGetter: Rfc2616LanguageGetter
+) {
     suspend operator fun invoke(query: String): SearchPlacesResult {
-        val result = placeSearcher.search(query)
+        val result = placeSearcher.search(
+            query,
+            rfc2616LanguageGetter.get()
+        )
         return if (result is PlaceSearcherResult.Success) {
             if (result.places.isEmpty()) {
                 SearchPlacesResult.Empty.None

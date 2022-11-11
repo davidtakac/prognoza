@@ -26,8 +26,8 @@ class ForecastRepository(
         return withContext(computationDispatcher) {
             data.map {
                 ForecastDatum(
-                    start = it.startTime,
-                    end = it.endTime,
+                    startEpochMillis = it.startEpochMillis,
+                    endEpochMillis = it.endEpochMillis,
                     temperature = it.temperature,
                     precipitation = it.precipitation,
                     wind = Wind(speed = it.windSpeed, fromDirection = it.windFromDirection),
@@ -49,8 +49,8 @@ class ForecastRepository(
             forecastQueries.delete(latitude, longitude)
             data.forEach {
                 val dbModel = Forecast(
-                    startTime = it.start,
-                    endTime = it.end,
+                    startEpochMillis = it.startEpochMillis,
+                    endEpochMillis = it.endEpochMillis,
                     latitude = latitude,
                     longitude = longitude,
                     temperature = it.temperature,

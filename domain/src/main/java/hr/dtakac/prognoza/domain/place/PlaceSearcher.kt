@@ -3,7 +3,10 @@ package hr.dtakac.prognoza.domain.place
 import hr.dtakac.prognoza.entities.Place
 
 interface PlaceSearcher {
-    suspend fun search(query: String): PlaceSearcherResult
+    suspend fun search(
+        query: String,
+        rfc2616Language: String
+    ): PlaceSearcherResult
 }
 
 sealed interface PlaceSearcherResult {

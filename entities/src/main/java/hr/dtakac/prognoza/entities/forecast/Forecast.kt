@@ -3,10 +3,14 @@ package hr.dtakac.prognoza.entities.forecast
 import hr.dtakac.prognoza.entities.forecast.units.Length
 import hr.dtakac.prognoza.entities.forecast.units.LengthUnit
 import hr.dtakac.prognoza.entities.forecast.units.Temperature
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
-class Forecast(data: List<ForecastDatum>) {
+class Forecast(
+    data: List<ForecastDatum>,
+    timeZone: TimeZone
+) {
     val current: Current
     val today: Today?
     val coming: List<Day>?
@@ -17,9 +21,10 @@ class Forecast(data: List<ForecastDatum>) {
         }
 
         current = getCurrent(data.first())
-        val dataGroupedByDay = data.groupBy { datum ->
-            datum.start.withZoneSameInstant(ZoneId.systemDefault()).toLocalDate()
-        }.values.toList()
+        val dataGroupedByDay = data
+            .groupBy { Instant.fromEpochMilliseconds(it.startEpochMillis).toLocalDateTime(timeZone).date }
+            .values
+            .toList()
 
         val todayHours = dataGroupedByDay.getOrElse(index = 0) { listOf() }.toMutableList()
         val tomorrowHours = dataGroupedByDay.getOrElse(index = 1) { listOf() }
@@ -27,13 +32,13 @@ class Forecast(data: List<ForecastDatum>) {
             // Overflow into next day if there are not many hours left in the day
             todayHours += tomorrowHours.take(n = 7)
         }
-        today = todayHours.drop(n = 1).takeIf { it.isNotEmpty() }?.let { getToday(it) }
-        coming = dataGroupedByDay.drop(n = 1).takeIf { it.isNotEmpty() }?.let { getComing(it) }
+        today = todayHours.drop(1).takeIf { it.isNotEmpty() }?.let { getToday(it) }
+        coming = dataGroupedByDay.drop(1).takeIf { it.isNotEmpty() }?.let { getComing(it) }
     }
 
     private fun getCurrent(datum: ForecastDatum): Current {
         return Current(
-            dateTime = datum.start,
+            epochMillis = datum.startEpochMillis,
             temperature = datum.temperature,
             feelsLike = datum.feelsLike,
             wind = datum.wind,
@@ -46,7 +51,7 @@ class Forecast(data: List<ForecastDatum>) {
     private fun getToday(data: List<ForecastDatum>): Today {
         val hourly = data.map { datum ->
             HourlyDatum(
-                dateTime = datum.start,
+                epochMillis = datum.startEpochMillis,
                 description = datum.description,
                 temperature = datum.temperature,
                 precipitation = datum.precipitation,
@@ -63,7 +68,7 @@ class Forecast(data: List<ForecastDatum>) {
     private fun getComing(listOfData: List<List<ForecastDatum>>): List<Day> {
         return listOfData.map { data ->
             Day(
-                dateTime = data.first().start,
+                epochMillis = data.first().startEpochMillis,
                 highTemperature = data.maxOf { it.temperature },
                 lowTemperature = data.minOf { it.temperature },
                 totalPrecipitation = Length(
@@ -72,7 +77,7 @@ class Forecast(data: List<ForecastDatum>) {
                 ),
                 hours = data.map { datum ->
                     HourlyDatum(
-                        dateTime = datum.start,
+                        epochMillis = datum.startEpochMillis,
                         description = datum.description,
                         temperature = datum.temperature,
                         precipitation = datum.precipitation,
@@ -85,7 +90,7 @@ class Forecast(data: List<ForecastDatum>) {
 }
 
 data class Current(
-    val dateTime: ZonedDateTime,
+    val epochMillis: Long,
     val temperature: Temperature,
     val feelsLike: Temperature,
     val wind: Wind,
@@ -95,7 +100,7 @@ data class Current(
 )
 
 data class HourlyDatum(
-    val dateTime: ZonedDateTime,
+    val epochMillis: Long,
     val description: Description,
     val temperature: Temperature,
     val precipitation: Length,
@@ -109,7 +114,7 @@ data class Today(
 )
 
 data class Day(
-    val dateTime: ZonedDateTime,
+    val epochMillis: Long,
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
     val totalPrecipitation: Length,

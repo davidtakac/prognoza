@@ -19,6 +19,7 @@ import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastService
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastProvider
+import hr.dtakac.prognoza.metnorwayforecastprovider.Rfc1123Converter
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceSearcher
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -57,12 +58,14 @@ class RepositoryModule {
     fun provideForecastProvider(
         apiService: MetNorwayForecastService,
         database: MetNorwayDatabase,
+        rfc1123Converter: Rfc1123Converter,
         @Named("io") ioDispatcher: CoroutineDispatcher
     ): ForecastProvider = MetNorwayForecastProvider(
         apiService = apiService,
         ioDispatcher = ioDispatcher,
         metaQueries = database.metaQueries,
-        cachedResponseQueries = database.cachedResponseQueries
+        cachedResponseQueries = database.cachedResponseQueries,
+        rfc1123Converter = rfc1123Converter
     )
 
     @Provides

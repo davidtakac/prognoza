@@ -11,6 +11,7 @@ import hr.dtakac.prognoza.entities.forecast.units.SpeedUnit
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
 import hr.dtakac.prognoza.entities.forecast.Forecast
 import hr.dtakac.prognoza.entities.forecast.ForecastDatum
+import kotlinx.datetime.TimeZone
 
 class GetForecast(
     private val getSelectedPlace: GetSelectedPlace,
@@ -42,7 +43,7 @@ class GetForecast(
         GetForecastResult.Empty.Error
     } else GetForecastResult.Success(
         placeName = place.name,
-        forecast = Forecast(data),
+        forecast = Forecast(data, TimeZone.currentSystemDefault()),
         temperatureUnit = settingsRepository.getTemperatureUnit(),
         windUnit = settingsRepository.getWindUnit(),
         precipitationUnit = settingsRepository.getPrecipitationUnit()

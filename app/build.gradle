@@ -131,7 +131,8 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:$versions.accompanist"
     implementation "androidx.glance:glance-appwidget:$versions.glance_appwidget"
 
-    // Core library desugaring
+    // Date time
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime-jvm:$versions.kotlinx_datetime"
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:$versions.core_library_desugaring"
 
     // Logging

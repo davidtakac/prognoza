@@ -4,17 +4,6 @@ import com.squareup.sqldelight.ColumnAdapter
 import hr.dtakac.prognoza.entities.forecast.Description
 import hr.dtakac.prognoza.entities.forecast.Mood
 import hr.dtakac.prognoza.entities.forecast.units.*
-import java.time.ZonedDateTime
-
-val zonedDateTimeSqlAdapter = object : ColumnAdapter<ZonedDateTime, String> {
-    override fun decode(databaseValue: String): ZonedDateTime {
-        return ZonedDateTime.parse(databaseValue)
-    }
-
-    override fun encode(value: ZonedDateTime): String {
-        return value.toString()
-    }
-}
 
 val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double> {
     override fun decode(databaseValue: Double): Temperature {

@@ -20,8 +20,8 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.entities.forecast.units.TemperatureUnit
+import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asGlanceString
-import hr.dtakac.prognoza.presentation.forecast.getShortTime
 import hr.dtakac.prognoza.presentation.forecast.getTemperature
 import hr.dtakac.prognoza.presentation.forecast.toDrawableId
 import hr.dtakac.prognoza.ui.MainActivity
@@ -273,7 +273,7 @@ private fun HoursRow(
                 unit = temperatureUnit
             ).asGlanceString()
             val iconResId = hour.description.toDrawableId()
-            val time = getShortTime(time = hour.dateTime).asGlanceString()
+            val time = TextResource.fromShortTime(hour.epochMillis).asGlanceString()
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

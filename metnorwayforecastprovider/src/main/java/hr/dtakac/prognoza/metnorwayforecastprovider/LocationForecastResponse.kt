@@ -4,9 +4,11 @@ import hr.dtakac.prognoza.entities.forecast.ForecastDatum
 import hr.dtakac.prognoza.entities.forecast.Description
 import hr.dtakac.prognoza.entities.forecast.units.*
 import hr.dtakac.prognoza.entities.forecast.Wind
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.plus
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import java.time.ZonedDateTime
 
 @Serializable
 data class LocationForecastResponse(
@@ -154,17 +156,17 @@ fun mapAdjacentTimeStepsToEntity(
     current: ForecastTimeStep,
     next: ForecastTimeStep?
 ): ForecastDatum? {
-    val endTime = next?.time?.let { ZonedDateTime.parse(it) } ?: return null
-    val startTime = ZonedDateTime.parse(current.time)
+    val endInstant = next?.time?.let { Instant.parse(it) } ?: return null
+    val startInstant = Instant.parse(current.time)
 
-    val details = when (endTime) {
-        startTime.plusHours(1) -> {
+    val details = when (endInstant) {
+        startInstant.plus(1, DateTimeUnit.HOUR) -> {
             current.data.next1Hours
         }
-        startTime.plusHours(6) -> {
+        startInstant.plus(6, DateTimeUnit.HOUR) -> {
             current.data.next6Hours
         }
-        startTime.plusHours(12) -> {
+        startInstant.plus(12, DateTimeUnit.HOUR) -> {
             current.data.next12Hours
         }
         else -> {
@@ -173,8 +175,8 @@ fun mapAdjacentTimeStepsToEntity(
     }
 
     return ForecastDatum(
-        start = startTime,
-        end = endTime,
+        startEpochMillis = startInstant.toEpochMilliseconds(),
+        endEpochMillis = endInstant.toEpochMilliseconds(),
         temperature = Temperature(
             value = current.data.instant.data.airTemperature,
             unit = TemperatureUnit.DEGREE_CELSIUS

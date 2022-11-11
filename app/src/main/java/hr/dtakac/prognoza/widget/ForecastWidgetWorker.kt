@@ -85,7 +85,7 @@ class ForecastWidgetWorker @Inject constructor(
                     description = result.forecast.current.description,
                     hours = result.forecast.today?.hourly?.map {
                         WidgetHour(
-                            dateTime = it.dateTime,
+                            epochMillis = it.epochMillis,
                             temperature = it.temperature,
                             description = it.description
                         )

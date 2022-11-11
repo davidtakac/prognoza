@@ -8,27 +8,26 @@ import io.ktor.client.call.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.time.ZonedDateTime
 
-private val TAG = MetNorwayForecastProvider::class.java.simpleName
-
+private val TAG = MetNorwayForecastProvider::class.simpleName ?: ""
 class MetNorwayForecastProvider(
     private val apiService: MetNorwayForecastService,
     private val metaQueries: MetaQueries,
     private val cachedResponseQueries: CachedResponseQueries,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    private val rfc1123Converter: Rfc1123Converter
 ) : ForecastProvider {
     override suspend fun provide(
         latitude: Double,
         longitude: Double
     ): ForecastProviderResult {
         val meta = getMeta(latitude, longitude)
-        if (meta?.expires?.let { ZonedDateTime.now() > meta.expires } != false) {
+        if (meta?.expiresEpochMillis?.let { System.currentTimeMillis() > it } != false) {
             try {
                 updateDatabase(
                     latitude = latitude,
                     longitude = longitude,
-                    lastModified = meta?.lastModified
+                    lastModifiedEpochMillis = meta?.lastModifiedEpochMillis
                 )
             } catch (e: Exception) {
                 Napier.e(TAG, e)
@@ -60,10 +59,10 @@ class MetNorwayForecastProvider(
     private suspend fun updateDatabase(
         latitude: Double,
         longitude: Double,
-        lastModified: ZonedDateTime?
+        lastModifiedEpochMillis: Long?
     ) {
         val forecastResponse = apiService.getForecast(
-            ifModifiedSince = lastModified,
+            ifModifiedSinceEpochMillis = lastModifiedEpochMillis,
             latitude = latitude,
             longitude = longitude
         )
@@ -99,8 +98,8 @@ class MetNorwayForecastProvider(
                 Meta(
                     latitude = latitude,
                     longitude = longitude,
-                    expires = headers[HttpHeaders.Expires]?.let(zonedDateTimeSqlAdapter::decode),
-                    lastModified = headers[HttpHeaders.LastModified]?.let(zonedDateTimeSqlAdapter::decode)
+                    expiresEpochMillis = headers[HttpHeaders.Expires]?.let(rfc1123Converter::toEpochMillis),
+                    lastModifiedEpochMillis = headers[HttpHeaders.LastModified]?.let(rfc1123Converter::toEpochMillis)
                 )
             )
         }

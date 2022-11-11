@@ -1,12 +1,11 @@
 package hr.dtakac.prognoza.entities.forecast
 
 import hr.dtakac.prognoza.entities.forecast.units.*
-import java.time.ZonedDateTime
 import kotlin.math.pow
 
 data class ForecastDatum(
-    val start: ZonedDateTime,
-    val end: ZonedDateTime,
+    val startEpochMillis: Long,
+    val endEpochMillis: Long,
     val temperature: Temperature,
     val precipitation: Length,
     val wind: Wind,

@@ -9,9 +9,6 @@ import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.descriptors.SerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.time.Instant
-import java.time.ZoneOffset
-import java.time.ZonedDateTime
 
 @Serializable
 sealed interface ForecastWidgetState {
@@ -37,8 +34,7 @@ sealed interface ForecastWidgetState {
 
 @Serializable
 data class WidgetHour(
-    @Serializable(with = ZonedDateTimeSerializer::class)
-    val dateTime: ZonedDateTime,
+    val epochMillis: Long,
     @Serializable(with = TemperatureSerializer::class)
     val temperature: Temperature,
     val description: Description
@@ -53,17 +49,5 @@ private object TemperatureSerializer : KSerializer<Temperature> {
 
     override fun serialize(encoder: Encoder, value: Temperature) {
         encoder.encodeDouble(value.celsius)
-    }
-}
-
-private object ZonedDateTimeSerializer : KSerializer<ZonedDateTime> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("zoned_date_time", PrimitiveKind.LONG)
-
-    override fun deserialize(decoder: Decoder): ZonedDateTime {
-        return Instant.ofEpochMilli(decoder.decodeLong()).atZone(ZoneOffset.UTC)
-    }
-
-    override fun serialize(encoder: Encoder, value: ZonedDateTime) {
-        encoder.encodeLong(value.toInstant().toEpochMilli())
     }
 }

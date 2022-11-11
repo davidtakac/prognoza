@@ -10,4 +10,5 @@ java {
 
 dependencies {
     implementation project(":entities")
+    implementation "org.jetbrains.kotlinx:kotlinx-datetime:$versions.kotlinx_datetime"
 }

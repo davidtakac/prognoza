@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Shorter time format (prevent stuff like 2 Uhr PM in German)
 - Measure pressure in mbar and inHg
 - Feels like calculated by wind chill
+- Migrate to kotlinx-datetime
 ### Fixed
 - Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
 - Current hour pairs too close together

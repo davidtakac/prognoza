@@ -4,14 +4,17 @@ import hr.dtakac.prognoza.domain.place.PlaceSearcher
 import hr.dtakac.prognoza.domain.place.PlaceSearcherResult
 import io.github.aakira.napier.Napier
 
-private const val TAG = "OsmPlaceSearcher"
+private val TAG = OsmPlaceSearcher::class.simpleName ?: ""
 
 class OsmPlaceSearcher(
     private val osmPlaceService: OsmPlaceService
 ) : PlaceSearcher {
-    override suspend fun search(query: String): PlaceSearcherResult {
+    override suspend fun search(
+        query: String,
+        rfc2616Language: String
+    ): PlaceSearcherResult {
         val entities = try {
-            osmPlaceService.search(query).map(PlaceResponse::toEntity)
+            osmPlaceService.search(query, rfc2616Language).map(PlaceResponse::toEntity)
         } catch (e: Exception) {
             Napier.e(TAG, e)
             null

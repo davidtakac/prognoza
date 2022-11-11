@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hr.dtakac.prognoza.AndroidRfc2616LanguageGetter
 import hr.dtakac.prognoza.domain.settings.SettingsRepository
 import hr.dtakac.prognoza.domain.forecast.ForecastProvider
 import hr.dtakac.prognoza.domain.forecast.ForecastSaver
@@ -11,6 +12,7 @@ import hr.dtakac.prognoza.domain.forecast.SavedForecastGetter
 import hr.dtakac.prognoza.domain.place.SavedPlaceGetter
 import hr.dtakac.prognoza.domain.place.PlaceSaver
 import hr.dtakac.prognoza.domain.place.PlaceSearcher
+import hr.dtakac.prognoza.domain.place.Rfc2616LanguageGetter
 import hr.dtakac.prognoza.domain.usecase.*
 
 @Module
@@ -38,8 +40,9 @@ class UseCaseModule {
 
     @Provides
     fun provideSearchPlacesUseCase(
-        placeSearcher: PlaceSearcher
-    ): SearchPlaces = SearchPlaces(placeSearcher)
+        placeSearcher: PlaceSearcher,
+        languageGetter: Rfc2616LanguageGetter
+    ): SearchPlaces = SearchPlaces(placeSearcher, languageGetter)
 
     @Provides
     fun provideGetSavedPlacesUseCase(

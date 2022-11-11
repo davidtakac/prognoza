@@ -4,6 +4,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hr.dtakac.prognoza.AndroidDotDecimalFormatter
+import hr.dtakac.prognoza.AndroidRfc1123Converter
 import hr.dtakac.prognoza.metnorwayforecastprovider.MetNorwayForecastService
 import hr.dtakac.prognoza.osmplacesearcher.OsmPlaceService
 import io.ktor.client.*
@@ -49,7 +51,9 @@ class ApiModule {
         return MetNorwayForecastService(
             client = httpClient,
             userAgent = userAgent,
-            baseUrl = "https://api.met.no/weatherapi"
+            baseUrl = "https://api.met.no/weatherapi",
+            rfc1123Converter = AndroidRfc1123Converter(),
+            dotDecimalFormatter = AndroidDotDecimalFormatter()
         )
     }
 

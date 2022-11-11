@@ -26,7 +26,8 @@ buildscript {
                 napier                  : '2.6.1',
                 work                    : '2.7.1',
                 ktor                    : '2.1.3',
-                sqldelight              : '1.5.3'
+                sqldelight              : '1.5.3',
+                kotlinx_datetime        : '0.4.0'
         ]
     }
     repositories {

@@ -48,7 +48,7 @@ class ForecastUiMapper @Inject constructor(
     ): CurrentUi = CurrentUi(
         place = TextResource.fromText(placeName),
         mood = current.mood,
-        date = TextResource.fromDate(current.dateTime.toInstant().toEpochMilli()),
+        date = TextResource.fromDate(current.epochMillis),
         temperature = getTemperature(current.temperature, temperatureUnit),
         description = TextResource.fromStringId(current.description.toStringId()),
         icon = current.description.toDrawableId(),
@@ -91,7 +91,7 @@ class ForecastUiMapper @Inject constructor(
         precipitationUnit: LengthUnit
     ): List<DayUi> = days.map { day ->
         DayUi(
-            date = TextResource.fromShortDateAndWeekday(day.dateTime.toInstant().toEpochMilli()),
+            date = TextResource.fromShortDateAndWeekday(day.epochMillis),
             lowHighTemperature = getLowHighTemperature(
                 lowTemperature = day.lowTemperature,
                 highTemperature = day.highTemperature,
@@ -102,7 +102,7 @@ class ForecastUiMapper @Inject constructor(
             } ?: TextResource.empty(),
             hours = day.hours.map {
                 ComingHourUi(
-                    time = getShortTime(it.dateTime),
+                    time = TextResource.fromShortTime(it.epochMillis),
                     temperature = getTemperature(
                         temperature = it.temperature,
                         unit = temperatureUnit
@@ -118,7 +118,7 @@ class ForecastUiMapper @Inject constructor(
         temperatureUnit: TemperatureUnit,
         precipitationUnit: LengthUnit
     ): DayHourUi = DayHourUi(
-        time = getShortTime(datum.dateTime),
+        time = TextResource.fromShortTime(datum.epochMillis),
         temperature = getTemperature(datum.temperature, temperatureUnit),
         precipitation = datum.precipitation.takeIf { it.millimetre > 0.0 }?.let {
             getPrecipitation(it, precipitationUnit)
