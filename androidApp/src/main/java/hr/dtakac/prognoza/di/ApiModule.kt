@@ -4,8 +4,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import hr.dtakac.prognoza.platform.AndroidDotDecimalFormatter
 import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
 import hr.dtakac.prognoza.shared.data.openstreetmap.OsmPlaceService
+import hr.dtakac.prognoza.shared.platform.Rfc1123UtcDateTimeParser
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -44,12 +46,15 @@ class ApiModule {
     fun provideForecastService(
         httpClient: HttpClient,
         @Named("user_agent")
-        userAgent: String
+        userAgent: String,
+        rfc1123UtcDateTimeParser: Rfc1123UtcDateTimeParser
     ): MetNorwayForecastService {
         return MetNorwayForecastService(
             client = httpClient,
             userAgent = userAgent,
-            baseUrl = "https://api.met.no/weatherapi"
+            baseUrl = "https://api.met.no/weatherapi",
+            dotDecimalFormatter = AndroidDotDecimalFormatter(),
+            epochMillisToRfc1123 = rfc1123UtcDateTimeParser::format
         )
     }
 

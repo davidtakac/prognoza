@@ -16,6 +16,7 @@ import hr.dtakac.prognoza.shared.data.prognoza.DatabaseForecastRepository
 import hr.dtakac.prognoza.shared.data.prognoza.DatabasePlaceRepository
 import hr.dtakac.prognoza.shared.data.prognoza.DatabaseSettingsRepository
 import hr.dtakac.prognoza.shared.domain.data.*
+import hr.dtakac.prognoza.shared.platform.Rfc1123UtcDateTimeParser
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Named
 
@@ -52,12 +53,14 @@ class RepositoryModule {
     fun provideForecastProvider(
         apiService: MetNorwayForecastService,
         database: PrognozaDatabase,
-        @Named("io") ioDispatcher: CoroutineDispatcher
+        @Named("io") ioDispatcher: CoroutineDispatcher,
+        rfc1123UtcDateTimeParser: Rfc1123UtcDateTimeParser
     ): ForecastProvider = MetNorwayForecastProvider(
         apiService = apiService,
         ioDispatcher = ioDispatcher,
         metaQueries = database.metaQueries,
-        cachedResponseQueries = database.cachedResponseQueries
+        cachedResponseQueries = database.cachedResponseQueries,
+        rfc1123ToEpochMillis = rfc1123UtcDateTimeParser::parseToEpochMillis
     )
 
     @Provides

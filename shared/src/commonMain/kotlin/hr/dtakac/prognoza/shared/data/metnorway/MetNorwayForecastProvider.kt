@@ -6,7 +6,6 @@ import hr.dtakac.prognoza.shared.data.metnorway.network.mapAdjacentTimeStepsToEn
 import hr.dtakac.prognoza.shared.domain.data.ForecastProvider
 import hr.dtakac.prognoza.shared.domain.data.ForecastProviderResult
 import hr.dtakac.prognoza.shared.entity.ForecastDatum
-import hr.dtakac.prognoza.shared.parseEpochMillisFromRfc1123
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -19,7 +18,8 @@ class MetNorwayForecastProvider(
     private val apiService: MetNorwayForecastService,
     private val metaQueries: MetaQueries,
     private val cachedResponseQueries: CachedResponseQueries,
-    private val ioDispatcher: CoroutineDispatcher
+    private val ioDispatcher: CoroutineDispatcher,
+    private val rfc1123ToEpochMillis: (String) -> Long
 ) : ForecastProvider {
     override suspend fun provide(
         latitude: Double,
@@ -102,8 +102,8 @@ class MetNorwayForecastProvider(
                 Meta(
                     latitude = latitude,
                     longitude = longitude,
-                    expiresEpochMillis = headers[HttpHeaders.Expires]?.let(::parseEpochMillisFromRfc1123),
-                    lastModifiedEpochMillis = headers[HttpHeaders.LastModified]?.let(::parseEpochMillisFromRfc1123)
+                    expiresEpochMillis = headers[HttpHeaders.Expires]?.let { rfc1123ToEpochMillis(it) },
+                    lastModifiedEpochMillis = headers[HttpHeaders.LastModified]?.let { rfc1123ToEpochMillis(it) }
                 )
             )
         }

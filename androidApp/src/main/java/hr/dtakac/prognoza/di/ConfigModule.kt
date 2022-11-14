@@ -5,6 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.BuildConfig
+import hr.dtakac.prognoza.platform.AndroidRfc1123UtcDateTimeParser
+import hr.dtakac.prognoza.shared.platform.Rfc1123UtcDateTimeParser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Named
@@ -27,4 +29,7 @@ class ConfigModule {
     @Provides
     @Named("computation")
     fun provideComputationDispatcher(): CoroutineDispatcher = Dispatchers.Default
+
+    @Provides
+    fun provideRfc1123UtcDateTimeParser(): Rfc1123UtcDateTimeParser = AndroidRfc1123UtcDateTimeParser()
 }
