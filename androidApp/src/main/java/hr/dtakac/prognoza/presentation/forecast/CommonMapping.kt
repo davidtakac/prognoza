@@ -10,16 +10,6 @@ import hr.dtakac.prognoza.shared.entity.Description.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-fun getLowHighTemperature(
-    lowTemperature: Temperature,
-    highTemperature: Temperature,
-    temperatureUnit: TemperatureUnit
-): TextResource = TextResource.fromStringId(
-    id = R.string.template_high_low_temperature,
-    getTemperature(highTemperature, temperatureUnit),
-    getTemperature(lowTemperature, temperatureUnit)
-)
-
 fun getTemperature(
     temperature: Temperature,
     unit: TemperatureUnit
@@ -34,73 +24,6 @@ fun getTemperature(
         ).setScale(0, RoundingMode.HALF_EVEN)
     )
 )
-
-fun getWind(
-    wind: Wind,
-    unit: SpeedUnit
-): TextResource {
-    fun BigDecimal.format() = setScale(0, RoundingMode.HALF_EVEN)
-    return when (unit) {
-        SpeedUnit.KILOMETRE_PER_HOUR -> TextResource.fromStringId(
-            R.string.template_wind_kmh,
-            TextResource.fromNumber(BigDecimal(wind.speed.kilometrePerHour).format())
-        )
-        SpeedUnit.MILE_PER_HOUR -> TextResource.fromStringId(
-            R.string.template_wind_mph,
-            TextResource.fromNumber(BigDecimal(wind.speed.milePerHour).format())
-        )
-        SpeedUnit.METRE_PER_SECOND -> TextResource.fromStringId(
-            R.string.template_wind_mps,
-            TextResource.fromNumber(BigDecimal(wind.speed.metrePerSecond).format())
-        )
-        SpeedUnit.KNOT -> TextResource.fromStringId(
-            R.string.template_wind_knots,
-            TextResource.fromNumber(BigDecimal(wind.speed.knot).format())
-        )
-    }
-}
-
-fun getPrecipitation(
-    precipitation: Length,
-    unit: LengthUnit
-): TextResource {
-    val zero = BigDecimal(0.0)
-    fun BigDecimal.format() = setScale(1, RoundingMode.HALF_EVEN)
-    return when (unit) {
-        LengthUnit.MILLIMETRE -> BigDecimal(precipitation.millimetre)
-            .format()
-            .takeUnless { it.compareTo(zero) == 0 }
-            ?.let {
-                TextResource.fromStringId(
-                    id = R.string.template_precipitation_mm,
-                    TextResource.fromNumber(it)
-                )
-            }
-            ?: TextResource.empty()
-
-        LengthUnit.INCH -> BigDecimal(precipitation.inch)
-            .format()
-            .takeUnless { it.compareTo(zero) == 0 }
-            ?.let {
-                TextResource.fromStringId(
-                    id = R.string.template_precipitation_in,
-                    TextResource.fromNumber(it)
-                )
-            }
-            ?: TextResource.empty()
-
-        LengthUnit.CENTIMETRE -> BigDecimal(precipitation.centimetre)
-            .format()
-            .takeUnless { it.compareTo(zero) == 0 }
-            ?.let {
-                TextResource.fromStringId(
-                    id = R.string.template_precipitation_cm,
-                    TextResource.fromNumber(it)
-                )
-            }
-            ?: TextResource.empty()
-    }
-}
 
 @StringRes
 fun CompassDirection.toCompassDirectionStringId(): Int = when (this) {
