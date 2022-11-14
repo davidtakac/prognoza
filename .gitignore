@@ -8,6 +8,7 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 /.idea/misc.xml
+/.idea/kotlinScripting.xml
 .DS_Store
 /build
 /captures
@@ -16,5 +17,5 @@
 local.properties
 
 # Signing
-keystore.properties
-/app/prognoza.jks
+/androidApp/keystore.properties
+/androidApp/prognoza.jks

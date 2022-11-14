@@ -1,7 +1,0 @@
-rootProject.name = "Prognoza"
-include ':app'
-include ':entities'
-include ':domain'
-include ':data'
-include ':osmplacesearcher'
-include ':metnorwayforecastprovider'
