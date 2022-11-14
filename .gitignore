@@ -17,5 +17,5 @@
 local.properties
 
 # Signing
-/androidApp/keystore.properties
-/androidApp/prognoza.jks
+keystore.properties
+*.jks
