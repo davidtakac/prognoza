@@ -52,7 +52,7 @@ class ForecastUiMapper @Inject constructor(
         date = TextResource.fromDate(current.epochMillis),
         temperature = getTemperature(current.temperature, temperatureUnit),
         description = TextResource.fromStringId(current.description.toStringId()),
-        icon = current.description.toDrawableId(),
+        weatherIconDescription = current.description,
         wind = getWind(current.wind, windUnit),
         feelsLike = TextResource.fromStringId(
             id = R.string.template_feels_like,
@@ -100,7 +100,7 @@ class ForecastUiMapper @Inject constructor(
                         temperature = it.temperature,
                         unit = temperatureUnit
                     ),
-                    icon = it.description.toDrawableId()
+                    weatherIconDescription = it.description
                 )
             }
         )
@@ -117,7 +117,7 @@ class ForecastUiMapper @Inject constructor(
             getPrecipitation(it, precipitationUnit)
         } ?: TextResource.empty(),
         description = TextResource.fromStringId(datum.description.toStringId()),
-        icon = datum.description.toDrawableId()
+        weatherIconDescription = datum.description
     )
 
     private fun getPrecipitation(

@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.compositeOver
 import hr.dtakac.prognoza.shared.entity.Mood
 
 @Immutable
-data class PrognozaColors(
+data class Colors(
     val surface1: Color,
     val surface2: Color,
     val surface3: Color,
@@ -21,7 +21,7 @@ data class PrognozaColors(
             mood: Mood,
             darkColors: Boolean,
             contentAlpha: Float
-        ): PrognozaColors {
+        ): Colors {
             val onSurface = if (darkColors) Color.White else Color.Black
             val surface = getSurface(darkColors)
             val onInverseSurface = if (darkColors) Color.Black else Color.White
@@ -29,7 +29,7 @@ data class PrognozaColors(
             val primary = getPrimary(darkColors, mood)
             val inversePrimary = getPrimary(!darkColors, mood)
 
-            return PrognozaColors(
+            return Colors(
                 surface1 = surface.overlay(with = primary, alpha = surface1Alpha),
                 surface2 = surface.overlay(with = primary, alpha = surface2Alpha),
                 surface3 = surface.overlay(with = primary, alpha = surface3Alpha),

@@ -75,7 +75,7 @@ class PlacesViewModel @Inject constructor(
                 places = mapper.mapToPlaceUi(currentPlaces, selectedPlace),
                 placeSelected = simpleEvent()
             )
-            widgetRefresher.refresh()
+            widgetRefresher.refreshData()
             hideLoader()
         }
     }

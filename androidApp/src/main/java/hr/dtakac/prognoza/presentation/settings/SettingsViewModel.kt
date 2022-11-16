@@ -148,7 +148,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun fireUnitChanged() {
-        widgetRefresher.refresh()
+        widgetRefresher.refreshData()
         _state.value = _state.value.copy(
             unitChangedEvent = simpleEvent()
         )

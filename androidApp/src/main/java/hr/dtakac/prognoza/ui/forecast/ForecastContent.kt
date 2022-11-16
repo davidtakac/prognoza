@@ -28,9 +28,11 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.*
+import hr.dtakac.prognoza.shared.entity.Description
 import hr.dtakac.prognoza.shared.entity.Mood
 import hr.dtakac.prognoza.ui.common.*
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.asWeatherIconResId
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.map
@@ -238,7 +240,7 @@ private fun DataList(
         item(key = "description-and-precipitation") {
             DescriptionAndPrecipitation(
                 description = forecast.current.description.asString(),
-                icon = forecast.current.icon,
+                icon = forecast.current.weatherIconDescription.asWeatherIconResId(),
                 precipitation = forecast.current.precipitation.asString(),
                 modifier = Modifier
                     .padding(itemPadding)
@@ -522,7 +524,7 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
     date = TextResource.fromText("September 12"),
     temperature = TextResource.fromText("1°"),
     description = TextResource.fromText("Clear sky, sleet soon"),
-    icon = R.drawable.clearsky_day,
+    weatherIconDescription = Description.CLEAR_SKY_DAY,
     wind = TextResource.fromText("Wind: 15 km/h"),
     feelsLike = TextResource.fromText("Feels like: -21°"),
     mood = Mood.CLEAR,
@@ -539,7 +541,7 @@ private fun fakeTodayUi(): TodayUi = TodayUi(
                     temperature = TextResource.fromText("23°"),
                     precipitation = TextResource.fromText("1.99 mm"),
                     description = TextResource.fromText("Clear and some more text"),
-                    icon = if (i % 2 == 0) R.drawable.heavysleetshowersandthunder_night else R.drawable.ic_question_mark
+                    weatherIconDescription = if (i % 2 == 0) Description.CLEAR_SKY_DAY else Description.UNKNOWN
                 )
             )
         }
@@ -557,7 +559,7 @@ private fun fakeComingUi(): List<DayUi> = listOf(
                     ComingHourUi(
                         time = TextResource.fromText("$i:00"),
                         temperature = TextResource.fromText("20"),
-                        icon = R.drawable.partlycloudy_day
+                        weatherIconDescription = Description.CLEAR_SKY_DAY
                     )
                 )
             }

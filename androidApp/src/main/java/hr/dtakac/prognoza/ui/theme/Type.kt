@@ -20,7 +20,7 @@ val Manrope = FontFamily(
 )
 
 @Immutable
-data class PrognozaTypography(
+data class Typography(
     val headlineLarge: TextStyle,
     val headlineSmall: TextStyle,
     val titleLarge: TextStyle,
@@ -36,7 +36,7 @@ data class PrognozaTypography(
         // to have excessive top padding which is most noticeable on very large text, such as
         // headlineLarge and headlineSmall
         @Suppress("DEPRECATION")
-        fun get(): PrognozaTypography = PrognozaTypography(
+        fun get(): Typography = Typography(
             headlineLarge = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,

@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import hr.dtakac.prognoza.shared.entity.Mood
 
-private val LocalPrognozaColors = staticCompositionLocalOf {
-    PrognozaColors(
+private val LocalColors = staticCompositionLocalOf {
+    Colors(
         surface1 = Color.Unspecified,
         surface2 = Color.Unspecified,
         surface3 = Color.Unspecified,
@@ -27,8 +27,8 @@ private val LocalPrognozaColors = staticCompositionLocalOf {
     )
 }
 
-private val LocalPrognozaTypography = staticCompositionLocalOf {
-    PrognozaTypography(
+private val LocalTypography = staticCompositionLocalOf {
+    Typography(
         headlineLarge = TextStyle.Default,
         headlineSmall = TextStyle.Default,
         titleLarge = TextStyle.Default,
@@ -41,12 +41,16 @@ private val LocalPrognozaTypography = staticCompositionLocalOf {
     )
 }
 
-private val LocalPrognozaContentAlpha = staticCompositionLocalOf {
-    PrognozaContentAlpha(
+private val LocalContentAlpha = staticCompositionLocalOf {
+    ContentAlpha(
         high = 1f,
         medium = 1f,
         disabled = 1f
     )
+}
+
+private val LocalWeatherIcons = staticCompositionLocalOf {
+    WeatherIcons.get(useDarkTheme = false)
 }
 
 private class PrognozaRippleTheme(
@@ -71,34 +75,40 @@ fun PrognozaTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val alpha = PrognozaContentAlpha.get()
-    val colors = PrognozaColors.get(
+    val alpha = ContentAlpha.get()
+    val colors = Colors.get(
         mood = description,
         darkColors = useDarkTheme,
         contentAlpha = alpha.high
     ).switch()
-    val typography = PrognozaTypography.get()
+    val typography = Typography.get()
+    val weatherIcons = WeatherIcons.get(useDarkTheme)
     CompositionLocalProvider(
-        LocalPrognozaColors provides colors,
-        LocalPrognozaTypography provides typography,
-        LocalPrognozaContentAlpha provides alpha,
+        LocalColors provides colors,
+        LocalTypography provides typography,
+        LocalContentAlpha provides alpha,
         LocalRippleTheme provides PrognozaRippleTheme(useDarkTheme),
+        LocalWeatherIcons provides weatherIcons,
         content = content
     )
 }
 
 object PrognozaTheme {
-    val colors: PrognozaColors
+    val colors: Colors
         @Composable
-        get() = LocalPrognozaColors.current
+        get() = LocalColors.current
 
-    val typography: PrognozaTypography
+    val typography: Typography
         @Composable
-        get() = LocalPrognozaTypography.current
+        get() = LocalTypography.current
 
-    val alpha: PrognozaContentAlpha
+    val alpha: ContentAlpha
         @Composable
-        get() = LocalPrognozaContentAlpha.current
+        get() = LocalContentAlpha.current
+
+    val weatherIcons: WeatherIcons
+        @Composable
+        get() = LocalWeatherIcons.current
 }
 
 @Composable
@@ -108,7 +118,7 @@ private fun animateColor(target: Color) = animateColorAsState(
 ).value
 
 @Composable
-private fun PrognozaColors.switch() = copy(
+private fun Colors.switch() = copy(
     surface1 = animateColor(target = surface1),
     surface2 = animateColor(target = surface2),
     surface3 = animateColor(target = surface3),

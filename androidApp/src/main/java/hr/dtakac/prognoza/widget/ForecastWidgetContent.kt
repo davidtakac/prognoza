@@ -22,9 +22,9 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asGlanceString
 import hr.dtakac.prognoza.presentation.forecast.getTemperature
-import hr.dtakac.prognoza.presentation.forecast.toDrawableId
 import hr.dtakac.prognoza.shared.entity.TemperatureUnit
 import hr.dtakac.prognoza.ui.MainActivity
+import hr.dtakac.prognoza.ui.theme.asGlanceWeatherIconResId
 import java.lang.IllegalStateException
 
 @Composable
@@ -80,7 +80,7 @@ private fun SuccessWidget(
 ) {
     val placeName = state.placeName
     val temperatureUnit = state.temperatureUnit
-    val icon = state.description.toDrawableId()
+    val icon = state.description.asGlanceWeatherIconResId()
     val currentTemperature = getTemperature(
         temperature = state.temperature,
         unit = temperatureUnit
@@ -272,7 +272,7 @@ private fun HoursRow(
                 temperature = hour.temperature,
                 unit = temperatureUnit
             ).asGlanceString()
-            val iconResId = hour.description.toDrawableId()
+            val iconResId = hour.description.asGlanceWeatherIconResId()
             val time = TextResource.fromShortTime(hour.epochMillis).asGlanceString()
 
             Column(

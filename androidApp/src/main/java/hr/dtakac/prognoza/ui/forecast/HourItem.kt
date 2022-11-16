@@ -24,6 +24,7 @@ import coil.compose.rememberAsyncImagePainter
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.DayHourUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.asWeatherIconResId
 
 @Composable
 fun rememberHourItemDimensions(
@@ -104,7 +105,7 @@ fun HourItem(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Image(
-                painter = rememberAsyncImagePainter(model = hour.icon),
+                painter = rememberAsyncImagePainter(model = hour.weatherIconDescription.asWeatherIconResId()),
                 contentDescription = null,
                 modifier = Modifier.size(32.dp)
             )

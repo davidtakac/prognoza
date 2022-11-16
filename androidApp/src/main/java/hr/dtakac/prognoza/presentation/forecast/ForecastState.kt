@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.presentation.forecast
 
-import androidx.annotation.DrawableRes
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.shared.entity.Description
 import hr.dtakac.prognoza.shared.entity.Mood
 
 data class ForecastState(
@@ -22,8 +22,7 @@ data class CurrentUi(
     val date: TextResource,
     val temperature: TextResource,
     val description: TextResource,
-    @DrawableRes
-    val icon: Int,
+    val weatherIconDescription: Description,
     val wind: TextResource,
     val feelsLike: TextResource,
     val precipitation: TextResource
@@ -39,8 +38,7 @@ data class DayHourUi(
     val temperature: TextResource,
     val precipitation: TextResource,
     val description: TextResource,
-    @DrawableRes
-    val icon: Int
+    val weatherIconDescription: Description
 )
 
 data class DayUi(
@@ -53,6 +51,5 @@ data class DayUi(
 data class ComingHourUi(
     val time: TextResource,
     val temperature: TextResource,
-    @DrawableRes
-    val icon: Int
+    val weatherIconDescription: Description
 )

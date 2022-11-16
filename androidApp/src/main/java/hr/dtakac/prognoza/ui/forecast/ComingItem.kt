@@ -38,6 +38,7 @@ import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.ComingHourUi
 import hr.dtakac.prognoza.presentation.forecast.DayUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.asWeatherIconResId
 
 @Composable
 fun rememberComingItemDimensions(
@@ -174,7 +175,7 @@ private fun ComingHourItem(
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Image(
-            painter = rememberAsyncImagePainter(model = hour.icon),
+            painter = rememberAsyncImagePainter(model = hour.weatherIconDescription.asWeatherIconResId()),
             contentDescription = null,
             modifier = Modifier.size(32.dp)
         )

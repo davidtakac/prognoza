@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.presentation.forecast
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
@@ -140,92 +139,4 @@ fun Description.toStringId(): Int = when (this) {
     SNOW_SHOWERS_DAY,
     SNOW_SHOWERS_NIGHT,
     SNOW_SHOWERS_POLAR_TWILIGHT -> R.string.description_snow_showers
-}
-
-@DrawableRes
-fun Description.toDrawableId(): Int = when (this) {
-    UNKNOWN -> R.drawable.ic_question_mark
-    CLEAR_SKY_DAY -> R.drawable.clearsky_day
-    CLEAR_SKY_NIGHT -> R.drawable.clearsky_night
-    CLEAR_SKY_POLAR_TWILIGHT -> R.drawable.clearsky_polartwilight
-    CLOUDY -> R.drawable.cloudy
-    FAIR_DAY -> R.drawable.fair_day
-    FAIR_NIGHT -> R.drawable.fair_night
-    FAIR_POLAR_TWILIGHT -> R.drawable.fair_polartwilight
-    FOG -> R.drawable.fog
-    HEAVY_RAIN_AND_THUNDER -> R.drawable.heavyrainandthunder
-    HEAVY_RAIN -> R.drawable.heavyrain
-    HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY -> R.drawable.heavyrainshowersandthunder_day
-    HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.heavyrainshowersandthunder_night
-    HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.heavyrainshowersandthunder_polartwilight
-    HEAVY_RAIN_SHOWERS_DAY -> R.drawable.heavyrainshowers_day
-    HEAVY_RAIN_SHOWERS_NIGHT -> R.drawable.heavyrainshowers_night
-    HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT -> R.drawable.heavyrainshowers_polartwilight
-    HEAVY_SLEET_AND_THUNDER -> R.drawable.heavysleetandthunder
-    HEAVY_SLEET -> R.drawable.heavysleet
-    HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY -> R.drawable.heavysleetshowersandthunder_day
-    HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.heavysleetshowersandthunder_night
-    HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.heavysleetshowersandthunder_polartwilight
-    HEAVY_SLEET_SHOWERS_DAY -> R.drawable.heavysleetshowers_day
-    HEAVY_SLEET_SHOWERS_NIGHT -> R.drawable.heavysleetshowers_night
-    HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT -> R.drawable.heavysleetshowers_polartwilight
-    HEAVY_SNOW_AND_THUNDER -> R.drawable.heavysnowandthunder
-    HEAVY_SNOW -> R.drawable.heavysnow
-    HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY -> R.drawable.heavysnowshowersandthunder_day
-    HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.heavysnowshowersandthunder_night
-    HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.heavysnowshowersandthunder_polartwilight
-    HEAVY_SNOW_SHOWERS_DAY -> R.drawable.heavysnowshowers_day
-    HEAVY_SNOW_SHOWERS_NIGHT -> R.drawable.heavysnowshowers_night
-    HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT -> R.drawable.heavysnowshowers_polartwilight
-    LIGHT_RAIN_AND_THUNDER -> R.drawable.lightrainandthunder
-    LIGHT_RAIN -> R.drawable.lightrain
-    LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY -> R.drawable.lightrainshowersandthunder_day
-    LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.lightrainshowersandthunder_night
-    LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.lightrainshowersandthunder_polartwilight
-    LIGHT_RAIN_SHOWERS_DAY -> R.drawable.lightrainshowers_day
-    LIGHT_RAIN_SHOWERS_NIGHT -> R.drawable.lightrainshowers_night
-    LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT -> R.drawable.lightrainshowers_polartwilight
-    LIGHT_SLEET_AND_THUNDER -> R.drawable.lightsleetandthunder
-    LIGHT_SLEET -> R.drawable.lightsleet
-    LIGHT_SLEET_SHOWERS_DAY -> R.drawable.lightsleetshowers_day
-    LIGHT_SLEET_SHOWERS_NIGHT -> R.drawable.lightsleetshowers_night
-    LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT -> R.drawable.lightsleetshowers_polartwilight
-    LIGHT_SNOW_AND_THUNDER -> R.drawable.lightsnowandthunder
-    LIGHT_SNOW -> R.drawable.lightsnow
-    LIGHT_SNOW_SHOWERS_DAY -> R.drawable.lightsnowshowers_day
-    LIGHT_SNOW_SHOWERS_NIGHT -> R.drawable.lightsnowshowers_night
-    LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT -> R.drawable.lightsnowshowers_polartwilight
-    LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY -> R.drawable.lightssleetshowersandthunder_day
-    LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.lightssleetshowersandthunder_night
-    LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.lightssleetshowersandthunder_polartwilight
-    LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY -> R.drawable.lightssnowshowersandthunder_day
-    LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.lightssnowshowersandthunder_night
-    LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.lightssnowshowersandthunder_polartwilight
-    PARTLY_CLOUDY_DAY -> R.drawable.partlycloudy_day
-    PARTLY_CLOUDY_NIGHT -> R.drawable.partlycloudy_night
-    PARTLY_CLOUDY_POLAR_TWILIGHT -> R.drawable.partlycloudy_polartwilight
-    RAIN_AND_THUNDER -> R.drawable.rainandthunder
-    RAIN -> R.drawable.rain
-    RAIN_SHOWERS_AND_THUNDER_DAY -> R.drawable.rainshowersandthunder_day
-    RAIN_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.rainshowersandthunder_night
-    RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.rainshowersandthunder_polartwilight
-    RAIN_SHOWERS_DAY -> R.drawable.rainshowers_day
-    RAIN_SHOWERS_NIGHT -> R.drawable.rainshowers_night
-    RAIN_SHOWERS_POLAR_TWILIGHT -> R.drawable.rainshowers_polartwilight
-    SLEET_AND_THUNDER -> R.drawable.sleetandthunder
-    SLEET -> R.drawable.sleet
-    SLEET_SHOWERS_AND_THUNDER_DAY -> R.drawable.sleetshowersandthunder_day
-    SLEET_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.sleetshowersandthunder_night
-    SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.sleetshowersandthunder_polartwilight
-    SLEET_SHOWERS_DAY -> R.drawable.sleetshowers_day
-    SLEET_SHOWERS_NIGHT -> R.drawable.sleetshowers_night
-    SLEET_SHOWERS_POLAR_TWILIGHT -> R.drawable.sleetshowers_polartwilight
-    SNOW_AND_THUNDER -> R.drawable.snowandthunder
-    SNOW -> R.drawable.snow
-    SNOW_SHOWERS_AND_THUNDER_DAY -> R.drawable.snowshowersandthunder_day
-    SNOW_SHOWERS_AND_THUNDER_NIGHT -> R.drawable.snowshowersandthunder_night
-    SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> R.drawable.snowshowersandthunder_polartwilight
-    SNOW_SHOWERS_DAY -> R.drawable.snowshowers_day
-    SNOW_SHOWERS_NIGHT -> R.drawable.snowshowers_night
-    SNOW_SHOWERS_POLAR_TWILIGHT -> R.drawable.snowshowers_polartwilight
 }
