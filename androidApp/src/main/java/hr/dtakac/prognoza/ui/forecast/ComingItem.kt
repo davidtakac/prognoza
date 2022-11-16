@@ -2,14 +2,17 @@ package hr.dtakac.prognoza.ui.forecast
 
 import android.content.Context
 import androidx.compose.animation.*
+import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ProvideTextStyle
@@ -19,6 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -73,18 +78,42 @@ fun ComingItem(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val expandTransition = updateTransition(label = "Expand coming item", targetState = isExpanded)
+    val expandTransition = updateTransition(
+        label = "Expand coming item",
+        targetState = isExpanded
+    )
     val chevronRotation by expandTransition.animateFloat(label = "Rotate chevron") {
         if (it) 180f else 0f
     }
+    val verticalMargin by expandTransition.animateDp(label = "Animate vertical margin") {
+        if (it) 12.dp else 0.dp
+    }
+    val horizontalMargin by expandTransition.animateDp(label = "Animate horizontal margin") {
+        if (it) 8.dp else 0.dp
+    }
+    val verticalPadding by expandTransition.animateDp(label = "Animate vertical padding") {
+        if (it) 16.dp else 12.dp
+    }
+    val horizontalPadding by expandTransition.animateDp(label = "Animate horizontal padding") {
+        if (it) 16.dp else 24.dp
+    }
+    val cornerRadius by expandTransition.animateDp(label = "Animate corner radius") {
+        if (it) 16.dp else 0.dp
+    }
+    val backgroundColor by expandTransition.animateColor(label = "Animate background color") {
+        if (it) PrognozaTheme.colors.surface2 else Color.Transparent
+    }
     Column(
-        modifier = Modifier
+        modifier = modifier
+            .padding(vertical = verticalMargin, horizontal = horizontalMargin)
+            .clip(RoundedCornerShape(cornerRadius))
+            .background(color = backgroundColor)
             .clickable(
                 onClick = onClick,
                 indication = rememberRipple(bounded = true),
                 interactionSource = remember { MutableInteractionSource() }
             )
-            .then(modifier)
+            .padding(vertical = verticalPadding, horizontal = horizontalPadding)
     ) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
             Row(

@@ -205,7 +205,9 @@ private fun DataList(
     val comingItemDimensions = rememberComingItemDimensions(days = forecast.coming ?: listOf())
     // Horizontal padding isn't included in contentPadding because the click ripple on the Coming
     // day items looks better when it goes edge-to-edge
-    val itemPadding = PaddingValues(horizontal = 24.dp)
+    val itemPadding = remember { PaddingValues(horizontal = 24.dp) }
+    // Expanded coming items get reset when they get out of view otherwise
+    var expandedComingItems: Set<Int> by remember(forecast.coming) { mutableStateOf(setOf()) }
     LazyColumn(
         state = listState,
         contentPadding = PaddingValues(vertical = 24.dp),
@@ -287,17 +289,18 @@ private fun DataList(
                         .padding(top = 42.dp, bottom = 6.dp)
                 )
             }
-            items(it) { day ->
-                var isExpanded by remember { mutableStateOf(false) }
+            itemsIndexed(it) { idx, day ->
                 ComingItem(
                     day = day,
                     dimensions = comingItemDimensions,
-                    isExpanded = isExpanded,
-                    onClick = { isExpanded = !isExpanded },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(itemPadding)
-                        .padding(vertical = 10.dp)
+                    isExpanded = idx in expandedComingItems,
+                    onClick = {
+                        expandedComingItems = expandedComingItems.toMutableSet().apply {
+                            if (idx in expandedComingItems) remove(idx)
+                            else add(idx)
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }

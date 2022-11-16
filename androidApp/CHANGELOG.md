@@ -21,12 +21,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feels like calculated by wind chill
 - Migrate to kotlinx-datetime
 - KMM
+- Coming item expands to card
+- Add dark mode icons
 ### Fixed
 - Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
 - Current hour pairs too close together
 - Inconsistent spacing between hour and coming data columns
 - Forecast not scrolling in horizontal orientation
 - Device default theme changes to one from settings on first start
+- Wind speed not hiding when 0
 ### Added
 - Unit conversion tests
 
