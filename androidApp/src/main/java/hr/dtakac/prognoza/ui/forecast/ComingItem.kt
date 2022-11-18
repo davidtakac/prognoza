@@ -6,7 +6,6 @@ import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -22,7 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
@@ -105,15 +104,26 @@ fun ComingItem(
     }
     Column(
         modifier = modifier
-            .padding(vertical = verticalMargin, horizontal = horizontalMargin)
-            .clip(RoundedCornerShape(cornerRadius))
-            .background(color = backgroundColor)
+            .padding(
+                vertical = verticalMargin,
+                horizontal = horizontalMargin
+            )
+            .graphicsLayer {
+                shape = RoundedCornerShape(cornerRadius)
+                clip = true
+            }
+            .drawBehind {
+                drawRect(color = backgroundColor)
+            }
             .clickable(
                 onClick = onClick,
                 indication = rememberRipple(bounded = true),
                 interactionSource = remember { MutableInteractionSource() }
             )
-            .padding(vertical = verticalPadding, horizontal = horizontalPadding)
+            .padding(
+                vertical = verticalPadding,
+                horizontal = horizontalPadding
+            )
     ) {
         ProvideTextStyle(PrognozaTheme.typography.body) {
             Row(

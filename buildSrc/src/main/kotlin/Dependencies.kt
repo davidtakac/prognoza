@@ -69,7 +69,7 @@ object Dependencies {
         }
 
         object Compose {
-            private const val version = "1.3.0"
+            private const val version = "1.3.1"
             const val core = "androidx.compose.ui:ui:$version"
             const val animation = "androidx.compose.animation:animation:$version"
             const val tooling = "androidx.compose.ui:ui-tooling:$version"
