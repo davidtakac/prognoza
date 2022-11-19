@@ -104,4 +104,12 @@ class SettingsUiMapper @Inject constructor(
         value = TextResource.fromStringId(R.string.neal_hampton_credit),
         onClick = onClick
     )
+
+    fun getIconCreditDisplaySetting(
+        onClick: () -> Unit
+    ): DisplaySetting = DisplaySetting(
+        name = TextResource.fromStringId(R.string.launcher_icon_credit),
+        value = TextResource.fromStringId(R.string.natasa_takac_credit),
+        onClick = onClick
+    )
 }

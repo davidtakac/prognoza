@@ -134,6 +134,9 @@ class SettingsViewModel @Inject constructor(
                 ),
                 mapper.getDesignCreditDisplaySetting(
                     onClick = { openLink("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2") }
+                ),
+                mapper.getIconCreditDisplaySetting(
+                    onClick = { openLink("https://www.instagram.com/art.ofil/") }
                 )
             )
         )

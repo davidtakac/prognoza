@@ -42,3 +42,4 @@ Weather app with widgets and offline support.
 - Forecast data by [MET Norway](https://www.met.no/en)
 - Geolocation data by [OSM Nominatim](https://nominatim.org/)
 - Design by [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2)
+- App icon by [Nataša Takač](https://www.instagram.com/art.ofil/)

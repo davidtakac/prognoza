@@ -121,5 +121,7 @@
     <string name="geolocation_data">Place data</string>
     <string name="design_credit">Design</string>
     <string name="neal_hampton_credit" translatable="false">Neal Hampton</string>
+    <string name="launcher_icon_credit">App icon</string>
+    <string name="natasa_takac_credit" translatable="false">Nataša Takač</string>
 
 </resources>

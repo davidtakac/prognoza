@@ -17,12 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Make app mood a business rule
 - Allow external feels like and mood
 - Shorter time format (prevent stuff like 2 Uhr PM in German)
-- Measure pressure in mbar and inHg
+- Measure pressure in millibar and inches of mercury
 - Feels like calculated by wind chill
 - Migrate to kotlinx-datetime
 - KMM
 - Coming item expands to card
 - Add dark mode icons
+- Better weather icon
 ### Fixed
 - Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
 - Current hour pairs too close together
