@@ -74,7 +74,7 @@ fun AppToolbarWithLoadingIndicator(
 @Preview
 @Composable
 private fun ToolbarWithLoadingIndicatorPreview() {
-    AppTheme(mood = Mood.CLEAR) {
+    AppTheme(mood = Mood.CLEAR_DAY) {
         AppToolbarWithLoadingIndicator(
             placeName = "Helsinki",
             date = "September 29",
