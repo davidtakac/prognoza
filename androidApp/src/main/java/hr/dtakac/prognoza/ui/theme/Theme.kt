@@ -55,7 +55,7 @@ private val LocalWeatherIcons = staticCompositionLocalOf {
     WeatherIcons.get(useDarkTheme = false)
 }
 
-private class PrognozaRippleTheme(
+private class RippleTheme(
     private val useDarkTheme: Boolean
 ) : RippleTheme {
     @Composable
@@ -72,14 +72,14 @@ private class PrognozaRippleTheme(
 }
 
 @Composable
-fun PrognozaTheme(
-    description: Mood = Mood.DEFAULT,
+fun AppTheme(
+    mood: Mood = Mood.DEFAULT,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val alpha = ContentAlpha.get()
     val colors = Colors.get(
-        mood = description,
+        mood = mood,
         darkColors = useDarkTheme,
         contentAlpha = alpha.high
     ).switch()
@@ -90,7 +90,7 @@ fun PrognozaTheme(
         LocalColors provides colors,
         LocalTypography provides typography,
         LocalContentAlpha provides alpha,
-        LocalRippleTheme provides PrognozaRippleTheme(useDarkTheme),
+        LocalRippleTheme provides RippleTheme(useDarkTheme),
         LocalWeatherIcons provides weatherIcons,
         LocalIndication provides indication,
         content = content

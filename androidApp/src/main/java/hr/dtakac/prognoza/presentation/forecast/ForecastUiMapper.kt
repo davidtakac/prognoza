@@ -47,7 +47,7 @@ class ForecastUiMapper @Inject constructor(
         windUnit: SpeedUnit,
         precipitationUnit: LengthUnit
     ): CurrentUi = CurrentUi(
-        place = TextResource.fromText(placeName),
+        place = TextResource.fromString(placeName),
         mood = current.mood,
         date = TextResource.fromDate(current.epochMillis),
         temperature = getTemperature(current.temperature, temperatureUnit),
@@ -56,7 +56,7 @@ class ForecastUiMapper @Inject constructor(
         wind = getWind(current.wind, windUnit),
         feelsLike = TextResource.fromStringId(
             id = R.string.template_feels_like,
-            getTemperature(current.temperature, temperatureUnit)
+            getTemperature(current.feelsLike, temperatureUnit)
         ),
         precipitation = getPrecipitation(current.precipitation, precipitationUnit)
     )
@@ -84,8 +84,8 @@ class ForecastUiMapper @Inject constructor(
         days: List<Day>,
         temperatureUnit: TemperatureUnit,
         precipitationUnit: LengthUnit
-    ): List<DayUi> = days.map { day ->
-        DayUi(
+    ): List<ComingDayUi> = days.map { day ->
+        ComingDayUi(
             date = TextResource.fromShortDateAndWeekday(day.epochMillis),
             lowHighTemperature = getLowHighTemperature(
                 lowTemperature = day.lowTemperature,
@@ -94,7 +94,7 @@ class ForecastUiMapper @Inject constructor(
             ),
             precipitation = getPrecipitation(day.totalPrecipitation, precipitationUnit),
             hours = day.hours.map {
-                ComingHourUi(
+                ComingDayHourUi(
                     time = TextResource.fromShortTime(it.epochMillis),
                     temperature = getTemperature(
                         temperature = it.temperature,

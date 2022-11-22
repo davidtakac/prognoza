@@ -17,73 +17,73 @@ class SettingsUiMapper @Inject constructor(
     private val computationDispatcher: CoroutineDispatcher
 ) {
     suspend fun mapToTemperatureUnitSetting(
-        selectedTemperatureUnit: TemperatureUnit,
-        availableTemperatureUnits: List<TemperatureUnit>,
-        onValuePick: (Int) -> Unit
-    ): MultipleChoiceSetting = MultipleChoiceSetting(
+        selected: TemperatureUnit,
+        units: List<TemperatureUnit>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
         name = TextResource.fromStringId(R.string.temperature_unit),
-        value = TextResource.fromStringId(selectedTemperatureUnit.toSettingsLabel()),
+        selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
-            availableTemperatureUnits.map(TemperatureUnit::toSettingsLabel).map(TextResource::fromStringId)
+            units.map(TemperatureUnit::toSettingsLabel).map(TextResource::fromStringId)
         },
-        onValuePick = onValuePick
+        onIndexSelected = onIndexSelected
     )
 
     suspend fun mapToWindUnitSetting(
-        selectedWindUnit: SpeedUnit,
-        availableWindUnits: List<SpeedUnit>,
-        onValuePick: (Int) -> Unit
-    ): MultipleChoiceSetting = MultipleChoiceSetting(
+        selected: SpeedUnit,
+        units: List<SpeedUnit>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
         name = TextResource.fromStringId(R.string.wind_unit),
-        value = TextResource.fromStringId(selectedWindUnit.toSettingsLabel()),
+        selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
-            availableWindUnits.map(SpeedUnit::toSettingsLabel).map(TextResource::fromStringId)
+            units.map(SpeedUnit::toSettingsLabel).map(TextResource::fromStringId)
         },
-        onValuePick = onValuePick
+        onIndexSelected = onIndexSelected
     )
 
     suspend fun mapToPrecipitationUnitSetting(
-        selectedPrecipitationUnit: LengthUnit,
-        availablePrecipitationUnits: List<LengthUnit>,
-        onValuePick: (Int) -> Unit
-    ): MultipleChoiceSetting = MultipleChoiceSetting(
+        selected: LengthUnit,
+        units: List<LengthUnit>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
         name = TextResource.fromStringId(R.string.precipitation_unit),
-        value = TextResource.fromStringId(selectedPrecipitationUnit.toSettingsLabel()),
+        selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
-            availablePrecipitationUnits.map(LengthUnit::toSettingsLabel).map(TextResource::fromStringId)
+            units.map(LengthUnit::toSettingsLabel).map(TextResource::fromStringId)
         },
-        onValuePick = onValuePick
+        onIndexSelected = onIndexSelected
     )
 
     suspend fun mapToPressureUnitSetting(
-        selectedPressureUnit: PressureUnit,
-        availablePressureUnits: List<PressureUnit>,
-        onValuePick: (Int) -> Unit
-    ): MultipleChoiceSetting = MultipleChoiceSetting(
+        selected: PressureUnit,
+        units: List<PressureUnit>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
         name = TextResource.fromStringId(R.string.pressure_unit),
-        value = TextResource.fromStringId(selectedPressureUnit.toSettingsLabel()),
+        selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
-            availablePressureUnits.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
+            units.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
         },
-        onValuePick = onValuePick
+        onIndexSelected = onIndexSelected
     )
 
     suspend fun mapToThemeSetting(
-        selectedThemeSetting: ThemeSetting,
-        availableThemeSettings: List<ThemeSetting>,
-        onValuePick: (Int) -> Unit
-    ): MultipleChoiceSetting = MultipleChoiceSetting(
+        selected: ThemeSetting,
+        options: List<ThemeSetting>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
         name = TextResource.fromStringId(R.string.theme),
-        value = TextResource.fromStringId(selectedThemeSetting.toSettingsLabel()),
+        selectedIndex = options.indexOf(selected),
         values = withContext(computationDispatcher) {
-            availableThemeSettings.map(ThemeSetting::toSettingsLabel).map(TextResource::fromStringId)
+            options.map(ThemeSetting::toSettingsLabel).map(TextResource::fromStringId)
         },
-        onValuePick = onValuePick
+        onIndexSelected = onIndexSelected
     )
 
     fun getForecastCreditDisplaySetting(
         onClick: () -> Unit
-    ): DisplaySetting = DisplaySetting(
+    ): DisplaySettingUi = DisplaySettingUi(
         name = TextResource.fromStringId(R.string.weather_data),
         value = TextResource.fromStringId(R.string.met_norway_credit),
         onClick = onClick
@@ -91,7 +91,7 @@ class SettingsUiMapper @Inject constructor(
 
     fun getGeolocationCreditDisplaySetting(
         onClick: () -> Unit
-    ): DisplaySetting = DisplaySetting(
+    ): DisplaySettingUi = DisplaySettingUi(
         name = TextResource.fromStringId(R.string.geolocation_data),
         value = TextResource.fromStringId(R.string.osm_nominatim_credit),
         onClick = onClick
@@ -99,7 +99,7 @@ class SettingsUiMapper @Inject constructor(
 
     fun getDesignCreditDisplaySetting(
         onClick: () -> Unit
-    ): DisplaySetting = DisplaySetting(
+    ): DisplaySettingUi = DisplaySettingUi(
         name = TextResource.fromStringId(R.string.design_credit),
         value = TextResource.fromStringId(R.string.neal_hampton_credit),
         onClick = onClick
@@ -107,7 +107,7 @@ class SettingsUiMapper @Inject constructor(
 
     fun getIconCreditDisplaySetting(
         onClick: () -> Unit
-    ): DisplaySetting = DisplaySetting(
+    ): DisplaySettingUi = DisplaySettingUi(
         name = TextResource.fromStringId(R.string.launcher_icon_credit),
         value = TextResource.fromStringId(R.string.natasa_takac_credit),
         onClick = onClick

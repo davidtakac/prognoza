@@ -12,28 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.delay
 
-class PrognozaSnackBarState {
-    var isVisible: Boolean = false
-        private set
-    
-    var currentText: String = ""
-        private set
-    
-    suspend fun showSnackBar(message: String) {
-        currentText = message
-        isVisible = true
-        delay(4000L)
-        isVisible = false
-    }
-}
-
 @Composable
-fun PrognozaSnackBar(
-    state: PrognozaSnackBarState,
+fun AppSnackBar(
+    state: AppSnackBarState,
     modifier: Modifier = Modifier,
     backgroundColor: Color = PrognozaTheme.colors.inverseSurface1,
     contentColor: Color = PrognozaTheme.colors.onInverseSurface,
@@ -53,7 +40,7 @@ fun PrognozaSnackBar(
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(
-                text = state.currentText,
+                text = state.currentMessage,
                 style = PrognozaTheme.typography.body,
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 2,
@@ -62,4 +49,39 @@ fun PrognozaSnackBar(
             )
         }
     }
+}
+
+class AppSnackBarState(
+    isVisible: Boolean,
+    initialMessage: String
+) {
+    private val _isVisible = mutableStateOf(isVisible)
+    val isVisible: Boolean by _isVisible
+
+    private val _currentMessage = mutableStateOf(initialMessage)
+    val currentMessage: String by _currentMessage
+
+    suspend fun showSnackBar(message: String) {
+        _currentMessage.value = message
+        _isVisible.value = true
+        delay(4000L)
+        _isVisible.value = false
+    }
+}
+
+@Composable
+fun rememberAppSnackBarState(
+    isVisible: Boolean = false,
+    initialMessage: String = ""
+) = remember { AppSnackBarState(isVisible, initialMessage) }
+
+@Preview
+@Composable
+private fun AppSnackBarPreview() = AppTheme {
+    AppSnackBar(
+        state = rememberAppSnackBarState(
+            isVisible = true,
+            initialMessage = "An error occurred."
+        )
+    )
 }

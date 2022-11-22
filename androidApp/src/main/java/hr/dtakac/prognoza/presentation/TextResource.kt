@@ -13,9 +13,9 @@ import java.util.*
 
 sealed interface TextResource {
     companion object {
-        fun empty(): TextResource = fromText("")
+        fun empty(): TextResource = fromString("")
 
-        fun fromText(text: String): TextResource =
+        fun fromString(text: String): TextResource =
             SimpleTextResource(text)
 
         fun fromStringId(@StringRes id: Int): TextResource =

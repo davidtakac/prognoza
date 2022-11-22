@@ -13,7 +13,7 @@ data class ForecastState(
 data class ForecastUi(
     val current: CurrentUi,
     val today: TodayUi?,
-    val coming: List<DayUi>?
+    val coming: List<ComingDayUi>?
 )
 
 data class CurrentUi(
@@ -41,14 +41,14 @@ data class DayHourUi(
     val weatherIconDescription: Description
 )
 
-data class DayUi(
+data class ComingDayUi(
     val date: TextResource,
     val lowHighTemperature: TextResource,
     val precipitation: TextResource,
-    val hours: List<ComingHourUi>
+    val hours: List<ComingDayHourUi>
 )
 
-data class ComingHourUi(
+data class ComingDayHourUi(
     val time: TextResource,
     val temperature: TextResource,
     val weatherIconDescription: Description

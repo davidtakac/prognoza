@@ -103,26 +103,26 @@ class SettingsViewModel @Inject constructor(
         _state.value = _state.value.copy(
             unitSettings = listOf(
                 mapper.mapToTemperatureUnitSetting(
-                    selectedTemperatureUnit = getTemperatureUnit(),
-                    availableTemperatureUnits = availableTemperatureUnits,
-                    onValuePick = ::setTemperatureUnit
+                    selected = getTemperatureUnit(),
+                    units = availableTemperatureUnits,
+                    onIndexSelected = ::setTemperatureUnit
                 ),
                 mapper.mapToWindUnitSetting(
-                    selectedWindUnit = getWindUnit(),
-                    availableWindUnits = availableWindUnits,
-                    onValuePick = ::setWindUnit
+                    selected = getWindUnit(),
+                    units = availableWindUnits,
+                    onIndexSelected = ::setWindUnit
                 ),
                 mapper.mapToPrecipitationUnitSetting(
-                    selectedPrecipitationUnit = getPrecipitationUnit(),
-                    availablePrecipitationUnits = availablePrecipitationUnits,
-                    onValuePick = ::setPrecipitationUnit
+                    selected = getPrecipitationUnit(),
+                    units = availablePrecipitationUnits,
+                    onIndexSelected = ::setPrecipitationUnit
                 )
             ),
             appearanceSettings = listOf(
                 mapper.mapToThemeSetting(
-                    selectedThemeSetting = sharedPrefsThemeSettingRepository.getTheme(),
-                    availableThemeSettings = availableThemeSettings,
-                    onValuePick = ::setTheme
+                    selected = sharedPrefsThemeSettingRepository.getTheme(),
+                    options = availableThemeSettings,
+                    onIndexSelected = ::setTheme
                 )
             ),
             creditSettings = listOf(

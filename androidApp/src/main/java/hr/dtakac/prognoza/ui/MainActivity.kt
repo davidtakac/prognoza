@@ -25,7 +25,7 @@ import hr.dtakac.prognoza.presentation.theme.ThemeSettingViewModel
 import hr.dtakac.prognoza.shared.entity.Mood
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
+import hr.dtakac.prognoza.ui.theme.AppTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -63,8 +63,8 @@ class MainActivity : ComponentActivity() {
                 ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
             }
 
-            PrognozaTheme(
-                description = forecastState.forecast?.current?.mood ?: Mood.DEFAULT,
+            AppTheme(
+                mood = forecastState.forecast?.current?.mood ?: Mood.DEFAULT,
                 useDarkTheme = useDarkTheme
             ) {
                 val navController = rememberNavController()

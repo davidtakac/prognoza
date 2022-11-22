@@ -19,8 +19,8 @@ class PlacesUiMapper @Inject constructor(
     ): List<PlaceUi> = withContext(computationDispatcher) {
         places.map {
             PlaceUi(
-                name = TextResource.fromText(it.name),
-                details = TextResource.fromText(it.details ?: ""),
+                name = TextResource.fromString(it.name),
+                details = TextResource.fromString(it.details ?: ""),
                 isSelected = it == selectedPlace
             )
         }
@@ -33,7 +33,7 @@ class PlacesUiMapper @Inject constructor(
         SearchPlacesResult.Empty.Error -> TextResource.fromStringId(R.string.error_search_places)
         SearchPlacesResult.Empty.None -> TextResource.fromStringId(
             id = R.string.no_places_found,
-            TextResource.fromText(query)
+            TextResource.fromString(query)
         )
     }
 }

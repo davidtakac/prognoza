@@ -5,22 +5,22 @@ import hr.dtakac.prognoza.presentation.TextResource
 
 data class SettingsState(
     val isLoading: Boolean = false,
-    val unitSettings: List<MultipleChoiceSetting> = listOf(),
-    val appearanceSettings: List<MultipleChoiceSetting> = listOf(),
-    val creditSettings: List<DisplaySetting> = listOf(),
+    val unitSettings: List<MultipleChoiceSettingUi> = listOf(),
+    val appearanceSettings: List<MultipleChoiceSettingUi> = listOf(),
+    val creditSettings: List<DisplaySettingUi> = listOf(),
     val unitChangedEvent: Event<Unit>? = null,
     val themeChangedEvent: Event<Unit>? = null,
     val openLinkEvent: Event<String>? = null
 )
 
-data class MultipleChoiceSetting(
+data class MultipleChoiceSettingUi(
     val name: TextResource,
-    val value: TextResource,
+    val selectedIndex: Int,
     val values: List<TextResource>,
-    val onValuePick: (Int) -> Unit
+    val onIndexSelected: (Int) -> Unit
 )
 
-data class DisplaySetting(
+data class DisplaySettingUi(
     val name: TextResource,
     val value: TextResource,
     val onClick: () -> Unit

@@ -19,15 +19,16 @@ fun PlacesScreen(
         onPlaceSelected()
     }
 
+    var query by remember { mutableStateOf("") }
     PlacesContent(
         state = state,
         onPlaceSelected = viewModel::select,
         onSettingsClick = onSettingsClick,
-        onQuerySubmit = viewModel::search,
-        onQueryChange = { query ->
-            if (query.isBlank()) {
-                viewModel.getSaved()
-            }
+        query = query,
+        onQuerySubmit = { viewModel.search(query) },
+        onQueryChange = {
+            query = it
+            if (it.isBlank()) viewModel.getSaved()
         }
     )
 }
