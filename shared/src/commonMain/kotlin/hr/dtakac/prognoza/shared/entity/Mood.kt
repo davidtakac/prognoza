@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.shared.entity
 
 enum class Mood {
-    DEFAULT, CLEAR, FOG, CLOUDY, RAIN, SNOW, SLEET;
+    DEFAULT, CLEAR_DAY, CLEAR_NIGHT, FOG, CLOUDY, RAIN, SNOW, SLEET;
 
     companion object {
         internal fun fromDescription(description: Description): Mood = when (description) {
@@ -10,11 +10,12 @@ enum class Mood {
             Description.FOG -> FOG
 
             Description.CLEAR_SKY_DAY,
+            Description.FAIR_DAY -> CLEAR_DAY
+
             Description.CLEAR_SKY_NIGHT,
             Description.CLEAR_SKY_POLAR_TWILIGHT,
-            Description.FAIR_DAY,
             Description.FAIR_NIGHT,
-            Description.FAIR_POLAR_TWILIGHT -> CLEAR
+            Description.FAIR_POLAR_TWILIGHT -> CLEAR_NIGHT
 
             Description.CLOUDY,
             Description.PARTLY_CLOUDY_DAY,

@@ -72,7 +72,7 @@ private fun TodayScreenPreview(
     current: CurrentUi = fakeCurrentUi(),
     today: TodayUi? = fakeTodayUi(),
     coming: List<ComingDayUi> = fakeComingUi()
-) = AppTheme(mood = Mood.CLEAR) {
+) = AppTheme(mood = Mood.CLEAR_DAY) {
     Box(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
         ForecastDataList(
             data = ForecastUi(
@@ -115,7 +115,7 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
     weatherIconDescription = Description.CLEAR_SKY_DAY,
     wind = TextResource.fromString("Wind: 15 km/h"),
     feelsLike = TextResource.fromString("Feels like: -21°"),
-    mood = Mood.CLEAR,
+    mood = Mood.CLEAR_DAY,
     precipitation = TextResource.fromString("12 mm")
 )
 

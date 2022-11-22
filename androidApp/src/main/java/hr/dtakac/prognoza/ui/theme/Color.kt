@@ -72,11 +72,15 @@ private fun getPrimary(
 
     Mood.DEFAULT,
     Mood.SNOW ->
-        if (darkColors) Color.White
+        if (darkColors) Color(0xFFE0E0E0) // Gray 300
         else Color(0xFF757575) // Gray 600
 
-    Mood.CLEAR ->
+    Mood.CLEAR_NIGHT ->
         if (darkColors) Color(0xFF9575CD) // Deep Purple 300
+        else Color(0xFF5E35B1) // Deep Purple 600
+
+    Mood.CLEAR_DAY ->
+        if (darkColors) Color(0xFFFFD54F) // Amber 300
         else Color(0xFFFFB300) // Amber 600
 }
 
