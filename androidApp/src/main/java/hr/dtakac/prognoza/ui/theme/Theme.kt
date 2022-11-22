@@ -2,10 +2,12 @@ package hr.dtakac.prognoza.ui.theme
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -83,12 +85,14 @@ fun PrognozaTheme(
     ).switch()
     val typography = Typography.get()
     val weatherIcons = WeatherIcons.get(useDarkTheme)
+    val indication = rememberRipple()
     CompositionLocalProvider(
         LocalColors provides colors,
         LocalTypography provides typography,
         LocalContentAlpha provides alpha,
         LocalRippleTheme provides PrognozaRippleTheme(useDarkTheme),
         LocalWeatherIcons provides weatherIcons,
+        LocalIndication provides indication,
         content = content
     )
 }

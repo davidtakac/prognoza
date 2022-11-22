@@ -7,12 +7,10 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
@@ -115,11 +113,7 @@ fun ComingItem(
             .drawBehind {
                 drawRect(color = backgroundColor)
             }
-            .clickable(
-                onClick = onClick,
-                indication = rememberRipple(bounded = true),
-                interactionSource = remember { MutableInteractionSource() }
-            )
+            .clickable(onClick = onClick)
             .padding(
                 vertical = verticalPadding,
                 horizontal = horizontalPadding

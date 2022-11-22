@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.ui.places
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -102,11 +101,7 @@ private fun PlacesList(
                 details = placeUi.details.asString(),
                 isSelected = placeUi.isSelected,
                 modifier = Modifier
-                    .clickable(
-                        onClick = { onPlaceSelected(idx) },
-                        indication = rememberRipple(bounded = true),
-                        interactionSource = remember { MutableInteractionSource() }
-                    )
+                    .clickable { onPlaceSelected(idx) }
                     .fillMaxWidth()
                     .padding(
                         vertical = 12.dp,
@@ -124,11 +119,7 @@ private fun SettingsButton(
 ) {
     Row(
         modifier = modifier
-            .clickable(
-                onClick = onClick,
-                indication = rememberRipple(bounded = true),
-                interactionSource = remember { MutableInteractionSource() }
-            )
+            .clickable(onClick = onClick)
             .fillMaxWidth()
             .padding(horizontal = 24.dp, vertical = 16.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -248,11 +239,7 @@ private fun SearchBar(
                             modifier = Modifier
                                 .padding(start = 12.dp)
                                 .size(24.dp)
-                                .clickable(
-                                    onClick = { setQuery("") },
-                                    indication = rememberRipple(bounded = true),
-                                    interactionSource = remember { MutableInteractionSource() }
-                                )
+                                .clickable { setQuery("") }
                         )
                     }
                 }

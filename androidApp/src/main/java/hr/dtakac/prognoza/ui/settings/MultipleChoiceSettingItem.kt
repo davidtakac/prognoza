@@ -70,11 +70,7 @@ fun SettingItem(
 ) {
     Column(
         modifier = modifier
-            .clickable(
-                onClick = onClick,
-                indication = rememberRipple(bounded = true),
-                interactionSource = remember { MutableInteractionSource() }
-            )
+            .clickable(onClick = onClick)
             .padding(horizontal = 24.dp, vertical = 16.dp)
             .fillMaxWidth()
     ) {
@@ -153,11 +149,7 @@ private fun DialogOptions(
             itemsIndexed(options) { idx, option ->
                 Row(
                     modifier = Modifier
-                        .clickable(
-                            onClick = { onIndexSelect(idx) },
-                            indication = rememberRipple(bounded = true),
-                            interactionSource = remember { MutableInteractionSource() }
-                        )
+                        .clickable { onIndexSelect(idx) }
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
