@@ -3,6 +3,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class WindChillTest {
+    private val tolerance = 0.0001
+
     @Test // By chart from here https://www.weather.gov/media/lsx/wcm/Winter2008/Wind_Chill.pdf
     fun `calculates wind chill when wind and temperature are per NWS chart`() {
         val windSpeed = Speed(20.0, SpeedUnit.MILE_PER_HOUR)
@@ -27,5 +29,38 @@ class WindChillTest {
                 absoluteTolerance = 1.0
             )
         }
+    }
+
+    @Test
+    fun `same as air temperature when wind speed 60mph and air temperature 80F`() {
+        val windSpeed = Speed(60.0, SpeedUnit.MILE_PER_HOUR)
+        val temperature = Temperature(80.0, TemperatureUnit.DEGREE_FAHRENHEIT)
+        assertEquals(
+            expected = temperature.fahrenheit,
+            actual = calculateWindChill(temperature, windSpeed).fahrenheit,
+            absoluteTolerance = tolerance
+        )
+    }
+
+    @Test
+    fun `same as air temperature when wind speed 2mph and air temperature 10F`() {
+        val windSpeed = Speed(2.0, SpeedUnit.MILE_PER_HOUR)
+        val temperature = Temperature(10.0, TemperatureUnit.DEGREE_FAHRENHEIT)
+        assertEquals(
+            expected = temperature.fahrenheit,
+            actual = calculateWindChill(temperature, windSpeed).fahrenheit,
+            absoluteTolerance = tolerance
+        )
+    }
+
+    @Test
+    fun `same as air temperature when wind speed 2mph and air temperature 85F`() {
+        val windSpeed = Speed(2.0, SpeedUnit.MILE_PER_HOUR)
+        val temperature = Temperature(85.0, TemperatureUnit.DEGREE_FAHRENHEIT)
+        assertEquals(
+            expected = temperature.fahrenheit,
+            actual = calculateWindChill(temperature, windSpeed).fahrenheit,
+            absoluteTolerance = tolerance
+        )
     }
 }

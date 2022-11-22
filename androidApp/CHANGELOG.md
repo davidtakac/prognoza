@@ -16,21 +16,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Make app mood a business rule
 - Allow external feels like and mood
-- Shorter time format (prevent stuff like 2 Uhr PM in German)
 - Measure pressure in millibar and inches of mercury
 - Feels like calculated by wind chill
-- Migrate to kotlinx-datetime
-- KMM
+- Refactored to Kotlin Multiplatform Mobile
 - Coming item expands to card
 - Add dark mode icons
 - Better weather icon
 ### Fixed
-- Each hourly and coming data cell (besides description) is as wide as the widest cell in the list
+- Hourly and coming data cells wider than they need to be
 - Current hour pairs too close together
 - Inconsistent spacing between hour and coming data columns
 - Forecast not scrolling in horizontal orientation
 - Device default theme changes to one from settings on first start
 - Wind speed not hiding when 0
+- Feels like temperature always same as air temperature
+- Long time format (like 2 Uhr PM in German)
 ### Added
 - Unit conversion tests
 
