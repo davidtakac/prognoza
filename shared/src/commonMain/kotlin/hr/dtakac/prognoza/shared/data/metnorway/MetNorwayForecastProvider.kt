@@ -12,9 +12,10 @@ import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock
+import kotlinx.serialization.json.Json
 
 private val TAG = MetNorwayForecastProvider::class.simpleName ?: ""
-class MetNorwayForecastProvider(
+internal class MetNorwayForecastProvider(
     private val apiService: MetNorwayForecastService,
     private val metaQueries: MetaQueries,
     private val cachedResponseQueries: CachedResponseQueries,
@@ -85,7 +86,7 @@ class MetNorwayForecastProvider(
                     CachedResponse(
                         latitude = latitude,
                         longitude = longitude,
-                        response = it
+                        responseJson = Json.encodeToString(LocationForecastResponse.serializer(), response)
                     )
                 )
             }
@@ -125,6 +126,9 @@ class MetNorwayForecastProvider(
         cachedResponseQueries
             .get(latitude, longitude)
             .executeAsOneOrNull()
-            ?.response
+            ?.responseJson
+            ?.let {
+                Json.decodeFromString(LocationForecastResponse.serializer(), it)
+            }
     }
 }

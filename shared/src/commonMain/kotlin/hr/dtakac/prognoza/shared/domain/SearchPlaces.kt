@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.shared.domain.data.PlaceSearcherResult
 import hr.dtakac.prognoza.shared.entity.Place
 import hr.dtakac.prognoza.shared.platform.LocalRfc2616LanguageGetter
 
-class SearchPlaces(
+class SearchPlaces internal constructor(
     private val placeSearcher: PlaceSearcher,
     private val localRfc2616LanguageGetter: LocalRfc2616LanguageGetter
 ) {

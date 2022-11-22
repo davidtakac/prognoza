@@ -22,6 +22,12 @@ object Dependencies {
     const val jUnit = "junit:junit:4.13"
     const val napier = "io.github.aakira:napier:2.6.1"
 
+    object Serialization {
+        private const val version = "1.4.1"
+        const val core = "org.jetbrains.kotlinx:kotlinx-serialization-core:$version"
+        const val json = "org.jetbrains.kotlinx:kotlinx-serialization-json:$version"
+    }
+
     object Ktor {
         private const val version = "2.1.3"
         const val core = "io.ktor:ktor-client-core:$version"
@@ -35,6 +41,7 @@ object Dependencies {
         private const val version = GlobalVersions.sqlDelight
         const val core = "com.squareup.sqldelight:runtime:$version"
         const val android = "com.squareup.sqldelight:android-driver:$version"
+        const val native = "com.squareup.sqldelight:native-driver:$version"
     }
 
     object Coroutines {

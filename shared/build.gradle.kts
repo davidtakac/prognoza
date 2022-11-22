@@ -22,11 +22,15 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(Dependencies.napier)
-                implementation(Dependencies.Ktor.core)
-                implementation(Dependencies.Ktor.serialization)
                 implementation(Dependencies.DateTime.core)
                 implementation(Dependencies.Coroutines.core)
                 implementation(Dependencies.SqlDelight.core)
+                implementation(Dependencies.Serialization.json)
+                implementation(Dependencies.Ktor.core)
+                implementation(Dependencies.Ktor.cio)
+                implementation(Dependencies.Ktor.logging)
+                implementation(Dependencies.Ktor.contentNegotiation)
+                implementation(Dependencies.Ktor.serialization)
             }
         }
         val commonTest by getting {
@@ -34,7 +38,11 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val androidMain by getting
+        val androidMain by getting {
+            dependencies {
+                implementation(Dependencies.SqlDelight.android)
+            }
+        }
         val androidTest by getting
         val iosX64Main by getting
         val iosArm64Main by getting
@@ -44,6 +52,9 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+            dependencies {
+                implementation(Dependencies.SqlDelight.native)
+            }
         }
         val iosX64Test by getting
         val iosArm64Test by getting

@@ -6,7 +6,7 @@ import io.github.aakira.napier.Napier
 
 private val TAG = OsmPlaceSearcher::class.simpleName ?: ""
 
-class OsmPlaceSearcher(
+internal class OsmPlaceSearcher(
     private val osmPlaceService: OsmPlaceService
 ) : PlaceSearcher {
     override suspend fun search(

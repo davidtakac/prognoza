@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.shared.domain.data
 
 import hr.dtakac.prognoza.shared.entity.*
 
-interface SettingsRepository {
+internal interface SettingsRepository {
     suspend fun setTemperatureUnit(unit: TemperatureUnit)
     suspend fun getTemperatureUnit(): TemperatureUnit
     suspend fun setPrecipitationUnit(unit: LengthUnit)

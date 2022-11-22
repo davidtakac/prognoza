@@ -6,7 +6,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 
-class MetNorwayForecastService(
+internal class MetNorwayForecastService(
     private val client: HttpClient,
     private val userAgent: String,
     private val baseUrl: String,

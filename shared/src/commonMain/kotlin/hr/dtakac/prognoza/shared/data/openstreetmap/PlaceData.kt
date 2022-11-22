@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PlaceResponse(
+internal data class PlaceResponse(
     @SerialName("place_id")
     val id: String,
     @SerialName("lat")
@@ -16,7 +16,7 @@ data class PlaceResponse(
     val displayName: String
 )
 
-fun PlaceResponse.toEntity(): Place {
+internal fun PlaceResponse.toEntity(): Place {
     return Place(
         name = displayName.split(", ").getOrNull(0) ?: displayName,
         details = displayName,

@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.shared.domain.data.PlaceSaver
 import hr.dtakac.prognoza.shared.domain.data.SettingsRepository
 import hr.dtakac.prognoza.shared.entity.Place
 
-class SelectPlace(
+class SelectPlace internal constructor(
     private val placeSaver: PlaceSaver,
     private val settingsRepository: SettingsRepository
 ) {

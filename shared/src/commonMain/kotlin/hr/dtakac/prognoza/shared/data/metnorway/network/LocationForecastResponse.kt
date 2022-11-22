@@ -8,13 +8,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LocationForecastResponse(
+internal data class LocationForecastResponse(
     @SerialName("properties")
     val forecast: Forecast
 )
 
 @Serializable
-data class Forecast(
+internal data class Forecast(
     @SerialName("meta")
     val meta: ForecastMeta,
     @SerialName("timeseries")
@@ -22,7 +22,7 @@ data class Forecast(
 )
 
 @Serializable
-data class ForecastTimeStep(
+internal data class ForecastTimeStep(
     @SerialName("time")
     val time: String,
     @SerialName("data")
@@ -30,7 +30,7 @@ data class ForecastTimeStep(
 )
 
 @Serializable
-data class ForecastTimeStepData(
+internal data class ForecastTimeStepData(
     @SerialName("instant")
     val instant: ForecastTimeInstant,
     @SerialName("next_1_hours")
@@ -42,13 +42,13 @@ data class ForecastTimeStepData(
 )
 
 @Serializable
-data class ForecastTimeInstant(
+internal data class ForecastTimeInstant(
     @SerialName("details")
     val data: ForecastInstantData,
 )
 
 @Serializable
-data class ForecastInstantData(
+internal data class ForecastInstantData(
     @SerialName("air_temperature")
     val airTemperature: Double,
     @SerialName("cloud_area_fraction")
@@ -64,7 +64,7 @@ data class ForecastInstantData(
 )
 
 @Serializable
-data class ForecastTimePeriod(
+internal data class ForecastTimePeriod(
     @SerialName("details")
     val data: ForecastTimePeriodData? = null,
     @SerialName("summary")
@@ -72,13 +72,13 @@ data class ForecastTimePeriod(
 )
 
 @Serializable
-data class ForecastTimePeriodSummary(
+internal data class ForecastTimePeriodSummary(
     @SerialName("symbol_code")
     val symbolCode: String
 )
 
 @Serializable
-data class ForecastTimePeriodData(
+internal data class ForecastTimePeriodData(
     @SerialName("probability_of_thunder")
     val probabilityOfThunder: Double? = null,
     @SerialName("ultraviolet_index_clear_sky_max")
@@ -98,7 +98,7 @@ data class ForecastTimePeriodData(
 )
 
 @Serializable
-data class ForecastMeta(
+internal data class ForecastMeta(
     @SerialName("units")
     val units: ForecastUnits,
     @SerialName("updated_at")
@@ -106,7 +106,7 @@ data class ForecastMeta(
 )
 
 @Serializable
-data class ForecastUnits(
+internal data class ForecastUnits(
     @SerialName("fog_area_fraction")
     val fogAreaFraction: String? = null,
     @SerialName("dew_point_temperature")
@@ -149,7 +149,7 @@ data class ForecastUnits(
     val cloudAreaFractionMedium: String? = null
 )
 
-fun mapAdjacentTimeStepsToEntity(
+internal fun mapAdjacentTimeStepsToEntity(
     current: ForecastTimeStep,
     next: ForecastTimeStep?
 ): ForecastDatum? {

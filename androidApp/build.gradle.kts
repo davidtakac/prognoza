@@ -93,16 +93,10 @@ android {
 dependencies {
     implementation(project(":shared"))
 
-    implementation(Dependencies.SqlDelight.android)
+    implementation(Dependencies.napier)
+    implementation(Dependencies.Serialization.json)
     implementation(Dependencies.Coroutines.android)
     implementation(Dependencies.DateTime.jvm)
-    implementation(Dependencies.napier)
-
-    implementation(Dependencies.Ktor.core)
-    implementation(Dependencies.Ktor.cio)
-    implementation(Dependencies.Ktor.logging)
-    implementation(Dependencies.Ktor.contentNegotiation)
-    implementation(Dependencies.Ktor.serialization)
 
     implementation(Dependencies.Android.Hilt.composeNavigation)
     implementation(Dependencies.Android.Hilt.core)
@@ -123,6 +117,7 @@ dependencies {
     implementation(Dependencies.Android.Compose.coil)
     implementation(Dependencies.Android.Compose.systemUiController)
 
+    androidTestImplementation(Dependencies.jUnit)
     androidTestImplementation(Dependencies.Android.Compose.testJUnit4)
     debugImplementation(Dependencies.Android.Compose.testManifest)
     androidTestImplementation(Dependencies.Android.Test.androidJUnit)
@@ -130,5 +125,4 @@ dependencies {
     androidTestImplementation(Dependencies.Android.Test.espresso)
     androidTestImplementation(Dependencies.Android.Test.espresso)
     androidTestImplementation(Dependencies.Android.Test.rules)
-    androidTestImplementation(Dependencies.jUnit)
 }

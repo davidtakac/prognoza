@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import hr.dtakac.prognoza.shared.entity.Place as PlaceEntity
 
-class DatabasePlaceRepository(
+internal class DatabasePlaceRepository(
     private val placeQueries: PlaceQueries,
     private val ioDispatcher: CoroutineDispatcher,
     private val computationDispatcher: CoroutineDispatcher

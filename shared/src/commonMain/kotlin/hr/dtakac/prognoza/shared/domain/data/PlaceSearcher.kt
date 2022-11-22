@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.shared.domain.data
 
 import hr.dtakac.prognoza.shared.entity.Place
 
-interface PlaceSearcher {
+internal interface PlaceSearcher {
     suspend fun search(
         query: String,
         rfc2616Language: String

@@ -1,104 +1,109 @@
 package hr.dtakac.prognoza.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import hr.dtakac.prognoza.platform.AndroidLocalRfc2616LanguageGetter
+import hr.dtakac.prognoza.shared.domain.PrognozaSdk
 import hr.dtakac.prognoza.shared.domain.*
-import hr.dtakac.prognoza.shared.domain.data.*
+import hr.dtakac.prognoza.shared.platform.AndroidPrognozaSdkFactory
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class UseCaseModule {
     @Provides
+    @Singleton
+    fun providePrognozaSdk(
+        @ApplicationContext context: Context,
+        @Named("user_agent") userAgent: String
+    ): PrognozaSdk = AndroidPrognozaSdkFactory(context, userAgent).create()
+
+    @Provides
     fun provideGetTodayForecastUseCase(
-        getSelectedPlaceUseCase: GetSelectedPlace,
-        savedForecastGetter: SavedForecastGetter,
-        forecastSaver: ForecastSaver,
-        forecastProvider: ForecastProvider,
-        settingsRepository: SettingsRepository
-    ): GetForecast = GetForecast(
-        getSelectedPlace = getSelectedPlaceUseCase,
-        savedForecastGetter = savedForecastGetter,
-        forecastSaver = forecastSaver,
-        forecastProvider = forecastProvider,
-        settingsRepository = settingsRepository
-    )
+        prognozaSdk: PrognozaSdk
+    ): GetForecast = prognozaSdk.getForecast
 
     @Provides
     fun provideGetSelectedPlaceUseCase(
-        settingsRepository: SettingsRepository
-    ): GetSelectedPlace = GetSelectedPlace(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): GetSelectedPlace = prognozaSdk.getSelectedPlace
 
     @Provides
     fun provideSearchPlacesUseCase(
-        placeSearcher: PlaceSearcher
-    ): SearchPlaces = SearchPlaces(placeSearcher, AndroidLocalRfc2616LanguageGetter())
+        prognozaSdk: PrognozaSdk
+    ): SearchPlaces = prognozaSdk.searchPlaces
 
     @Provides
     fun provideGetSavedPlacesUseCase(
-        savedPlaceGetter: SavedPlaceGetter
-    ): GetSavedPlaces = GetSavedPlaces(savedPlaceGetter)
+        prognozaSdk: PrognozaSdk
+    ): GetSavedPlaces = prognozaSdk.getSavedPlaces
 
     @Provides
     fun provideSelectPlaceUseCase(
-        placeSaver: PlaceSaver,
-        settingsRepository: SettingsRepository
-    ): SelectPlace = SelectPlace(
-        placeSaver,
-        settingsRepository
-    )
+        prognozaSdk: PrognozaSdk
+    ): SelectPlace = prognozaSdk.selectPlace
 
     @Provides
     fun provideSetTemperatureUnit(
-        settingsRepository: SettingsRepository
-    ): SetTemperatureUnit = SetTemperatureUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): SetTemperatureUnit = prognozaSdk.setTemperatureUnit
 
     @Provides
     fun provideGetTemperatureUnit(
-        settingsRepository: SettingsRepository
-    ): GetTemperatureUnit = GetTemperatureUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): GetTemperatureUnit = prognozaSdk.getTemperatureUnit
 
     @Provides
-    fun provideGetAllTemperatureUnits(): GetAllTemperatureUnits = GetAllTemperatureUnits()
+    fun provideGetAllTemperatureUnits(
+        prognozaSdk: PrognozaSdk
+    ): GetAllTemperatureUnits = prognozaSdk.getAllTemperatureUnits
 
     @Provides
     fun provideSetWindUnit(
-        settingsRepository: SettingsRepository
-    ): SetWindUnit = SetWindUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): SetWindUnit = prognozaSdk.setWindUnit
 
     @Provides
     fun provideGetWindUnit(
-        settingsRepository: SettingsRepository
-    ): GetWindUnit = GetWindUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): GetWindUnit = prognozaSdk.getWindUnit
 
     @Provides
-    fun provideGetAllWindUnits(): GetAllWindUnits = GetAllWindUnits()
+    fun provideGetAllWindUnits(
+        prognozaSdk: PrognozaSdk
+    ): GetAllWindUnits = prognozaSdk.getAllWindUnits
 
     @Provides
     fun provideSetPrecipitationUnit(
-        settingsRepository: SettingsRepository
-    ): SetPrecipitationUnit = SetPrecipitationUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): SetPrecipitationUnit = prognozaSdk.setPrecipitationUnit
 
     @Provides
     fun provideGetPrecipitationUnit(
-        settingsRepository: SettingsRepository
-    ): GetPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): GetPrecipitationUnit = prognozaSdk.getPrecipitationUnit
 
     @Provides
-    fun provideGetAllPrecipitationUnits(): GetAllPrecipitationUnits = GetAllPrecipitationUnits()
+    fun provideGetAllPrecipitationUnits(
+        prognozaSdk: PrognozaSdk
+    ): GetAllPrecipitationUnits = prognozaSdk.getAllPrecipitationUnits
 
     @Provides
     fun provideSetPressureUnit(
-        settingsRepository: SettingsRepository
-    ): SetPressureUnit = SetPressureUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): SetPressureUnit = prognozaSdk.setPressureUnit
 
     @Provides
     fun provideGetPressureUnit(
-        settingsRepository: SettingsRepository
-    ): GetPressureUnit = GetPressureUnit(settingsRepository)
+        prognozaSdk: PrognozaSdk
+    ): GetPressureUnit = prognozaSdk.getPressureUnit
 
     @Provides
-    fun provideGetAllPressureUnits(): GetAllPressureUnits = GetAllPressureUnits()
+    fun provideGetAllPressureUnits(
+        prognozaSdk: PrognozaSdk
+    ): GetAllPressureUnits = prognozaSdk.getAllPressureUnits
 }

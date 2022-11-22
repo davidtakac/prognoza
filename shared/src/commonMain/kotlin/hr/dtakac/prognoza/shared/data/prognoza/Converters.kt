@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.shared.data.prognoza
 import com.squareup.sqldelight.ColumnAdapter
 import hr.dtakac.prognoza.shared.entity.*
 
-val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double> {
+internal val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double> {
     override fun decode(databaseValue: Double): Temperature {
         return Temperature(databaseValue, TemperatureUnit.DEGREE_CELSIUS)
     }
@@ -13,7 +13,7 @@ val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double> {
     }
 }
 
-val descriptionSqlAdapter = object : ColumnAdapter<Description, String> {
+internal val descriptionSqlAdapter = object : ColumnAdapter<Description, String> {
     override fun decode(databaseValue: String): Description {
         return Description.valueOf(databaseValue)
     }
@@ -23,7 +23,7 @@ val descriptionSqlAdapter = object : ColumnAdapter<Description, String> {
     }
 }
 
-val moodSqlAdapter = object : ColumnAdapter<Mood, String> {
+internal val moodSqlAdapter = object : ColumnAdapter<Mood, String> {
     override fun decode(databaseValue: String): Mood {
         return Mood.valueOf(databaseValue)
     }
@@ -33,7 +33,7 @@ val moodSqlAdapter = object : ColumnAdapter<Mood, String> {
     }
 }
 
-val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
+internal val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
     override fun decode(databaseValue: Double): Length {
         return Length(databaseValue, LengthUnit.MILLIMETRE)
     }
@@ -43,7 +43,7 @@ val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
     }
 }
 
-val speedSqlAdapter = object : ColumnAdapter<Speed, Double> {
+internal val speedSqlAdapter = object : ColumnAdapter<Speed, Double> {
     override fun decode(databaseValue: Double): Speed {
         return Speed(databaseValue, SpeedUnit.METRE_PER_SECOND)
     }
@@ -53,7 +53,7 @@ val speedSqlAdapter = object : ColumnAdapter<Speed, Double> {
     }
 }
 
-val angleSqlAdapter = object : ColumnAdapter<Angle, Double> {
+internal val angleSqlAdapter = object : ColumnAdapter<Angle, Double> {
     override fun decode(databaseValue: Double): Angle {
         return Angle(databaseValue, AngleUnit.DEGREE)
     }
@@ -63,7 +63,7 @@ val angleSqlAdapter = object : ColumnAdapter<Angle, Double> {
     }
 }
 
-val percentageSqlAdapter = object : ColumnAdapter<Percentage, Double> {
+internal val percentageSqlAdapter = object : ColumnAdapter<Percentage, Double> {
     override fun decode(databaseValue: Double): Percentage {
         return Percentage(databaseValue, PercentageUnit.PERCENT)
     }
@@ -73,7 +73,7 @@ val percentageSqlAdapter = object : ColumnAdapter<Percentage, Double> {
     }
 }
 
-val pressureSqlAdapter = object : ColumnAdapter<Pressure, Double> {
+internal val pressureSqlAdapter = object : ColumnAdapter<Pressure, Double> {
     override fun decode(databaseValue: Double): Pressure {
         return Pressure(databaseValue, PressureUnit.MILLIBAR)
     }
@@ -83,7 +83,7 @@ val pressureSqlAdapter = object : ColumnAdapter<Pressure, Double> {
     }
 }
 
-val temperatureUnitSqlAdapter = object : ColumnAdapter<TemperatureUnit, String> {
+internal val temperatureUnitSqlAdapter = object : ColumnAdapter<TemperatureUnit, String> {
     override fun decode(databaseValue: String): TemperatureUnit {
         return TemperatureUnit.valueOf(databaseValue)
     }
@@ -93,7 +93,7 @@ val temperatureUnitSqlAdapter = object : ColumnAdapter<TemperatureUnit, String> 
     }
 }
 
-val lengthUnitSqlAdapter = object : ColumnAdapter<LengthUnit, String> {
+internal val lengthUnitSqlAdapter = object : ColumnAdapter<LengthUnit, String> {
     override fun decode(databaseValue: String): LengthUnit {
         return LengthUnit.valueOf(databaseValue)
     }
@@ -103,7 +103,7 @@ val lengthUnitSqlAdapter = object : ColumnAdapter<LengthUnit, String> {
     }
 }
 
-val speedUnitSqlAdapter = object : ColumnAdapter<SpeedUnit, String> {
+internal val speedUnitSqlAdapter = object : ColumnAdapter<SpeedUnit, String> {
     override fun decode(databaseValue: String): SpeedUnit {
         return SpeedUnit.valueOf(databaseValue)
     }
@@ -113,7 +113,7 @@ val speedUnitSqlAdapter = object : ColumnAdapter<SpeedUnit, String> {
     }
 }
 
-val pressureUnitSqlAdapter = object : ColumnAdapter<PressureUnit, String> {
+internal val pressureUnitSqlAdapter = object : ColumnAdapter<PressureUnit, String> {
     override fun decode(databaseValue: String): PressureUnit {
         return PressureUnit.valueOf(databaseValue)
     }

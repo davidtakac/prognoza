@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import hr.dtakac.prognoza.shared.entity.Place as PlaceEntity
 
-class DatabaseSettingsRepository(
+internal class DatabaseSettingsRepository(
     private val settingsQueries: SettingsQueries,
     private val savedPlaceGetter: SavedPlaceGetter,
     private val ioDispatcher: CoroutineDispatcher

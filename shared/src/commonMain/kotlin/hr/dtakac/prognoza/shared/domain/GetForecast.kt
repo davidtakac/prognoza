@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.shared.domain.data.*
 import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.datetime.TimeZone
 
-class GetForecast(
+class GetForecast internal constructor(
     private val getSelectedPlace: GetSelectedPlace,
     private val savedForecastGetter: SavedForecastGetter,
     private val forecastSaver: ForecastSaver,

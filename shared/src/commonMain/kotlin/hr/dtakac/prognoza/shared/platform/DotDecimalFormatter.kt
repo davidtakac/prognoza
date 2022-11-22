@@ -1,5 +1,5 @@
 package hr.dtakac.prognoza.shared.platform
 
-interface DotDecimalFormatter {
+internal expect class DotDecimalFormatter {
     fun format(value: Double, decimalPlaces: Int): String
 }

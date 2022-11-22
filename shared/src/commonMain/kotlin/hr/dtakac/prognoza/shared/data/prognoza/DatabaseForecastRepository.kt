@@ -7,7 +7,7 @@ import hr.dtakac.prognoza.shared.entity.Wind
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-class DatabaseForecastRepository(
+internal class DatabaseForecastRepository(
     private val forecastQueries: ForecastQueries,
     private val computationDispatcher: CoroutineDispatcher,
     private val ioDispatcher: CoroutineDispatcher
