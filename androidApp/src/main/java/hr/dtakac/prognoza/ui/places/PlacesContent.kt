@@ -1,14 +1,20 @@
 package hr.dtakac.prognoza.ui.places
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 import hr.dtakac.prognoza.presentation.places.PlacesState
+import hr.dtakac.prognoza.ui.common.ContentLoadingIndicatorHost
 import hr.dtakac.prognoza.ui.theme.AppTheme
 
 @Composable
@@ -21,17 +27,45 @@ fun PlacesContent(
     onSettingsClick: () -> Unit = {},
 ) {
     Column {
-        PlacesSearchBar(
-            query = query,
-            modifier = Modifier.padding(
-                top = 24.dp,
-                start = 24.dp,
-                end = 24.dp
-            ),
-            isLoading = state.isLoading,
-            onSubmitClick = onQuerySubmit,
-            onQueryChange = onQueryChange
-        )
+        Column(
+            modifier = Modifier
+                .padding(
+                    start = 24.dp,
+                    end = 24.dp,
+                    top = 8.dp
+                )
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                PlacesSearchBar(
+                    query = query,
+                    modifier = Modifier
+                        .padding(end = 8.dp)
+                        .weight(1f),
+                    onSubmitClick = onQuerySubmit,
+                    onQueryChange = onQueryChange
+                )
+                IconButton(
+                    onClick = onSettingsClick,
+                    modifier = Modifier.size(24.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_settings),
+                        contentDescription = null
+                    )
+                }
+            }
+            ContentLoadingIndicatorHost(state.isLoading) { isVisible ->
+                PlacesLoadingUnderline(
+                    isVisible,
+                    modifier = Modifier.height(1.dp)
+                )
+            }
+        }
 
         if (state.empty != null) {
             PlacesEmpty(
@@ -47,8 +81,6 @@ fun PlacesContent(
                 modifier = Modifier.weight(1f)
             )
         }
-
-        SettingsButton(onClick = onSettingsClick)
     }
 }
 

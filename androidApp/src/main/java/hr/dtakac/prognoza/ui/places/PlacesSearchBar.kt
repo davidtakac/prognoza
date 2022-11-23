@@ -1,8 +1,6 @@
 package hr.dtakac.prognoza.ui.places
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -11,7 +9,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
@@ -22,7 +19,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.ui.common.ContentLoadingIndicatorHost
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
@@ -30,7 +26,6 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 fun PlacesSearchBar(
     query: String,
     modifier: Modifier = Modifier,
-    isLoading: Boolean = false,
     onQueryChange: (String) -> Unit = {},
     onSubmitClick: () -> Unit = {}
 ) {
@@ -53,7 +48,6 @@ fun PlacesSearchBar(
             cursorBrush = SolidColor(LocalContentColor.current),
             decorationBox = { innerTextField ->
                 SearchFieldDecorationBox(
-                    isLoading = isLoading,
                     onClearClick = { onQueryChange("") },
                     isQueryEmpty = query.isEmpty(),
                     innerTextField = innerTextField
@@ -65,7 +59,6 @@ fun PlacesSearchBar(
 
 @Composable
 private fun SearchFieldDecorationBox(
-    isLoading: Boolean,
     onClearClick: () -> Unit,
     isQueryEmpty: Boolean,
     innerTextField: @Composable () -> Unit,
@@ -73,9 +66,7 @@ private fun SearchFieldDecorationBox(
 ) {
     Column(modifier = modifier) {
         Row(
-            modifier = Modifier
-                .padding(bottom = 16.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             SearchIcon(modifier = Modifier
@@ -101,15 +92,6 @@ private fun SearchFieldDecorationBox(
                 )
             }
         }
-
-        ContentLoadingIndicatorHost(isLoading) { isVisible ->
-            LoadingUnderline(
-                isVisible,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-            )
-        }
     }
 }
 
@@ -128,38 +110,14 @@ private fun ClearTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Image(
-        painter = painterResource(id = R.drawable.ic_cancel),
-        contentDescription = null,
-        colorFilter = ColorFilter.tint(LocalContentColor.current),
-        modifier = modifier.clickable(onClick = onClick)
-    )
-}
-
-@Composable
-private fun LoadingUnderline(
-    isLoading: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Crossfade(targetState = isLoading, modifier = modifier) {
-        if (it) {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp),
-                color = PrognozaTheme.colors.onSurface,
-                trackColor = Color.Transparent
-            )
-        } else {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp),
-                color = PrognozaTheme.colors.onSurface,
-                trackColor = Color.Transparent,
-                progress = 1f
-            )
-        }
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+    ) {
+        Icon(
+            painter = painterResource(id = R.drawable.ic_cancel),
+            contentDescription = null
+        )
     }
 }
 
@@ -168,7 +126,7 @@ private fun LoadingUnderline(
 private fun SearchBarPreview() {
     AppTheme {
         PlacesSearchBar(
-            query = "",
+            query = "Osijek",
             modifier = Modifier.padding(24.dp)
         )
     }

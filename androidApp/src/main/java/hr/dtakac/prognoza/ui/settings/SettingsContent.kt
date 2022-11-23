@@ -35,11 +35,11 @@ fun SettingsContent(
                 navigation = {
                     IconButton(
                         onClick = onBackClick,
-                        modifier = Modifier.size(48.dp)
+                        modifier = Modifier.size(40.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_back),
-                            contentDescription = null,
+                            contentDescription = null
                         )
                     }
                 }
