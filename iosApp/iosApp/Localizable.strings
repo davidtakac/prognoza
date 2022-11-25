@@ -1,0 +1,8 @@
+/* 
+  Localizable.strings
+  iosApp
+
+  Created by David on 25.11.2022..
+  
+*/
+"template_temperature" = "%1$s°";

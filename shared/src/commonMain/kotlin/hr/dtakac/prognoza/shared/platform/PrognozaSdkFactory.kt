@@ -9,7 +9,6 @@ import hr.dtakac.prognoza.shared.data.openstreetmap.OsmPlaceService
 import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*
 import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
@@ -88,7 +87,7 @@ open class PrognozaSdkFactory internal constructor(
         }
     }
 
-    private fun getHttpClient(): HttpClient = HttpClient(CIO) {
+    private fun getHttpClient(): HttpClient = HttpClient {
         install(Logging) {
             logger = Logger.DEFAULT
             level = LogLevel.ALL

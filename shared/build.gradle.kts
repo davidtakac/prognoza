@@ -41,6 +41,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 implementation(Dependencies.SqlDelight.android)
+                implementation(Dependencies.Ktor.android)
             }
         }
         val androidTest by getting
@@ -54,6 +55,7 @@ kotlin {
             iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation(Dependencies.SqlDelight.native)
+                implementation(Dependencies.Ktor.darwin)
             }
         }
         val iosX64Test by getting
