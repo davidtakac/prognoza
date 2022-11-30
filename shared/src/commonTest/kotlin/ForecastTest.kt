@@ -1,9 +1,6 @@
 import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.datetime.*
-import kotlin.test.Test
-import kotlin.test.assertFailsWith
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import kotlin.test.*
 
 class ForecastTest {
     private val timeZone = TimeZone.UTC
@@ -16,33 +13,40 @@ class ForecastTest {
     }
 
     @Test
-    fun `only current is non-null when input data is one data point`() {
+    fun `when data spans 0-23hr forecast has today and coming`() {
+        val start = getStartOfDay()
+        val data = (0..23).map { getHourDatum(start.plus(it, DateTimeUnit.HOUR)) }
+        val forecast = Forecast(data, timeZone)
+        assertNotNull(forecast.current)
+        assertEquals(
+            expected = Forecast.dayStartHour - 1,
+            actual = (forecast.today?.hourly?.size ?: 0)
+        )
+        assertEquals(
+            expected = 1,
+            actual = forecast.coming?.size ?: 0
+        )
+    }
+
+    @Test
+    fun `when data is 0-4hr forecast has only today`() {
+        val start = getStartOfDay()
+        val data = (0 until Forecast.dayStartHour).map { getHourDatum(start.plus(it, DateTimeUnit.HOUR)) }
+        val forecast = Forecast(data, timeZone)
+        assertNotNull(forecast.current)
+        assertEquals(
+            expected = Forecast.dayStartHour - 1,
+            actual = (forecast.today?.hourly?.size ?: 0)
+        )
+        assertNull(forecast.coming)
+    }
+
+    @Test
+    fun `when data is a single hour forecast has only current`() {
         val forecast = Forecast(listOf(getHourDatum(getStartOfDay())), timeZone)
         assertNotNull(forecast.current)
         assertNull(forecast.today)
         assertNull(forecast.coming)
-    }
-
-    @Test
-    fun `only coming is null when all data points on same day`() {
-        val now = getStartOfDay()
-        val data = (0L..23L).map { getHourDatum(now.plus(it, DateTimeUnit.HOUR)) }
-        val forecast = Forecast(data, timeZone)
-        assertNotNull(forecast.current)
-        assertNotNull(forecast.today)
-        assertNull(forecast.coming)
-    }
-
-    @Test
-    fun `none are null when data points span multiple days`() {
-        val now = getStartOfDay()
-        val data = (0L..23L).map { getHourDatum(now.plus(it, DateTimeUnit.HOUR)) } +
-                (0L..23L).map { getHourDatum(now.plus(1, DateTimeUnit.DAY, timeZone).plus(it, DateTimeUnit.HOUR)) } +
-                (0L..23L).map { getHourDatum(now.plus(2, DateTimeUnit.DAY, timeZone).plus(it, DateTimeUnit.HOUR)) }
-        val forecast = Forecast(data, timeZone)
-        assertNotNull(forecast.current)
-        assertNotNull(forecast.today)
-        assertNotNull(forecast.coming)
     }
 
     private fun getHourDatum(start: Instant): ForecastDatum = ForecastDatum(

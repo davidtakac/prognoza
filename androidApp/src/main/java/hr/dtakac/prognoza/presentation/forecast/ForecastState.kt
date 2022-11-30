@@ -45,6 +45,7 @@ data class ComingDayUi(
     val date: TextResource,
     val lowHighTemperature: TextResource,
     val precipitation: TextResource,
+    val weatherIconDescriptions: List<Description?>,
     val hours: List<ComingDayHourUi>
 )
 

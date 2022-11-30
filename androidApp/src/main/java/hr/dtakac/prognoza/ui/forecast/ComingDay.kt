@@ -3,9 +3,7 @@ package hr.dtakac.prognoza.ui.forecast
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
-import androidx.compose.animation.core.animateDp
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.updateTransition
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -56,30 +54,33 @@ fun ComingDay(
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
-    val expandTransition = updateTransition(
+    val isExpandedTransition = updateTransition(
         label = "Expand coming item",
         targetState = isExpanded
     )
-    val chevronRotation by expandTransition.animateFloat(label = "Rotate chevron") {
+    val chevronRotation by isExpandedTransition.animateFloat(label = "Rotate chevron") {
         if (it) 180f else 0f
     }
-    val verticalMargin by expandTransition.animateDp(label = "Animate vertical margin") {
+    val verticalMargin by isExpandedTransition.animateDp(label = "Animate vertical margin") {
         if (it) 12.dp else 0.dp
     }
-    val horizontalMargin by expandTransition.animateDp(label = "Animate horizontal margin") {
+    val horizontalMargin by isExpandedTransition.animateDp(label = "Animate horizontal margin") {
         if (it) 8.dp else 0.dp
     }
-    val verticalPadding by expandTransition.animateDp(label = "Animate vertical padding") {
-        if (it) 16.dp else 12.dp
+    val verticalPadding by isExpandedTransition.animateDp(label = "Animate vertical padding") {
+        if (it) 12.dp else 8.dp
     }
-    val horizontalPadding by expandTransition.animateDp(label = "Animate horizontal padding") {
+    val horizontalPadding by isExpandedTransition.animateDp(label = "Animate horizontal padding") {
         if (it) 16.dp else 24.dp
     }
-    val cornerRadius by expandTransition.animateDp(label = "Animate corner radius") {
+    val cornerRadius by isExpandedTransition.animateDp(label = "Animate corner radius") {
         if (it) 16.dp else 0.dp
     }
-    val backgroundColor by expandTransition.animateColor(label = "Animate background color") {
-        if (it) PrognozaTheme.colors.surface2 else Color.Transparent
+    val backgroundColor by isExpandedTransition.animateColor(label = "Animate background color") {
+        if (it) PrognozaTheme.colors.surface2
+        // This color instead of transparent because the ripple animation
+        // becomes weird otherwise
+        else PrognozaTheme.colors.surface1
     }
 
     Column(
@@ -103,12 +104,39 @@ fun ComingDay(
     ) {
         Header(
             date = data.date.asString(),
-            precipitation = data.precipitation.asString(),
-            lowHighTemperature = data.lowHighTemperature.asString(),
+            summaryContent = {
+                isExpandedTransition.AnimatedContent(
+                    transitionSpec = {
+                        if (targetState) {
+                            slideInVertically { height -> -height } + fadeIn() with
+                                    slideOutVertically { height -> height } + fadeOut()
+                        } else {
+                            slideInVertically { height -> height } + fadeIn() with
+                                    slideOutVertically { height -> -height } + fadeOut()
+                        }
+                    }
+                ) {
+                    if (it) {
+                        PrecipitationAndLowHighTemperature(
+                            precipitation = data.precipitation.asString(),
+                            precipitationWidth = dimensions.precipitationWidth,
+                            lowHighTemperature = data.lowHighTemperature.asString(),
+                            lowHighTemperatureWidth = dimensions.lowHighTemperatureWidth
+                        )
+                    } else {
+                        WeatherIcons(weatherIcons = data
+                            .weatherIconDescriptions
+                            .map { desc -> desc?.asWeatherIconResId() }
+                        )
+                    }
+                }
+            },
             chevronRotation = chevronRotation,
-            dimensions = dimensions
+            modifier = Modifier
+                .height(32.dp)
+                .fillMaxWidth()
         )
-        expandTransition.AnimatedVisibility(
+        isExpandedTransition.AnimatedVisibility(
             visible = { targetIsExpanded -> targetIsExpanded },
             enter = fadeIn() + expandVertically(),
             exit = fadeOut() + shrinkVertically()
@@ -124,10 +152,8 @@ fun ComingDay(
 @Composable
 private fun Header(
     date: String,
-    precipitation: String,
-    lowHighTemperature: String,
     chevronRotation: Float,
-    dimensions: HeaderDimensions,
+    summaryContent: @Composable () -> Unit,
     modifier: Modifier = Modifier
 ) {
     ProvideTextStyle(PrognozaTheme.typography.body) {
@@ -142,25 +168,7 @@ private fun Header(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            precipitation.takeIf { it.isNotBlank() }?.let {
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    modifier = Modifier.width(dimensions.precipitationWidth),
-                    text = it,
-                    textAlign = TextAlign.End,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-                )
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                modifier = Modifier.width(dimensions.lowHighTemperatureWidth),
-                text = lowHighTemperature,
-                textAlign = TextAlign.End,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            summaryContent()
             Spacer(modifier = Modifier.width(4.dp))
             Image(
                 painter = painterResource(id = R.drawable.ic_expand_more),
@@ -170,6 +178,59 @@ private fun Header(
                     .graphicsLayer { rotationZ = chevronRotation },
                 colorFilter = ColorFilter.tint(LocalContentColor.current)
             )
+        }
+    }
+}
+
+@Composable
+private fun PrecipitationAndLowHighTemperature(
+    precipitation: String,
+    precipitationWidth: Dp,
+    lowHighTemperature: String,
+    lowHighTemperatureWidth: Dp,
+    modifier: Modifier = Modifier
+) {
+    Row(modifier = modifier) {
+        precipitation.takeIf { it.isNotBlank() }?.let {
+            Spacer(modifier = Modifier.width(12.dp))
+            Text(
+                modifier = Modifier.width(precipitationWidth),
+                text = it,
+                textAlign = TextAlign.End,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+            )
+        }
+        Spacer(modifier = Modifier.width(12.dp))
+        Text(
+            modifier = Modifier.width(lowHighTemperatureWidth),
+            text = lowHighTemperature,
+            textAlign = TextAlign.End,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+private fun WeatherIcons(
+    weatherIcons: List<Int?>,
+    modifier: Modifier = Modifier
+) {
+    Row(horizontalArrangement = Arrangement.Start, modifier = modifier) {
+        weatherIcons.forEachIndexed { idx, icon ->
+            val iconModifier = Modifier
+                .padding(start = if (idx == 0) 0.dp else 4.dp)
+                .height(IntrinsicSize.Max)
+                .aspectRatio(1f)
+            if (icon != null) {
+                Image(
+                    painter = painterResource(id = icon),
+                    contentDescription = null,
+                    modifier = iconModifier
+                )
+            } else Box(iconModifier)
         }
     }
 }
@@ -265,7 +326,7 @@ fun rememberHeaderDimensions(
 private fun DayPreview() = AppTheme {
     ComingDay(
         data = fakeDay,
-        dimensions = fakeDimensions,
+        dimensions = rememberHeaderDimensions(days = listOf(fakeDay)),
         isExpanded = true
     )
 }
@@ -284,12 +345,14 @@ private fun HourPreview() = AppTheme {
 @Preview
 @Composable
 private fun HeaderPreview() = AppTheme {
+    val dimensions = rememberHeaderDimensions(days = listOf(fakeDay))
     Header(
         date = fakeDay.date.asString(),
-        precipitation = fakeDay.precipitation.asString(),
-        lowHighTemperature = fakeDay.lowHighTemperature.asString(),
         chevronRotation = 0f,
-        dimensions = fakeDimensions
+        modifier = Modifier.height(32.dp),
+        summaryContent = {
+            WeatherIcons(weatherIcons = fakeDay.weatherIconDescriptions.map { it?.asWeatherIconResId() })
+        }
     )
 }
 
@@ -304,13 +367,12 @@ private val fakeDay by lazy {
                 temperature = TextResource.fromString("${5 + it}°"),
                 weatherIconDescription = Description.values().random()
             )
-        }
-    )
-}
-
-private val fakeDimensions by lazy {
-    HeaderDimensions(
-        precipitationWidth = 64.dp,
-        lowHighTemperatureWidth = 42.dp
+        },
+        weatherIconDescriptions = listOf(
+            Description.CLEAR_SKY_NIGHT,
+            Description.FOG,
+            Description.PARTLY_CLOUDY_DAY,
+            Description.RAIN_SHOWERS_NIGHT
+        )
     )
 }

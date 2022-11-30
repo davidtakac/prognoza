@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
@@ -17,20 +18,58 @@ class Forecast(
             throw IllegalStateException("Forecast data must not be empty.")
         }
 
-        current = getCurrent(data.first())
-        val dataGroupedByDay = data
-            .groupBy { Instant.fromEpochMilliseconds(it.startEpochMillis).toLocalDateTime(timeZone).date }
-            .values
-            .toList()
+        val days = groupDays(data, timeZone)
+        current = getCurrent(datum = days.first().first())
+        today = days
+            .getOrElse(index = 0) { listOf() }
+            .toMutableList()
+            .drop(1) // First hour is displayed in current part
+            .takeIf { it.isNotEmpty() }
+            ?.let(::getToday)
+        coming = days
+            .drop(1) // First day is displayed in today part
+            .takeIf { it.isNotEmpty() }
+            ?.let { getComing(it, timeZone) }
+    }
 
-        val todayHours = dataGroupedByDay.getOrElse(index = 0) { listOf() }.toMutableList()
-        val tomorrowHours = dataGroupedByDay.getOrElse(index = 1) { listOf() }
-        if (todayHours.size <= 5 && tomorrowHours.isNotEmpty()) {
-            // Overflow into next day if there are not many hours left in the day
-            todayHours += tomorrowHours.take(n = 7)
+    private fun groupDays(
+        data: List<ForecastDatum>,
+        timeZone: TimeZone
+    ): List<List<ForecastDatum>> {
+        val days = data
+            .groupBy { getLocalDateTime(it.startEpochMillis, timeZone).date }
+            .values
+            .toMutableList()
+            .apply {
+                if (first().any { getLocalDateTime(it.startEpochMillis, timeZone).hour < dayStartHour }) {
+                    add(0, listOf())
+                }
+            }
+            .toList()
+        val resultDays = mutableListOf<MutableList<ForecastDatum>>(mutableListOf())
+        var resultDayIndex = 0
+
+        for (i in days.indices) {
+            val currentDay = days[i]
+            val nextDay = days.getOrNull(i + 1)
+
+            resultDays[resultDayIndex].addAll(
+                currentDay.filter {
+                    getLocalDateTime(it.startEpochMillis, timeZone).hour >= dayStartHour
+                }
+            )
+            if (nextDay != null) {
+                resultDays[resultDayIndex].addAll(
+                    nextDay.filter {
+                        getLocalDateTime(it.startEpochMillis, timeZone).hour < dayStartHour
+                    }
+                )
+                resultDays.add(mutableListOf())
+                resultDayIndex++
+            }
         }
-        today = todayHours.drop(1).takeIf { it.isNotEmpty() }?.let { getToday(it) }
-        coming = dataGroupedByDay.drop(1).takeIf { it.isNotEmpty() }?.let { getComing(it) }
+
+        return resultDays.apply { removeAll { it.isEmpty() } }
     }
 
     private fun getCurrent(datum: ForecastDatum): Current {
@@ -62,7 +101,7 @@ class Forecast(
         )
     }
 
-    private fun getComing(listOfData: List<List<ForecastDatum>>): List<Day> {
+    private fun getComing(listOfData: List<List<ForecastDatum>>, timeZone: TimeZone): List<Day> {
         return listOfData.map { data ->
             Day(
                 epochMillis = data.first().startEpochMillis,
@@ -80,9 +119,30 @@ class Forecast(
                         precipitation = datum.precipitation,
                         wind = datum.wind
                     )
-                }
+                },
+                night = data.getRepresentativeDescription(hourSpan = night, timeZone),
+                morning = data.getRepresentativeDescription(hourSpan = morning, timeZone),
+                afternoon = data.getRepresentativeDescription(hourSpan = afternoon, timeZone),
+                evening = data.getRepresentativeDescription(hourSpan = evening, timeZone)
             )
         }
+    }
+
+    private fun List<ForecastDatum>.getRepresentativeDescription(
+        hourSpan: IntRange,
+        timeZone: TimeZone
+    ): Description? {
+        return filter { getLocalDateTime(it.startEpochMillis, timeZone).hour in hourSpan }
+            .map { it.description }
+            .getMostCommon()
+    }
+
+    companion object {
+        internal const val dayStartHour = 5
+        private val morning = dayStartHour until dayStartHour + 6
+        private val afternoon = morning.last until (morning.last + 6)
+        private val evening = afternoon.last until (afternoon.last + 6)
+        private val night = (dayStartHour - 6) until dayStartHour
     }
 }
 
@@ -115,5 +175,25 @@ data class Day(
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
     val totalPrecipitation: Length,
+    val night: Description?,
+    val morning: Description?,
+    val afternoon: Description?,
+    val evening: Description?,
     val hours: List<HourlyDatum>
 )
+
+private fun getLocalDateTime(epochMillis: Long, timeZone: TimeZone): LocalDateTime {
+    return Instant.fromEpochMilliseconds(epochMillis).toLocalDateTime(timeZone)
+}
+
+private fun <T> List<T>.getMostCommon(): T? {
+    if (isEmpty()) return null
+    val itemsToOccurrences = groupingBy { it }.eachCount()
+    val occurrences = itemsToOccurrences.values.toList()
+
+    return if (occurrences.all { it == occurrences[0] }) {
+        itemsToOccurrences.keys.last()
+    } else {
+        itemsToOccurrences.maxBy { it.value }.key
+    }
+}

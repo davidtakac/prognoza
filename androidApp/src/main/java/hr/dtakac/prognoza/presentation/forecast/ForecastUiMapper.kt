@@ -102,6 +102,12 @@ class ForecastUiMapper @Inject constructor(
                     ),
                     weatherIconDescription = it.description
                 )
+            },
+            weatherIconDescriptions = mutableListOf<Description?>().apply {
+                add(day.morning)
+                add(day.afternoon)
+                add(day.evening)
+                add(day.night)
             }
         )
     }

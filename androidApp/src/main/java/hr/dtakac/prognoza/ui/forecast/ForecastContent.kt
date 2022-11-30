@@ -151,18 +151,21 @@ private fun fakeComingUi(): List<ComingDayUi> = listOf(
                     )
                 )
             }
-        }
+        },
+        weatherIconDescriptions = listOf()
     ),
     ComingDayUi(
         date = TextResource.fromString("Fri, Sep 14"),
         lowHighTemperature = TextResource.fromString("18—8"),
         precipitation = TextResource.fromString("0.7 mm"),
-        hours = listOf()
+        hours = listOf(),
+        weatherIconDescriptions = listOf()
     ),
     ComingDayUi(
         date = TextResource.fromString("Sat, Sep 15"),
         lowHighTemperature = TextResource.fromString("21—5"),
         precipitation = TextResource.empty(),
-        hours = listOf()
+        hours = listOf(),
+        weatherIconDescriptions = listOf()
     )
 )
