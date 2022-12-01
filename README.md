@@ -1,18 +1,32 @@
-# Prognoza
-Weather app with widgets and offline support.
-[Latest release - on GitHub](https://github.com/davidtakac/prognoza/releases/latest)
+<div align="center"><img src="images/app_icon.png" width="100"/></div>
+<h1 align="center" style="vertical-align:middle">Prognoza</h1>
+<h3 align="center">Libre weather app with widgets and offline support</h3>
+
+<div align="center">
+    <a href="https://apt.izzysoft.de/fdroid/index/apk/hr.dtakac.prognoza">
+        <img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png" width="170"/>
+    </a>
+</div>
 
 <p align="center">
-    <img src="screenshots/rain_dark.png" width=32%/>
-    <img src="screenshots/cloudy_dark.png" width=32%/>
-    <img src="screenshots/widgets_dark.png" width=32%/>
+    <a href="https://apt.izzysoft.de/fdroid/index/apk/hr.dtakac.prognoza">
+        <img src="https://img.shields.io/endpoint?url=https%3A%2F%2Fapt.izzysoft.de%2Ffdroid%2Fapi%2Fv1%2Fshield%2Fhr.dtakac.prognoza"/>
+    </a>
+    <a href="https://github.com/davidtakac/prognoza/releases/latest">
+        <img src="https://img.shields.io/github/v/release/davidtakac/prognoza?label=GitHub%20release"/>
+    </a>
+    <a href="https://opensource.org/licenses/MIT">
+        <img src="https://img.shields.io/github/license/davidtakac/prognoza"/>
+    </a>
 </p>
 
-<p align="center">
-    <img src="screenshots/rain_light.png" width=32%/>
-    <img src="screenshots/cloudy_light.png" width=32%/>
-    <img src="screenshots/widgets_light.png" width=32%/>
-</p>
+## Screenshots
+<img src="images/rain_dark.png" width=150/>
+<img src="images/cloudy_dark.png" width=150/>
+<img src="images/widgets_dark.png" width=150/>
+<img src="images/rain_light.png" width=150/>
+<img src="images/cloudy_light.png" width=150/>
+<img src="images/widgets_light.png" width=150/>
 
 ## Features
 - Weather for today and coming days
@@ -26,16 +40,17 @@ Weather app with widgets and offline support.
 ## Buzzwords
 - Clean architecture
 - Use cases
-- Jetpack Compose
-- Jetpack Glance
+- Continuous integration
+- Unit tests
+- Kotlin Coroutines
+- Compose (+ tests)
+- Glance
 - SQLDelight
 - Ktor
 - Kotlin Serialization
 - Work Manager
-- Jetpack Compose tests
-- Kotlin Coroutines
 - Dagger Hilt
-- Jetpack Compose Navigation
+- Compose Navigation
 - Splash screen
 
 ## Credit
