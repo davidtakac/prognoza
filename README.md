@@ -21,12 +21,17 @@
 </p>
 
 ## Screenshots
-<img src="images/rain_dark.png" width=150/>
-<img src="images/cloudy_dark.png" width=150/>
-<img src="images/widgets_dark.png" width=150/>
-<img src="images/rain_light.png" width=150/>
-<img src="images/cloudy_light.png" width=150/>
-<img src="images/widgets_light.png" width=150/>
+<p align="left">
+    <img src="images/rain_dark.png" width=30%/>
+    <img src="images/cloudy_dark.png" width=30%/>
+    <img src="images/widgets_dark.png" width=30%/>
+</p>
+
+<p align="left">
+    <img src="images/rain_light.png" width=30%/>
+    <img src="images/cloudy_light.png" width=30%/>
+    <img src="images/widgets_light.png" width=30%/>
+</p>
 
 ## Features
 - Weather for today and coming days
