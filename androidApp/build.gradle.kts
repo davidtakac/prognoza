@@ -16,9 +16,9 @@ android {
         applicationId = "hr.dtakac.prognoza"
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
-        versionCode = 12
+        versionCode = 13
         // Before pushing to release, make sure this value matches the latest one in CHANGELOG.md
-        versionName = "2.2.2"
+        versionName = "3.0.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         resourceConfigurations.addAll(listOf("en", "hr"))
     }

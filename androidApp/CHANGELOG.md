@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS support
 - OpenWeatherMap as forecast provider
 
-## [Unreleased]
+## [3.0.0] - 2022-12-01
+### Note
+- Uninstall previous version before installing this one
 ### Changed
 - Make app mood a business rule
 - Allow external feels like and mood
@@ -20,8 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Feels like calculated by wind chill
 - Refactored to Kotlin Multiplatform Mobile
 - Coming item expands to card
+- Coming item has morning, afternoon, evening and night icons
 - Add dark mode icons
-- Better weather icon
+- Better app icon
 ### Fixed
 - Hourly and coming data cells wider than they need to be
 - Current hour pairs too close together
