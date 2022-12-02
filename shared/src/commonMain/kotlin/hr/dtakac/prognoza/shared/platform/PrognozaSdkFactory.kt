@@ -37,6 +37,7 @@ open class PrognozaSdkFactory internal constructor(
         val placeSearcher = getOsmPlaceSearcher(userAgent)
         val forecastRepository = DatabaseForecastRepository(
             forecastQueries = database.forecastQueries,
+            metaQueries = database.prognozaMetaQueries,
             computationDispatcher = computationDispatcher,
             ioDispatcher = ioDispatcher
         )
@@ -50,6 +51,14 @@ open class PrognozaSdkFactory internal constructor(
             savedPlaceGetter = placeRepository,
             ioDispatcher = ioDispatcher
         )
+        val getSelectedPlace = GetSelectedPlace(settingsRepository)
+        val actualGetForecast = ActualGetForecast(
+            getSelectedPlace = getSelectedPlace,
+            savedForecastGetter = forecastRepository,
+            forecastSaver = forecastRepository,
+            forecastProvider = forecastProvider,
+            settingsRepository = settingsRepository
+        )
 
         return object : PrognozaSdk {
             override val getAllPrecipitationUnits = GetAllPrecipitationUnits()
@@ -59,13 +68,15 @@ open class PrognozaSdkFactory internal constructor(
             override val getPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
             override val getPressureUnit = GetPressureUnit(settingsRepository)
             override val getSavedPlaces = GetSavedPlaces(placeRepository)
-            override val getSelectedPlace = GetSelectedPlace(settingsRepository)
+            override val getSelectedPlace = getSelectedPlace
             override val getTemperatureUnit = GetTemperatureUnit(settingsRepository)
             override val getWindUnit = GetWindUnit(settingsRepository)
             override val setPrecipitationUnit = SetPrecipitationUnit(settingsRepository)
             override val setPressureUnit = SetPressureUnit(settingsRepository)
             override val setTemperatureUnit = SetTemperatureUnit(settingsRepository)
             override val setWindUnit = SetWindUnit(settingsRepository)
+            override val getForecast = GetForecastLatest(actualGetForecast)
+            override val getForecastFrugal = GetForecastFrugal(actualGetForecast)
 
             override val searchPlaces = SearchPlaces(
                 placeSearcher = placeSearcher,
@@ -74,14 +85,6 @@ open class PrognozaSdkFactory internal constructor(
 
             override val selectPlace = SelectPlace(
                 placeSaver = placeRepository,
-                settingsRepository = settingsRepository
-            )
-
-            override val getForecast = GetForecast(
-                getSelectedPlace = getSelectedPlace,
-                savedForecastGetter = forecastRepository,
-                forecastSaver = forecastRepository,
-                forecastProvider = forecastProvider,
                 settingsRepository = settingsRepository
             )
         }

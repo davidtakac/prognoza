@@ -6,6 +6,7 @@ interface PrognozaSdk {
     val getAllTemperatureUnits: GetAllTemperatureUnits
     val getAllWindUnits: GetAllWindUnits
     val getForecast: GetForecast
+    val getForecastFrugal: GetForecast
     val getPrecipitationUnit: GetPrecipitationUnit
     val getPressureUnit: GetPressureUnit
     val getSavedPlaces: GetSavedPlaces

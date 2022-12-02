@@ -14,10 +14,11 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
+import javax.inject.Named
 import javax.inject.Provider
 import kotlin.random.Random
 
-class ForecastWidgetWorker @Inject constructor(
+class ForecastWidgetWorker(
     private val context: Context,
     workerParameters: WorkerParameters,
     private val getForecast: GetForecast
@@ -117,6 +118,7 @@ class ForecastWidgetWorker @Inject constructor(
     }
 
     class Factory @Inject constructor(
+        @Named("frugal")
         private val getForecast: Provider<GetForecast>
     ) : ChildWorkerFactory {
         override fun create(

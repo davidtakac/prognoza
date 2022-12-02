@@ -10,7 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Widget text reacts to system dark/light theme on <= Android 11
 ### Added
 - iOS support
-- OpenWeatherMap as forecast provider
+- NWS weather data provider
+
+## [Unreleased]
+### Changed
+- Widget data refreshes more frugally than main screen
 
 ## [3.0.0] - 2022-12-01
 ### Note

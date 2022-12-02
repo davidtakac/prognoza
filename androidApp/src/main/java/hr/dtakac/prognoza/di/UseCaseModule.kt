@@ -23,9 +23,15 @@ class UseCaseModule {
     ): PrognozaSdk = AndroidPrognozaSdkFactory(context, userAgent).create()
 
     @Provides
-    fun provideGetTodayForecastUseCase(
+    fun provideGetForecastUseCase(
         prognozaSdk: PrognozaSdk
     ): GetForecast = prognozaSdk.getForecast
+
+    @Provides
+    @Named("frugal")
+    fun provideGetForecastFrugalUseCase(
+        prognozaSdk: PrognozaSdk
+    ): GetForecast = prognozaSdk.getForecastFrugal
 
     @Provides
     fun provideGetSelectedPlaceUseCase(

@@ -6,5 +6,13 @@ internal interface SavedForecastGetter {
     suspend fun get(
         latitude: Double,
         longitude: Double
-    ): List<ForecastDatum>
+    ): SavedForecastGetterResult
+}
+
+sealed class SavedForecastGetterResult {
+    object Empty : SavedForecastGetterResult()
+    data class Success(
+        val data: List<ForecastDatum>,
+        val lastUpdatedEpochMillis: Long
+    ) : SavedForecastGetterResult()
 }
