@@ -16,9 +16,14 @@ class ConfigModule {
     @Provides
     @Singleton
     @Named("user_agent")
-    fun provideUserAgent(): String = "Prognoza/${BuildConfig.VERSION_NAME}, " +
-            "github.com/davidtakac/Prognoza, " +
-            "developer.takac@gmail.com"
+    fun provideUserAgent(): String {
+        val appName = "Prognoza"
+        val version = BuildConfig.VERSION_NAME
+        val platform = "Android"
+        val source = "https://github.com/davidtakac/prognoza"
+        val email = "developer.takac@gmail.com"
+        return "$appName $version, platform: $platform, source: $source, contact: $email"
+    }
 
     @Provides
     @Named("computation")
