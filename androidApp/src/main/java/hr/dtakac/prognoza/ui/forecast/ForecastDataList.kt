@@ -68,8 +68,8 @@ fun ForecastDataList(
         item(key = "temperature") {
             AutoSizeText(
                 text = data.current.temperature.asString(),
-                style = PrognozaTheme.typography.headlineLarge,
-                maxFontSize = PrognozaTheme.typography.headlineLarge.fontSize,
+                style = PrognozaTheme.typography.currentTemperature,
+                maxFontSize = PrognozaTheme.typography.currentTemperature.fontSize,
                 maxLines = 1,
                 modifier = Modifier.padding(itemPadding)
             )

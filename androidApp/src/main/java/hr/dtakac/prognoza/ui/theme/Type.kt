@@ -21,7 +21,7 @@ val Manrope = FontFamily(
 
 @Immutable
 data class Typography(
-    val headlineLarge: TextStyle,
+    val currentTemperature: TextStyle,
     val headlineSmall: TextStyle,
     val titleLarge: TextStyle,
     val subtitleLarge: TextStyle,
@@ -37,10 +37,10 @@ data class Typography(
         // headlineLarge and headlineSmall
         @Suppress("DEPRECATION")
         fun get(): Typography = Typography(
-            headlineLarge = TextStyle(
+            currentTemperature = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
-                fontSize = 200.sp,
+                fontSize = 170.sp,
                 letterSpacing = (-9).sp,
                 lineHeightStyle = LineHeightStyle(
                     alignment = LineHeightStyle.Alignment.Proportional,

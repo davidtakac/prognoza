@@ -31,7 +31,7 @@ private val LocalColors = staticCompositionLocalOf {
 
 private val LocalTypography = staticCompositionLocalOf {
     Typography(
-        headlineLarge = TextStyle.Default,
+        currentTemperature = TextStyle.Default,
         headlineSmall = TextStyle.Default,
         titleLarge = TextStyle.Default,
         titleMedium = TextStyle.Default,

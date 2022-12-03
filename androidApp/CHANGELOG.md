@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Widget data refreshes more frugally than main screen
+- Reduce current temperature size
 
 ## [3.0.0] - 2022-12-01
 ### Note
