@@ -12,10 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS support
 - NWS weather data provider
 
-## [Unreleased]
+## [3.0.1] - 2022-12-04
 ### Changed
 - Widget data refreshes more frugally than main screen
 - Reduce current temperature size
+- High and low temp separated by /
+- Čvorovi -> Čvor
 
 ## [3.0.0] - 2022-12-01
 ### Note
