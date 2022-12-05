@@ -12,6 +12,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS support
 - NWS weather data provider
 
+## [Unreleased]
+### Changed
+- Reduce weather icon sizes
+- Manually create dark weather icon SVGs from yr.no default ones
+- Update SVG -> PNG conversion scripts for Android
+
 ## [3.0.1] - 2022-12-04
 ### Changed
 - Widget data refreshes more frugally than main screen

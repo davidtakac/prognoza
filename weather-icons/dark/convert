@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+ldpi='30';
+mdpi='40';
+hdpi='60';
+xhdpi='80';
+xxhdpi='120';
+xxxhdpi='160';
+
+for file in *.svg
+do
+    path="../../androidApp/src/main/res"
+    filename="dark_${file%.*}";
+    inkscape -w $ldpi -h $ldpi $file -o $path/drawable-ldpi/$filename.png;
+    inkscape -w $mdpi -h $mdpi $file -o $path/drawable-mdpi/$filename.png;
+    inkscape -w $hdpi -h $hdpi $file -o $path/drawable-hdpi/$filename.png;
+    inkscape -w $xhdpi -h $xhdpi $file -o $path/drawable-xhdpi/$filename.png;
+    inkscape -w $xxhdpi -h $xxhdpi $file -o $path/drawable-xxhdpi/$filename.png;
+    inkscape -w $xxxhdpi -h $xxxhdpi $file -o $path/drawable-xxxhdpi/$filename.png;
+done;
