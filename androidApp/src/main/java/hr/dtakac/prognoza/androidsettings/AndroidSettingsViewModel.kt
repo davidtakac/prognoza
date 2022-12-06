@@ -18,7 +18,7 @@ class AndroidSettingsViewModel @Inject constructor(
     }
 
     private fun createState() = AndroidSettingsState(
-        theme = androidSettingsRepository.getTheme(),
+        uiMode = androidSettingsRepository.getUiMode(),
         moodMode = androidSettingsRepository.getMoodMode()
     )
 }

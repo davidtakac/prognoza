@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.simpleEvent
-import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
+import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.presentation.WidgetRefresher
-import hr.dtakac.prognoza.androidsettings.model.MoodMode
+import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsRepository
 import hr.dtakac.prognoza.shared.domain.*
 import hr.dtakac.prognoza.shared.entity.LengthUnit
@@ -42,7 +42,7 @@ class SettingsScreenViewModel @Inject constructor(
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
     private var availablePressureUnits: List<PressureUnit> = listOf()
-    private var availableThemeSettings: List<ThemeSetting> = listOf()
+    private var availableUiModes: List<UiMode> = listOf()
     private var availableMoodModes: List<MoodMode> = listOf()
 
     private val _state = mutableStateOf(SettingsScreenState())
@@ -82,7 +82,7 @@ class SettingsScreenViewModel @Inject constructor(
 
     private fun setTheme(index: Int) {
         updateState {
-            androidSettingsRepository.setTheme(availableThemeSettings[index])
+            androidSettingsRepository.setUiMode(availableUiModes[index])
             fireThemeChanged()
         }
     }
@@ -108,7 +108,7 @@ class SettingsScreenViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
-        availableThemeSettings = androidSettingsRepository.getAvailableThemes()
+        availableUiModes = androidSettingsRepository.getAvailableUiModes()
         availableMoodModes = androidSettingsRepository.getAvailableMoodModes()
 
         _state.value = _state.value.copy(
@@ -130,9 +130,9 @@ class SettingsScreenViewModel @Inject constructor(
                 )
             ),
             appearanceSettings = mutableListOf<MultipleChoiceSettingUi>().apply {
-                add(mapper.mapToThemeSetting(
-                    selected = androidSettingsRepository.getTheme(),
-                    options = availableThemeSettings,
+                add(mapper.mapToUiModeSetting(
+                    selected = androidSettingsRepository.getUiMode(),
+                    options = availableUiModes,
                     onIndexSelected = ::setTheme
                 ))
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

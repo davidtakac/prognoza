@@ -2,8 +2,8 @@ package hr.dtakac.prognoza.presentation.settingsscreen
 
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.androidsettings.model.MoodMode
-import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
+import hr.dtakac.prognoza.androidsettings.MoodMode
+import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.shared.entity.LengthUnit
 import hr.dtakac.prognoza.shared.entity.PressureUnit
 import hr.dtakac.prognoza.shared.entity.SpeedUnit
@@ -69,15 +69,15 @@ class SettingsScreenUiMapper @Inject constructor(
         onIndexSelected = onIndexSelected
     )
 
-    suspend fun mapToThemeSetting(
-        selected: ThemeSetting,
-        options: List<ThemeSetting>,
+    suspend fun mapToUiModeSetting(
+        selected: UiMode,
+        options: List<UiMode>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
         name = TextResource.fromStringId(R.string.theme),
         selectedIndex = options.indexOf(selected),
         values = withContext(computationDispatcher) {
-            options.map(ThemeSetting::toSettingsLabel).map(TextResource::fromStringId)
+            options.map(UiMode::toSettingsLabel).map(TextResource::fromStringId)
         },
         onIndexSelected = onIndexSelected
     )

@@ -2,8 +2,8 @@ package hr.dtakac.prognoza.presentation.settingsscreen
 
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.androidsettings.model.MoodMode
-import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
+import hr.dtakac.prognoza.androidsettings.MoodMode
+import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.shared.entity.LengthUnit
 import hr.dtakac.prognoza.shared.entity.PressureUnit
 import hr.dtakac.prognoza.shared.entity.SpeedUnit
@@ -37,10 +37,10 @@ fun PressureUnit.toSettingsLabel(): Int = when (this) {
 }
 
 @StringRes
-fun ThemeSetting.toSettingsLabel(): Int = when (this) {
-    ThemeSetting.DARK -> R.string.settings_label_dark
-    ThemeSetting.LIGHT -> R.string.settings_label_light
-    ThemeSetting.FOLLOW_SYSTEM -> R.string.settings_label_follow_system
+fun UiMode.toSettingsLabel(): Int = when (this) {
+    UiMode.DARK -> R.string.settings_label_dark
+    UiMode.LIGHT -> R.string.settings_label_light
+    UiMode.FOLLOW_SYSTEM -> R.string.settings_label_follow_system
 }
 
 @StringRes

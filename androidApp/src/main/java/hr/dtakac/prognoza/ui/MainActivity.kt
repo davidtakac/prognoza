@@ -20,8 +20,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
-import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
-import hr.dtakac.prognoza.androidsettings.model.MoodMode
+import hr.dtakac.prognoza.androidsettings.UiMode
+import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
@@ -52,10 +52,10 @@ class MainActivity : ComponentActivity() {
                 onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
             }
 
-            val useDarkTheme = when (androidSettingsState.theme) {
-                ThemeSetting.DARK -> true
-                ThemeSetting.LIGHT -> false
-                ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+            val useDarkTheme = when (androidSettingsState.uiMode) {
+                UiMode.DARK -> true
+                UiMode.LIGHT -> false
+                UiMode.FOLLOW_SYSTEM -> isSystemInDarkTheme()
             }
 
             val mood = if (androidSettingsState.moodMode == MoodMode.DYNAMIC) {

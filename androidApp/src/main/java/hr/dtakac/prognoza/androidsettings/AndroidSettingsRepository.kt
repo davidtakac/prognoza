@@ -2,8 +2,6 @@ package hr.dtakac.prognoza.androidsettings
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import hr.dtakac.prognoza.androidsettings.model.MoodMode
-import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
 import javax.inject.Inject
 
 private const val THEME_SETTING_KEY = "theme_setting_key"
@@ -12,22 +10,22 @@ private const val MOOD_MODE_KEY = "mood_mode_key"
 class AndroidSettingsRepository @Inject constructor(
     private val sharedPreferences: SharedPreferences
 ) {
-    fun getAvailableThemes(): List<ThemeSetting> = ThemeSetting.values().toList()
+    fun getAvailableUiModes(): List<UiMode> = UiMode.values().toList()
 
-    fun getTheme(): ThemeSetting {
+    fun getUiMode(): UiMode {
         val settingValue = sharedPreferences.getString(THEME_SETTING_KEY, null)
         return if (settingValue == null) {
-            val default = ThemeSetting.FOLLOW_SYSTEM
-            setTheme(default)
+            val default = UiMode.FOLLOW_SYSTEM
+            setUiMode(default)
             default
         } else {
-            ThemeSetting.valueOf(settingValue)
+            UiMode.valueOf(settingValue)
         }
     }
 
-    fun setTheme(themeSetting: ThemeSetting)  {
+    fun setUiMode(uiMode: UiMode)  {
         sharedPreferences.edit {
-            putString(THEME_SETTING_KEY, themeSetting.name)
+            putString(THEME_SETTING_KEY, uiMode.name)
         }
     }
 
