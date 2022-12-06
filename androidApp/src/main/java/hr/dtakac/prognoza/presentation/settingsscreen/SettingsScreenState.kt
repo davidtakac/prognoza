@@ -1,15 +1,16 @@
-package hr.dtakac.prognoza.presentation.settings
+package hr.dtakac.prognoza.presentation.settingsscreen
 
 import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.TextResource
 
-data class SettingsState(
+data class SettingsScreenState(
     val isLoading: Boolean = false,
     val unitSettings: List<MultipleChoiceSettingUi> = listOf(),
     val appearanceSettings: List<MultipleChoiceSettingUi> = listOf(),
     val creditSettings: List<DisplaySettingUi> = listOf(),
     val unitChangedEvent: Event<Unit>? = null,
     val themeChangedEvent: Event<Unit>? = null,
+    val moodModeChangedEvent: Event<Unit>? = null,
     val openLinkEvent: Event<String>? = null
 )
 

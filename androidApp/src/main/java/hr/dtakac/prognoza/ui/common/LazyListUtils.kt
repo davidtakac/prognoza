@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.ui.forecast
+package hr.dtakac.prognoza.ui.common
 
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.ui.text.Paragraph
@@ -7,6 +7,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import kotlin.math.max
 
 // https://stackoverflow.com/a/69267808
@@ -32,5 +33,5 @@ fun calculateMaxWidth(
             fontFamilyResolver = fontFamilyResolver,
             constraints = Constraints(maxWidth = Int.MAX_VALUE)
         )
-    }.maxOf { it.getLineWidth(0) }.toDp()
+    }.maxOfOrNull { it.getLineWidth(0) }?.toDp() ?: 0.dp
 }

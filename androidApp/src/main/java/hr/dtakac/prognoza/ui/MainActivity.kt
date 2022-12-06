@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -19,10 +18,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
-import hr.dtakac.prognoza.presentation.theme.ThemeSetting
-import hr.dtakac.prognoza.presentation.theme.ThemeSettingViewModel
-import hr.dtakac.prognoza.shared.entity.Mood
+import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
+import hr.dtakac.prognoza.androidsettings.model.MoodMode
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
@@ -36,14 +35,10 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val forecastViewModel: ForecastViewModel = hiltViewModel()
-            val themeSettingViewModel: ThemeSettingViewModel = hiltViewModel()
+            val androidSettingsViewModel: AndroidSettingsViewModel = hiltViewModel()
 
             val forecastState by forecastViewModel.state
-            val themeSetting by themeSettingViewModel.currentTheme
-
-            LaunchedEffect(true) {
-                themeSettingViewModel.getState()
-            }
+            val androidSettingsState by androidSettingsViewModel.state
 
             // Refresh forecast on every resume, ie every app enter
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -57,14 +52,20 @@ class MainActivity : ComponentActivity() {
                 onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
             }
 
-            val useDarkTheme = when (themeSetting) {
+            val useDarkTheme = when (androidSettingsState.theme) {
                 ThemeSetting.DARK -> true
                 ThemeSetting.LIGHT -> false
                 ThemeSetting.FOLLOW_SYSTEM -> isSystemInDarkTheme()
             }
 
+            val mood = if (androidSettingsState.moodMode == MoodMode.DYNAMIC) {
+                null
+            } else {
+                forecastState.forecast?.current?.mood
+            }
+
             AppTheme(
-                mood = forecastState.forecast?.current?.mood ?: Mood.DEFAULT,
+                mood = mood,
                 useDarkTheme = useDarkTheme
             ) {
                 val navController = rememberNavController()
@@ -84,7 +85,8 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(
                             onBackClick = navController::navigateUp,
-                            onThemeChange = themeSettingViewModel::getState,
+                            onThemeChange = androidSettingsViewModel::getState,
+                            onMoodModeChange = androidSettingsViewModel::getState,
                             onUnitChange = forecastViewModel::getState
                         )
                     }

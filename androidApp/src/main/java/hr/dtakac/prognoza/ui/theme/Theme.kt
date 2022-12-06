@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.ui.theme
 
+import android.os.Build
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.LocalIndication
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import hr.dtakac.prognoza.shared.entity.Mood
 
@@ -73,16 +75,32 @@ private class RippleTheme(
 
 @Composable
 fun AppTheme(
-    mood: Mood = Mood.DEFAULT,
+    mood: Mood? = null,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val alpha = ContentAlpha.get()
-    val colors = Colors.get(
-        mood = mood,
-        darkColors = useDarkTheme,
-        contentAlpha = alpha.high
-    ).switch()
+    val colors = if (mood == null) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            Colors.getByDynamicColor(
+                context = LocalContext.current,
+                useDarkColors = useDarkTheme,
+                contentAlpha = alpha.high
+            )
+        } else {
+            Colors.getByMood(
+                mood = Mood.DEFAULT,
+                useDarkColors = useDarkTheme,
+                contentAlpha = alpha.high
+            )
+        }
+    } else {
+        Colors.getByMood(
+            mood = mood,
+            useDarkColors = useDarkTheme,
+            contentAlpha = alpha.high
+        )
+    }.switch()
     val typography = Typography.get()
     val weatherIcons = WeatherIcons.get(useDarkTheme)
     val indication = rememberRipple()

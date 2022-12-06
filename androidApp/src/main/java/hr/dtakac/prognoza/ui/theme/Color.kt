@@ -1,5 +1,10 @@
 package hr.dtakac.prognoza.ui.theme
 
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.compositeOver
@@ -17,17 +22,43 @@ data class Colors(
     val inversePrimary: Color
 ) {
     companion object {
-        fun get(
+        fun getByMood(
             mood: Mood,
-            darkColors: Boolean,
+            useDarkColors: Boolean,
+            contentAlpha: Float
+        ): Colors = get(
+            primary = getPrimary(useDarkColors, mood),
+            inversePrimary = getPrimary(!useDarkColors, mood),
+            useDarkColors = useDarkColors,
+            contentAlpha = contentAlpha
+        )
+
+        @RequiresApi(api = Build.VERSION_CODES.S)
+        fun getByDynamicColor(
+            context: Context,
+            useDarkColors: Boolean,
             contentAlpha: Float
         ): Colors {
-            val onSurface = if (darkColors) Color.White else Color.Black
-            val surface = getSurface(darkColors)
-            val onInverseSurface = if (darkColors) Color.Black else Color.White
-            val inverseSurface = getSurface(!darkColors)
-            val primary = getPrimary(darkColors, mood)
-            val inversePrimary = getPrimary(!darkColors, mood)
+            val dynamicColorScheme = if (useDarkColors) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
+            return get(
+                primary = dynamicColorScheme.primary,
+                inversePrimary = dynamicColorScheme.inversePrimary,
+                useDarkColors = useDarkColors,
+                contentAlpha = contentAlpha
+            )
+        }
+
+        private fun get(
+            primary: Color,
+            inversePrimary: Color,
+            useDarkColors: Boolean,
+            contentAlpha: Float
+        ): Colors {
+            val onSurface = if (useDarkColors) Color.White else Color.Black
+            val surface = getSurface(useDarkColors)
+            val onInverseSurface = if (useDarkColors) Color.Black else Color.White
+            val inverseSurface = getSurface(!useDarkColors)
 
             return Colors(
                 surface1 = surface.overlay(with = primary, alpha = surface1Alpha),
@@ -50,37 +81,37 @@ private fun Color.overlay(
     return with.copy(alpha = alpha).compositeOver(this)
 }
 
-private fun getSurface(darkColors: Boolean): Color =
-    if (darkColors) Color(0xFF121212) else Color.White
+private fun getSurface(useDarkColors: Boolean): Color =
+    if (useDarkColors) Color(0xFF121212) else Color.White
 
 private fun getPrimary(
-    darkColors: Boolean,
+    useDarkColors: Boolean,
     mood: Mood
 ): Color = when (mood) {
     Mood.FOG,
     Mood.CLOUDY ->
-        if (darkColors) Color(0xFF90A4AE) // Blue Gray 300
+        if (useDarkColors) Color(0xFF90A4AE) // Blue Gray 300
         else Color(0xFF546E7A) // Blue Gray 600
 
     Mood.RAIN ->
-        if (darkColors) Color(0xFF64B5F6) // Blue 300
+        if (useDarkColors) Color(0xFF64B5F6) // Blue 300
         else Color(0xFF1E88E5) // Blue 600
 
     Mood.SLEET ->
-        if (darkColors) Color(0xFF4DB6AC) // Teal 300
+        if (useDarkColors) Color(0xFF4DB6AC) // Teal 300
         else Color(0xFF00897B) // Teal 600
 
     Mood.DEFAULT,
     Mood.SNOW ->
-        if (darkColors) Color(0xFFE0E0E0) // Gray 300
+        if (useDarkColors) Color(0xFFE0E0E0) // Gray 300
         else Color(0xFF757575) // Gray 600
 
     Mood.CLEAR_NIGHT ->
-        if (darkColors) Color(0xFF9575CD) // Deep Purple 300
+        if (useDarkColors) Color(0xFF9575CD) // Deep Purple 300
         else Color(0xFF5E35B1) // Deep Purple 600
 
     Mood.CLEAR_DAY ->
-        if (darkColors) Color(0xFFFFD54F) // Amber 300
+        if (useDarkColors) Color(0xFFFFD54F) // Amber 300
         else Color(0xFFFFB300) // Amber 600
 }
 

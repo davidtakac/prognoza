@@ -14,8 +14,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.asString
-import hr.dtakac.prognoza.presentation.settings.SettingsState
-import hr.dtakac.prognoza.ui.forecast.keyVisibilityPercent
+import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenState
+import hr.dtakac.prognoza.ui.common.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.dropWhile
@@ -23,7 +23,7 @@ import kotlinx.coroutines.flow.map
 
 @Composable
 fun SettingsList(
-    state: SettingsState,
+    state: SettingsScreenState,
     isTitleVisible: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {

@@ -14,8 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSettingUi
-import hr.dtakac.prognoza.presentation.settings.SettingsState
+import hr.dtakac.prognoza.presentation.settingsscreen.MultipleChoiceSettingUi
+import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.common.AppToolbar
@@ -23,7 +23,7 @@ import hr.dtakac.prognoza.ui.common.rememberAppToolbarState
 
 @Composable
 fun SettingsContent(
-    state: SettingsState,
+    state: SettingsScreenState,
     onBackClick: () -> Unit = {}
 ) {
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
@@ -58,7 +58,7 @@ private fun Preview() = AppTheme {
     SettingsContent(state = fakeState)
 }
 
-private val fakeState: SettingsState = SettingsState(
+private val fakeState: SettingsScreenState = SettingsScreenState(
     isLoading = false,
     unitSettings = mutableListOf<MultipleChoiceSettingUi>().apply {
         repeat(5) {

@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.ForecastUi
+import hr.dtakac.prognoza.ui.common.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.theme.asWeatherIconResId
 import kotlinx.coroutines.flow.distinctUntilChanged

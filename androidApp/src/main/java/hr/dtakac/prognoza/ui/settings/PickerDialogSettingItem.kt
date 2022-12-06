@@ -3,7 +3,7 @@ package hr.dtakac.prognoza.ui.settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import hr.dtakac.prognoza.presentation.asString
-import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSettingUi
+import hr.dtakac.prognoza.presentation.settingsscreen.MultipleChoiceSettingUi
 
 @Composable
 fun PickerDialogSettingItem(

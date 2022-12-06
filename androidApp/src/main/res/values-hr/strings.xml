@@ -114,4 +114,7 @@
     <string name="design_credit">Dizajn</string>
     <string name="settings_label_inhg">Inč žive</string>
     <string name="launcher_icon_credit">Ikona aplikacije</string>
+    <string name="mood_source">Boja</string>
+    <string name="mood_mode_forecast">Iz vremenskih uvjeta</string>
+    <string name="mood_mode_dynamic">Iz pozadine uređaja</string>
 </resources>

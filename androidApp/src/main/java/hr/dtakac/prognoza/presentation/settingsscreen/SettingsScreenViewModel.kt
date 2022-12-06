@@ -1,5 +1,6 @@
-package hr.dtakac.prognoza.presentation.settings
+package hr.dtakac.prognoza.presentation.settingsscreen
 
+import android.os.Build
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -7,9 +8,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.simpleEvent
-import hr.dtakac.prognoza.presentation.theme.ThemeSetting
-import hr.dtakac.prognoza.presentation.theme.SharedPrefsThemeSettingRepository
+import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
 import hr.dtakac.prognoza.presentation.WidgetRefresher
+import hr.dtakac.prognoza.androidsettings.model.MoodMode
+import hr.dtakac.prognoza.androidsettings.AndroidSettingsRepository
 import hr.dtakac.prognoza.shared.domain.*
 import hr.dtakac.prognoza.shared.entity.LengthUnit
 import hr.dtakac.prognoza.shared.entity.PressureUnit
@@ -19,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsViewModel @Inject constructor(
+class SettingsScreenViewModel @Inject constructor(
     private val setTemperatureUnit: SetTemperatureUnit,
     private val getTemperatureUnit: GetTemperatureUnit,
     private val getAllTemperatureUnits: GetAllTemperatureUnits,
@@ -32,21 +34,22 @@ class SettingsViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
-    private val sharedPrefsThemeSettingRepository: SharedPrefsThemeSettingRepository,
+    private val androidSettingsRepository: AndroidSettingsRepository,
     private val widgetRefresher: WidgetRefresher,
-    private val mapper: SettingsUiMapper
+    private val mapper: SettingsScreenUiMapper
 ) : ViewModel() {
     private var availableTemperatureUnits: List<TemperatureUnit> = listOf()
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
     private var availablePressureUnits: List<PressureUnit> = listOf()
     private var availableThemeSettings: List<ThemeSetting> = listOf()
+    private var availableMoodModes: List<MoodMode> = listOf()
 
-    private val _state = mutableStateOf(SettingsState())
-    val state: State<SettingsState> get() = _state
+    private val _state = mutableStateOf(SettingsScreenState())
+    val state: State<SettingsScreenState> get() = _state
 
     fun getState() {
-        updateState { }
+        updateState()
     }
 
     private fun setTemperatureUnit(index: Int) {
@@ -79,12 +82,19 @@ class SettingsViewModel @Inject constructor(
 
     private fun setTheme(index: Int) {
         updateState {
-            sharedPrefsThemeSettingRepository.setTheme(availableThemeSettings[index])
+            androidSettingsRepository.setTheme(availableThemeSettings[index])
             fireThemeChanged()
         }
     }
 
-    private fun updateState(action: suspend () -> Unit) {
+    private fun setMoodMode(index: Int) {
+        updateState {
+            androidSettingsRepository.setMoodMode(availableMoodModes[index])
+            fireMoodModeChanged()
+        }
+    }
+
+    private fun updateState(action: suspend () -> Unit = {}) {
         viewModelScope.launch {
             showLoader()
             action()
@@ -98,7 +108,8 @@ class SettingsViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
-        availableThemeSettings = sharedPrefsThemeSettingRepository.getAvailableThemes()
+        availableThemeSettings = androidSettingsRepository.getAvailableThemes()
+        availableMoodModes = androidSettingsRepository.getAvailableMoodModes()
 
         _state.value = _state.value.copy(
             unitSettings = listOf(
@@ -118,13 +129,20 @@ class SettingsViewModel @Inject constructor(
                     onIndexSelected = ::setPrecipitationUnit
                 )
             ),
-            appearanceSettings = listOf(
-                mapper.mapToThemeSetting(
-                    selected = sharedPrefsThemeSettingRepository.getTheme(),
+            appearanceSettings = mutableListOf<MultipleChoiceSettingUi>().apply {
+                add(mapper.mapToThemeSetting(
+                    selected = androidSettingsRepository.getTheme(),
                     options = availableThemeSettings,
                     onIndexSelected = ::setTheme
-                )
-            ),
+                ))
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    add(mapper.mapToMoodModeSetting(
+                        selected = androidSettingsRepository.getMoodMode(),
+                        options = availableMoodModes,
+                        onIndexSelected = ::setMoodMode
+                    ))
+                }
+            },
             creditSettings = listOf(
                 mapper.getForecastCreditDisplaySetting(
                     onClick = { openLink("https://www.met.no/en") }
@@ -160,6 +178,12 @@ class SettingsViewModel @Inject constructor(
     private fun fireThemeChanged() {
         _state.value = _state.value.copy(
             themeChangedEvent = simpleEvent()
+        )
+    }
+
+    private fun fireMoodModeChanged() {
+        _state.value = _state.value.copy(
+            moodModeChangedEvent = simpleEvent()
         )
     }
 

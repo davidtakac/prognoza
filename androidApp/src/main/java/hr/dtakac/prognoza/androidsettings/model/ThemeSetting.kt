@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation.theme
+package hr.dtakac.prognoza.androidsettings.model
 
 enum class ThemeSetting {
     DARK, LIGHT, FOLLOW_SYSTEM

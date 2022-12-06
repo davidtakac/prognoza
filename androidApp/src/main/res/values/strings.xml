@@ -123,5 +123,8 @@
     <string name="neal_hampton_credit" translatable="false">Neal Hampton</string>
     <string name="launcher_icon_credit">App icon</string>
     <string name="natasa_takac_credit" translatable="false">Nataša Takač</string>
+    <string name="mood_source">Mood</string>
+    <string name="mood_mode_forecast">From weather</string>
+    <string name="mood_mode_dynamic">From device wallpaper</string>
 
 </resources>

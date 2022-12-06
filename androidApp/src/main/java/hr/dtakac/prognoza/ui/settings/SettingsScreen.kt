@@ -7,13 +7,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.presentation.OnEvent
-import hr.dtakac.prognoza.presentation.settings.SettingsViewModel
+import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenViewModel
 
 @Composable
 fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel(),
+    viewModel: SettingsScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onThemeChange: () -> Unit = {},
+    onMoodModeChange: () -> Unit = {},
     onUnitChange: () -> Unit = {}
 ) {
     val state by viewModel.state
@@ -25,6 +26,9 @@ fun SettingsScreen(
     }
     OnEvent(event = state.unitChangedEvent) {
         onUnitChange()
+    }
+    OnEvent(event = state.moodModeChangedEvent) {
+        onMoodModeChange()
     }
     val context = LocalContext.current
     OnEvent(event = state.openLinkEvent) {

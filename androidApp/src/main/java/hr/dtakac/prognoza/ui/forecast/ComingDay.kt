@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +40,7 @@ import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.ComingDayHourUi
 import hr.dtakac.prognoza.presentation.forecast.ComingDayUi
 import hr.dtakac.prognoza.shared.entity.Description
+import hr.dtakac.prognoza.ui.common.calculateMaxWidth
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.theme.asWeatherIconResId

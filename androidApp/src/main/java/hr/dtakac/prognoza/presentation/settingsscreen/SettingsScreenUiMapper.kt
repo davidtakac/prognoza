@@ -1,8 +1,9 @@
-package hr.dtakac.prognoza.presentation.settings
+package hr.dtakac.prognoza.presentation.settingsscreen
 
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.theme.ThemeSetting
+import hr.dtakac.prognoza.androidsettings.model.MoodMode
+import hr.dtakac.prognoza.androidsettings.model.ThemeSetting
 import hr.dtakac.prognoza.shared.entity.LengthUnit
 import hr.dtakac.prognoza.shared.entity.PressureUnit
 import hr.dtakac.prognoza.shared.entity.SpeedUnit
@@ -12,7 +13,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
 
-class SettingsUiMapper @Inject constructor(
+class SettingsScreenUiMapper @Inject constructor(
     @Named("computation")
     private val computationDispatcher: CoroutineDispatcher
 ) {
@@ -77,6 +78,19 @@ class SettingsUiMapper @Inject constructor(
         selectedIndex = options.indexOf(selected),
         values = withContext(computationDispatcher) {
             options.map(ThemeSetting::toSettingsLabel).map(TextResource::fromStringId)
+        },
+        onIndexSelected = onIndexSelected
+    )
+
+    suspend fun mapToMoodModeSetting(
+        selected: MoodMode,
+        options: List<MoodMode>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
+        name = TextResource.fromStringId(R.string.mood_source),
+        selectedIndex = options.indexOf(selected),
+        values = withContext(computationDispatcher) {
+            options.map(MoodMode::toSettingsLabel).map(TextResource::fromStringId)
         },
         onIndexSelected = onIndexSelected
     )
