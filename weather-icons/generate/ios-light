@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+. constants
+
+echo && echo "iOS image sets from LIGHT icons..."
+cd $light
+for icon in *.svg
+do
+    echo "  $icon"
+    name="${icon%.*}"
+    inkscape -w $mdpi -h $mdpi $icon -o $ios_assets/$name.imageset/light_$name.png;
+    inkscape -w $xhdpi -h $xhdpi $icon -o $ios_assets/$name.imageset/light_${name}_2x.png;
+    inkscape -w $xxhdpi -h $xxhdpi $icon -o $ios_assets/$name.imageset/light_${name}_3x.png;
+done;
+echo && echo "Done!"

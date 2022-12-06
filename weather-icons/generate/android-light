@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+. constants
+
+echo && echo "Android drawables from LIGHT icons..."
+cd $light
+for icon in *.svg
+do
+    echo "  $icon"
+    drawable="light_${icon%.*}.png";
+    inkscape -w $ldpi -h $ldpi $icon -o $android_resources/drawable-ldpi/$drawable;
+    inkscape -w $mdpi -h $mdpi $icon -o $android_resources/drawable-mdpi/$drawable;
+    inkscape -w $hdpi -h $hdpi $icon -o $android_resources/drawable-hdpi/$drawable;
+    inkscape -w $xhdpi -h $xhdpi $icon -o $android_resources/drawable-xhdpi/$drawable;
+    inkscape -w $xxhdpi -h $xxhdpi $icon -o $android_resources/drawable-xxhdpi/$drawable;
+    inkscape -w $xxxhdpi -h $xxxhdpi $icon -o $android_resources/drawable-xxxhdpi/$drawable;
+done;
+echo && echo "Done!"

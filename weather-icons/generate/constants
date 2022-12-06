@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+ldpi='30';
+mdpi='40'; # iOS 1x
+hdpi='60';
+xhdpi='80'; # iOS 2x
+xxhdpi='120'; # iOS 3x
+xxxhdpi='160';
+
+light="../light"
+dark="../dark"
+android_resources="../../androidApp/src/main/res"
+ios_assets="../../iosApp/iosApp/Assets.xcassets"

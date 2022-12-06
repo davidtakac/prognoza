@@ -5,4 +5,75 @@
   Created by David on 25.11.2022..
   
 */
-"template_temperature" = "%1$s°";
+"description_unknown" = "Unknown";
+"description_clear_sky" = "Clear sky";
+"description_cloudy" = "Cloudy";
+"description_fair" = "Fair";
+"description_fog" = "Fog";
+"description_heavy_rain" = "Heavy rain";
+"description_heavy_rain_and_thunder" = "Heavy rain and thunder";
+"description_heavy_rain_showers" = "Heavy rain showers";
+"description_heavy_rain_showers_and_thunder" = "Heavy rain showers and thunder";
+"description_heavy_sleet" = "Heavy sleet";
+"description_heavy_sleet_and_thunder" = "Heavy sleet and thunder";
+"description_heavy_sleet_showers" = "Heavy sleet showers";
+"description_heavy_sleet_showers_and_thunder" = "Heavy sleet showers and thunder";
+"description_heavy_snow" = "Heavy snow";
+"description_heavy_snow_and_thunder" = "Heavy snow and thunder";
+"description_heavy_snow_showers" = "Heavy snow showers";
+"description_heavy_snow_showers_and_thunder" = "Heavy snow showers and thunder";
+"description_light_rain" = "Light rain";
+"description_light_rain_and_thunder" = "Light rain and thunder";
+"description_light_rain_showers" = "Light rain showers";
+"description_light_rain_showers_and_thunder" = "Light rain showers and thunder";
+"description_light_sleet" = "Light sleet";
+"description_light_sleet_and_thunder" = "Light sleet and thunder";
+"description_light_sleet_showers" = "Light sleet showers";
+"description_light_snow" = "Light snow";
+"description_light_snow_and_thunder" = "Light snow and thunder";
+"description_light_snow_showers" = "Light snow showers";
+"description_light_sleet_showers_and_thunder" = "Light sleet showers and thunder";
+"description_light_snow_showers_and_thunder" = "Light snow showers and thunder";
+"description_partly_cloudy" = "Partly cloudy";
+"description_rain" = "Rain";
+"description_rain_and_thunder" = "Rain and thunder";
+"description_rain_showers" = "Rain showers";
+"description_rain_showers_and_thunder" = "Rain showers and thunder";
+"description_sleet" = "Sleet";
+"description_sleet_and_thunder" = "Sleet and thunder";
+"description_sleet_showers" = "Sleet showers";
+"description_sleet_showers_and_thunder" = "Sleet showers and thunder";
+"description_snow" = "Snow";
+"description_snow_and_thunder" = "Snow and thunder";
+"description_snow_showers" = "Snow showers";
+"description_snow_showers_and_thunder" = "Snow showers and thunder";
+
+"template_temperature_degrees" = "%@°";
+"template_feels_like" = "Feels like %@";
+"template_wind_kmh" = "%@\U00A0km\U2215h";
+"template_wind_mps" = "%@\U00A0m\U2215s";
+"template_wind_mph" = "%@\U00A0mi\U2215h";
+"template_wind_knots" = "%@\U00A0kt";
+"template_wind" = "%@\U00A0\U00B7\U00A0%@";
+
+"wind_calm" = "Calm";
+"wind_light_air" = "Light air";
+"wind_light_breeze" = "Light breeze";
+"wind_gentle_breeze" = "Gentle breeze";
+"wind_moderate_breeze" = "Moderate breeze";
+"wind_fresh_breeze" = "Fresh breeze";
+"wind_strong_breeze" = "Strong breeze";
+"wind_near_gale" = "Near gale";
+"wind_gale" = "Gale";
+"wind_severe_gale" = "Severe gale";
+"wind_storm" = "Storm";
+"wind_violent_storm" = "Violent storm";
+"wind_hurricane" = "Hurricane";
+
+"template_precipitation_mm" = "%@\U00A0mm";
+"template_precipitation_in" = "%@\U00A0in";
+"template_precipitation_cm" = "%@\U00A0cm";
+
+"template_high_low_temperature" = "%@\U00A0\U00B7\U00A0%@";
+
+"hourly" = "Hourly";

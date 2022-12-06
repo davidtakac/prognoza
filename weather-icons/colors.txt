@@ -1,7 +1,0 @@
-These are the approximate colors of the official yr.no app. They use a gradient for the moon,
-but it's so subtle that a solid color doesn't make a difference.
-
-moon dark: #e9d9b1
-rain dark: #47bfe2
-snow dark & light: #47bfe2
-lightning dark & light: #fedc15
