@@ -40,8 +40,7 @@ data class Typography(
             currentTemperature = TextStyle(
                 fontFamily = Manrope,
                 fontWeight = FontWeight.Bold,
-                fontSize = 184.sp,
-                letterSpacing = (-9).sp,
+                // Font size and letter spacing are dynamically determined
                 lineHeightStyle = LineHeightStyle(
                     alignment = LineHeightStyle.Alignment.Proportional,
                     trim = LineHeightStyle.Trim.Both
