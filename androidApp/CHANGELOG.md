@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - NWS weather data provider
 
 ## [Unreleased]
+### Fixed
+- Current temperature too big on some devices
+- Coming day background flashing on mood and theme change
 ### Changed
 - Reduce weather icon sizes
 - Manually create dark weather icon SVGs from yr.no default ones

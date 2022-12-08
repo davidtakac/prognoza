@@ -76,11 +76,12 @@ fun ComingDay(
     val cornerRadius by isExpandedTransition.animateDp(label = "Animate corner radius") {
         if (it) 16.dp else 0.dp
     }
-    val backgroundColor by isExpandedTransition.animateColor(label = "Animate background color") {
-        if (it) PrognozaTheme.colors.surface2
-        // This color instead of transparent because the ripple animation
-        // becomes weird otherwise
-        else PrognozaTheme.colors.surface1
+    // Not animating background color from surface2 to transparent because it messes with the
+    // ongoing ripple animation. Animating alpha seems to work fine, probably because a background
+    // is present even when transparent
+    val backgroundColor = PrognozaTheme.colors.surface2
+    val backgroundAlpha by isExpandedTransition.animateFloat(label = "Animate background transparency") {
+        if (isExpanded) 1f else 0f
     }
 
     Column(
@@ -94,7 +95,10 @@ fun ComingDay(
                 clip = true
             }
             .drawBehind {
-                drawRect(color = backgroundColor)
+                drawRect(
+                    color = backgroundColor,
+                    alpha = backgroundAlpha
+                )
             }
             .clickable(onClick = onClick)
             .padding(
