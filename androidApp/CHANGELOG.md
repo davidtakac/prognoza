@@ -12,17 +12,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS support
 - NWS weather data provider
 
-## [Unreleased]
+## [3.1.0] - 2022-12-09
+### Added
+- Option to determine mood from device wallpaper on Android 12+
 ### Fixed
 - Current temperature too big on some devices
 - Coming day background flashing on mood and theme change
 ### Changed
 - Reduce weather icon sizes
 - Manually create dark weather icon SVGs from yr.no default ones
-- Update SVG -> PNG conversion scripts for Android
+- Update SVG -> PNG conversion scripts
 - Optimize app color changes
-### Added
-- Option to determine mood from device wallpaper on Android 12+
+- Snow is near-white in dark mode
 
 ## [3.0.1] - 2022-12-04
 ### Changed
