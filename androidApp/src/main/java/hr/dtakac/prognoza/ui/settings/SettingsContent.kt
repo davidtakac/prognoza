@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.ui.settings
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -8,6 +7,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,9 +26,12 @@ fun SettingsContent(
     state: SettingsScreenState,
     onBackClick: () -> Unit = {}
 ) {
-    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
-        Column(modifier = Modifier.background(PrognozaTheme.colors.surface1)) {
-            val toolbarState = rememberAppToolbarState()
+    val backgroundColor = PrognozaTheme.colors.surface1
+    Column(modifier = Modifier.drawBehind { drawRect(color = backgroundColor) }) {
+        val toolbarState = rememberAppToolbarState()
+        CompositionLocalProvider(
+            LocalContentColor provides PrognozaTheme.colors.onSurface
+        ) {
             AppToolbar(
                 title = { Text(stringResource(id = R.string.settings)) },
                 state = toolbarState,

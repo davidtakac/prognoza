@@ -25,9 +25,7 @@ private val LocalColors = staticCompositionLocalOf {
         surface3 = Color.Unspecified,
         onSurface = Color.Unspecified,
         inverseSurface1 = Color.Unspecified,
-        primary = Color.Unspecified,
-        onInverseSurface = Color.Unspecified,
-        inversePrimary = Color.Unspecified
+        onInverseSurface = Color.Unspecified
     )
 }
 
@@ -147,6 +145,4 @@ private fun Colors.switch() = copy(
     onSurface = animateColor(target = onSurface),
     inverseSurface1 = animateColor(target = inverseSurface1),
     onInverseSurface = animateColor(target = onInverseSurface),
-    primary = animateColor(target = primary),
-    inversePrimary = animateColor(target = inversePrimary)
 )

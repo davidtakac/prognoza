@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Reduce weather icon sizes
 - Manually create dark weather icon SVGs from yr.no default ones
 - Update SVG -> PNG conversion scripts for Android
+- Optimize app color changes
 ### Added
 - Option to determine mood from device wallpaper on Android 12+
 

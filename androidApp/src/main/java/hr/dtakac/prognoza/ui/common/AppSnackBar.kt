@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.common
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,7 +9,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,10 +34,11 @@ fun AppSnackBar(
     ) {
         Box(
             modifier = Modifier
-                .background(
-                    color = backgroundColor,
+                .graphicsLayer {
                     shape = RoundedCornerShape(8.dp)
-                )
+                    clip = true
+                }
+                .drawBehind { drawRect(color = backgroundColor) }
                 .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
             Text(

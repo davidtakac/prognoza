@@ -17,9 +17,7 @@ data class Colors(
     val surface3: Color,
     val onSurface: Color,
     val inverseSurface1: Color,
-    val onInverseSurface: Color,
-    val primary: Color,
-    val inversePrimary: Color
+    val onInverseSurface: Color
 ) {
     companion object {
         fun getByMood(
@@ -66,9 +64,7 @@ data class Colors(
                 surface3 = surface.overlay(with = primary, alpha = surface3Alpha),
                 onSurface = onSurface.copy(alpha = contentAlpha),
                 inverseSurface1 = inverseSurface.overlay(with = inversePrimary, alpha = surface1Alpha),
-                onInverseSurface = onInverseSurface.copy(alpha = contentAlpha),
-                primary = primary,
-                inversePrimary = inversePrimary
+                onInverseSurface = onInverseSurface.copy(alpha = contentAlpha)
             )
         }
     }

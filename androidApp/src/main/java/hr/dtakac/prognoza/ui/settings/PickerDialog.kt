@@ -53,12 +53,14 @@ fun PickerDialog(
         confirmButton = {
             Button(
                 label = stringResource(id = R.string.confirm),
+                textColor = contentColor,
                 onClick = onConfirm
             )
         },
         dismissButton = {
             Button(
                 label = stringResource(id = R.string.cancel),
+                textColor = contentColor,
                 onClick = onDismiss
             )
         }
@@ -69,12 +71,13 @@ fun PickerDialog(
 private fun Button(
     label: String,
     onClick: () -> Unit,
+    textColor: Color = Color.Unspecified,
     modifier: Modifier = Modifier
 ) {
     TextButton(onClick = onClick, modifier = modifier) {
         Text(
             text = label,
-            color = PrognozaTheme.colors.onSurface,
+            color = textColor,
             style = PrognozaTheme.typography.titleSmall
         )
     }

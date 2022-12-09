@@ -1,12 +1,12 @@
 package hr.dtakac.prognoza.ui.common
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -30,7 +30,7 @@ fun AppToolbar(
 ) {
     Column(
         modifier = modifier
-            .background(backgroundColor)
+            .drawBehind { drawRect(color = backgroundColor) }
             .padding(windowInsets.asPaddingValues())
     ) {
         CompositionLocalProvider(LocalContentColor provides contentColor) {
