@@ -17,11 +17,8 @@ and import them into the correct iOS imagesets.
 ## Instructions
 On MacOS and Linux, install Inkscape and run the `convert` script. 
 
-## Colors
-These are the approximate colors of the official yr.no app. They use a gradient for the moon,
-but it's so subtle that a solid color doesn't make a difference.
-
-- moon dark: #e9d9b1
-- rain dark: #47bfe2
-- snow dark & light: #47bfe2
-- lightning dark & light: #fedc15
+## Changed colors
+- moon dark: #e9d9b1 (approx. from official yr.no)
+- rain dark: #4fc3f7 (Material light blue 300)
+- snow dark: #e1f5fe (Material light blue 50)
+- lightning dark: #fedc15 (from official yr.no)
