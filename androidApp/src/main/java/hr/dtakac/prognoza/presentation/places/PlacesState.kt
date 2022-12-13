@@ -13,5 +13,6 @@ data class PlacesState(
 data class PlaceUi(
     val name: TextResource,
     val details: TextResource,
-    val isSelected: Boolean
+    val isSelected: Boolean,
+    val isDeletable: Boolean
 )

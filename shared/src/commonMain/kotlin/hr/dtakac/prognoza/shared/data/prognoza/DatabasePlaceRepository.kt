@@ -2,15 +2,18 @@ package hr.dtakac.prognoza.shared.data.prognoza
 
 import hr.dtakac.prognoza.shared.domain.data.PlaceSaver
 import hr.dtakac.prognoza.shared.domain.data.SavedPlaceGetter
+import hr.dtakac.prognoza.shared.domain.data.SavedPlaceRemover
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import hr.dtakac.prognoza.shared.entity.Place as PlaceEntity
 
 internal class DatabasePlaceRepository(
+    private val forecastQueries: ForecastQueries,
     private val placeQueries: PlaceQueries,
+    private val metaQueries: PrognozaMetaQueries,
     private val ioDispatcher: CoroutineDispatcher,
     private val computationDispatcher: CoroutineDispatcher
-) : SavedPlaceGetter, PlaceSaver {
+) : SavedPlaceGetter, PlaceSaver, SavedPlaceRemover {
     override suspend fun get(latitude: Double, longitude: Double): PlaceEntity? {
         return withContext(ioDispatcher) {
             placeQueries
@@ -55,6 +58,23 @@ internal class DatabasePlaceRepository(
                     name = place.name,
                     details = place.details
                 )
+            )
+        }
+    }
+
+    override suspend fun remove(place: PlaceEntity) {
+        withContext(ioDispatcher) {
+            placeQueries.delete(
+                latitude = place.latitude,
+                longitude = place.longitude
+            )
+            forecastQueries.delete(
+                latitude = place.latitude,
+                longitude = place.longitude
+            )
+            metaQueries.delete(
+                latitude = place.latitude,
+                longitude = place.longitude
             )
         }
     }

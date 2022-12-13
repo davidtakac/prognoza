@@ -1,4 +1,6 @@
-package hr.dtakac.prognoza.shared.domain
+package hr.dtakac.prognoza.shared
+
+import hr.dtakac.prognoza.shared.domain.*
 
 interface PrognozaSdk {
     val getAllPrecipitationUnits: GetAllPrecipitationUnits
@@ -15,6 +17,7 @@ interface PrognozaSdk {
     val getWindUnit: GetWindUnit
     val searchPlaces: SearchPlaces
     val selectPlace: SelectPlace
+    val deleteSavedPlace: DeleteSavedPlace
     val setPrecipitationUnit: SetPrecipitationUnit
     val setPressureUnit: SetPressureUnit
     val setTemperatureUnit: SetTemperatureUnit

@@ -6,9 +6,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import hr.dtakac.prognoza.shared.domain.PrognozaSdk
+import hr.dtakac.prognoza.shared.PrognozaSdk
 import hr.dtakac.prognoza.shared.domain.*
-import hr.dtakac.prognoza.shared.platform.AndroidPrognozaSdkFactory
+import hr.dtakac.prognoza.shared.platform.PrognozaSdkFactory
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -20,7 +20,7 @@ class UseCaseModule {
     fun providePrognozaSdk(
         @ApplicationContext context: Context,
         @Named("user_agent") userAgent: String
-    ): PrognozaSdk = AndroidPrognozaSdkFactory(context, userAgent).create()
+    ): PrognozaSdk = PrognozaSdkFactory(context, userAgent).create()
 
     @Provides
     fun provideGetForecastUseCase(
@@ -52,6 +52,11 @@ class UseCaseModule {
     fun provideSelectPlaceUseCase(
         prognozaSdk: PrognozaSdk
     ): SelectPlace = prognozaSdk.selectPlace
+
+    @Provides
+    fun provideDeleteSavedPlaceUseCase(
+        prognozaSdk: PrognozaSdk
+    ): DeleteSavedPlace = prognozaSdk.deleteSavedPlace
 
     @Provides
     fun provideSetTemperatureUnit(

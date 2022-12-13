@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -29,7 +28,6 @@ fun PlacesSearchBar(
     onQueryChange: (String) -> Unit = {},
     onSubmitClick: () -> Unit = {}
 ) {
-    val focusManager = LocalFocusManager.current
     ProvideTextStyle(PrognozaTheme.typography.subtitleMedium.copy(color = LocalContentColor.current)) {
         BasicTextField(
             value = query,
@@ -43,7 +41,6 @@ fun PlacesSearchBar(
             ),
             keyboardActions = KeyboardActions {
                 onSubmitClick()
-                focusManager.clearFocus()
             },
             cursorBrush = SolidColor(LocalContentColor.current),
             decorationBox = { innerTextField ->

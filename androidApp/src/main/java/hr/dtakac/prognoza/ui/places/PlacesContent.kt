@@ -20,11 +20,12 @@ import hr.dtakac.prognoza.ui.theme.AppTheme
 @Composable
 fun PlacesContent(
     state: PlacesState,
-    query: String = "",
-    onQuerySubmit: () -> Unit = {},
-    onQueryChange: (String) -> Unit = {},
-    onPlaceSelected: (Int) -> Unit = {},
+    searchQuery: String = "",
+    onSearchSubmit: () -> Unit = {},
+    onSearchQueryChange: (String) -> Unit = {},
+    onPlaceClick: (Int) -> Unit = {},
     onSettingsClick: () -> Unit = {},
+    onPlaceLongClick: (Int) -> Unit = {},
 ) {
     Column {
         Column(
@@ -42,12 +43,12 @@ fun PlacesContent(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PlacesSearchBar(
-                    query = query,
+                    query = searchQuery,
                     modifier = Modifier
                         .padding(end = 8.dp)
                         .weight(1f),
-                    onSubmitClick = onQuerySubmit,
-                    onQueryChange = onQueryChange
+                    onSubmitClick = onSearchSubmit,
+                    onQueryChange = onSearchQueryChange
                 )
                 IconButton(
                     onClick = onSettingsClick,
@@ -77,7 +78,8 @@ fun PlacesContent(
         } else {
             PlacesList(
                 places = state.places,
-                onPlaceSelected = onPlaceSelected,
+                onPlaceClick = onPlaceClick,
+                onPlaceLongClick = onPlaceLongClick,
                 modifier = Modifier.weight(1f)
             )
         }
@@ -97,22 +99,26 @@ private val fakeState: PlacesState = PlacesState(
         PlaceUi(
             name = TextResource.fromString("Tenja"),
             details = TextResource.fromString("Osijek, Osijek-baranja county, Croatia, 31207"),
-            isSelected = true
+            isSelected = true,
+            isDeletable = false
         ),
         PlaceUi(
             name = TextResource.fromString("Osijek"),
             details = TextResource.fromString("Osijek, Osijek-baranja county, Croatia, 31000"),
-            isSelected = false
+            isSelected = false,
+            isDeletable = false
         ),
         PlaceUi(
             name = TextResource.fromString("Sombor"),
             details = TextResource.fromString("Sombor, Backa county, Serbia"),
-            isSelected = false
+            isSelected = false,
+            isDeletable = false
         ),
         PlaceUi(
             name = TextResource.fromString("San Francisco"),
             details = TextResource.fromString("Wherever in the US that San Francisco is, I don't care, it's not like the Americans know where Croatia, let alone Tenja, is."),
-            isSelected = false
+            isSelected = false,
+            isDeletable = false
         ),
     )
 )

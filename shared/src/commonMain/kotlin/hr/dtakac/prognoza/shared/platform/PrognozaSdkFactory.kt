@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.shared.platform
 
 import com.squareup.sqldelight.db.SqlDriver
+import hr.dtakac.prognoza.shared.PrognozaSdk
 import hr.dtakac.prognoza.shared.data.PrognozaDatabase
 import hr.dtakac.prognoza.shared.data.metnorway.*
 import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
@@ -15,7 +16,11 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.serialization.json.Json
 
-open class PrognozaSdkFactory internal constructor(
+expect class PrognozaSdkFactory {
+    fun create(): PrognozaSdk
+}
+
+internal class InternalPrognozaSdkFactory constructor(
     private val userAgent: String,
     private val localRfc2616LanguageGetter: LocalRfc2616LanguageGetter,
     private val sqlDriverFactory: SqlDriverFactory,
@@ -44,7 +49,9 @@ open class PrognozaSdkFactory internal constructor(
         val placeRepository = DatabasePlaceRepository(
             placeQueries = database.placeQueries,
             ioDispatcher = ioDispatcher,
-            computationDispatcher = computationDispatcher
+            computationDispatcher = computationDispatcher,
+            forecastQueries = database.forecastQueries,
+            metaQueries = database.prognozaMetaQueries
         )
         val settingsRepository = DatabaseSettingsRepository(
             settingsQueries = database.settingsQueries,
@@ -77,6 +84,7 @@ open class PrognozaSdkFactory internal constructor(
             override val setWindUnit = SetWindUnit(settingsRepository)
             override val getForecast = GetForecastLatest(actualGetForecast)
             override val getForecastFrugal = GetForecastFrugal(actualGetForecast)
+            override val deleteSavedPlace = DeleteSavedPlace(placeRepository)
 
             override val searchPlaces = SearchPlaces(
                 placeSearcher = placeSearcher,

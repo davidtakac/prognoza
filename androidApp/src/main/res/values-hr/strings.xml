@@ -51,7 +51,7 @@
     <string name="direction_w">Zapad</string>
     <string name="direction_nw">Sjeverozapad</string>
     <string name="template_temperature_degrees">%1$s°</string>
-    <string name="template_feels_like">Osjet %1$s</string>
+    <string name="template_feels_like">Osjet ugode %1$s</string>
     <string name="template_precipitation_mm">%1$s\u00A0mm</string>
     <string name="template_precipitation_in">%1$s\u00A0in</string>
     <string name="template_precipitation_cm">%1$s\u00A0cm</string>
@@ -114,7 +114,10 @@
     <string name="design_credit">Dizajn</string>
     <string name="settings_label_inhg">Inč žive</string>
     <string name="launcher_icon_credit">Ikona aplikacije</string>
-    <string name="mood_source">Boja</string>
-    <string name="mood_mode_forecast">Iz vremenskih uvjeta</string>
-    <string name="mood_mode_dynamic">Iz pozadine uređaja</string>
+    <string name="mood_source">Raspoloženje</string>
+    <string name="mood_mode_forecast">Odredi iz prognoze</string>
+    <string name="mood_mode_dynamic">Prati sustav</string>
+    <string name="delete_place_title">Obriši mjesto?</string>
+    <string name="template_delete_place_description">Brisanjem spremljenog mjesta \"%1$s\" brišu se svi njegovi podaci, uključujući i spremljenu prognozu. Uvijek ga možeš ponovo potražiti i odabrati.</string>
+    <string name="delete">Obriši</string>
 </resources>

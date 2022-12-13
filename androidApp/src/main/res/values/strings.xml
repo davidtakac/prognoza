@@ -112,7 +112,7 @@
     <string name="theme">Theme</string>
     <string name="settings_label_light">Light</string>
     <string name="settings_label_dark">Dark</string>
-    <string name="settings_label_follow_system">Follow system setting</string>
+    <string name="settings_label_follow_system">Follow system</string>
     <string name="widget_empty">No forecast data. Make sure that you have a selected place and are online</string>
     <string name="widget_description">Weather forecast for the next couple of hours.</string>
     <string name="widget_name">Current forecast</string>
@@ -124,7 +124,10 @@
     <string name="launcher_icon_credit">App icon</string>
     <string name="natasa_takac_credit" translatable="false">Nataša Takač</string>
     <string name="mood_source">Mood</string>
-    <string name="mood_mode_forecast">From weather</string>
-    <string name="mood_mode_dynamic">From device wallpaper</string>
+    <string name="mood_mode_forecast">Extract from weather</string>
+    <string name="mood_mode_dynamic">Follow system</string>
+    <string name="delete">Delete</string>
+    <string name="delete_place_title">Delete place?</string>
+    <string name="template_delete_place_description">Deleting saved place \"%1$s\" will clear all of its data, including its offline forecast. You can always search for and select it again.</string>
 
 </resources>

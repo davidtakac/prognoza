@@ -10,11 +10,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.ui.common.AppDialog
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
@@ -26,59 +24,18 @@ fun PickerDialog(
     onSelectedIndexChange: (Int) -> Unit,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    modifier: Modifier = Modifier,
-    contentColor: Color = PrognozaTheme.colors.onSurface,
-    backgroundColor: Color = PrognozaTheme.colors.surface3
-) {
-    AlertDialog(
-        modifier = modifier,
-        containerColor = backgroundColor,
-        titleContentColor = contentColor,
-        onDismissRequest = onDismiss,
-        title = {
-            Text(
-                text = title,
-                style = PrognozaTheme.typography.titleMedium
-            )
-        },
-        text = {
-            CompositionLocalProvider(LocalContentColor provides contentColor) {
-                OptionsList(
-                    options = options,
-                    onIndexSelect = onSelectedIndexChange,
-                    selectedIndex = selectedIndex
-                )
-            }
-        },
-        confirmButton = {
-            Button(
-                label = stringResource(id = R.string.confirm),
-                textColor = contentColor,
-                onClick = onConfirm
-            )
-        },
-        dismissButton = {
-            Button(
-                label = stringResource(id = R.string.cancel),
-                textColor = contentColor,
-                onClick = onDismiss
-            )
-        }
-    )
-}
-
-@Composable
-private fun Button(
-    label: String,
-    onClick: () -> Unit,
-    textColor: Color = Color.Unspecified,
     modifier: Modifier = Modifier
 ) {
-    TextButton(onClick = onClick, modifier = modifier) {
-        Text(
-            text = label,
-            color = textColor,
-            style = PrognozaTheme.typography.titleSmall
+    AppDialog(
+        title = title,
+        onConfirm = onConfirm,
+        onDismiss = onDismiss,
+        modifier = modifier
+    ) {
+        OptionsList(
+            options = options,
+            onIndexSelect = onSelectedIndexChange,
+            selectedIndex = selectedIndex
         )
     }
 }

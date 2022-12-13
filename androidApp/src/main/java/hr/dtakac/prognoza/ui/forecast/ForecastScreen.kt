@@ -3,7 +3,6 @@ package hr.dtakac.prognoza.ui.forecast
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalFocusManager
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
@@ -16,15 +15,7 @@ fun ForecastScreen(
     onSettingsClick: () -> Unit = {},
     onPlaceSelected: () -> Unit = {}
 ) {
-    // Hide keyboard when drawer is closed
-    val focusManager = LocalFocusManager.current
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    LaunchedEffect(drawerState.isClosed) {
-        if (drawerState.isClosed) {
-            focusManager.clearFocus()
-        }
-    }
-
     CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
         val scope = rememberCoroutineScope()
         ModalNavigationDrawer(

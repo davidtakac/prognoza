@@ -20,6 +20,7 @@ class PlacesViewModel @Inject constructor(
     private val getSavedPlaces: GetSavedPlaces,
     private val selectPlace: SelectPlace,
     private val getSelectedPlace: GetSelectedPlace,
+    private val deleteSavedPlace: DeleteSavedPlace,
     private val widgetRefresher: WidgetRefresher,
     private val mapper: PlacesUiMapper
 ) : ViewModel() {
@@ -28,55 +29,74 @@ class PlacesViewModel @Inject constructor(
     private val _state = mutableStateOf(PlacesState())
     val state: State<PlacesState> get() = _state
 
+    init {
+        getSaved()
+    }
+
     fun getSaved() {
         viewModelScope.launch {
             showLoader()
-            val savedPlaces = getSavedPlaces()
-            if (savedPlaces.isEmpty()) {
+            showSaved()
+            hideLoader()
+        }
+    }
+
+    fun getSearchResults(query: String) {
+        viewModelScope.launch {
+            showLoader()
+            showSearchResults(query)
+            hideLoader()
+        }
+    }
+
+    fun selectPlace(index: Int) {
+        viewModelScope.launch {
+            showLoader()
+            selectPlace(currentPlaces[index])
+            showSaved().also {
+                _state.value = _state.value.copy(placeSelected = simpleEvent())
+            }
+            widgetRefresher.refreshData()
+            hideLoader()
+        }
+    }
+
+    fun deletePlace(index: Int) {
+        viewModelScope.launch {
+            showLoader()
+            deleteSavedPlace(currentPlaces[index])
+            showSaved()
+            hideLoader()
+        }
+    }
+
+    private suspend fun showSaved() {
+        val savedPlaces = getSavedPlaces()
+        if (savedPlaces.isEmpty()) {
+            _state.value = _state.value.copy(
+                empty = TextResource.fromStringId(R.string.no_saved_places)
+            )
+        } else {
+            currentPlaces = savedPlaces
+            _state.value = _state.value.copy(
+                places = mapper.mapToSavedPlacesUi(savedPlaces, getSelectedPlace()),
+                empty = null
+            )
+        }
+    }
+
+    private suspend fun showSearchResults(query: String) {
+        when (val result = searchPlaces(query)) {
+            is SearchPlacesResult.Success -> {
+                currentPlaces = result.places
                 _state.value = _state.value.copy(
-                    empty = TextResource.fromStringId(R.string.no_saved_places)
-                )
-            } else {
-                currentPlaces = savedPlaces
-                _state.value = _state.value.copy(
-                    places = mapper.mapToPlaceUi(savedPlaces, getSelectedPlace()),
+                    places = mapper.mapToSearchResultPlacesUi(result.places),
                     empty = null
                 )
             }
-            hideLoader()
-        }
-    }
-
-    fun search(query: String) {
-        viewModelScope.launch {
-            showLoader()
-            when (val searchPlacesResult = searchPlaces(query)) {
-                is SearchPlacesResult.Success -> {
-                    currentPlaces = searchPlacesResult.places
-                    _state.value = _state.value.copy(
-                        places = mapper.mapToPlaceUi(searchPlacesResult.places, getSelectedPlace()),
-                        empty = null
-                    )
-                }
-                is SearchPlacesResult.Empty -> _state.value = _state.value.copy(
-                    empty = mapper.mapToSearchPlacesError(searchPlacesResult, query)
-                )
-            }
-            hideLoader()
-        }
-    }
-
-    fun select(index: Int) {
-        viewModelScope.launch {
-            showLoader()
-            val selectedPlace = currentPlaces[index]
-            selectPlace(selectedPlace)
-            _state.value = _state.value.copy(
-                places = mapper.mapToPlaceUi(currentPlaces, selectedPlace),
-                placeSelected = simpleEvent()
+            is SearchPlacesResult.Empty -> _state.value = _state.value.copy(
+                empty = mapper.mapToSearchPlacesError(result, query)
             )
-            widgetRefresher.refreshData()
-            hideLoader()
         }
     }
 

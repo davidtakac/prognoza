@@ -11,3 +11,7 @@ WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00
 
 insert:
 INSERT OR REPLACE INTO PrognozaMeta VALUES ?;
+
+delete:
+DELETE FROM PrognozaMeta
+WHERE abs(latitude - :latitude) < 0.00001 AND abs(longitude - :longitude) < 0.00001;
