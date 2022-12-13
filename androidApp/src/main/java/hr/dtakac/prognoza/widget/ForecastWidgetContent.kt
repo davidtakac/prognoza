@@ -45,9 +45,9 @@ fun ForecastWidgetContent(
         contentAlignment = Alignment.Center
     ) {
         when (state) {
-            ForecastWidgetState.Error -> EmptyWidget(colors)
-            ForecastWidgetState.Loading -> LoadingWidget()
+            ForecastWidgetState.Error,
             ForecastWidgetState.Unavailable -> EmptyWidget(colors)
+            ForecastWidgetState.Loading -> LoadingWidget()
             is ForecastWidgetState.Success -> SuccessWidget(
                 state = state,
                 colors = colors,
