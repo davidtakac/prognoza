@@ -368,5 +368,11 @@ fun Description.asWeatherIconResId(
 @Composable
 @DrawableRes
 fun Description.asGlanceWeatherIconResId(
-    useDarkTheme: Boolean = LocalContext.current.resources.configuration.isNightModeActive
+    useDarkTheme: Boolean = LocalContext.current.let {
+        try {
+            it.resources.configuration.isNightModeActive
+        } catch (_: NoSuchMethodError) {
+            false
+        }
+    }
 ): Int = asWeatherIconResId(WeatherIcons.get(useDarkTheme))
