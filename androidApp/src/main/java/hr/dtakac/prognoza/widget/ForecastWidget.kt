@@ -13,10 +13,11 @@ class ForecastWidget : GlanceAppWidget() {
         val normal = DpSize(width = 130.dp, height = 220.dp) // 2x2
         val normalWide = DpSize(width = 203.dp, height = 220.dp) // 3x2
         val normalExtraWide = DpSize(width = 276.dp, height = 220.dp) // 4x2
+        val normalChunky = DpSize(width = 349.dp, height = 220.dp) // 5x2
     }
 
     override val sizeMode: SizeMode = SizeMode.Responsive(
-        setOf(tiny, small, normal, normalWide, normalExtraWide)
+        setOf(tiny, small, normal, normalWide, normalExtraWide, normalChunky)
     )
 
     override val stateDefinition = ForecastWidgetStateDefinition

@@ -17,6 +17,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Ability to delete saved places
 ### Fixed
 - Widget crashing due to missing isNightModeActive
+- Widget only clickable on edges
+- Widget hours clipped
+- Widget not expanding to 5 cells
+### Changed
+- Tiny widget displays temp and icon instead of place
+- Small widget tweaked dimensions (slight reduction)
+- 
 
 ## [3.1.0] - 2022-12-09
 ### Added
