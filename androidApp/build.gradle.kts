@@ -102,6 +102,8 @@ dependencies {
     implementation(Dependencies.Android.Hilt.core)
     kapt(Dependencies.Android.Hilt.kapt)
 
+    implementation(Dependencies.Android.core)
+    implementation(Dependencies.Android.appcompat)
     implementation(Dependencies.Android.work)
     implementation(Dependencies.Android.splashScreen)
     implementation(Dependencies.Android.glance)

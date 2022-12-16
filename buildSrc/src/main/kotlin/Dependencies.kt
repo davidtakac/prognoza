@@ -59,6 +59,8 @@ object Dependencies {
     }
 
     object Android {
+        const val core = "androidx.core:core-ktx:1.7.0"
+        const val appcompat = "androidx.appcompat:appcompat:1.5.1"
         const val splashScreen = "androidx.core:core-splashscreen:1.0.0"
         const val work = "androidx.work:work-runtime-ktx:2.7.1"
         const val glance = "androidx.glance:glance-appwidget:1.0.0-alpha05"

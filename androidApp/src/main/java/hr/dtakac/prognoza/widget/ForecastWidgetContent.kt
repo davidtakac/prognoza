@@ -2,6 +2,8 @@ package hr.dtakac.prognoza.widget
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,6 +20,7 @@ import androidx.glance.text.FontStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asGlanceString
@@ -25,7 +28,7 @@ import hr.dtakac.prognoza.presentation.forecast.getTemperature
 import hr.dtakac.prognoza.shared.entity.TemperatureUnit
 import hr.dtakac.prognoza.ui.MainActivity
 import hr.dtakac.prognoza.ui.theme.asGlanceWeatherIconResId
-import java.lang.IllegalStateException
+import kotlin.math.floor
 
 @Composable
 fun ForecastWidgetContent(
@@ -41,8 +44,6 @@ fun ForecastWidgetContent(
             .appWidgetBackground()
             .padding(8.dp)
             .fillMaxSize()
-            .clickable(onClick),
-        contentAlignment = Alignment.Center
     ) {
         when (state) {
             ForecastWidgetState.Error,
@@ -54,22 +55,34 @@ fun ForecastWidgetContent(
                 size = size
             )
         }
+        // This box is a workaround to make the entire widget clickable
+        Box(modifier = GlanceModifier.fillMaxSize().clickable(onClick)) {}
     }
 }
 
 
 @Composable
 private fun EmptyWidget(colors: ColorProviders) {
-    Text(
-        // Glance does not support stringResource
-        text = LocalContext.current.getString(R.string.widget_empty),
-        style = TextStyle(color = colors.onSurface, fontSize = 14.sp)
-    )
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = GlanceModifier.fillMaxSize()
+    ) {
+        Text(
+            // Glance does not support stringResource
+            text = LocalContext.current.getString(R.string.widget_empty),
+            style = TextStyle(color = colors.onSurface, fontSize = 14.sp)
+        )
+    }
 }
 
 @Composable
 private fun LoadingWidget() {
-    CircularProgressIndicator()
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = GlanceModifier.fillMaxSize()
+    ) {
+        CircularProgressIndicator()
+    }
 }
 
 @Composable
@@ -88,39 +101,36 @@ private fun SuccessWidget(
 
     when (size) {
         ForecastWidget.tiny -> TinyWidget(
-            placeName = placeName,
+            iconResId = icon,
             currentTemperature = currentTemperature,
-            colors = colors,
+            textColor = colors.onSurface,
+            modifier = GlanceModifier.fillMaxSize()
         )
         ForecastWidget.small -> SmallWidget(
             placeName = placeName,
             currentTemperature = currentTemperature,
             iconResId = icon,
-            colors = colors,
+            textColor = colors.onSurface,
+            modifier = GlanceModifier.fillMaxSize()
         )
         else -> NormalWidget(
             placeName = placeName,
             currentTemperature = currentTemperature,
             iconResId = icon,
-            hours = state.hours.take(
-                when (size) {
-                    ForecastWidget.normal -> 3
-                    ForecastWidget.normalWide -> 5
-                    ForecastWidget.normalExtraWide -> 7
-                    else -> throw IllegalStateException("Unsupported widget size.")
-                }
-            ),
+            hours = state.hours,
             temperatureUnit = temperatureUnit,
-            colors = colors,
+            availableWidth = size.width - 16.dp,
+            textColor = colors.onSurface,
+            modifier = GlanceModifier.fillMaxSize()
         )
     }
 }
 
 @Composable
 private fun TinyWidget(
-    placeName: String,
+    @DrawableRes iconResId: Int,
     currentTemperature: String,
-    colors: ColorProviders,
+    textColor: ColorProvider,
     modifier: GlanceModifier = GlanceModifier
 ) {
     Column(
@@ -129,25 +139,19 @@ private fun TinyWidget(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            placeName,
-            style = TextStyle(
-                color = colors.onSurface,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
-                fontStyle = FontStyle.Normal
-            ),
-            maxLines = 1,
-            modifier = GlanceModifier.padding(bottom = 2.dp)
-        )
-        Text(
             currentTemperature,
             style = TextStyle(
-                color = colors.onSurface,
-                fontSize = 22.sp,
+                color = textColor,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
                 fontStyle = FontStyle.Normal
             ),
             maxLines = 1
+        )
+        Image(
+            provider = ImageProvider(iconResId),
+            contentDescription = null,
+            modifier = GlanceModifier.size(30.dp)
         )
     }
 }
@@ -158,7 +162,7 @@ private fun SmallWidget(
     currentTemperature: String,
     @DrawableRes
     iconResId: Int,
-    colors: ColorProviders,
+    textColor: ColorProvider,
     modifier: GlanceModifier = GlanceModifier
 ) {
     Column(
@@ -169,7 +173,7 @@ private fun SmallWidget(
         Text(
             placeName,
             style = TextStyle(
-                color = colors.onSurface,
+                color = textColor,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Normal,
                 fontStyle = FontStyle.Normal
@@ -177,15 +181,11 @@ private fun SmallWidget(
             maxLines = 1,
             modifier = GlanceModifier.padding(bottom = 4.dp)
         )
-        Row(
-            modifier = modifier,
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Row {
             Text(
                 currentTemperature,
                 style = TextStyle(
-                    color = colors.onSurface,
+                    color = textColor,
                     fontSize = 32.sp,
                     fontWeight = FontWeight.Bold,
                     fontStyle = FontStyle.Normal
@@ -196,7 +196,7 @@ private fun SmallWidget(
             Image(
                 provider = ImageProvider(iconResId),
                 contentDescription = null,
-                modifier = GlanceModifier.size(48.dp)
+                modifier = GlanceModifier.size(44.dp)
             )
         }
     }
@@ -208,9 +208,10 @@ private fun NormalWidget(
     currentTemperature: String,
     @DrawableRes
     iconResId: Int,
+    availableWidth: Dp,
     hours: List<WidgetHour>,
     temperatureUnit: TemperatureUnit,
-    colors: ColorProviders,
+    textColor: ColorProvider,
     modifier: GlanceModifier = GlanceModifier
 ) {
     Column(
@@ -218,95 +219,65 @@ private fun NormalWidget(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            placeName,
-            style = TextStyle(
-                color = colors.onSurface,
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                fontStyle = FontStyle.Normal
-            ),
-            maxLines = 1,
-            modifier = GlanceModifier.padding(bottom = 4.dp)
+        SmallWidget(
+            placeName = placeName,
+            currentTemperature = currentTemperature,
+            iconResId = iconResId,
+            textColor = textColor
         )
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                currentTemperature,
-                style = TextStyle(
-                    color = colors.onSurface,
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontStyle = FontStyle.Normal
-                ),
-                maxLines = 1,
-                modifier = GlanceModifier.padding(end = 4.dp)
-            )
-            Image(
-                provider = ImageProvider(iconResId),
-                contentDescription = null,
-                modifier = GlanceModifier.size(48.dp)
-            )
+        Row(modifier = GlanceModifier.padding(top = 16.dp)) {
+            val hourWidth = remember { 48.dp }
+            val numHours = remember { floor(availableWidth / hourWidth).toInt() }
+            hours.take(numHours).forEachIndexed { _, hour ->
+                Hour(
+                    temperature = getTemperature(
+                        temperature = hour.temperature,
+                        unit = temperatureUnit
+                    ).asGlanceString(),
+                    iconResId = hour.description.asGlanceWeatherIconResId(),
+                    time = TextResource.fromShortTime(hour.epochMillis).asGlanceString(),
+                    textColor = textColor,
+                    modifier = GlanceModifier.width(hourWidth)
+                )
+            }
         }
-        HoursRow(
-            data = hours,
-            temperatureUnit = temperatureUnit,
-            colors = colors,
-            modifier = GlanceModifier.padding(top = 8.dp)
-        )
     }
 }
 
 @Composable
-private fun HoursRow(
-    data: List<WidgetHour>,
-    temperatureUnit: TemperatureUnit,
-    colors: ColorProviders,
+private fun Hour(
+    temperature: String,
+    @DrawableRes iconResId: Int,
+    time: String,
+    textColor: ColorProvider,
     modifier: GlanceModifier = GlanceModifier
 ) {
-    Row(modifier = modifier) {
-        data.forEachIndexed { idx, hour ->
-            val temperature = getTemperature(
-                temperature = hour.temperature,
-                unit = temperatureUnit
-            ).asGlanceString()
-            val iconResId = hour.description.asGlanceWeatherIconResId()
-            val time = TextResource.fromShortTime(hour.epochMillis).asGlanceString()
-
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = when (idx) {
-                    0 -> GlanceModifier.padding(end = 6.dp)
-                    data.lastIndex -> GlanceModifier.padding(start = 6.dp)
-                    else -> GlanceModifier.padding(horizontal = 6.dp)
-                }
-            ) {
-                Text(
-                    text = temperature,
-                    maxLines = 1,
-                    style = TextStyle(
-                        color = colors.onSurface,
-                        fontSize = 14.sp
-                    ),
-                    modifier = GlanceModifier.padding(bottom = 2.dp)
-                )
-                Image(
-                    provider = ImageProvider(iconResId),
-                    contentDescription = null,
-                    modifier = GlanceModifier.size(32.dp)
-                )
-                Text(
-                    text = time,
-                    maxLines = 1,
-                    style = TextStyle(
-                        color = colors.onSurface,
-                        fontSize = 14.sp
-                    ),
-                    modifier = GlanceModifier.padding(top = 2.dp)
-                )
-            }
-        }
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            text = temperature,
+            maxLines = 1,
+            style = TextStyle(
+                color = textColor,
+                fontSize = 14.sp
+            ),
+            modifier = GlanceModifier.padding(bottom = 4.dp)
+        )
+        Image(
+            provider = ImageProvider(iconResId),
+            contentDescription = null,
+            modifier = GlanceModifier.size(32.dp)
+        )
+        Text(
+            text = time,
+            maxLines = 1,
+            style = TextStyle(
+                color = textColor,
+                fontSize = 14.sp
+            ),
+            modifier = GlanceModifier.padding(top = 4.dp)
+        )
     }
 }
