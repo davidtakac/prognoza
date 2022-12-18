@@ -52,7 +52,8 @@ fun PlacesScreen(
     placeDeletionDialogIndex?.let { idx ->
         val placeName = state.places[idx].name.asString()
         AppDialog(
-            title = stringResource(id = R.string.delete_place_title),
+            title = stringResource(id = R.string.delete_place_title, placeName),
+            iconResId = R.drawable.ic_delete,
             onConfirm = {
                 viewModel.deletePlace(idx)
                 placeDeletionDialogIndex = null
@@ -61,6 +62,6 @@ fun PlacesScreen(
             onDismiss = {
                 placeDeletionDialogIndex = null
             }
-        ) { Text(stringResource(id = R.string.template_delete_place_description, placeName)) }
+        ) { Text(stringResource(id = R.string.template_delete_place_description)) }
     }
 }

@@ -1,10 +1,12 @@
 package hr.dtakac.prognoza.ui.common
 
+import androidx.annotation.DrawableRes
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -16,6 +18,7 @@ fun AppDialog(
     onDismiss: () -> Unit,
     confirmLabel: String = stringResource(id = R.string.confirm),
     dismissLabel: String = stringResource(id = R.string.cancel),
+    @DrawableRes iconResId: Int? = null,
     modifier: Modifier = Modifier,
     contentColor: Color = PrognozaTheme.colors.onSurface,
     backgroundColor: Color = PrognozaTheme.colors.surface3,
@@ -26,6 +29,15 @@ fun AppDialog(
         containerColor = backgroundColor,
         titleContentColor = contentColor,
         onDismissRequest = onDismiss,
+        icon = iconResId?.let {
+            {
+                Icon(
+                    painter = painterResource(id = it),
+                    contentDescription = null,
+                    tint = contentColor.copy(alpha = PrognozaTheme.alpha.medium)
+                )
+            }
+        },
         title = {
             Text(
                 text = title,
@@ -68,7 +80,7 @@ private fun Button(
         Text(
             text = label,
             color = textColor,
-            style = PrognozaTheme.typography.titleSmall
+            style = PrognozaTheme.typography.label
         )
     }
 }

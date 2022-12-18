@@ -29,7 +29,8 @@ data class Typography(
     val subtitleMedium: TextStyle,
     val body: TextStyle,
     val bodySmall: TextStyle,
-    val titleSmall: TextStyle
+    val titleSmall: TextStyle,
+    val label: TextStyle
 ) {
     companion object {
         // Despite what linter says, removing the PlatformTextStyle line still causes the text
@@ -100,6 +101,12 @@ data class Typography(
                 fontSize = 14.sp,
                 letterSpacing = 0.sp
             ),
+            label = TextStyle(
+                fontFamily = Manrope,
+                fontWeight = FontWeight.Bold,
+                fontSize = 14.sp,
+                letterSpacing = 1.sp
+            )
         )
     }
 }

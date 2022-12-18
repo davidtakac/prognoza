@@ -39,7 +39,8 @@ private val LocalTypography = staticCompositionLocalOf {
         subtitleMedium = TextStyle.Default,
         body = TextStyle.Default,
         titleSmall = TextStyle.Default,
-        bodySmall = TextStyle.Default
+        bodySmall = TextStyle.Default,
+        label = TextStyle.Default
     )
 }
 

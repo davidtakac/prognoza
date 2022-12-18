@@ -127,7 +127,7 @@
     <string name="mood_mode_forecast">Extract from weather</string>
     <string name="mood_mode_dynamic">Follow system</string>
     <string name="delete">Delete</string>
-    <string name="delete_place_title">Delete place?</string>
-    <string name="template_delete_place_description">Deleting saved place \"%1$s\" will clear all of its data, including its offline forecast. You can always search for and select it again.</string>
+    <string name="delete_place_title">Delete %1$s?</string>
+    <string name="template_delete_place_description">This will clear all of its data. You can always search for and select it again.</string>
 
 </resources>
