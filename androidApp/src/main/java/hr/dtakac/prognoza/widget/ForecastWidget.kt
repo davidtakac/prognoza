@@ -123,7 +123,8 @@ class ForecastWidget : GlanceAppWidget() {
             Text(
                 // Glance does not support stringResource
                 text = LocalContext.current.getString(R.string.widget_empty),
-                style = TextStyle(color = textColor, fontSize = 14.sp)
+                style = TextStyle(color = textColor, fontSize = 14.sp),
+                modifier = GlanceModifier.padding(8.dp)
             )
         }
     }
@@ -193,7 +194,7 @@ class ForecastWidget : GlanceAppWidget() {
                     fontStyle = FontStyle.Normal
                 ),
                 maxLines = 1,
-                modifier = GlanceModifier.padding(bottom = 6.dp)
+                modifier = GlanceModifier.padding(bottom = 4.dp)
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
@@ -237,7 +238,7 @@ class ForecastWidget : GlanceAppWidget() {
                 iconResId = iconResId,
                 textColor = textColor
             )
-            Row(modifier = GlanceModifier.padding(top = 16.dp)) {
+            Row(modifier = GlanceModifier.padding(top = 8.dp)) {
                 hours.forEachIndexed { _, hour ->
                     Hour(
                         temperature = getTemperature(
