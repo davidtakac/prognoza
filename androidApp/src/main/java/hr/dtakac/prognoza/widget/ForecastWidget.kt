@@ -201,7 +201,7 @@ class ForecastWidget : GlanceAppWidget() {
                     currentTemperature,
                     style = TextStyle(
                         color = textColor,
-                        fontSize = 26.sp,
+                        fontSize = 24.sp,
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Normal
                     ),
