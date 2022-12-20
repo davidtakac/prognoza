@@ -4,9 +4,9 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -19,15 +19,14 @@ fun PlacesLoadingUnderline(
             LinearProgressIndicator(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(1.dp),
-                trackColor = Color.Transparent
+                    .height(1.dp)
             )
         } else {
             LinearProgressIndicator(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp),
-                trackColor = Color.Transparent,
+                color = LocalContentColor.current,
                 progress = 1f
             )
         }

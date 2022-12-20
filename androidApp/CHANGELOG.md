@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS support
 - NWS weather data provider
 
+## [3.2.1] - 2022-12-20
+### Changed
+- Places search bar underline is in text color when idle and primary with track when loading
+
 ## [3.2.0] - 2022-12-20
 ### Note
 - For the widget changes to apply, you may need to remove and add them again
