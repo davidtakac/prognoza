@@ -12,7 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - iOS support
 - NWS weather data provider
 
-## [Unreleased]
+## [3.2.0] - 2022-12-20
+### Note
+- For the widget changes to apply, you may need to remove and add them again
 ### Added
 - Ability to delete saved places
 ### Fixed
