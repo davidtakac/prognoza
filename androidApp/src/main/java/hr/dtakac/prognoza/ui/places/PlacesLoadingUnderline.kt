@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun PlacesLoadingUnderline(
@@ -21,7 +20,6 @@ fun PlacesLoadingUnderline(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp),
-                color = PrognozaTheme.colors.onSurface,
                 trackColor = Color.Transparent
             )
         } else {
@@ -29,7 +27,6 @@ fun PlacesLoadingUnderline(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(1.dp),
-                color = PrognozaTheme.colors.onSurface,
                 trackColor = Color.Transparent,
                 progress = 1f
             )

@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Tiny widget displays temp and icon instead of place
 - Small widget tweaked dimensions (slight reduction)
-- 
+- More vibrant app colors thanks to Material You
 
 ## [3.1.0] - 2022-12-09
 ### Added

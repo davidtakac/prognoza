@@ -1,20 +1,14 @@
 package hr.dtakac.prognoza.ui.common
 
 import androidx.compose.animation.*
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import kotlinx.coroutines.delay
@@ -22,9 +16,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun AppSnackBar(
     state: AppSnackBarState,
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = PrognozaTheme.colors.inverseSurface1,
-    contentColor: Color = PrognozaTheme.colors.onInverseSurface,
+    modifier: Modifier = Modifier
 ) {
     AnimatedVisibility(
         visible = state.isVisible,
@@ -32,22 +24,13 @@ fun AppSnackBar(
         exit = fadeOut() + shrinkVertically(shrinkTowards = Alignment.Top),
         modifier = modifier
     ) {
-        Box(
-            modifier = Modifier
-                .graphicsLayer {
-                    shape = RoundedCornerShape(8.dp)
-                    clip = true
-                }
-                .drawBehind { drawRect(color = backgroundColor) }
-                .padding(horizontal = 24.dp, vertical = 16.dp)
-        ) {
+        Snackbar {
             Text(
                 text = state.currentMessage,
                 style = PrognozaTheme.typography.body,
                 modifier = Modifier.fillMaxWidth(),
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                color = contentColor
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

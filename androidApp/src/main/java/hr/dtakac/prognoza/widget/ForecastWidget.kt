@@ -205,7 +205,10 @@ class ForecastWidget : GlanceAppWidget() {
                         fontWeight = FontWeight.Bold,
                         fontStyle = FontStyle.Normal
                     ),
-                    maxLines = 1
+                    maxLines = 1,
+                    // Without this padding, the temperature and weather icon are too close
+                    // when the weather icon is cloudy, for example
+                    modifier = GlanceModifier.padding(end = 4.dp)
                 )
                 Image(
                     provider = ImageProvider(iconResId),

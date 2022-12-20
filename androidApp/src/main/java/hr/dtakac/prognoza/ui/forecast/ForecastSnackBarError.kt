@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import hr.dtakac.prognoza.ui.common.AppSnackBar
 import hr.dtakac.prognoza.ui.common.rememberAppSnackBarState
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun ForecastSnackBarError(
@@ -18,8 +17,6 @@ fun ForecastSnackBarError(
     }
     AppSnackBar(
         modifier = modifier,
-        state = snackBarState,
-        backgroundColor = PrognozaTheme.colors.inverseSurface1,
-        contentColor = PrognozaTheme.colors.onInverseSurface
+        state = snackBarState
     )
 }

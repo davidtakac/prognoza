@@ -84,7 +84,6 @@ fun ForecastDataList(
             item(key = "temperature") {
                 CurrentTemperature(
                     temperature = data.current.temperature.asString(),
-                    textColor = PrognozaTheme.colors.onSurface,
                     letterSpacingFraction = -0.05f,
                     modifier = Modifier
                         .padding(itemPadding)

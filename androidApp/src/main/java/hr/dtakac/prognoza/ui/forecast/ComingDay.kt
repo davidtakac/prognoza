@@ -5,22 +5,17 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.*
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.ProvideTextStyle
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
@@ -45,7 +40,7 @@ import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.theme.asWeatherIconResId
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ComingDay(
     data: ComingDayUi,
@@ -76,79 +71,71 @@ fun ComingDay(
     val cornerRadius by isExpandedTransition.animateDp(label = "Animate corner radius") {
         if (it) 16.dp else 0.dp
     }
-    // Not animating background color from surface2 to transparent because it messes with the
-    // ongoing ripple animation. Animating alpha seems to work fine, probably because a background
-    // is present even when transparent
-    val backgroundColor = PrognozaTheme.colors.surface2
-    val backgroundAlpha by isExpandedTransition.animateFloat(label = "Animate background transparency") {
-        if (isExpanded) 1f else 0f
+    val tonalElevation by isExpandedTransition.animateDp(label = "Animate elevation") {
+        if (it) 1.dp else 0.dp
     }
 
-    Column(
+    Surface(
         modifier = modifier
             .padding(
                 vertical = verticalMargin,
                 horizontal = horizontalMargin
-            )
-            .graphicsLayer {
-                shape = RoundedCornerShape(cornerRadius)
-                clip = true
-            }
-            .drawBehind {
-                drawRect(
-                    color = backgroundColor,
-                    alpha = backgroundAlpha
-                )
-            }
-            .clickable(onClick = onClick)
-            .padding(
+            ),
+        tonalElevation = tonalElevation,
+        color = MaterialTheme.colorScheme.surface,
+        shape = RoundedCornerShape(size = cornerRadius),
+        onClick = onClick
+    ) {
+        Column(
+            modifier = Modifier.padding(
                 vertical = verticalPadding,
                 horizontal = horizontalPadding
             )
-    ) {
-        Header(
-            date = data.date.asString(),
-            summaryContent = {
-                isExpandedTransition.AnimatedContent(
-                    transitionSpec = {
-                        if (targetState) {
-                            slideInVertically { height -> -height } + fadeIn() with
-                                    slideOutVertically { height -> height } + fadeOut()
+        ) {
+            Header(
+                date = data.date.asString(),
+                summaryContent = {
+                    isExpandedTransition.AnimatedContent(
+                        transitionSpec = {
+                            if (targetState) {
+                                slideInVertically { height -> -height } + fadeIn() with
+                                        slideOutVertically { height -> height } + fadeOut()
+                            } else {
+                                slideInVertically { height -> height } + fadeIn() with
+                                        slideOutVertically { height -> -height } + fadeOut()
+                            }
+                        }
+                    ) {
+                        if (it) {
+                            PrecipitationAndLowHighTemperature(
+                                precipitation = data.precipitation.asString(),
+                                precipitationWidth = dimensions.precipitationWidth,
+                                lowHighTemperature = data.lowHighTemperature.asString(),
+                                lowHighTemperatureWidth = dimensions.lowHighTemperatureWidth
+                            )
                         } else {
-                            slideInVertically { height -> height } + fadeIn() with
-                                    slideOutVertically { height -> -height } + fadeOut()
+                            WeatherIcons(weatherIcons = data
+                                .weatherIconDescriptions
+                                .map { desc -> desc?.asWeatherIconResId() }
+                            )
                         }
                     }
-                ) {
-                    if (it) {
-                        PrecipitationAndLowHighTemperature(
-                            precipitation = data.precipitation.asString(),
-                            precipitationWidth = dimensions.precipitationWidth,
-                            lowHighTemperature = data.lowHighTemperature.asString(),
-                            lowHighTemperatureWidth = dimensions.lowHighTemperatureWidth
-                        )
-                    } else {
-                        WeatherIcons(weatherIcons = data
-                            .weatherIconDescriptions
-                            .map { desc -> desc?.asWeatherIconResId() }
-                        )
-                    }
-                }
-            },
-            chevronRotation = chevronRotation,
-            modifier = Modifier
-                .height(32.dp)
-                .fillMaxWidth()
-        )
-        isExpandedTransition.AnimatedVisibility(
-            visible = { targetIsExpanded -> targetIsExpanded },
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically()
-        ) {
-            Hours(
-                hours = data.hours,
-                modifier = Modifier.padding(top = 16.dp)
+                },
+                chevronRotation = chevronRotation,
+                modifier = Modifier
+                    .height(32.dp)
+                    .fillMaxWidth()
             )
+            isExpandedTransition.AnimatedVisibility(
+                visible = { targetIsExpanded -> targetIsExpanded },
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Hours(
+                    hours = data.hours,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
+            }
         }
     }
 }
@@ -174,13 +161,12 @@ private fun Header(
             )
             summaryContent()
             Spacer(modifier = Modifier.width(4.dp))
-            Image(
+            Icon(
                 painter = painterResource(id = R.drawable.ic_expand_more),
                 contentDescription = null,
                 modifier = Modifier
                     .size(24.dp)
-                    .graphicsLayer { rotationZ = chevronRotation },
-                colorFilter = ColorFilter.tint(LocalContentColor.current)
+                    .graphicsLayer { rotationZ = chevronRotation }
             )
         }
     }

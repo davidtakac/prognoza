@@ -63,7 +63,6 @@ fun AppToolbarWithLoadingIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(2.dp),
-                    color = PrognozaTheme.colors.onSurface,
                     trackColor = Color.Transparent
                 )
             }

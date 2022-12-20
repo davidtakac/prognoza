@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalFocusManager
 import hr.dtakac.prognoza.presentation.forecast.ForecastState
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 import hr.dtakac.prognoza.ui.places.PlacesScreen
 import kotlinx.coroutines.launch
 
@@ -25,34 +24,29 @@ fun ForecastScreen(
         }
     }
 
-    CompositionLocalProvider(LocalContentColor provides PrognozaTheme.colors.onSurface) {
-        val scope = rememberCoroutineScope()
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet(
-                    drawerShape = RectangleShape,
-                    drawerContainerColor = PrognozaTheme.colors.surface2
-                ) {
-                    PlacesScreen(
-                        onPlaceSelected = {
-                            scope.launch { drawerState.close() }
-                            onPlaceSelected()
-                        },
-                        onSettingsClick = onSettingsClick
-                    )
-                }
-            },
-            content = {
-                ForecastContent(
-                    state = state,
-                    onMenuClick = {
-                        scope.launch {
-                            drawerState.open()
-                        }
-                    }
+    val scope = rememberCoroutineScope()
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet {
+                PlacesScreen(
+                    onPlaceSelected = {
+                        scope.launch { drawerState.close() }
+                        onPlaceSelected()
+                    },
+                    onSettingsClick = onSettingsClick
                 )
             }
-        )
-    }
+        },
+        content = {
+            ForecastContent(
+                state = state,
+                onMenuClick = {
+                    scope.launch {
+                        drawerState.open()
+                    }
+                }
+            )
+        }
+    )
 }

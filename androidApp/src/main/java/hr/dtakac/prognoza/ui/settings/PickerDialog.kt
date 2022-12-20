@@ -76,13 +76,7 @@ private fun Option(
     ) {
         RadioButton(
             selected = isSelected,
-            onClick = null,
-            colors = RadioButtonDefaults.colors(
-                selectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                unselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                disabledSelectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled),
-                disabledUnselectedColor = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.disabled)
-            )
+            onClick = null
         )
         Text(
             text = label,

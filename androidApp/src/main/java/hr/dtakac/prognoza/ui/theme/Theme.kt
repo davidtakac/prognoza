@@ -1,33 +1,22 @@
 package hr.dtakac.prognoza.ui.theme
 
+import android.content.Context
 import android.os.Build
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import hr.dtakac.prognoza.shared.entity.Mood
-
-private val LocalColors = staticCompositionLocalOf {
-    Colors(
-        surface1 = Color.Unspecified,
-        surface2 = Color.Unspecified,
-        surface3 = Color.Unspecified,
-        onSurface = Color.Unspecified,
-        inverseSurface1 = Color.Unspecified,
-        onInverseSurface = Color.Unspecified
-    )
-}
+import hr.dtakac.prognoza.ui.theme.colors.*
 
 private val LocalTypography = staticCompositionLocalOf {
     Typography(
@@ -56,22 +45,6 @@ private val LocalWeatherIcons = staticCompositionLocalOf {
     WeatherIcons.get(useDarkTheme = false)
 }
 
-private class RippleTheme(
-    private val useDarkTheme: Boolean
-) : RippleTheme {
-    @Composable
-    override fun defaultColor() = RippleTheme.defaultRippleColor(
-        contentColor = LocalContentColor.current,
-        lightTheme = !useDarkTheme
-    )
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(
-        contentColor = LocalContentColor.current,
-        lightTheme = !useDarkTheme
-    )
-}
-
 @Composable
 fun AppTheme(
     mood: Mood? = null,
@@ -81,44 +54,39 @@ fun AppTheme(
     val alpha = ContentAlpha.get()
     val colors = if (mood == null) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            Colors.getByDynamicColor(
+            getByDynamicColor(
                 context = LocalContext.current,
-                useDarkColors = useDarkTheme,
-                contentAlpha = alpha.high
+                useDarkColors = useDarkTheme
             )
         } else {
-            Colors.getByMood(
+            getByMood(
                 mood = Mood.DEFAULT,
-                useDarkColors = useDarkTheme,
-                contentAlpha = alpha.high
+                useDarkColors = useDarkTheme
             )
         }
     } else {
-        Colors.getByMood(
+        getByMood(
             mood = mood,
-            useDarkColors = useDarkTheme,
-            contentAlpha = alpha.high
+            useDarkColors = useDarkTheme
         )
-    }.switch()
+    }.animate()
     val typography = Typography.get()
     val weatherIcons = WeatherIcons.get(useDarkTheme)
     val indication = rememberRipple()
     CompositionLocalProvider(
-        LocalColors provides colors,
         LocalTypography provides typography,
         LocalContentAlpha provides alpha,
-        LocalRippleTheme provides RippleTheme(useDarkTheme),
         LocalWeatherIcons provides weatherIcons,
-        LocalIndication provides indication,
-        content = content
-    )
+        LocalIndication provides indication
+    ) {
+        MaterialTheme(
+            colorScheme = colors,
+            content = content
+        )
+    }
 }
 
 object PrognozaTheme {
-    val colors: Colors
-        @Composable
-        get() = LocalColors.current
-
     val typography: Typography
         @Composable
         get() = LocalTypography.current
@@ -132,18 +100,26 @@ object PrognozaTheme {
         get() = LocalWeatherIcons.current
 }
 
-@Composable
-private fun animateColor(target: Color) = animateColorAsState(
-    targetValue = target,
-    animationSpec = tween(durationMillis = 1000)
-).value
+fun getByMood(
+    mood: Mood,
+    useDarkColors: Boolean
+): ColorScheme = when (mood) {
+    Mood.CLEAR_DAY -> if (useDarkColors) YellowColorSchemeDark else YellowColorSchemeLight
+    Mood.CLEAR_NIGHT -> if (useDarkColors) DeepPurpleColorSchemeDark else DeepPurpleColorSchemeLight
+    Mood.RAIN -> if (useDarkColors) BlueColorSchemeDark else BlueColorSchemeLight
+    Mood.SLEET -> if (useDarkColors) TealColorSchemeDark else TealColorSchemeLight
+    Mood.SNOW -> if (useDarkColors) CyanColorSchemeDark else CyanColorSchemeLight
 
-@Composable
-private fun Colors.switch() = copy(
-    surface1 = animateColor(target = surface1),
-    surface2 = animateColor(target = surface2),
-    surface3 = animateColor(target = surface3),
-    onSurface = animateColor(target = onSurface),
-    inverseSurface1 = animateColor(target = inverseSurface1),
-    onInverseSurface = animateColor(target = onInverseSurface),
-)
+    Mood.CLOUDY,
+    Mood.FOG,
+    Mood.DEFAULT -> if (useDarkColors) GreenColorSchemeDark else GreenColorSchemeLight
+}
+
+@RequiresApi(api = Build.VERSION_CODES.S)
+fun getByDynamicColor(
+    context: Context,
+    useDarkColors: Boolean
+): ColorScheme {
+    return if (useDarkColors) dynamicDarkColorScheme(context)
+    else dynamicLightColorScheme(context)
+}

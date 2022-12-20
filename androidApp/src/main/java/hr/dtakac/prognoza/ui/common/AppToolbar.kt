@@ -6,8 +6,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,30 +22,27 @@ fun AppToolbar(
     navigation: (@Composable () -> Unit)? = null,
     subtitle: @Composable () -> Unit = {},
     end: @Composable () -> Unit = {},
-    backgroundColor: Color = PrognozaTheme.colors.surface2,
-    contentColor: Color = LocalContentColor.current,
     windowInsets: WindowInsets = WindowInsets.statusBars
 ) {
-    Column(
-        modifier = modifier
-            .drawBehind { drawRect(color = backgroundColor) }
-            .padding(windowInsets.asPaddingValues())
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surface,
+        tonalElevation = 2.dp
     ) {
-        CompositionLocalProvider(LocalContentColor provides contentColor) {
-            Content(
-                title = title,
-                navigation = navigation,
-                subtitle = subtitle,
-                end = end,
-                isTitleVisible = state.isTitleVisible,
-                isSubtitleVisible = state.isSubtitleVisible,
-                isEndVisible = state.isEndVisible,
-                modifier = Modifier
-                    .height(90.dp)
-                    .padding(horizontal = 24.dp)
-                    .fillMaxWidth()
-            )
-        }
+        Content(
+            title = title,
+            navigation = navigation,
+            subtitle = subtitle,
+            end = end,
+            isTitleVisible = state.isTitleVisible,
+            isSubtitleVisible = state.isSubtitleVisible,
+            isEndVisible = state.isEndVisible,
+            modifier = Modifier
+                .padding(windowInsets.asPaddingValues())
+                .height(90.dp)
+                .padding(horizontal = 24.dp)
+                .fillMaxWidth()
+        )
     }
 }
 

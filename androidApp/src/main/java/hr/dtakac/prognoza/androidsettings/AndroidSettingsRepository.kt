@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.androidsettings
 
 import android.content.SharedPreferences
+import android.os.Build
 import androidx.core.content.edit
 import javax.inject.Inject
 
@@ -34,7 +35,9 @@ class AndroidSettingsRepository @Inject constructor(
     fun getMoodMode(): MoodMode {
         val settingValue = sharedPreferences.getString(MOOD_MODE_KEY, null)
         return if (settingValue == null) {
-            val default = MoodMode.FORECAST
+            val default = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                MoodMode.DYNAMIC
+            } else MoodMode.FORECAST
             setMoodMode(default)
             default
         } else {

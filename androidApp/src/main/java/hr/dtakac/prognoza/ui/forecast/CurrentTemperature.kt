@@ -10,6 +10,7 @@ import android.view.View
 import androidx.compose.foundation.Canvas as ComposeCanvas
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -27,7 +28,7 @@ import androidx.compose.ui.graphics.Color as ComposeColor
 @Composable
 fun CurrentTemperature(
     temperature: String,
-    textColor: ComposeColor = ComposeColor.Black,
+    textColor: ComposeColor = LocalContentColor.current,
     letterSpacingFraction: Float = 0f,
     modifier: Modifier = Modifier
 ) {

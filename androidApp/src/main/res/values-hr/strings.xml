@@ -115,7 +115,7 @@
     <string name="settings_label_inhg">Inč žive</string>
     <string name="launcher_icon_credit">Ikona aplikacije</string>
     <string name="mood_source">Raspoloženje</string>
-    <string name="mood_mode_forecast">Odredi iz prognoze</string>
+    <string name="mood_mode_forecast">Odredi iz trenutnog vremena</string>
     <string name="mood_mode_dynamic">Prati sustav</string>
     <string name="delete_place_title">Obrisati %1$s?</string>
     <string name="template_delete_place_description">Ovo će obrisati sve njegove podatke. Uvijek ga možeš ponovo potražiti i odabrati.</string>
