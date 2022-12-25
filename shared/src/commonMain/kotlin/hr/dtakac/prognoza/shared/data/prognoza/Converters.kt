@@ -122,3 +122,13 @@ internal val pressureUnitSqlAdapter = object : ColumnAdapter<PressureUnit, Strin
         return value.name
     }
 }
+
+internal val forecastProviderAdapter = object : ColumnAdapter<ForecastProvider, String> {
+    override fun decode(databaseValue: String): ForecastProvider {
+        return ForecastProvider.valueOf(databaseValue)
+    }
+
+    override fun encode(value: ForecastProvider): String {
+        return value.name
+    }
+}

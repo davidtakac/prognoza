@@ -117,4 +117,19 @@ class UseCaseModule {
     fun provideGetAllPressureUnits(
         prognozaSdk: PrognozaSdk
     ): GetAllPressureUnits = prognozaSdk.getAllPressureUnits
+
+    @Provides
+    fun provideSetForecastProvider(
+        prognozaSdk: PrognozaSdk
+    ): SetForecastProvider = prognozaSdk.setForecastProvider
+
+    @Provides
+    fun provideGetForecastProvider(
+        prognozaSdk: PrognozaSdk
+    ): GetForecastProvider = prognozaSdk.getForecastProvider
+
+    @Provides
+    fun provideGetAllForecastProviders(
+        prognozaSdk: PrognozaSdk
+    ): GetAllForecastProviders = prognozaSdk.getAllForecastProviders
 }

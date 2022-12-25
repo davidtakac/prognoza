@@ -68,6 +68,7 @@
     <string name="template_wind">%1$s\u00A0\u00B7\u00A0%2$s</string>
     <string name="error_unknown">An unexpected error occurred.</string>
     <string name="met_norway_credit" translatable="false">MET Norway</string>
+    <string name="open_meteo_credit" translatable="false">Open-Meteo</string>
     <string name="osm_nominatim_credit" translatable="false">OpenStreetMap</string>
     <string name="error_no_selected_place">Select a place to see its forecast.</string>
     <string name="wind_calm">Calm</string>
@@ -129,5 +130,6 @@
     <string name="delete">Delete</string>
     <string name="delete_place_title">Delete %1$s?</string>
     <string name="template_delete_place_description">This will clear all of its data. You can always search for and select it again.</string>
+    <string name="sources">Sources</string>
 
 </resources>

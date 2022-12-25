@@ -20,6 +20,7 @@ internal class MetNorwayForecastProvider(
     private val metaQueries: MetaQueries,
     private val cachedResponseQueries: CachedResponseQueries,
     private val ioDispatcher: CoroutineDispatcher,
+    private val computationDispatcher: CoroutineDispatcher,
     private val rfc1123ToEpochMillis: (String) -> Long
 ) : ForecastProvider {
     override suspend fun provide(
@@ -44,16 +45,18 @@ internal class MetNorwayForecastProvider(
             if (response == null) {
                 ForecastProviderResult.Error
             } else {
-                val timeSteps = response.forecast.forecastTimeSteps
-                val data = mutableListOf<ForecastDatum>()
-                for (i in timeSteps.indices) {
-                    val datum = mapAdjacentTimeStepsToEntity(
-                        current = timeSteps[i],
-                        next = timeSteps.getOrNull(i + 1)
-                    )
-                    datum?.let(data::add)
+                withContext(computationDispatcher) {
+                    val timeSteps = response.forecast.forecastTimeSteps
+                    val data = mutableListOf<ForecastDatum>()
+                    for (i in timeSteps.indices) {
+                        val datum = mapAdjacentTimeStepsToEntity(
+                            current = timeSteps[i],
+                            next = timeSteps.getOrNull(i + 1)
+                        )
+                        datum?.let(data::add)
+                    }
+                    ForecastProviderResult.Success(data)
                 }
-                ForecastProviderResult.Success(data)
             }
         } catch (e: Exception) {
             Napier.e(TAG, e)

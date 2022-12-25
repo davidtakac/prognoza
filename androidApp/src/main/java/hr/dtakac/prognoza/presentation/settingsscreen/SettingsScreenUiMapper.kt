@@ -4,10 +4,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.UiMode
-import hr.dtakac.prognoza.shared.entity.LengthUnit
-import hr.dtakac.prognoza.shared.entity.PressureUnit
-import hr.dtakac.prognoza.shared.entity.SpeedUnit
-import hr.dtakac.prognoza.shared.entity.TemperatureUnit
+import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -65,6 +62,19 @@ class SettingsScreenUiMapper @Inject constructor(
         selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
             units.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
+        },
+        onIndexSelected = onIndexSelected
+    )
+
+    suspend fun mapToForecastProviderSetting(
+        selected: ForecastProvider,
+        providers: List<ForecastProvider>,
+        onIndexSelected: (Int) -> Unit
+    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
+        name = TextResource.fromStringId(R.string.weather_data),
+        selectedIndex = providers.indexOf(selected),
+        values = withContext(computationDispatcher) {
+            providers.map(ForecastProvider::toSettingsLabel).map(TextResource::fromStringId)
         },
         onIndexSelected = onIndexSelected
     )

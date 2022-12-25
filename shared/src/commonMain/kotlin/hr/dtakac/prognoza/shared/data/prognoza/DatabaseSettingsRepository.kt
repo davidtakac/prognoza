@@ -54,6 +54,13 @@ internal class DatabaseSettingsRepository(
         settingsQueries.setWindUnit(unit)
     }
 
+    override suspend fun getForecastProvider(): hr.dtakac.prognoza.shared.entity.ForecastProvider =
+        getSettings().forecastProvider
+
+    override suspend fun setForecastProvider(forecastProvider: hr.dtakac.prognoza.shared.entity.ForecastProvider) {
+        settingsQueries.setForecastProvider(forecastProvider)
+    }
+
     private suspend fun getSettings(): Get = withContext(ioDispatcher) {
         settingsQueries.get().executeAsOne()
     }

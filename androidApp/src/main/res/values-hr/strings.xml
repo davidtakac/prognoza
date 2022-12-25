@@ -51,7 +51,7 @@
     <string name="direction_w">Zapad</string>
     <string name="direction_nw">Sjeverozapad</string>
     <string name="template_temperature_degrees">%1$s°</string>
-    <string name="template_feels_like">Osjet ugode %1$s</string>
+    <string name="template_feels_like">Stvarni osjećaj %1$s</string>
     <string name="template_precipitation_mm">%1$s\u00A0mm</string>
     <string name="template_precipitation_in">%1$s\u00A0in</string>
     <string name="template_precipitation_cm">%1$s\u00A0cm</string>
@@ -120,4 +120,5 @@
     <string name="delete_place_title">Obrisati %1$s?</string>
     <string name="template_delete_place_description">Ovo će obrisati sve njegove podatke. Uvijek ga možeš ponovo potražiti i odabrati.</string>
     <string name="delete">Obriši</string>
+    <string name="sources">Izvori</string>
 </resources>

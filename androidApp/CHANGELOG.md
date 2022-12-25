@@ -10,7 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Widget text reacts to system dark/light theme on <= Android 11
 ### Added
 - iOS support
-- NWS weather data provider
+
+## [Unreleased]
+### Added 
+- Open-Meteo weather data provider
 
 ## [3.2.1] - 2022-12-20
 ### Changed

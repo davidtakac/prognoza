@@ -5,10 +5,15 @@ import hr.dtakac.prognoza.shared.PrognozaSdk
 import hr.dtakac.prognoza.shared.data.PrognozaDatabase
 import hr.dtakac.prognoza.shared.data.metnorway.*
 import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
+import hr.dtakac.prognoza.shared.data.openmeteo.CachedOpenMeteoResponseQueries
+import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoForecastProvider
+import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoMetaQueries
+import hr.dtakac.prognoza.shared.data.openmeteo.network.OpenMeteoForecastService
 import hr.dtakac.prognoza.shared.data.openstreetmap.OsmPlaceSearcher
 import hr.dtakac.prognoza.shared.data.openstreetmap.OsmPlaceService
 import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*
+import hr.dtakac.prognoza.shared.entity.ForecastProvider
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
@@ -31,13 +36,22 @@ internal class InternalPrognozaSdkFactory constructor(
 ) {
     fun create(): PrognozaSdk {
         val database = getDatabase(sqlDriverFactory.create())
-        val forecastProvider = getMetNorwayForecastProvider(
+        val metNorwayProvider = getMetNorwayForecastProvider(
             userAgent = userAgent,
             dotDecimalFormatter = dotDecimalFormatter,
             rfc1123UtcDateTimeParser = rfc1123UtcDateTimeParser,
             metaQueries = database.metaQueries,
             cachedResponseQueries = database.cachedResponseQueries,
-            ioDispatcher = ioDispatcher
+            ioDispatcher = ioDispatcher,
+            computationDispatcher = computationDispatcher
+        )
+        val openMeteoProvider = getOpenMeteoForecastProvider(
+            userAgent = userAgent,
+            dotDecimalFormatter = dotDecimalFormatter,
+            computationDispatcher = computationDispatcher,
+            ioDispatcher = ioDispatcher,
+            metaQueries = database.openMeteoMetaQueries,
+            cachedOpenMeteoResponseQueries = database.cachedOpenMeteoResponseQueries
         )
         val placeSearcher = getOsmPlaceSearcher(userAgent)
         val forecastRepository = DatabaseForecastRepository(
@@ -59,11 +73,17 @@ internal class InternalPrognozaSdkFactory constructor(
             ioDispatcher = ioDispatcher
         )
         val getSelectedPlace = GetSelectedPlace(settingsRepository)
+        val getForecastProvider = GetForecastProvider(settingsRepository)
         val actualGetForecast = ActualGetForecast(
             getSelectedPlace = getSelectedPlace,
             savedForecastGetter = forecastRepository,
             forecastSaver = forecastRepository,
-            forecastProvider = forecastProvider,
+            getForecastProvider = {
+                when (getForecastProvider()) {
+                    ForecastProvider.MET_NORWAY -> metNorwayProvider
+                    ForecastProvider.OPEN_METEO -> openMeteoProvider
+                }
+            },
             settingsRepository = settingsRepository
         )
 
@@ -85,6 +105,9 @@ internal class InternalPrognozaSdkFactory constructor(
             override val getForecast = GetForecastLatest(actualGetForecast)
             override val getForecastFrugal = GetForecastFrugal(actualGetForecast)
             override val deleteSavedPlace = DeleteSavedPlace(placeRepository)
+            override val getForecastProvider = getForecastProvider
+            override val setForecastProvider = SetForecastProvider(settingsRepository)
+            override val getAllForecastProviders = GetAllForecastProviders()
 
             override val searchPlaces = SearchPlaces(
                 placeSearcher = placeSearcher,
@@ -100,7 +123,7 @@ internal class InternalPrognozaSdkFactory constructor(
 
     private fun getHttpClient(): HttpClient = HttpClient {
         install(Logging) {
-            logger = Logger.DEFAULT
+            logger = Logger.SIMPLE
             level = LogLevel.ALL
         }
         install(ContentNegotiation) {
@@ -127,7 +150,8 @@ internal class InternalPrognozaSdkFactory constructor(
             temperatureUnitAdapter = temperatureUnitSqlAdapter,
             precipitationUnitAdapter = lengthUnitSqlAdapter,
             windUnitAdapter = speedUnitSqlAdapter,
-            pressureUnitAdapter = pressureUnitSqlAdapter
+            pressureUnitAdapter = pressureUnitSqlAdapter,
+            forecastProviderAdapter = forecastProviderAdapter
         )
     )
 
@@ -137,7 +161,8 @@ internal class InternalPrognozaSdkFactory constructor(
         rfc1123UtcDateTimeParser: Rfc1123UtcDateTimeParser,
         metaQueries: MetaQueries,
         cachedResponseQueries: CachedResponseQueries,
-        ioDispatcher: CoroutineDispatcher
+        ioDispatcher: CoroutineDispatcher,
+        computationDispatcher: CoroutineDispatcher
     ): MetNorwayForecastProvider = MetNorwayForecastProvider(
         apiService = MetNorwayForecastService(
             client = getHttpClient(),
@@ -149,7 +174,28 @@ internal class InternalPrognozaSdkFactory constructor(
         metaQueries = metaQueries,
         cachedResponseQueries = cachedResponseQueries,
         ioDispatcher = ioDispatcher,
+        computationDispatcher = computationDispatcher,
         rfc1123ToEpochMillis = rfc1123UtcDateTimeParser::parseToEpochMillis
+    )
+
+    private fun getOpenMeteoForecastProvider(
+        userAgent: String,
+        dotDecimalFormatter: DotDecimalFormatter,
+        computationDispatcher: CoroutineDispatcher,
+        ioDispatcher: CoroutineDispatcher,
+        metaQueries: OpenMeteoMetaQueries,
+        cachedOpenMeteoResponseQueries: CachedOpenMeteoResponseQueries
+    ): OpenMeteoForecastProvider = OpenMeteoForecastProvider(
+        apiService = OpenMeteoForecastService(
+            client = getHttpClient(),
+            userAgent = userAgent,
+            baseUrl = "https://api.open-meteo.com/v1",
+            dotDecimalFormatter = dotDecimalFormatter
+        ),
+        computationDispatcher = computationDispatcher,
+        ioDispatcher = ioDispatcher,
+        cachedResponseQueries = cachedOpenMeteoResponseQueries,
+        metaQueries = metaQueries
     )
 
     private fun getOsmPlaceSearcher(userAgent: String): OsmPlaceSearcher = OsmPlaceSearcher(

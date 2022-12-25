@@ -52,9 +52,24 @@ fun SettingsList(
         }
 
         state.unitSettings.takeIf { it.isNotEmpty() }?.let { settings ->
-            item(key = "units-spacer") {
+            item(key = "units-header") {
                 SettingsSectionHeader(
                     text = stringResource(id = R.string.units),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+                )
+            }
+            items(settings) {
+                PickerDialogSettingItem(
+                    state = it,
+                    onPick = it.onIndexSelected
+                )
+            }
+        }
+
+        state.dataSettings.takeIf { it.isNotEmpty() }?.let { settings ->
+            item(key = "data-header") {
+                SettingsSectionHeader(
+                    text = stringResource(id = R.string.sources),
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
                 )
             }

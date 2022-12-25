@@ -4,10 +4,7 @@ import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.UiMode
-import hr.dtakac.prognoza.shared.entity.LengthUnit
-import hr.dtakac.prognoza.shared.entity.PressureUnit
-import hr.dtakac.prognoza.shared.entity.SpeedUnit
-import hr.dtakac.prognoza.shared.entity.TemperatureUnit
+import hr.dtakac.prognoza.shared.entity.*
 
 @StringRes
 fun TemperatureUnit.toSettingsLabel(): Int = when (this) {
@@ -47,4 +44,10 @@ fun UiMode.toSettingsLabel(): Int = when (this) {
 fun MoodMode.toSettingsLabel(): Int = when (this) {
     MoodMode.FORECAST -> R.string.mood_mode_forecast
     MoodMode.DYNAMIC -> R.string.mood_mode_dynamic
+}
+
+@StringRes
+fun ForecastProvider.toSettingsLabel(): Int = when (this) {
+    ForecastProvider.MET_NORWAY -> R.string.met_norway_credit
+    ForecastProvider.OPEN_METEO -> R.string.open_meteo_credit
 }

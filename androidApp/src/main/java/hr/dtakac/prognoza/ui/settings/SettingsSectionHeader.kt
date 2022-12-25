@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.ui.settings
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ fun SettingsSectionHeader(
         Text(
             text = text,
             style = PrognozaTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.secondary
         )
     }
 }

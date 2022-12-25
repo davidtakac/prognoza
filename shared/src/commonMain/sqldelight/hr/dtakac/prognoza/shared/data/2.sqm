@@ -1,0 +1,18 @@
+import hr.dtakac.prognoza.shared.entity.ForecastProvider;
+
+CREATE TABLE CachedOpenMeteoResponse (
+    `latitude` REAL NOT NULL,
+    `longitude` REAL NOT NULL,
+    `responseJson` TEXT NOT NULL,
+    PRIMARY KEY(`latitude`, `longitude`)
+);
+
+CREATE TABLE OpenMeteoMeta (
+    `latitude` REAL NOT NULL,
+    `longitude` REAL NOT NULL,
+    `lastUpdatedEpochMillis` INTEGER NOT NULL,
+    PRIMARY KEY (`latitude`, `longitude`)
+);
+
+-- Linter complains that Settings doesn't exist, but this compiles and works just fine
+ALTER TABLE Settings ADD COLUMN forecastProvider TEXT AS ForecastProvider NOT NULL DEFAULT "MET_NORWAY";

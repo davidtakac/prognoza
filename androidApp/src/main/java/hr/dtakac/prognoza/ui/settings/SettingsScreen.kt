@@ -13,23 +13,17 @@ import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenViewModel
 fun SettingsScreen(
     viewModel: SettingsScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
-    onThemeChange: () -> Unit = {},
-    onMoodModeChange: () -> Unit = {},
-    onUnitChange: () -> Unit = {}
+    updateTheme: () -> Unit = {},
+    updateForecast: () -> Unit = {}
 ) {
     val state by viewModel.state
-    LaunchedEffect(true) {
-        viewModel.getState()
+    OnEvent(event = state.updateThemeEvent) {
+        updateTheme()
     }
-    OnEvent(event = state.themeChangedEvent) {
-        onThemeChange()
+    OnEvent(event = state.updateForecastEvent) {
+        updateForecast()
     }
-    OnEvent(event = state.unitChangedEvent) {
-        onUnitChange()
-    }
-    OnEvent(event = state.moodModeChangedEvent) {
-        onMoodModeChange()
-    }
+
     val context = LocalContext.current
     OnEvent(event = state.openLinkEvent) {
         openLink(link = it, context)
@@ -44,6 +38,5 @@ fun SettingsScreen(
 private fun openLink(link: String, context: Context) {
     try {
         context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-    } catch (e: Exception) {
-    }
+    } catch (_: Exception) {}
 }

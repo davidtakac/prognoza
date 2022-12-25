@@ -6,11 +6,11 @@ import hr.dtakac.prognoza.presentation.TextResource
 data class SettingsScreenState(
     val isLoading: Boolean = false,
     val unitSettings: List<MultipleChoiceSettingUi> = listOf(),
+    val dataSettings: List<MultipleChoiceSettingUi> = listOf(),
     val appearanceSettings: List<MultipleChoiceSettingUi> = listOf(),
     val creditSettings: List<DisplaySettingUi> = listOf(),
-    val unitChangedEvent: Event<Unit>? = null,
-    val themeChangedEvent: Event<Unit>? = null,
-    val moodModeChangedEvent: Event<Unit>? = null,
+    val updateForecastEvent: Event<Unit>? = null,
+    val updateThemeEvent: Event<Unit>? = null,
     val openLinkEvent: Event<String>? = null
 )
 

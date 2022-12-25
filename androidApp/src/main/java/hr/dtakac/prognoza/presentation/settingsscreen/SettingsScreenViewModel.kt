@@ -13,10 +13,7 @@ import hr.dtakac.prognoza.presentation.WidgetRefresher
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsRepository
 import hr.dtakac.prognoza.shared.domain.*
-import hr.dtakac.prognoza.shared.entity.LengthUnit
-import hr.dtakac.prognoza.shared.entity.PressureUnit
-import hr.dtakac.prognoza.shared.entity.SpeedUnit
-import hr.dtakac.prognoza.shared.entity.TemperatureUnit
+import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -34,6 +31,9 @@ class SettingsScreenViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
+    private val setForecastProvider: SetForecastProvider,
+    private val getForecastProvider: GetForecastProvider,
+    private val getAllForecastProviders: GetAllForecastProviders,
     private val androidSettingsRepository: AndroidSettingsRepository,
     private val widgetRefresher: WidgetRefresher,
     private val mapper: SettingsScreenUiMapper
@@ -42,55 +42,63 @@ class SettingsScreenViewModel @Inject constructor(
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
     private var availablePressureUnits: List<PressureUnit> = listOf()
+    private var availableProviders: List<ForecastProvider> = listOf()
     private var availableUiModes: List<UiMode> = listOf()
     private var availableMoodModes: List<MoodMode> = listOf()
 
     private val _state = mutableStateOf(SettingsScreenState())
     val state: State<SettingsScreenState> get() = _state
 
-    fun getState() {
+    init {
         updateState()
     }
 
     private fun setTemperatureUnit(index: Int) {
         updateState {
             setTemperatureUnit(availableTemperatureUnits[index])
-            fireUnitChanged()
+            fireUpdateForecast()
         }
     }
 
     private fun setWindUnit(index: Int) {
         updateState {
             setWindUnit(availableWindUnits[index])
-            fireUnitChanged()
+            fireUpdateForecast()
         }
     }
 
     private fun setPrecipitationUnit(index: Int) {
         updateState {
             setPrecipitationUnit(availablePrecipitationUnits[index])
-            fireUnitChanged()
+            fireUpdateForecast()
         }
     }
 
     private fun setPressureUnit(index: Int) {
         updateState {
             setPressureUnit(availablePressureUnits[index])
-            fireUnitChanged()
+            fireUpdateForecast()
+        }
+    }
+
+    private fun setForecastProvider(index: Int) {
+        updateState {
+            setForecastProvider(availableProviders[index])
+            fireUpdateForecast()
         }
     }
 
     private fun setTheme(index: Int) {
         updateState {
             androidSettingsRepository.setUiMode(availableUiModes[index])
-            fireThemeChanged()
+            fireUpdateTheme()
         }
     }
 
     private fun setMoodMode(index: Int) {
         updateState {
             androidSettingsRepository.setMoodMode(availableMoodModes[index])
-            fireMoodModeChanged()
+            fireUpdateTheme()
         }
     }
 
@@ -108,6 +116,7 @@ class SettingsScreenViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
+        availableProviders = getAllForecastProviders()
         availableUiModes = androidSettingsRepository.getAvailableUiModes()
         availableMoodModes = androidSettingsRepository.getAvailableMoodModes()
 
@@ -129,6 +138,13 @@ class SettingsScreenViewModel @Inject constructor(
                     onIndexSelected = ::setPrecipitationUnit
                 )
             ),
+            dataSettings = listOf(
+                mapper.mapToForecastProviderSetting(
+                    selected = getForecastProvider(),
+                    providers = availableProviders,
+                    onIndexSelected = ::setForecastProvider
+                )
+            ),
             appearanceSettings = mutableListOf<MultipleChoiceSettingUi>().apply {
                 add(mapper.mapToUiModeSetting(
                     selected = androidSettingsRepository.getUiMode(),
@@ -144,9 +160,6 @@ class SettingsScreenViewModel @Inject constructor(
                 }
             },
             creditSettings = listOf(
-                mapper.getForecastCreditDisplaySetting(
-                    onClick = { openLink("https://www.met.no/en") }
-                ),
                 mapper.getGeolocationCreditDisplaySetting(
                     onClick = { openLink("https://www.openstreetmap.org") }
                 ),
@@ -168,22 +181,16 @@ class SettingsScreenViewModel @Inject constructor(
         _state.value = _state.value.copy(isLoading = false)
     }
 
-    private fun fireUnitChanged() {
+    private fun fireUpdateForecast() {
         widgetRefresher.refreshData()
         _state.value = _state.value.copy(
-            unitChangedEvent = simpleEvent()
+            updateForecastEvent = simpleEvent()
         )
     }
 
-    private fun fireThemeChanged() {
+    private fun fireUpdateTheme() {
         _state.value = _state.value.copy(
-            themeChangedEvent = simpleEvent()
-        )
-    }
-
-    private fun fireMoodModeChanged() {
-        _state.value = _state.value.copy(
-            moodModeChangedEvent = simpleEvent()
+            updateThemeEvent = simpleEvent()
         )
     }
 

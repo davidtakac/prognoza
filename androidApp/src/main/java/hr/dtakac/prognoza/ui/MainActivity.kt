@@ -85,9 +85,8 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(
                             onBackClick = navController::navigateUp,
-                            onThemeChange = androidSettingsViewModel::getState,
-                            onMoodModeChange = androidSettingsViewModel::getState,
-                            onUnitChange = forecastViewModel::getState
+                            updateTheme = androidSettingsViewModel::getState,
+                            updateForecast = forecastViewModel::getState
                         )
                     }
                 }

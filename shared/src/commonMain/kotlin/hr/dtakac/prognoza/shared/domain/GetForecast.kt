@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.shared.domain
 
 import hr.dtakac.prognoza.shared.domain.data.*
+import hr.dtakac.prognoza.shared.domain.data.ForecastProvider
 import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -26,9 +27,9 @@ internal class GetForecastFrugal(
 
 internal class ActualGetForecast internal constructor(
     private val getSelectedPlace: GetSelectedPlace,
+    private val getForecastProvider: suspend () -> ForecastProvider,
     private val savedForecastGetter: SavedForecastGetter,
     private val forecastSaver: ForecastSaver,
-    private val forecastProvider: ForecastProvider,
     private val settingsRepository: SettingsRepository
 ) {
     internal suspend fun get(
@@ -44,7 +45,7 @@ internal class ActualGetForecast internal constructor(
         )
 
         if (shouldPullFromProvider) {
-            val freshForecast = forecastProvider.provide(latitude, longitude)
+            val freshForecast = getForecastProvider().provide(latitude, longitude)
             if (freshForecast is ForecastProviderResult.Success) {
                 forecastSaver.save(latitude, longitude, freshForecast.data)
             }
