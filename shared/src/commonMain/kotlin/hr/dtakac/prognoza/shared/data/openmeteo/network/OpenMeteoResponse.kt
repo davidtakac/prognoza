@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 import kotlin.math.abs
 
 @Serializable
-data class OpenMeteoResponse(
+internal data class OpenMeteoResponse(
     @SerialName("hourly")
     val hourly: OpenMeteoHourly,
     @SerialName("daily")
@@ -14,7 +14,7 @@ data class OpenMeteoResponse(
 )
 
 @Serializable
-data class OpenMeteoHourly(
+internal data class OpenMeteoHourly(
     @SerialName("time")
     val epochSeconds: List<Long>,
     @SerialName("temperature_2m")
@@ -36,7 +36,7 @@ data class OpenMeteoHourly(
 )
 
 @Serializable
-data class OpenMeteoDaily(
+internal data class OpenMeteoDaily(
     @SerialName("time")
     val dayStartEpochSeconds: List<Long>,
     @SerialName("sunrise")
@@ -47,20 +47,17 @@ data class OpenMeteoDaily(
 
 internal fun OpenMeteoResponse.mapToEntities(): List<ForecastDatum> {
     val result = mutableListOf<ForecastDatum>()
-    val timestampToIsDay = calculateAreTimestampsDay(
-        timestamps = hourly.epochSeconds,
-        sunrises = daily.sunriseEpochSeconds,
-        sunsets = daily.sunsetEpochSeconds
-    )
     for (i in hourly.epochSeconds.indices) {
         val currEpochSeconds = hourly.epochSeconds[i]
         val nextEpochSeconds = hourly.epochSeconds.getOrNull(i + 1) ?: break
-        val description = timestampToIsDay[currEpochSeconds]?.let {
-            mapWmoCodeToDescription(
-                wmoCode = hourly.weatherCode[i],
-                isDay = it
+        val description = mapWmoCodeToDescription(
+            wmoCode = hourly.weatherCode[i],
+            isDay = isTimestampDay(
+                timestamp = currEpochSeconds,
+                sunrises = daily.sunriseEpochSeconds,
+                sunsets = daily.sunsetEpochSeconds
             )
-        } ?: Description.UNKNOWN
+        )
         val datum = ForecastDatum(
             startEpochMillis = currEpochSeconds * 1000,
             endEpochMillis = nextEpochSeconds * 1000,
@@ -180,22 +177,19 @@ private fun mapWmoCodeToDescription(
     else -> Description.UNKNOWN
 }
 
-internal fun calculateAreTimestampsDay(
-    timestamps: List<Long>,
+internal fun isTimestampDay(
+    timestamp: Long,
     sunrises: List<Long>,
     sunsets: List<Long>
-): Map<Long, Boolean> {
-    val result = mutableMapOf<Long, Boolean>()
-    for (timestamp in timestamps) {
-        val closestSunrise = sunrises.minBy { abs(timestamp - it) }
-        val closestSunset = sunsets.minBy { abs(timestamp - it) }
-        result[timestamp] = if (closestSunrise == 0L && closestSunset == 0L) {
-            false
-        } else if (closestSunrise < closestSunset) {
-            timestamp in closestSunrise until closestSunset
-        } else {
-            timestamp !in closestSunset until closestSunrise
-        }
+): Boolean {
+    val closestSunrise = sunrises.minBy { abs(timestamp - it) }
+    val closestSunset = sunsets.minBy { abs(timestamp - it) }
+
+    return if (closestSunrise == 0L && closestSunset == 0L) {
+        false
+    } else if (closestSunrise < closestSunset) {
+        timestamp in closestSunrise until closestSunset
+    } else {
+        timestamp !in closestSunset until closestSunrise
     }
-    return result
 }

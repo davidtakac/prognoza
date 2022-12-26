@@ -1,17 +1,30 @@
-import hr.dtakac.prognoza.shared.data.openmeteo.network.calculateAreTimestampsDay
+import hr.dtakac.prognoza.shared.data.openmeteo.network.isTimestampDay
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
+import kotlin.test.assertEquals
 
 class OpenMeteoIsDayTest {
     @Test
     fun `is day after sunrise`() {
-        assertContentEquals(
-            expected = listOf(true),
-            actual = calculateAreTimestampsDay(
-                timestamps = listOf(2L),
+        assertEquals(
+            expected = true,
+            actual = isTimestampDay(
+                timestamp = 2L,
                 sunrises = listOf(1L),
                 sunsets = listOf(3L)
-            ).values
+            )
+        )
+    }
+
+    @Test
+    fun `is day at sunrise`() {
+        assertEquals(
+            expected = true,
+            actual = isTimestampDay(
+                timestamp = 1L,
+                sunrises = listOf(1L),
+                sunsets = listOf(2L)
+            )
         )
     }
 
@@ -25,11 +38,25 @@ class OpenMeteoIsDayTest {
         val sunsets = listOf(4L)
         assertContentEquals(
             expected = listOf(true, false),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
+        )
+    }
+
+    @Test
+    fun `is night at sunset`() {
+        assertEquals(
+            expected = false,
+            actual = isTimestampDay(
+                timestamp = 2L,
+                sunrises = listOf(1L),
+                sunsets = listOf(2L)
+            )
         )
     }
 
@@ -45,11 +72,13 @@ class OpenMeteoIsDayTest {
         val sunsets = listOf(4L, 8L)
         assertContentEquals(
             expected = listOf(false, true, false, true),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
@@ -66,11 +95,13 @@ class OpenMeteoIsDayTest {
         val sunsets = listOf(4L, 8L)
         assertContentEquals(
             expected = listOf(false, true, false, true, false),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
@@ -78,14 +109,30 @@ class OpenMeteoIsDayTest {
     fun `is night between sunset and sunrise`() {
         val sunrises = listOf(1L, 4L)
         val sunsets = listOf(2L, 5L)
-        val times = listOf(3L)
-        assertContentEquals(
-            expected = listOf(false),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
+        assertEquals(
+            expected = false,
+            actual = isTimestampDay(
+                timestamp = 3L,
                 sunrises = sunrises,
                 sunsets = sunsets
-            ).values
+            )
+        )
+    }
+
+    @Test
+    fun `is night between all sunrises and sunsets`() {
+        val sunrises = listOf(1L, 4L, 7L, 10L, 13L)
+        val sunsets = listOf(2L, 5L, 8L, 11L, 14L)
+        val times = listOf(3L, 6L, 9L, 12L)
+        assertContentEquals(
+            expected = times.map { false },
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
@@ -96,11 +143,13 @@ class OpenMeteoIsDayTest {
         val times = listOf(3L, 6L, 7L, 8L, 9L, 10L, 11L, 12L, 13L, 14L)
         assertContentEquals(
             expected = times.map { false },
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
@@ -108,14 +157,13 @@ class OpenMeteoIsDayTest {
     fun `recognizes single polar night`() {
         val sunrises = listOf(0L)
         val sunsets = listOf(0L)
-        val times = listOf(1L)
-        assertContentEquals(
-            expected = listOf(false),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
+        assertEquals(
+            expected = false,
+            actual = isTimestampDay(
+                timestamp = 1L,
                 sunrises = sunrises,
                 sunsets = sunsets
-            ).values
+            )
         )
     }
 
@@ -125,11 +173,13 @@ class OpenMeteoIsDayTest {
         val times = listOf(1L, 2L, 3L, 4L, 5L, 6L, 7L, 8L)
         assertContentEquals(
             expected = times.map { false },
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunrises
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunrises
+                )
+            }
         )
     }
 
@@ -140,11 +190,13 @@ class OpenMeteoIsDayTest {
         val times = listOf(1L, 2L, 3L, 4L, 6L, 7L, 9L, 10L)
         assertContentEquals(
             expected = listOf(false, false, false, false, true, true, false, false),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
@@ -155,11 +207,13 @@ class OpenMeteoIsDayTest {
         val times = listOf(2L, 6L, 10L, 11L, 12L)
         assertContentEquals(
             expected = listOf(true, true, false, false, false),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
@@ -170,16 +224,18 @@ class OpenMeteoIsDayTest {
         val times = listOf(2L, 5L, 8L, 10L, 11L, 12L, 13L, 15L, 18L)
         assertContentEquals(
             expected = listOf(true, true, true, false, false, false, false, true, true),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 
     @Test
-    fun `recognizes multiple polar nights at all places`() {
+    fun `recognizes polar night at start and end and twice in middle`() {
         val sunrises = listOf(0L, 0L, 5L, 8L, 0L, 0L, 13L, 0L, 0L, 19L, 22L, 0L, 0L)
         val sunsets = listOf(0L, 0L, 7L, 10L, 0L, 0L, 15L, 0L, 0L, 21L, 24L, 0L, 0L)
         val times = listOf(
@@ -201,11 +257,13 @@ class OpenMeteoIsDayTest {
                 true, true,
                 false, false, false
             ),
-            actual = calculateAreTimestampsDay(
-                timestamps = times,
-                sunrises = sunrises,
-                sunsets = sunsets
-            ).values
+            actual = times.map {
+                isTimestampDay(
+                    timestamp = it,
+                    sunrises = sunrises,
+                    sunsets = sunsets
+                )
+            }
         )
     }
 }
