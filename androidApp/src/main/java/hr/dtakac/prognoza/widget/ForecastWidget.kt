@@ -54,11 +54,9 @@ class ForecastWidget : GlanceAppWidget() {
         val onClick = actionStartActivity(MainActivity::class.java)
         val size = LocalSize.current
         val textColor = colors.onSurface
-        val backgroundColor = colors.surface
         Box(
             modifier = GlanceModifier
-                .appWidgetBackgroundRadius()
-                .background(backgroundColor)
+                .appWidgetBackgroundShape()
                 .appWidgetBackground()
                 .fillMaxSize()
         ) {
