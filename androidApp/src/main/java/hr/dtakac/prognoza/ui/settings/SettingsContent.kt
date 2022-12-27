@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,12 +19,12 @@ import hr.dtakac.prognoza.ui.common.rememberAppToolbarState
 @Composable
 fun SettingsContent(
     state: SettingsScreenState,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onCreditAndLicensesClick: () -> Unit = {},
+    onSourceClick: () -> Unit = {},
+    onLicenseClick: () -> Unit = {}
 ) {
-    val backgroundColor = MaterialTheme.colorScheme.background
-    Surface(
-        modifier = Modifier.drawBehind { drawRect(color = backgroundColor) }
-    ) {
+    Surface(color = MaterialTheme.colorScheme.background) {
         Column {
             val toolbarState = rememberAppToolbarState()
             AppToolbar(
@@ -45,7 +44,10 @@ fun SettingsContent(
             )
             SettingsList(
                 state = state,
-                isTitleVisible = { toolbarState.setTitleVisible(!it) }
+                isTitleVisible = { toolbarState.setTitleVisible(!it) },
+                onCreditAndLicensesClick = onCreditAndLicensesClick,
+                onSourceClick = onSourceClick,
+                onLicenseClick = onLicenseClick
             )
         }
     }

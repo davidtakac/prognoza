@@ -7,6 +7,7 @@ data class PlacesState(
     val isLoading: Boolean = false,
     val empty: TextResource? = null,
     val places: List<PlaceUi> = listOf(),
+    val provider: TextResource? = null,
     val placeSelected: Event<Unit>? = null
 )
 

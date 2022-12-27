@@ -27,10 +27,14 @@ internal class GetForecastFrugal(
 
 internal class ActualGetForecast internal constructor(
     private val getSelectedPlace: GetSelectedPlace,
-    private val getForecastProvider: suspend () -> ForecastProvider,
+    private val getForecastProvider: GetForecastProvider,
+    private val getPrecipitationUnit: GetPrecipitationUnit,
+    private val getWindUnit: GetWindUnit,
+    private val getTemperatureUnit: GetTemperatureUnit,
     private val savedForecastGetter: SavedForecastGetter,
     private val forecastSaver: ForecastSaver,
-    private val settingsRepository: SettingsRepository
+    private val openMeteoProvider: ForecastProvider,
+    private val metNorwayProvider: ForecastProvider
 ) {
     internal suspend fun get(
         refreshIfOlderThan: Duration = Duration.ZERO
@@ -45,7 +49,7 @@ internal class ActualGetForecast internal constructor(
         )
 
         if (shouldPullFromProvider) {
-            val freshForecast = getForecastProvider().provide(latitude, longitude)
+            val freshForecast = getProvider().provide(latitude, longitude)
             if (freshForecast is ForecastProviderResult.Success) {
                 forecastSaver.save(latitude, longitude, freshForecast.data)
             }
@@ -70,9 +74,10 @@ internal class ActualGetForecast internal constructor(
     } else GetForecastResult.Success(
         placeName = place.name,
         forecast = Forecast(data, TimeZone.currentSystemDefault()),
-        temperatureUnit = settingsRepository.getTemperatureUnit(),
-        windUnit = settingsRepository.getWindUnit(),
-        precipitationUnit = settingsRepository.getPrecipitationUnit()
+        provider = getForecastProvider(),
+        temperatureUnit = getTemperatureUnit(),
+        windUnit = getWindUnit(),
+        precipitationUnit = getPrecipitationUnit()
     )
 
     private suspend fun shouldPullFromProvider(
@@ -88,12 +93,18 @@ internal class ActualGetForecast internal constructor(
             Clock.System.now().toEpochMilliseconds() - lastUpdated >= refreshIfOlderThan.inWholeMilliseconds
         } else true
     }
+
+    private suspend fun getProvider(): ForecastProvider = when (getForecastProvider()) {
+        hr.dtakac.prognoza.shared.entity.ForecastProvider.OPEN_METEO -> openMeteoProvider
+        hr.dtakac.prognoza.shared.entity.ForecastProvider.MET_NORWAY -> metNorwayProvider
+    }
 }
 
 sealed interface GetForecastResult {
     data class Success(
         val placeName: String,
         val forecast: Forecast,
+        val provider: hr.dtakac.prognoza.shared.entity.ForecastProvider,
         val temperatureUnit: TemperatureUnit,
         val windUnit: SpeedUnit,
         val precipitationUnit: LengthUnit

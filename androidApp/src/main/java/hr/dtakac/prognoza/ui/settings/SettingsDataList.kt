@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenState
 import hr.dtakac.prognoza.ui.common.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
@@ -25,6 +24,9 @@ import kotlinx.coroutines.flow.map
 fun SettingsList(
     state: SettingsScreenState,
     isTitleVisible: (Boolean) -> Unit,
+    onSourceClick: () -> Unit,
+    onLicenseClick: () -> Unit,
+    onCreditAndLicensesClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val listState = rememberLazyListState()
@@ -96,23 +98,35 @@ fun SettingsList(
             }
         }
 
-        state.creditSettings.takeIf { it.isNotEmpty() }?.let { settings ->
-            item(key = "credit-header") {
-                SettingsSectionHeader(
-                    text = stringResource(id = R.string.credit),
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-                )
-            }
-            items(settings) {
-                SettingItem(
-                    name = it.name.asString(),
-                    value = it.value.asString(),
-                    onClick = it.onClick
-                )
-            }
+
+        item(key = "about-header") {
+            SettingsSectionHeader(
+                text = stringResource(id = R.string.about_title),
+                modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
+            )
+        }
+        item(key = "source") {
+            SettingItem(
+                name = stringResource(id = R.string.source_code_title),
+                value = stringResource(id = R.string.source_code_description),
+                onClick = onSourceClick
+            )
+        }
+        item(key = "license") {
+            SettingItem(
+                name = stringResource(id = R.string.license_title),
+                value = stringResource(id = R.string.license_description),
+                onClick = onLicenseClick
+            )
+        }
+        item(key = "third-party") {
+            SettingItem(
+                name = stringResource(id = R.string.credit_and_licenses_title),
+                value = stringResource(id = R.string.credit_and_licenses_description),
+                onClick = onCreditAndLicensesClick
+            )
         }
     }
-
 }
 
 @Composable

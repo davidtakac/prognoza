@@ -24,15 +24,7 @@ class ForecastViewModel @Inject constructor(
             _state.value = _state.value.copy(isLoading = true)
             _state.value = when (val result = getForecast()) {
                 is GetForecastResult.Success -> _state.value.copy(
-                    forecast = mapper.mapToForecastUi(
-                        placeName = result.placeName,
-                        current = result.forecast.current,
-                        today = result.forecast.today,
-                        coming = result.forecast.coming,
-                        temperatureUnit = result.temperatureUnit,
-                        windUnit = result.windUnit,
-                        precipitationUnit = result.precipitationUnit
-                    ),
+                    forecast = mapper.mapToForecastUi(result),
                     error = null
                 )
                 is GetForecastResult.Empty -> _state.value.copy(

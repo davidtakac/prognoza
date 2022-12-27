@@ -55,4 +55,9 @@ class PlacesUiMapper @Inject constructor(
             TextResource.fromString(query)
         )
     }
+
+    fun getProvider(): TextResource = TextResource.fromStringId(
+        R.string.template_data_from,
+        TextResource.fromStringId(R.string.osm_nominatim_credit)
+    )
 }

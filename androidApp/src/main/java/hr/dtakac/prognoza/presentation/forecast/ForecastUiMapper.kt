@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.presentation.forecast
 
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.presentation.settingsscreen.toSettingsLabel
 import hr.dtakac.prognoza.shared.domain.GetForecastResult
 import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,18 +17,19 @@ class ForecastUiMapper @Inject constructor(
     private val computationDispatcher: CoroutineDispatcher
 ) {
     suspend fun mapToForecastUi(
-        placeName: String,
-        current: Current,
-        today: Today?,
-        coming: List<Day>?,
-        temperatureUnit: TemperatureUnit,
-        windUnit: SpeedUnit,
-        precipitationUnit: LengthUnit
+        data: GetForecastResult.Success
     ): ForecastUi = withContext(computationDispatcher) {
+        val tempUnit = data.temperatureUnit
+        val windUnit = data.windUnit
+        val precipUnit = data.precipitationUnit
         ForecastUi(
-            current = mapToCurrentUi(placeName, current, temperatureUnit, windUnit, precipitationUnit),
-            today = today?.let { mapToTodayUi(it, temperatureUnit, precipitationUnit) },
-            coming = coming?.let { mapToComingUi(it, temperatureUnit, precipitationUnit) }
+            current = mapToCurrentUi(data.placeName, data.forecast.current, tempUnit, windUnit, precipUnit),
+            today = data.forecast.today?.let { mapToTodayUi(it, tempUnit, precipUnit) },
+            coming = data.forecast.coming?.let { mapToComingUi(it, tempUnit, precipUnit) },
+            provider = TextResource.fromStringId(
+                R.string.template_data_from,
+                TextResource.fromStringId(data.provider.toSettingsLabel())
+            )
         )
     }
 

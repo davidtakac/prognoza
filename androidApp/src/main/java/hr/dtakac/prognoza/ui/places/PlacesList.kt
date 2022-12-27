@@ -7,18 +7,23 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.places.PlaceUi
+import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlacesList(
     places: List<PlaceUi>,
+    provider: TextResource?,
     onPlaceClick: (Int) -> Unit,
     onPlaceLongClick: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -26,7 +31,7 @@ fun PlacesList(
     val hapticFeedback = LocalHapticFeedback.current
     LazyColumn(
         modifier = modifier,
-        contentPadding = PaddingValues(top = 12.dp)
+        contentPadding = PaddingValues(top = 12.dp, bottom = 24.dp)
     ) {
         itemsIndexed(places) { idx, placeUi ->
             PlaceItem(
@@ -51,6 +56,16 @@ fun PlacesList(
                         horizontal = 24.dp
                     )
             )
+        }
+        provider?.let {
+            item(key = "provider") {
+                Text(
+                    text = it.asString(),
+                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp),
+                    style = PrognozaTheme.typography.body,
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }

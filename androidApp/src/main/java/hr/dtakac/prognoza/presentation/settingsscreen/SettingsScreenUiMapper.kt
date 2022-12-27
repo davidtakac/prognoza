@@ -104,36 +104,4 @@ class SettingsScreenUiMapper @Inject constructor(
         },
         onIndexSelected = onIndexSelected
     )
-
-    fun getForecastCreditDisplaySetting(
-        onClick: () -> Unit
-    ): DisplaySettingUi = DisplaySettingUi(
-        name = TextResource.fromStringId(R.string.weather_data),
-        value = TextResource.fromStringId(R.string.met_norway_credit),
-        onClick = onClick
-    )
-
-    fun getGeolocationCreditDisplaySetting(
-        onClick: () -> Unit
-    ): DisplaySettingUi = DisplaySettingUi(
-        name = TextResource.fromStringId(R.string.geolocation_data),
-        value = TextResource.fromStringId(R.string.osm_nominatim_credit),
-        onClick = onClick
-    )
-
-    fun getDesignCreditDisplaySetting(
-        onClick: () -> Unit
-    ): DisplaySettingUi = DisplaySettingUi(
-        name = TextResource.fromStringId(R.string.design_credit),
-        value = TextResource.fromStringId(R.string.neal_hampton_credit),
-        onClick = onClick
-    )
-
-    fun getIconCreditDisplaySetting(
-        onClick: () -> Unit
-    ): DisplaySettingUi = DisplaySettingUi(
-        name = TextResource.fromStringId(R.string.launcher_icon_credit),
-        value = TextResource.fromStringId(R.string.natasa_takac_credit),
-        onClick = onClick
-    )
 }

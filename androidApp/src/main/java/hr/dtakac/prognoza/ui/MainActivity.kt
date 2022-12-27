@@ -23,6 +23,7 @@ import hr.dtakac.prognoza.presentation.forecast.ForecastViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.ui.forecast.ForecastScreen
+import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
 
@@ -85,8 +86,14 @@ class MainActivity : ComponentActivity() {
                     composable("settings") {
                         SettingsScreen(
                             onBackClick = navController::navigateUp,
+                            onCreditAndLicensesClick = { navController.navigate("credit") },
                             updateTheme = androidSettingsViewModel::getState,
                             updateForecast = forecastViewModel::getState
+                        )
+                    }
+                    composable("credit") {
+                        LicensesAndCreditScreen(
+                            onBackClick = navController::navigateUp
                         )
                     }
                 }

@@ -13,7 +13,6 @@ import hr.dtakac.prognoza.shared.data.openstreetmap.OsmPlaceSearcher
 import hr.dtakac.prognoza.shared.data.openstreetmap.OsmPlaceService
 import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*
-import hr.dtakac.prognoza.shared.entity.ForecastProvider
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
@@ -74,17 +73,19 @@ internal class InternalPrognozaSdkFactory constructor(
         )
         val getSelectedPlace = GetSelectedPlace(settingsRepository)
         val getForecastProvider = GetForecastProvider(settingsRepository)
+        val getTemperatureUnit = GetTemperatureUnit(settingsRepository)
+        val getWindUnit = GetWindUnit(settingsRepository)
+        val getPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
         val actualGetForecast = ActualGetForecast(
             getSelectedPlace = getSelectedPlace,
             savedForecastGetter = forecastRepository,
             forecastSaver = forecastRepository,
-            getForecastProvider = {
-                when (getForecastProvider()) {
-                    ForecastProvider.MET_NORWAY -> metNorwayProvider
-                    ForecastProvider.OPEN_METEO -> openMeteoProvider
-                }
-            },
-            settingsRepository = settingsRepository
+            getForecastProvider = getForecastProvider,
+            getTemperatureUnit = getTemperatureUnit,
+            getPrecipitationUnit = getPrecipitationUnit,
+            getWindUnit = getWindUnit,
+            openMeteoProvider = openMeteoProvider,
+            metNorwayProvider = metNorwayProvider
         )
 
         return object : PrognozaSdk {

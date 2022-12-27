@@ -74,12 +74,14 @@ class PlacesViewModel @Inject constructor(
         val savedPlaces = getSavedPlaces()
         if (savedPlaces.isEmpty()) {
             _state.value = _state.value.copy(
+                provider = null,
                 empty = TextResource.fromStringId(R.string.no_saved_places)
             )
         } else {
             currentPlaces = savedPlaces
             _state.value = _state.value.copy(
                 places = mapper.mapToSavedPlacesUi(savedPlaces, getSelectedPlace()),
+                provider = null,
                 empty = null
             )
         }
@@ -91,11 +93,13 @@ class PlacesViewModel @Inject constructor(
                 currentPlaces = result.places
                 _state.value = _state.value.copy(
                     places = mapper.mapToSearchResultPlacesUi(result.places),
+                    provider = mapper.getProvider(),
                     empty = null
                 )
             }
             is SearchPlacesResult.Empty -> _state.value = _state.value.copy(
-                empty = mapper.mapToSearchPlacesError(result, query)
+                empty = mapper.mapToSearchPlacesError(result, query),
+                provider = null
             )
         }
     }

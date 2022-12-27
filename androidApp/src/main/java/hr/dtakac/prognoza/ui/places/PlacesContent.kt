@@ -80,6 +80,7 @@ fun PlacesContent(
                 places = state.places,
                 onPlaceClick = onPlaceClick,
                 onPlaceLongClick = onPlaceLongClick,
+                provider = state.provider,
                 modifier = Modifier.weight(1f)
             )
         }

@@ -1,18 +1,17 @@
 package hr.dtakac.prognoza.ui.settings
 
-import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.presentation.OnEvent
 import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenViewModel
+import hr.dtakac.prognoza.ui.common.openLink
 
 @Composable
 fun SettingsScreen(
     viewModel: SettingsScreenViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
+    onCreditAndLicensesClick: () -> Unit = {},
     updateTheme: () -> Unit = {},
     updateForecast: () -> Unit = {}
 ) {
@@ -25,18 +24,11 @@ fun SettingsScreen(
     }
 
     val context = LocalContext.current
-    OnEvent(event = state.openLinkEvent) {
-        openLink(link = it, context)
-    }
-
     SettingsContent(
         state = state,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        onCreditAndLicensesClick = onCreditAndLicensesClick,
+        onSourceClick = { openLink("https://github.com/davidtakac/prognoza", context) },
+        onLicenseClick = { openLink("https://github.com/davidtakac/prognoza/blob/dev/LICENSE", context) }
     )
-}
-
-private fun openLink(link: String, context: Context) {
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-    } catch (_: Exception) {}
 }

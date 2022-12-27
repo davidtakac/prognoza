@@ -13,7 +13,8 @@ data class ForecastState(
 data class ForecastUi(
     val current: CurrentUi,
     val today: TodayUi?,
-    val coming: List<ComingDayUi>?
+    val coming: List<ComingDayUi>?,
+    val provider: TextResource
 )
 
 data class CurrentUi(

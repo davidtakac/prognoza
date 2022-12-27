@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -157,6 +158,14 @@ fun ForecastDataList(
                     )
                 }
             }
+            item(key = "provider") {
+                Text(
+                    text = data.provider.asString(),
+                    style = PrognozaTheme.typography.body,
+                    modifier = Modifier.padding(itemPadding).padding(top = 12.dp),
+                    color = MaterialTheme.colorScheme.secondary
+                )
+            }
         }
     }
 }
@@ -198,7 +207,8 @@ private fun TodayScreenPreview(
         data = ForecastUi(
             current = current,
             today = today,
-            coming = coming
+            coming = coming,
+            provider = TextResource.fromString("Data from MET Norway")
         )
     )
 }

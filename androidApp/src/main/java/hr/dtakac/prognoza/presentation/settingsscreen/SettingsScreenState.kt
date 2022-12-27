@@ -8,10 +8,8 @@ data class SettingsScreenState(
     val unitSettings: List<MultipleChoiceSettingUi> = listOf(),
     val dataSettings: List<MultipleChoiceSettingUi> = listOf(),
     val appearanceSettings: List<MultipleChoiceSettingUi> = listOf(),
-    val creditSettings: List<DisplaySettingUi> = listOf(),
     val updateForecastEvent: Event<Unit>? = null,
-    val updateThemeEvent: Event<Unit>? = null,
-    val openLinkEvent: Event<String>? = null
+    val updateThemeEvent: Event<Unit>? = null
 )
 
 data class MultipleChoiceSettingUi(
@@ -19,10 +17,4 @@ data class MultipleChoiceSettingUi(
     val selectedIndex: Int,
     val values: List<TextResource>,
     val onIndexSelected: (Int) -> Unit
-)
-
-data class DisplaySettingUi(
-    val name: TextResource,
-    val value: TextResource,
-    val onClick: () -> Unit
 )

@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.presentation.WidgetRefresher
@@ -158,18 +157,7 @@ class SettingsScreenViewModel @Inject constructor(
                         onIndexSelected = ::setMoodMode
                     ))
                 }
-            },
-            creditSettings = listOf(
-                mapper.getGeolocationCreditDisplaySetting(
-                    onClick = { openLink("https://www.openstreetmap.org") }
-                ),
-                mapper.getDesignCreditDisplaySetting(
-                    onClick = { openLink("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2") }
-                ),
-                mapper.getIconCreditDisplaySetting(
-                    onClick = { openLink("https://www.instagram.com/art.ofil/") }
-                )
-            )
+            }
         )
     }
 
@@ -191,12 +179,6 @@ class SettingsScreenViewModel @Inject constructor(
     private fun fireUpdateTheme() {
         _state.value = _state.value.copy(
             updateThemeEvent = simpleEvent()
-        )
-    }
-
-    private fun openLink(url: String) {
-        _state.value = _state.value.copy(
-            openLinkEvent = Event(url)
         )
     }
 }

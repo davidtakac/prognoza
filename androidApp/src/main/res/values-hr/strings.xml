@@ -7,7 +7,7 @@
     <string name="description_fog">Magla</string>
     <string name="description_heavy_rain">Jaka kiša</string>
     <string name="description_heavy_rain_and_thunder">Jaka kiša i grmljavina</string>
-    <string name="description_heavy_rain_showers">Jaki pljuskovi</string>
+    <string name="description_heavy_rain_showers">MET Norway, OpenStreetMap i drugi</string>
     <string name="description_heavy_rain_showers_and_thunder">Jaki pljuskovi i grmljavina</string>
     <string name="description_heavy_sleet">Jaka susnježica</string>
     <string name="description_heavy_sleet_and_thunder">Jaka susnježica i grmljavina</string>
@@ -115,10 +115,20 @@
     <string name="settings_label_inhg">Inč žive</string>
     <string name="launcher_icon_credit">Ikona aplikacije</string>
     <string name="mood_source">Raspoloženje</string>
-    <string name="mood_mode_forecast">Odredi iz trenutnog vremena</string>
+    <string name="mood_mode_forecast">Odredi iz trenutne prognoze</string>
     <string name="mood_mode_dynamic">Prati sustav</string>
     <string name="delete_place_title">Obrisati %1$s?</string>
     <string name="template_delete_place_description">Ovo će obrisati sve njegove podatke. Uvijek ga možeš ponovo potražiti i odabrati.</string>
     <string name="delete">Obriši</string>
     <string name="sources">Izvori</string>
+    <string name="template_data_from">Podaci od %1$s</string>
+    <string name="credit_and_licenses_title">Licence i priznanja</string>
+    <string name="source_code_title">Izvorni kod</string>
+    <string name="about_title">Informacije</string>
+    <string name="license_title">Licenca</string>
+    <string name="license_description">MIT Licenca</string>
+    <string name="credit_and_licenses_description">MET Norway, OpenStreetMap i drugi</string>
+    <string name="licenses_title">Licence</string>
+    <string name="weather_icons_title">Ikonice vremenskih uvjeta</string>
+    <string name="weather_icons_description">MET Norway, MIT Licenca</string>
 </resources>
