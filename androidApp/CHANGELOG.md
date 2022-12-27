@@ -6,14 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Backlog]
 ### Fixed
-- Widget rounded corners on <= Android 11
 - Widget text reacts to system dark/light theme on <= Android 11
 ### Added
 - iOS support
 
 ## [Unreleased]
+### Changed
+- Shorter weather condition descriptions
 ### Added 
 - Open-Meteo weather data provider
+- Separate credit and licenses screen
+- Today's precipitation in hourly header
+- Data provider footers when searching places and displaying forecast
+### Fixed
+- Widget sharp corners on <= Android 11
 
 ## [3.2.1] - 2022-12-20
 ### Changed
