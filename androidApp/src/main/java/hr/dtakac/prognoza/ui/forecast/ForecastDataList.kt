@@ -117,6 +117,7 @@ fun ForecastDataList(
                 item(key = "hourly-header") {
                     HourlyHeader(
                         lowHighTemperature = data.today.lowHighTemperature.asString(),
+                        precipitation = data.today.precipitation.asString(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(itemPadding)
@@ -162,7 +163,9 @@ fun ForecastDataList(
                 Text(
                     text = data.provider.asString(),
                     style = PrognozaTheme.typography.body,
-                    modifier = Modifier.padding(itemPadding).padding(top = 12.dp),
+                    modifier = Modifier
+                        .padding(itemPadding)
+                        .padding(top = 12.dp),
                     color = MaterialTheme.colorScheme.secondary
                 )
             }
@@ -250,6 +253,7 @@ private fun fakeCurrentUi(): CurrentUi = CurrentUi(
 
 private fun fakeTodayUi(): TodayUi = TodayUi(
     lowHighTemperature = TextResource.fromString("135°—197°"),
+    precipitation = TextResource.fromString("13 mm"),
     hourly = mutableListOf<DayHourUi>().apply {
         for (i in 1..4) {
             add(

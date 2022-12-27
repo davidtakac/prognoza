@@ -98,6 +98,10 @@ class Forecast(
             hourly = hourly,
             highTemperature = hourly.maxOf { it.temperature },
             lowTemperature = hourly.minOf { it.temperature },
+            precipitation = Length(
+                value = hourly.sumOf { it.precipitation.millimetre },
+                unit = LengthUnit.MILLIMETRE
+            )
         )
     }
 
@@ -167,6 +171,7 @@ data class HourlyDatum(
 data class Today(
     val highTemperature: Temperature,
     val lowTemperature: Temperature,
+    val precipitation: Length,
     val hourly: List<HourlyDatum>
 )
 

@@ -73,6 +73,10 @@ class ForecastUiMapper @Inject constructor(
             today.highTemperature,
             temperatureUnit
         ),
+        precipitation = getPrecipitation(
+            precipitation = today.precipitation,
+            unit = precipitationUnit
+        ),
         hourly = today.hourly.map { datum ->
             getDayHourUi(
                 datum,

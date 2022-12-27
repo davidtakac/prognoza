@@ -31,6 +31,7 @@ data class CurrentUi(
 
 data class TodayUi(
     val lowHighTemperature: TextResource,
+    val precipitation: TextResource,
     val hourly: List<DayHourUi>
 )
 

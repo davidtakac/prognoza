@@ -6,6 +6,7 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -15,16 +16,27 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun HourlyHeader(
     lowHighTemperature: String,
+    precipitation: String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             ProvideTextStyle(PrognozaTheme.typography.titleSmall) {
                 Text(stringResource(id = R.string.hourly))
-                Text(lowHighTemperature)
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    precipitation.takeIf { it.isNotEmpty() }?.let {
+                        Text(
+                            text = it,
+                            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+                            modifier = Modifier.padding(end = 12.dp)
+                        )
+                    }
+                    Text(lowHighTemperature)
+                }
             }
         }
         Divider(
