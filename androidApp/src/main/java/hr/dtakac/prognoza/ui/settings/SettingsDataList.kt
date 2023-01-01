@@ -39,7 +39,7 @@ fun SettingsList(
         modifier = modifier
             .fillMaxSize()
             .padding(WindowInsets.navigationBars.asPaddingValues()),
-        contentPadding = PaddingValues(vertical = 24.dp),
+        contentPadding = PaddingValues(top = 24.dp),
         state = listState
     ) {
         item(key = "settings") {

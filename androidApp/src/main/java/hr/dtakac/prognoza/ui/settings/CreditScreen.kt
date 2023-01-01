@@ -57,8 +57,10 @@ fun LicensesAndCreditScreen(
             }
             LazyColumn(
                 state = listState,
-                contentPadding = PaddingValues(vertical = 24.dp),
-                modifier = Modifier.fillMaxSize()
+                contentPadding = PaddingValues(top = 24.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(WindowInsets.navigationBars.asPaddingValues())
             ) {
                 item(key = "screen-title") {
                     Text(
