@@ -1,7 +1,10 @@
+import hr.dtakac.prognoza.shared.entity.ForecastProvider;
+
 CREATE TABLE IF NOT EXISTS PrognozaMeta (
     `latitude` REAL NOT NULL,
     `longitude` REAL NOT NULL,
     `lastUpdatedEpochMillis` INTEGER NOT NULL,
+    `provider` TEXT AS ForecastProvider NOT NULL,
     PRIMARY KEY (`latitude`, `longitude`)
 );
 

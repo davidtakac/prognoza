@@ -56,6 +56,8 @@ internal class InternalPrognozaSdkFactory constructor(
         val forecastRepository = DatabaseForecastRepository(
             forecastQueries = database.forecastQueries,
             metaQueries = database.prognozaMetaQueries,
+            openMeteoProvider = openMeteoProvider,
+            metNorwayProvider = metNorwayProvider,
             computationDispatcher = computationDispatcher,
             ioDispatcher = ioDispatcher
         )
@@ -78,14 +80,11 @@ internal class InternalPrognozaSdkFactory constructor(
         val getPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
         val actualGetForecast = ActualGetForecast(
             getSelectedPlace = getSelectedPlace,
-            savedForecastGetter = forecastRepository,
-            forecastSaver = forecastRepository,
             getForecastProvider = getForecastProvider,
             getTemperatureUnit = getTemperatureUnit,
             getPrecipitationUnit = getPrecipitationUnit,
             getWindUnit = getWindUnit,
-            openMeteoProvider = openMeteoProvider,
-            metNorwayProvider = metNorwayProvider
+            forecastRepository = forecastRepository
         )
 
         return object : PrognozaSdk {
@@ -153,6 +152,9 @@ internal class InternalPrognozaSdkFactory constructor(
             windUnitAdapter = speedUnitSqlAdapter,
             pressureUnitAdapter = pressureUnitSqlAdapter,
             forecastProviderAdapter = forecastProviderAdapter
+        ),
+        PrognozaMetaAdapter = PrognozaMeta.Adapter(
+            providerAdapter = forecastProviderAdapter
         )
     )
 
