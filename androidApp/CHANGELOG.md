@@ -16,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added 
 - Open-Meteo weather data provider
 - Separate credit and licenses screen
-- Today's precipitation in hourly header
 - Data provider footers when searching places and displaying forecast
 ### Fixed
 - Widget sharp corners on <= Android 11

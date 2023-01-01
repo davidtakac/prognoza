@@ -34,8 +34,11 @@
 </p>
 
 ## Features
+- Multiple weather data providers
 - Weather for today and coming days
-- App mood changes based on current conditions
+- App color based on: 
+  - Current weather
+  - (Android 12+) System color
 - Dark and light theme
 - Multiple measurement units
 - Widgets
@@ -59,7 +62,10 @@
 - Splash screen
 
 ## Credit
-- Forecast data by [MET Norway](https://www.met.no/en)
+- Forecast data by:
+  - [MET Norway](https://www.met.no/en)
+  - [Open-Meteo](https://open-meteo.com/)
+- Weather icons by [MET Norway](https://www.met.no/en)
 - Geolocation data by [OSM Nominatim](https://nominatim.org/)
 - Design by [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2)
 - App icon by [Nataša Takač](https://www.instagram.com/art.ofil/)
