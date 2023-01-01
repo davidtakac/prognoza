@@ -16,7 +16,6 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 @Composable
 fun HourlyHeader(
     lowHighTemperature: String,
-    precipitation: String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -27,16 +26,7 @@ fun HourlyHeader(
         ) {
             ProvideTextStyle(PrognozaTheme.typography.titleSmall) {
                 Text(stringResource(id = R.string.hourly))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    precipitation.takeIf { it.isNotEmpty() }?.let {
-                        Text(
-                            text = it,
-                            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-                            modifier = Modifier.padding(end = 12.dp)
-                        )
-                    }
-                    Text(lowHighTemperature)
-                }
+                Text(lowHighTemperature)
             }
         }
         Divider(

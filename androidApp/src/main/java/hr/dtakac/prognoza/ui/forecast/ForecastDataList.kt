@@ -117,7 +117,6 @@ fun ForecastDataList(
                 item(key = "hourly-header") {
                     HourlyHeader(
                         lowHighTemperature = data.today.lowHighTemperature.asString(),
-                        precipitation = data.today.precipitation.asString(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(itemPadding)
