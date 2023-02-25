@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.ui.forecast
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.RectangleShape
@@ -15,16 +16,20 @@ fun ForecastScreen(
     onSettingsClick: () -> Unit = {},
     onPlaceSelected: () -> Unit = {}
 ) {
-    // Hide keyboard when drawer is closed
     val focusManager = LocalFocusManager.current
     val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
     LaunchedEffect(drawerState.isClosed) {
         if (drawerState.isClosed) {
             focusManager.clearFocus()
         }
     }
+    BackHandler(enabled = drawerState.isOpen) {
+        scope.launch {
+            drawerState.close()
+        }
+    }
 
-    val scope = rememberCoroutineScope()
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {

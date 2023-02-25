@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - iOS support
 
+## [Unreleased]
+### Fixed
+- Hide drawer when back pressed
+
 ## [3.4.0] - 2023-02-25
 ### Added
 - German translations
