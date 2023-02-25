@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - iOS support
 
+## [Unreleased]
+### Added
+- German translations
+- Russian translations
+
 ## [3.3.0] - 2023-01-01
 ### Changed
 - Shorter weather condition descriptions

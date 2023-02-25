@@ -20,7 +20,7 @@ android {
         // Before pushing to release, make sure this value matches the latest one in CHANGELOG.md
         versionName = "3.3.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        resourceConfigurations.addAll(listOf("en", "hr"))
+        resourceConfigurations.addAll(listOf("en", "hr", "de"))
     }
 
     signingConfigs {
