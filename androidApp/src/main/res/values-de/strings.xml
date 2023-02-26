@@ -3,9 +3,9 @@
 
     <!--Weather descriptions-->
     <string name="description_unknown">Unbekannt</string>
-    <string name="description_clear_sky">Klar</string>
+    <string name="description_clear_sky">Wolkenlos</string>
     <string name="description_cloudy">Bewölkt</string>
-    <string name="description_fair">Sonnig</string>
+    <string name="description_fair">Heiter</string>
     <string name="description_fog">Nebel</string>
     <string name="description_heavy_rain">Starker Regen</string>
     <string name="description_heavy_rain_and_thunder">Heftiges Gewitter</string>
