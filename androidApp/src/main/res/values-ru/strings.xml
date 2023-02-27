@@ -57,7 +57,7 @@
     <string name="direction_nw">СЗ</string>
 
     <string name="template_temperature_degrees">%1$s°</string>
-    <string name="template_feels_like">Ощущается как %1$s</string>
+    <string name="template_feels_like">Ощущается\n %1$s</string>
     <string name="template_precipitation_mm">%1$s\u00A0mm</string>
     <string name="template_precipitation_in">%1$s\u00A0in</string>
     <string name="template_precipitation_cm">%1$s\u00A0cm</string>
