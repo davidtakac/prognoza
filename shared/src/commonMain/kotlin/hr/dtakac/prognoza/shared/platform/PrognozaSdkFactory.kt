@@ -9,7 +9,7 @@ import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
 import hr.dtakac.prognoza.shared.data.openmeteo.CachedOpenMeteoResponseQueries
 import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoForecastProvider
 import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoMetaQueries
-import hr.dtakac.prognoza.shared.data.openmeteo.geocoding.OpenMeteoPlaceProvider
+import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoPlaceProvider
 import hr.dtakac.prognoza.shared.data.openmeteo.network.OpenMeteoForecastService
 import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*

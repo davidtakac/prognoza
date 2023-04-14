@@ -93,13 +93,6 @@ fun LicensesAndCreditScreen(
                         onClick = { openLink("https://open-meteo.com/en/features#terms", context) }
                     )
                 }
-                item(key = "osm") {
-                    SettingItem(
-                        name = stringResource(id = R.string.osm_nominatim_credit),
-                        value = stringResource(id = R.string.osm_nominatim_credit_description),
-                        onClick = { openLink("https://www.openstreetmap.org/copyright", context) }
-                    )
-                }
                 item(key = "weather-icons") {
                     SettingItem(
                         name = stringResource(id = R.string.weather_icons_title),
