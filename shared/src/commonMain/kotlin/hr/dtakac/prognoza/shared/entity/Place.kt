@@ -1,7 +1,10 @@
 package hr.dtakac.prognoza.shared.entity
 
+import kotlinx.datetime.TimeZone
+
 data class Place(
     val name: String,
+    val timeZone: TimeZone,
     val details: String?,
     val latitude: Double,
     val longitude: Double
