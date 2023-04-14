@@ -12,14 +12,14 @@ class Percentage(
     }
 
     val percent: Double = calculatePercent(value, unit)
-    val fraction: Double = if (unit == PercentageUnit.FRACTION) value else value / 100
+    val fraction: Double = if (unit == PercentageUnit.Fraction) value else value / 100
 
     private fun calculatePercent(
         value: Double,
         unit: PercentageUnit
-    ): Double = if (unit == PercentageUnit.PERCENT) value else value * 100
+    ): Double = if (unit == PercentageUnit.Percent) value else value * 100
 }
 
 enum class PercentageUnit {
-    PERCENT, FRACTION
+    Percent, Fraction
 }

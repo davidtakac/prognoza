@@ -12,7 +12,7 @@ class Temperature(
     }
 
     val celsius: Double = calculateCelsius(value, unit)
-    val fahrenheit: Double = if (unit == TemperatureUnit.DEGREE_FAHRENHEIT) value else celsius * 1.8 + 32
+    val fahrenheit: Double = if (unit == TemperatureUnit.DegreeFahrenheit) value else celsius * 1.8 + 32
 
     override fun compareTo(other: Temperature): Int {
         return celsius.compareTo(other.celsius)
@@ -21,10 +21,10 @@ class Temperature(
     private fun calculateCelsius(
         value: Double,
         unit: TemperatureUnit
-    ): Double = if (unit == TemperatureUnit.DEGREE_CELSIUS) value else (value - 32) / 1.8
+    ): Double = if (unit == TemperatureUnit.DegreeCelsius) value else (value - 32) / 1.8
 }
 
 enum class TemperatureUnit {
-    DEGREE_CELSIUS,
-    DEGREE_FAHRENHEIT
+    DegreeCelsius,
+    DegreeFahrenheit
 }

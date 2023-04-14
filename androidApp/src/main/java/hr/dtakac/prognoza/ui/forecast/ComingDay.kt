@@ -34,7 +34,6 @@ import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.ComingDayHourUi
 import hr.dtakac.prognoza.presentation.forecast.ComingDayUi
-import hr.dtakac.prognoza.shared.entity.Description
 import hr.dtakac.prognoza.ui.common.calculateMaxWidth
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme

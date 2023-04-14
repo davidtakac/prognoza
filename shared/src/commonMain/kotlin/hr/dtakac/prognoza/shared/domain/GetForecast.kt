@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.shared.domain
 
 import hr.dtakac.prognoza.shared.domain.data.*
 import hr.dtakac.prognoza.shared.entity.*
-import hr.dtakac.prognoza.shared.entity.ForecastProvider
 import kotlinx.datetime.TimeZone
 import kotlin.time.Duration
 
@@ -51,7 +50,7 @@ internal class ActualGetForecast internal constructor(
 
     private suspend fun mapToResult(
         place: Place,
-        data: List<ForecastDatum>,
+        data: List<Hour>,
         provider: ForecastProvider
     ): GetForecastResult = if (data.isEmpty()) {
         GetForecastResult.Empty.Error

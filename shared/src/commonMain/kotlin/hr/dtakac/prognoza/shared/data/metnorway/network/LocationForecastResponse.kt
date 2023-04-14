@@ -152,7 +152,7 @@ internal data class ForecastUnits(
 internal fun mapAdjacentTimeStepsToEntity(
     current: ForecastTimeStep,
     next: ForecastTimeStep?
-): ForecastDatum? {
+): Hour? {
     val endInstant = next?.time?.let { Instant.parse(it) } ?: return null
     val startInstant = Instant.parse(current.time)
 
@@ -171,37 +171,37 @@ internal fun mapAdjacentTimeStepsToEntity(
         }
     }
 
-    return ForecastDatum(
-        startEpochMillis = startInstant.toEpochMilliseconds(),
+    return Hour(
+        unixSecond = startInstant.toEpochMilliseconds(),
         endEpochMillis = endInstant.toEpochMilliseconds(),
         temperature = Temperature(
             value = current.data.instant.data.airTemperature,
-            unit = TemperatureUnit.DEGREE_CELSIUS
+            unit = TemperatureUnit.DegreeCelsius
         ),
         description = details?.summary?.symbolCode?.let {
             mapToDescription(it)
         } ?: Description.UNKNOWN,
         precipitation = Length(
             value = details?.data?.precipitationAmount ?: 0.0,
-            unit = LengthUnit.MILLIMETRE
+            unit = LengthUnit.Millimetre
         ),
         wind = Wind(
             speed = Speed(
                 value = current.data.instant.data.windSpeed,
-                unit = SpeedUnit.METRE_PER_SECOND
+                unit = SpeedUnit.MetrePerSecond
             ),
-            fromDirection = Angle(
+            direction = Angle(
                 value = current.data.instant.data.windFromDirection,
-                unit = AngleUnit.DEGREE
+                unit = AngleUnit.Degree
             )
         ),
-        humidity = Percentage(
+        relativeHumidity = Percentage(
             value = current.data.instant.data.relativeHumidity,
-            unit = PercentageUnit.PERCENT
+            unit = PercentageUnit.Percent
         ),
-        airPressure = Pressure(
+        pressureAtSeaLevel = Pressure(
             value = current.data.instant.data.airPressureAtSeaLevel,
-            unit = PressureUnit.MILLIBAR
+            unit = PressureUnit.Millibar
         )
     )
 }

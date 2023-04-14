@@ -45,8 +45,8 @@ internal data class OpenMeteoDaily(
     val sunsetEpochSeconds: List<Long>
 )
 
-internal fun OpenMeteoResponse.mapToEntities(): List<ForecastDatum> {
-    val result = mutableListOf<ForecastDatum>()
+internal fun OpenMeteoResponse.mapToEntities(): List<Hour> {
+    val result = mutableListOf<Hour>()
     for (i in hourly.epochSeconds.indices) {
         val currEpochSeconds = hourly.epochSeconds[i]
         val nextEpochSeconds = hourly.epochSeconds.getOrNull(i + 1) ?: break
@@ -58,40 +58,40 @@ internal fun OpenMeteoResponse.mapToEntities(): List<ForecastDatum> {
                 sunsets = daily.sunsetEpochSeconds
             )
         )
-        val datum = ForecastDatum(
-            startEpochMillis = currEpochSeconds * 1000,
+        val datum = Hour(
+            unixSecond = currEpochSeconds * 1000,
             endEpochMillis = nextEpochSeconds * 1000,
             temperature = Temperature(
                 value = hourly.temperature[i],
-                unit = TemperatureUnit.DEGREE_CELSIUS
+                unit = TemperatureUnit.DegreeCelsius
             ),
             precipitation = Length(
                 value = hourly.precipitation[i],
-                unit = LengthUnit.MILLIMETRE
+                unit = LengthUnit.Millimetre
             ),
             wind = Wind(
                 speed = Speed(
                     value = hourly.windSpeed[i],
-                    unit = SpeedUnit.KILOMETRE_PER_HOUR
+                    unit = SpeedUnit.KilometrePerHour
                 ),
-                fromDirection = Angle(
+                direction = Angle(
                     value = hourly.windDirection[i].toDouble(),
-                    unit = AngleUnit.DEGREE
+                    unit = AngleUnit.Degree
                 )
             ),
-            airPressure = Pressure(
+            pressureAtSeaLevel = Pressure(
                 value = hourly.airPressure[i],
-                unit = PressureUnit.MILLIBAR
+                unit = PressureUnit.Millibar
             ),
             description = description,
             mood = Mood.fromDescription(description),
-            humidity = Percentage(
+            relativeHumidity = Percentage(
                 value = hourly.relativeHumidity[i],
-                unit = PercentageUnit.PERCENT
+                unit = PercentageUnit.Percent
             ),
             feelsLike = Temperature(
                 value = hourly.feelsLike[i],
-                unit = TemperatureUnit.DEGREE_CELSIUS
+                unit = TemperatureUnit.DegreeCelsius
             )
         )
         result.add(datum)

@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.glance.LocalContext
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.shared.entity.Description
 
 // Accessing drawables this way instead of putting them in drawable and drawable-night
 // dirs is required to make them dynamic based on the current theme. Not scalable at all.

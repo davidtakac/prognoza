@@ -36,7 +36,7 @@ class AngleTest {
             345.0 to CompassDirection.NW
         )
         degreesToExpectedDirections.keys
-            .map { it to Angle(it, AngleUnit.DEGREE).compassDirection }
+            .map { it to Angle(it, AngleUnit.Degree).compassDirection }
             .forEach { (degrees, actualDirection) ->
                 assertEquals(
                     expected = degreesToExpectedDirections[degrees]!!,
@@ -48,32 +48,32 @@ class AngleTest {
     @Test
     fun `direction is west when angle is -90 deg`() = assertEquals(
         expected = CompassDirection.W,
-        actual = Angle(-90.0, AngleUnit.DEGREE).compassDirection
+        actual = Angle(-90.0, AngleUnit.Degree).compassDirection
     )
 
     @Test
     fun `direction is west when angle is -450 deg`() = assertEquals(
         expected = CompassDirection.W,
-        actual = Angle(-450.0, AngleUnit.DEGREE).compassDirection
+        actual = Angle(-450.0, AngleUnit.Degree).compassDirection
     )
 
     @Test
     fun `direction is east when angle is 450 deg`() = assertEquals(
         expected = CompassDirection.E,
-        actual = Angle(450.0, AngleUnit.DEGREE).compassDirection
+        actual = Angle(450.0, AngleUnit.Degree).compassDirection
     )
 
     @Test
     fun `radians are pi when angle is 180 deg`() = assertEquals(
         expected = PI,
-        actual = Angle(180.0, AngleUnit.DEGREE).radian,
+        actual = Angle(180.0, AngleUnit.Degree).radian,
         absoluteTolerance = tolerance
     )
 
     @Test
     fun `degrees are 180 when angle is pi rad`() = assertEquals(
         expected = 180.0,
-        actual = Angle(PI, AngleUnit.RADIAN).degree,
+        actual = Angle(PI, AngleUnit.Radian).degree,
         absoluteTolerance = tolerance
     )
 }

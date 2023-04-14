@@ -49,15 +49,15 @@ class ForecastTest {
         assertNull(forecast.coming)
     }
 
-    private fun getHourDatum(start: Instant): ForecastDatum = ForecastDatum(
-        startEpochMillis = start.toEpochMilliseconds(),
+    private fun getHourDatum(start: Instant): Hour = Hour(
+        unixSecond = start.toEpochMilliseconds(),
         endEpochMillis = start.plus(1, DateTimeUnit.HOUR).toEpochMilliseconds(),
-        temperature = Temperature(0.0, TemperatureUnit.DEGREE_CELSIUS),
-        precipitation = Length(0.0, LengthUnit.MILLIMETRE),
-        wind = Wind(Speed(0.0, SpeedUnit.KILOMETRE_PER_HOUR), Angle(45.0, AngleUnit.DEGREE)),
-        airPressure = Pressure(0.25, PressureUnit.MILLIBAR),
+        temperature = Temperature(0.0, TemperatureUnit.DegreeCelsius),
+        precipitation = Length(0.0, LengthUnit.Millimetre),
+        wind = Wind(Speed(0.0, SpeedUnit.KilometrePerHour), Angle(45.0, AngleUnit.Degree)),
+        pressureAtSeaLevel = Pressure(0.25, PressureUnit.Millibar),
         description = Description.CLEAR_SKY_DAY,
-        humidity = Percentage(0.5, PercentageUnit.FRACTION)
+        relativeHumidity = Percentage(0.5, PercentageUnit.Fraction)
     )
 
     private fun getStartOfDay() = LocalDateTime(

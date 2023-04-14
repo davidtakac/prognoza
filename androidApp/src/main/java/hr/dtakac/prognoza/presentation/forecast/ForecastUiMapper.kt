@@ -138,17 +138,17 @@ class ForecastUiMapper @Inject constructor(
     ): TextResource {
         val precipitationValue = BigDecimal(
             when (unit) {
-                LengthUnit.MILLIMETRE -> precipitation.millimetre
-                LengthUnit.INCH -> precipitation.inch
-                LengthUnit.CENTIMETRE -> precipitation.centimetre
+                LengthUnit.Millimetre -> precipitation.millimetre
+                LengthUnit.Inch -> precipitation.inch
+                LengthUnit.Centimetre -> precipitation.centimetre
             }
         ).setScale(1, RoundingMode.HALF_EVEN)
 
         return if (precipitationValue.compareTo(BigDecimal.ZERO) == 0) TextResource.empty() else {
             val precipitationTemplateId = when (unit) {
-                LengthUnit.MILLIMETRE -> R.string.template_precipitation_mm
-                LengthUnit.INCH -> R.string.template_precipitation_in
-                LengthUnit.CENTIMETRE -> R.string.template_precipitation_cm
+                LengthUnit.Millimetre -> R.string.template_precipitation_mm
+                LengthUnit.Inch -> R.string.template_precipitation_in
+                LengthUnit.Centimetre -> R.string.template_precipitation_cm
             }
             TextResource.fromStringId(
                 id = precipitationTemplateId,
@@ -162,19 +162,19 @@ class ForecastUiMapper @Inject constructor(
     ): TextResource {
         val windSpeedValue = BigDecimal(
             when (windSpeedUnit) {
-                SpeedUnit.METRE_PER_SECOND -> wind.speed.metrePerSecond
-                SpeedUnit.KILOMETRE_PER_HOUR -> wind.speed.kilometrePerHour
-                SpeedUnit.MILE_PER_HOUR -> wind.speed.milePerHour
-                SpeedUnit.KNOT -> wind.speed.knot
+                SpeedUnit.MetrePerSecond -> wind.speed.metrePerSecond
+                SpeedUnit.KilometrePerHour -> wind.speed.kilometrePerHour
+                SpeedUnit.MilePerHour -> wind.speed.milePerHour
+                SpeedUnit.Knot -> wind.speed.knot
             }
         ).setScale(0, RoundingMode.HALF_EVEN)
 
         val windSpeedText = if (windSpeedValue.compareTo(BigDecimal.ZERO) == 0) null else {
             val windSpeedTemplateId = when (windSpeedUnit) {
-                SpeedUnit.METRE_PER_SECOND -> R.string.template_wind_mps
-                SpeedUnit.KILOMETRE_PER_HOUR -> R.string.template_wind_kmh
-                SpeedUnit.MILE_PER_HOUR -> R.string.template_wind_mph
-                SpeedUnit.KNOT -> R.string.template_wind_knots
+                SpeedUnit.MetrePerSecond -> R.string.template_wind_mps
+                SpeedUnit.KilometrePerHour -> R.string.template_wind_kmh
+                SpeedUnit.MilePerHour -> R.string.template_wind_mph
+                SpeedUnit.Knot -> R.string.template_wind_knots
             }
             TextResource.fromStringId(
                 id = windSpeedTemplateId,

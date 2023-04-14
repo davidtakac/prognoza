@@ -1,8 +1,6 @@
 package hr.dtakac.prognoza.presentation.forecast
 
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.shared.entity.Description
-import hr.dtakac.prognoza.shared.entity.Mood
 
 data class ForecastState(
     val isLoading: Boolean = false,

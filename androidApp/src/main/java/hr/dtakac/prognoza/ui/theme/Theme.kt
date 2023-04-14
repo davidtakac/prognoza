@@ -15,7 +15,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import hr.dtakac.prognoza.shared.entity.Mood
 import hr.dtakac.prognoza.ui.theme.colors.*
 
 private val LocalTypography = staticCompositionLocalOf {

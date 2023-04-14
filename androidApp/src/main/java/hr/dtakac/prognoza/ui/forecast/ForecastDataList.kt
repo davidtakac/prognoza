@@ -15,8 +15,6 @@ import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.forecast.*
-import hr.dtakac.prognoza.shared.entity.Description
-import hr.dtakac.prognoza.shared.entity.Mood
 import hr.dtakac.prognoza.ui.common.keyVisibilityPercent
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme

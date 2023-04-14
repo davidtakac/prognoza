@@ -23,7 +23,7 @@ class TemperatureTest {
             50.0 to 122.0
         )
         celsiusToExpectedFahrenheit.keys
-            .map { it to Temperature(it, TemperatureUnit.DEGREE_CELSIUS).fahrenheit }
+            .map { it to Temperature(it, TemperatureUnit.DegreeCelsius).fahrenheit }
             .forEach { (celsius, actualFahrenheit) ->
                 assertEquals(
                     expected = celsiusToExpectedFahrenheit[celsius]!!,
@@ -49,7 +49,7 @@ class TemperatureTest {
             122.0 to 50.0
         )
         fahrenheitToExpectedCelsius.keys
-            .map { it to Temperature(it, TemperatureUnit.DEGREE_FAHRENHEIT).celsius }
+            .map { it to Temperature(it, TemperatureUnit.DegreeFahrenheit).celsius }
             .forEach { (fahrenheit, actualCelsius) ->
                 assertEquals(
                     expected = fahrenheitToExpectedCelsius[fahrenheit]!!,
@@ -62,7 +62,7 @@ class TemperatureTest {
     @Test
     fun `throws exception when celsius less than 0K`() {
         assertFailsWith<IllegalStateException> {
-            Temperature(-280.0, TemperatureUnit.DEGREE_CELSIUS)
+            Temperature(-280.0, TemperatureUnit.DegreeCelsius)
         }
     }
 }

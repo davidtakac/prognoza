@@ -5,7 +5,6 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.shared.entity.*
 import hr.dtakac.prognoza.shared.entity.BeaufortScale.*
-import hr.dtakac.prognoza.shared.entity.Description.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 
@@ -17,8 +16,8 @@ fun getTemperature(
     TextResource.fromNumber(
         BigDecimal(
             when (unit) {
-                TemperatureUnit.DEGREE_CELSIUS -> temperature.celsius
-                TemperatureUnit.DEGREE_FAHRENHEIT -> temperature.fahrenheit
+                TemperatureUnit.DegreeCelsius -> temperature.celsius
+                TemperatureUnit.DegreeFahrenheit -> temperature.fahrenheit
             }
         ).setScale(0, RoundingMode.HALF_EVEN)
     )
@@ -38,9 +37,9 @@ fun CompassDirection.toCompassDirectionStringId(): Int = when (this) {
 
 @StringRes
 fun BeaufortScale.toStringId(): Int = when (this) {
-    CALM -> R.string.wind_calm
-    LIGHT_AIR -> R.string.wind_light_air
-    LIGHT_BREEZE -> R.string.wind_light_breeze
+    Calm -> R.string.wind_calm
+    LightAir -> R.string.wind_light_air
+    LightBreeze -> R.string.wind_light_breeze
     GENTLE_BREEZE -> R.string.wind_gentle_breeze
     MODERATE_BREEZE -> R.string.wind_moderate_breeze
     FRESH_BREEZE -> R.string.wind_fresh_breeze

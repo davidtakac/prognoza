@@ -8,29 +8,29 @@ import hr.dtakac.prognoza.shared.entity.*
 
 @StringRes
 fun TemperatureUnit.toSettingsLabel(): Int = when (this) {
-    TemperatureUnit.DEGREE_CELSIUS -> R.string.settings_label_celsius
-    TemperatureUnit.DEGREE_FAHRENHEIT -> R.string.settings_label_fahrenheit
+    TemperatureUnit.DegreeCelsius -> R.string.settings_label_celsius
+    TemperatureUnit.DegreeFahrenheit -> R.string.settings_label_fahrenheit
 }
 
 @StringRes
 fun SpeedUnit.toSettingsLabel(): Int = when (this) {
-    SpeedUnit.METRE_PER_SECOND -> R.string.settings_label_mps
-    SpeedUnit.KILOMETRE_PER_HOUR -> R.string.settings_label_kph
-    SpeedUnit.MILE_PER_HOUR -> R.string.settings_label_mph
-    SpeedUnit.KNOT -> R.string.settings_label_knots
+    SpeedUnit.MetrePerSecond -> R.string.settings_label_mps
+    SpeedUnit.KilometrePerHour -> R.string.settings_label_kph
+    SpeedUnit.MilePerHour -> R.string.settings_label_mph
+    SpeedUnit.Knot -> R.string.settings_label_knots
 }
 
 @StringRes
 fun LengthUnit.toSettingsLabel(): Int = when (this) {
-    LengthUnit.MILLIMETRE -> R.string.settings_label_mm
-    LengthUnit.INCH -> R.string.settings_label_in
-    LengthUnit.CENTIMETRE -> R.string.settings_label_cm
+    LengthUnit.Millimetre -> R.string.settings_label_mm
+    LengthUnit.Inch -> R.string.settings_label_in
+    LengthUnit.Centimetre -> R.string.settings_label_cm
 }
 
 @StringRes
 fun PressureUnit.toSettingsLabel(): Int = when (this) {
-    PressureUnit.MILLIBAR -> R.string.settings_label_mbar
-    PressureUnit.INCH_OF_MERCURY -> R.string.settings_label_inhg
+    PressureUnit.Millibar -> R.string.settings_label_mbar
+    PressureUnit.InchOfMercury -> R.string.settings_label_inhg
 }
 
 @StringRes

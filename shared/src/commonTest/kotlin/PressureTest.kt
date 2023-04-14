@@ -10,21 +10,21 @@ class PressureTest {
     @Test
     fun `throws exception when negative`() {
         assertFailsWith<IllegalStateException> {
-            Pressure(-98.0, PressureUnit.MILLIBAR)
+            Pressure(-98.0, PressureUnit.Millibar)
         }
     }
 
     @Test
     fun `converts from millibar to inches of mercury`() = assertEquals(
         expected = 0.0886,
-        actual = Pressure(3.0, PressureUnit.MILLIBAR).inchOfMercury,
+        actual = Pressure(3.0, PressureUnit.Millibar).inchOfMercury,
         absoluteTolerance = tolerance
     )
 
     @Test
     fun `converts from inches of mercury to millibar`() = assertEquals(
         expected = 101.5917,
-        actual = Pressure(3.0, PressureUnit.INCH_OF_MERCURY).millibar,
+        actual = Pressure(3.0, PressureUnit.InchOfMercury).millibar,
         absoluteTolerance = tolerance
     )
 }

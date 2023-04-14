@@ -17,13 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.shared.entity.Mood
 import hr.dtakac.prognoza.ui.common.AppToolbar
 import hr.dtakac.prognoza.ui.common.AppToolbarState
 import hr.dtakac.prognoza.ui.common.ContentLoadingIndicatorHost
 import hr.dtakac.prognoza.ui.common.rememberAppToolbarState
 import hr.dtakac.prognoza.ui.theme.AppTheme
-import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun AppToolbarWithLoadingIndicator(

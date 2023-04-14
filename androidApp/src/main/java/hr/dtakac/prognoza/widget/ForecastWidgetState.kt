@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.widget
 
-import hr.dtakac.prognoza.shared.entity.Description
 import hr.dtakac.prognoza.shared.entity.Temperature
 import hr.dtakac.prognoza.shared.entity.TemperatureUnit
 import kotlinx.serialization.KSerializer
@@ -45,7 +44,7 @@ private object TemperatureSerializer : KSerializer<Temperature> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("temperature", PrimitiveKind.DOUBLE)
 
     override fun deserialize(decoder: Decoder): Temperature {
-        return Temperature(value = decoder.decodeDouble(), unit = TemperatureUnit.DEGREE_CELSIUS)
+        return Temperature(value = decoder.decodeDouble(), unit = TemperatureUnit.DegreeCelsius)
     }
 
     override fun serialize(encoder: Encoder, value: Temperature) {

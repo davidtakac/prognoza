@@ -4,7 +4,7 @@ import hr.dtakac.prognoza.shared.domain.data.ForecastProvider
 import hr.dtakac.prognoza.shared.domain.data.ForecastProviderResult
 import hr.dtakac.prognoza.shared.domain.data.ForecastRepository
 import hr.dtakac.prognoza.shared.domain.data.ForecastRepositoryResult
-import hr.dtakac.prognoza.shared.entity.ForecastDatum
+import hr.dtakac.prognoza.shared.entity.Hour
 import hr.dtakac.prognoza.shared.entity.Wind
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -46,16 +46,16 @@ internal class DatabaseForecastRepository(
         } else withContext(computationDispatcher) {
             ForecastRepositoryResult.Success(
                 data = data.map {
-                    ForecastDatum(
-                        startEpochMillis = it.startEpochMillis,
+                    Hour(
+                        unixSecond = it.startEpochMillis,
                         endEpochMillis = it.endEpochMillis,
                         temperature = it.temperature,
                         precipitation = it.precipitation,
-                        wind = Wind(speed = it.windSpeed, fromDirection = it.windFromDirection),
-                        airPressure = it.airPressureAtSeaLevel,
+                        wind = Wind(speed = it.windSpeed, direction = it.windFromDirection),
+                        pressureAtSeaLevel = it.airPressureAtSeaLevel,
                         description = it.description,
                         mood = it.mood,
-                        humidity = it.humidity
+                        relativeHumidity = it.humidity
                     )
                 },
                 provider = provider
@@ -102,7 +102,7 @@ internal class DatabaseForecastRepository(
             remove(latitude, longitude)
             data.forEach {
                 val dbModel = Forecast(
-                    startEpochMillis = it.startEpochMillis,
+                    startEpochMillis = it.unixSecond,
                     endEpochMillis = it.endEpochMillis,
                     latitude = latitude,
                     longitude = longitude,
@@ -111,9 +111,9 @@ internal class DatabaseForecastRepository(
                     mood = it.mood,
                     precipitation = it.precipitation,
                     windSpeed = it.wind.speed,
-                    windFromDirection = it.wind.fromDirection,
-                    humidity = it.humidity,
-                    airPressureAtSeaLevel = it.airPressure
+                    windFromDirection = it.wind.direction,
+                    humidity = it.relativeHumidity,
+                    airPressureAtSeaLevel = it.pressureAtSeaLevel
                 )
                 forecastQueries.insert(dbModel)
             }

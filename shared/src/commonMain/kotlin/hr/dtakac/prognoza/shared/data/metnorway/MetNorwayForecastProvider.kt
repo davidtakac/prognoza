@@ -5,7 +5,7 @@ import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
 import hr.dtakac.prognoza.shared.data.metnorway.network.mapAdjacentTimeStepsToEntity
 import hr.dtakac.prognoza.shared.domain.data.ForecastProvider
 import hr.dtakac.prognoza.shared.domain.data.ForecastProviderResult
-import hr.dtakac.prognoza.shared.entity.ForecastDatum
+import hr.dtakac.prognoza.shared.entity.Hour
 import io.github.aakira.napier.Napier
 import io.ktor.client.call.*
 import io.ktor.http.*
@@ -47,7 +47,7 @@ internal class MetNorwayForecastProvider(
             } else {
                 withContext(computationDispatcher) {
                     val timeSteps = response.forecast.forecastTimeSteps
-                    val data = mutableListOf<ForecastDatum>()
+                    val data = mutableListOf<Hour>()
                     for (i in timeSteps.indices) {
                         val datum = mapAdjacentTimeStepsToEntity(
                             current = timeSteps[i],

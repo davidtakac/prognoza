@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.domain.data
 
-import hr.dtakac.prognoza.shared.entity.ForecastDatum
+import hr.dtakac.prognoza.shared.entity.Hour
 
 internal interface ForecastProvider {
     suspend fun provide(
@@ -11,5 +11,5 @@ internal interface ForecastProvider {
 
 internal sealed interface ForecastProviderResult {
     object Error : ForecastProviderResult
-    data class Success(val data: List<ForecastDatum>): ForecastProviderResult
+    data class Success(val data: List<Hour>): ForecastProviderResult
 }

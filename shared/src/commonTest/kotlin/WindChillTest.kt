@@ -7,9 +7,9 @@ class WindChillTest {
 
     @Test // By chart from here https://www.weather.gov/media/lsx/wcm/Winter2008/Wind_Chill.pdf
     fun `calculates wind chill when wind and temperature are per NWS chart`() {
-        val windSpeed = Speed(20.0, SpeedUnit.MILE_PER_HOUR)
+        val windSpeed = Speed(20.0, SpeedUnit.MilePerHour)
         val temperaturesFahrenheit = (-45..40 step 5).map {
-            Temperature(it.toDouble(), TemperatureUnit.DEGREE_FAHRENHEIT)
+            Temperature(it.toDouble(), TemperatureUnit.DegreeFahrenheit)
         }
 
         val expectedWindChillTempsFahrenheit = listOf(
@@ -33,8 +33,8 @@ class WindChillTest {
 
     @Test
     fun `same as air temperature when wind speed 60mph and air temperature 80F`() {
-        val windSpeed = Speed(60.0, SpeedUnit.MILE_PER_HOUR)
-        val temperature = Temperature(80.0, TemperatureUnit.DEGREE_FAHRENHEIT)
+        val windSpeed = Speed(60.0, SpeedUnit.MilePerHour)
+        val temperature = Temperature(80.0, TemperatureUnit.DegreeFahrenheit)
         assertEquals(
             expected = temperature.fahrenheit,
             actual = calculateWindChill(temperature, windSpeed).fahrenheit,
@@ -44,8 +44,8 @@ class WindChillTest {
 
     @Test
     fun `same as air temperature when wind speed 2mph and air temperature 10F`() {
-        val windSpeed = Speed(2.0, SpeedUnit.MILE_PER_HOUR)
-        val temperature = Temperature(10.0, TemperatureUnit.DEGREE_FAHRENHEIT)
+        val windSpeed = Speed(2.0, SpeedUnit.MilePerHour)
+        val temperature = Temperature(10.0, TemperatureUnit.DegreeFahrenheit)
         assertEquals(
             expected = temperature.fahrenheit,
             actual = calculateWindChill(temperature, windSpeed).fahrenheit,
@@ -55,8 +55,8 @@ class WindChillTest {
 
     @Test
     fun `same as air temperature when wind speed 2mph and air temperature 85F`() {
-        val windSpeed = Speed(2.0, SpeedUnit.MILE_PER_HOUR)
-        val temperature = Temperature(85.0, TemperatureUnit.DEGREE_FAHRENHEIT)
+        val windSpeed = Speed(2.0, SpeedUnit.MilePerHour)
+        val temperature = Temperature(85.0, TemperatureUnit.DegreeFahrenheit)
         assertEquals(
             expected = temperature.fahrenheit,
             actual = calculateWindChill(temperature, windSpeed).fahrenheit,
