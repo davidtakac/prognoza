@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.data.prognoza
 
-import hr.dtakac.prognoza.shared.domain.data.SavedPlaceGetter
+import hr.dtakac.prognoza.shared.domain.data.PlaceRepository
 import hr.dtakac.prognoza.shared.domain.data.SettingsRepository
 import hr.dtakac.prognoza.shared.entity.LengthUnit
 import hr.dtakac.prognoza.shared.entity.PressureUnit
@@ -12,12 +12,12 @@ import hr.dtakac.prognoza.shared.entity.Place as PlaceEntity
 
 internal class DatabaseSettingsRepository(
     private val settingsQueries: SettingsQueries,
-    private val savedPlaceGetter: SavedPlaceGetter,
+    private val placeRepository: PlaceRepository,
     private val ioDispatcher: CoroutineDispatcher
 ) : SettingsRepository {
     override suspend fun getPlace(): PlaceEntity? {
         val settings = getSettings()
-        return savedPlaceGetter.get(
+        return placeRepository.get(
             latitude = settings.placeLatitude ?: 91.0,
             longitude = settings.placeLongitude ?: 181.0
         )

@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.shared.platform
 
+import com.squareup.sqldelight.EnumColumnAdapter
 import com.squareup.sqldelight.db.SqlDriver
 import hr.dtakac.prognoza.shared.PrognozaSdk
 import hr.dtakac.prognoza.shared.data.PrognozaDatabase
@@ -8,9 +9,8 @@ import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
 import hr.dtakac.prognoza.shared.data.openmeteo.CachedOpenMeteoResponseQueries
 import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoForecastProvider
 import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoMetaQueries
+import hr.dtakac.prognoza.shared.data.openmeteo.geocoding.OpenMeteoPlaceProvider
 import hr.dtakac.prognoza.shared.data.openmeteo.network.OpenMeteoForecastService
-import hr.dtakac.prognoza.shared.data.openmeteo.geocoding.OsmPlaceSearcher
-import hr.dtakac.prognoza.shared.data.openmeteo.geocoding.OsmPlaceService
 import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*
 import io.ktor.client.*
@@ -52,7 +52,7 @@ internal class InternalPrognozaSdkFactory constructor(
             metaQueries = database.openMeteoMetaQueries,
             cachedOpenMeteoResponseQueries = database.cachedOpenMeteoResponseQueries
         )
-        val placeSearcher = getOsmPlaceSearcher(userAgent)
+        val placeProvider = getOpenMeteoPlaceSearcher(userAgent)
         val forecastRepository = DatabaseForecastRepository(
             forecastQueries = database.forecastQueries,
             metaQueries = database.prognozaMetaQueries,
@@ -64,13 +64,11 @@ internal class InternalPrognozaSdkFactory constructor(
         val placeRepository = DatabasePlaceRepository(
             placeQueries = database.placeQueries,
             ioDispatcher = ioDispatcher,
-            computationDispatcher = computationDispatcher,
-            forecastQueries = database.forecastQueries,
-            metaQueries = database.prognozaMetaQueries
+            computationDispatcher = computationDispatcher
         )
         val settingsRepository = DatabaseSettingsRepository(
             settingsQueries = database.settingsQueries,
-            savedPlaceGetter = placeRepository,
+            placeRepository = placeRepository,
             ioDispatcher = ioDispatcher
         )
         val getSelectedPlace = GetSelectedPlace(settingsRepository)
@@ -104,18 +102,18 @@ internal class InternalPrognozaSdkFactory constructor(
             override val setWindUnit = SetWindUnit(settingsRepository)
             override val getForecast = GetForecastLatest(actualGetForecast)
             override val getForecastFrugal = GetForecastFrugal(actualGetForecast)
-            override val deleteSavedPlace = DeleteSavedPlace(placeRepository)
+            override val deleteSavedPlace = DeleteSavedPlace(placeRepository, forecastRepository)
             override val getForecastProvider = getForecastProvider
             override val setForecastProvider = SetForecastProvider(settingsRepository)
             override val getAllForecastProviders = GetAllForecastProviders()
 
             override val searchPlaces = SearchPlaces(
-                placeSearcher = placeSearcher,
+                placeProvider = placeProvider,
                 localRfc2616LanguageGetter = localRfc2616LanguageGetter
             )
 
             override val selectPlace = SelectPlace(
-                placeSaver = placeRepository,
+                placeRepository = placeRepository,
                 settingsRepository = settingsRepository
             )
         }
@@ -138,8 +136,8 @@ internal class InternalPrognozaSdkFactory constructor(
         driver = sqlDriver,
         ForecastAdapter = Forecast.Adapter(
             temperatureAdapter = temperatureSqlAdapter,
-            descriptionAdapter = descriptionSqlAdapter,
-            moodAdapter = moodSqlAdapter,
+            descriptionAdapter = EnumColumnAdapter(),
+            moodAdapter = EnumColumnAdapter(),
             precipitationAdapter = lengthSqlAdapter,
             windSpeedAdapter = speedSqlAdapter,
             windFromDirectionAdapter = angleSqlAdapter,
@@ -147,15 +145,14 @@ internal class InternalPrognozaSdkFactory constructor(
             airPressureAtSeaLevelAdapter = pressureSqlAdapter
         ),
         SettingsAdapter = Settings.Adapter(
-            temperatureUnitAdapter = temperatureUnitSqlAdapter,
-            precipitationUnitAdapter = lengthUnitSqlAdapter,
-            windUnitAdapter = speedUnitSqlAdapter,
-            pressureUnitAdapter = pressureUnitSqlAdapter,
-            forecastProviderAdapter = forecastProviderAdapter
+            temperatureUnitAdapter = EnumColumnAdapter(),
+            precipitationUnitAdapter = EnumColumnAdapter(),
+            windUnitAdapter = EnumColumnAdapter(),
+            pressureUnitAdapter = EnumColumnAdapter(),
+            forecastProviderAdapter = EnumColumnAdapter()
         ),
-        PrognozaMetaAdapter = PrognozaMeta.Adapter(
-            providerAdapter = forecastProviderAdapter
-        )
+        PrognozaMetaAdapter = PrognozaMeta.Adapter(EnumColumnAdapter()),
+        PlaceAdapter = Place.Adapter(timeZoneAdapter)
     )
 
     private fun getMetNorwayForecastProvider(
@@ -201,11 +198,8 @@ internal class InternalPrognozaSdkFactory constructor(
         metaQueries = metaQueries
     )
 
-    private fun getOsmPlaceSearcher(userAgent: String): OsmPlaceSearcher = OsmPlaceSearcher(
-        osmPlaceService = OsmPlaceService(
-            client = getHttpClient(),
-            baseUrl = "https://nominatim.openstreetmap.org",
-            userAgent = userAgent
-        )
+    private fun getOpenMeteoPlaceSearcher(userAgent: String) = OpenMeteoPlaceProvider(
+        client = getHttpClient(),
+        userAgent = userAgent
     )
 }

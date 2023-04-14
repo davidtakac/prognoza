@@ -1,19 +1,15 @@
 package hr.dtakac.prognoza.shared.data.prognoza
 
-import hr.dtakac.prognoza.shared.domain.data.PlaceSaver
-import hr.dtakac.prognoza.shared.domain.data.SavedPlaceGetter
-import hr.dtakac.prognoza.shared.domain.data.SavedPlaceRemover
+import hr.dtakac.prognoza.shared.domain.data.PlaceRepository
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import hr.dtakac.prognoza.shared.entity.Place as PlaceEntity
 
 internal class DatabasePlaceRepository(
-    private val forecastQueries: ForecastQueries,
     private val placeQueries: PlaceQueries,
-    private val metaQueries: PrognozaMetaQueries,
     private val ioDispatcher: CoroutineDispatcher,
     private val computationDispatcher: CoroutineDispatcher
-) : SavedPlaceGetter, PlaceSaver, SavedPlaceRemover {
+) : PlaceRepository {
     override suspend fun get(latitude: Double, longitude: Double): PlaceEntity? {
         return withContext(ioDispatcher) {
             placeQueries
@@ -22,6 +18,7 @@ internal class DatabasePlaceRepository(
                 ?.let {
                     PlaceEntity(
                         name = it.name,
+                        timeZone = it.timeZone,
                         details = it.details,
                         latitude = it.latitude,
                         longitude = it.longitude
@@ -32,15 +29,14 @@ internal class DatabasePlaceRepository(
 
     override suspend fun getAll(): List<PlaceEntity> {
         val placeDbModels = withContext(ioDispatcher) {
-            placeQueries
-                .getAll()
-                .executeAsList()
+            placeQueries.getAll().executeAsList()
         }
         return withContext(computationDispatcher) {
             placeDbModels
                 .map {
                     PlaceEntity(
                         name = it.name,
+                        timeZone = it.timeZone,
                         details = it.details,
                         latitude = it.latitude,
                         longitude = it.longitude
@@ -55,6 +51,7 @@ internal class DatabasePlaceRepository(
                 Place(
                     latitude = place.latitude,
                     longitude = place.longitude,
+                    timeZone = place.timeZone,
                     name = place.name,
                     details = place.details
                 )
@@ -62,20 +59,9 @@ internal class DatabasePlaceRepository(
         }
     }
 
-    override suspend fun remove(place: PlaceEntity) {
+    override suspend fun remove(latitude: Double, longitude: Double) {
         withContext(ioDispatcher) {
-            placeQueries.delete(
-                latitude = place.latitude,
-                longitude = place.longitude
-            )
-            forecastQueries.delete(
-                latitude = place.latitude,
-                longitude = place.longitude
-            )
-            metaQueries.delete(
-                latitude = place.latitude,
-                longitude = place.longitude
-            )
+            placeQueries.delete(latitude = latitude, longitude = longitude)
         }
     }
 }

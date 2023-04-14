@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.presentation.places
 
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.shared.domain.SearchPlacesResult
 import hr.dtakac.prognoza.shared.entity.Place
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -46,18 +45,21 @@ class PlacesUiMapper @Inject constructor(
     }
 
     fun mapToSearchPlacesError(
-        error: SearchPlacesResult.Empty,
+        result: List<Place>?,
         query: String
-    ): TextResource = when (error) {
-        SearchPlacesResult.Empty.Error -> TextResource.fromStringId(R.string.error_search_places)
-        SearchPlacesResult.Empty.None -> TextResource.fromStringId(
+    ): TextResource? = when {
+        result == null -> TextResource.fromStringId(R.string.error_search_places)
+        result.isEmpty() -> TextResource.fromStringId(
             id = R.string.no_places_found,
             TextResource.fromString(query)
         )
+        else -> null
     }
+
+    fun getEmptyMessage(): TextResource = TextResource.fromStringId(R.string.no_saved_places)
 
     fun getProvider(): TextResource = TextResource.fromStringId(
         R.string.template_data_from,
-        TextResource.fromStringId(R.string.osm_nominatim_credit)
+        TextResource.fromStringId(R.string.open_meteo_credit)
     )
 }

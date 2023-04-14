@@ -1,10 +1,15 @@
 package hr.dtakac.prognoza.shared.domain
 
-import hr.dtakac.prognoza.shared.domain.data.SavedPlaceRemover
+import hr.dtakac.prognoza.shared.domain.data.ForecastRepository
+import hr.dtakac.prognoza.shared.domain.data.PlaceRepository
 import hr.dtakac.prognoza.shared.entity.Place
 
 class DeleteSavedPlace internal constructor(
-    private val placeDeleter: SavedPlaceRemover
+    private val placeRepository: PlaceRepository,
+    private val forecastRepository: ForecastRepository
 ) {
-    suspend operator fun invoke(place: Place) = placeDeleter.remove(place)
+    suspend operator fun invoke(place: Place) {
+        placeRepository.remove(latitude = place.latitude, longitude = place.longitude)
+        forecastRepository.remove(latitude = place.latitude, longitude = place.longitude)
+    }
 }

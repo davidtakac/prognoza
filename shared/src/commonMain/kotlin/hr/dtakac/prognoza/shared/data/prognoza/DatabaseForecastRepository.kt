@@ -63,6 +63,11 @@ internal class DatabaseForecastRepository(
         }
     }
 
+    override suspend fun remove(latitude: Double, longitude: Double) {
+        forecastQueries.delete(latitude = latitude, longitude = longitude)
+        metaQueries.delete(latitude = latitude, longitude = longitude)
+    }
+
     private suspend fun shouldPullFromProvider(
         refreshIfOlderThan: Duration,
         latitude: Double,
@@ -94,7 +99,7 @@ internal class DatabaseForecastRepository(
             ?: return
 
         withContext(ioDispatcher) {
-            forecastQueries.delete(latitude, longitude)
+            remove(latitude, longitude)
             data.forEach {
                 val dbModel = Forecast(
                     startEpochMillis = it.startEpochMillis,

@@ -35,7 +35,10 @@ internal fun OpenMeteoPlace.toEntity(): Place {
     return Place(
         name = name,
         timeZone = TimeZone.of(timeZone),
-        details = listOf(admin1, admin2, admin3, admin4).filterNot { it.isNullOrBlank() }.joinToString(", "),
+        details = listOf(admin1, admin2, admin3, admin4)
+            .filterNot { it.isNullOrBlank() }
+            .joinToString(", ")
+            .takeIf { it.isNotBlank() },
         latitude = latitude,
         longitude = longitude
     )

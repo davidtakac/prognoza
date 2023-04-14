@@ -10,6 +10,8 @@ internal interface ForecastRepository {
         from: hr.dtakac.prognoza.shared.entity.ForecastProvider,
         refreshIfOlderThan: Duration
     ): ForecastRepositoryResult
+
+    suspend fun remove(latitude: Double, longitude: Double)
 }
 
 sealed interface ForecastRepositoryResult {

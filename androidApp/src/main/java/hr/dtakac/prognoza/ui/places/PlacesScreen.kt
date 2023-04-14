@@ -17,7 +17,7 @@ fun PlacesScreen(
     onPlaceSelected: () -> Unit = {},
     onSettingsClick: () -> Unit = {}
 ) {
-    val state by viewModel.state
+    val state = viewModel.state
     var query by remember { mutableStateOf("") }
     var placeDeletionDialogIndex by remember { mutableStateOf<Int?>(null) }
     val focusManager = LocalFocusManager.current
