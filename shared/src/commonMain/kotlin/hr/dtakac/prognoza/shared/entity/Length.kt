@@ -1,26 +1,19 @@
 package hr.dtakac.prognoza.shared.entity
 
-import hr.dtakac.prognoza.shared.entity.LengthUnit.*
-
-class Length(
-    value: Double,
-    unit: LengthUnit
-) {
+class Length(val metres: Double) {
     init {
-        if (value < 0) {
-            throw IllegalStateException("Length must be >= 0, was $value.")
+        if (metres < 0) {
+            throw IllegalStateException("Length must be >= 0, was $metres.")
         }
     }
 
-    val millimetre: Double = when (unit) {
-        Millimetre -> value
-        Inch -> value * 25.4
-        Centimetre -> value * 10.0
-    }
-    val inch: Double = if (unit == Inch) value else millimetre / 25.4
-    val centimetre: Double = if (unit == Centimetre) value else millimetre / 10
+    val millimetres: Double = metres * 1000
+    val centimetres: Double = metres * 100
+    val kilometres: Double = metres / 1000
+    val inches: Double = metres * 39.3701
+    val miles: Double = metres * 0.00062137
 }
 
 enum class LengthUnit {
-    Millimetre, Inch, Centimetre
+    Millimetre, Centimetre, Metre, Kilometre, Inch, Mile
 }

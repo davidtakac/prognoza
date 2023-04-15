@@ -11,17 +11,17 @@ internal val temperatureSqlAdapter = object : ColumnAdapter<Temperature, Double>
 
 internal val lengthSqlAdapter = object : ColumnAdapter<Length, Double> {
     override fun decode(databaseValue: Double): Length = Length(databaseValue, LengthUnit.Millimetre)
-    override fun encode(value: Length): Double = value.millimetre
+    override fun encode(value: Length): Double = value.millimetres
 }
 
 internal val speedSqlAdapter = object : ColumnAdapter<Speed, Double> {
     override fun decode(databaseValue: Double): Speed = Speed(databaseValue, SpeedUnit.MetrePerSecond)
-    override fun encode(value: Speed): Double = value.metrePerSecond
+    override fun encode(value: Speed): Double = value.metresPerSecond
 }
 
 internal val angleSqlAdapter = object : ColumnAdapter<Angle, Double> {
     override fun decode(databaseValue: Double): Angle = Angle(databaseValue, AngleUnit.Degree)
-    override fun encode(value: Angle): Double = value.degree
+    override fun encode(value: Angle): Double = value.degrees
 }
 
 internal val percentageSqlAdapter = object : ColumnAdapter<Percentage, Double> {
@@ -31,7 +31,7 @@ internal val percentageSqlAdapter = object : ColumnAdapter<Percentage, Double> {
 
 internal val pressureSqlAdapter = object : ColumnAdapter<Pressure, Double> {
     override fun decode(databaseValue: Double): Pressure = Pressure(databaseValue, PressureUnit.Millibar)
-    override fun encode(value: Pressure): Double = value.millibar
+    override fun encode(value: Pressure): Double = value.millibars
 }
 
 internal val timeZoneAdapter = object : ColumnAdapter<TimeZone, String> {

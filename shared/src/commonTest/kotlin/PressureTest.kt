@@ -17,14 +17,14 @@ class PressureTest {
     @Test
     fun `converts from millibar to inches of mercury`() = assertEquals(
         expected = 0.0886,
-        actual = Pressure(3.0, PressureUnit.Millibar).inchOfMercury,
+        actual = Pressure(3.0, PressureUnit.Millibar).inchesOfMercury,
         absoluteTolerance = tolerance
     )
 
     @Test
     fun `converts from inches of mercury to millibar`() = assertEquals(
         expected = 101.5917,
-        actual = Pressure(3.0, PressureUnit.InchOfMercury).millibar,
+        actual = Pressure(3.0, PressureUnit.InchOfMercury).millibars,
         absoluteTolerance = tolerance
     )
 }

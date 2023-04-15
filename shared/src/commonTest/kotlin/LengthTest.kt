@@ -54,17 +54,17 @@ class LengthTest {
         val tolerance = 0.0001
         assertEquals(
             expected = expectedCm,
-            actual = length.centimetre,
+            actual = length.centimetres,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedMm,
-            actual = length.millimetre,
+            actual = length.millimetres,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedIn,
-            actual = length.inch,
+            actual = length.inches,
             absoluteTolerance = tolerance
         )
     }

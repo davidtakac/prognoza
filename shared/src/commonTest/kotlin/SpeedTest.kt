@@ -76,27 +76,27 @@ class SpeedTest { // Not Ookla ;)
         val tolerance = 0.0001
         assertEquals(
             expected = expectedKt,
-            actual = speed.knot,
+            actual = speed.knots,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedMph,
-            actual = speed.milePerHour,
+            actual = speed.milesPerHour,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedMps,
-            actual = speed.metrePerSecond,
+            actual = speed.metresPerSecond,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedKmh,
-            actual = speed.kilometrePerHour,
+            actual = speed.kilometresPerHour,
             absoluteTolerance = tolerance
         )
         assertEquals(
             expected = expectedBeaufort,
-            actual = speed.beaufortScale
+            actual = speed.beaufortNumber
         )
     }
 }

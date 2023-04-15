@@ -138,9 +138,9 @@ class ForecastUiMapper @Inject constructor(
     ): TextResource {
         val precipitationValue = BigDecimal(
             when (unit) {
-                LengthUnit.Millimetre -> precipitation.millimetre
-                LengthUnit.Inch -> precipitation.inch
-                LengthUnit.Centimetre -> precipitation.centimetre
+                LengthUnit.Millimetre -> precipitation.millimetres
+                LengthUnit.Inch -> precipitation.inches
+                LengthUnit.Centimetre -> precipitation.centimetres
             }
         ).setScale(1, RoundingMode.HALF_EVEN)
 

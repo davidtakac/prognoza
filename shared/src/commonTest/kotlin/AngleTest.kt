@@ -66,14 +66,14 @@ class AngleTest {
     @Test
     fun `radians are pi when angle is 180 deg`() = assertEquals(
         expected = PI,
-        actual = Angle(180.0, AngleUnit.Degree).radian,
+        actual = Angle(180.0, AngleUnit.Degree).radians,
         absoluteTolerance = tolerance
     )
 
     @Test
     fun `degrees are 180 when angle is pi rad`() = assertEquals(
         expected = 180.0,
-        actual = Angle(PI, AngleUnit.Radian).degree,
+        actual = Angle(PI, AngleUnit.Radian).degrees,
         absoluteTolerance = tolerance
     )
 }

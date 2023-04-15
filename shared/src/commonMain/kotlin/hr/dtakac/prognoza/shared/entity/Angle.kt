@@ -1,19 +1,14 @@
 package hr.dtakac.prognoza.shared.entity
 
 import kotlin.math.PI
-import hr.dtakac.prognoza.shared.entity.AngleUnit.*
 
-class Angle(
-    value: Double,
-    unit: AngleUnit
-) {
-    val degree: Double = if (unit == Degree) value else value * 180/PI
-    val radian: Double = if (unit == Radian) value else value * PI/180
-    val compassDirection: CompassDirection = CompassDirection.fromDegrees(degree)
+class Angle(val degrees: Double) {
+    val radians: Double = this.degrees * PI/180
+    val compassDirection: CompassDirection = CompassDirection.fromDegrees(this.degrees)
 }
 
 enum class AngleUnit {
-    Degree, Radian
+    Degree, Radian, Compass
 }
 
 enum class CompassDirection {

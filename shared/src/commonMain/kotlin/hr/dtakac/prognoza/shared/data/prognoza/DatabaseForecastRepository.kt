@@ -5,7 +5,6 @@ import hr.dtakac.prognoza.shared.domain.data.ForecastProviderResult
 import hr.dtakac.prognoza.shared.domain.data.ForecastRepository
 import hr.dtakac.prognoza.shared.domain.data.ForecastRepositoryResult
 import hr.dtakac.prognoza.shared.entity.Hour
-import hr.dtakac.prognoza.shared.entity.Wind
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.Clock

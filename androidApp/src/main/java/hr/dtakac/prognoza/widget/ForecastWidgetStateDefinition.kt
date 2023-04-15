@@ -32,7 +32,7 @@ object ForecastWidgetStateDefinition : GlanceStateDefinition<ForecastWidgetState
         override suspend fun readFrom(input: InputStream): ForecastWidgetState = try {
             Json.decodeFromString(
                 ForecastWidgetState.serializer(),
-                input.readBytes().decodeToString()
+                input.readInts().decodeToString()
             )
         } catch (e: Exception) {
             Napier.e(message = "Widget error", e)
@@ -45,7 +45,7 @@ object ForecastWidgetStateDefinition : GlanceStateDefinition<ForecastWidgetState
                     Json.encodeToString(
                         ForecastWidgetState.serializer(),
                         t
-                    ).encodeToByteArray()
+                    ).encodeToIntArray()
                 )
             }
         }
