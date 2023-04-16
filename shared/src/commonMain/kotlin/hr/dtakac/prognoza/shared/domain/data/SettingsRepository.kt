@@ -13,6 +13,4 @@ internal interface SettingsRepository {
     suspend fun getPressureUnit(): PressureUnit
     suspend fun setPlace(place: Place)
     suspend fun getPlace(): Place?
-    suspend fun getForecastProvider(): hr.dtakac.prognoza.shared.entity.ForecastProvider
-    suspend fun setForecastProvider(forecastProvider: hr.dtakac.prognoza.shared.entity.ForecastProvider)
 }

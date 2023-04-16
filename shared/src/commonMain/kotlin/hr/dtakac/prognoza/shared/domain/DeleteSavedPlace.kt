@@ -10,6 +10,6 @@ class DeleteSavedPlace internal constructor(
 ) {
     suspend operator fun invoke(place: Place) {
         placeRepository.remove(latitude = place.latitude, longitude = place.longitude)
-        forecastRepository.remove(latitude = place.latitude, longitude = place.longitude)
+        forecastRepository.delete(latitude = place.latitude, longitude = place.longitude)
     }
 }

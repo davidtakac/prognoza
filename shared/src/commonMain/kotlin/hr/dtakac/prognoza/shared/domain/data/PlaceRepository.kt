@@ -3,8 +3,9 @@ package hr.dtakac.prognoza.shared.domain.data
 import hr.dtakac.prognoza.shared.entity.Place
 
 interface PlaceRepository {
-    suspend fun get(latitude: Double, longitude: Double): Place?
+    suspend fun search(query: String): List<Place>?
+    suspend fun get(id: String): Place?
     suspend fun getAll(): List<Place>
-    suspend fun remove(latitude: Double, longitude: Double)
+    suspend fun remove(id: String)
     suspend fun save(place: Place)
 }

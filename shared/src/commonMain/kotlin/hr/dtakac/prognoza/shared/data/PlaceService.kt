@@ -1,19 +1,24 @@
-package hr.dtakac.prognoza.shared.data.openmeteo
+package hr.dtakac.prognoza.shared.data
 
-import hr.dtakac.prognoza.shared.domain.data.PlaceProvider
 import hr.dtakac.prognoza.shared.entity.Place
+import hr.dtakac.prognoza.shared.platform.UuidProvider
 import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import kotlinx.datetime.TimeZone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-internal class OpenMeteoPlaceProvider(
+private const val Tag = "PlaceService"
+internal class PlaceService(
     private val client: HttpClient,
-    private val userAgent: String
+    private val userAgent: String,
+    private val uuidProvider: UuidProvider,
+    private val computationDispatcher: CoroutineDispatcher
 ) : PlaceProvider {
     override suspend fun get(query: String, rfc2616Language: String): List<Place>? {
         val response = try {
@@ -23,12 +28,20 @@ internal class OpenMeteoPlaceProvider(
                 parameter("count", 10)
                 parameter("language", rfc2616Language)
                 parameter("format", "json")
-            }.body<OpenMeteoGeocodingResponse>().results?.map(OpenMeteoPlace::toEntity)
+            }.body<OpenMeteoGeocodingResponse>()
         } catch (e: Exception) {
-            Napier.e("OpenMeteoPlaceSearcher", e)
+            Napier.e(Tag, e)
+            return null
+        }
+
+        return try {
+            withContext(computationDispatcher) {
+                response.results?.map { it.toEntity(uuidProvider.randomUuid()) }
+            }
+        } catch (e: Exception) {
+            Napier.e(Tag, e)
             null
         }
-        return response
     }
 }
 
@@ -58,8 +71,9 @@ private data class OpenMeteoPlace(
     val admin4: String? = ""
 )
 
-private fun OpenMeteoPlace.toEntity(): Place {
+private fun OpenMeteoPlace.toEntity(id: String): Place {
     return Place(
+        id = id,
         name = name,
         timeZone = TimeZone.of(timeZone),
         details = listOf(admin1, admin2, admin3, admin4)

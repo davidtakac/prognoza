@@ -39,6 +39,13 @@ object Dependencies {
         const val serialization = "io.ktor:ktor-serialization-kotlinx-json:$version"
     }
 
+    object Okio {
+        private const val version = "3.3.0"
+        const val core = "com.squareup.okio:okio:$version"
+        const val jvm = "com.squareup.okio:okio-jvm:$version"
+        const val ios = "com.squareup.okio:okio-iosx64:$version"
+    }
+
     object SqlDelight {
         private const val version = GlobalVersions.sqlDelight
         const val core = "com.squareup.sqldelight:runtime:$version"

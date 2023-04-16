@@ -7,10 +7,9 @@ import hr.dtakac.prognoza.shared.data.PrognozaDatabase
 import hr.dtakac.prognoza.shared.data.metnorway.*
 import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
 import hr.dtakac.prognoza.shared.data.openmeteo.CachedOpenMeteoResponseQueries
-import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoForecastProvider
 import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoMetaQueries
-import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoPlaceProvider
-import hr.dtakac.prognoza.shared.data.openmeteo.network.OpenMeteoForecastService
+import hr.dtakac.prognoza.shared.data.PlaceService
+import hr.dtakac.prognoza.shared.data.ForecastService
 import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*
 import io.ktor.client.*
@@ -186,7 +185,7 @@ internal class InternalPrognozaSdkFactory constructor(
         metaQueries: OpenMeteoMetaQueries,
         cachedOpenMeteoResponseQueries: CachedOpenMeteoResponseQueries
     ): OpenMeteoForecastProvider = OpenMeteoForecastProvider(
-        apiService = OpenMeteoForecastService(
+        apiService = ForecastService(
             client = getHttpClient(),
             userAgent = userAgent,
             baseUrl = "https://api.open-meteo.com/v1",
@@ -198,7 +197,7 @@ internal class InternalPrognozaSdkFactory constructor(
         metaQueries = metaQueries
     )
 
-    private fun getOpenMeteoPlaceSearcher(userAgent: String) = OpenMeteoPlaceProvider(
+    private fun getOpenMeteoPlaceSearcher(userAgent: String) = PlaceService(
         client = getHttpClient(),
         userAgent = userAgent
     )

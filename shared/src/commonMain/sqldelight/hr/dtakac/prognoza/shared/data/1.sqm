@@ -1,7 +1,0 @@
-/** Migrates from 3.0.0 to 3.0.1 */
-CREATE TABLE PrognozaMeta (
-    `latitude` REAL NOT NULL,
-    `longitude` REAL NOT NULL,
-    `lastUpdatedEpochMillis` INTEGER NOT NULL,
-    PRIMARY KEY (`latitude`, `longitude`)
-);

@@ -1,6 +1,5 @@
 package hr.dtakac.prognoza.shared.domain
 
-import hr.dtakac.prognoza.shared.domain.data.PlaceProvider
 import hr.dtakac.prognoza.shared.entity.Place
 import hr.dtakac.prognoza.shared.platform.LocalRfc2616LanguageGetter
 

@@ -24,7 +24,7 @@ kotlin {
                 implementation(Dependencies.napier)
                 implementation(Dependencies.DateTime.core)
                 implementation(Dependencies.Coroutines.core)
-                implementation(Dependencies.SqlDelight.core)
+                implementation(Dependencies.Okio.core)
                 implementation(Dependencies.Serialization.json)
                 implementation(Dependencies.Ktor.core)
                 implementation(Dependencies.Ktor.cio)
@@ -40,8 +40,8 @@ kotlin {
         }
         val androidMain by getting {
             dependencies {
-                implementation(Dependencies.SqlDelight.android)
                 implementation(Dependencies.Ktor.android)
+                implementation(Dependencies.Okio.jvm)
             }
         }
         val androidTest by getting
@@ -56,6 +56,7 @@ kotlin {
             dependencies {
                 implementation(Dependencies.SqlDelight.native)
                 implementation(Dependencies.Ktor.darwin)
+                implementation(Dependencies.Okio.ios)
             }
         }
         val iosX64Test by getting
@@ -76,12 +77,6 @@ android {
     defaultConfig {
         minSdk = AndroidConfig.minSdk
         targetSdk = AndroidConfig.targetSdk
-    }
-}
-
-sqldelight {
-    database("PrognozaDatabase") {
-        packageName = "hr.dtakac.prognoza.shared.data"
     }
 }
 
