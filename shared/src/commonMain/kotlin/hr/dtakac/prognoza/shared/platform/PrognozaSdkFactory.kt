@@ -1,16 +1,8 @@
 package hr.dtakac.prognoza.shared.platform
 
-import com.squareup.sqldelight.EnumColumnAdapter
-import com.squareup.sqldelight.db.SqlDriver
 import hr.dtakac.prognoza.shared.PrognozaSdk
-import hr.dtakac.prognoza.shared.data.PrognozaDatabase
-import hr.dtakac.prognoza.shared.data.metnorway.*
-import hr.dtakac.prognoza.shared.data.metnorway.network.MetNorwayForecastService
-import hr.dtakac.prognoza.shared.data.openmeteo.CachedOpenMeteoResponseQueries
-import hr.dtakac.prognoza.shared.data.openmeteo.OpenMeteoMetaQueries
+import hr.dtakac.prognoza.shared.data.*
 import hr.dtakac.prognoza.shared.data.PlaceService
-import hr.dtakac.prognoza.shared.data.ForecastService
-import hr.dtakac.prognoza.shared.data.prognoza.*
 import hr.dtakac.prognoza.shared.domain.*
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -26,63 +18,24 @@ expect class PrognozaSdkFactory {
 internal class InternalPrognozaSdkFactory constructor(
     private val userAgent: String,
     private val localRfc2616LanguageGetter: LocalRfc2616LanguageGetter,
-    private val sqlDriverFactory: SqlDriverFactory,
     private val dotDecimalFormatter: DotDecimalFormatter,
     private val rfc1123UtcDateTimeParser: Rfc1123UtcDateTimeParser,
     private val ioDispatcher: CoroutineDispatcher,
     private val computationDispatcher: CoroutineDispatcher
 ) {
     fun create(): PrognozaSdk {
-        val database = getDatabase(sqlDriverFactory.create())
-        val metNorwayProvider = getMetNorwayForecastProvider(
+        val placeProvider = PlaceService(
+            client = getHttpClient(),
             userAgent = userAgent,
-            dotDecimalFormatter = dotDecimalFormatter,
-            rfc1123UtcDateTimeParser = rfc1123UtcDateTimeParser,
-            metaQueries = database.metaQueries,
-            cachedResponseQueries = database.cachedResponseQueries,
-            ioDispatcher = ioDispatcher,
             computationDispatcher = computationDispatcher
         )
-        val openMeteoProvider = getOpenMeteoForecastProvider(
-            userAgent = userAgent,
-            dotDecimalFormatter = dotDecimalFormatter,
-            computationDispatcher = computationDispatcher,
-            ioDispatcher = ioDispatcher,
-            metaQueries = database.openMeteoMetaQueries,
-            cachedOpenMeteoResponseQueries = database.cachedOpenMeteoResponseQueries
-        )
-        val placeProvider = getOpenMeteoPlaceSearcher(userAgent)
-        val forecastRepository = DatabaseForecastRepository(
-            forecastQueries = database.forecastQueries,
-            metaQueries = database.prognozaMetaQueries,
-            openMeteoProvider = openMeteoProvider,
-            metNorwayProvider = metNorwayProvider,
-            computationDispatcher = computationDispatcher,
-            ioDispatcher = ioDispatcher
-        )
-        val placeRepository = DatabasePlaceRepository(
-            placeQueries = database.placeQueries,
-            ioDispatcher = ioDispatcher,
-            computationDispatcher = computationDispatcher
-        )
-        val settingsRepository = DatabaseSettingsRepository(
-            settingsQueries = database.settingsQueries,
-            placeRepository = placeRepository,
-            ioDispatcher = ioDispatcher
-        )
+        val forecastRepository = ForecastRepository()
+        val placeRepository = PlaceRepository()
+        val settingsRepository = SettingsRepository()
         val getSelectedPlace = GetSelectedPlace(settingsRepository)
-        val getForecastProvider = GetForecastProvider(settingsRepository)
         val getTemperatureUnit = GetTemperatureUnit(settingsRepository)
         val getWindUnit = GetWindUnit(settingsRepository)
         val getPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
-        val actualGetForecast = ActualGetForecast(
-            getSelectedPlace = getSelectedPlace,
-            getForecastProvider = getForecastProvider,
-            getTemperatureUnit = getTemperatureUnit,
-            getPrecipitationUnit = getPrecipitationUnit,
-            getWindUnit = getWindUnit,
-            forecastRepository = forecastRepository
-        )
 
         return object : PrognozaSdk {
             override val getAllPrecipitationUnits = GetAllPrecipitationUnits()
@@ -99,18 +52,8 @@ internal class InternalPrognozaSdkFactory constructor(
             override val setPressureUnit = SetPressureUnit(settingsRepository)
             override val setTemperatureUnit = SetTemperatureUnit(settingsRepository)
             override val setWindUnit = SetWindUnit(settingsRepository)
-            override val getForecast = GetForecastLatest(actualGetForecast)
-            override val getForecastFrugal = GetForecastFrugal(actualGetForecast)
             override val deleteSavedPlace = DeleteSavedPlace(placeRepository, forecastRepository)
-            override val getForecastProvider = getForecastProvider
-            override val setForecastProvider = SetForecastProvider(settingsRepository)
-            override val getAllForecastProviders = GetAllForecastProviders()
-
-            override val searchPlaces = SearchPlaces(
-                placeProvider = placeProvider,
-                localRfc2616LanguageGetter = localRfc2616LanguageGetter
-            )
-
+            override val searchPlaces = SearchPlaces(placeRepository)
             override val selectPlace = SelectPlace(
                 placeRepository = placeRepository,
                 settingsRepository = settingsRepository
@@ -130,75 +73,4 @@ internal class InternalPrognozaSdkFactory constructor(
             })
         }
     }
-
-    private fun getDatabase(sqlDriver: SqlDriver): PrognozaDatabase = PrognozaDatabase(
-        driver = sqlDriver,
-        ForecastAdapter = Forecast.Adapter(
-            temperatureAdapter = temperatureSqlAdapter,
-            descriptionAdapter = EnumColumnAdapter(),
-            moodAdapter = EnumColumnAdapter(),
-            precipitationAdapter = lengthSqlAdapter,
-            windSpeedAdapter = speedSqlAdapter,
-            windFromDirectionAdapter = angleSqlAdapter,
-            humidityAdapter = percentageSqlAdapter,
-            airPressureAtSeaLevelAdapter = pressureSqlAdapter
-        ),
-        SettingsAdapter = Settings.Adapter(
-            temperatureUnitAdapter = EnumColumnAdapter(),
-            precipitationUnitAdapter = EnumColumnAdapter(),
-            windUnitAdapter = EnumColumnAdapter(),
-            pressureUnitAdapter = EnumColumnAdapter(),
-            forecastProviderAdapter = EnumColumnAdapter()
-        ),
-        PrognozaMetaAdapter = PrognozaMeta.Adapter(EnumColumnAdapter()),
-        PlaceAdapter = Place.Adapter(timeZoneAdapter)
-    )
-
-    private fun getMetNorwayForecastProvider(
-        userAgent: String,
-        dotDecimalFormatter: DotDecimalFormatter,
-        rfc1123UtcDateTimeParser: Rfc1123UtcDateTimeParser,
-        metaQueries: MetaQueries,
-        cachedResponseQueries: CachedResponseQueries,
-        ioDispatcher: CoroutineDispatcher,
-        computationDispatcher: CoroutineDispatcher
-    ): MetNorwayForecastProvider = MetNorwayForecastProvider(
-        apiService = MetNorwayForecastService(
-            client = getHttpClient(),
-            userAgent = userAgent,
-            baseUrl = "https://api.met.no/weatherapi",
-            dotDecimalFormatter = dotDecimalFormatter,
-            epochMillisToRfc1123 = rfc1123UtcDateTimeParser::format
-        ),
-        metaQueries = metaQueries,
-        cachedResponseQueries = cachedResponseQueries,
-        ioDispatcher = ioDispatcher,
-        computationDispatcher = computationDispatcher,
-        rfc1123ToEpochMillis = rfc1123UtcDateTimeParser::parseToEpochMillis
-    )
-
-    private fun getOpenMeteoForecastProvider(
-        userAgent: String,
-        dotDecimalFormatter: DotDecimalFormatter,
-        computationDispatcher: CoroutineDispatcher,
-        ioDispatcher: CoroutineDispatcher,
-        metaQueries: OpenMeteoMetaQueries,
-        cachedOpenMeteoResponseQueries: CachedOpenMeteoResponseQueries
-    ): OpenMeteoForecastProvider = OpenMeteoForecastProvider(
-        apiService = ForecastService(
-            client = getHttpClient(),
-            userAgent = userAgent,
-            baseUrl = "https://api.open-meteo.com/v1",
-            dotDecimalFormatter = dotDecimalFormatter
-        ),
-        computationDispatcher = computationDispatcher,
-        ioDispatcher = ioDispatcher,
-        cachedResponseQueries = cachedOpenMeteoResponseQueries,
-        metaQueries = metaQueries
-    )
-
-    private fun getOpenMeteoPlaceSearcher(userAgent: String) = PlaceService(
-        client = getHttpClient(),
-        userAgent = userAgent
-    )
 }

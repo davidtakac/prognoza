@@ -1,32 +1,27 @@
 package hr.dtakac.prognoza.shared.entity
 
-import kotlin.math.PI
-
 class Angle(val degrees: Double) {
-    val radians: Double = this.degrees * PI/180
-    val compassDirection: CompassDirection = CompassDirection.fromDegrees(this.degrees)
+    val cardinalDirection: CardinalDirection = calculateCardinalDirection()
+
+    private fun calculateCardinalDirection(): CardinalDirection {
+        val normalizedDegrees = (degrees % 360 + 360) % 360
+        return when {
+            normalizedDegrees < 45 -> CardinalDirection.N
+            normalizedDegrees < 90 -> CardinalDirection.NE
+            normalizedDegrees < 135 -> CardinalDirection.E
+            normalizedDegrees < 180 -> CardinalDirection.SE
+            normalizedDegrees < 225 -> CardinalDirection.S
+            normalizedDegrees < 270 -> CardinalDirection.SW
+            normalizedDegrees < 315 -> CardinalDirection.W
+            else -> CardinalDirection.NW
+        }
+    }
 }
 
 enum class AngleUnit {
-    Degree, Radian, Compass
+    Degree, Compass
 }
 
-enum class CompassDirection {
+enum class CardinalDirection {
     N, NE, E, SE, S, SW, W, NW;
-
-    companion object {
-        internal fun fromDegrees(degrees: Double): CompassDirection {
-            val normalizedDegrees = (degrees % 360 + 360) % 360
-            return when {
-                normalizedDegrees < 45 -> N
-                normalizedDegrees < 90 -> NE
-                normalizedDegrees < 135 -> E
-                normalizedDegrees < 180 -> SE
-                normalizedDegrees < 225 -> S
-                normalizedDegrees < 270 -> SW
-                normalizedDegrees < 315 -> W
-                else -> NW
-            }
-        }
-    }
 }

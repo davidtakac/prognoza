@@ -9,7 +9,3 @@ class Percentage(val percent: Double) {
 
     val fraction: Double = percent / 100
 }
-
-enum class PercentageUnit {
-    Percent, Fraction
-}

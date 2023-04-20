@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.shared.data
 
 import hr.dtakac.prognoza.shared.entity.Place
-import hr.dtakac.prognoza.shared.platform.UuidProvider
 import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -17,10 +16,9 @@ private const val Tag = "PlaceService"
 internal class PlaceService(
     private val client: HttpClient,
     private val userAgent: String,
-    private val uuidProvider: UuidProvider,
     private val computationDispatcher: CoroutineDispatcher
-) : PlaceProvider {
-    override suspend fun get(query: String, rfc2616Language: String): List<Place>? {
+) {
+    suspend fun get(query: String, rfc2616Language: String): List<Place>? {
         val response = try {
             client.request("https://geocoding-api.open-meteo.com/v1/search") {
                 header(HttpHeaders.UserAgent, userAgent)
@@ -36,7 +34,7 @@ internal class PlaceService(
 
         return try {
             withContext(computationDispatcher) {
-                response.results?.map { it.toEntity(uuidProvider.randomUuid()) }
+                response.results?.map(OpenMeteoPlace::toEntity)
             }
         } catch (e: Exception) {
             Napier.e(Tag, e)
@@ -71,9 +69,9 @@ private data class OpenMeteoPlace(
     val admin4: String? = ""
 )
 
-private fun OpenMeteoPlace.toEntity(id: String): Place {
+private fun OpenMeteoPlace.toEntity(): Place {
     return Place(
-        id = id,
+        id = "lat:${latitude}ln:${longitude}",
         name = name,
         timeZone = TimeZone.of(timeZone),
         details = listOf(admin1, admin2, admin3, admin4)

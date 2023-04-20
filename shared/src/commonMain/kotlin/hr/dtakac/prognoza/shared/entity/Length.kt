@@ -11,9 +11,10 @@ class Length(val metres: Double) {
     val centimetres: Double = metres * 100
     val kilometres: Double = metres / 1000
     val inches: Double = metres * 39.3701
-    val miles: Double = metres * 0.00062137
+    val feet: Double = metres * 3.2808
+    val miles: Double = metres * 0.0006214
 }
 
 enum class LengthUnit {
-    Millimetre, Centimetre, Metre, Kilometre, Inch, Mile
+    Metric, Imperial
 }

@@ -7,10 +7,9 @@ class Temperature(val degreesCelsius: Double) {
         }
     }
 
-    val fahrenheit: Double = degreesCelsius * 1.8 + 32
+    val degreesFahrenheit: Double = degreesCelsius * 1.8 + 32
 }
 
 enum class TemperatureUnit {
-    DegreeCelsius,
-    DegreeFahrenheit
+    DegreeCelsius, DegreeFahrenheit
 }

@@ -23,7 +23,7 @@ class TemperatureTest {
             50.0 to 122.0
         )
         celsiusToExpectedFahrenheit.keys
-            .map { it to Temperature(it, TemperatureUnit.DegreeCelsius).fahrenheit }
+            .map { it to Temperature(it, TemperatureUnit.DegreeCelsius).degreesFahrenheit }
             .forEach { (celsius, actualFahrenheit) ->
                 assertEquals(
                     expected = celsiusToExpectedFahrenheit[celsius]!!,

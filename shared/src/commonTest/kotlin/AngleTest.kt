@@ -1,6 +1,6 @@
 import hr.dtakac.prognoza.shared.entity.Angle
 import hr.dtakac.prognoza.shared.entity.AngleUnit
-import hr.dtakac.prognoza.shared.entity.CompassDirection
+import hr.dtakac.prognoza.shared.entity.CardinalDirection
 import kotlin.math.PI
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,32 +11,32 @@ class AngleTest {
     @Test
     fun `directions are correct when angles are on compass rose`() {
         val degreesToExpectedDirections = mapOf(
-            0.0 to CompassDirection.N,
-            30.0 to CompassDirection.N,
+            0.0 to CardinalDirection.N,
+            30.0 to CardinalDirection.N,
 
-            45.0 to CompassDirection.NE,
-            75.0 to CompassDirection.NE,
+            45.0 to CardinalDirection.NE,
+            75.0 to CardinalDirection.NE,
 
-            90.0 to CompassDirection.E,
-            120.0 to CompassDirection.E,
+            90.0 to CardinalDirection.E,
+            120.0 to CardinalDirection.E,
 
-            135.0 to CompassDirection.SE,
-            165.0 to CompassDirection.SE,
+            135.0 to CardinalDirection.SE,
+            165.0 to CardinalDirection.SE,
 
-            180.0 to CompassDirection.S,
-            210.0 to CompassDirection.S,
+            180.0 to CardinalDirection.S,
+            210.0 to CardinalDirection.S,
 
-            225.0 to CompassDirection.SW,
-            255.0 to CompassDirection.SW,
+            225.0 to CardinalDirection.SW,
+            255.0 to CardinalDirection.SW,
 
-            270.0 to CompassDirection.W,
-            300.0 to CompassDirection.W,
+            270.0 to CardinalDirection.W,
+            300.0 to CardinalDirection.W,
 
-            315.0 to CompassDirection.NW,
-            345.0 to CompassDirection.NW
+            315.0 to CardinalDirection.NW,
+            345.0 to CardinalDirection.NW
         )
         degreesToExpectedDirections.keys
-            .map { it to Angle(it, AngleUnit.Degree).compassDirection }
+            .map { it to Angle(it, AngleUnit.Degree).cardinalDirection }
             .forEach { (degrees, actualDirection) ->
                 assertEquals(
                     expected = degreesToExpectedDirections[degrees]!!,
@@ -47,20 +47,20 @@ class AngleTest {
 
     @Test
     fun `direction is west when angle is -90 deg`() = assertEquals(
-        expected = CompassDirection.W,
-        actual = Angle(-90.0, AngleUnit.Degree).compassDirection
+        expected = CardinalDirection.W,
+        actual = Angle(-90.0, AngleUnit.Degree).cardinalDirection
     )
 
     @Test
     fun `direction is west when angle is -450 deg`() = assertEquals(
-        expected = CompassDirection.W,
-        actual = Angle(-450.0, AngleUnit.Degree).compassDirection
+        expected = CardinalDirection.W,
+        actual = Angle(-450.0, AngleUnit.Degree).cardinalDirection
     )
 
     @Test
     fun `direction is east when angle is 450 deg`() = assertEquals(
-        expected = CompassDirection.E,
-        actual = Angle(450.0, AngleUnit.Degree).compassDirection
+        expected = CardinalDirection.E,
+        actual = Angle(450.0, AngleUnit.Degree).cardinalDirection
     )
 
     @Test

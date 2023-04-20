@@ -7,8 +7,6 @@ interface PrognozaSdk {
     val getAllPressureUnits: GetAllPressureUnits
     val getAllTemperatureUnits: GetAllTemperatureUnits
     val getAllWindUnits: GetAllWindUnits
-    val getForecast: GetForecast
-    val getForecastFrugal: GetForecast
     val getPrecipitationUnit: GetPrecipitationUnit
     val getPressureUnit: GetPressureUnit
     val getSavedPlaces: GetSavedPlaces
@@ -22,7 +20,4 @@ interface PrognozaSdk {
     val setPressureUnit: SetPressureUnit
     val setTemperatureUnit: SetTemperatureUnit
     val setWindUnit: SetWindUnit
-    val setForecastProvider: SetForecastProvider
-    val getForecastProvider: GetForecastProvider
-    val getAllForecastProviders: GetAllForecastProviders
 }

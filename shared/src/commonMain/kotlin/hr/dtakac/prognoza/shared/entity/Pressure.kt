@@ -11,6 +11,5 @@ class Pressure(val millibars: Double) {
 }
 
 enum class PressureUnit {
-    Millibar,
-    InchOfMercury
+    Millibar, InchOfMercury
 }

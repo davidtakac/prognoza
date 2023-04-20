@@ -23,17 +23,6 @@ class UseCaseModule {
     ): PrognozaSdk = PrognozaSdkFactory(context, userAgent).create()
 
     @Provides
-    fun provideGetForecastUseCase(
-        prognozaSdk: PrognozaSdk
-    ): GetForecast = prognozaSdk.getForecast
-
-    @Provides
-    @Named("frugal")
-    fun provideGetForecastFrugalUseCase(
-        prognozaSdk: PrognozaSdk
-    ): GetForecast = prognozaSdk.getForecastFrugal
-
-    @Provides
     fun provideGetSelectedPlaceUseCase(
         prognozaSdk: PrognozaSdk
     ): GetSelectedPlace = prognozaSdk.getSelectedPlace
@@ -117,19 +106,4 @@ class UseCaseModule {
     fun provideGetAllPressureUnits(
         prognozaSdk: PrognozaSdk
     ): GetAllPressureUnits = prognozaSdk.getAllPressureUnits
-
-    @Provides
-    fun provideSetForecastProvider(
-        prognozaSdk: PrognozaSdk
-    ): SetForecastProvider = prognozaSdk.setForecastProvider
-
-    @Provides
-    fun provideGetForecastProvider(
-        prognozaSdk: PrognozaSdk
-    ): GetForecastProvider = prognozaSdk.getForecastProvider
-
-    @Provides
-    fun provideGetAllForecastProviders(
-        prognozaSdk: PrognozaSdk
-    ): GetAllForecastProviders = prognozaSdk.getAllForecastProviders
 }

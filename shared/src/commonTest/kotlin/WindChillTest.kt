@@ -36,7 +36,7 @@ class WindChillTest {
         val windSpeed = Speed(60.0, SpeedUnit.MilePerHour)
         val temperature = Temperature(80.0, TemperatureUnit.DegreeFahrenheit)
         assertEquals(
-            expected = temperature.fahrenheit,
+            expected = temperature.degreesFahrenheit,
             actual = calculateWindChill(temperature, windSpeed).fahrenheit,
             absoluteTolerance = tolerance
         )
@@ -47,7 +47,7 @@ class WindChillTest {
         val windSpeed = Speed(2.0, SpeedUnit.MilePerHour)
         val temperature = Temperature(10.0, TemperatureUnit.DegreeFahrenheit)
         assertEquals(
-            expected = temperature.fahrenheit,
+            expected = temperature.degreesFahrenheit,
             actual = calculateWindChill(temperature, windSpeed).fahrenheit,
             absoluteTolerance = tolerance
         )
@@ -58,7 +58,7 @@ class WindChillTest {
         val windSpeed = Speed(2.0, SpeedUnit.MilePerHour)
         val temperature = Temperature(85.0, TemperatureUnit.DegreeFahrenheit)
         assertEquals(
-            expected = temperature.fahrenheit,
+            expected = temperature.degreesFahrenheit,
             actual = calculateWindChill(temperature, windSpeed).fahrenheit,
             absoluteTolerance = tolerance
         )
