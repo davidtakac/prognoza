@@ -15,7 +15,6 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 

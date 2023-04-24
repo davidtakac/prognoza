@@ -15,8 +15,8 @@ fun AppDialog(
     title: String,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
-    confirmLabel: String = stringResource(id = R.string.confirm),
-    dismissLabel: String = stringResource(id = R.string.cancel),
+    confirmLabel: String = stringResource(id = R.string.common_btn_confirm),
+    dismissLabel: String = stringResource(id = R.string.common_btn_cancel),
     @DrawableRes iconResId: Int? = null,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit = {}

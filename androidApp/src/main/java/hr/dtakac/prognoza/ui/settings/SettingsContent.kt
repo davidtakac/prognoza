@@ -28,7 +28,7 @@ fun SettingsContent(
         Column {
             val toolbarState = rememberAppToolbarState()
             AppToolbar(
-                title = { Text(stringResource(id = R.string.settings)) },
+                title = { Text(stringResource(id = R.string.settings_title)) },
                 state = toolbarState,
                 navigation = {
                     IconButton(

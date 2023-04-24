@@ -4,22 +4,19 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.UiMode
+import hr.dtakac.prognoza.di.ComputationDispatcher
 import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Named
 
-class SettingsScreenUiMapper @Inject constructor(
-    @Named("computation")
-    private val computationDispatcher: CoroutineDispatcher
-) {
+class SettingsScreenUiMapper @Inject constructor(@ComputationDispatcher private val computationDispatcher: CoroutineDispatcher) {
     suspend fun mapToTemperatureUnitSetting(
         selected: TemperatureUnit,
         units: List<TemperatureUnit>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.temperature_unit),
+        name = TextResource.fromStringId(R.string.settings_title_temperature),
         selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
             units.map(TemperatureUnit::toSettingsLabel).map(TextResource::fromStringId)
@@ -32,7 +29,7 @@ class SettingsScreenUiMapper @Inject constructor(
         units: List<SpeedUnit>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.wind_unit),
+        name = TextResource.fromStringId(R.string.settings_title_speed),
         selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
             units.map(SpeedUnit::toSettingsLabel).map(TextResource::fromStringId)
@@ -45,7 +42,7 @@ class SettingsScreenUiMapper @Inject constructor(
         units: List<LengthUnit>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.precipitation_unit),
+        name = TextResource.fromStringId(R.string.settings_title_length),
         selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
             units.map(LengthUnit::toSettingsLabel).map(TextResource::fromStringId)
@@ -58,23 +55,10 @@ class SettingsScreenUiMapper @Inject constructor(
         units: List<PressureUnit>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.pressure_unit),
+        name = TextResource.fromStringId(R.string.settings_title_pressure),
         selectedIndex = units.indexOf(selected),
         values = withContext(computationDispatcher) {
             units.map(PressureUnit::toSettingsLabel).map(TextResource::fromStringId)
-        },
-        onIndexSelected = onIndexSelected
-    )
-
-    suspend fun mapToForecastProviderSetting(
-        selected: ForecastProvider,
-        providers: List<ForecastProvider>,
-        onIndexSelected: (Int) -> Unit
-    ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.weather_data),
-        selectedIndex = providers.indexOf(selected),
-        values = withContext(computationDispatcher) {
-            providers.map(ForecastProvider::toSettingsLabel).map(TextResource::fromStringId)
         },
         onIndexSelected = onIndexSelected
     )
@@ -84,7 +68,7 @@ class SettingsScreenUiMapper @Inject constructor(
         options: List<UiMode>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.theme),
+        name = TextResource.fromStringId(R.string.settings_title_theme),
         selectedIndex = options.indexOf(selected),
         values = withContext(computationDispatcher) {
             options.map(UiMode::toSettingsLabel).map(TextResource::fromStringId)
@@ -97,7 +81,7 @@ class SettingsScreenUiMapper @Inject constructor(
         options: List<MoodMode>,
         onIndexSelected: (Int) -> Unit
     ): MultipleChoiceSettingUi = MultipleChoiceSettingUi(
-        name = TextResource.fromStringId(R.string.mood_source),
+        name = TextResource.fromStringId(R.string.settings_title_mood),
         selectedIndex = options.indexOf(selected),
         values = withContext(computationDispatcher) {
             options.map(MoodMode::toSettingsLabel).map(TextResource::fromStringId)

@@ -6,10 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.material3.ColorScheme
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
@@ -46,29 +43,11 @@ private val LocalWeatherIcons = staticCompositionLocalOf {
 
 @Composable
 fun AppTheme(
-    mood: Mood? = null,
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val alpha = ContentAlpha.get()
-    val colors = if (mood == null) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            getByDynamicColor(
-                context = LocalContext.current,
-                useDarkColors = useDarkTheme
-            )
-        } else {
-            getByMood(
-                mood = Mood.DEFAULT,
-                useDarkColors = useDarkTheme
-            )
-        }
-    } else {
-        getByMood(
-            mood = mood,
-            useDarkColors = useDarkTheme
-        )
-    }.animate()
+    val colors = if (useDarkTheme) darkColorScheme() else lightColorScheme()
     val typography = Typography.get()
     val weatherIcons = WeatherIcons.get(useDarkTheme)
     val indication = rememberRipple()
@@ -97,28 +76,4 @@ object PrognozaTheme {
     val weatherIcons: WeatherIcons
         @Composable
         get() = LocalWeatherIcons.current
-}
-
-fun getByMood(
-    mood: Mood,
-    useDarkColors: Boolean
-): ColorScheme = when (mood) {
-    Mood.CLEAR_DAY -> if (useDarkColors) YellowColorSchemeDark else YellowColorSchemeLight
-    Mood.CLEAR_NIGHT -> if (useDarkColors) DeepPurpleColorSchemeDark else DeepPurpleColorSchemeLight
-    Mood.RAIN -> if (useDarkColors) BlueColorSchemeDark else BlueColorSchemeLight
-    Mood.SLEET -> if (useDarkColors) TealColorSchemeDark else TealColorSchemeLight
-    Mood.SNOW -> if (useDarkColors) CyanColorSchemeDark else CyanColorSchemeLight
-
-    Mood.CLOUDY,
-    Mood.FOG,
-    Mood.DEFAULT -> if (useDarkColors) GreenColorSchemeDark else GreenColorSchemeLight
-}
-
-@RequiresApi(api = Build.VERSION_CODES.S)
-fun getByDynamicColor(
-    context: Context,
-    useDarkColors: Boolean
-): ColorScheme {
-    return if (useDarkColors) dynamicDarkColorScheme(context)
-    else dynamicLightColorScheme(context)
 }

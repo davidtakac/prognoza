@@ -8,46 +8,40 @@ import hr.dtakac.prognoza.shared.entity.*
 
 @StringRes
 fun TemperatureUnit.toSettingsLabel(): Int = when (this) {
-    TemperatureUnit.DegreeCelsius -> R.string.settings_label_celsius
-    TemperatureUnit.DegreeFahrenheit -> R.string.settings_label_fahrenheit
+    TemperatureUnit.DegreeCelsius -> R.string.settings_label_temperature_celsius
+    TemperatureUnit.DegreeFahrenheit -> R.string.settings_label_temperature_fahrenheit
 }
 
 @StringRes
 fun SpeedUnit.toSettingsLabel(): Int = when (this) {
-    SpeedUnit.MetrePerSecond -> R.string.settings_label_mps
-    SpeedUnit.KilometrePerHour -> R.string.settings_label_kph
-    SpeedUnit.MilePerHour -> R.string.settings_label_mph
-    SpeedUnit.Knot -> R.string.settings_label_knots
+    SpeedUnit.MetrePerSecond -> R.string.settings_label_speed_mps
+    SpeedUnit.KilometrePerHour -> R.string.settings_label_speed_kph
+    SpeedUnit.MilePerHour -> R.string.settings_label_speed_mph
+    SpeedUnit.Knot -> R.string.settings_label_speed_knots
+    SpeedUnit.BeaufortNumber -> R.string.settings_label_speed_beaufort
 }
 
 @StringRes
 fun LengthUnit.toSettingsLabel(): Int = when (this) {
-    LengthUnit.Millimetre -> R.string.settings_label_mm
-    LengthUnit.Inch -> R.string.settings_label_in
-    LengthUnit.Centimetre -> R.string.settings_label_cm
+    LengthUnit.Metric -> R.string.settings_label_length_metric
+    LengthUnit.Imperial -> R.string.settings_label_length_imperial
 }
 
 @StringRes
 fun PressureUnit.toSettingsLabel(): Int = when (this) {
-    PressureUnit.Millibar -> R.string.settings_label_mbar
-    PressureUnit.InchOfMercury -> R.string.settings_label_inhg
+    PressureUnit.Millibar -> R.string.settings_label_pressure_mbar
+    PressureUnit.InchOfMercury -> R.string.settings_label_pressure_inhg
 }
 
 @StringRes
 fun UiMode.toSettingsLabel(): Int = when (this) {
-    UiMode.DARK -> R.string.settings_label_dark
-    UiMode.LIGHT -> R.string.settings_label_light
-    UiMode.FOLLOW_SYSTEM -> R.string.settings_label_follow_system
+    UiMode.Dark -> R.string.settings_label_theme_dark
+    UiMode.Light -> R.string.settings_label_theme_light
+    UiMode.FollowSystem -> R.string.settings_label_theme_follow_system
 }
 
 @StringRes
 fun MoodMode.toSettingsLabel(): Int = when (this) {
-    MoodMode.FORECAST -> R.string.mood_mode_forecast
-    MoodMode.DYNAMIC -> R.string.mood_mode_dynamic
-}
-
-@StringRes
-fun ForecastProvider.toSettingsLabel(): Int = when (this) {
-    ForecastProvider.MET_NORWAY -> R.string.met_norway_credit
-    ForecastProvider.OPEN_METEO -> R.string.open_meteo_credit
+    MoodMode.Forecast -> R.string.settings_label_mood_forecast
+    MoodMode.Dynamic -> R.string.settings_label_mood_dynamic
 }

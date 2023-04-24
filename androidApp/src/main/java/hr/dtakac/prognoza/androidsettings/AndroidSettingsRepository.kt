@@ -5,18 +5,16 @@ import android.os.Build
 import androidx.core.content.edit
 import javax.inject.Inject
 
-private const val THEME_SETTING_KEY = "theme_setting_key"
-private const val MOOD_MODE_KEY = "mood_mode_key"
+private const val ThemeSettingKey = "theme_setting_key"
+private const val MoodModeKey = "mood_mode_key"
 
-class AndroidSettingsRepository @Inject constructor(
-    private val sharedPreferences: SharedPreferences
-) {
+class AndroidSettingsRepository @Inject constructor(private val sharedPreferences: SharedPreferences) {
     fun getAvailableUiModes(): List<UiMode> = UiMode.values().toList()
 
     fun getUiMode(): UiMode {
-        val settingValue = sharedPreferences.getString(THEME_SETTING_KEY, null)
+        val settingValue = sharedPreferences.getString(ThemeSettingKey, null)
         return if (settingValue == null) {
-            val default = UiMode.FOLLOW_SYSTEM
+            val default = UiMode.FollowSystem
             setUiMode(default)
             default
         } else {
@@ -26,18 +24,18 @@ class AndroidSettingsRepository @Inject constructor(
 
     fun setUiMode(uiMode: UiMode)  {
         sharedPreferences.edit {
-            putString(THEME_SETTING_KEY, uiMode.name)
+            putString(ThemeSettingKey, uiMode.name)
         }
     }
 
     fun getAvailableMoodModes(): List<MoodMode> = MoodMode.values().toList()
 
     fun getMoodMode(): MoodMode {
-        val settingValue = sharedPreferences.getString(MOOD_MODE_KEY, null)
+        val settingValue = sharedPreferences.getString(MoodModeKey, null)
         return if (settingValue == null) {
             val default = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                MoodMode.DYNAMIC
-            } else MoodMode.FORECAST
+                MoodMode.Dynamic
+            } else MoodMode.Forecast
             setMoodMode(default)
             default
         } else {
@@ -47,7 +45,7 @@ class AndroidSettingsRepository @Inject constructor(
 
     fun setMoodMode(moodMode: MoodMode) {
         sharedPreferences.edit {
-            putString(MOOD_MODE_KEY, moodMode.name)
+            putString(MoodModeKey, moodMode.name)
         }
     }
 }

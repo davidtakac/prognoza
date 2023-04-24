@@ -70,7 +70,6 @@ object Dependencies {
         const val appcompat = "androidx.appcompat:appcompat:1.5.1"
         const val splashScreen = "androidx.core:core-splashscreen:1.0.0"
         const val work = "androidx.work:work-runtime-ktx:2.7.1"
-        const val glance = "androidx.glance:glance-appwidget:1.0.0-alpha05"
 
         object Hilt {
             private const val version = GlobalVersions.hilt

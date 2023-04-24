@@ -30,7 +30,7 @@ fun LicensesAndCreditScreen(
         Column {
             val toolbarState = rememberAppToolbarState()
             AppToolbar(
-                title = { Text(stringResource(id = R.string.credit_and_licenses_title)) },
+                title = { Text(stringResource(id = R.string.settings_title_third_party_licenses)) },
                 state = toolbarState,
                 navigation = {
                     IconButton(
@@ -64,7 +64,7 @@ fun LicensesAndCreditScreen(
             ) {
                 item(key = "screen-title") {
                     Text(
-                        text = stringResource(id = R.string.credit_and_licenses_title),
+                        text = stringResource(id = R.string.settings_title_third_party_licenses),
                         style = PrognozaTheme.typography.titleLarge,
                         modifier = Modifier.padding(horizontal = 24.dp)
                     )
@@ -75,49 +75,35 @@ fun LicensesAndCreditScreen(
 
                 item(key = "licenses-header") {
                     SettingsSectionHeader(
-                        text = stringResource(id = R.string.licenses_title),
+                        text = stringResource(id = R.string.settings_heading_third_party_licenses),
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-                    )
-                }
-                item(key = "met-no") {
-                    SettingItem(
-                        name = stringResource(id = R.string.met_norway_credit),
-                        value = stringResource(id = R.string.met_norway_credit_description),
-                        onClick = { openLink("https://api.met.no/doc/License", context) }
                     )
                 }
                 item(key = "open-meteo") {
                     SettingItem(
-                        name = stringResource(id = R.string.open_meteo_credit),
-                        value = stringResource(id = R.string.open_meteo_credit_description),
+                        name = stringResource(id = R.string.settings_title_open_meteo),
+                        value = stringResource(id = R.string.settings_msg_open_meteo),
                         onClick = { openLink("https://open-meteo.com/en/features#terms", context) }
                     )
                 }
                 item(key = "weather-icons") {
                     SettingItem(
-                        name = stringResource(id = R.string.weather_icons_title),
-                        value = stringResource(id = R.string.weather_icons_description),
+                        name = stringResource(id = R.string.settings_title_weather_icons),
+                        value = stringResource(id = R.string.settings_msg_weather_icons),
                         onClick = { openLink("https://api.met.no/doc/License", context) }
                     )
                 }
 
                 item(key = "credit-header") {
                     SettingsSectionHeader(
-                        text = stringResource(id = R.string.credit),
+                        text = stringResource(id = R.string.settings_heading_credit),
                         modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-                    )
-                }
-                item(key = "design") {
-                    SettingItem(
-                        name = stringResource(id = R.string.design_credit),
-                        value = stringResource(id = R.string.design_credit_description),
-                        onClick = { openLink("https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2", context) }
                     )
                 }
                 item(key = "app-icon") {
                     SettingItem(
-                        name = stringResource(id = R.string.launcher_icon_credit),
-                        value = stringResource(id = R.string.launcher_icon_description),
+                        name = stringResource(id = R.string.settings_title_app_icon),
+                        value = stringResource(id = R.string.settings_msg_app_icon),
                         onClick = { openLink("https://www.instagram.com/art.ofil/", context) }
                     )
                 }

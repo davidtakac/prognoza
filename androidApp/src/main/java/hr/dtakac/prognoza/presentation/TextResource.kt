@@ -5,6 +5,8 @@ import android.icu.text.NumberFormat
 import android.text.format.DateFormat
 import android.text.format.DateUtils
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import java.math.BigDecimal
 import java.time.Instant
 import java.time.ZoneId
@@ -42,6 +44,9 @@ sealed interface TextResource {
     }
 
     fun asString(context: Context): String
+
+    @Composable
+    fun asString(): String = asString(LocalContext.current)
 }
 
 private data class SimpleTextResource(

@@ -44,7 +44,7 @@ fun SettingsList(
     ) {
         item(key = "settings") {
             Text(
-                text = stringResource(id = R.string.settings),
+                text = stringResource(id = R.string.settings_title),
                 style = PrognozaTheme.typography.titleLarge,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
@@ -56,22 +56,7 @@ fun SettingsList(
         state.unitSettings.takeIf { it.isNotEmpty() }?.let { settings ->
             item(key = "units-header") {
                 SettingsSectionHeader(
-                    text = stringResource(id = R.string.units),
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
-                )
-            }
-            items(settings) {
-                PickerDialogSettingItem(
-                    state = it,
-                    onPick = it.onIndexSelected
-                )
-            }
-        }
-
-        state.dataSettings.takeIf { it.isNotEmpty() }?.let { settings ->
-            item(key = "data-header") {
-                SettingsSectionHeader(
-                    text = stringResource(id = R.string.sources),
+                    text = stringResource(id = R.string.settings_heading_units),
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
                 )
             }
@@ -86,7 +71,7 @@ fun SettingsList(
         state.appearanceSettings.takeIf { it.isNotEmpty() }?.let { settings ->
             item(key = "appearance-header") {
                 SettingsSectionHeader(
-                    text = stringResource(id = R.string.appearance),
+                    text = stringResource(id = R.string.settings_heading_appearance),
                     modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
                 )
             }
@@ -101,28 +86,28 @@ fun SettingsList(
 
         item(key = "about-header") {
             SettingsSectionHeader(
-                text = stringResource(id = R.string.about_title),
+                text = stringResource(id = R.string.settings_heading_about),
                 modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 24.dp)
             )
         }
         item(key = "source") {
             SettingItem(
-                name = stringResource(id = R.string.source_code_title),
-                value = stringResource(id = R.string.source_code_description),
+                name = stringResource(id = R.string.settings_title_source_code),
+                value = stringResource(id = R.string.settings_msg_source_code),
                 onClick = onSourceClick
             )
         }
         item(key = "license") {
             SettingItem(
-                name = stringResource(id = R.string.license_title),
-                value = stringResource(id = R.string.license_description),
+                name = stringResource(id = R.string.settings_title_license),
+                value = stringResource(id = R.string.settings_msg_license),
                 onClick = onLicenseClick
             )
         }
         item(key = "third-party") {
             SettingItem(
-                name = stringResource(id = R.string.credit_and_licenses_title),
-                value = stringResource(id = R.string.credit_and_licenses_description),
+                name = stringResource(id = R.string.settings_title_third_party_licenses),
+                value = stringResource(id = R.string.settings_msg_third_party_licenses),
                 onClick = onCreditAndLicensesClick
             )
         }

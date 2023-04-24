@@ -73,7 +73,7 @@ private fun SearchFieldDecorationBox(
             Box(modifier = Modifier.weight(1f)) {
                 if (isQueryEmpty) {
                     Text(
-                        text = stringResource(id = R.string.search_places),
+                        text = stringResource(id = R.string.places_hint_search),
                         color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
                     )
                 }

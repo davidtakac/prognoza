@@ -9,7 +9,6 @@ import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.shared.PrognozaSdk
 import hr.dtakac.prognoza.shared.domain.*
 import hr.dtakac.prognoza.shared.platform.PrognozaSdkFactory
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -19,7 +18,7 @@ class UseCaseModule {
     @Singleton
     fun providePrognozaSdk(
         @ApplicationContext context: Context,
-        @Named("user_agent") userAgent: String
+        @UserAgent userAgent: String
     ): PrognozaSdk = PrognozaSdkFactory(context, userAgent).create()
 
     @Provides

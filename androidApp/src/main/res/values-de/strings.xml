@@ -46,104 +46,86 @@
     <string name="description_snow_showers_and_thunder">Schneegewitterschauer</string>
 
     <!-- Compass directions -->
-    <string name="direction_n">Norden</string>
-    <string name="direction_ne">Nordost</string>
-    <string name="direction_e">Osten</string>
-    <string name="direction_se">Südost</string>
-    <string name="direction_s">Süden</string>
-    <string name="direction_sw">Südwest</string>
-    <string name="direction_w">Westen</string>
-    <string name="direction_nw">Nordwest</string>
+    <string name="cardinal_n">Norden</string>
+    <string name="cardinal_ne">Nordost</string>
+    <string name="cardinal_e">Osten</string>
+    <string name="cardinal_se">Südost</string>
+    <string name="cardinal_s">Süden</string>
+    <string name="cardinal_sw">Südwest</string>
+    <string name="cardinal_w">Westen</string>
+    <string name="cardinal_nw">Nordwest</string>
 
-    <string name="template_temperature_degrees">%1$s°</string>
-    <string name="template_feels_like">Gefühlt wie %1$s</string>
-    <string name="template_precipitation_mm">%1$s\u00A0mm</string>
-    <string name="template_precipitation_in">%1$s\u00A0in</string>
-    <string name="template_precipitation_cm">%1$s\u00A0cm</string>
-    <string name="template_wind_kmh">%1$s\u00A0km\u2215h</string>
-    <string name="template_wind_mps">%1$s\u00A0m\u2215s</string>
-    <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>
-    <string name="template_wind_knots">%1$s\u00A0kt</string>
-    <string name="template_high_low_temperature">%1$s\u00A0\u2215\u00A0%2$s</string>
-    <string name="template_wind">%1$s\u00A0\u00B7\u00A0%2$s</string>
-    <string name="error_unknown">Unerwarteter Fehler.</string>
-    <string name="met_norway_credit" translatable="false">MET Norway</string>
-    <string name="open_meteo_credit" translatable="false">Open-Meteo</string>
-    <string name="osm_nominatim_credit" translatable="false">OpenStreetMap</string>
-    <string name="error_no_selected_place">Ort auswählen um Wettervorhersage anzuzeigen.</string>
-    <string name="wind_calm">Ruhig</string>
-    <string name="wind_light_air">Leichte Luft</string>
-    <string name="wind_light_breeze">Leichte Brise</string>
-    <string name="wind_gentle_breeze">Sanfte Brise</string>
-    <string name="wind_moderate_breeze">Mäßige Brise</string>
-    <string name="wind_fresh_breeze">Frische Brise</string>
-    <string name="wind_strong_breeze">Starke Brise</string>
-    <string name="wind_near_gale">Mäßiger Orkan</string>
-    <string name="wind_gale">Orkan</string>
-    <string name="wind_severe_gale">Schwerer Orkan</string>
-    <string name="wind_storm">Sturm</string>
-    <string name="wind_violent_storm">Heftiger Sturm</string>
-    <string name="wind_hurricane">Wirbelsturm</string>
-    <string name="hourly">Stündlich</string>
-    <string name="coming">Darauffolgend</string>
-    <string name="settings">Einstellungen</string>
-    <string name="search_places">Orte suchen...</string>
-    <string name="no_saved_places">Die Orte, die Sie suchen und auswählen, erscheinen hier.</string>
-    <string name="no_places_found">Keine zutreffenden Orte gefunden bezüglich \"%1$s\".</string>
-    <string name="error_search_places">Bei der Suche nach Orten ist ein Fehler aufgetreten. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
-    <string name="units">Einheiten</string>
-    <string name="precipitation_unit">Einheit Niederschlag</string>
-    <string name="pressure_unit">Einheit Luftdruck</string>
-    <string name="wind_unit">Einheit Wind</string>
-    <string name="temperature_unit">Einheit Temperatur</string>
-    <string name="settings_label_celsius">Grad Celsius</string>
-    <string name="settings_label_fahrenheit">Grad Fahrenheit</string>
-    <string name="confirm">Bestätigen</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="settings_label_mps">Meter pro Sekunde</string>
-    <string name="settings_label_kph">Stundenkilometer</string>
-    <string name="settings_label_mph">Meilen pro Stunde</string>
-    <string name="settings_label_knots">Knoten</string>
+    <string name="temperature_value">%s°</string>
+    <string name="length_value_mm">%s\u00A0mm</string>
+    <string name="length_value_in">%s\u00A0in</string>
+    <string name="length_value_cm">%s\u00A0cm</string>
+    <string name="speed_value_kmh">%s\u00A0km\u2215h</string>
+    <string name="speed_value_mps">%s\u00A0m\u2215s</string>
+    <string name="speed_value_mph">%s\u00A0mi\u2215h</string>
+    <string name="speed_value_kt">%s\u00A0kt</string>
+    <string name="forecast_msg_empty_no_place">Ort auswählen um Wettervorhersage anzuzeigen.</string>
+    <string name="beaufort_label_0">Ruhig</string>
+    <string name="beaufort_label_1">Leichte Luft</string>
+    <string name="beaufort_label_2">Leichte Brise</string>
+    <string name="beaufort_label_3">Sanfte Brise</string>
+    <string name="beaufort_label_4">Mäßige Brise</string>
+    <string name="beaufort_label_5">Frische Brise</string>
+    <string name="beaufort_label_6">Starke Brise</string>
+    <string name="beaufort_label_7">Mäßiger Orkan</string>
+    <string name="beaufort_label_8">Orkan</string>
+    <string name="beaufort_label_9">Schwerer Orkan</string>
+    <string name="beaufort_label_11">Sturm</string>
+    <string name="beaufort_label_12">Heftiger Sturm</string>
+    <string name="beaufort_label_13">Wirbelsturm</string>
+    <string name="forecast_title_hourly">Stündlich</string>
+    <string name="forecast_title_coming">Darauffolgend</string>
+    <string name="settings_title">Einstellungen</string>
+    <string name="places_hint_search">Orte suchen...</string>
+    <string name="places_msg_empty">Die Orte, die Sie suchen und auswählen, erscheinen hier.</string>
+    <string name="places_err_none_found">Keine zutreffenden Orte gefunden bezüglich \"%s\".</string>
+    <string name="places_err_search">Bei der Suche nach Orten ist ein Fehler aufgetreten. Überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut.</string>
+    <string name="settings_heading_units">Einheiten</string>
+    <string name="settings_title_length">Einheit Niederschlag</string>
+    <string name="settings_title_pressure">Einheit Luftdruck</string>
+    <string name="settings_title_speed">Einheit Wind</string>
+    <string name="settings_title_temperature">Einheit Temperatur</string>
+    <string name="settings_label_temperature_celsius">Grad Celsius</string>
+    <string name="settings_label_temperature_fahrenheit">Grad Fahrenheit</string>
+    <string name="common_btn_confirm">Bestätigen</string>
+    <string name="common_btn_cancel">Abbrechen</string>
+    <string name="settings_label_speed_mps">Meter pro Sekunde</string>
+    <string name="settings_label_speed_kph">Stundenkilometer</string>
+    <string name="settings_label_speed_mph">Meilen pro Stunde</string>
+    <string name="settings_label_speed_knots">Knoten</string>
     <string name="settings_label_mm">Millimeter</string>
     <string name="settings_label_in">Zoll</string>
     <string name="settings_label_cm">Zentimeter</string>
-    <string name="settings_label_mbar">Millibar</string>
-    <string name="settings_label_inhg">Zoll Quecksilber</string>
-    <string name="appearance">Erscheinungsbild</string>
-    <string name="theme">Thema</string>
-    <string name="settings_label_light">Hell</string>
-    <string name="settings_label_dark">Dunkel</string>
-    <string name="settings_label_follow_system">Wie System</string>
-    <string name="widget_empty">Keine Prognosedaten. Stellen Sie sicher, dass Sie einen Ort ausgewählt haben und online sind</string>
-    <string name="widget_description">Wettervorhersage für die nächsten paar Stunden.</string>
-    <string name="widget_name">Aktuelle Prognose</string>
-    <string name="credit">Credits</string>
-    <string name="weather_data">Wetterdaten</string>
-    <string name="geolocation_data">Ortsdaten</string>
-    <string name="design_credit">Design</string>
-    <string name="design_credit_description" translatable="false">Neal Hampton</string>
-    <string name="launcher_icon_credit">App icon</string>
-    <string name="launcher_icon_description" translatable="false">Nataša Takač</string>
-    <string name="mood_source">Stimmung</string>
-    <string name="mood_mode_forecast">Aktuelles Wetter</string>k
-    <string name="mood_mode_dynamic">Wie System</string>
-    <string name="delete">Löschen</string>
-    <string name="delete_place_title">%1$s löschen?</string>
-    <string name="template_delete_place_description">Dadurch werden alle Daten gelöscht. Sie können jederzeit erneut danach suchen und sie auswählen.</string>
-    <string name="sources">Quellen</string>
-    <string name="template_data_from">Daten von %1$s</string>
-    <string name="credit_and_licenses_title">Lizenzen und Credits</string>
-    <string name="source_code_title">Quellcode</string>
-    <string name="source_code_description" translatable="false">GitHub</string>
-    <string name="about_title">Über</string>
-    <string name="license_title">Lizenz</string>
-    <string name="license_description">MIT Lizenz</string>
-    <string name="credit_and_licenses_description">MET Norwegen, OpenStreetMap und weitere</string>
-    <string name="licenses_title">Lizenzen</string>
-    <string name="met_norway_credit_description" translatable="false">NLOD 2.0, CC BY 4.0</string>
-    <string name="open_meteo_credit_description" translatable="false">CC BY 4.0</string>
-    <string name="osm_nominatim_credit_description" translatable="false">ODbL</string>
-    <string name="weather_icons_title">Wettersymbole</string>
-    <string name="weather_icons_description">MET Norwegen, MIT Lizenz</string>
+    <string name="settings_label_pressure_mbar">Millibar</string>
+    <string name="settings_label_pressure_inhg">Zoll Quecksilber</string>
+    <string name="settings_heading_appearance">Erscheinungsbild</string>
+    <string name="settings_title_theme">Thema</string>
+    <string name="settings_label_theme_light">Hell</string>
+    <string name="settings_label_theme_dark">Dunkel</string>
+    <string name="settings_label_theme_follow_system">Wie System</string>
+    <string name="settings_title_app_icon">App icon</string>
+    <string name="settings_msg_app_icon" translatable="false">Nataša Takač</string>
+    <string name="settings_title_mood">Stimmung</string>
+    <string name="settings_label_mood_forecast">Aktuelles Wetter</string>k
+    <string name="settings_label_mood_dynamic">Wie System</string>
+    <string name="common_btn_delete">Löschen</string>
+    <string name="places_title_delete_confirm">%s löschen?</string>
+    <string name="places_msg_delete_confirm">Dadurch werden alle Daten gelöscht. Sie können jederzeit erneut danach suchen und sie auswählen.</string>
+    <string name="common_msg_data_from">Daten von %s</string>
+    <string name="settings_title_third_party_licenses">Lizenzen und Credits</string>
+    <string name="settings_title_source_code">Quellcode</string>
+    <string name="settings_msg_source_code" translatable="false">GitHub</string>
+    <string name="settings_heading_about">Über</string>
+    <string name="settings_title_license">Lizenz</string>
+    <string name="settings_msg_license">MIT Lizenz</string>
+    <string name="settings_msg_third_party_licenses">MET Norwegen, OpenStreetMap und weitere</string>
+    <string name="settings_heading_third_party_licenses">Lizenzen</string>
+    <string name="settings_msg_open_meteo" translatable="false">CC BY 4.0</string>
+    <string name="settings_title_weather_icons">Wettersymbole</string>
+    <string name="settings_msg_weather_icons">MET Norwegen, MIT Lizenz</string>
 
 </resources>

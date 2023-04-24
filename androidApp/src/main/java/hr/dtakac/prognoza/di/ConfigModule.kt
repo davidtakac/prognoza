@@ -4,10 +4,9 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import hr.dtakac.prognoza.BuildConfig
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import javax.inject.Named
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -15,10 +14,10 @@ import javax.inject.Singleton
 class ConfigModule {
     @Provides
     @Singleton
-    @Named("user_agent")
+    @UserAgent
     fun provideUserAgent(): String {
         val appName = "Prognoza"
-        val version = BuildConfig.VERSION_NAME
+        val version = "1"
         val platform = "Android"
         val source = "https://github.com/davidtakac/prognoza"
         val email = "developer.takac@gmail.com"
@@ -26,6 +25,14 @@ class ConfigModule {
     }
 
     @Provides
-    @Named("computation")
+    @ComputationDispatcher
     fun provideComputationDispatcher(): CoroutineDispatcher = Dispatchers.Default
 }
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class UserAgent
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ComputationDispatcher

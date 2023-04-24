@@ -1,17 +1,14 @@
 package hr.dtakac.prognoza.presentation.places
 
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.di.ComputationDispatcher
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.shared.entity.Place
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
-import javax.inject.Named
 
-class PlacesUiMapper @Inject constructor(
-    @Named("computation")
-    private val computationDispatcher: CoroutineDispatcher
-) {
+class PlacesUiMapper @Inject constructor(@ComputationDispatcher private val computationDispatcher: CoroutineDispatcher) {
     suspend fun mapToSavedPlacesUi(
         places: List<Place>,
         selectedPlace: Place?,
@@ -48,18 +45,18 @@ class PlacesUiMapper @Inject constructor(
         result: List<Place>?,
         query: String
     ): TextResource? = when {
-        result == null -> TextResource.fromStringId(R.string.error_search_places)
+        result == null -> TextResource.fromStringId(R.string.places_err_search)
         result.isEmpty() -> TextResource.fromStringId(
-            id = R.string.no_places_found,
+            id = R.string.places_err_none_found,
             TextResource.fromString(query)
         )
         else -> null
     }
 
-    fun getEmptyMessage(): TextResource = TextResource.fromStringId(R.string.no_saved_places)
+    fun getEmptyMessage(): TextResource = TextResource.fromStringId(R.string.places_msg_empty)
 
     fun getProvider(): TextResource = TextResource.fromStringId(
-        R.string.template_data_from,
-        TextResource.fromStringId(R.string.open_meteo_credit)
+        R.string.common_msg_data_from,
+        TextResource.fromStringId(R.string.common_value_data_from_open_meteo)
     )
 }

@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.presentation.simpleEvent
-import hr.dtakac.prognoza.presentation.WidgetRefresher
 import hr.dtakac.prognoza.shared.domain.*
 import hr.dtakac.prognoza.shared.entity.Place
 import kotlinx.coroutines.launch
@@ -20,7 +19,6 @@ class PlacesViewModel @Inject constructor(
     private val selectPlace: SelectPlace,
     private val getSelectedPlace: GetSelectedPlace,
     private val deleteSavedPlace: DeleteSavedPlace,
-    private val widgetRefresher: WidgetRefresher,
     private val mapper: PlacesUiMapper
 ) : ViewModel() {
     private var currentPlaces: List<Place> = listOf()
@@ -52,7 +50,6 @@ class PlacesViewModel @Inject constructor(
             showLoader()
             selectPlace(currentPlaces[index])
             showSaved().also { state = state.copy(placeSelected = simpleEvent()) }
-            widgetRefresher.refreshData()
             hideLoader()
         }
     }
@@ -60,7 +57,7 @@ class PlacesViewModel @Inject constructor(
     fun deletePlace(index: Int) {
         viewModelScope.launch {
             showLoader()
-            deleteSavedPlace(currentPlaces[index])
+            deleteSavedPlace(currentPlaces[index].id)
             showSaved()
             hideLoader()
         }

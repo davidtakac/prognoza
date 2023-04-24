@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">Prognoza</string>
 
+    <string name="common_msg_data_from">Data from %s</string>
+    <string name="common_value_data_from_open_meteo" translatable="false">Open-Meteo</string>
+    <string name="common_btn_delete">Delete</string>
+    <string name="common_btn_confirm">Confirm</string>
+    <string name="common_btn_cancel">Cancel</string>
+
     <!--Weather descriptions-->
     <string name="description_unknown">Unknown</string>
     <string name="description_clear_sky">Clear</string>
@@ -45,103 +51,90 @@
     <string name="description_snow_showers">Snow showers</string>
     <string name="description_snow_showers_and_thunder">Thundersnow showers</string>
 
-    <!-- Compass directions -->
-    <string name="direction_n">North</string>
-    <string name="direction_ne">Northeast</string>
-    <string name="direction_e">East</string>
-    <string name="direction_se">Southeast</string>
-    <string name="direction_s">South</string>
-    <string name="direction_sw">Southwest</string>
-    <string name="direction_w">West</string>
-    <string name="direction_nw">Northwest</string>
+    <string name="beaufort_label_0">Calm</string>
+    <string name="beaufort_label_1">Light air</string>
+    <string name="beaufort_label_2">Light breeze</string>
+    <string name="beaufort_label_3">Gentle breeze</string>
+    <string name="beaufort_label_4">Moderate breeze</string>
+    <string name="beaufort_label_5">Fresh breeze</string>
+    <string name="beaufort_label_6">Strong breeze</string>
+    <string name="beaufort_label_7">Near gale</string>
+    <string name="beaufort_label_8">Gale</string>
+    <string name="beaufort_label_9">Severe gale</string>
+    <string name="beaufort_label_11">Storm</string>
+    <string name="beaufort_label_12">Violent storm</string>
+    <string name="beaufort_label_13">Hurricane</string>
 
-    <string name="template_temperature_degrees">%1$s°</string>
-    <string name="template_feels_like">Feels like %1$s</string>
-    <string name="template_precipitation_mm">%1$s\u00A0mm</string>
-    <string name="template_precipitation_in">%1$s\u00A0in</string>
-    <string name="template_precipitation_cm">%1$s\u00A0cm</string>
-    <string name="template_wind_kmh">%1$s\u00A0km\u2215h</string>
-    <string name="template_wind_mps">%1$s\u00A0m\u2215s</string>
-    <string name="template_wind_mph">%1$s\u00A0mi\u2215h</string>
-    <string name="template_wind_knots">%1$s\u00A0kt</string>
-    <string name="template_high_low_temperature">%1$s\u00A0\u2215\u00A0%2$s</string>
-    <string name="template_wind">%1$s\u00A0\u00B7\u00A0%2$s</string>
-    <string name="error_unknown">An unexpected error occurred.</string>
-    <string name="met_norway_credit" translatable="false">MET Norway</string>
-    <string name="open_meteo_credit" translatable="false">Open-Meteo</string>
-    <string name="error_no_selected_place">Select a place to see its forecast.</string>
-    <string name="wind_calm">Calm</string>
-    <string name="wind_light_air">Light air</string>
-    <string name="wind_light_breeze">Light breeze</string>
-    <string name="wind_gentle_breeze">Gentle breeze</string>
-    <string name="wind_moderate_breeze">Moderate breeze</string>
-    <string name="wind_fresh_breeze">Fresh breeze</string>
-    <string name="wind_strong_breeze">Strong breeze</string>
-    <string name="wind_near_gale">Near gale</string>
-    <string name="wind_gale">Gale</string>
-    <string name="wind_severe_gale">Severe gale</string>
-    <string name="wind_storm">Storm</string>
-    <string name="wind_violent_storm">Violent storm</string>
-    <string name="wind_hurricane">Hurricane</string>
-    <string name="hourly">Hourly</string>
-    <string name="coming">Coming</string>
-    <string name="settings">Settings</string>
-    <string name="search_places">Search places…</string>
-    <string name="no_saved_places">The places you search for and select will appear here.</string>
-    <string name="no_places_found">No places found that match \"%1$s\".</string>
-    <string name="error_search_places">An error occurred when searching places. Check your internet and try again.</string>
-    <string name="units">Units</string>
-    <string name="precipitation_unit">Precipitation unit</string>
-    <string name="pressure_unit">Pressure unit</string>
-    <string name="wind_unit">Wind unit</string>
-    <string name="temperature_unit">Temperature unit</string>
-    <string name="settings_label_celsius">Degree Celsius</string>
-    <string name="settings_label_fahrenheit">Degree Fahrenheit</string>
-    <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
-    <string name="settings_label_mps">Metre per second</string>
-    <string name="settings_label_kph">Kilometre per hour</string>
-    <string name="settings_label_mph">Mile per hour</string>
-    <string name="settings_label_knots">Knot</string>
-    <string name="settings_label_mm">Millimetre</string>
-    <string name="settings_label_in">Inch</string>
-    <string name="settings_label_cm">Centimetre</string>
-    <string name="settings_label_mbar">Millibar</string>
-    <string name="settings_label_inhg">Inch of mercury</string>
-    <string name="appearance">Appearance</string>
-    <string name="theme">Theme</string>
-    <string name="settings_label_light">Light</string>
-    <string name="settings_label_dark">Dark</string>
-    <string name="settings_label_follow_system">Follow system</string>
-    <string name="widget_empty">No forecast data. Make sure that you have a selected place and are online</string>
-    <string name="widget_description">Weather forecast for the next couple of hours.</string>
-    <string name="widget_name">Current forecast</string>
-    <string name="credit">Credit</string>
-    <string name="weather_data">Weather data</string>
-    <string name="geolocation_data">Place data</string>
-    <string name="design_credit">Design</string>
-    <string name="design_credit_description" translatable="false">Neal Hampton</string>
-    <string name="launcher_icon_credit">App icon</string>
-    <string name="launcher_icon_description" translatable="false">Nataša Takač</string>
-    <string name="mood_source">Mood</string>
-    <string name="mood_mode_forecast">Current weather</string>k
-    <string name="mood_mode_dynamic">Follow system</string>
-    <string name="delete">Delete</string>
-    <string name="delete_place_title">Delete %1$s?</string>
-    <string name="template_delete_place_description">This will clear all of its data. You can always search for and select it again.</string>
-    <string name="sources">Sources</string>
-    <string name="template_data_from">Data from %1$s</string>
-    <string name="credit_and_licenses_title">Licenses and credit</string>
-    <string name="source_code_title">Source code</string>
-    <string name="source_code_description" translatable="false">GitHub</string>
-    <string name="about_title">About</string>
-    <string name="license_title">License</string>
-    <string name="license_description">MIT License</string>
-    <string name="credit_and_licenses_description">MET Norway and more</string>
-    <string name="licenses_title">Licenses</string>
-    <string name="met_norway_credit_description" translatable="false">NLOD 2.0, CC BY 4.0</string>
-    <string name="open_meteo_credit_description" translatable="false">CC BY 4.0</string>
-    <string name="weather_icons_title">Weather icons</string>
-    <string name="weather_icons_description">MET Norway, MIT License</string>
+    <string name="cardinal_n">North</string>
+    <string name="cardinal_ne">Northeast</string>
+    <string name="cardinal_e">East</string>
+    <string name="cardinal_se">Southeast</string>
+    <string name="cardinal_s">South</string>
+    <string name="cardinal_sw">Southwest</string>
+    <string name="cardinal_w">West</string>
+    <string name="cardinal_nw">Northwest</string>
+
+    <string name="temperature_value">%s°</string>
+    <string name="length_value_mm">%s\u00A0mm</string>
+    <string name="length_value_in">%s\u00A0in</string>
+    <string name="length_value_cm">%s\u00A0cm</string>
+    <string name="speed_value_kmh">%s\u00A0km\u2215h</string>
+    <string name="speed_value_mps">%s\u00A0m\u2215s</string>
+    <string name="speed_value_mph">%s\u00A0mi\u2215h</string>
+    <string name="speed_value_kt">%s\u00A0kt</string>
+
+    <string name="forecast_msg_empty_no_place">Select a place to see its forecast.</string>
+    <string name="forecast_title_hourly">Hourly</string>
+    <string name="forecast_title_coming">Coming</string>
+
+    <string name="places_hint_search">Search places…</string>
+    <string name="places_msg_empty">The places you search for and select will appear here.</string>
+    <string name="places_err_none_found">No places found that match \"%s\".</string>
+    <string name="places_err_search">An error occurred when searching places. Check your internet connection and try again.</string>
+    <string name="places_title_delete_confirm">Delete %s?</string>
+    <string name="places_msg_delete_confirm">This will clear all of its data. You can always search for and select it again.</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_heading_units">Units</string>
+    <string name="settings_title_temperature">Temperature unit</string>
+    <string name="settings_label_temperature_celsius">Degree Celsius</string>
+    <string name="settings_label_temperature_fahrenheit">Degree Fahrenheit</string>
+    <!--TODO: change translations to mean "Speed" and not "Wind" unit-->
+    <string name="settings_title_speed">Speed unit</string>
+    <string name="settings_label_speed_mps">Metre per second</string>
+    <string name="settings_label_speed_kph">Kilometre per hour</string>
+    <string name="settings_label_speed_mph">Mile per hour</string>
+    <string name="settings_label_speed_knots">Knot</string>
+    <string name="settings_label_speed_beaufort">Beaufort scale</string>
+    <!--TODO: change translations to mean "Length" and not "Precipitation" unit-->
+    <string name="settings_title_length">Length unit</string>
+    <string name="settings_label_length_metric">Metric</string>
+    <string name="settings_label_length_imperial">Imperial</string>
+    <string name="settings_label_pressure_mbar">Millibar</string>
+    <string name="settings_title_pressure">Pressure unit</string>
+    <string name="settings_label_pressure_inhg">Inch of mercury</string>
+    <string name="settings_heading_appearance">Appearance</string>
+    <string name="settings_title_theme">Theme</string>
+    <string name="settings_label_theme_light">Light</string>
+    <string name="settings_label_theme_dark">Dark</string>
+    <string name="settings_label_theme_follow_system">Follow system</string>
+    <string name="settings_title_mood">Mood</string>
+    <string name="settings_label_mood_forecast">Current weather</string>
+    <string name="settings_label_mood_dynamic">Follow system</string>
+    <string name="settings_heading_about">About</string>
+    <string name="settings_title_source_code">Source code</string>
+    <string name="settings_msg_source_code" translatable="false">GitHub</string>
+    <string name="settings_title_license">License</string>
+    <string name="settings_msg_license">MIT License</string>
+    <string name="settings_title_third_party_licenses">Licenses and credit</string>
+    <string name="settings_msg_third_party_licenses">MET Norway and more</string>
+    <string name="settings_heading_third_party_licenses">Licenses</string>
+    <string name="settings_title_open_meteo">Open-Meteo</string>
+    <string name="settings_msg_open_meteo" translatable="false">CC BY 4.0</string>
+    <string name="settings_title_weather_icons">Weather icons</string>
+    <string name="settings_msg_weather_icons">MET Norway, MIT License</string>
+    <string name="settings_heading_credit">Credit</string>
+    <string name="settings_title_app_icon">App icon</string>
+    <string name="settings_msg_app_icon" translatable="false">Nataša Takač</string>
 
 </resources>

@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.presentation.simpleEvent
 import hr.dtakac.prognoza.androidsettings.UiMode
-import hr.dtakac.prognoza.presentation.WidgetRefresher
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsRepository
 import hr.dtakac.prognoza.shared.domain.*
@@ -30,18 +29,13 @@ class SettingsScreenViewModel @Inject constructor(
     private val setPressureUnit: SetPressureUnit,
     private val getPressureUnit: GetPressureUnit,
     private val getAllPressureUnits: GetAllPressureUnits,
-    private val setForecastProvider: SetForecastProvider,
-    private val getForecastProvider: GetForecastProvider,
-    private val getAllForecastProviders: GetAllForecastProviders,
     private val androidSettingsRepository: AndroidSettingsRepository,
-    private val widgetRefresher: WidgetRefresher,
     private val mapper: SettingsScreenUiMapper
 ) : ViewModel() {
     private var availableTemperatureUnits: List<TemperatureUnit> = listOf()
     private var availableWindUnits: List<SpeedUnit> = listOf()
     private var availablePrecipitationUnits: List<LengthUnit> = listOf()
     private var availablePressureUnits: List<PressureUnit> = listOf()
-    private var availableProviders: List<ForecastProvider> = listOf()
     private var availableUiModes: List<UiMode> = listOf()
     private var availableMoodModes: List<MoodMode> = listOf()
 
@@ -80,13 +74,6 @@ class SettingsScreenViewModel @Inject constructor(
         }
     }
 
-    private fun setForecastProvider(index: Int) {
-        updateState {
-            setForecastProvider(availableProviders[index])
-            fireUpdateForecast()
-        }
-    }
-
     private fun setTheme(index: Int) {
         updateState {
             androidSettingsRepository.setUiMode(availableUiModes[index])
@@ -115,7 +102,6 @@ class SettingsScreenViewModel @Inject constructor(
         availableWindUnits = getAllWindUnits()
         availablePrecipitationUnits = getAllPrecipitationUnits()
         availablePressureUnits = getAllPressureUnits()
-        availableProviders = getAllForecastProviders()
         availableUiModes = androidSettingsRepository.getAvailableUiModes()
         availableMoodModes = androidSettingsRepository.getAvailableMoodModes()
 
@@ -135,13 +121,6 @@ class SettingsScreenViewModel @Inject constructor(
                     selected = getPrecipitationUnit(),
                     units = availablePrecipitationUnits,
                     onIndexSelected = ::setPrecipitationUnit
-                )
-            ),
-            dataSettings = listOf(
-                mapper.mapToForecastProviderSetting(
-                    selected = getForecastProvider(),
-                    providers = availableProviders,
-                    onIndexSelected = ::setForecastProvider
                 )
             ),
             appearanceSettings = mutableListOf<MultipleChoiceSettingUi>().apply {
@@ -170,7 +149,6 @@ class SettingsScreenViewModel @Inject constructor(
     }
 
     private fun fireUpdateForecast() {
-        widgetRefresher.refreshData()
         _state.value = _state.value.copy(
             updateForecastEvent = simpleEvent()
         )

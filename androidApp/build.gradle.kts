@@ -106,7 +106,6 @@ dependencies {
     implementation(Dependencies.Android.appcompat)
     implementation(Dependencies.Android.work)
     implementation(Dependencies.Android.splashScreen)
-    implementation(Dependencies.Android.glance)
     implementation(Dependencies.Android.Lifecycle.core)
     implementation(Dependencies.Android.Lifecycle.viewModel)
     implementation(Dependencies.Android.Lifecycle.composeViewModel)

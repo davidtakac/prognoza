@@ -1,8 +1,7 @@
-package hr.dtakac.prognoza.presentation.forecast
+package hr.dtakac.prognoza.presentation
 
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.shared.entity.*
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -11,7 +10,7 @@ fun getTemperature(
     temperature: Temperature,
     unit: TemperatureUnit
 ): TextResource = TextResource.fromStringId(
-    id = R.string.template_temperature_degrees,
+    id = R.string.temperature_value,
     TextResource.fromNumber(
         BigDecimal(
             when (unit) {
@@ -24,31 +23,31 @@ fun getTemperature(
 
 @StringRes
 fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
-    CardinalDirection.N -> R.string.direction_n
-    CardinalDirection.NE -> R.string.direction_ne
-    CardinalDirection.E -> R.string.direction_e
-    CardinalDirection.SE -> R.string.direction_se
-    CardinalDirection.S -> R.string.direction_s
-    CardinalDirection.SW -> R.string.direction_sw
-    CardinalDirection.W -> R.string.direction_w
-    else -> R.string.direction_nw
+    CardinalDirection.N -> R.string.cardinal_n
+    CardinalDirection.NE -> R.string.cardinal_ne
+    CardinalDirection.E -> R.string.cardinal_e
+    CardinalDirection.SE -> R.string.cardinal_se
+    CardinalDirection.S -> R.string.cardinal_s
+    CardinalDirection.SW -> R.string.cardinal_sw
+    CardinalDirection.W -> R.string.cardinal_w
+    else -> R.string.cardinal_nw
 }
 
 @StringRes
 fun Int.toBeaufortStringId(): Int = when (this) {
-    0 -> R.string.wind_calm
-    1 -> R.string.wind_light_air
-    2 -> R.string.wind_light_breeze
-    3 -> R.string.wind_gentle_breeze
-    4 -> R.string.wind_moderate_breeze
-    5 -> R.string.wind_fresh_breeze
-    6 -> R.string.wind_strong_breeze
-    7 -> R.string.wind_near_gale
-    8 -> R.string.wind_gale
-    9 -> R.string.wind_severe_gale
-    11 -> R.string.wind_storm
-    12 -> R.string.wind_violent_storm
-    else -> R.string.wind_hurricane
+    0 -> R.string.beaufort_label_0
+    1 -> R.string.beaufort_label_1
+    2 -> R.string.beaufort_label_2
+    3 -> R.string.beaufort_label_3
+    4 -> R.string.beaufort_label_4
+    5 -> R.string.beaufort_label_5
+    6 -> R.string.beaufort_label_6
+    7 -> R.string.beaufort_label_7
+    8 -> R.string.beaufort_label_8
+    9 -> R.string.beaufort_label_9
+    11 -> R.string.beaufort_label_11
+    12 -> R.string.beaufort_label_12
+    else -> R.string.beaufort_label_13
 }
 
 /*
@@ -213,4 +212,97 @@ fun Description.toStringId(): Int = when (this) {
     SNOW_SHOWERS_DAY,
     SNOW_SHOWERS_NIGHT,
     SNOW_SHOWERS_POLAR_TWILIGHT -> R.string.description_snow_showers
+}*/
+/*
+
+// See https://nrkno.github.io/yr-weather-symbols/ for the mapping logic
+@Composable
+@DrawableRes
+fun Description.asWeatherIconResId(
+    weatherIcons: WeatherIcons = PrognozaTheme.weatherIcons
+): Int = when (this) {
+    Description.UNKNOWN -> R.drawable.ic_question_mark
+    Description.CLEAR_SKY_DAY -> weatherIcons.ic01d
+    Description.CLEAR_SKY_NIGHT -> weatherIcons.ic01n
+    Description.CLEAR_SKY_POLAR_TWILIGHT -> weatherIcons.ic01m
+    Description.CLOUDY -> weatherIcons.ic04
+    Description.FAIR_DAY -> weatherIcons.ic02d
+    Description.FAIR_NIGHT -> weatherIcons.ic02n
+    Description.FAIR_POLAR_TWILIGHT -> weatherIcons.ic02m
+    Description.FOG -> weatherIcons.ic15
+    Description.HEAVY_RAIN_AND_THUNDER -> weatherIcons.ic11
+    Description.HEAVY_RAIN -> weatherIcons.ic10
+    Description.HEAVY_RAIN_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic25d
+    Description.HEAVY_RAIN_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic25n
+    Description.HEAVY_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic25m
+    Description.HEAVY_RAIN_SHOWERS_DAY -> weatherIcons.ic41d
+    Description.HEAVY_RAIN_SHOWERS_NIGHT -> weatherIcons.ic41n
+    Description.HEAVY_RAIN_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic41m
+    Description.HEAVY_SLEET_AND_THUNDER -> weatherIcons.ic32
+    Description.HEAVY_SLEET -> weatherIcons.ic48
+    Description.HEAVY_SLEET_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic27d
+    Description.HEAVY_SLEET_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic27n
+    Description.HEAVY_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic27m
+    Description.HEAVY_SLEET_SHOWERS_DAY -> weatherIcons.ic43d
+    Description.HEAVY_SLEET_SHOWERS_NIGHT -> weatherIcons.ic43n
+    Description.HEAVY_SLEET_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic43m
+    Description.HEAVY_SNOW_AND_THUNDER -> weatherIcons.ic34
+    Description.HEAVY_SNOW -> weatherIcons.ic50
+    Description.HEAVY_SNOW_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic29d
+    Description.HEAVY_SNOW_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic29n
+    Description.HEAVY_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic29m
+    Description.HEAVY_SNOW_SHOWERS_DAY -> weatherIcons.ic45d
+    Description.HEAVY_SNOW_SHOWERS_NIGHT -> weatherIcons.ic45n
+    Description.HEAVY_SNOW_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic45m
+    Description.LIGHT_RAIN_AND_THUNDER -> weatherIcons.ic30
+    Description.LIGHT_RAIN -> weatherIcons.ic46
+    Description.LIGHT_RAIN_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic24d
+    Description.LIGHT_RAIN_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic24n
+    Description.LIGHT_RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic24m
+    Description.LIGHT_RAIN_SHOWERS_DAY -> weatherIcons.ic40d
+    Description.LIGHT_RAIN_SHOWERS_NIGHT -> weatherIcons.ic40n
+    Description.LIGHT_RAIN_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic40m
+    Description.LIGHT_SLEET_AND_THUNDER -> weatherIcons.ic31
+    Description.LIGHT_SLEET -> weatherIcons.ic47
+    Description.LIGHT_SLEET_SHOWERS_DAY -> weatherIcons.ic42d
+    Description.LIGHT_SLEET_SHOWERS_NIGHT -> weatherIcons.ic42n
+    Description.LIGHT_SLEET_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic42m
+    Description.LIGHT_SNOW_AND_THUNDER -> weatherIcons.ic33
+    Description.LIGHT_SNOW -> weatherIcons.ic49
+    Description.LIGHT_SNOW_SHOWERS_DAY -> weatherIcons.ic44d
+    Description.LIGHT_SNOW_SHOWERS_NIGHT -> weatherIcons.ic44n
+    Description.LIGHT_SNOW_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic44m
+    Description.LIGHT_SLEET_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic26d
+    Description.LIGHT_SLEET_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic26n
+    Description.LIGHT_SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic26m
+    Description.LIGHT_SNOW_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic28d
+    Description.LIGHT_SNOW_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic28n
+    Description.LIGHT_SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic28m
+    Description.PARTLY_CLOUDY_DAY -> weatherIcons.ic03d
+    Description.PARTLY_CLOUDY_NIGHT -> weatherIcons.ic03n
+    Description.PARTLY_CLOUDY_POLAR_TWILIGHT -> weatherIcons.ic03m
+    Description.RAIN_AND_THUNDER -> weatherIcons.ic11
+    Description.RAIN -> weatherIcons.ic09
+    Description.RAIN_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic06d
+    Description.RAIN_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic06n
+    Description.RAIN_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic06m
+    Description.RAIN_SHOWERS_DAY -> weatherIcons.ic05d
+    Description.RAIN_SHOWERS_NIGHT -> weatherIcons.ic05n
+    Description.RAIN_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic05m
+    Description.SLEET_AND_THUNDER -> weatherIcons.ic23
+    Description.SLEET -> weatherIcons.ic12
+    Description.SLEET_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic20d
+    Description.SLEET_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic20n
+    Description.SLEET_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic20m
+    Description.SLEET_SHOWERS_DAY -> weatherIcons.ic07d
+    Description.SLEET_SHOWERS_NIGHT -> weatherIcons.ic07n
+    Description.SLEET_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic07m
+    Description.SNOW_AND_THUNDER -> weatherIcons.ic14
+    Description.SNOW -> weatherIcons.ic13
+    Description.SNOW_SHOWERS_AND_THUNDER_DAY -> weatherIcons.ic21d
+    Description.SNOW_SHOWERS_AND_THUNDER_NIGHT -> weatherIcons.ic21n
+    Description.SNOW_SHOWERS_AND_THUNDER_POLAR_TWILIGHT -> weatherIcons.ic21m
+    Description.SNOW_SHOWERS_DAY -> weatherIcons.ic08d
+    Description.SNOW_SHOWERS_NIGHT -> weatherIcons.ic08n
+    Description.SNOW_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic08m
 }*/

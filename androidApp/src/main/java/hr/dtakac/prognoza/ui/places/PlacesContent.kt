@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.asString
 import hr.dtakac.prognoza.presentation.places.PlaceUi
 import hr.dtakac.prognoza.presentation.places.PlacesState
 import hr.dtakac.prognoza.ui.common.ContentLoadingIndicatorHost
