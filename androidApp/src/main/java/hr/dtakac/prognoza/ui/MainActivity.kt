@@ -3,12 +3,17 @@ package hr.dtakac.prognoza.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,7 +26,6 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
-import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
@@ -64,7 +68,11 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "forecast") {
                     composable("forecast") {
-                        Text("Forecast screen")
+                        Text(
+                            modifier = Modifier.background(Color.White).padding(64.dp).fillMaxSize(),
+                            color = Color.Black,
+                            text = "Forecast screen"
+                        )
                     }
                     composable("settings") {
                         SettingsScreen(

@@ -24,18 +24,16 @@ internal class InternalPrognozaSdkFactory constructor(
     private val computationDispatcher: CoroutineDispatcher
 ) {
     fun create(): PrognozaSdk {
-        val placeProvider = PlaceService(
+        val apiService = ForecastService(
             client = getHttpClient(),
             userAgent = userAgent,
+            dotDecimalFormatter = dotDecimalFormatter,
             computationDispatcher = computationDispatcher
         )
-        val forecastRepository = ForecastRepository()
         val placeRepository = PlaceRepository()
+        val forecastRepository = ForecastRepository(apiService, placeRepository)
         val settingsRepository = SettingsRepository()
         val getSelectedPlace = GetSelectedPlace(settingsRepository)
-        val getTemperatureUnit = GetTemperatureUnit(settingsRepository)
-        val getWindUnit = GetWindUnit(settingsRepository)
-        val getPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
 
         return object : PrognozaSdk {
             override val getAllPrecipitationUnits = GetAllPrecipitationUnits()
