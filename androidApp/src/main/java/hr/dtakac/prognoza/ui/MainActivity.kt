@@ -91,7 +91,7 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxSize()
                                 .verticalScroll(rememberScrollState()),
                             color = Color.Black,
-                            text = if (overview == null) "Loading..." else overview!!.hours.joinToString("\n---\n")
+                            text = if (overview == null) "Loading..." else "Success"
                         )
                     }
                     composable("settings") {

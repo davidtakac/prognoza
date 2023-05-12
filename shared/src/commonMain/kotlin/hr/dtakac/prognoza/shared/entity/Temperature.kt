@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Temperature(val degreesCelsius: Double) {
+class Temperature(val degreesCelsius: Double) : Comparable<Temperature> {
     init {
         if (degreesCelsius <= -273.15) {
             throw IllegalStateException("Temperature must be greater than -273.15 degrees Celsius, was $degreesCelsius.")
@@ -8,6 +8,8 @@ class Temperature(val degreesCelsius: Double) {
     }
 
     val degreesFahrenheit: Double = degreesCelsius * 1.8 + 32
+
+    override fun compareTo(other: Temperature): Int = degreesCelsius.compareTo(other.degreesCelsius)
 }
 
 enum class TemperatureUnit {
