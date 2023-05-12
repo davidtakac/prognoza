@@ -9,7 +9,7 @@ class SelectPlace internal constructor(
     private val settingsRepository: SettingsRepository
 ) {
     suspend operator fun invoke(place: Place) {
-        placeRepository.save(place)
-        settingsRepository.setPlace(place)
+        placeRepository.savePlace(place)
+        settingsRepository.setSelectedPlaceId(place.id)
     }
 }

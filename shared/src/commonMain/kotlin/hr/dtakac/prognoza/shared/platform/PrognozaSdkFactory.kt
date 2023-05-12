@@ -2,7 +2,6 @@ package hr.dtakac.prognoza.shared.platform
 
 import hr.dtakac.prognoza.shared.PrognozaSdk
 import hr.dtakac.prognoza.shared.data.*
-import hr.dtakac.prognoza.shared.data.PlaceService
 import hr.dtakac.prognoza.shared.domain.*
 import io.ktor.client.*
 import io.ktor.client.plugins.contentnegotiation.*
@@ -33,29 +32,28 @@ internal class InternalPrognozaSdkFactory constructor(
         val placeRepository = PlaceRepository()
         val forecastRepository = ForecastRepository(apiService, placeRepository)
         val settingsRepository = SettingsRepository()
-        val getSelectedPlace = GetSelectedPlace(settingsRepository)
+        val getSelectedPlace = GetSelectedPlace(settingsRepository, placeRepository)
+        val getForecast = GetForecast(forecastRepository, settingsRepository)
 
         return object : PrognozaSdk {
-            override val getAllPrecipitationUnits = GetAllPrecipitationUnits()
-            override val getAllPressureUnits = GetAllPressureUnits()
-            override val getAllTemperatureUnits = GetAllTemperatureUnits()
-            override val getAllWindUnits = GetAllWindUnits()
-            override val getPrecipitationUnit = GetPrecipitationUnit(settingsRepository)
-            override val getPressureUnit = GetPressureUnit(settingsRepository)
+            override val getOverview: GetOverview = GetOverview(getForecast)
+            override val getAvailableLengthUnits = GetAvailableLengthUnits()
+            override val getAvailablePressureUnits = GetAvailablePressureUnits()
+            override val getAvailableTemperatureUnits = GetAvailableTemperatureUnits()
+            override val getAvailableWindSpeedUnits = GetAvailableWindSpeedUnits()
+            override val getSelectedLengthUnit = GetSelectedLengthUnit(settingsRepository)
+            override val getSelectedPressureUnit = GetSelectedPressureUnit(settingsRepository)
             override val getSavedPlaces = GetSavedPlaces(placeRepository)
             override val getSelectedPlace = getSelectedPlace
-            override val getTemperatureUnit = GetTemperatureUnit(settingsRepository)
-            override val getWindUnit = GetWindUnit(settingsRepository)
-            override val setPrecipitationUnit = SetPrecipitationUnit(settingsRepository)
-            override val setPressureUnit = SetPressureUnit(settingsRepository)
-            override val setTemperatureUnit = SetTemperatureUnit(settingsRepository)
-            override val setWindUnit = SetWindUnit(settingsRepository)
+            override val getSelectedTemperatureUnit = GetSelectedTemperatureUnit(settingsRepository)
+            override val getSelectedWindSpeedUnit = GetSelectedWindSpeedUnit(settingsRepository)
+            override val selectLengthUnit = SelectLengthUnit(settingsRepository)
+            override val selectPressureUnit = SelectPressureUnit(settingsRepository)
+            override val selectTemperatureUnit = SelectTemperatureUnit(settingsRepository)
+            override val selectWindSpeedUnit = SelectWindSpeedUnit(settingsRepository)
             override val deleteSavedPlace = DeleteSavedPlace(placeRepository, forecastRepository)
             override val searchPlaces = SearchPlaces(placeRepository)
-            override val selectPlace = SelectPlace(
-                placeRepository = placeRepository,
-                settingsRepository = settingsRepository
-            )
+            override val selectPlace = SelectPlace(placeRepository, settingsRepository)
         }
     }
 

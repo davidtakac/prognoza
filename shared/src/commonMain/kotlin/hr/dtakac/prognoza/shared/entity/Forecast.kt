@@ -1,9 +1,17 @@
 package hr.dtakac.prognoza.shared.entity
 
-data class Forecast(
-    val hours: List<Hour>,
-    val days: List<Day>
-)
+class Forecast(
+    hours: List<Hour>,
+    days: List<Day>
+) {
+    init {
+        if (hours.isEmpty()) throw IllegalStateException("Hours must not be empty")
+        if (days.isEmpty()) throw IllegalStateException("Days must not be empty")
+    }
+
+    val hours: List<Hour> = hours.sortedBy { it.unixSecond }
+    val days: List<Day> = days.sortedBy { it.unixSecond }
+}
 
 data class Hour(
     val unixSecond: Long,

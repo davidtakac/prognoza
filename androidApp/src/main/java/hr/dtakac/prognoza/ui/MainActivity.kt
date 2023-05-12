@@ -7,9 +7,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -26,12 +27,20 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
+import hr.dtakac.prognoza.shared.domain.GetOverview
+import hr.dtakac.prognoza.shared.domain.OverviewResult
+import hr.dtakac.prognoza.shared.entity.Overview
 import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    lateinit var getOverview: GetOverview
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -68,10 +77,21 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "forecast") {
                     composable("forecast") {
+                        val scope = rememberCoroutineScope()
+                        var overview by remember { mutableStateOf<Overview?>(null) }
+                        LaunchedEffect(Unit) {
+                            scope.launch {
+                               overview = (getOverview() as? OverviewResult.Success)?.overview
+                            }
+                        }
                         Text(
-                            modifier = Modifier.background(Color.White).padding(64.dp).fillMaxSize(),
+                            modifier = Modifier
+                                .background(Color.White)
+                                .padding(64.dp)
+                                .fillMaxSize()
+                                .verticalScroll(rememberScrollState()),
                             color = Color.Black,
-                            text = "Forecast screen"
+                            text = if (overview == null) "Loading..." else overview!!.hours.joinToString("\n---\n")
                         )
                     }
                     composable("settings") {

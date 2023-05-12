@@ -8,7 +8,7 @@ class DeleteSavedPlace internal constructor(
     private val forecastRepository: ForecastRepository
 ) {
     suspend operator fun invoke(id: String) {
-        placeRepository.remove(id)
-        forecastRepository.delete(id)
+        placeRepository.deleteSavedPlace(id)
+        forecastRepository.deleteForecast(id)
     }
 }

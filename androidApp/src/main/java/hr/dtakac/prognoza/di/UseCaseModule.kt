@@ -22,6 +22,11 @@ class UseCaseModule {
     ): PrognozaSdk = PrognozaSdkFactory(context, userAgent).create()
 
     @Provides
+    fun provideGetOverviewUseCase(
+        prognozaSdk: PrognozaSdk
+    ): GetOverview = prognozaSdk.getOverview
+
+    @Provides
     fun provideGetSelectedPlaceUseCase(
         prognozaSdk: PrognozaSdk
     ): GetSelectedPlace = prognozaSdk.getSelectedPlace
@@ -49,60 +54,60 @@ class UseCaseModule {
     @Provides
     fun provideSetTemperatureUnit(
         prognozaSdk: PrognozaSdk
-    ): SetTemperatureUnit = prognozaSdk.setTemperatureUnit
+    ): SelectTemperatureUnit = prognozaSdk.selectTemperatureUnit
 
     @Provides
     fun provideGetTemperatureUnit(
         prognozaSdk: PrognozaSdk
-    ): GetTemperatureUnit = prognozaSdk.getTemperatureUnit
+    ): GetSelectedTemperatureUnit = prognozaSdk.getSelectedTemperatureUnit
 
     @Provides
     fun provideGetAllTemperatureUnits(
         prognozaSdk: PrognozaSdk
-    ): GetAllTemperatureUnits = prognozaSdk.getAllTemperatureUnits
+    ): GetAvailableTemperatureUnits = prognozaSdk.getAvailableTemperatureUnits
 
     @Provides
     fun provideSetWindUnit(
         prognozaSdk: PrognozaSdk
-    ): SetWindUnit = prognozaSdk.setWindUnit
+    ): SelectWindSpeedUnit = prognozaSdk.selectWindSpeedUnit
 
     @Provides
     fun provideGetWindUnit(
         prognozaSdk: PrognozaSdk
-    ): GetWindUnit = prognozaSdk.getWindUnit
+    ): GetSelectedWindSpeedUnit = prognozaSdk.getSelectedWindSpeedUnit
 
     @Provides
     fun provideGetAllWindUnits(
         prognozaSdk: PrognozaSdk
-    ): GetAllWindUnits = prognozaSdk.getAllWindUnits
+    ): GetAvailableWindSpeedUnits = prognozaSdk.getAvailableWindSpeedUnits
 
     @Provides
     fun provideSetPrecipitationUnit(
         prognozaSdk: PrognozaSdk
-    ): SetPrecipitationUnit = prognozaSdk.setPrecipitationUnit
+    ): SelectLengthUnit = prognozaSdk.selectLengthUnit
 
     @Provides
     fun provideGetPrecipitationUnit(
         prognozaSdk: PrognozaSdk
-    ): GetPrecipitationUnit = prognozaSdk.getPrecipitationUnit
+    ): GetSelectedLengthUnit = prognozaSdk.getSelectedLengthUnit
 
     @Provides
     fun provideGetAllPrecipitationUnits(
         prognozaSdk: PrognozaSdk
-    ): GetAllPrecipitationUnits = prognozaSdk.getAllPrecipitationUnits
+    ): GetAvailableLengthUnits = prognozaSdk.getAvailableLengthUnits
 
     @Provides
     fun provideSetPressureUnit(
         prognozaSdk: PrognozaSdk
-    ): SetPressureUnit = prognozaSdk.setPressureUnit
+    ): SelectPressureUnit = prognozaSdk.selectPressureUnit
 
     @Provides
     fun provideGetPressureUnit(
         prognozaSdk: PrognozaSdk
-    ): GetPressureUnit = prognozaSdk.getPressureUnit
+    ): GetSelectedPressureUnit = prognozaSdk.getSelectedPressureUnit
 
     @Provides
     fun provideGetAllPressureUnits(
         prognozaSdk: PrognozaSdk
-    ): GetAllPressureUnits = prognozaSdk.getAllPressureUnits
+    ): GetAvailablePressureUnits = prognozaSdk.getAvailablePressureUnits
 }

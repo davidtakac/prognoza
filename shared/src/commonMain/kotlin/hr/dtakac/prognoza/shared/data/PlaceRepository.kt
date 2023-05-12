@@ -8,21 +8,20 @@ class PlaceRepository {
         return null
     }
 
-    // todo: pull from local storage
-    suspend fun get(id: String): Place? = Place(
+    suspend fun savePlace(place: Place) { /*todo*/ }
+
+    suspend fun getSavedPlace(id: String): Place? = if (id == "1") Place(
         id = "1",
         name = "Osijek",
         timeZone = TimeZone.of("Europe/Zagreb"),
         details = "Osjecko-baranjska",
         latitude = 45.55111,
         longitude = 18.69389
-    )
+    ) else null
 
-    suspend fun getAll(): List<Place> {
+    suspend fun getAllSavedPlaces(): List<Place> {
         return listOf()
     }
 
-    suspend fun remove(id: String) { /*todo*/ }
-
-    suspend fun save(place: Place) { /*todo*/ }
+    suspend fun deleteSavedPlace(id: String) { /*todo*/ }
 }

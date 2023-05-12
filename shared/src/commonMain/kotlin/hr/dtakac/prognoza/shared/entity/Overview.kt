@@ -1,9 +1,55 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Overview(private val forecast: Forecast) {
-    val temperature: Temperature by lazy { forecast.hours[0].temperature }
-    val minTemperature: Temperature by lazy { forecast.days[0].minimumTemperature }
-    val maxTemperature: Temperature by lazy { forecast.days[0].maximumTemperature }
-    val wmoCode: Int by lazy { forecast.hours[0].wmoCode }
+import kotlinx.datetime.Clock
 
+class Overview(private val forecast: Forecast) {
+    val temperature: Temperature = forecast.hours[0].temperature
+    val minTemperature: Temperature = forecast.days[0].minimumTemperature
+    val maxTemperature: Temperature = forecast.days[0].maximumTemperature
+    val wmoCode: Int = forecast.hours[0].wmoCode
+    val hours: List<OverviewHour> = buildOverviewHours()
+
+    private fun buildOverviewHours(): List<OverviewHour> = buildList {
+        val hours = forecast.hours
+            .filter { it.unixSecond >= Clock.System.now().epochSeconds }
+            .take(24)
+            .map {
+                OverviewHour.Weather(
+                    unixSecond = it.unixSecond,
+                    temperature = it.temperature,
+                    probabilityOfPrecipitation = it.probabilityOfPrecipitation,
+                    wmoCode = it.wmoCode
+                )
+            }
+
+        val sunrises = forecast.days
+            .mapNotNull { it.sunriseUnixSecond }
+            .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+            .map { OverviewHour.Sunrise(it) }
+
+        val sunsets = forecast.days
+            .mapNotNull { it.sunsetUnixSecond }
+            .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+            .map { OverviewHour.Sunset(it) }
+
+        addAll(hours)
+        addAll(sunrises)
+        addAll(sunsets)
+        sortBy { it.unixSecond }
+    }
+}
+
+sealed interface OverviewHour {
+    val unixSecond: Long
+
+    data class Weather(
+        override val unixSecond: Long,
+        val temperature: Temperature,
+        val probabilityOfPrecipitation: Percentage,
+        val wmoCode: Int
+    ) : OverviewHour
+
+    data class Sunrise(override val unixSecond: Long) : OverviewHour
+
+    data class Sunset(override val unixSecond: Long) : OverviewHour
 }

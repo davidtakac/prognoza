@@ -11,6 +11,7 @@ class SettingsRepository {
     suspend fun getWindUnit(): SpeedUnit {TODO()}
     suspend fun setPressureUnit(unit: PressureUnit) {TODO()}
     suspend fun getPressureUnit(): PressureUnit {TODO()}
-    suspend fun setPlace(place: Place) {TODO()}
-    suspend fun getPlace(): Place? {TODO()}
+    suspend fun setSelectedPlaceId(id: String) {TODO()}
+    // todo: pull from local storage
+    suspend fun getSelectedPlaceId(): String? = "1"
 }

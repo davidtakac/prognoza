@@ -14,6 +14,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 private const val Tag = "ForecastService"
+
 internal class ForecastService(
     private val client: HttpClient,
     private val userAgent: String,
@@ -141,61 +142,61 @@ private data class Daily(
 )
 
 private fun Response.toEntity(): Forecast? {
-    return Forecast(
-        hours = if (hourly.time.isEmpty()) return null else buildList {
-            with(hourly) {
-                for (i in time.indices) {
-                    add(
-                        Hour(
-                            unixSecond = time[i],
-                            wmoCode = weathercode[i],
-                            temperature = Temperature(degreesCelsius = temperature2m[i]),
-                            rain = Length(metres = rain[i] / 1000),
-                            showers = Length(metres = showers[i] / 1000),
-                            snow = Length(metres = snowfall[i] / 100),
-                            precipitation = Length(metres = precipitation[i] / 1000),
-                            probabilityOfPrecipitation = Percentage(percent = precipitationProbability[i]),
-                            gust = Speed(metresPerSecond = windgusts10m[i]),
-                            wind = Speed(metresPerSecond = windspeed10m[i]),
-                            windDirection = Angle(degrees = winddirection10m[i]),
-                            pressureAtSeaLevel = Pressure(millibars = pressureMsl[i]),
-                            relativeHumidity = Percentage(percent = relativehumidity2m[i]),
-                            dewPoint = Temperature(degreesCelsius = dewpoint2m[i]),
-                            visibility = Length(metres = visibility[i]),
-                            uvIndex = uvIndex[i],
-                            day = isDay[i] == 1,
-                            feelsLike = Temperature(degreesCelsius = apparentTemperature[i])
-                        )
-                    )
-                }
-            }
-        },
-        days = if (daily.time.isEmpty()) return null else buildList {
-            with(daily) {
-                for (i in time.indices) {
-                    add(
-                        Day(
-                            unixSecond = time[i],
-                            wmoCode = weathercode[i],
-                            sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
-                            sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
-                            minimumTemperature = Temperature(degreesCelsius = temperature2mMin[i]),
-                            maximumTemperature = Temperature(degreesCelsius = temperature2mMax[i]),
-                            minimumFeelsLike = Temperature(degreesCelsius = apparentTemperatureMin[i]),
-                            maximumFeelsLike = Temperature(degreesCelsius = apparentTemperatureMax[i]),
-                            rain = Length(metres = rainSum[i] / 1000),
-                            showers = Length(metres = showersSum[i] / 1000),
-                            snow = Length(metres = snowfallSum[i] / 100),
-                            precipitation = Length(metres = precipitationSum[i] / 1000),
-                            maximumGust = Speed(metresPerSecond = windgusts10mMax[i]),
-                            maximumProbabilityOfPrecipitation = Percentage(percent = precipitationProbabilityMax[i]),
-                            maximumWind = Speed(metresPerSecond = windspeed10mMax[i]),
-                            dominantWindDirection = Angle(degrees = winddirection10mDominant[i]),
-                            maximumUvIndex = uvIndexMax[i]
-                        )
-                    )
-                }
+    val hours = buildList {
+        with(hourly) {
+            for (i in time.indices) {
+                val hour = Hour(
+                    unixSecond = time[i],
+                    wmoCode = weathercode[i],
+                    temperature = Temperature(degreesCelsius = temperature2m[i]),
+                    rain = rainfallToLength(rain[i]),
+                    showers = rainfallToLength(showers[i]),
+                    snow = snowfallToLength(snowfall[i]),
+                    precipitation = rainfallToLength(precipitation[i]),
+                    probabilityOfPrecipitation = Percentage(percent = precipitationProbability[i]),
+                    gust = Speed(metresPerSecond = windgusts10m[i]),
+                    wind = Speed(metresPerSecond = windspeed10m[i]),
+                    windDirection = Angle(degrees = winddirection10m[i]),
+                    pressureAtSeaLevel = Pressure(millibars = pressureMsl[i]),
+                    relativeHumidity = Percentage(percent = relativehumidity2m[i]),
+                    dewPoint = Temperature(degreesCelsius = dewpoint2m[i]),
+                    visibility = Length(metres = visibility[i]),
+                    uvIndex = uvIndex[i],
+                    day = isDay[i] == 1,
+                    feelsLike = Temperature(degreesCelsius = apparentTemperature[i])
+                )
+                add(hour)
             }
         }
-    )
+    }
+    val days = buildList {
+        with(daily) {
+            for (i in time.indices) {
+                val day = Day(
+                    unixSecond = time[i],
+                    wmoCode = weathercode[i],
+                    sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
+                    sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
+                    minimumTemperature = Temperature(degreesCelsius = temperature2mMin[i]),
+                    maximumTemperature = Temperature(degreesCelsius = temperature2mMax[i]),
+                    minimumFeelsLike = Temperature(degreesCelsius = apparentTemperatureMin[i]),
+                    maximumFeelsLike = Temperature(degreesCelsius = apparentTemperatureMax[i]),
+                    rain = rainfallToLength(rainSum[i]),
+                    showers = rainfallToLength(showersSum[i]),
+                    snow = snowfallToLength(snowfallSum[i]),
+                    precipitation = rainfallToLength(precipitationSum[i]),
+                    maximumGust = Speed(metresPerSecond = windgusts10mMax[i]),
+                    maximumProbabilityOfPrecipitation = Percentage(percent = precipitationProbabilityMax[i]),
+                    maximumWind = Speed(metresPerSecond = windspeed10mMax[i]),
+                    dominantWindDirection = Angle(degrees = winddirection10mDominant[i]),
+                    maximumUvIndex = uvIndexMax[i]
+                )
+                add(day)
+            }
+        }
+    }
+    return try { Forecast(hours, days) } catch (_: Exception) { null }
 }
+
+private fun rainfallToLength(millimetres: Double): Length = Length(metres = millimetres / 1000)
+private fun snowfallToLength(centimetres: Double): Length = Length(metres = centimetres / 100)

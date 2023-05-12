@@ -7,8 +7,8 @@ internal class ForecastRepository(
     private val placeRepository: PlaceRepository
 ) {
     // todo: implement caching to local storage
-    suspend fun get(placeId: String): Forecast? =
-        placeRepository.get(placeId)?.let {
+    suspend fun getForecast(placeId: String): Forecast? =
+        placeRepository.getSavedPlace(placeId)?.let {
             apiService.getForecast(
                 latitude = it.latitude,
                 longitude = it.longitude,
@@ -16,5 +16,5 @@ internal class ForecastRepository(
             )
         }
 
-    suspend fun delete(placeId: String) {/*todo*/}
+    suspend fun deleteForecast(placeId: String) {/*todo*/}
 }

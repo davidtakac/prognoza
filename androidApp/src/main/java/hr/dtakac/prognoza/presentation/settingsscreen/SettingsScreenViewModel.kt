@@ -17,18 +17,18 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsScreenViewModel @Inject constructor(
-    private val setTemperatureUnit: SetTemperatureUnit,
-    private val getTemperatureUnit: GetTemperatureUnit,
-    private val getAllTemperatureUnits: GetAllTemperatureUnits,
-    private val setWindUnit: SetWindUnit,
-    private val getWindUnit: GetWindUnit,
-    private val getAllWindUnits: GetAllWindUnits,
-    private val setPrecipitationUnit: SetPrecipitationUnit,
-    private val getPrecipitationUnit: GetPrecipitationUnit,
-    private val getAllPrecipitationUnits: GetAllPrecipitationUnits,
-    private val setPressureUnit: SetPressureUnit,
-    private val getPressureUnit: GetPressureUnit,
-    private val getAllPressureUnits: GetAllPressureUnits,
+    private val selectTemperatureUnit: SelectTemperatureUnit,
+    private val getSelectedTemperatureUnit: GetSelectedTemperatureUnit,
+    private val getAvailableTemperatureUnits: GetAvailableTemperatureUnits,
+    private val selectWindSpeedUnit: SelectWindSpeedUnit,
+    private val getSelectedWindSpeedUnit: GetSelectedWindSpeedUnit,
+    private val getAvailableWindSpeedUnits: GetAvailableWindSpeedUnits,
+    private val selectLengthUnit: SelectLengthUnit,
+    private val getSelectedLengthUnit: GetSelectedLengthUnit,
+    private val getAvailableLengthUnits: GetAvailableLengthUnits,
+    private val selectPressureUnit: SelectPressureUnit,
+    private val getSelectedPressureUnit: GetSelectedPressureUnit,
+    private val getAvailablePressureUnits: GetAvailablePressureUnits,
     private val androidSettingsRepository: AndroidSettingsRepository,
     private val mapper: SettingsScreenUiMapper
 ) : ViewModel() {
@@ -48,28 +48,28 @@ class SettingsScreenViewModel @Inject constructor(
 
     private fun setTemperatureUnit(index: Int) {
         updateState {
-            setTemperatureUnit(availableTemperatureUnits[index])
+            selectTemperatureUnit(availableTemperatureUnits[index])
             fireUpdateForecast()
         }
     }
 
     private fun setWindUnit(index: Int) {
         updateState {
-            setWindUnit(availableWindUnits[index])
+            selectWindSpeedUnit(availableWindUnits[index])
             fireUpdateForecast()
         }
     }
 
     private fun setPrecipitationUnit(index: Int) {
         updateState {
-            setPrecipitationUnit(availablePrecipitationUnits[index])
+            selectLengthUnit(availablePrecipitationUnits[index])
             fireUpdateForecast()
         }
     }
 
     private fun setPressureUnit(index: Int) {
         updateState {
-            setPressureUnit(availablePressureUnits[index])
+            selectPressureUnit(availablePressureUnits[index])
             fireUpdateForecast()
         }
     }
@@ -98,27 +98,27 @@ class SettingsScreenViewModel @Inject constructor(
     }
 
     private suspend fun getStateActual() {
-        availableTemperatureUnits = getAllTemperatureUnits()
-        availableWindUnits = getAllWindUnits()
-        availablePrecipitationUnits = getAllPrecipitationUnits()
-        availablePressureUnits = getAllPressureUnits()
+        availableTemperatureUnits = getAvailableTemperatureUnits()
+        availableWindUnits = getAvailableWindSpeedUnits()
+        availablePrecipitationUnits = getAvailableLengthUnits()
+        availablePressureUnits = getAvailablePressureUnits()
         availableUiModes = androidSettingsRepository.getAvailableUiModes()
         availableMoodModes = androidSettingsRepository.getAvailableMoodModes()
 
         _state.value = _state.value.copy(
             unitSettings = listOf(
                 mapper.mapToTemperatureUnitSetting(
-                    selected = getTemperatureUnit(),
+                    selected = getSelectedTemperatureUnit(),
                     units = availableTemperatureUnits,
                     onIndexSelected = ::setTemperatureUnit
                 ),
                 mapper.mapToWindUnitSetting(
-                    selected = getWindUnit(),
+                    selected = getSelectedWindSpeedUnit(),
                     units = availableWindUnits,
                     onIndexSelected = ::setWindUnit
                 ),
                 mapper.mapToPrecipitationUnitSetting(
-                    selected = getPrecipitationUnit(),
+                    selected = getSelectedLengthUnit(),
                     units = availablePrecipitationUnits,
                     onIndexSelected = ::setPrecipitationUnit
                 )
