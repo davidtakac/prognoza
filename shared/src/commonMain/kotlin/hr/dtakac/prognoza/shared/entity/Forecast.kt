@@ -1,16 +1,24 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Forecast(
-    hours: List<Hour>,
-    days: List<Day>
+import kotlinx.datetime.*
+
+data class Forecast(
+    val localTimeZone: TimeZone,
+    val hours: List<Hour>,
+    val days: List<Day>
 ) {
     init {
         if (hours.isEmpty()) throw IllegalStateException("Hours must not be empty")
         if (days.isEmpty()) throw IllegalStateException("Days must not be empty")
     }
 
-    val hours: List<Hour> = hours.sortedBy { it.unixSecond }
-    val days: List<Day> = days.sortedBy { it.unixSecond }
+    fun getHoursStartingFromNow(): List<Hour> =
+        hours.filter { it.unixSecond >= Clock.System.now().epochSeconds }
+
+    fun getDaysStartingFromToday(): List<Day> =
+        days.groupBy { Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(localTimeZone) }
+            .filterKeys { it.date >= Clock.System.now().toLocalDateTime(localTimeZone).date }
+            .flatMap { it.value }
 }
 
 data class Hour(

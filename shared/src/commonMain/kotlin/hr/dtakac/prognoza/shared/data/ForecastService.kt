@@ -43,7 +43,7 @@ internal class ForecastService(
         }
 
         return try {
-            withContext(computationDispatcher) { response.toEntity() }
+            withContext(computationDispatcher) { response.toEntity(timeZone) }
         } catch (e: Exception) {
             Napier.e(Tag, e)
             return null
@@ -141,7 +141,7 @@ private data class Daily(
     @SerialName("winddirection_10m_dominant") var winddirection10mDominant: List<Double>
 )
 
-private fun Response.toEntity(): Forecast? {
+private fun Response.toEntity(timeZone: TimeZone): Forecast? {
     val hours = buildList {
         with(hourly) {
             for (i in time.indices) {
@@ -195,7 +195,7 @@ private fun Response.toEntity(): Forecast? {
             }
         }
     }
-    return try { Forecast(hours, days) } catch (_: Exception) { null }
+    return try { Forecast(timeZone, hours, days) } catch (_: Exception) { null }
 }
 
 private fun rainfallToLength(millimetres: Double): Length = Length(metres = millimetres / 1000)
