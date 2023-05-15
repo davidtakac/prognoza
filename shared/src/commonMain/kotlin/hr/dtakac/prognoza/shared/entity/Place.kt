@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.TimeZone
 
-data class Place(
+class Place internal constructor(
     val id: String,
     val name: String,
     val timeZone: TimeZone,

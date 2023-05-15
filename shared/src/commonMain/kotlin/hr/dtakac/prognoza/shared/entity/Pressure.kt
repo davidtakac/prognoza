@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Pressure(val millibars: Double) {
+class Pressure internal constructor(val millibars: Double) {
     init {
         if (millibars < 0) {
             throw IllegalStateException("Pressure must be >= 0, was $millibars.")

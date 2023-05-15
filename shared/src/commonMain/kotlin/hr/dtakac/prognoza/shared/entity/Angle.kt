@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Angle(val degrees: Double) {
+class Angle internal constructor(val degrees: Double) {
     val cardinalDirection: CardinalDirection = calculateCardinalDirection()
 
     private fun calculateCardinalDirection(): CardinalDirection {

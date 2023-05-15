@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Speed(val metresPerSecond: Double) {
+class Speed internal constructor(val metresPerSecond: Double) {
     init {
         if (this.metresPerSecond !in 0.0..299_792_458.0) {
             throw IllegalStateException("Speed must be >= 0 and <= c, was ${this.metresPerSecond}.")

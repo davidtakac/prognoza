@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Length(val metres: Double) {
+class Length internal constructor(val metres: Double) {
     init {
         if (metres < 0) {
             throw IllegalStateException("Length must be >= 0, was $metres.")

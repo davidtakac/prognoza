@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.*
 
-data class Forecast(
+class Forecast internal constructor(
     val localTimeZone: TimeZone,
     val hours: List<Hour>,
     val days: List<Day>
