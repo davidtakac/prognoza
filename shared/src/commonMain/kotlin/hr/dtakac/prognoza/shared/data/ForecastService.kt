@@ -160,7 +160,7 @@ private fun Response.toEntity(timeZone: TimeZone): Forecast? {
                     pressureAtSeaLevel = Pressure(millibars = pressureMsl[i]),
                     relativeHumidity = Percentage(percent = relativehumidity2m[i]),
                     dewPoint = Temperature(degreesCelsius = dewpoint2m[i]),
-                    visibility = Length(metres = visibility[i]),
+                    visibility = Visibility(Length(metres = visibility[i])),
                     uvIndex = uvIndex[i],
                     day = isDay[i] == 1,
                     feelsLike = Temperature(degreesCelsius = apparentTemperature[i])

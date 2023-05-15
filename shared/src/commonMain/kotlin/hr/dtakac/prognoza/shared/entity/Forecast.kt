@@ -34,7 +34,7 @@ data class Hour(
     val pressureAtSeaLevel: Pressure,
     val relativeHumidity: Percentage,
     val dewPoint: Temperature,
-    val visibility: Length,
+    val visibility: Visibility,
     val uvIndex: Double,
     val day: Boolean,
     val feelsLike: Temperature
