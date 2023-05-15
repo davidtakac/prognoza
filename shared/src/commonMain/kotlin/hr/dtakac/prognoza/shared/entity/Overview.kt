@@ -1,21 +1,29 @@
 package hr.dtakac.prognoza.shared.entity
 
 data class Overview(
-    val temperature: Temperature,
-    val minimumTemperature: Temperature,
-    val maximumTemperature: Temperature,
-    val wmoCode: Int,
     val hours: OverviewHours,
     val days: OverviewDays
-)
+) {
+    val temperature: Temperature = hours.first.temperature
+    val minimumTemperature: Temperature = days.first.minimumTemperature
+    val maximumTemperature: Temperature = days.first.maximumTemperature
+    val wmoCode: Int = hours.first.wmoCode
+}
 
 data class OverviewHours(val hours: List<OverviewHour>) {
-    val hourWhenWeatherChanges: OverviewHour? =
-        hours
-            .filterIsInstance<OverviewHour.Weather>()
-            .let { weatherHours ->
-                weatherHours.firstOrNull { it.wmoCode != weatherHours.first().wmoCode }
+    init {
+        if (hours.filterIsInstance<OverviewHour.Weather>().isEmpty()) {
+            throw IllegalStateException("Hours must contain at least one Weather hour.")
+        }
+    }
+
+    val first: OverviewHour.Weather = hours.filterIsInstance<OverviewHour.Weather>()[0]
+    val hourOfWeatherChange: OverviewHour? =
+        hours.filterIsInstance<OverviewHour.Weather>().let { weatherHours ->
+            weatherHours.firstOrNull { hour ->
+                hour.wmoCode != weatherHours.first().wmoCode
             }
+        }
 }
 
 sealed interface OverviewHour {
@@ -33,15 +41,14 @@ sealed interface OverviewHour {
     data class Sunset(override val unixSecond: Long) : OverviewHour
 }
 
-class OverviewDays(days: List<Day>) {
-    val days: List<OverviewDay> = days.map {
-        OverviewDay(
-            unixSecond = it.unixSecond,
-            wmoCode = it.wmoCode,
-            minimumTemperature = it.minimumTemperature,
-            maximumTemperature = it.maximumTemperature
-        )
+class OverviewDays(val days: List<OverviewDay>) {
+    init {
+        if (days.isEmpty()) {
+            throw IllegalStateException("Days must not be empty.")
+        }
     }
+
+    val first: OverviewDay = days[0]
     val minimumTemperature: Temperature = days.minOf { it.minimumTemperature }
     val maximumTemperature: Temperature = days.maxOf { it.maximumTemperature }
 }

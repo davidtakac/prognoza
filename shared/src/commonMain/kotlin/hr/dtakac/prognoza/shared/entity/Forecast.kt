@@ -8,17 +8,15 @@ data class Forecast(
     val days: List<Day>
 ) {
     init {
-        if (hours.isEmpty()) throw IllegalStateException("Hours must not be empty")
-        if (days.isEmpty()) throw IllegalStateException("Days must not be empty")
+        if (hours.isEmpty()) throw IllegalStateException("Hours must not be empty.")
+        if (days.isEmpty()) throw IllegalStateException("Days must not be empty.")
     }
 
-    fun getHoursStartingFromNow(): List<Hour> =
-        hours.filter { it.unixSecond >= Clock.System.now().epochSeconds }
+    val futureHours: List<Hour>
+        get() = hours.filter { it.unixSecond >= Clock.System.now().epochSeconds }
 
-    fun getDaysStartingFromToday(): List<Day> =
-        days.groupBy { Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(localTimeZone) }
-            .filterKeys { it.date >= Clock.System.now().toLocalDateTime(localTimeZone).date }
-            .flatMap { it.value }
+    val futureDays: List<Day>
+        get() = days.filter { Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(localTimeZone).date >= Clock.System.now().toLocalDateTime(localTimeZone).date }
 }
 
 data class Hour(

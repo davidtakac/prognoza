@@ -36,7 +36,7 @@ internal class InternalPrognozaSdkFactory constructor(
         val getForecast = GetForecast(forecastRepository, settingsRepository)
 
         return object : PrognozaSdk {
-            override val getOverview: GetOverview = GetOverview(getForecast)
+            override val getOverview: GetOverview = GetOverview(getForecast, computationDispatcher)
             override val getAvailableLengthUnits = GetAvailableLengthUnits()
             override val getAvailablePressureUnits = GetAvailablePressureUnits()
             override val getAvailableTemperatureUnits = GetAvailableTemperatureUnits()
