@@ -63,7 +63,8 @@ class Overview private constructor(
                     unixSecond = it.unixSecond,
                     wmoCode = it.wmoCode,
                     minimumTemperature = it.minimumTemperature,
-                    maximumTemperature = it.maximumTemperature
+                    maximumTemperature = it.maximumTemperature,
+                    maximumProbabilityOfPrecipitation = it.maximumProbabilityOfPrecipitation
                 )
             },
             minimumTemperature = days.minOf { it.minimumTemperature },
@@ -102,5 +103,6 @@ class OverviewDay internal constructor(
     val unixSecond: Long,
     val wmoCode: Int,
     val minimumTemperature: Temperature,
-    val maximumTemperature: Temperature
+    val maximumTemperature: Temperature,
+    val maximumProbabilityOfPrecipitation: Percentage
 )
