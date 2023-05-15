@@ -2,10 +2,11 @@ package hr.dtakac.prognoza.shared.entity
 
 class Overview private constructor(
     val temperature: Temperature,
+    val feelsLike: Temperature,
     val minimumTemperature: Temperature,
     val maximumTemperature: Temperature,
     val wmoCode: Int,
-    val hours: OverviewHours,
+    val hours: List<OverviewHour>,
     val days: OverviewDays
 ) {
     companion object {
@@ -14,6 +15,7 @@ class Overview private constructor(
             val days = forecast.futureDays
             return Overview(
                 temperature = hours[0].temperature,
+                feelsLike = hours[0].feelsLike,
                 minimumTemperature = days[0].minimumTemperature,
                 maximumTemperature = days[0].maximumTemperature,
                 wmoCode = hours[0].wmoCode,
@@ -25,36 +27,31 @@ class Overview private constructor(
         private fun createHours(
             hours: List<Hour>,
             days: List<Day>
-        ): OverviewHours {
-            return OverviewHours(
-                hours = buildList {
-                    val overviewHours = hours.map {
-                        OverviewHour.Weather(
-                            unixSecond = it.unixSecond,
-                            temperature = it.temperature,
-                            probabilityOfPrecipitation = it.probabilityOfPrecipitation,
-                            wmoCode = it.wmoCode
-                        )
-                    }
-                    addAll(overviewHours)
+        ): List<OverviewHour> = buildList {
+            val overviewHours = hours.map {
+                OverviewHour.Weather(
+                    unixSecond = it.unixSecond,
+                    temperature = it.temperature,
+                    probabilityOfPrecipitation = it.probabilityOfPrecipitation,
+                    wmoCode = it.wmoCode
+                )
+            }
+            addAll(overviewHours)
 
-                    val sunrises = days
-                        .mapNotNull { it.sunriseUnixSecond }
-                        .filter { it in hours.first().unixSecond..hours.last().unixSecond }
-                        .map { OverviewHour.Sunrise(it) }
-                    addAll(sunrises)
+            val sunrises = days
+                .mapNotNull { it.sunriseUnixSecond }
+                .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+                .map { OverviewHour.Sunrise(it) }
+            addAll(sunrises)
 
-                    val sunsets = days
-                        .mapNotNull { it.sunsetUnixSecond }
-                        .filter { it in hours.first().unixSecond..hours.last().unixSecond }
-                        .map { OverviewHour.Sunset(it) }
-                    addAll(sunsets)
+            val sunsets = days
+                .mapNotNull { it.sunsetUnixSecond }
+                .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+                .map { OverviewHour.Sunset(it) }
+            addAll(sunsets)
 
-                    // Ensures sunrises and sunsets are placed in between Weather hours
-                    sortBy { it.unixSecond }
-                },
-                indexOfFirstWeatherChange = hours.indexOfFirst { it.wmoCode != hours.firstOrNull()?.wmoCode }
-            )
+            // Ensures sunrises and sunsets are placed in between Weather hours
+            sortBy { it.unixSecond }
         }
 
         private fun createDays(days: List<Day>): OverviewDays = OverviewDays(
@@ -72,11 +69,6 @@ class Overview private constructor(
         )
     }
 }
-
-class OverviewHours internal constructor(
-    val hours: List<OverviewHour>,
-    val indexOfFirstWeatherChange: Int
-)
 
 sealed interface OverviewHour {
     val unixSecond: Long
