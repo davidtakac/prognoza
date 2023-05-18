@@ -3,15 +3,9 @@ package hr.dtakac.prognoza.shared.entity
 class Length internal constructor(
     val value: Double,
     val unit: LengthUnit
-) : Comparable<Length> {
+) {
     init {
         if (value < 0) throwInvalidLength()
-    }
-
-    override fun compareTo(other: Length): Int {
-        val thisMetres = valueIn(LengthUnit.Metre)
-        val otherMetres = other.valueIn(LengthUnit.Metre)
-        return thisMetres.compareTo(otherMetres)
     }
 
     override fun toString(): String = "$value ${unit.suffix}"
