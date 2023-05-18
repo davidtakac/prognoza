@@ -22,8 +22,6 @@ class Angle internal constructor(
             }
         }
 
-    fun convertTo(targetUnit: AngleUnit): Angle = Angle(valueIn(targetUnit), targetUnit)
-
     private fun valueIn(targetUnit: AngleUnit): Double =
         if (targetUnit == unit) value
         else value * unit.radians / targetUnit.radians
