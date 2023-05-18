@@ -6,21 +6,6 @@ import hr.dtakac.prognoza.shared.entity.*
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-fun getTemperature(
-    temperature: Temperature,
-    unit: TemperatureUnit
-): TextResource = TextResource.fromStringId(
-    id = R.string.temperature_value,
-    TextResource.fromNumber(
-        BigDecimal(
-            when (unit) {
-                TemperatureUnit.DegreeCelsius -> temperature.degreesCelsius
-                TemperatureUnit.DegreeFahrenheit -> temperature.degreesFahrenheit
-            }
-        ).setScale(0, RoundingMode.HALF_EVEN)
-    )
-)
-
 @StringRes
 fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
     CardinalDirection.N -> R.string.cardinal_n

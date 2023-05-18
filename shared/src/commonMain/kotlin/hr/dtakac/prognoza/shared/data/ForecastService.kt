@@ -21,17 +21,13 @@ internal class ForecastService(
     private val dotDecimalFormatter: DotDecimalFormatter,
     private val computationDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getForecast(
-        latitude: Double,
-        longitude: Double,
-        timeZone: TimeZone
-    ): Forecast? {
+    suspend fun getForecast(latitude: Double, longitude: Double): Forecast? {
         val response = try {
             client.get("https://api.open-meteo.com/v1//forecast") {
                 header(HttpHeaders.UserAgent, userAgent)
                 parameter("latitude", dotDecimalFormatter.format(latitude, decimalPlaces = 2))
                 parameter("longitude", dotDecimalFormatter.format(longitude, decimalPlaces = 2))
-                parameter("timezone", timeZone.id)
+                parameter("timezone", "auto")
                 parameter("timeformat", "unixtime")
                 parameter("hourly", hourlyParams)
                 parameter("daily", dailyParams)
@@ -43,7 +39,9 @@ internal class ForecastService(
         }
 
         return try {
-            withContext(computationDispatcher) { response.toEntity(timeZone) }
+            withContext(computationDispatcher) {
+                response.toEntity()
+            }
         } catch (e: Exception) {
             Napier.e(Tag, e)
             return null
@@ -92,6 +90,8 @@ internal class ForecastService(
 
 @Serializable
 private data class Response(
+    @SerialName("timezone")
+    val timeZone: String,
     @SerialName("hourly")
     val hourly: Hourly,
     @SerialName("daily")
@@ -141,29 +141,29 @@ private data class Daily(
     @SerialName("winddirection_10m_dominant") var winddirection10mDominant: List<Double>
 )
 
-private fun Response.toEntity(timeZone: TimeZone): Forecast? {
+private fun Response.toEntity(): Forecast? {
     val hours = buildList {
         with(hourly) {
             for (i in time.indices) {
                 val hour = Hour(
                     unixSecond = time[i],
                     wmoCode = weathercode[i],
-                    temperature = Temperature(degreesCelsius = temperature2m[i]),
+                    temperature = Temperature(temperature2m[i], TemperatureUnit.DegreeCelsius),
                     rain = rainfallToLength(rain[i]),
                     showers = rainfallToLength(showers[i]),
                     snow = snowfallToLength(snowfall[i]),
                     precipitation = rainfallToLength(precipitation[i]),
-                    probabilityOfPrecipitation = Percentage(percent = precipitationProbability[i]),
-                    gust = Speed(metresPerSecond = windgusts10m[i]),
-                    wind = Speed(metresPerSecond = windspeed10m[i]),
-                    windDirection = Angle(degrees = winddirection10m[i]),
-                    pressureAtSeaLevel = Pressure(millibars = pressureMsl[i]),
-                    relativeHumidity = Percentage(percent = relativehumidity2m[i]),
-                    dewPoint = Temperature(degreesCelsius = dewpoint2m[i]),
-                    visibility = Visibility(Length(metres = visibility[i])),
+                    probabilityOfPrecipitation = precipitationProbability[i],
+                    gust = Speed(windgusts10m[i], SpeedUnit.MetrePerSecond),
+                    wind = Speed(windspeed10m[i], SpeedUnit.MetrePerSecond),
+                    windDirection = Angle(winddirection10m[i], AngleUnit.Degree),
+                    pressureAtSeaLevel = Pressure(pressureMsl[i], PressureUnit.Millibar),
+                    relativeHumidity = relativehumidity2m[i],
+                    dewPoint = Temperature(dewpoint2m[i], TemperatureUnit.DegreeCelsius),
+                    visibility = Length(visibility[i], LengthUnit.Metre),
                     uvIndex = uvIndex[i],
                     day = isDay[i] == 1,
-                    feelsLike = Temperature(degreesCelsius = apparentTemperature[i])
+                    feelsLike = Temperature(apparentTemperature[i], TemperatureUnit.DegreeCelsius)
                 )
                 add(hour)
             }
@@ -177,26 +177,30 @@ private fun Response.toEntity(timeZone: TimeZone): Forecast? {
                     wmoCode = weathercode[i],
                     sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
                     sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
-                    minimumTemperature = Temperature(degreesCelsius = temperature2mMin[i]),
-                    maximumTemperature = Temperature(degreesCelsius = temperature2mMax[i]),
-                    minimumFeelsLike = Temperature(degreesCelsius = apparentTemperatureMin[i]),
-                    maximumFeelsLike = Temperature(degreesCelsius = apparentTemperatureMax[i]),
+                    minimumTemperature = Temperature(temperature2mMin[i], TemperatureUnit.DegreeCelsius),
+                    maximumTemperature = Temperature(temperature2mMax[i], TemperatureUnit.DegreeCelsius),
+                    minimumFeelsLike = Temperature(apparentTemperatureMin[i], TemperatureUnit.DegreeCelsius),
+                    maximumFeelsLike = Temperature(apparentTemperatureMax[i], TemperatureUnit.DegreeCelsius),
                     rain = rainfallToLength(rainSum[i]),
                     showers = rainfallToLength(showersSum[i]),
                     snow = snowfallToLength(snowfallSum[i]),
                     precipitation = rainfallToLength(precipitationSum[i]),
-                    maximumGust = Speed(metresPerSecond = windgusts10mMax[i]),
-                    maximumProbabilityOfPrecipitation = Percentage(percent = precipitationProbabilityMax[i]),
-                    maximumWind = Speed(metresPerSecond = windspeed10mMax[i]),
-                    dominantWindDirection = Angle(degrees = winddirection10mDominant[i]),
+                    maximumGust = Speed(windgusts10mMax[i], SpeedUnit.MetrePerSecond),
+                    maximumProbabilityOfPrecipitation = precipitationProbabilityMax[i],
+                    maximumWind = Speed(windspeed10mMax[i], SpeedUnit.MetrePerSecond),
+                    dominantWindDirection = Angle(winddirection10mDominant[i], AngleUnit.Degree),
                     maximumUvIndex = uvIndexMax[i]
                 )
                 add(day)
             }
         }
     }
-    return try { Forecast(timeZone, hours, days) } catch (_: Exception) { null }
+    return try {
+        Forecast(TimeZone.of(timeZone), hours, days)
+    } catch (_: Exception) {
+        null
+    }
 }
 
-private fun rainfallToLength(millimetres: Double): Length = Length(metres = millimetres / 1000)
-private fun snowfallToLength(centimetres: Double): Length = Length(metres = centimetres / 100)
+private fun rainfallToLength(millimetres: Double): Length = Length(millimetres, LengthUnit.Millimetre)
+private fun snowfallToLength(centimetres: Double): Length = Length(centimetres, LengthUnit.Centimetre)

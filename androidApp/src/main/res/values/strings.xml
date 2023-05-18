@@ -97,6 +97,7 @@
     <string name="settings_title">Settings</string>
     <string name="settings_heading_units">Units</string>
     <string name="settings_title_temperature">Temperature unit</string>
+    <string name="settings_label_temperature_kelvin">Kelvin</string>
     <string name="settings_label_temperature_celsius">Degree Celsius</string>
     <string name="settings_label_temperature_fahrenheit">Degree Fahrenheit</string>
     <!--TODO: change translations to mean "Speed" and not "Wind" unit-->
@@ -113,6 +114,7 @@
     <string name="settings_label_pressure_mbar">Millibar</string>
     <string name="settings_title_pressure">Pressure unit</string>
     <string name="settings_label_pressure_inhg">Inch of mercury</string>
+    <string name="settings_label_pressure_pascal">Pascal</string>
     <string name="settings_heading_appearance">Appearance</string>
     <string name="settings_title_theme">Theme</string>
     <string name="settings_label_theme_light">Light</string>

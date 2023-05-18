@@ -8,15 +8,25 @@ class Forecast internal constructor(
     val days: List<Day>
 ) {
     init {
-        if (hours.isEmpty()) throw IllegalStateException("Hours must not be empty.")
-        if (days.isEmpty()) throw IllegalStateException("Days must not be empty.")
+        if (hours.isEmpty()) throwInvalidHours()
+        if (days.isEmpty()) throwInvalidDays()
     }
 
-    val futureHours: List<Hour>
-        get() = hours.filter { it.unixSecond >= Clock.System.now().epochSeconds }
+    val futureHours: List<Hour> get() = hours.filter {
+        it.unixSecond >= Clock.System.now().epochSeconds
+    }
 
-    val futureDays: List<Day>
-        get() = days.filter { Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(localTimeZone).date >= Clock.System.now().toLocalDateTime(localTimeZone).date }
+    val futureDays: List<Day> get() = days.filter {
+        val dayDate = Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(localTimeZone).date
+        val nowDate = Clock.System.now().toLocalDateTime(localTimeZone).date
+        dayDate >= nowDate
+    }
+
+    private fun throwInvalidHours(): Nothing =
+        throw IllegalStateException("Hours must not be empty.")
+
+    private fun throwInvalidDays(): Nothing =
+        throw IllegalStateException("Days must not be empty.")
 }
 
 data class Hour(
@@ -27,14 +37,14 @@ data class Hour(
     val showers: Length,
     val snow: Length,
     val precipitation: Length,
-    val probabilityOfPrecipitation: Percentage,
+    val probabilityOfPrecipitation: Double,
     val wind: Speed,
     val gust: Speed,
     val windDirection: Angle,
     val pressureAtSeaLevel: Pressure,
-    val relativeHumidity: Percentage,
+    val relativeHumidity: Double,
     val dewPoint: Temperature,
-    val visibility: Visibility,
+    val visibility: Length,
     val uvIndex: Double,
     val day: Boolean,
     val feelsLike: Temperature
@@ -53,7 +63,7 @@ data class Day(
     val showers: Length,
     val snow: Length,
     val precipitation: Length,
-    val maximumProbabilityOfPrecipitation: Percentage,
+    val maximumProbabilityOfPrecipitation: Double,
     val maximumWind: Speed,
     val maximumGust: Speed,
     val dominantWindDirection: Angle,

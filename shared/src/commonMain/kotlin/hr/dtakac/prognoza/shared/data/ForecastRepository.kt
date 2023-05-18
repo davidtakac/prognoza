@@ -11,8 +11,7 @@ internal class ForecastRepository(
         placeRepository.getSavedPlace(placeId)?.let {
             apiService.getForecast(
                 latitude = it.latitude,
-                longitude = it.longitude,
-                timeZone = it.timeZone
+                longitude = it.longitude
             )
         }
 

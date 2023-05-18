@@ -76,7 +76,7 @@ sealed interface OverviewHour {
     class Weather internal constructor(
         override val unixSecond: Long,
         val temperature: Temperature,
-        val probabilityOfPrecipitation: Percentage,
+        val probabilityOfPrecipitation: Double,
         val wmoCode: Int
     ) : OverviewHour
 
@@ -96,5 +96,5 @@ class OverviewDay internal constructor(
     val wmoCode: Int,
     val minimumTemperature: Temperature,
     val maximumTemperature: Temperature,
-    val maximumProbabilityOfPrecipitation: Percentage
+    val maximumProbabilityOfPrecipitation: Double
 )
