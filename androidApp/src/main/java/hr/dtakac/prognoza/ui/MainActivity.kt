@@ -27,8 +27,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
-import hr.dtakac.prognoza.shared.domain.GetOverview
-import hr.dtakac.prognoza.shared.domain.OverviewResult
+import hr.dtakac.prognoza.shared.usecase.GetOverview
+import hr.dtakac.prognoza.shared.usecase.OverviewResult
 import hr.dtakac.prognoza.shared.entity.Overview
 import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen

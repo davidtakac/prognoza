@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.shared.domain
+package hr.dtakac.prognoza.shared.usecase
 
 import hr.dtakac.prognoza.shared.data.PlaceRepository
 import hr.dtakac.prognoza.shared.entity.Place

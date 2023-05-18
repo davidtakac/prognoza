@@ -21,12 +21,12 @@ internal class ForecastService(
     private val dotDecimalFormatter: DotDecimalFormatter,
     private val computationDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getForecast(latitude: Double, longitude: Double): Forecast? {
+    suspend fun getForecast(coordinates: Coordinates): Forecast? {
         val response = try {
             client.get("https://api.open-meteo.com/v1//forecast") {
                 header(HttpHeaders.UserAgent, userAgent)
-                parameter("latitude", dotDecimalFormatter.format(latitude, decimalPlaces = 2))
-                parameter("longitude", dotDecimalFormatter.format(longitude, decimalPlaces = 2))
+                parameter("latitude", dotDecimalFormatter.format(coordinates.latitude, decimalPlaces = 2))
+                parameter("longitude", dotDecimalFormatter.format(coordinates.longitude, decimalPlaces = 2))
                 parameter("timezone", "auto")
                 parameter("timeformat", "unixtime")
                 parameter("hourly", hourlyParams)

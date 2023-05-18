@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.presentation.simpleEvent
-import hr.dtakac.prognoza.shared.domain.*
+import hr.dtakac.prognoza.shared.usecase.*
 import hr.dtakac.prognoza.shared.entity.Place
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -57,7 +57,7 @@ class PlacesViewModel @Inject constructor(
     fun deletePlace(index: Int) {
         viewModelScope.launch {
             showLoader()
-            deleteSavedPlace(currentPlaces[index].id)
+            deleteSavedPlace(currentPlaces[index])
             showSaved()
             hideLoader()
         }

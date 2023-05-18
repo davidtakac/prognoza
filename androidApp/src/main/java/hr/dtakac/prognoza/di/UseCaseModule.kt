@@ -7,7 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import hr.dtakac.prognoza.shared.PrognozaSdk
-import hr.dtakac.prognoza.shared.domain.*
+import hr.dtakac.prognoza.shared.usecase.*
 import hr.dtakac.prognoza.shared.platform.PrognozaSdkFactory
 import javax.inject.Singleton
 
@@ -50,64 +50,4 @@ class UseCaseModule {
     fun provideDeleteSavedPlaceUseCase(
         prognozaSdk: PrognozaSdk
     ): DeleteSavedPlace = prognozaSdk.deleteSavedPlace
-
-    @Provides
-    fun provideSetTemperatureUnit(
-        prognozaSdk: PrognozaSdk
-    ): SelectTemperatureUnit = prognozaSdk.selectTemperatureUnit
-
-    @Provides
-    fun provideGetTemperatureUnit(
-        prognozaSdk: PrognozaSdk
-    ): GetSelectedTemperatureUnit = prognozaSdk.getSelectedTemperatureUnit
-
-    @Provides
-    fun provideGetAllTemperatureUnits(
-        prognozaSdk: PrognozaSdk
-    ): GetAvailableTemperatureUnits = prognozaSdk.getAvailableTemperatureUnits
-
-    @Provides
-    fun provideSetWindUnit(
-        prognozaSdk: PrognozaSdk
-    ): SelectWindSpeedUnit = prognozaSdk.selectWindSpeedUnit
-
-    @Provides
-    fun provideGetWindUnit(
-        prognozaSdk: PrognozaSdk
-    ): GetSelectedWindSpeedUnit = prognozaSdk.getSelectedWindSpeedUnit
-
-    @Provides
-    fun provideGetAllWindUnits(
-        prognozaSdk: PrognozaSdk
-    ): GetAvailableWindSpeedUnits = prognozaSdk.getAvailableWindSpeedUnits
-
-    @Provides
-    fun provideSetPrecipitationUnit(
-        prognozaSdk: PrognozaSdk
-    ): SelectLengthUnit = prognozaSdk.selectLengthUnit
-
-    @Provides
-    fun provideGetPrecipitationUnit(
-        prognozaSdk: PrognozaSdk
-    ): GetSelectedLengthUnit = prognozaSdk.getSelectedLengthUnit
-
-    @Provides
-    fun provideGetAllPrecipitationUnits(
-        prognozaSdk: PrognozaSdk
-    ): GetAvailableLengthUnits = prognozaSdk.getAvailableLengthUnits
-
-    @Provides
-    fun provideSetPressureUnit(
-        prognozaSdk: PrognozaSdk
-    ): SelectPressureUnit = prognozaSdk.selectPressureUnit
-
-    @Provides
-    fun provideGetPressureUnit(
-        prognozaSdk: PrognozaSdk
-    ): GetSelectedPressureUnit = prognozaSdk.getSelectedPressureUnit
-
-    @Provides
-    fun provideGetAllPressureUnits(
-        prognozaSdk: PrognozaSdk
-    ): GetAvailablePressureUnits = prognozaSdk.getAvailablePressureUnits
 }

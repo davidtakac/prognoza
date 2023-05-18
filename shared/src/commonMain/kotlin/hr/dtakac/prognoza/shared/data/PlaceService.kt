@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.shared.data
 
+import hr.dtakac.prognoza.shared.entity.Coordinates
 import hr.dtakac.prognoza.shared.entity.Place
 import io.github.aakira.napier.Napier
 import io.ktor.client.*
@@ -8,7 +9,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.TimeZone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -71,14 +71,14 @@ private data class OpenMeteoPlace(
 
 private fun OpenMeteoPlace.toEntity(): Place {
     return Place(
-        id = "lat:${latitude}ln:${longitude}",
+        coordinates = Coordinates(
+            latitude = latitude,
+            longitude = longitude
+        ),
         name = name,
-        timeZone = TimeZone.of(timeZone),
         details = listOf(admin1, admin2, admin3, admin4)
             .filterNot { it.isNullOrBlank() }
             .joinToString(", ")
-            .takeIf { it.isNotBlank() },
-        latitude = latitude,
-        longitude = longitude
+            .takeIf { it.isNotBlank() }
     )
 }
