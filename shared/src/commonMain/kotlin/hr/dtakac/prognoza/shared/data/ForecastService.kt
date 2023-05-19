@@ -149,10 +149,9 @@ private fun Response.toEntity(): Forecast? {
                     unixSecond = time[i],
                     wmoCode = weathercode[i],
                     temperature = Temperature(temperature2m[i], TemperatureUnit.DegreeCelsius),
-                    rain = rainfallToLength(rain[i]),
-                    showers = rainfallToLength(showers[i]),
-                    snow = snowfallToLength(snowfall[i]),
-                    precipitation = rainfallToLength(precipitation[i]),
+                    rain = Length(rain[i], LengthUnit.Millimetre),
+                    showers = Length(rain[i], LengthUnit.Millimetre),
+                    snow = Length(snowfall[i], LengthUnit.Centimetre),
                     probabilityOfPrecipitation = precipitationProbability[i],
                     gust = Speed(windgusts10m[i], SpeedUnit.MetrePerSecond),
                     wind = Speed(windspeed10m[i], SpeedUnit.MetrePerSecond),
@@ -161,7 +160,7 @@ private fun Response.toEntity(): Forecast? {
                     relativeHumidity = relativehumidity2m[i],
                     dewPoint = Temperature(dewpoint2m[i], TemperatureUnit.DegreeCelsius),
                     visibility = Length(visibility[i], LengthUnit.Metre),
-                    uvIndex = uvIndex[i],
+                    uvIndex = UvIndex(uvIndex[i]),
                     day = isDay[i] == 1,
                     feelsLike = Temperature(apparentTemperature[i], TemperatureUnit.DegreeCelsius)
                 )
@@ -181,15 +180,14 @@ private fun Response.toEntity(): Forecast? {
                     maximumTemperature = Temperature(temperature2mMax[i], TemperatureUnit.DegreeCelsius),
                     minimumFeelsLike = Temperature(apparentTemperatureMin[i], TemperatureUnit.DegreeCelsius),
                     maximumFeelsLike = Temperature(apparentTemperatureMax[i], TemperatureUnit.DegreeCelsius),
-                    rain = rainfallToLength(rainSum[i]),
-                    showers = rainfallToLength(showersSum[i]),
-                    snow = snowfallToLength(snowfallSum[i]),
-                    precipitation = rainfallToLength(precipitationSum[i]),
+                    rain = Length(rainSum[i], LengthUnit.Millimetre),
+                    showers = Length(showersSum[i], LengthUnit.Millimetre),
+                    snow = Length(snowfallSum[i], LengthUnit.Centimetre),
                     maximumGust = Speed(windgusts10mMax[i], SpeedUnit.MetrePerSecond),
                     maximumProbabilityOfPrecipitation = precipitationProbabilityMax[i],
                     maximumWind = Speed(windspeed10mMax[i], SpeedUnit.MetrePerSecond),
                     dominantWindDirection = Angle(winddirection10mDominant[i], AngleUnit.Degree),
-                    maximumUvIndex = uvIndexMax[i]
+                    maximumUvIndex = UvIndex(uvIndexMax[i])
                 )
                 add(day)
             }
@@ -201,6 +199,3 @@ private fun Response.toEntity(): Forecast? {
         null
     }
 }
-
-private fun rainfallToLength(millimetres: Double): Length = Length(millimetres, LengthUnit.Millimetre)
-private fun snowfallToLength(centimetres: Double): Length = Length(centimetres, LengthUnit.Centimetre)

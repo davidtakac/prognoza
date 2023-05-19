@@ -36,7 +36,6 @@ data class Hour(
     val rain: Length,
     val showers: Length,
     val snow: Length,
-    val precipitation: Length,
     val probabilityOfPrecipitation: Double,
     val wind: Speed,
     val gust: Speed,
@@ -45,7 +44,7 @@ data class Hour(
     val relativeHumidity: Double,
     val dewPoint: Temperature,
     val visibility: Length,
-    val uvIndex: Double,
+    val uvIndex: UvIndex,
     val day: Boolean,
     val feelsLike: Temperature
 )
@@ -62,10 +61,9 @@ data class Day(
     val rain: Length,
     val showers: Length,
     val snow: Length,
-    val precipitation: Length,
     val maximumProbabilityOfPrecipitation: Double,
     val maximumWind: Speed,
     val maximumGust: Speed,
     val dominantWindDirection: Angle,
-    val maximumUvIndex: Double
+    val maximumUvIndex: UvIndex
 )
