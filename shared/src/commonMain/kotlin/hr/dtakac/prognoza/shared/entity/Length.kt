@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Length private constructor(
+class Length internal constructor(
     val value: Double,
     val unit: LengthUnit
 ) {
@@ -12,7 +12,7 @@ class Length private constructor(
 
     // From ChatGPT 3.5 for the prompt
     // "Can you map meteorological visibility in kilometres to qualitative measurements?"
-    val visibility: Visibility = unit.convert(value, LengthUnit.Kilometre).let { kilometres ->
+    val visibility: Visibility = valueIn(LengthUnit.Kilometre).let { kilometres ->
         when {
             kilometres >= 10 -> Visibility.Excellent
             kilometres >= 5 -> Visibility.VeryGood
@@ -24,48 +24,13 @@ class Length private constructor(
         }
     }
 
+    internal fun convertTo(unit: LengthUnit) = Length(valueIn(unit), unit)
+
+    private fun valueIn(unit: LengthUnit): Double =
+        if (this.unit == unit) value else value * this.unit.metres / unit.metres
+
     private fun throwInvalidLength(): Nothing =
         throw IllegalStateException("Length must be positive, was ${toString()}.")
-
-    companion object {
-        fun fromSnowfall(
-            value: Double,
-            unit: LengthUnit,
-            system: MeasurementSystem
-        ): Length {
-            val targetUnit = when (system) {
-                MeasurementSystem.Metric -> LengthUnit.Centimetre
-                MeasurementSystem.Imperial -> LengthUnit.Inch
-            }
-            return Length(unit.convert(value, targetUnit), targetUnit)
-        }
-
-        fun fromRainfall(
-            value: Double,
-            unit: LengthUnit,
-            system: MeasurementSystem
-        ): Length {
-            val targetUnit = when (system) {
-                MeasurementSystem.Metric -> LengthUnit.Millimetre
-                MeasurementSystem.Imperial -> LengthUnit.Inch
-            }
-            return Length(unit.convert(value, targetUnit), targetUnit)
-        }
-
-        fun fromVisibility(
-            value: Double,
-            unit: LengthUnit,
-            system: MeasurementSystem
-        ): Length {
-            val targetUnit = when (system) {
-                MeasurementSystem.Metric ->
-                    if (unit.convert(value, LengthUnit.Metre) >= 1000) LengthUnit.Kilometre
-                    else LengthUnit.Metre
-                MeasurementSystem.Imperial -> LengthUnit.Inch
-            }
-            return Length(unit.convert(value, targetUnit), targetUnit)
-        }
-    }
 }
 
 enum class LengthUnit(
@@ -78,12 +43,7 @@ enum class LengthUnit(
     Kilometre(metres = 1000.0, suffix = "km"),
     Inch(metres = 0.0254, suffix = "in"),
     Foot(metres = 0.3048, suffix = "ft"),
-    Mile(metres = 1609.34, suffix = "mi");
-
-    fun convert(
-        value: Double,
-        targetUnit: LengthUnit
-    ): Double = if (this == targetUnit) value else value * metres / targetUnit.metres
+    Mile(metres = 1609.34, suffix = "mi")
 }
 
 enum class Visibility {

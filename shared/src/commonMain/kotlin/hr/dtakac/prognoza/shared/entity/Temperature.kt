@@ -16,8 +16,7 @@ class Temperature internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
-    fun convertTo(targetUnit: TemperatureUnit): Temperature =
-        Temperature(valueIn(targetUnit), targetUnit)
+    internal fun convertTo(targetUnit: TemperatureUnit) = Temperature(valueIn(targetUnit), targetUnit)
 
     private fun valueIn(targetUnit: TemperatureUnit): Double =
         if (unit == targetUnit) value

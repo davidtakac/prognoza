@@ -10,7 +10,7 @@ class Speed internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
-    fun convertTo(targetUnit: SpeedUnit): Speed = Speed(valueIn(targetUnit), targetUnit)
+    internal fun convertTo(targetUnit: SpeedUnit): Speed = Speed(valueIn(targetUnit), targetUnit)
 
     val beaufortNumber: Int = valueIn(SpeedUnit.MilePerHour).let { milesPerHour ->
         when {

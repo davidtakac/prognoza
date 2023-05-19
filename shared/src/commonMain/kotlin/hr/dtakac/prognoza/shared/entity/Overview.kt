@@ -10,28 +10,29 @@ class Overview private constructor(
     val days: OverviewDays
 ) {
     companion object {
-        fun create(forecast: Forecast): Overview {
+        fun create(forecast: Forecast, measurementSystem: MeasurementSystem): Overview {
             val hours = forecast.futureHours.take(24)
             val days = forecast.futureDays
             return Overview(
-                temperature = hours[0].temperature,
-                feelsLike = hours[0].feelsLike,
-                minimumTemperature = days[0].minimumTemperature,
-                maximumTemperature = days[0].maximumTemperature,
+                temperature = hours[0].temperature.inSystem(measurementSystem),
+                feelsLike = hours[0].feelsLike.inSystem(measurementSystem),
+                minimumTemperature = days[0].minimumTemperature.inSystem(measurementSystem),
+                maximumTemperature = days[0].maximumTemperature.inSystem(measurementSystem),
                 wmoCode = hours[0].wmoCode,
-                hours = createHours(hours, days),
-                days = createDays(days)
+                hours = createHours(hours, days, measurementSystem),
+                days = createDays(days, measurementSystem)
             )
         }
 
         private fun createHours(
             hours: List<Hour>,
-            days: List<Day>
+            days: List<Day>,
+            measurementSystem: MeasurementSystem
         ): List<OverviewHour> = buildList {
             val overviewHours = hours.map {
                 OverviewHour.Weather(
                     unixSecond = it.unixSecond,
-                    temperature = it.temperature,
+                    temperature = it.temperature.inSystem(measurementSystem),
                     probabilityOfPrecipitation = it.probabilityOfPrecipitation,
                     wmoCode = it.wmoCode
                 )
@@ -54,18 +55,23 @@ class Overview private constructor(
             sortBy { it.unixSecond }
         }
 
-        private fun createDays(days: List<Day>): OverviewDays = OverviewDays(
+        private fun createDays(days: List<Day>, measurementSystem: MeasurementSystem) = OverviewDays(
             days = days.map {
                 OverviewDay(
                     unixSecond = it.unixSecond,
                     wmoCode = it.wmoCode,
-                    minimumTemperature = it.minimumTemperature,
-                    maximumTemperature = it.maximumTemperature,
+                    minimumTemperature = it.minimumTemperature.inSystem(measurementSystem),
+                    maximumTemperature = it.maximumTemperature.inSystem(measurementSystem),
                     maximumProbabilityOfPrecipitation = it.maximumProbabilityOfPrecipitation
                 )
             },
-            minimumTemperature = days.minOf { it.minimumTemperature },
-            maximumTemperature = days.maxOf { it.maximumTemperature }
+            minimumTemperature = days.minOf { it.minimumTemperature }.inSystem(measurementSystem),
+            maximumTemperature = days.maxOf { it.maximumTemperature }.inSystem(measurementSystem)
+        )
+
+        private fun Temperature.inSystem(system: MeasurementSystem) = convertTo(
+            if (system == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
+            else TemperatureUnit.DegreeCelsius
         )
     }
 }

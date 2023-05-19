@@ -10,7 +10,7 @@ class Pressure internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
-    fun convertTo(targetUnit: PressureUnit): Pressure = Pressure(valueIn(targetUnit), targetUnit)
+    internal fun convertTo(targetUnit: PressureUnit): Pressure = Pressure(valueIn(targetUnit), targetUnit)
 
     private fun valueIn(targetUnit: PressureUnit): Double =
         if (targetUnit == unit) value
