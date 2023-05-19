@@ -10,6 +10,14 @@ class Length internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
+    operator fun plus(other: Length): Length {
+        val newUnit = LengthUnit.Metre
+        return Length(
+            value = valueIn(newUnit) + other.valueIn(newUnit),
+            unit = newUnit
+        )
+    }
+
     // From ChatGPT 3.5 for the prompt
     // "Can you map meteorological visibility in kilometres to qualitative measurements?"
     val visibility: Visibility = valueIn(LengthUnit.Kilometre).let { kilometres ->
