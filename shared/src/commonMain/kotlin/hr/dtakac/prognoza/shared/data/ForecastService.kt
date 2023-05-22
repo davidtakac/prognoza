@@ -21,7 +21,7 @@ internal class ForecastService(
     private val dotDecimalFormatter: DotDecimalFormatter,
     private val computationDispatcher: CoroutineDispatcher
 ) {
-    suspend fun getForecast(coordinates: Coordinates): Forecast? {
+    suspend fun getForecast(coordinates: Coordinates): List<Day>? {
         val response = try {
             client.get("https://api.open-meteo.com/v1//forecast") {
                 header(HttpHeaders.UserAgent, userAgent)
@@ -141,7 +141,7 @@ private data class Daily(
     @SerialName("winddirection_10m_dominant") var winddirection10mDominant: List<Double>
 )
 
-private fun Response.toEntity(): Forecast? {
+private fun Response.toEntity(): List<Day>? {
     val hours = buildList {
         with(hourly) {
             for (i in time.indices) {
@@ -152,7 +152,7 @@ private fun Response.toEntity(): Forecast? {
                     rain = Length(rain[i], LengthUnit.Millimetre),
                     showers = Length(rain[i], LengthUnit.Millimetre),
                     snow = Length(snowfall[i], LengthUnit.Centimetre),
-                    probabilityOfPrecipitation = precipitationProbability[i],
+                    pop = precipitationProbability[i],
                     gust = Speed(windgusts10m[i], SpeedUnit.MetrePerSecond),
                     wind = Speed(windspeed10m[i], SpeedUnit.MetrePerSecond),
                     windDirection = Angle(winddirection10m[i], AngleUnit.Degree),
@@ -173,18 +173,18 @@ private fun Response.toEntity(): Forecast? {
             for (i in time.indices) {
                 val day = Day(
                     unixSecond = time[i],
-                    wmoCode = weathercode[i],
+                    mostExtremeWmoCode = weathercode[i],
                     sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
                     sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
                     minimumTemperature = Temperature(temperature2mMin[i], TemperatureUnit.DegreeCelsius),
                     maximumTemperature = Temperature(temperature2mMax[i], TemperatureUnit.DegreeCelsius),
                     minimumFeelsLike = Temperature(apparentTemperatureMin[i], TemperatureUnit.DegreeCelsius),
                     maximumFeelsLike = Temperature(apparentTemperatureMax[i], TemperatureUnit.DegreeCelsius),
-                    rain = Length(rainSum[i], LengthUnit.Millimetre),
-                    showers = Length(showersSum[i], LengthUnit.Millimetre),
-                    snow = Length(snowfallSum[i], LengthUnit.Centimetre),
+                    totalRain = Length(rainSum[i], LengthUnit.Millimetre),
+                    totalShowers = Length(showersSum[i], LengthUnit.Millimetre),
+                    totalSnow = Length(snowfallSum[i], LengthUnit.Centimetre),
                     maximumGust = Speed(windgusts10mMax[i], SpeedUnit.MetrePerSecond),
-                    maximumProbabilityOfPrecipitation = precipitationProbabilityMax[i],
+                    maximumPop = precipitationProbabilityMax[i],
                     maximumWind = Speed(windspeed10mMax[i], SpeedUnit.MetrePerSecond),
                     dominantWindDirection = Angle(winddirection10mDominant[i], AngleUnit.Degree),
                     maximumUvIndex = UvIndex(uvIndexMax[i])

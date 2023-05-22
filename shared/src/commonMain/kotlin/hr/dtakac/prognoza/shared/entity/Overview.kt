@@ -41,7 +41,7 @@ class Overview private constructor(
                 OverviewHour.Weather(
                     unixSecond = it.unixSecond,
                     temperature = it.temperature.inSystem(system),
-                    probabilityOfPrecipitation = it.probabilityOfPrecipitation,
+                    probabilityOfPrecipitation = it.pop,
                     wmoCode = it.wmoCode
                 )
             }
@@ -69,10 +69,10 @@ class Overview private constructor(
                 days = days.map {
                     OverviewDay(
                         unixSecond = it.unixSecond,
-                        wmoCode = it.wmoCode,
+                        wmoCode = it.mostExtremeWmoCode,
                         minimumTemperature = it.minimumTemperature.inSystem(system),
                         maximumTemperature = it.maximumTemperature.inSystem(system),
-                        maximumProbabilityOfPrecipitation = it.maximumProbabilityOfPrecipitation
+                        maximumProbabilityOfPrecipitation = it.maximumPop
                     )
                 },
                 minimumTemperature = days.minOf { it.minimumTemperature }.inSystem(system),
@@ -106,11 +106,11 @@ class Overview private constructor(
 
             val nextRainyDay = forecast.futureDays
                 .drop(1)
-                .firstOrNull { (it.rain + it.showers).value > 0.0 }
+                .firstOrNull { (it.totalRain + it.totalShowers).value > 0.0 }
                 ?.let {
                     NextPrecipitation(
                         unixSecond = it.unixSecond,
-                        amount = (it.rain + it.showers).rainInSystem(system)
+                        amount = (it.totalRain + it.totalShowers).rainInSystem(system)
                     )
                 }
 
@@ -147,11 +147,11 @@ class Overview private constructor(
 
             val nextSnowyDay = forecast.futureDays
                 .drop(1)
-                .firstOrNull { it.snow.value > 0.0 }
+                .firstOrNull { it.totalSnow.value > 0.0 }
                 ?.let {
                     NextPrecipitation(
                         unixSecond = it.unixSecond,
-                        amount = (it.rain + it.showers).snowInSystem(system)
+                        amount = (it.totalRain + it.totalShowers).snowInSystem(system)
                     )
                 }
 
