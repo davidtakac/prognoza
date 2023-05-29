@@ -15,7 +15,12 @@
     <a href="https://github.com/davidtakac/prognoza/releases/latest">
         <img src="https://img.shields.io/github/v/release/davidtakac/prognoza?label=GitHub%20release"/>
     </a>
-    <a href="https://opensource.org/licenses/MIT">
+    <a title="Crowdin" target="_blank" href="https://crowdin.com/project/prognoza">
+        <img src="https://badges.crowdin.net/prognoza/localized.svg"></a>
+    <a href="https://liberapay.com/davidtakac/">
+        <img src="https://img.shields.io/liberapay/patrons/davidtakac.svg?logo=liberapay">
+    </a>
+    <a href="LICENSE">
         <img src="https://img.shields.io/github/license/davidtakac/prognoza"/>
     </a>
 </p>
@@ -45,27 +50,24 @@
 - Works offline
 - Does not access your location
 
-## Buzzwords
-- Clean architecture
-- Use cases
-- Continuous integration
-- Unit tests
-- Kotlin Coroutines
-- Compose (+ tests)
-- Glance
-- SQLDelight
-- Ktor
-- Kotlin Serialization
-- Work Manager
-- Dagger Hilt
-- Compose Navigation
-- Splash screen
+## Translate
+Translations are managed on [Crowdin](https://crowdin.com/project/prognoza) thanks to [@ryder203](https://github.com/ryder203). They will be periodically pulled into the project as languages and changes are added.
+
+<a title="Crowdin" target="_blank" href="https://crowdin.com/project/prognoza"><img src="https://badges.crowdin.net/prognoza/localized.svg"></a>
+
+## Contribute
+The app is undergoing a redesign that will include a bunch of new features including probability of precipitation, wind, UV index, sunrise/sunset times, and more. This requires a significant restructuring of the codebase which will affect most architectural layers. 
+
+Because of this, please do **not** open PRs for new features now. Only bugfix and translation PRs will be accepted.
+
+## Donate
+If you like Prognoza, you're welcome to send a donation with LiberaPay. 
+
+<a href="https://liberapay.com/davidtakac/"><img src="https://liberapay.com/assets/widgets/donate.svg" alt="Liberapay" width="80px" ></a>
 
 ## Credit
-- Forecast data by:
-  - [MET Norway](https://www.met.no/en)
-  - [Open-Meteo](https://open-meteo.com/)
-- Weather icons by [MET Norway](https://www.met.no/en)
-- Geolocation data by [OSM Nominatim](https://nominatim.org/)
-- Design by [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2)
-- App icon by [Nataša Takač](https://www.instagram.com/art.ofil/)
+Forecast data by [MET Norway](https://www.met.no/en) and [Open-Meteo](https://open-meteo.com/)  
+Weather icons by [MET Norway](https://www.met.no/en)  
+Geolocation data by [OSM Nominatim](https://nominatim.org/)  
+Design inspired by [Neal Hampton](https://dribbble.com/shots/6680361-Dribbble-Daily-UI-37-Weather-2)  
+App icon by [Nataša Takač](https://www.instagram.com/art.ofil/)
