@@ -1,6 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Prognoza</string>
-
     <!--Weather descriptions-->
     <string name="description_unknown">Unknown</string>
     <string name="description_clear_sky">Clear</string>
@@ -44,7 +43,6 @@
     <string name="description_snow_and_thunder">Thundersnow</string>
     <string name="description_snow_showers">Snow showers</string>
     <string name="description_snow_showers_and_thunder">Thundersnow showers</string>
-
     <!-- Compass directions -->
     <string name="direction_n">North</string>
     <string name="direction_ne">Northeast</string>
@@ -54,7 +52,6 @@
     <string name="direction_sw">Southwest</string>
     <string name="direction_w">West</string>
     <string name="direction_nw">Northwest</string>
-
     <string name="template_temperature_degrees">%1$s°</string>
     <string name="template_feels_like">Feels like %1$s</string>
     <string name="template_precipitation_mm">%1$s\u00A0mm</string>
@@ -67,9 +64,6 @@
     <string name="template_high_low_temperature">%1$s\u00A0\u2215\u00A0%2$s</string>
     <string name="template_wind">%1$s\u00A0\u00B7\u00A0%2$s</string>
     <string name="error_unknown">An unexpected error occurred.</string>
-    <string name="met_norway_credit" translatable="false">MET Norway</string>
-    <string name="open_meteo_credit" translatable="false">Open-Meteo</string>
-    <string name="osm_nominatim_credit" translatable="false">OpenStreetMap</string>
     <string name="error_no_selected_place">Select a place to see its forecast.</string>
     <string name="wind_calm">Calm</string>
     <string name="wind_light_air">Light air</string>
@@ -121,11 +115,9 @@
     <string name="weather_data">Weather data</string>
     <string name="geolocation_data">Place data</string>
     <string name="design_credit">Design</string>
-    <string name="design_credit_description" translatable="false">Neal Hampton</string>
     <string name="launcher_icon_credit">App icon</string>
-    <string name="launcher_icon_description" translatable="false">Nataša Takač</string>
     <string name="mood_source">Mood</string>
-    <string name="mood_mode_forecast">Current weather</string>k
+    <string name="mood_mode_forecast">Current weather</string>
     <string name="mood_mode_dynamic">Follow system</string>
     <string name="delete">Delete</string>
     <string name="delete_place_title">Delete %1$s?</string>
@@ -134,16 +126,11 @@
     <string name="template_data_from">Data from %1$s</string>
     <string name="credit_and_licenses_title">Licenses and credit</string>
     <string name="source_code_title">Source code</string>
-    <string name="source_code_description" translatable="false">GitHub</string>
     <string name="about_title">About</string>
     <string name="license_title">License</string>
     <string name="license_description">MIT License</string>
     <string name="credit_and_licenses_description">MET Norway, OpenStreetMap and more</string>
     <string name="licenses_title">Licenses</string>
-    <string name="met_norway_credit_description" translatable="false">NLOD 2.0, CC BY 4.0</string>
-    <string name="open_meteo_credit_description" translatable="false">CC BY 4.0</string>
-    <string name="osm_nominatim_credit_description" translatable="false">ODbL</string>
     <string name="weather_icons_title">Weather icons</string>
     <string name="weather_icons_description">MET Norway, MIT License</string>
-
 </resources>
