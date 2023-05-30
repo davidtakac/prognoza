@@ -10,6 +10,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - iOS support
 
+## [3.5.0] - 2023-05-30
+### Added
+Huge thank you to everyone who contributed translations and to @ryder203 for putting the app on Crowdin! If there are any translation issues, please raise them on Crowdin. There's a link in the project README.
+- Chinese Simplified
+- Chinese Traditional
+- Czech
+- Danish
+- Dutch
+- Finnish
+- French
+- Greek
+- Hungarian
+- Italian
+- Japanese
+- Norwegian
+- Polish
+- Portuguese
+- Portuguese, Brazilian
+- Romanian
+- Spanish
+- Swedish
+- Turkish
+- Ukranian
+
 ## [3.4.1] - 2023-02-26
 ### Fixed
 - System back button closes app instead of drawer 
