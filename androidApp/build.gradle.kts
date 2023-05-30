@@ -20,7 +20,12 @@ android {
         // Before pushing to release, make sure this value matches the latest one in CHANGELOG.md
         versionName = "3.4.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        resourceConfigurations.addAll(listOf("en", "hr", "de", "ru"))
+        resourceConfigurations.addAll(listOf(
+            "ar-rSA", "cs-rCZ", "da-rDK", "de-rDE", "el-rGR", "en-rUS", "es-rES",
+            "fi-rFI", "fr-rFR", "hu-rHU", "it-rIT", "ja-rJP", "nl-rNL", "no-rNO",
+            "pl-rPL", "pt-rBR", "pt-rPT", "ro-rRO", "ru-rRU", "sv-rSE", "tr-rTR",
+            "uk-rUA", "zh-rCN", "zh-rTW", "hr-rHR"
+        ))
     }
 
     signingConfigs {

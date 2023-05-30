@@ -51,17 +51,17 @@
 - Does not access your location
 
 ## Translate
-Translations are managed on [Crowdin](https://crowdin.com/project/prognoza) thanks to [@ryder203](https://github.com/ryder203). They will be periodically pulled into the project as languages and changes are added.
+You can add and/or edit translations on [Crowdin](https://crowdin.com/project/prognoza). They will be periodically pulled into the project as languages and changes are added.
 
 <a title="Crowdin" target="_blank" href="https://crowdin.com/project/prognoza"><img src="https://badges.crowdin.net/prognoza/localized.svg"></a>
 
 ## Contribute
-The app is undergoing a redesign that will include a bunch of new features including probability of precipitation, wind, UV index, sunrise/sunset times, and more. This requires a significant restructuring of the codebase which will affect most architectural layers. 
+The app is undergoing a redesign that will bring a bunch of new features including probability of precipitation, wind, UV index, sunrise/sunset times, and more. This requires a significant refactoring of the codebase which will affect most architectural layers. 
 
-Because of this, please do **not** open PRs for new features now. Only bugfix and translation PRs will be accepted.
+Because of this, please do not open PRs for new features now. Only bugfixes will be accepted.
 
 ## Donate
-If you like Prognoza, you're welcome to send a donation with LiberaPay. 
+If you like Prognoza, you're welcome to send a donation with LiberaPay.
 
 <a href="https://liberapay.com/davidtakac/"><img src="https://liberapay.com/assets/widgets/donate.svg" alt="Liberapay" width="80px" ></a>
 
