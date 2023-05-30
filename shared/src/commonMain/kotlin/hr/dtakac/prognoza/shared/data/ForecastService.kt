@@ -96,7 +96,65 @@ private data class Response(
     val hourly: Hourly,
     @SerialName("daily")
     val daily: Daily
-)
+) {
+    fun toEntity(): List<Day> {
+        val hours = getHours()
+        return buildList {
+            with(daily) {
+                for (i in time.indices) {
+                    val dayStartUnixSecond = time[i]
+                    val day = Day(
+                        unixSecond = dayStartUnixSecond,
+                        mostExtremeWmoCode = weathercode[i],
+                        sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
+                        sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
+                        minimumTemperature = Temperature(temperature2mMin[i], TemperatureUnit.DegreeCelsius),
+                        maximumTemperature = Temperature(temperature2mMax[i], TemperatureUnit.DegreeCelsius),
+                        minimumFeelsLike = Temperature(apparentTemperatureMin[i], TemperatureUnit.DegreeCelsius),
+                        maximumFeelsLike = Temperature(apparentTemperatureMax[i], TemperatureUnit.DegreeCelsius),
+                        totalRain = Length(rainSum[i], LengthUnit.Millimetre),
+                        totalShowers = Length(showersSum[i], LengthUnit.Millimetre),
+                        totalSnow = Length(snowfallSum[i], LengthUnit.Centimetre),
+                        maximumGust = Speed(windgusts10mMax[i], SpeedUnit.MetrePerSecond),
+                        maximumPop = precipitationProbabilityMax[i],
+                        maximumWind = Speed(windspeed10mMax[i], SpeedUnit.MetrePerSecond),
+                        dominantWindDirection = Angle(winddirection10mDominant[i], AngleUnit.Degree),
+                        maximumUvIndex = UvIndex(uvIndexMax[i]),
+                        hours = hours.filter { it.unixSecond - dayStartUnixSecond <= 24 * 60 * 60 }
+                    )
+                    add(day)
+                }
+            }
+        }
+    }
+
+    private fun getHours(): List<Hour> = buildList {
+        with(hourly) {
+            for (i in time.indices) {
+                val hour = Hour(
+                    unixSecond = time[i],
+                    wmoCode = weathercode[i],
+                    temperature = Temperature(temperature2m[i], TemperatureUnit.DegreeCelsius),
+                    rain = Length(rain[i], LengthUnit.Millimetre),
+                    showers = Length(rain[i], LengthUnit.Millimetre),
+                    snow = Length(snowfall[i], LengthUnit.Centimetre),
+                    pop = precipitationProbability[i],
+                    gust = Speed(windgusts10m[i], SpeedUnit.MetrePerSecond),
+                    wind = Speed(windspeed10m[i], SpeedUnit.MetrePerSecond),
+                    windDirection = Angle(winddirection10m[i], AngleUnit.Degree),
+                    pressureAtSeaLevel = Pressure(pressureMsl[i], PressureUnit.Millibar),
+                    relativeHumidity = relativehumidity2m[i],
+                    dewPoint = Temperature(dewpoint2m[i], TemperatureUnit.DegreeCelsius),
+                    visibility = Length(visibility[i], LengthUnit.Metre),
+                    uvIndex = UvIndex(uvIndex[i]),
+                    day = isDay[i] == 1,
+                    feelsLike = Temperature(apparentTemperature[i], TemperatureUnit.DegreeCelsius)
+                )
+                add(hour)
+            }
+        }
+    }
+}
 
 @Serializable
 private data class Hourly(
@@ -140,62 +198,3 @@ private data class Daily(
     @SerialName("windgusts_10m_max") var windgusts10mMax: List<Double>,
     @SerialName("winddirection_10m_dominant") var winddirection10mDominant: List<Double>
 )
-
-private fun Response.toEntity(): List<Day>? {
-    val hours = buildList {
-        with(hourly) {
-            for (i in time.indices) {
-                val hour = Hour(
-                    unixSecond = time[i],
-                    wmoCode = weathercode[i],
-                    temperature = Temperature(temperature2m[i], TemperatureUnit.DegreeCelsius),
-                    rain = Length(rain[i], LengthUnit.Millimetre),
-                    showers = Length(rain[i], LengthUnit.Millimetre),
-                    snow = Length(snowfall[i], LengthUnit.Centimetre),
-                    pop = precipitationProbability[i],
-                    gust = Speed(windgusts10m[i], SpeedUnit.MetrePerSecond),
-                    wind = Speed(windspeed10m[i], SpeedUnit.MetrePerSecond),
-                    windDirection = Angle(winddirection10m[i], AngleUnit.Degree),
-                    pressureAtSeaLevel = Pressure(pressureMsl[i], PressureUnit.Millibar),
-                    relativeHumidity = relativehumidity2m[i],
-                    dewPoint = Temperature(dewpoint2m[i], TemperatureUnit.DegreeCelsius),
-                    visibility = Length(visibility[i], LengthUnit.Metre),
-                    uvIndex = UvIndex(uvIndex[i]),
-                    day = isDay[i] == 1,
-                    feelsLike = Temperature(apparentTemperature[i], TemperatureUnit.DegreeCelsius)
-                )
-                add(hour)
-            }
-        }
-    }
-    val days = buildList {
-        with(daily) {
-            for (i in time.indices) {
-                val day = Day(
-                    unixSecond = time[i],
-                    mostExtremeWmoCode = weathercode[i],
-                    sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
-                    sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
-                    minimumTemperature = Temperature(temperature2mMin[i], TemperatureUnit.DegreeCelsius),
-                    maximumTemperature = Temperature(temperature2mMax[i], TemperatureUnit.DegreeCelsius),
-                    minimumFeelsLike = Temperature(apparentTemperatureMin[i], TemperatureUnit.DegreeCelsius),
-                    maximumFeelsLike = Temperature(apparentTemperatureMax[i], TemperatureUnit.DegreeCelsius),
-                    totalRain = Length(rainSum[i], LengthUnit.Millimetre),
-                    totalShowers = Length(showersSum[i], LengthUnit.Millimetre),
-                    totalSnow = Length(snowfallSum[i], LengthUnit.Centimetre),
-                    maximumGust = Speed(windgusts10mMax[i], SpeedUnit.MetrePerSecond),
-                    maximumPop = precipitationProbabilityMax[i],
-                    maximumWind = Speed(windspeed10mMax[i], SpeedUnit.MetrePerSecond),
-                    dominantWindDirection = Angle(winddirection10mDominant[i], AngleUnit.Degree),
-                    maximumUvIndex = UvIndex(uvIndexMax[i])
-                )
-                add(day)
-            }
-        }
-    }
-    return try {
-        Forecast(TimeZone.of(timeZone), hours, days)
-    } catch (_: Exception) {
-        null
-    }
-}

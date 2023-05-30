@@ -2,6 +2,9 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.*
 
+fun List<Day>.futureDays(): List<Day> =
+    filter { Clock.System.now().epochSeconds - it.unixSecond >= -(24 * 60 * 60) }
+
 data class Day(
     val unixSecond: Long,
     val mostExtremeWmoCode: Int,

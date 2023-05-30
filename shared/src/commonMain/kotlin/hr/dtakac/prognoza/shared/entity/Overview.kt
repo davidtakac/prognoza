@@ -14,29 +14,26 @@ class Overview private constructor(
     companion object {
         private const val FutureHourCount = 24
 
-        fun create(forecast: Forecast, system: MeasurementSystem): Overview {
-            val hours = forecast.futureHours.take(FutureHourCount)
-            val days = forecast.futureDays
-            return Overview(
-                temperature = hours[0].temperature.inSystem(system),
-                feelsLike = hours[0].feelsLike.inSystem(system),
-                minimumTemperature = days[0].minimumTemperature.inSystem(system),
-                maximumTemperature = days[0].maximumTemperature.inSystem(system),
-                wmoCode = hours[0].wmoCode,
-                hours = createHours(forecast, system),
-                days = createDays(forecast, system),
-                rainfall = createRainfall(forecast, system),
-                snowfall = createSnowfall(forecast, system)
-            )
+        fun create(days: List<Day>, system: MeasurementSystem): Overview {
+            val hours =
+                return Overview(
+                    temperature = hours[0].temperature.inSystem(system),
+                    feelsLike = hours[0].feelsLike.inSystem(system),
+                    minimumTemperature = days[0].minimumTemperature.inSystem(system),
+                    maximumTemperature = days[0].maximumTemperature.inSystem(system),
+                    wmoCode = hours[0].wmoCode,
+                    hours = createHours(days, system),
+                    days = createDays(days, system),
+                    rainfall = createRainfall(days, system),
+                    snowfall = createSnowfall(days, system)
+                )
         }
 
         private fun createHours(
-            forecast: Forecast,
+            days: List<Day>,
             system: MeasurementSystem
         ): List<OverviewHour> = buildList {
-            val hours = forecast.futureHours.take(FutureHourCount)
-            val days = forecast.futureDays
-
+            val hours = days.take(2).flatMap { it.futureHours }
             val overviewHours = hours.map {
                 OverviewHour.Weather(
                     unixSecond = it.unixSecond,
@@ -63,30 +60,32 @@ class Overview private constructor(
             sortBy { it.unixSecond }
         }
 
-        private fun createDays(forecast: Forecast, system: MeasurementSystem): OverviewDays {
-            val days = forecast.futureDays
-            return OverviewDays(
-                days = days.map {
-                    OverviewDay(
-                        unixSecond = it.unixSecond,
-                        wmoCode = it.mostExtremeWmoCode,
-                        minimumTemperature = it.minimumTemperature.inSystem(system),
-                        maximumTemperature = it.maximumTemperature.inSystem(system),
-                        maximumProbabilityOfPrecipitation = it.maximumPop
-                    )
-                },
-                minimumTemperature = days.minOf { it.minimumTemperature }.inSystem(system),
-                maximumTemperature = days.maxOf { it.maximumTemperature }.inSystem(system)
-            )
-        }
+        private fun createDays(
+            days: List<Day>,
+            system: MeasurementSystem
+        ) = OverviewDays(
+            days = days.map {
+                OverviewDay(
+                    unixSecond = it.unixSecond,
+                    wmoCode = it.mostExtremeWmoCode,
+                    minimumTemperature = it.minimumTemperature.inSystem(system),
+                    maximumTemperature = it.maximumTemperature.inSystem(system),
+                    maximumProbabilityOfPrecipitation = it.maximumPop
+                )
+            },
+            minimumTemperature = days.minOf { it.minimumTemperature }.inSystem(system),
+            maximumTemperature = days.maxOf { it.maximumTemperature }.inSystem(system)
+        )
 
         private fun createRainfall(
-            forecast: Forecast,
+            days: List<Day>,
             system: MeasurementSystem
         ): OverviewPrecipitation {
             val pastHours = forecast.hours - forecast.futureHours.toSet()
             var pastRainfall = Length(0.0, LengthUnit.Metre)
-            for (h in pastHours) { pastRainfall += h.rain + h.showers }
+            for (h in pastHours) {
+                pastRainfall += h.rain + h.showers
+            }
             val pastPrecipitation = pastRainfall.takeIf { it.value > 0.0 }?.let {
                 PrecipitationOverHours(
                     hours = pastHours.size,
@@ -96,7 +95,9 @@ class Overview private constructor(
 
             val futureHours = forecast.futureHours.take(FutureHourCount)
             var futureRainfall = Length(0.0, LengthUnit.Metre)
-            for (h in futureHours) { futureRainfall += h.rain + h.showers }
+            for (h in futureHours) {
+                futureRainfall += h.rain + h.showers
+            }
             val futurePrecipitation = futureRainfall.takeIf { it.value > 0.0 }?.let {
                 PrecipitationOverHours(
                     hours = futureHours.size,
@@ -127,7 +128,9 @@ class Overview private constructor(
         ): OverviewPrecipitation? {
             val pastHours = forecast.hours - forecast.futureHours.toSet()
             var pastSnowfall = Length(0.0, LengthUnit.Metre)
-            for (h in pastHours) { pastSnowfall += h.snow }
+            for (h in pastHours) {
+                pastSnowfall += h.snow
+            }
             val pastPrecipitation = pastSnowfall.takeIf { it.value > 0.0 }?.let {
                 PrecipitationOverHours(
                     hours = pastHours.size,
@@ -137,7 +140,9 @@ class Overview private constructor(
 
             val futureHours = forecast.futureHours.take(FutureHourCount)
             var futureSnowfall = Length(0.0, LengthUnit.Metre)
-            for (h in futureHours) { futureSnowfall += h.snow }
+            for (h in futureHours) {
+                futureSnowfall += h.snow
+            }
             val futurePrecipitation = futureSnowfall.takeIf { it.value > 0.0 }?.let {
                 PrecipitationOverHours(
                     hours = futureHours.size,
