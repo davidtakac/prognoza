@@ -2,11 +2,23 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.*
 
-fun List<Day>.futureDays(): List<Day> =
-    filter { Clock.System.now().epochSeconds - it.unixSecond >= -(24 * 60 * 60) }
+data class Forecast(
+    private val timeZone: TimeZone,
+    val days: List<Day>
+) {
+    val futureDays: List<Day>
+        get() = days.filter {
+            val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
+            val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
+            dayDate >= nowDate
+        }
+
+    val futureHours: List<Hour>
+        get() = futureDays.flatMap(Day::hours)
+}
 
 data class Day(
-    val unixSecond: Long,
+    val startUnixSecond: Long,
     val mostExtremeWmoCode: Int,
     val sunriseUnixSecond: Long?,
     val sunsetUnixSecond: Long?,
@@ -28,16 +40,17 @@ data class Day(
         if (hours.isEmpty()) throwInvalidHours()
     }
 
-    val futureHours: List<Hour> get() = hours.filter {
-        it.unixSecond >= Clock.System.now().epochSeconds
-    }
+    val futureHours: List<Hour>
+        get() = hours.filter {
+            it.startUnixSecond >= Clock.System.now().epochSeconds
+        }
 
     private fun throwInvalidHours(): Nothing =
         throw IllegalStateException("Hours must not be empty.")
 }
 
 data class Hour(
-    val unixSecond: Long,
+    val startUnixSecond: Long,
     val wmoCode: Int,
     val temperature: Temperature,
     val rain: Length,

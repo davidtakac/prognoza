@@ -2,83 +2,40 @@ package hr.dtakac.prognoza.shared.data
 
 import hr.dtakac.prognoza.shared.entity.Coordinates
 import hr.dtakac.prognoza.shared.entity.Place
-import io.github.aakira.napier.Napier
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-private const val Tag = "PlaceService"
-internal class PlaceService(
-    private val client: HttpClient,
-    private val userAgent: String,
-    private val computationDispatcher: CoroutineDispatcher
-) {
-    suspend fun get(query: String, rfc2616Language: String): List<Place>? {
-        val response = try {
-            client.request("https://geocoding-api.open-meteo.com/v1/search") {
-                header(HttpHeaders.UserAgent, userAgent)
-                parameter("name", query)
-                parameter("count", 10)
-                parameter("language", rfc2616Language)
-                parameter("format", "json")
-            }.body<OpenMeteoGeocodingResponse>()
-        } catch (e: Exception) {
-            Napier.e(Tag, e)
-            return null
+internal class PlaceService(private val client: HttpClient, private val userAgent: String) {
+    suspend fun search(query: String, acceptLanguage: String): List<Place> = client
+        .get(urlString = "https://api.open-meteo.com/v1/search") {
+            header(HttpHeaders.UserAgent, userAgent)
+            header(HttpHeaders.AcceptLanguage, acceptLanguage)
+            parameter("q", query)
+            parameter("format", "jsonv2")
         }
-
-        return try {
-            withContext(computationDispatcher) {
-                response.results?.map(OpenMeteoPlace::toEntity)
-            }
-        } catch (e: Exception) {
-            Napier.e(Tag, e)
-            null
-        }
-    }
+        .body<List<PlaceResponse>>()
+        .map(PlaceResponse::toEntity)
 }
 
 @Serializable
-private data class OpenMeteoGeocodingResponse(
-    @SerialName("results")
-    val results: List<OpenMeteoPlace>? = listOf()
-)
-
-@Serializable
-private data class OpenMeteoPlace(
-    @SerialName("latitude")
+private data class PlaceResponse(
+    @SerialName("place_id")
+    val id: String,
+    @SerialName("lat")
     val latitude: Double,
-    @SerialName("longitude")
+    @SerialName("lon")
     val longitude: Double,
-    @SerialName("timezone")
-    val timeZone: String,
-    @SerialName("name")
-    val name: String,
-    @SerialName("admin1")
-    val admin1: String? = "",
-    @SerialName("admin2")
-    val admin2: String? = "",
-    @SerialName("admin3")
-    val admin3: String? = "",
-    @SerialName("admin4")
-    val admin4: String? = ""
+    @SerialName("display_name")
+    val displayName: String
 )
 
-private fun OpenMeteoPlace.toEntity(): Place {
-    return Place(
-        coordinates = Coordinates(
-            latitude = latitude,
-            longitude = longitude
-        ),
-        name = name,
-        details = listOf(admin1, admin2, admin3, admin4)
-            .filterNot { it.isNullOrBlank() }
-            .joinToString(", ")
-            .takeIf { it.isNotBlank() }
+private fun PlaceResponse.toEntity() =
+    Place(
+        coordinates = Coordinates(latitude, longitude),
+        name = displayName.split(", ").getOrNull(0) ?: displayName,
+        details = displayName
     )
-}

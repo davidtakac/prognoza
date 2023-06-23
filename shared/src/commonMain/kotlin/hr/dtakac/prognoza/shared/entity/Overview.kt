@@ -36,7 +36,7 @@ class Overview private constructor(
             val hours = days.take(2).flatMap { it.futureHours }
             val overviewHours = hours.map {
                 OverviewHour.Weather(
-                    unixSecond = it.unixSecond,
+                    unixSecond = it.startUnixSecond,
                     temperature = it.temperature.inSystem(system),
                     probabilityOfPrecipitation = it.pop,
                     wmoCode = it.wmoCode
@@ -46,13 +46,13 @@ class Overview private constructor(
 
             val sunrises = days
                 .mapNotNull { it.sunriseUnixSecond }
-                .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+                .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
                 .map { OverviewHour.Sunrise(it) }
             addAll(sunrises)
 
             val sunsets = days
                 .mapNotNull { it.sunsetUnixSecond }
-                .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+                .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
                 .map { OverviewHour.Sunset(it) }
             addAll(sunsets)
 
@@ -66,7 +66,7 @@ class Overview private constructor(
         ) = OverviewDays(
             days = days.map {
                 OverviewDay(
-                    unixSecond = it.unixSecond,
+                    unixSecond = it.startUnixSecond,
                     wmoCode = it.mostExtremeWmoCode,
                     minimumTemperature = it.minimumTemperature.inSystem(system),
                     maximumTemperature = it.maximumTemperature.inSystem(system),
@@ -155,7 +155,7 @@ class Overview private constructor(
                 .firstOrNull { it.totalSnow.value > 0.0 }
                 ?.let {
                     NextPrecipitation(
-                        unixSecond = it.unixSecond,
+                        unixSecond = it.startUnixSecond,
                         amount = (it.totalRain + it.totalShowers).snowInSystem(system)
                     )
                 }

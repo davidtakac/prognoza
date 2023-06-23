@@ -9,7 +9,6 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.TimeZone
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -31,7 +30,9 @@ internal class ForecastService(
                 parameter("timeformat", "unixtime")
                 parameter("hourly", hourlyParams)
                 parameter("daily", dailyParams)
+                parameter("temperature_unit", "celsius")
                 parameter("windspeed_unit", "ms")
+                parameter("precipitation_unit", "")
             }.body<Response>()
         } catch (e: Exception) {
             Napier.e(Tag, e)
@@ -104,7 +105,7 @@ private data class Response(
                 for (i in time.indices) {
                     val dayStartUnixSecond = time[i]
                     val day = Day(
-                        unixSecond = dayStartUnixSecond,
+                        startUnixSecond = dayStartUnixSecond,
                         mostExtremeWmoCode = weathercode[i],
                         sunriseUnixSecond = sunrise[i].takeUnless { it == 0L },
                         sunsetUnixSecond = sunset[i].takeUnless { it == 0L },
@@ -120,7 +121,7 @@ private data class Response(
                         maximumWind = Speed(windspeed10mMax[i], SpeedUnit.MetrePerSecond),
                         dominantWindDirection = Angle(winddirection10mDominant[i], AngleUnit.Degree),
                         maximumUvIndex = UvIndex(uvIndexMax[i]),
-                        hours = hours.filter { it.unixSecond - dayStartUnixSecond <= 24 * 60 * 60 }
+                        hours = hours.filter { it.startUnixSecond - dayStartUnixSecond <= 24 * 60 * 60 }
                     )
                     add(day)
                 }
@@ -132,7 +133,7 @@ private data class Response(
         with(hourly) {
             for (i in time.indices) {
                 val hour = Hour(
-                    unixSecond = time[i],
+                    startUnixSecond = time[i],
                     wmoCode = weathercode[i],
                     temperature = Temperature(temperature2m[i], TemperatureUnit.DegreeCelsius),
                     rain = Length(rain[i], LengthUnit.Millimetre),
