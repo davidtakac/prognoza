@@ -9,19 +9,10 @@ class GetOverview internal constructor(
     private val getSelectedMeasurementSystem: GetSelectedMeasurementSystem,
     private val computationDispatcher: CoroutineDispatcher
 ) {
-    suspend operator fun invoke(): OverviewResult =
-        when (val result = getForecast()) {
-            ForecastResult.Failure -> OverviewResult.Failure
-            ForecastResult.NoPlace -> OverviewResult.NoPlace
-            is ForecastResult.Success -> withContext(computationDispatcher) {
-                val overview = Overview.build(result.forecast, getSelectedMeasurementSystem())
-                overview?.let(OverviewResult::Success) ?: OverviewResult.Failure
+    suspend operator fun invoke(coordinates: Coordinates): Overview? =
+        getForecast(coordinates)?.let {
+            withContext(computationDispatcher) {
+                Overview.build(it, getSelectedMeasurementSystem())
             }
         }
-}
-
-sealed interface OverviewResult {
-    object NoPlace : OverviewResult
-    object Failure : OverviewResult
-    data class Success(val overview: Overview) : OverviewResult
 }

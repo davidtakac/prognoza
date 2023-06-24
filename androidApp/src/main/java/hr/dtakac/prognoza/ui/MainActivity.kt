@@ -3,18 +3,10 @@ package hr.dtakac.prognoza.ui
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,13 +19,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
+import hr.dtakac.prognoza.presentation.overview.OverviewViewModel
 import hr.dtakac.prognoza.shared.usecase.GetOverview
-import hr.dtakac.prognoza.shared.usecase.OverviewResult
-import hr.dtakac.prognoza.shared.entity.Overview
+import hr.dtakac.prognoza.ui.overview.OverviewScreen
 import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -77,22 +68,9 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(navController = navController, startDestination = "forecast") {
                     composable("forecast") {
-                        val scope = rememberCoroutineScope()
-                        var overview by remember { mutableStateOf<Overview?>(null) }
-                        LaunchedEffect(Unit) {
-                            scope.launch {
-                               overview = (getOverview() as? OverviewResult.Success)?.overview
-                            }
-                        }
-                        Text(
-                            modifier = Modifier
-                                .background(Color.White)
-                                .padding(64.dp)
-                                .fillMaxSize()
-                                .verticalScroll(rememberScrollState()),
-                            color = Color.Black,
-                            text = "$overview"
-                        )
+                        val viewModel = hiltViewModel<OverviewViewModel>()
+                        LaunchedEffect(it) { viewModel.getOverview() }
+                        OverviewScreen(state = viewModel.state)
                     }
                     composable("settings") {
                         SettingsScreen(

@@ -2,45 +2,30 @@ package hr.dtakac.prognoza.presentation
 
 import android.content.Context
 import android.icu.text.NumberFormat
-import android.text.format.DateFormat
-import android.text.format.DateUtils
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.shared.entity.Temperature
 import java.math.BigDecimal
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.util.*
+import java.util.Locale
+import kotlin.math.roundToInt
 
 sealed interface TextResource {
     companion object {
         fun empty(): TextResource = fromString("")
 
         fun fromString(text: String): TextResource =
-            SimpleTextResource(text)
+            StringTextResource(text)
 
-        fun fromStringId(@StringRes id: Int): TextResource =
-            IdTextResource(id)
+        fun fromResId(@StringRes id: Int): TextResource =
+            ResIdTextResource(id)
 
-        fun fromStringId(@StringRes id: Int, vararg args: Any): TextResource =
-            IdTextResourceWithArgs(id, args.toList())
+        fun fromResId(@StringRes id: Int, vararg args: Any): TextResource =
+            ResIdTextResourceWithArgs(id, args.toList())
 
-        fun fromShortTime(epochMillis: Long): TextResource =
-            ShortTimeTextResource(epochMillis)
-
-        fun fromDate(epochMillis: Long): TextResource =
-            DateUtilsTextResource(epochMillis, DateUtils.FORMAT_SHOW_DATE)
-
-        fun fromShortDateAndWeekday(epochMillis: Long): TextResource =
-            DateUtilsTextResource(
-                millis = epochMillis,
-                flags = DateUtils.FORMAT_SHOW_DATE or
-                        DateUtils.FORMAT_SHOW_WEEKDAY or
-                        DateUtils.FORMAT_ABBREV_ALL
-            )
-
-        fun fromNumber(number: BigDecimal): TextResource = NumberTextResource(number)
+        fun fromTemperature(temperature: Temperature): TextResource =
+            TemperatureTextResource(temperature)
     }
 
     fun asString(context: Context): String
@@ -49,55 +34,38 @@ sealed interface TextResource {
     fun asString(): String = asString(LocalContext.current)
 }
 
-private data class SimpleTextResource(
-    val text: String
-) : TextResource {
-    override fun asString(context: Context): String = text
-}
-
-private data class IdTextResource(
-    @StringRes val id: Int
-) : TextResource {
-    override fun asString(context: Context): String = context.getString(id)
-}
-
-private data class ShortTimeTextResource(
-    val epochMillis: Long
-) : TextResource {
-    override fun asString(context: Context): String {
-        val zonedDateTime = Instant.ofEpochMilli(epochMillis).atZone(ZoneId.systemDefault())
-        return DateTimeFormatter.ofPattern(
-            if (DateFormat.is24HourFormat(context)) {
-                "HH:mm"
-            } else {
-                if (zonedDateTime.minute > 0) "h:mm a" else "h a"
-            }
-        ).format(zonedDateTime)
-    }
-}
-
-private data class DateUtilsTextResource(
-    val millis: Long,
-    val flags: Int
-) : TextResource {
+private data class StringTextResource(val text: String) : TextResource {
     override fun asString(context: Context): String =
-        DateUtils.formatDateTime(context, millis, flags)
+        text
+}
+
+private data class ResIdTextResource(@StringRes val id: Int) : TextResource {
+    override fun asString(context: Context): String =
+        context.getString(id)
+}
+
+private data class ResIdTextResourceWithArgs(@StringRes val id: Int, val args: List<Any>) :
+    TextResource {
+    override fun asString(context: Context): String =
+        context.getString(
+            id,
+            *args.map { if (it is TextResource) it.asString(context) else it }.toTypedArray()
+        )
 }
 
 private data class NumberTextResource(
     val number: BigDecimal
 ) : TextResource {
-    override fun asString(context: Context): String = NumberFormat
-        .getInstance(Locale.getDefault())
-        .format(number)
+    override fun asString(context: Context): String =
+        NumberFormat
+            .getInstance(context.resources.configuration.locales[0])
+            .format(number)
 }
 
-private data class IdTextResourceWithArgs(
-    @StringRes val id: Int,
-    val args: List<Any>
-) : TextResource {
-    override fun asString(context: Context): String = context.getString(
-        id,
-        *args.map { if (it is TextResource) it.asString(context) else it }.toTypedArray()
-    )
+private data class TemperatureTextResource(val temperature: Temperature) : TextResource {
+    override fun asString(context: Context): String =
+        TextResource.fromResId(
+            id = R.string.temperature_value,
+            NumberTextResource(temperature.value.toBigDecimal().setScale(0))
+        ).asString(context)
 }

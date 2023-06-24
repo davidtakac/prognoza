@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation.settingsscreen
+package hr.dtakac.prognoza.presentation.settings
 
 import hr.dtakac.prognoza.presentation.Event
 import hr.dtakac.prognoza.presentation.TextResource

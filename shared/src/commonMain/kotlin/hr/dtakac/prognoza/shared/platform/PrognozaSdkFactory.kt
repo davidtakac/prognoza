@@ -34,7 +34,7 @@ internal class InternalPrognozaSdkFactory constructor(
         val settingsRepository = SettingsRepository()
         val getSelectedMeasurementSystem = GetSelectedMeasurementSystem(settingsRepository)
         val getSelectedPlace = GetSelectedPlace(settingsRepository, placeRepository)
-        val getForecast = GetForecast(forecastRepository, settingsRepository)
+        val getForecast = GetForecast(forecastRepository)
 
         return object : PrognozaSdk {
             override val getOverview: GetOverview = GetOverview(getForecast, getSelectedMeasurementSystem, computationDispatcher)

@@ -10,7 +10,11 @@ class PlaceRepository {
 
     suspend fun save(place: Place) { /*todo*/ }
 
-    suspend fun getSaved(coordinates: Coordinates): Place? = null
+    suspend fun getSaved(coordinates: Coordinates): Place? = Place(
+        coordinates = Coordinates(45.0, 18.0),
+        name = "Osijek",
+        details = "Osjecko-baranjska"
+    )
 
     suspend fun getAllSaved(): List<Place> {
         return listOf()

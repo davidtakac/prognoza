@@ -10,8 +10,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.settingsscreen.MultipleChoiceSettingUi
-import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenState
+import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSettingUi
+import hr.dtakac.prognoza.presentation.settings.SettingsScreenState
 import hr.dtakac.prognoza.ui.theme.AppTheme
 import hr.dtakac.prognoza.ui.common.AppToolbar
 import hr.dtakac.prognoza.ui.common.rememberAppToolbarState

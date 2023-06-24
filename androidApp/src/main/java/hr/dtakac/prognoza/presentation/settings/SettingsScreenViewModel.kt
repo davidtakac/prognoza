@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation.settingsscreen
+package hr.dtakac.prognoza.presentation.settings
 
 import android.os.Build
 import androidx.compose.runtime.State

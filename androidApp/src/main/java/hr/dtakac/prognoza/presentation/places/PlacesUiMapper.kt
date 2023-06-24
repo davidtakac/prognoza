@@ -45,18 +45,18 @@ class PlacesUiMapper @Inject constructor(@ComputationDispatcher private val comp
         result: List<Place>?,
         query: String
     ): TextResource? = when {
-        result == null -> TextResource.fromStringId(R.string.places_err_search)
-        result.isEmpty() -> TextResource.fromStringId(
+        result == null -> TextResource.fromResId(R.string.places_err_search)
+        result.isEmpty() -> TextResource.fromResId(
             id = R.string.places_err_none_found,
             TextResource.fromString(query)
         )
         else -> null
     }
 
-    fun getEmptyMessage(): TextResource = TextResource.fromStringId(R.string.places_msg_empty)
+    fun getEmptyMessage(): TextResource = TextResource.fromResId(R.string.places_msg_empty)
 
-    fun getProvider(): TextResource = TextResource.fromStringId(
+    fun getProvider(): TextResource = TextResource.fromResId(
         R.string.common_msg_data_from,
-        TextResource.fromStringId(R.string.common_value_data_from_open_meteo)
+        TextResource.fromResId(R.string.common_value_data_from_open_meteo)
     )
 }

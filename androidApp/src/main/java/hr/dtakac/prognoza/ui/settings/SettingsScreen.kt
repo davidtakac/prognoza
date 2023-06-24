@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.presentation.OnEvent
-import hr.dtakac.prognoza.presentation.settingsscreen.SettingsScreenViewModel
+import hr.dtakac.prognoza.presentation.settings.SettingsScreenViewModel
 import hr.dtakac.prognoza.ui.common.openLink
 
 @Composable
