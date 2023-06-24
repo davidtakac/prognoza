@@ -57,6 +57,7 @@ class Hour internal constructor(
     val rain: Length,
     val showers: Length,
     val snow: Length,
+    val totalPrecipitation: Length,
     val pop: Double,
     val wind: Speed,
     val gust: Speed,

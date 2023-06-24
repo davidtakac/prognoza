@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
-data class Coordinates(
+class Coordinates(
     val latitude: Double,
     val longitude: Double
 ) {

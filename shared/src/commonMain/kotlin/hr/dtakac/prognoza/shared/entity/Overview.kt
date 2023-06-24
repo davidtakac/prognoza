@@ -1,26 +1,52 @@
 package hr.dtakac.prognoza.shared.entity
 
-class Overview private constructor(
+class Overview internal constructor(
     val temperature: Temperature,
-    val minimumTemperature: Temperature,
-    val maximumTemperature: Temperature,
     val feelsLike: Temperature,
     val wmoCode: Int,
+    val day: Boolean,
+    val minimumTemperature: Temperature,
+    val maximumTemperature: Temperature,
     val hours: List<OverviewHour>,
     val days: OverviewDays,
+    val totalPrecipitation: Length,
+    val snowFall: Length,
+    val rainFall: Length,
+    val pressure: Pressure,
+    val uvIndex: UvIndex,
+    val wind: Speed,
+    val gust: Speed,
+    val windDirection: Angle,
+    val humidity: Double,
+    val dewPoint: Temperature,
+    val visibility: Length
 ) {
     companion object {
         fun build(forecast: Forecast, system: MeasurementSystem): Overview? {
             val hours = forecast.futureHours.take(24).takeIf { it.isNotEmpty() } ?: return null
             val days = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
+            val now = hours[0]
+            val today = days[0]
             return Overview(
-                temperature = hours[0].temperature.toSystem(system),
-                feelsLike = hours[0].feelsLike.toSystem(system),
-                minimumTemperature = days[0].minimumTemperature.toSystem(system),
-                maximumTemperature = days[0].maximumTemperature.toSystem(system),
-                wmoCode = hours[0].wmoCode,
+                temperature = now.temperature.toSystem(system),
+                feelsLike = now.feelsLike.toSystem(system),
+                minimumTemperature = today.minimumTemperature.toSystem(system),
+                maximumTemperature = today.maximumTemperature.toSystem(system),
+                wmoCode = now.wmoCode,
+                day = now.day,
                 hours = buildHours(hours, days, system),
                 days = buildDays(days, system),
+                totalPrecipitation = now.totalPrecipitation.totalPrecipitationToSystem(system),
+                snowFall = now.snow.snowToSystem(system),
+                rainFall = (now.rain + now.showers).rainToSystem(system),
+                pressure = now.pressureAtSeaLevel.toSystem(system),
+                uvIndex = now.uvIndex,
+                wind = now.wind.toSystem(system),
+                windDirection = now.windDirection,
+                gust = now.gust.toSystem(system),
+                humidity = now.relativeHumidity,
+                dewPoint = now.dewPoint.toSystem(system),
+                visibility = now.visibility.visibilityToSystem(system)
             )
         }
 
@@ -77,6 +103,9 @@ class Overview private constructor(
             else TemperatureUnit.DegreeCelsius
         )
 
+        private fun Length.totalPrecipitationToSystem(system: MeasurementSystem) =
+            rainToSystem(system)
+
         private fun Length.rainToSystem(system: MeasurementSystem) = convertTo(
             if (system == MeasurementSystem.Imperial) LengthUnit.Inch
             else LengthUnit.Millimetre
@@ -85,6 +114,21 @@ class Overview private constructor(
         private fun Length.snowToSystem(system: MeasurementSystem) = convertTo(
             if (system == MeasurementSystem.Imperial) LengthUnit.Inch
             else LengthUnit.Centimetre
+        )
+
+        private fun Length.visibilityToSystem(system: MeasurementSystem) = convertTo(
+            if (system == MeasurementSystem.Imperial) LengthUnit.Mile
+            else LengthUnit.Kilometre
+        )
+
+        private fun Pressure.toSystem(system: MeasurementSystem) = convertTo(
+            if (system == MeasurementSystem.Imperial) PressureUnit.InchOfMercury
+            else PressureUnit.Millibar
+        )
+
+        private fun Speed.toSystem(system: MeasurementSystem) = convertTo(
+            if (system == MeasurementSystem.Imperial) SpeedUnit.MilePerHour
+            else SpeedUnit.MetrePerSecond
         )
     }
 }
