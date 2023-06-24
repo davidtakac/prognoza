@@ -18,7 +18,7 @@ internal class PlaceService(private val client: HttpClient, private val userAgen
             parameter("format", "jsonv2")
         }
         .body<List<PlaceResponse>>()
-        .map(PlaceResponse::toEntity)
+        .map(PlaceResponse::toPlace)
 }
 
 @Serializable
@@ -31,11 +31,11 @@ private data class PlaceResponse(
     val longitude: Double,
     @SerialName("display_name")
     val displayName: String
-)
-
-private fun PlaceResponse.toEntity() =
-    Place(
-        coordinates = Coordinates(latitude, longitude),
-        name = displayName.split(", ").getOrNull(0) ?: displayName,
-        details = displayName
-    )
+) {
+    fun toPlace() =
+        Place(
+            coordinates = Coordinates(latitude, longitude),
+            name = displayName.split(", ").getOrNull(0) ?: displayName,
+            details = displayName
+        )
+}

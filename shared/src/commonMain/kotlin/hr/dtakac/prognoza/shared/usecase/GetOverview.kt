@@ -13,11 +13,10 @@ class GetOverview internal constructor(
         when (val result = getForecast()) {
             ForecastResult.Failure -> OverviewResult.Failure
             ForecastResult.NoPlace -> OverviewResult.NoPlace
-            is ForecastResult.Success -> OverviewResult.Success(
-                withContext(computationDispatcher) {
-                    Overview.create(result.forecast, getSelectedMeasurementSystem())
-                }
-            )
+            is ForecastResult.Success -> withContext(computationDispatcher) {
+                val overview = Overview.build(result.forecast, getSelectedMeasurementSystem())
+                overview?.let(OverviewResult::Success) ?: OverviewResult.Failure
+            }
         }
 }
 
