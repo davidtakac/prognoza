@@ -32,24 +32,41 @@ fun OverviewScreen(
                         active = searchActive,
                         onActiveChange = { searchActive = it },
                         leadingIcon = {
-                            AnimatedContent(targetState = searchActive) {
-                                if (it) {
+                            Box(contentAlignment = Alignment.Center) {
+                                // Crossfade and AnimatedContent glitch out with a weird sliding
+                                // animation for some reason. This combination of two visibilities
+                                // works fine
+                                AnimatedVisibility(
+                                    visible = searchActive,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
                                     IconButton(onClick = { searchActive = false }) {
                                         Icon(
                                             imageVector = Icons.Default.ArrowBack,
                                             contentDescription = null
                                         )
                                     }
-                                } else {
+                                }
+                                AnimatedVisibility(
+                                    visible = !searchActive,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
                                     Icon(
                                         imageVector = Icons.Outlined.LocationOn,
                                         contentDescription = null
                                     )
                                 }
                             }
+
                         },
                         trailingIcon = {
-                            AnimatedVisibility(visible = !searchActive) {
+                            AnimatedVisibility(
+                                visible = !searchActive,
+                                enter = fadeIn(),
+                                exit = fadeOut()
+                            ) {
                                 IconButton(onClick = { /*TODO: open menu*/ }) {
                                     Icon(
                                         imageVector = Icons.Default.MoreVert,
@@ -65,12 +82,14 @@ fun OverviewScreen(
             }
         ) {
             if (state.data == null) return@Scaffold
-            LazyColumn(contentPadding = PaddingValues(
-                top = it.calculateTopPadding() + 24.dp,
-                start = it.calculateStartPadding(LocalLayoutDirection.current) + 24.dp,
-                end = it.calculateEndPadding(LocalLayoutDirection.current) + 24.dp,
-                bottom = it.calculateBottomPadding()
-            )) {
+            LazyColumn(
+                contentPadding = PaddingValues(
+                    top = it.calculateTopPadding() + 24.dp,
+                    start = it.calculateStartPadding(LocalLayoutDirection.current) + 24.dp,
+                    end = it.calculateEndPadding(LocalLayoutDirection.current) + 24.dp,
+                    bottom = it.calculateBottomPadding()
+                )
+            ) {
                 item("now") {
                     OverviewNow(
                         temperature = state.data.temperature.asString(),
