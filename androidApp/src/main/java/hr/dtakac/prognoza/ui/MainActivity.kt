@@ -20,18 +20,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.presentation.overview.OverviewViewModel
-import hr.dtakac.prognoza.shared.usecase.GetOverview
 import hr.dtakac.prognoza.ui.overview.OverviewScreen
 import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen
 import hr.dtakac.prognoza.ui.theme.AppTheme
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    @Inject
-    lateinit var getOverview: GetOverview
-
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)

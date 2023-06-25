@@ -122,5 +122,8 @@
     <string name="settings_title_app_icon">App icon</string>
     <string name="settings_msg_app_icon" translatable="false">Nataša Takač</string>
     <string name="forecast_err">Failed to get forecast. Please check your Internet connection and try again.</string>
+    <string name="forecast_label_now">Now</string>
+    <string name="forecast_label_high_low">High: %s ꞏ Low: %s</string>
+    <string name="forecast_label_feels_like">Feels like %s</string>
 
 </resources>

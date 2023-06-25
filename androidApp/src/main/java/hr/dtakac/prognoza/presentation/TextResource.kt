@@ -8,8 +8,7 @@ import androidx.compose.ui.platform.LocalContext
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.shared.entity.Temperature
 import java.math.BigDecimal
-import java.util.Locale
-import kotlin.math.roundToInt
+import java.math.RoundingMode
 
 sealed interface TextResource {
     companion object {
@@ -66,6 +65,6 @@ private data class TemperatureTextResource(val temperature: Temperature) : TextR
     override fun asString(context: Context): String =
         TextResource.fromResId(
             id = R.string.temperature_value,
-            NumberTextResource(temperature.value.toBigDecimal().setScale(0))
+            NumberTextResource(temperature.value.toBigDecimal().setScale(0, RoundingMode.HALF_UP))
         ).asString(context)
 }

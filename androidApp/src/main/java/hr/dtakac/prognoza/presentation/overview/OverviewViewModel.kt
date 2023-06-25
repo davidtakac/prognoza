@@ -46,7 +46,14 @@ class OverviewViewModel @Inject constructor(
 
             state = state.copy(
                 data = OverviewDataState(
-                    temperature = TextResource.fromTemperature(overview.temperature)
+                    temperature = TextResource.fromTemperature(overview.temperature),
+                    maximumTemperature = TextResource.fromTemperature(overview.maximumTemperature),
+                    minimumTemperature = TextResource.fromTemperature(overview.minimumTemperature),
+                    feelsLikeTemperature = TextResource.fromTemperature(overview.feelsLike),
+                    // TODO: replace with actual mappings based on WMO code
+                    weatherIcon = R.drawable.dark_01d,
+                    weatherDescription = TextResource.fromString("Cloudy"),
+                    backgroundImage = 0
                 ),
                 error = null,
                 loading = false
