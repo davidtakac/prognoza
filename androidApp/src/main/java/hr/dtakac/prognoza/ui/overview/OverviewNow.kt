@@ -62,7 +62,8 @@ fun OverviewNow(
                 )
                 Text(
                     text = stringResource(id = R.string.forecast_label_feels_like, feelsLikeTemperature),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
