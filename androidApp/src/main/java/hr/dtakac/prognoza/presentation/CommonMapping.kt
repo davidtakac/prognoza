@@ -1,10 +1,9 @@
 package hr.dtakac.prognoza.presentation
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.shared.entity.*
-import java.math.BigDecimal
-import java.math.RoundingMode
 
 @StringRes
 fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
@@ -291,3 +290,37 @@ fun Description.asWeatherIconResId(
     Description.SNOW_SHOWERS_NIGHT -> weatherIcons.ic08n
     Description.SNOW_SHOWERS_POLAR_TWILIGHT -> weatherIcons.ic08m
 }*/
+
+// TODO: swap with new icons
+@DrawableRes
+fun wmoCodeToWeatherIcon(wmoCode: Int, day: Boolean) =
+    when (wmoCode) {
+        0, 1 -> if (day) R.drawable.dark_01d else R.drawable.dark_01n
+        2 -> if (day) R.drawable.dark_03d else R.drawable.dark_03n
+        3 -> R.drawable.dark_04
+        45, 48 -> R.drawable.dark_15
+        51, 53, 55, 56, 57 -> R.drawable.dark_46
+        61, 63, 65, 66, 67 -> R.drawable.dark_09
+        71, 73, 75, 77 -> R.drawable.dark_13
+        80, 81, 82 -> if (day) R.drawable.dark_05d else R.drawable.dark_05n
+        85, 86 -> if (day) R.drawable.dark_08d else R.drawable.dark_08n
+        95, 96, 99 -> if (day) R.drawable.dark_06d else R.drawable.dark_06n
+        else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
+    }
+
+// TODO: Create a new string resource for every one of these WMO codes
+@StringRes
+fun wmoCodeToWeatherDescription(wmoCode: Int) =
+    when (wmoCode) {
+        0, 1 -> R.string.description_clear_sky
+        2 -> R.string.description_partly_cloudy
+        3 -> R.string.description_cloudy
+        45, 48 -> R.string.description_fog
+        51, 53, 55, 56, 57 -> R.string.description_light_rain
+        61, 63, 65, 66, 67 -> R.string.description_rain
+        71, 73, 75, 77 -> R.string.description_snow
+        80, 81, 82 -> R.string.description_rain_showers
+        85, 86 -> R.string.description_snow_showers
+        95, 96, 99 -> R.string.description_rain_showers_and_thunder
+        else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
+    }

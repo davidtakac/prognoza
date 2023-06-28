@@ -8,6 +8,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.presentation.wmoCodeToWeatherDescription
+import hr.dtakac.prognoza.presentation.wmoCodeToWeatherIcon
 import hr.dtakac.prognoza.shared.usecase.GetOverview
 import hr.dtakac.prognoza.shared.usecase.GetSelectedPlace
 import kotlinx.coroutines.launch
@@ -50,9 +52,8 @@ class OverviewViewModel @Inject constructor(
                     maximumTemperature = TextResource.fromTemperature(overview.maximumTemperature),
                     minimumTemperature = TextResource.fromTemperature(overview.minimumTemperature),
                     feelsLikeTemperature = TextResource.fromTemperature(overview.feelsLike),
-                    // TODO: replace with actual mappings based on WMO code
-                    weatherIcon = R.drawable.dark_01d,
-                    weatherDescription = TextResource.fromString("Cloudy"),
+                    weatherIcon = wmoCodeToWeatherIcon(overview.wmoCode, day = overview.day),
+                    weatherDescription = TextResource.fromResId(wmoCodeToWeatherDescription(overview.wmoCode)),
                     backgroundImage = 0
                 ),
                 error = null,
