@@ -1,54 +1,52 @@
 package hr.dtakac.prognoza.shared.entity
 
+import kotlinx.datetime.TimeZone
+
+// TODO: probably figure out a way to convert all these to the measurement system at the time of creation.
+//  These conversions will have to be repeated for future classes, too. We only have to standardise the
+//  measurement system for the graphs feature. The rest can be opinionated from the very start.
 class Overview internal constructor(
-    val temperature: Temperature,
-    val feelsLike: Temperature,
-    val wmoCode: Int,
-    val day: Boolean,
-    val minimumTemperature: Temperature,
-    val maximumTemperature: Temperature,
+    val timeZone: TimeZone,
+    val now: OverviewNow,
     val hours: List<OverviewHour>,
     val days: OverviewDays,
-    val totalPrecipitation: Length,
-    val snowFall: Length,
-    val rainFall: Length,
-    val pressure: Pressure,
-    val uvIndex: UvIndex,
-    val wind: Speed,
-    val gust: Speed,
-    val windDirection: Angle,
-    val humidity: Double,
-    val dewPoint: Temperature,
-    val visibility: Length
 ) {
     companion object {
         fun build(forecast: Forecast, system: MeasurementSystem): Overview? {
             val hours = forecast.futureHours.take(24).takeIf { it.isNotEmpty() } ?: return null
             val days = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
-            val now = hours[0]
-            val today = days[0]
             return Overview(
-                temperature = now.temperature.toSystem(system),
-                feelsLike = now.feelsLike.toSystem(system),
-                minimumTemperature = today.minimumTemperature.toSystem(system),
-                maximumTemperature = today.maximumTemperature.toSystem(system),
-                wmoCode = now.wmoCode,
-                day = now.day,
-                hours = buildHours(hours, days, system),
-                days = buildDays(days, system),
-                totalPrecipitation = now.totalPrecipitation.totalPrecipitationToSystem(system),
-                snowFall = now.snow.snowToSystem(system),
-                rainFall = (now.rain + now.showers).rainToSystem(system),
-                pressure = now.pressureAtSeaLevel.toSystem(system),
-                uvIndex = now.uvIndex,
-                wind = now.wind.toSystem(system),
-                windDirection = now.windDirection,
-                gust = now.gust.toSystem(system),
-                humidity = now.relativeHumidity,
-                dewPoint = now.dewPoint.toSystem(system),
-                visibility = now.visibility.visibilityToSystem(system)
+                timeZone = forecast.timeZone,
+                now = buildNow(now = hours[0], today = days[0], system = system),
+                hours = buildHours(hours = hours, days = days, system = system),
+                days = buildDays(days = days, system = system),
             )
         }
+
+        private fun buildNow(
+            now: Hour,
+            today: Day,
+            system: MeasurementSystem
+        ) = OverviewNow(
+            unixSecond = now.unixSecond,
+            temperature = now.temperature.toSystem(system),
+            minimumTemperature = today.minimumTemperature.toSystem(system),
+            maximumTemperature = today.maximumTemperature.toSystem(system),
+            feelsLike = now.feelsLike.toSystem(system),
+            wmoCode = now.wmoCode,
+            day = now.day,
+            totalPrecipitation = now.totalPrecipitation.totalPrecipitationToSystem(system),
+            snowFall = now.snow.snowToSystem(system),
+            rainFall = (now.rain + now.showers).rainToSystem(system),
+            pressure = now.pressureAtSeaLevel.toSystem(system),
+            uvIndex = now.uvIndex,
+            wind = now.wind.toSystem(system),
+            windDirection = now.windDirection,
+            gust = now.gust.toSystem(system),
+            humidity = now.relativeHumidity,
+            dewPoint = now.dewPoint.toSystem(system),
+            visibility = now.visibility.visibilityToSystem(system)
+        )
 
         private fun buildHours(
             hours: List<Hour>,
@@ -60,7 +58,8 @@ class Overview internal constructor(
                     unixSecond = it.unixSecond,
                     temperature = it.temperature.toSystem(system),
                     pop = it.pop,
-                    wmoCode = it.wmoCode
+                    wmoCode = it.wmoCode,
+                    day = it.day
                 )
             }
             addAll(overviewHours)
@@ -133,6 +132,27 @@ class Overview internal constructor(
     }
 }
 
+data class OverviewNow(
+    val unixSecond: Long,
+    val temperature: Temperature,
+    val minimumTemperature: Temperature,
+    val maximumTemperature: Temperature,
+    val feelsLike: Temperature,
+    val wmoCode: Int,
+    val day: Boolean,
+    val totalPrecipitation: Length,
+    val snowFall: Length,
+    val rainFall: Length,
+    val pressure: Pressure,
+    val uvIndex: UvIndex,
+    val wind: Speed,
+    val gust: Speed,
+    val windDirection: Angle,
+    val humidity: Double,
+    val dewPoint: Temperature,
+    val visibility: Length
+)
+
 sealed interface OverviewHour {
     val unixSecond: Long
 
@@ -140,7 +160,8 @@ sealed interface OverviewHour {
         override val unixSecond: Long,
         val temperature: Temperature,
         val pop: Double,
-        val wmoCode: Int
+        val wmoCode: Int,
+        val day: Boolean
     ) : OverviewHour
 
     class Sunrise internal constructor(override val unixSecond: Long) : OverviewHour

@@ -22,7 +22,6 @@ fun OverviewNow(
     @DrawableRes weatherIcon: Int,
     weatherDescription: String,
     feelsLikeTemperature: String,
-    @DrawableRes backgroundImage: Int,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {

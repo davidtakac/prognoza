@@ -10,6 +10,7 @@ import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.presentation.TextResource
 import hr.dtakac.prognoza.presentation.wmoCodeToWeatherDescription
 import hr.dtakac.prognoza.presentation.wmoCodeToWeatherIcon
+import hr.dtakac.prognoza.shared.entity.OverviewHour
 import hr.dtakac.prognoza.shared.usecase.GetOverview
 import hr.dtakac.prognoza.shared.usecase.GetSelectedPlace
 import kotlinx.coroutines.launch
@@ -48,13 +49,28 @@ class OverviewViewModel @Inject constructor(
 
             state = state.copy(
                 data = OverviewDataState(
-                    temperature = TextResource.fromTemperature(overview.temperature),
-                    maximumTemperature = TextResource.fromTemperature(overview.maximumTemperature),
-                    minimumTemperature = TextResource.fromTemperature(overview.minimumTemperature),
-                    feelsLikeTemperature = TextResource.fromTemperature(overview.feelsLike),
-                    weatherIcon = wmoCodeToWeatherIcon(overview.wmoCode, day = overview.day),
-                    weatherDescription = TextResource.fromResId(wmoCodeToWeatherDescription(overview.wmoCode)),
-                    backgroundImage = 0
+                    now = OverviewNowState(
+                        time = TextResource.fromResId(R.string.forecast_label_now),
+                        temperature = TextResource.fromTemperature(overview.now.temperature),
+                        maximumTemperature = TextResource.fromTemperature(overview.days.maximumTemperature),
+                        minimumTemperature = TextResource.fromTemperature(overview.now.minimumTemperature),
+                        feelsLikeTemperature = TextResource.fromTemperature(overview.now.feelsLike),
+                        weatherIcon = wmoCodeToWeatherIcon(overview.now.wmoCode, day = overview.now.day),
+                        weatherDescription = TextResource.fromResId(wmoCodeToWeatherDescription(overview.now.wmoCode)),
+                    ),
+                    hours = overview.hours.mapIndexed { idx, h ->
+                        when (h) {
+                            is OverviewHour.Sunrise -> OverviewHourState.Sunrise(TextResource.fromTime(h.unixSecond, timeZone = overview.timeZone))
+                            is OverviewHour.Sunset -> OverviewHourState.Sunset(TextResource.fromTime(h.unixSecond, timeZone = overview.timeZone))
+                            is OverviewHour.Weather -> OverviewHourState.Weather(
+                                time = if (idx == 0) TextResource.fromResId(R.string.forecast_label_now) else TextResource.fromTime(h.unixSecond, timeZone = overview.timeZone),
+                                temperature = TextResource.fromTemperature(h.temperature),
+                                weatherIcon = wmoCodeToWeatherIcon(h.wmoCode, day = h.day),
+                                // TODO: figure out a way to make this null when pop resolves to 0
+                                pop = TextResource.fromPercentage(h.pop)
+                            )
+                        }
+                    }
                 ),
                 error = null,
                 loading = false

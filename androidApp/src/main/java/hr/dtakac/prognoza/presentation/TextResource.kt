@@ -2,13 +2,16 @@ package hr.dtakac.prognoza.presentation
 
 import android.content.Context
 import android.icu.text.NumberFormat
+import android.text.format.DateFormat
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.shared.entity.Temperature
+import kotlinx.datetime.*
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.time.format.DateTimeFormatter
 
 sealed interface TextResource {
     companion object {
@@ -25,6 +28,14 @@ sealed interface TextResource {
 
         fun fromTemperature(temperature: Temperature): TextResource =
             TemperatureTextResource(temperature)
+
+        fun fromTime(
+            unixSecond: Long,
+            timeZone: TimeZone
+        ): TextResource = TimeTextResource(unixSecond, timeZone)
+
+        fun fromPercentage(percentage: Double): TextResource =
+            PercentageTextResource(percentage)
     }
 
     fun asString(context: Context): String
@@ -63,8 +74,40 @@ private data class NumberTextResource(
 
 private data class TemperatureTextResource(val temperature: Temperature) : TextResource {
     override fun asString(context: Context): String =
-        TextResource.fromResId(
-            id = R.string.temperature_value,
-            NumberTextResource(temperature.value.toBigDecimal().setScale(0, RoundingMode.HALF_UP))
-        ).asString(context)
+        context.getString(
+            R.string.temperature_value,
+            NumberTextResource(
+                temperature.value
+                    .toBigDecimal()
+                    .setScale(0, RoundingMode.HALF_UP)
+            ).asString(context)
+        )
+}
+
+private data class TimeTextResource(
+    val unixSecond: Long,
+    val timeZone: TimeZone
+) : TextResource {
+    override fun asString(context: Context): String {
+        val localDateTime = Instant.fromEpochSeconds(unixSecond)
+            .toLocalDateTime(timeZone)
+            .toJavaLocalDateTime()
+        val use24Hr = DateFormat.is24HourFormat(context)
+        val pattern = (if (use24Hr) "H" else "h") +
+                (if (localDateTime.minute > 0) ":mm" else "") +
+                (if (use24Hr) "" else " a")
+        return DateTimeFormatter.ofPattern(pattern).format(localDateTime)
+    }
+}
+
+private data class PercentageTextResource(val percentage: Double) : TextResource {
+    override fun asString(context: Context): String =
+        context.getString(
+            R.string.percentage_value,
+            NumberTextResource(
+                percentage
+                    .toBigDecimal()
+                    .setScale(0, RoundingMode.HALF_UP)
+            ).asString(context)
+        )
 }

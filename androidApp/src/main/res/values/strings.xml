@@ -75,6 +75,7 @@
     <string name="cardinal_nw">Northwest</string>
 
     <string name="temperature_value">%s°</string>
+    <string name="percentage_value">%s%%</string>
     <string name="length_value_mm">%s\u00A0mm</string>
     <string name="length_value_in">%s\u00A0in</string>
     <string name="length_value_cm">%s\u00A0cm</string>
@@ -84,7 +85,7 @@
     <string name="speed_value_kt">%s\u00A0kt</string>
 
     <string name="forecast_msg_empty_no_place">Select a place to see its forecast.</string>
-    <string name="forecast_title_hourly">Hourly</string>
+    <string name="forecast_title_hourly">Hourly forecast</string>
     <string name="forecast_title_coming">Coming</string>
 
     <string name="places_hint_search">Search places…</string>

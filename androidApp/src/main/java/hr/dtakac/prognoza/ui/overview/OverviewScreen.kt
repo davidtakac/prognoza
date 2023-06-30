@@ -3,6 +3,8 @@ package hr.dtakac.prognoza.ui.overview
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -12,10 +14,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.presentation.overview.OverviewHourState
 import hr.dtakac.prognoza.presentation.overview.OverviewScreenState
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OverviewScreen(
     state: OverviewScreenState
@@ -80,26 +85,54 @@ fun OverviewScreen(
                     }
                 }
             }
-        ) {
+        ) { contentPadding ->
             if (state.data == null) return@Scaffold
             LazyColumn(
                 contentPadding = PaddingValues(
-                    top = it.calculateTopPadding() + 24.dp,
-                    start = it.calculateStartPadding(LocalLayoutDirection.current) + 24.dp,
-                    end = it.calculateEndPadding(LocalLayoutDirection.current) + 24.dp,
-                    bottom = it.calculateBottomPadding()
+                    top = contentPadding.calculateTopPadding() + 24.dp,
+                    start = contentPadding.calculateStartPadding(LocalLayoutDirection.current) + 24.dp,
+                    end = contentPadding.calculateEndPadding(LocalLayoutDirection.current) + 24.dp,
+                    bottom = contentPadding.calculateBottomPadding()
                 )
             ) {
                 item("now") {
                     OverviewNow(
-                        temperature = state.data.temperature.asString(),
-                        maximumTemperature = state.data.maximumTemperature.asString(),
-                        minimumTemperature = state.data.minimumTemperature.asString(),
-                        weatherIcon = state.data.weatherIcon,
-                        weatherDescription = state.data.weatherDescription.asString(),
-                        feelsLikeTemperature = state.data.feelsLikeTemperature.asString(),
-                        backgroundImage = state.data.backgroundImage
+                        temperature = state.data.now.temperature.asString(),
+                        maximumTemperature = state.data.now.maximumTemperature.asString(),
+                        minimumTemperature = state.data.now.minimumTemperature.asString(),
+                        weatherIcon = state.data.now.weatherIcon,
+                        weatherDescription = state.data.now.weatherDescription.asString(),
+                        feelsLikeTemperature = state.data.now.feelsLikeTemperature.asString(),
                     )
+                }
+                item("hours-heading") {
+                    Text(
+                        text = stringResource(id = R.string.forecast_title_hourly),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = 64.dp)
+                    )
+                }
+                item("hours") {
+                    Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                        LazyRow(
+                            horizontalArrangement = Arrangement.spacedBy(32.dp),
+                            contentPadding = PaddingValues(
+                                start = 16.dp,
+                                end = 16.dp,
+                                top = 12.dp,
+                                bottom = 16.dp
+                            )
+                        ) {
+                            items(state.data.hours.filterIsInstance<OverviewHourState.Weather>()) {
+                                OverviewHour(
+                                    temperature = it.temperature.asString(),
+                                    pop = it.pop?.asString(),
+                                    weatherIcon = it.weatherIcon,
+                                    time = it.time.asString()
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

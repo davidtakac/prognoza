@@ -11,11 +11,29 @@ data class OverviewScreenState(
 )
 
 data class OverviewDataState(
+    val now: OverviewNowState,
+    val hours: List<OverviewHourState>
+)
+
+data class OverviewNowState(
+    val time: TextResource,
     val temperature: TextResource,
     val maximumTemperature: TextResource,
     val minimumTemperature: TextResource,
     val feelsLikeTemperature: TextResource,
     @DrawableRes val weatherIcon: Int,
     val weatherDescription: TextResource,
-    @DrawableRes val backgroundImage: Int
 )
+
+sealed interface OverviewHourState {
+    data class Weather(
+        val time: TextResource,
+        val temperature: TextResource,
+        @DrawableRes val weatherIcon: Int,
+        val pop: TextResource?,
+    ) : OverviewHourState
+
+    data class Sunrise(val time: TextResource): OverviewHourState
+
+    data class Sunset(val time: TextResource): OverviewHourState
+}
