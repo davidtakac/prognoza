@@ -113,7 +113,7 @@ fun OverviewScreen(
                     )
                 }
                 item("hours") {
-                    Card(modifier = Modifier.fillMaxWidth().padding(top = 8.dp)) {
+                    Card(modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(32.dp),
                             contentPadding = PaddingValues(
