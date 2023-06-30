@@ -123,6 +123,8 @@ fun OverviewScreen(
                                 bottom = 16.dp
                             )
                         ) {
+                            // TODO: do not filter out sunrises and sunsets.
+                            //  You can just display sun for sunrise and moon for sunset for now
                             items(state.data.hours.filterIsInstance<OverviewHourState.Weather>()) {
                                 OverviewHour(
                                     temperature = it.temperature.asString(),
