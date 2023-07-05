@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.ui.overview
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,7 +22,11 @@ fun OverviewHour(
     time: String,
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(text = temperature, style = MaterialTheme.typography.titleMedium)
         Text(
             // Empty pop acts as a placeholder
@@ -38,4 +43,3 @@ fun OverviewHour(
         Text(text = time, style = MaterialTheme.typography.bodySmall)
     }
 }
-

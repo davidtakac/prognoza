@@ -113,7 +113,11 @@ fun OverviewScreen(
                     )
                 }
                 item("hours") {
-                    Card(modifier = Modifier.fillMaxWidth().padding(top = 12.dp)) {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    ) {
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(32.dp),
                             contentPadding = PaddingValues(
@@ -121,17 +125,21 @@ fun OverviewScreen(
                                 end = 16.dp,
                                 top = 12.dp,
                                 bottom = 16.dp
-                            )
+                            ),
                         ) {
-                            // TODO: do not filter out sunrises and sunsets.
-                            //  You can just display sun for sunrise and moon for sunset for now
-                            items(state.data.hours.filterIsInstance<OverviewHourState.Weather>()) {
-                                OverviewHour(
-                                    temperature = it.temperature.asString(),
-                                    pop = it.pop?.asString(),
-                                    weatherIcon = it.weatherIcon,
-                                    time = it.time.asString()
-                                )
+                            items(state.data.hours) {
+                                // TODO: to make sunrise, sunset and weather align, make a template
+                                //  slots-based composable and reuse it for each of them
+                                when (it) {
+                                    is OverviewHourState.Sunrise -> OverviewSunrise(time = it.time.asString())
+                                    is OverviewHourState.Sunset -> OverviewSunset(time = it.time.asString())
+                                    is OverviewHourState.Weather -> OverviewHour(
+                                        temperature = it.temperature.asString(),
+                                        pop = it.pop?.asString(),
+                                        weatherIcon = it.weatherIcon,
+                                        time = it.time.asString()
+                                    )
+                                }
                             }
                         }
                     }

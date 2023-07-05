@@ -126,5 +126,7 @@
     <string name="forecast_label_now">Now</string>
     <string name="forecast_label_high_low">High: %s ꞏ Low: %s</string>
     <string name="forecast_label_feels_like">Feels like %s</string>
+    <string name="forecast_label_sunrise">Sunrise</string>
+    <string name="forecast_label_sunset">Sunset</string>
 
 </resources>
