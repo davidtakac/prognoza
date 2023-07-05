@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.presentation.settings
 
-import hr.dtakac.prognoza.presentation.Event
-import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.ui.common.Event
+import hr.dtakac.prognoza.ui.common.TextResource
 
 data class SettingsScreenState(
     val isLoading: Boolean = false,

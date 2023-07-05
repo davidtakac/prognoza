@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation.overview
+package hr.dtakac.prognoza.ui.overview
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.TextResource
-import hr.dtakac.prognoza.presentation.wmoCodeToWeatherDescription
-import hr.dtakac.prognoza.presentation.wmoCodeToWeatherIcon
+import hr.dtakac.prognoza.ui.common.TextResource
+import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherDescription
+import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherIcon
 import hr.dtakac.prognoza.shared.entity.OverviewHour
 import hr.dtakac.prognoza.shared.usecase.GetOverview
 import hr.dtakac.prognoza.shared.usecase.GetSelectedPlace
@@ -55,19 +55,40 @@ class OverviewViewModel @Inject constructor(
                         maximumTemperature = TextResource.fromTemperature(overview.days.maximumTemperature),
                         minimumTemperature = TextResource.fromTemperature(overview.now.minimumTemperature),
                         feelsLikeTemperature = TextResource.fromTemperature(overview.now.feelsLike),
-                        weatherIcon = wmoCodeToWeatherIcon(overview.now.wmoCode, day = overview.now.day),
-                        weatherDescription = TextResource.fromResId(wmoCodeToWeatherDescription(overview.now.wmoCode)),
+                        weatherIcon = wmoCodeToWeatherIcon(
+                            overview.now.wmoCode,
+                            day = overview.now.day
+                        ),
+                        weatherDescription = TextResource.fromResId(
+                            wmoCodeToWeatherDescription(
+                                overview.now.wmoCode
+                            )
+                        ),
                     ),
                     hours = overview.hours.mapIndexed { idx, h ->
                         when (h) {
-                            is OverviewHour.Sunrise -> OverviewHourState.Sunrise(TextResource.fromTime(h.unixSecond, timeZone = overview.timeZone))
-                            is OverviewHour.Sunset -> OverviewHourState.Sunset(TextResource.fromTime(h.unixSecond, timeZone = overview.timeZone))
+                            is OverviewHour.Sunrise -> OverviewHourState.Sunrise(
+                                time = TextResource.fromTime(
+                                    h.unixSecond,
+                                    timeZone = overview.timeZone
+                                )
+                            )
+                            is OverviewHour.Sunset -> OverviewHourState.Sunset(
+                                time = TextResource.fromTime(
+                                    h.unixSecond,
+                                    timeZone = overview.timeZone
+                                )
+                            )
                             is OverviewHour.Weather -> OverviewHourState.Weather(
-                                time = if (idx == 0) TextResource.fromResId(R.string.forecast_label_now) else TextResource.fromTime(h.unixSecond, timeZone = overview.timeZone),
+                                time = if (idx == 0) TextResource.fromResId(R.string.forecast_label_now)
+                                else TextResource.fromTime(
+                                    h.unixSecond,
+                                    timeZone = overview.timeZone
+                                ),
                                 temperature = TextResource.fromTemperature(h.temperature),
                                 weatherIcon = wmoCodeToWeatherIcon(h.wmoCode, day = h.day),
-                                // TODO: figure out a way to make this null when pop resolves to 0
-                                pop = TextResource.fromPercentage(h.pop)
+                                pop = h.pop.takeUnless { it == 0 }
+                                    ?.let(TextResource::fromPercentage)
                             )
                         }
                     }

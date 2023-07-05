@@ -19,7 +19,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsViewModel
 import hr.dtakac.prognoza.androidsettings.UiMode
-import hr.dtakac.prognoza.presentation.overview.OverviewViewModel
+import hr.dtakac.prognoza.ui.overview.OverviewViewModel
 import hr.dtakac.prognoza.ui.overview.OverviewScreen
 import hr.dtakac.prognoza.ui.settings.LicensesAndCreditScreen
 import hr.dtakac.prognoza.ui.settings.SettingsScreen

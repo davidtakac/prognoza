@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation
+package hr.dtakac.prognoza.ui.common
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

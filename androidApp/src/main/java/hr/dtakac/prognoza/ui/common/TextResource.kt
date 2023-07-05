@@ -1,7 +1,10 @@
-package hr.dtakac.prognoza.presentation
+package hr.dtakac.prognoza.ui.common
 
 import android.content.Context
-import android.icu.text.NumberFormat
+import android.icu.number.Notation
+import android.icu.number.NumberFormatter
+import android.icu.number.Precision
+import android.icu.util.MeasureUnit
 import android.text.format.DateFormat
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
@@ -9,7 +12,6 @@ import androidx.compose.ui.platform.LocalContext
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.shared.entity.Temperature
 import kotlinx.datetime.*
-import java.math.BigDecimal
 import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 
@@ -34,7 +36,7 @@ sealed interface TextResource {
             timeZone: TimeZone
         ): TextResource = TimeTextResource(unixSecond, timeZone)
 
-        fun fromPercentage(percentage: Double): TextResource =
+        fun fromPercentage(percentage: Int): TextResource =
             PercentageTextResource(percentage)
     }
 
@@ -45,8 +47,7 @@ sealed interface TextResource {
 }
 
 private data class StringTextResource(val text: String) : TextResource {
-    override fun asString(context: Context): String =
-        text
+    override fun asString(context: Context): String = text
 }
 
 private data class ResIdTextResource(@StringRes val id: Int) : TextResource {
@@ -63,24 +64,16 @@ private data class ResIdTextResourceWithArgs(@StringRes val id: Int, val args: L
         )
 }
 
-private data class NumberTextResource(
-    val number: BigDecimal
-) : TextResource {
-    override fun asString(context: Context): String =
-        NumberFormat
-            .getInstance(context.resources.configuration.locales[0])
-            .format(number)
-}
-
 private data class TemperatureTextResource(val temperature: Temperature) : TextResource {
     override fun asString(context: Context): String =
         context.getString(
             R.string.temperature_value,
-            NumberTextResource(
-                temperature.value
-                    .toBigDecimal()
-                    .setScale(0, RoundingMode.HALF_UP)
-            ).asString(context)
+            NumberFormatter.with()
+                .locale(context.resources.configuration.locales[0])
+                .precision(Precision.integer())
+                .roundingMode(RoundingMode.HALF_UP)
+                .format(temperature.value)
+                .toString()
         )
 }
 
@@ -100,14 +93,11 @@ private data class TimeTextResource(
     }
 }
 
-private data class PercentageTextResource(val percentage: Double) : TextResource {
+private data class PercentageTextResource(val percentage: Int) : TextResource {
     override fun asString(context: Context): String =
-        context.getString(
-            R.string.percentage_value,
-            NumberTextResource(
-                percentage
-                    .toBigDecimal()
-                    .setScale(0, RoundingMode.HALF_UP)
-            ).asString(context)
-        )
+        NumberFormatter.with()
+            .locale(context.resources.configuration.locales[0])
+            .unit(MeasureUnit.PERCENT)
+            .format(percentage)
+            .toString()
 }

@@ -148,7 +148,7 @@ data class OverviewNow(
     val wind: Speed,
     val gust: Speed,
     val windDirection: Angle,
-    val humidity: Double,
+    val humidity: Int,
     val dewPoint: Temperature,
     val visibility: Length
 )
@@ -159,7 +159,7 @@ sealed interface OverviewHour {
     class Weather internal constructor(
         override val unixSecond: Long,
         val temperature: Temperature,
-        val pop: Double,
+        val pop: Int,
         val wmoCode: Int,
         val day: Boolean
     ) : OverviewHour
@@ -180,5 +180,5 @@ class OverviewDay internal constructor(
     val wmoCode: Int,
     val minimumTemperature: Temperature,
     val maximumTemperature: Temperature,
-    val maximumPop: Double
+    val maximumPop: Int
 )

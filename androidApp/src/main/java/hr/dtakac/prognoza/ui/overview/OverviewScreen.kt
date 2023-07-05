@@ -17,8 +17,6 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.overview.OverviewHourState
-import hr.dtakac.prognoza.presentation.overview.OverviewScreenState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,6 +141,13 @@ fun OverviewScreen(
                             }
                         }
                     }
+                }
+                item("coming-heading") {
+                    Text(
+                        text = stringResource(id = R.string.forecast_title_coming),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = 32.dp)
+                    )
                 }
             }
         }

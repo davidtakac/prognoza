@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import hr.dtakac.prognoza.presentation.simpleEvent
+import hr.dtakac.prognoza.ui.common.simpleEvent
 import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.AndroidSettingsRepository

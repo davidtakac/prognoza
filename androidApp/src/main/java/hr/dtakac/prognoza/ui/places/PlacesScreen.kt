@@ -6,9 +6,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.OnEvent
 import hr.dtakac.prognoza.presentation.places.PlacesViewModel
 import hr.dtakac.prognoza.ui.common.AppDialog
+import hr.dtakac.prognoza.ui.common.OnEvent
 
 @Composable
 fun PlacesScreen(

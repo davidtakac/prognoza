@@ -191,10 +191,10 @@ private data class Response(
 private data class Hourly(
     @SerialName("time") var startUnixSecond: List<Long>,
     @SerialName("temperature_2m") var temperature2m: List<Double>,
-    @SerialName("relativehumidity_2m") var relativeHumidity2m: List<Double>,
+    @SerialName("relativehumidity_2m") var relativeHumidity2m: List<Int>,
     @SerialName("dewpoint_2m") var dewpoint2m: List<Double>,
     @SerialName("apparent_temperature") var apparentTemperature: List<Double>,
-    @SerialName("precipitation_probability") var precipitationProbability: List<Double>,
+    @SerialName("precipitation_probability") var precipitationProbability: List<Int>,
     @SerialName("precipitation") var precipitation: List<Double>,
     @SerialName("rain") var rain: List<Double>,
     @SerialName("showers") var showers: List<Double>,
@@ -224,7 +224,7 @@ private data class Daily(
     @SerialName("rain_sum") var rainSum: List<Double>,
     @SerialName("showers_sum") var showersSum: List<Double>,
     @SerialName("snowfall_sum") var snowfallSum: List<Double>,
-    @SerialName("precipitation_probability_max") var precipitationProbabilityMax: List<Double>,
+    @SerialName("precipitation_probability_max") var precipitationProbabilityMax: List<Int>,
     @SerialName("windspeed_10m_max") var windSpeed10mMax: List<Double>,
     @SerialName("windgusts_10m_max") var windGusts10mMax: List<Double>,
     @SerialName("winddirection_10m_dominant") var windDirection10mDominant: List<Double>

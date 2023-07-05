@@ -9,7 +9,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.presentation.settings.MultipleChoiceSettingUi
 import hr.dtakac.prognoza.presentation.settings.SettingsScreenState
 import hr.dtakac.prognoza.ui.theme.AppTheme

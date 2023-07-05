@@ -1,7 +1,7 @@
-package hr.dtakac.prognoza.presentation.overview
+package hr.dtakac.prognoza.ui.overview
 
 import androidx.annotation.DrawableRes
-import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.ui.common.TextResource
 
 data class OverviewScreenState(
     val loading: Boolean = false,

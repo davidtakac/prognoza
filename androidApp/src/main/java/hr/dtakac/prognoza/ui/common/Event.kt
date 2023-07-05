@@ -1,4 +1,4 @@
-package hr.dtakac.prognoza.presentation
+package hr.dtakac.prognoza.ui.common
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect

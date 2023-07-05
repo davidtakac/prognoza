@@ -2,7 +2,7 @@ package hr.dtakac.prognoza.presentation.places
 
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.di.ComputationDispatcher
-import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.shared.entity.Place
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

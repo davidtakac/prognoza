@@ -1,7 +1,7 @@
 package hr.dtakac.prognoza.presentation.settings
 
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.presentation.TextResource
+import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.androidsettings.MoodMode
 import hr.dtakac.prognoza.androidsettings.UiMode
 import hr.dtakac.prognoza.di.ComputationDispatcher
