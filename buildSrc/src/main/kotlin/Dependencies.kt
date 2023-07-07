@@ -12,7 +12,7 @@ object GlobalVersions {
 }
 
 object AndroidConfig {
-    const val minSdk = 26
+    const val minSdk = 30
     const val compileSdk = 33
     const val targetSdk = compileSdk
     const val jvmTarget = "11"

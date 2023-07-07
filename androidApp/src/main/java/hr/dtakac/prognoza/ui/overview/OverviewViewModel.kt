@@ -65,33 +65,51 @@ class OverviewViewModel @Inject constructor(
                             )
                         ),
                     ),
-                    hours = overview.hours.mapIndexed { idx, h ->
-                        when (h) {
+                    hours = overview.hours.mapIndexed { idx, hour ->
+                        when (hour) {
                             is OverviewHour.Sunrise -> OverviewHourState.Sunrise(
-                                time = TextResource.fromTime(
-                                    h.unixSecond,
+                                time = TextResource.fromUnixSecondToShortTime(
+                                    hour.unixSecond,
                                     timeZone = overview.timeZone
                                 )
                             )
                             is OverviewHour.Sunset -> OverviewHourState.Sunset(
-                                time = TextResource.fromTime(
-                                    h.unixSecond,
+                                time = TextResource.fromUnixSecondToShortTime(
+                                    hour.unixSecond,
                                     timeZone = overview.timeZone
                                 )
                             )
                             is OverviewHour.Weather -> OverviewHourState.Weather(
                                 time = if (idx == 0) TextResource.fromResId(R.string.forecast_label_now)
-                                else TextResource.fromTime(
-                                    h.unixSecond,
+                                else TextResource.fromUnixSecondToShortTime(
+                                    unixSecond = hour.unixSecond,
                                     timeZone = overview.timeZone
                                 ),
-                                temperature = TextResource.fromTemperature(h.temperature),
-                                weatherIcon = wmoCodeToWeatherIcon(h.wmoCode, day = h.day),
-                                pop = h.pop.takeUnless { it == 0 }
+                                temperature = TextResource.fromTemperature(hour.temperature),
+                                weatherIcon = wmoCodeToWeatherIcon(hour.wmoCode, day = hour.day),
+                                pop = hour.pop.takeUnless { it == 0 }
                                     ?.let(TextResource::fromPercentage)
                             )
                         }
-                    }
+                    },
+                    days = overview.days.days.mapIndexed { idx, day ->
+                        OverviewDayState(
+                            dayOfWeek = if (idx == 0) TextResource.fromResId(R.string.forecast_label_today)
+                            else TextResource.fromUnixSecondToShortDayOfWeek(
+                                unixSecond = day.unixSecond,
+                                timeZone = overview.timeZone
+                            ),
+                            pop = day.maximumPop.takeUnless { it == 0 }?.let(TextResource::fromPercentage),
+                            // TODO: figure out a way to provide day/night normally. You can probably
+                            //  do maxOf { wmoCode}. Most likely they're ordered by severity already.
+                            //  Then just get the max's day variable and that's it.
+                            weatherIcon = wmoCodeToWeatherIcon(day.wmoCode, day = true),
+                            minimumTemperature = TextResource.fromTemperature(day.minimumTemperature),
+                            maximumTemperature = TextResource.fromTemperature(day.maximumTemperature),
+                            minimumTemperatureStartFraction = (day.minimumTemperature.value / overview.days.minimumTemperature.value).toFloat(),
+                            maximumTemperatureEndFraction = (day.maximumTemperature.value / overview.days.maximumTemperature.value).toFloat(),
+                        )
+                    },
                 ),
                 error = null,
                 loading = false

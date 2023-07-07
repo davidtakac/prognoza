@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.common
 
 import android.content.Context
-import android.icu.number.Notation
 import android.icu.number.NumberFormatter
 import android.icu.number.Precision
 import android.icu.util.MeasureUnit
@@ -31,10 +30,15 @@ sealed interface TextResource {
         fun fromTemperature(temperature: Temperature): TextResource =
             TemperatureTextResource(temperature)
 
-        fun fromTime(
+        fun fromUnixSecondToShortTime(
             unixSecond: Long,
             timeZone: TimeZone
         ): TextResource = TimeTextResource(unixSecond, timeZone)
+
+        fun fromUnixSecondToShortDayOfWeek(
+            unixSecond: Long,
+            timeZone: TimeZone
+        ): TextResource = DayOfWeekTextResource(unixSecond, timeZone)
 
         fun fromPercentage(percentage: Int): TextResource =
             PercentageTextResource(percentage)
@@ -100,4 +104,16 @@ private data class PercentageTextResource(val percentage: Int) : TextResource {
             .unit(MeasureUnit.PERCENT)
             .format(percentage)
             .toString()
+}
+
+private data class DayOfWeekTextResource(
+    val unixSecond: Long,
+    val timeZone: TimeZone
+) : TextResource {
+    override fun asString(context: Context): String {
+        val localDateTime = Instant.fromEpochSeconds(unixSecond)
+            .toLocalDateTime(timeZone)
+            .toJavaLocalDateTime()
+        return DateTimeFormatter.ofPattern("E").format(localDateTime)
+    }
 }
