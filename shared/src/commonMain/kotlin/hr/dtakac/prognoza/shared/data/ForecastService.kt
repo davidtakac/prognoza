@@ -151,7 +151,7 @@ private data class Response(
                     ),
                     maximumUvIndex = UvIndex(daily.uvIndexMax[i]),
                     hours = hours.filter {
-                        val hourDate = Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(timeZone).date
+                        val hourDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
                         val dayDate = Instant.fromEpochSeconds(dayStartUnixSecond).toLocalDateTime(timeZone).date
                         hourDate == dayDate
                     }
@@ -164,7 +164,7 @@ private data class Response(
         for (i in hourly.startUnixSecond.indices) {
             add(
                 Hour(
-                    unixSecond = hourly.startUnixSecond[i],
+                    startUnixSecond = hourly.startUnixSecond[i],
                     wmoCode = hourly.weathercode[i],
                     temperature = Temperature(
                         hourly.temperature2m[i],

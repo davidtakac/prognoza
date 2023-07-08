@@ -50,7 +50,7 @@ class ForecastTest {
     }
 
     private fun getHourDatum(start: Instant): Hour = Hour(
-        unixSecond = start.toEpochMilliseconds(),
+        startUnixSecond = start.toEpochMilliseconds(),
         endEpochMillis = start.plus(1, DateTimeUnit.HOUR).toEpochMilliseconds(),
         temperature = Temperature(0.0, TemperatureUnit.DegreeCelsius),
         precipitation = Length(0.0, LengthUnit.Millimetre),

@@ -28,7 +28,7 @@ class Overview internal constructor(
             today: Day,
             system: MeasurementSystem
         ) = OverviewNow(
-            unixSecond = now.unixSecond,
+            unixSecond = now.startUnixSecond,
             temperature = now.temperature.toSystem(system),
             minimumTemperature = today.minimumTemperature.toSystem(system),
             maximumTemperature = today.maximumTemperature.toSystem(system),
@@ -55,7 +55,7 @@ class Overview internal constructor(
         ) = buildList<OverviewHour> {
             val overviewHours = hours.map {
                 OverviewHour.Weather(
-                    unixSecond = it.unixSecond,
+                    unixSecond = it.startUnixSecond,
                     temperature = it.temperature.toSystem(system),
                     pop = it.pop,
                     wmoCode = it.wmoCode,
@@ -66,13 +66,13 @@ class Overview internal constructor(
 
             val sunrises = days
                 .mapNotNull { it.sunriseUnixSecond }
-                .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+                .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
                 .map { OverviewHour.Sunrise(it) }
             addAll(sunrises)
 
             val sunsets = days
                 .mapNotNull { it.sunsetUnixSecond }
-                .filter { it in hours.first().unixSecond..hours.last().unixSecond }
+                .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
                 .map { OverviewHour.Sunset(it) }
             addAll(sunsets)
 

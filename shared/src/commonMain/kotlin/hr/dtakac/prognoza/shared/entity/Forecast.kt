@@ -15,7 +15,7 @@ class Forecast internal constructor(
 
     val futureHours: List<Hour>
         get() = days.flatMap { it.hours }.filter {
-            val hourDateTime = Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(timeZone)
+            val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone)
             val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
             val nowDateTimeNormalized = LocalDateTime(
                 year = nowDateTime.year,
@@ -51,7 +51,7 @@ class Day internal constructor(
 )
 
 class Hour internal constructor(
-    val unixSecond: Long,
+    val startUnixSecond: Long,
     val wmoCode: Int,
     val temperature: Temperature,
     val rain: Length,
