@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -27,7 +28,10 @@ fun OverviewScreen(
     MaterialTheme {
         Scaffold(
             topBar = {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
                     SearchBar(
                         query = state.placeName?.asString() ?: "",
                         onQueryChange = {},
@@ -147,6 +151,22 @@ fun OverviewScreen(
                         text = stringResource(id = R.string.forecast_title_coming),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(top = 32.dp)
+                    )
+                }
+                itemsIndexed(state.data.days) { idx, day ->
+                    OverviewDay(
+                        day = day.dayOfWeek.asString(),
+                        pop = day.pop?.asString(),
+                        weatherIcon = day.weatherIcon,
+                        minimumTemperature = day.minimumTemperature.asString(),
+                        maximumTemperature = day.maximumTemperature.asString(),
+                        temperatureBarStartFraction = day.temperatureBarStartFraction,
+                        temperatureBarEndFraction = day.temperatureBarEndFraction,
+                        modifier = Modifier
+                            .padding(top = if (idx == 0) 12.dp else 4.dp)
+                            .fillMaxWidth()
+                            .height(64.dp)
+
                     )
                 }
             }

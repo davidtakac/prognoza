@@ -45,6 +45,6 @@ data class OverviewDayState(
     @DrawableRes val weatherIcon: Int,
     val minimumTemperature: TextResource,
     val maximumTemperature: TextResource,
-    val minimumTemperatureStartFraction: Float,
-    val maximumTemperatureEndFraction: Float
+    val temperatureBarStartFraction: Float,
+    val temperatureBarEndFraction: Float
 )

@@ -147,7 +147,7 @@ private data class Response(
 
     private fun buildDays() = buildList {
         for (i in daily.startUnixSecond.indices) {
-            val dayStartUnixSecond = hourly.startUnixSecond[i]
+            val dayStartUnixSecond = daily.startUnixSecond[i]
             add(
                 Day(
                     startUnixSecond = dayStartUnixSecond,

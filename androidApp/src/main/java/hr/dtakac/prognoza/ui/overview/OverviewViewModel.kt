@@ -52,7 +52,7 @@ class OverviewViewModel @Inject constructor(
                     now = OverviewNowState(
                         time = TextResource.fromResId(R.string.forecast_label_now),
                         temperature = TextResource.fromTemperature(overview.now.temperature),
-                        maximumTemperature = TextResource.fromTemperature(overview.days.maximumTemperature),
+                        maximumTemperature = TextResource.fromTemperature(overview.now.maximumTemperature),
                         minimumTemperature = TextResource.fromTemperature(overview.now.minimumTemperature),
                         feelsLikeTemperature = TextResource.fromTemperature(overview.now.feelsLike),
                         weatherIcon = wmoCodeToWeatherIcon(
@@ -106,8 +106,8 @@ class OverviewViewModel @Inject constructor(
                             weatherIcon = wmoCodeToWeatherIcon(day.wmoCode, day = true),
                             minimumTemperature = TextResource.fromTemperature(day.minimumTemperature),
                             maximumTemperature = TextResource.fromTemperature(day.maximumTemperature),
-                            minimumTemperatureStartFraction = (day.minimumTemperature.value / overview.days.minimumTemperature.value).toFloat(),
-                            maximumTemperatureEndFraction = (day.maximumTemperature.value / overview.days.maximumTemperature.value).toFloat(),
+                            temperatureBarStartFraction = 1f - (overview.days.minimumTemperature.value / day.minimumTemperature.value).toFloat(),
+                            temperatureBarEndFraction = 1f - (day.maximumTemperature.value / overview.days.maximumTemperature.value).toFloat(),
                         )
                     },
                 ),
