@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
@@ -25,6 +26,7 @@ fun OverviewScreen(
     state: OverviewScreenState
 ) {
     var searchActive by remember { mutableStateOf(false) }
+    val roundedCornerRadius = remember { 12.dp }
     MaterialTheme {
         Scaffold(
             topBar = {
@@ -118,7 +120,8 @@ fun OverviewScreen(
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp)
+                            .padding(top = 12.dp),
+                        shape = RoundedCornerShape(roundedCornerRadius)
                     ) {
                         LazyRow(
                             horizontalArrangement = Arrangement.spacedBy(32.dp),
@@ -162,11 +165,16 @@ fun OverviewScreen(
                         maximumTemperature = day.maximumTemperature.asString(),
                         temperatureBarStartFraction = day.temperatureBarStartFraction,
                         temperatureBarEndFraction = day.temperatureBarEndFraction,
+                        shape = RoundedCornerShape(
+                            topStart = if (idx == 0) roundedCornerRadius else 4.dp,
+                            topEnd = if (idx == 0) roundedCornerRadius else 4.dp,
+                            bottomStart = if (idx == state.data.days.lastIndex) roundedCornerRadius else 4.dp,
+                            bottomEnd = if (idx == state.data.days.lastIndex) roundedCornerRadius else 4.dp
+                        ),
                         modifier = Modifier
                             .padding(top = if (idx == 0) 12.dp else 4.dp)
                             .fillMaxWidth()
                             .height(64.dp)
-
                     )
                 }
             }
