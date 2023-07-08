@@ -36,7 +36,7 @@ fun Int.toBeaufortStringId(): Int = when (this) {
 
 /*
 // See https://open-meteo.com/en/docs for mapping
-private fun Int.toWmoCodeDrawableResId(isDay: Boolean): Int = when (this) {
+private fun Int.toWmoCodeDrawableResId(isisDay: Boolean): Int = when (this) {
     0 -> when (isDay) {
         true -> Description.CLEAR_SKY_DAY
         false -> Description.CLEAR_SKY_NIGHT
@@ -293,18 +293,18 @@ fun Description.asWeatherIconResId(
 
 // TODO: swap with new icons
 @DrawableRes
-fun wmoCodeToWeatherIcon(wmoCode: Int, day: Boolean) =
+fun wmoCodeToWeatherIcon(wmoCode: Int, isDay: Boolean) =
     when (wmoCode) {
-        0, 1 -> if (day) R.drawable.dark_01d else R.drawable.dark_01n
-        2 -> if (day) R.drawable.dark_03d else R.drawable.dark_03n
+        0, 1 -> if (isDay) R.drawable.dark_01d else R.drawable.dark_01n
+        2 -> if (isDay) R.drawable.dark_03d else R.drawable.dark_03n
         3 -> R.drawable.dark_04
         45, 48 -> R.drawable.dark_15
         51, 53, 55, 56, 57 -> R.drawable.dark_46
         61, 63, 65, 66, 67 -> R.drawable.dark_09
         71, 73, 75, 77 -> R.drawable.dark_13
-        80, 81, 82 -> if (day) R.drawable.dark_05d else R.drawable.dark_05n
-        85, 86 -> if (day) R.drawable.dark_08d else R.drawable.dark_08n
-        95, 96, 99 -> if (day) R.drawable.dark_06d else R.drawable.dark_06n
+        80, 81, 82 -> if (isDay) R.drawable.dark_05d else R.drawable.dark_05n
+        85, 86 -> if (isDay) R.drawable.dark_08d else R.drawable.dark_08n
+        95, 96, 99 -> if (isDay) R.drawable.dark_06d else R.drawable.dark_06n
         else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
     }
 

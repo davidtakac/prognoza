@@ -9,7 +9,9 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -107,45 +109,12 @@ private data class Response(
         val timeZone = TimeZone.of(timeZoneId)
         return Forecast(
             timeZone = timeZone,
-            hours = buildHours(),
-            days = buildDays()
+            days = buildDays(timeZone)
         )
     }
 
-    private fun buildHours() = buildList {
-        for (i in hourly.startUnixSecond.indices) {
-            add(
-                Hour(
-                    unixSecond = hourly.startUnixSecond[i],
-                    wmoCode = hourly.weathercode[i],
-                    temperature = Temperature(
-                        hourly.temperature2m[i],
-                        TemperatureUnit.DegreeCelsius
-                    ),
-                    rain = Length(hourly.rain[i], LengthUnit.Millimetre),
-                    showers = Length(hourly.rain[i], LengthUnit.Millimetre),
-                    snow = Length(hourly.snowfall[i], LengthUnit.Centimetre),
-                    totalPrecipitation = Length(hourly.precipitation[i], LengthUnit.Millimetre),
-                    pop = hourly.precipitationProbability[i],
-                    gust = Speed(hourly.windGusts10m[i], SpeedUnit.MetrePerSecond),
-                    wind = Speed(hourly.windSpeed10m[i], SpeedUnit.MetrePerSecond),
-                    windDirection = Angle(hourly.windDirection10m[i], AngleUnit.Degree),
-                    pressureAtSeaLevel = Pressure(hourly.pressureMsl[i], PressureUnit.Millibar),
-                    relativeHumidity = hourly.relativeHumidity2m[i],
-                    dewPoint = Temperature(hourly.dewpoint2m[i], TemperatureUnit.DegreeCelsius),
-                    visibility = Length(hourly.visibility[i], LengthUnit.Metre),
-                    uvIndex = UvIndex(hourly.uvIndex[i]),
-                    day = hourly.isDay[i] == 1,
-                    feelsLike = Temperature(
-                        hourly.apparentTemperature[i],
-                        TemperatureUnit.DegreeCelsius
-                    )
-                )
-            )
-        }
-    }
-
-    private fun buildDays() = buildList {
+    private fun buildDays(timeZone: TimeZone) = buildList {
+        val hours = buildHours()
         for (i in daily.startUnixSecond.indices) {
             val dayStartUnixSecond = daily.startUnixSecond[i]
             add(
@@ -181,6 +150,44 @@ private data class Response(
                         AngleUnit.Degree
                     ),
                     maximumUvIndex = UvIndex(daily.uvIndexMax[i]),
+                    hours = hours.filter {
+                        val hourDate = Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(timeZone).date
+                        val dayDate = Instant.fromEpochSeconds(dayStartUnixSecond).toLocalDateTime(timeZone).date
+                        hourDate == dayDate
+                    }
+                )
+            )
+        }
+    }
+
+    private fun buildHours() = buildList {
+        for (i in hourly.startUnixSecond.indices) {
+            add(
+                Hour(
+                    unixSecond = hourly.startUnixSecond[i],
+                    wmoCode = hourly.weathercode[i],
+                    temperature = Temperature(
+                        hourly.temperature2m[i],
+                        TemperatureUnit.DegreeCelsius
+                    ),
+                    rain = Length(hourly.rain[i], LengthUnit.Millimetre),
+                    showers = Length(hourly.rain[i], LengthUnit.Millimetre),
+                    snow = Length(hourly.snowfall[i], LengthUnit.Centimetre),
+                    totalPrecipitation = Length(hourly.precipitation[i], LengthUnit.Millimetre),
+                    pop = hourly.precipitationProbability[i],
+                    gust = Speed(hourly.windGusts10m[i], SpeedUnit.MetrePerSecond),
+                    wind = Speed(hourly.windSpeed10m[i], SpeedUnit.MetrePerSecond),
+                    windDirection = Angle(hourly.windDirection10m[i], AngleUnit.Degree),
+                    pressureAtSeaLevel = Pressure(hourly.pressureMsl[i], PressureUnit.Millibar),
+                    relativeHumidity = hourly.relativeHumidity2m[i],
+                    dewPoint = Temperature(hourly.dewpoint2m[i], TemperatureUnit.DegreeCelsius),
+                    visibility = Length(hourly.visibility[i], LengthUnit.Metre),
+                    uvIndex = UvIndex(hourly.uvIndex[i]),
+                    isDay = hourly.isDay[i] == 1,
+                    feelsLike = Temperature(
+                        hourly.apparentTemperature[i],
+                        TemperatureUnit.DegreeCelsius
+                    )
                 )
             )
         }

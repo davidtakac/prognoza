@@ -4,7 +4,6 @@ import kotlinx.datetime.*
 
 class Forecast internal constructor(
     val timeZone: TimeZone,
-    val hours: List<Hour>,
     val days: List<Day>
 ) {
     val futureDays: List<Day>
@@ -15,7 +14,7 @@ class Forecast internal constructor(
         }
 
     val futureHours: List<Hour>
-        get() = hours.filter {
+        get() = days.flatMap { it.hours }.filter {
             val hourDateTime = Instant.fromEpochSeconds(it.unixSecond).toLocalDateTime(timeZone)
             val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
             val nowDateTimeNormalized = LocalDateTime(
@@ -48,6 +47,7 @@ class Day internal constructor(
     val maximumGust: Speed,
     val dominantWindDirection: Angle,
     val maximumUvIndex: UvIndex,
+    val hours: List<Hour>
 )
 
 class Hour internal constructor(
@@ -67,6 +67,6 @@ class Hour internal constructor(
     val dewPoint: Temperature,
     val visibility: Length,
     val uvIndex: UvIndex,
-    val day: Boolean,
+    val isDay: Boolean,
     val feelsLike: Temperature
 )

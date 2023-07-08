@@ -34,7 +34,7 @@ class Overview internal constructor(
             maximumTemperature = today.maximumTemperature.toSystem(system),
             feelsLike = now.feelsLike.toSystem(system),
             wmoCode = now.wmoCode,
-            day = now.day,
+            isDay = now.isDay,
             totalPrecipitation = now.totalPrecipitation.totalPrecipitationToSystem(system),
             snowFall = now.snow.snowToSystem(system),
             rainFall = (now.rain + now.showers).rainToSystem(system),
@@ -59,7 +59,7 @@ class Overview internal constructor(
                     temperature = it.temperature.toSystem(system),
                     pop = it.pop,
                     wmoCode = it.wmoCode,
-                    day = it.day
+                    isDay = it.isDay
                 )
             }
             addAll(overviewHours)
@@ -84,13 +84,15 @@ class Overview internal constructor(
             days: List<Day>,
             system: MeasurementSystem
         ) = OverviewDays(
-            days = days.map {
+            days = days.map { day ->
+                val hourWithMostExtremeWmoCode = day.hours.maxBy { it.wmoCode }
                 OverviewDay(
-                    unixSecond = it.startUnixSecond,
-                    wmoCode = it.mostExtremeWmoCode,
-                    minimumTemperature = it.minimumTemperature.toSystem(system),
-                    maximumTemperature = it.maximumTemperature.toSystem(system),
-                    maximumPop = it.maximumPop
+                    unixSecond = day.startUnixSecond,
+                    mostExtremeWmoCode = hourWithMostExtremeWmoCode.wmoCode,
+                    mostExtremeWmoCodeIsDay = hourWithMostExtremeWmoCode.isDay,
+                    minimumTemperature = day.minimumTemperature.toSystem(system),
+                    maximumTemperature = day.maximumTemperature.toSystem(system),
+                    maximumPop = day.maximumPop,
                 )
             },
             minimumTemperature = days.minOf { it.minimumTemperature }.toSystem(system),
@@ -139,7 +141,7 @@ data class OverviewNow(
     val maximumTemperature: Temperature,
     val feelsLike: Temperature,
     val wmoCode: Int,
-    val day: Boolean,
+    val isDay: Boolean,
     val totalPrecipitation: Length,
     val snowFall: Length,
     val rainFall: Length,
@@ -161,7 +163,7 @@ sealed interface OverviewHour {
         val temperature: Temperature,
         val pop: Int,
         val wmoCode: Int,
-        val day: Boolean
+        val isDay: Boolean
     ) : OverviewHour
 
     class Sunrise internal constructor(override val unixSecond: Long) : OverviewHour
@@ -177,7 +179,8 @@ class OverviewDays internal constructor(
 
 class OverviewDay internal constructor(
     val unixSecond: Long,
-    val wmoCode: Int,
+    val mostExtremeWmoCode: Int,
+    val mostExtremeWmoCodeIsDay: Boolean,
     val minimumTemperature: Temperature,
     val maximumTemperature: Temperature,
     val maximumPop: Int

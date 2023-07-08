@@ -56,8 +56,8 @@ class OverviewViewModel @Inject constructor(
                         minimumTemperature = TextResource.fromTemperature(overview.now.minimumTemperature),
                         feelsLikeTemperature = TextResource.fromTemperature(overview.now.feelsLike),
                         weatherIcon = wmoCodeToWeatherIcon(
-                            overview.now.wmoCode,
-                            day = overview.now.day
+                            wmoCode = overview.now.wmoCode,
+                            isDay = overview.now.isDay
                         ),
                         weatherDescription = TextResource.fromResId(
                             wmoCodeToWeatherDescription(
@@ -86,7 +86,10 @@ class OverviewViewModel @Inject constructor(
                                     timeZone = overview.timeZone
                                 ),
                                 temperature = TextResource.fromTemperature(hour.temperature),
-                                weatherIcon = wmoCodeToWeatherIcon(hour.wmoCode, day = hour.day),
+                                weatherIcon = wmoCodeToWeatherIcon(
+                                    hour.wmoCode,
+                                    isDay = hour.isDay
+                                ),
                                 pop = hour.pop.takeUnless { it == 0 }
                                     ?.let(TextResource::fromPercentage)
                             )
@@ -99,11 +102,12 @@ class OverviewViewModel @Inject constructor(
                                 unixSecond = day.unixSecond,
                                 timeZone = overview.timeZone
                             ),
-                            pop = day.maximumPop.takeUnless { it == 0 }?.let(TextResource::fromPercentage),
-                            // TODO: figure out a way to provide day/night normally. You can probably
-                            //  do maxOf { wmoCode}. Most likely they're ordered by severity already.
-                            //  Then just get the max's day variable and that's it.
-                            weatherIcon = wmoCodeToWeatherIcon(day.wmoCode, day = true),
+                            pop = day.maximumPop.takeUnless { it == 0 }
+                                ?.let(TextResource::fromPercentage),
+                            weatherIcon = wmoCodeToWeatherIcon(
+                                wmoCode = day.mostExtremeWmoCode,
+                                isDay = day.mostExtremeWmoCodeIsDay
+                            ),
                             minimumTemperature = TextResource.fromTemperature(day.minimumTemperature),
                             maximumTemperature = TextResource.fromTemperature(day.maximumTemperature),
                             temperatureBarStartFraction = 1f - (overview.days.minimumTemperature.value / day.minimumTemperature.value).toFloat(),
