@@ -148,7 +148,7 @@ fun OverviewScreen(
                 }
                 item("coming-heading") {
                     Text(
-                        text = stringResource(id = R.string.forecast_title_coming),
+                        text = stringResource(id = R.string.forecast_title_coming, state.data.days.size),
                         style = MaterialTheme.typography.bodyLarge,
                         modifier = Modifier.padding(top = 32.dp)
                     )

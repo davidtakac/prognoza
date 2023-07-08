@@ -85,7 +85,7 @@
 
     <string name="forecast_msg_empty_no_place">Select a place to see its forecast.</string>
     <string name="forecast_title_hourly">Hourly forecast</string>
-    <string name="forecast_title_coming">Daily forecast</string>
+    <string name="forecast_title_coming">%d-day forecast</string>
 
     <string name="places_hint_search">Search places…</string>
     <string name="places_msg_empty">The places you search for and select will appear here.</string>

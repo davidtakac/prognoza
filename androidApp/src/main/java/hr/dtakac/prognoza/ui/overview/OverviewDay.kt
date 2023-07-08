@@ -63,7 +63,7 @@ fun OverviewDay(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(text = minimumTemperature)
+                Text(text = minimumTemperature, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 Row(
                     modifier = Modifier
                         .weight(1f)
