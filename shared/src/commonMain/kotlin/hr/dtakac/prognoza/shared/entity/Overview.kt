@@ -89,7 +89,9 @@ class Overview internal constructor(
                 OverviewDay(
                     unixSecond = day.startUnixSecond,
                     mostExtremeWmoCode = hourWithMostExtremeWmoCode.wmoCode,
-                    mostExtremeWmoCodeIsDay = hourWithMostExtremeWmoCode.isDay,
+                    // If the most extreme condition of a day is "Clear" then display the sun
+                    // because people are generally more interested in a clear day than night.
+                    mostExtremeWmoCodeIsDay = if (hourWithMostExtremeWmoCode.wmoCode == 0) true else hourWithMostExtremeWmoCode.isDay,
                     minimumTemperature = day.minimumTemperature.toSystem(system),
                     maximumTemperature = day.maximumTemperature.toSystem(system),
                     maximumPop = day.maximumPop,

@@ -156,7 +156,7 @@ fun OverviewScreen(
                             state.data.days.size
                         ),
                         style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(top = 32.dp)
+                        modifier = Modifier.padding(top = 24.dp)
                     )
                 }
                 itemsIndexed(state.data.days) { idx, day ->
@@ -178,6 +178,13 @@ fun OverviewScreen(
                             .padding(top = if (idx == 0) 12.dp else 4.dp)
                             .fillMaxWidth()
                             .height(64.dp)
+                    )
+                }
+                item("details-heading") {
+                    Text(
+                        text = stringResource(id = R.string.forecast_title_details),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.padding(top = 24.dp)
                     )
                 }
             }

@@ -295,7 +295,8 @@ fun Description.asWeatherIconResId(
 @DrawableRes
 fun wmoCodeToWeatherIcon(wmoCode: Int, isDay: Boolean) =
     when (wmoCode) {
-        0, 1 -> if (isDay) R.drawable.dark_01d else R.drawable.dark_01n
+        0 -> if (isDay) R.drawable.dark_01d else R.drawable.dark_01n
+        1 -> if (isDay) R.drawable.dark_02d else R.drawable.dark_02n
         2 -> if (isDay) R.drawable.dark_03d else R.drawable.dark_03n
         3 -> R.drawable.dark_04
         45, 48 -> R.drawable.dark_15
@@ -312,7 +313,8 @@ fun wmoCodeToWeatherIcon(wmoCode: Int, isDay: Boolean) =
 @StringRes
 fun wmoCodeToWeatherDescription(wmoCode: Int) =
     when (wmoCode) {
-        0, 1 -> R.string.description_clear_sky
+        0 -> R.string.description_clear_sky
+        1 -> R.string.description_fair
         2 -> R.string.description_partly_cloudy
         3 -> R.string.description_cloudy
         45, 48 -> R.string.description_fog
