@@ -85,13 +85,17 @@ class Overview internal constructor(
             system: MeasurementSystem
         ) = OverviewDays(
             days = days.map { day ->
-                val hourWithMostExtremeWmoCode = day.hours.maxBy { it.wmoCode }
+                var mostExtremeHour = day.hours.maxBy { it.wmoCode }
+                // If the most extreme weather condition for a given day is 0 (clear) and at night,
+                // try to override it to day instead. Assumes people are generally more interested
+                // in a clear day than a clear night.
+                if (mostExtremeHour.wmoCode == 0 && !mostExtremeHour.isDay) {
+                    mostExtremeHour = day.hours.firstOrNull { it.isDay } ?: mostExtremeHour
+                }
                 OverviewDay(
                     unixSecond = day.startUnixSecond,
-                    mostExtremeWmoCode = hourWithMostExtremeWmoCode.wmoCode,
-                    // If the most extreme condition of a day is "Clear" then display the sun
-                    // because people are generally more interested in a clear day than night.
-                    mostExtremeWmoCodeIsDay = if (hourWithMostExtremeWmoCode.wmoCode == 0) true else hourWithMostExtremeWmoCode.isDay,
+                    mostExtremeWmoCode = mostExtremeHour.wmoCode,
+                    mostExtremeWmoCodeIsDay = mostExtremeHour.isDay,
                     minimumTemperature = day.minimumTemperature.toSystem(system),
                     maximumTemperature = day.maximumTemperature.toSystem(system),
                     maximumPop = day.maximumPop,
