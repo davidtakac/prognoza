@@ -105,8 +105,8 @@ class OverviewViewModel @Inject constructor(
                             pop = day.maximumPop.takeUnless { it == 0 }
                                 ?.let(TextResource::fromPercentage),
                             weatherIcon = wmoCodeToWeatherIcon(
-                                wmoCode = day.mostExtremeWmoCode,
-                                isDay = day.mostExtremeWmoCodeIsDay
+                                wmoCode = day.representativeWmoCode,
+                                isDay = day.representativeWmoCodeIsDay
                             ),
                             minimumTemperature = TextResource.fromTemperature(day.minimumTemperature),
                             maximumTemperature = TextResource.fromTemperature(day.maximumTemperature),

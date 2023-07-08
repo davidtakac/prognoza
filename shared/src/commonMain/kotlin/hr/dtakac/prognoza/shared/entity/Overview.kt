@@ -85,17 +85,11 @@ class Overview internal constructor(
             system: MeasurementSystem
         ) = OverviewDays(
             days = days.map { day ->
-                var mostExtremeHour = day.hours.maxBy { it.wmoCode }
-                // If the most extreme weather condition for a given day is 0 (clear) and at night,
-                // try to override it to day instead. Assumes people are generally more interested
-                // in a clear day than a clear night.
-                if (mostExtremeHour.wmoCode == 0 && !mostExtremeHour.isDay) {
-                    mostExtremeHour = day.hours.firstOrNull { it.isDay } ?: mostExtremeHour
-                }
+                val (repCode, repCodeIsDay) = getRepresentativeWmoCode(day.hours)
                 OverviewDay(
                     unixSecond = day.startUnixSecond,
-                    mostExtremeWmoCode = mostExtremeHour.wmoCode,
-                    mostExtremeWmoCodeIsDay = mostExtremeHour.isDay,
+                    representativeWmoCode = repCode,
+                    representativeWmoCodeIsDay = repCodeIsDay,
                     minimumTemperature = day.minimumTemperature.toSystem(system),
                     maximumTemperature = day.maximumTemperature.toSystem(system),
                     maximumPop = day.maximumPop,
@@ -137,7 +131,30 @@ class Overview internal constructor(
             if (system == MeasurementSystem.Imperial) SpeedUnit.MilePerHour
             else SpeedUnit.MetrePerSecond
         )
-    }
+
+        private fun getRepresentativeWmoCode(hours: List<Hour>): Pair<Int, Boolean> =
+            if (hours.any { it.wmoCode > 48 }) {
+                // The most severe weather condition is at least light drizzle. Because this involves
+                // precipitation, it could affect people's plans for the day. In this case they would
+                // likely want to know the most severe weather condition so they can prepare accordingly
+                val mostExtremeHour = hours.maxBy { it.wmoCode }
+                mostExtremeHour.wmoCode to mostExtremeHour.isDay
+            } else {
+                // The most severe weather condition is depositing rime fog. Because this doesn't
+                // involve precipitation, it rarely affects people's plans for the day. In this case
+                // they would likely want to know what most of the day looks like instead
+                val priorityHours = hours
+                    // Prioritize daytime if possible
+                    .filter { it.isDay }
+                    .takeUnless { it.isEmpty() } ?: hours
+                val mostCommonWmoCode = priorityHours
+                    // Map WMO code to amount of times it appears in the list
+                    .groupingBy { it.wmoCode }.eachCount()
+                    // Find the most severe WMO code (sortedByDescending) that appears the most (maxBy)
+                    .entries.sortedByDescending { it.key }.maxBy { it.value }.key
+                mostCommonWmoCode to priorityHours[0].isDay
+            }
+        }
 }
 
 data class OverviewNow(
@@ -185,8 +202,8 @@ class OverviewDays internal constructor(
 
 class OverviewDay internal constructor(
     val unixSecond: Long,
-    val mostExtremeWmoCode: Int,
-    val mostExtremeWmoCodeIsDay: Boolean,
+    val representativeWmoCode: Int,
+    val representativeWmoCodeIsDay: Boolean,
     val minimumTemperature: Temperature,
     val maximumTemperature: Temperature,
     val maximumPop: Int
