@@ -85,11 +85,10 @@ class Overview internal constructor(
             system: MeasurementSystem
         ) = OverviewDays(
             days = days.map { day ->
-                val (repCode, repCodeIsDay) = getRepresentativeWmoCode(day.hours)
                 OverviewDay(
                     unixSecond = day.startUnixSecond,
-                    representativeWmoCode = repCode,
-                    representativeWmoCodeIsDay = repCodeIsDay,
+                    representativeWmoCode = day.representativeWmoCode.wmoCode,
+                    representativeWmoCodeIsDay = day.representativeWmoCode.isDay,
                     minimumTemperature = day.minimumTemperature.toSystem(system),
                     maximumTemperature = day.maximumTemperature.toSystem(system),
                     maximumPop = day.maximumPop,
@@ -131,33 +130,10 @@ class Overview internal constructor(
             if (system == MeasurementSystem.Imperial) SpeedUnit.MilePerHour
             else SpeedUnit.MetrePerSecond
         )
-
-        private fun getRepresentativeWmoCode(hours: List<Hour>): Pair<Int, Boolean> =
-            if (hours.any { it.wmoCode > 48 }) {
-                // The most severe weather condition is at least light drizzle. Because this involves
-                // precipitation, it could affect people's plans for the day. In this case they would
-                // likely want to know the most severe weather condition so they can prepare accordingly
-                val mostExtremeHour = hours.maxBy { it.wmoCode }
-                mostExtremeHour.wmoCode to mostExtremeHour.isDay
-            } else {
-                // The most severe weather condition is depositing rime fog. Because this doesn't
-                // involve precipitation, it rarely affects people's plans for the day. In this case
-                // they would likely want to know what most of the day looks like instead
-                val priorityHours = hours
-                    // Prioritize daytime if possible
-                    .filter { it.isDay }
-                    .takeUnless { it.isEmpty() } ?: hours
-                val mostCommonWmoCode = priorityHours
-                    // Map WMO code to amount of times it appears in the list
-                    .groupingBy { it.wmoCode }.eachCount()
-                    // Find the most severe WMO code (sortedByDescending) that appears the most (maxBy)
-                    .entries.sortedByDescending { it.key }.maxBy { it.value }.key
-                mostCommonWmoCode to priorityHours[0].isDay
-            }
-        }
+    }
 }
 
-data class OverviewNow(
+class OverviewNow internal constructor(
     val unixSecond: Long,
     val temperature: Temperature,
     val minimumTemperature: Temperature,
