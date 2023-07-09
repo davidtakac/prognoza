@@ -187,6 +187,9 @@ fun OverviewScreen(
                         modifier = Modifier.padding(top = 24.dp)
                     )
                 }
+                item("details-first-row") {
+
+                }
             }
         }
     }
