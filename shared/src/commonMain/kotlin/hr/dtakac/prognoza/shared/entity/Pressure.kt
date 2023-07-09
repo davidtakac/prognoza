@@ -10,11 +10,11 @@ class Pressure internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
-    internal fun convertTo(targetUnit: PressureUnit): Pressure = Pressure(valueIn(targetUnit), targetUnit)
+    internal fun convertTo(unit: PressureUnit): Pressure = Pressure(valueIn(unit), unit)
 
-    private fun valueIn(targetUnit: PressureUnit): Double =
-        if (targetUnit == unit) value
-        else value * unit.pascals / targetUnit.pascals
+    private fun valueIn(unit: PressureUnit): Double =
+        if (unit == unit) value
+        else value * unit.pascals / unit.pascals
 
     private fun throwInvalidPressure(): Nothing =
         throw IllegalStateException("Pressure must be positive, was ${toString()}.")

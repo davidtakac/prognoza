@@ -22,9 +22,9 @@ class Angle internal constructor(
             }
         }
 
-    private fun valueIn(targetUnit: AngleUnit): Double =
-        if (targetUnit == unit) value
-        else value * unit.radians / targetUnit.radians
+    private fun valueIn(unit: AngleUnit): Double =
+        if (unit == unit) value
+        else value * unit.radians / unit.radians
 }
 
 enum class AngleUnit(

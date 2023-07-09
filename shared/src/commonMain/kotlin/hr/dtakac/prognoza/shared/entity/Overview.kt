@@ -2,9 +2,6 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.TimeZone
 
-// TODO: probably figure out a way to convert all these to the measurement system at the time of creation.
-//  These conversions will have to be repeated for future classes, too. We only have to standardise the
-//  measurement system for the graphs feature. The rest can be opinionated from the very start.
 class Overview internal constructor(
     val timeZone: TimeZone,
     val now: OverviewNow,
@@ -12,51 +9,43 @@ class Overview internal constructor(
     val days: OverviewDays,
 ) {
     companion object {
-        fun build(forecast: Forecast, system: MeasurementSystem): Overview? {
+        fun build(forecast: Forecast): Overview? {
             val hours = forecast.futureHours.take(24).takeIf { it.isNotEmpty() } ?: return null
             val days = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
             return Overview(
                 timeZone = forecast.timeZone,
-                now = buildNow(now = hours[0], today = days[0], system = system),
-                hours = buildHours(hours = hours, days = days, system = system),
-                days = buildDays(days = days, system = system),
+                now = buildNow(now = hours[0], today = days[0]),
+                hours = buildHours(hours = hours, days = days),
+                days = buildDays(days = days),
             )
         }
 
-        private fun buildNow(
-            now: Hour,
-            today: Day,
-            system: MeasurementSystem
-        ) = OverviewNow(
+        private fun buildNow(now: Hour, today: Day) = OverviewNow(
             unixSecond = now.startUnixSecond,
-            temperature = now.temperature.toSystem(system),
-            minimumTemperature = today.minimumTemperature.toSystem(system),
-            maximumTemperature = today.maximumTemperature.toSystem(system),
-            feelsLike = now.feelsLike.toSystem(system),
+            temperature = now.temperature,
+            minimumTemperature = today.minimumTemperature,
+            maximumTemperature = today.maximumTemperature,
+            feelsLike = now.feelsLike,
             wmoCode = now.wmoCode,
             isDay = now.isDay,
-            totalPrecipitation = now.totalPrecipitation.totalPrecipitationToSystem(system),
-            snowFall = now.snow.snowToSystem(system),
-            rainFall = (now.rain + now.showers).rainToSystem(system),
-            pressure = now.pressureAtSeaLevel.toSystem(system),
+            totalPrecipitation = now.totalPrecipitation,
+            snowFall = now.snow,
+            rainFall = (now.rain + now.showers),
+            pressure = now.pressureAtSeaLevel,
             uvIndex = now.uvIndex,
-            wind = now.wind.toSystem(system),
+            wind = now.wind,
             windDirection = now.windDirection,
-            gust = now.gust.toSystem(system),
+            gust = now.gust,
             humidity = now.relativeHumidity,
-            dewPoint = now.dewPoint.toSystem(system),
-            visibility = now.visibility.visibilityToSystem(system)
+            dewPoint = now.dewPoint,
+            visibility = now.visibility
         )
 
-        private fun buildHours(
-            hours: List<Hour>,
-            days: List<Day>,
-            system: MeasurementSystem
-        ) = buildList<OverviewHour> {
+        private fun buildHours(hours: List<Hour>, days: List<Day>) = buildList<OverviewHour> {
             val overviewHours = hours.map {
                 OverviewHour.Weather(
                     unixSecond = it.startUnixSecond,
-                    temperature = it.temperature.toSystem(system),
+                    temperature = it.temperature,
                     pop = it.pop,
                     wmoCode = it.wmoCode,
                     isDay = it.isDay
@@ -80,55 +69,19 @@ class Overview internal constructor(
             sortBy { it.unixSecond }
         }
 
-        private fun buildDays(
-            days: List<Day>,
-            system: MeasurementSystem
-        ) = OverviewDays(
+        private fun buildDays(days: List<Day>) = OverviewDays(
             days = days.map { day ->
                 OverviewDay(
                     unixSecond = day.startUnixSecond,
                     representativeWmoCode = day.representativeWmoCode.wmoCode,
                     representativeWmoCodeIsDay = day.representativeWmoCode.isDay,
-                    minimumTemperature = day.minimumTemperature.toSystem(system),
-                    maximumTemperature = day.maximumTemperature.toSystem(system),
+                    minimumTemperature = day.minimumTemperature,
+                    maximumTemperature = day.maximumTemperature,
                     maximumPop = day.maximumPop,
                 )
             },
-            minimumTemperature = days.minOf { it.minimumTemperature }.toSystem(system),
-            maximumTemperature = days.maxOf { it.maximumTemperature }.toSystem(system)
-        )
-
-        private fun Temperature.toSystem(system: MeasurementSystem) = convertTo(
-            if (system == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
-            else TemperatureUnit.DegreeCelsius
-        )
-
-        private fun Length.totalPrecipitationToSystem(system: MeasurementSystem) =
-            rainToSystem(system)
-
-        private fun Length.rainToSystem(system: MeasurementSystem) = convertTo(
-            if (system == MeasurementSystem.Imperial) LengthUnit.Inch
-            else LengthUnit.Millimetre
-        )
-
-        private fun Length.snowToSystem(system: MeasurementSystem) = convertTo(
-            if (system == MeasurementSystem.Imperial) LengthUnit.Inch
-            else LengthUnit.Centimetre
-        )
-
-        private fun Length.visibilityToSystem(system: MeasurementSystem) = convertTo(
-            if (system == MeasurementSystem.Imperial) LengthUnit.Mile
-            else LengthUnit.Kilometre
-        )
-
-        private fun Pressure.toSystem(system: MeasurementSystem) = convertTo(
-            if (system == MeasurementSystem.Imperial) PressureUnit.InchOfMercury
-            else PressureUnit.Millibar
-        )
-
-        private fun Speed.toSystem(system: MeasurementSystem) = convertTo(
-            if (system == MeasurementSystem.Imperial) SpeedUnit.MilePerHour
-            else SpeedUnit.MetrePerSecond
+            minimumTemperature = days.minOf { it.minimumTemperature },
+            maximumTemperature = days.maxOf { it.maximumTemperature }
         )
     }
 }

@@ -10,7 +10,7 @@ class Speed internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
-    internal fun convertTo(targetUnit: SpeedUnit): Speed = Speed(valueIn(targetUnit), targetUnit)
+    internal fun convertTo(unit: SpeedUnit): Speed = Speed(valueIn(unit), unit)
 
     val beaufortNumber: Int = valueIn(SpeedUnit.MilePerHour).let { milesPerHour ->
         when {
@@ -30,9 +30,9 @@ class Speed internal constructor(
         }
     }
 
-    private fun valueIn(targetUnit: SpeedUnit): Double =
-        if (targetUnit == unit) value
-        else value * unit.metresPerSecond / targetUnit.metresPerSecond
+    private fun valueIn(unit: SpeedUnit): Double =
+        if (unit == unit) value
+        else value * unit.metresPerSecond / unit.metresPerSecond
 
     private fun throwInvalidSpeed(): Nothing =
         throw IllegalStateException("Speed must be >= 0 && <= c, was ${toString()}.")

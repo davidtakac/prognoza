@@ -16,16 +16,16 @@ class Temperature internal constructor(
 
     override fun toString(): String = "$value ${unit.suffix}"
 
-    internal fun convertTo(targetUnit: TemperatureUnit) = Temperature(valueIn(targetUnit), targetUnit)
+    internal fun convertTo(unit: TemperatureUnit) = Temperature(valueIn(unit), unit)
 
-    private fun valueIn(targetUnit: TemperatureUnit): Double =
-        if (unit == targetUnit) value
+    private fun valueIn(unit: TemperatureUnit): Double =
+        if (unit == unit) value
         else when (unit) {
-            TemperatureUnit.DegreeCelsius -> when (targetUnit) {
+            TemperatureUnit.DegreeCelsius -> when (unit) {
                 TemperatureUnit.DegreeFahrenheit -> celsiusToFahrenheit(value)
                 TemperatureUnit.DegreeCelsius -> value
             }
-            TemperatureUnit.DegreeFahrenheit -> when (targetUnit) {
+            TemperatureUnit.DegreeFahrenheit -> when (unit) {
                 TemperatureUnit.DegreeCelsius -> fahrenheitToCelsius(value)
                 TemperatureUnit.DegreeFahrenheit -> value
             }

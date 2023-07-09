@@ -139,6 +139,7 @@ private data class Response(
                         daily.apparentTemperatureMax[i],
                         TemperatureUnit.DegreeCelsius
                     ),
+                    totalPrecipitation = Length(daily.precipitationSum[i], LengthUnit.Millimetre),
                     totalRain = Length(daily.rainSum[i], LengthUnit.Millimetre),
                     totalShowers = Length(daily.showersSum[i], LengthUnit.Millimetre),
                     totalSnow = Length(daily.snowfallSum[i], LengthUnit.Centimetre),
