@@ -102,8 +102,7 @@ class OverviewViewModel @Inject constructor(
                 unixSecond = day.unixSecond,
                 timeZone = overview.timeZone
               ),
-              pop = day.maximumPop.takeUnless { it == 0 }
-                ?.let(TextResource::fromPercentage),
+              pop = day.maximumPop.takeUnless { it == 0 }?.let(TextResource::fromPercentage),
               weatherIcon = wmoCodeToWeatherIcon(
                 wmoCode = day.representativeWmoCode,
                 isDay = day.representativeWmoCodeIsDay

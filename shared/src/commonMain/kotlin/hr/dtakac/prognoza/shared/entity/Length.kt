@@ -2,13 +2,11 @@ package hr.dtakac.prognoza.shared.entity
 
 class Length internal constructor(
   val value: Double,
-  val unit: LengthUnit
-) {
+  val unit: LengthUnit = LengthUnit.Metre
+) : Comparable<Length> {
   init {
     if (value < 0) throwInvalidLength()
   }
-
-  override fun toString(): String = "$value ${unit.suffix}"
 
   operator fun plus(other: Length): Length {
     val newUnit = LengthUnit.Metre
@@ -17,6 +15,10 @@ class Length internal constructor(
       unit = newUnit
     )
   }
+
+  override fun compareTo(other: Length): Int = value.compareTo(other.convertTo(unit).value)
+
+  override fun toString(): String = "$value ${unit.suffix}"
 
   // From ChatGPT 3.5 for the prompt
   // "Can you map meteorological visibility in kilometres to qualitative measurements?"
@@ -39,6 +41,10 @@ class Length internal constructor(
 
   private fun throwInvalidLength(): Nothing =
     throw IllegalStateException("Length must be positive, was ${toString()}.")
+
+  companion object {
+    val Zero get() = Length(0.0)
+  }
 }
 
 enum class LengthUnit(

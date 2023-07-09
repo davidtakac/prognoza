@@ -7,16 +7,19 @@ class Overview internal constructor(
   val now: OverviewNow,
   val hours: List<OverviewHour>,
   val days: OverviewDays,
+  val precipitation: OverviewPrecipitation
 ) {
   companion object {
     fun build(forecast: Forecast): Overview? {
-      val hours = forecast.futureHours.take(24).takeIf { it.isNotEmpty() } ?: return null
-      val days = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
+      val last24Hours = forecast.pastHours.take(24)
+      val next24Hours = forecast.futureHours.take(24).takeIf { it.isNotEmpty() } ?: return null
+      val futureDays = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
       return Overview(
         timeZone = forecast.timeZone,
-        now = buildNow(now = hours[0], today = days[0]),
-        hours = buildHours(hours = hours, days = days),
-        days = buildDays(days = days),
+        now = buildNow(now = next24Hours[0], today = futureDays[0]),
+        hours = buildHours(hours = next24Hours, days = futureDays),
+        days = buildDays(days = futureDays),
+        precipitation = buildPrecipitation(lastPeriodHours = last24Hours, futureDays = futureDays)
       )
     }
 
@@ -27,18 +30,7 @@ class Overview internal constructor(
       maximumTemperature = today.maximumTemperature,
       feelsLike = now.feelsLike,
       wmoCode = now.wmoCode,
-      isDay = now.isDay,
-      totalPrecipitation = now.totalPrecipitation,
-      snowFall = now.snow,
-      rainFall = (now.rain + now.showers),
-      pressure = now.pressureAtSeaLevel,
-      uvIndex = now.uvIndex,
-      wind = now.wind,
-      windDirection = now.windDirection,
-      gust = now.gust,
-      humidity = now.relativeHumidity,
-      dewPoint = now.dewPoint,
-      visibility = now.visibility
+      isDay = now.isDay
     )
 
     private fun buildHours(hours: List<Hour>, days: List<Day>) = buildList<OverviewHour> {
@@ -83,6 +75,35 @@ class Overview internal constructor(
       minimumTemperature = days.minOf { it.minimumTemperature },
       maximumTemperature = days.maxOf { it.maximumTemperature }
     )
+
+    private fun buildPrecipitation(lastPeriodHours: List<Hour>, futureDays: List<Day>): OverviewPrecipitation {
+      var nextExpectedRainStartUnixSecond: Long? = null
+      var nextExpectedRain: Length? = null
+      futureDays.firstOrNull { it.totalRain + it.totalShowers > Length.Zero }?.let { rainyDay ->
+        nextExpectedRainStartUnixSecond = rainyDay.hours.firstOrNull { it.rain + it.showers > Length.Zero }?.startUnixSecond
+        nextExpectedRain = (rainyDay.totalRain + rainyDay.totalShowers).takeIf { it > Length.Zero }?.convertTo(rainyDay.totalRain.unit)
+      }
+
+      var nextExpectedSnowStartUnixSecond: Long? = null
+      var nextExpectedSnow: Length? = null
+      futureDays.firstOrNull { it.totalSnow > Length.Zero }?.let { snowyDay ->
+        nextExpectedSnowStartUnixSecond = snowyDay.hours.firstOrNull { it.snow > Length.Zero }?.startUnixSecond
+        nextExpectedSnow = snowyDay.totalSnow.takeIf { it > Length.Zero }?.convertTo(snowyDay.totalSnow.unit)
+      }
+
+      // TODO: figure out why nextExpectedRain can be 0.1mm, but startUnixSecond can be null. Probably because
+      //  the API returns an aggregate that doesn't necessarily correspond to the actual hourly values. To address this,
+      //  you should probably calculate daily values directly from the hours.
+      return OverviewPrecipitation(
+        lastPeriodHourCount = lastPeriodHours.size,
+        lastPeriodRain = lastPeriodHours.fold(Length.Zero) { acc, curr -> acc + curr.rain + curr.showers }.takeIf { it > Length.Zero },
+        lastPeriodSnow = lastPeriodHours.fold(Length.Zero) { acc, curr -> acc + curr.snow }.takeIf { it > Length.Zero },
+        nextExpectedRain = nextExpectedRain,
+        nextExpectedRainStartUnixSecond = nextExpectedRainStartUnixSecond,
+        nextExpectedSnow = nextExpectedSnow,
+        nextExpectedSnowStartUnixSecond = nextExpectedSnowStartUnixSecond
+      )
+    }
   }
 }
 
@@ -94,17 +115,6 @@ class OverviewNow internal constructor(
   val feelsLike: Temperature,
   val wmoCode: Int,
   val isDay: Boolean,
-  val totalPrecipitation: Length,
-  val snowFall: Length,
-  val rainFall: Length,
-  val pressure: Pressure,
-  val uvIndex: UvIndex,
-  val wind: Speed,
-  val gust: Speed,
-  val windDirection: Angle,
-  val humidity: Int,
-  val dewPoint: Temperature,
-  val visibility: Length
 )
 
 sealed interface OverviewHour {
@@ -136,4 +146,14 @@ class OverviewDay internal constructor(
   val minimumTemperature: Temperature,
   val maximumTemperature: Temperature,
   val maximumPop: Int
+)
+
+class OverviewPrecipitation internal constructor(
+  val lastPeriodHourCount: Int,
+  val lastPeriodRain: Length?,
+  val lastPeriodSnow: Length?,
+  val nextExpectedRain: Length?,
+  val nextExpectedRainStartUnixSecond: Long?,
+  val nextExpectedSnow: Length?,
+  val nextExpectedSnowStartUnixSecond: Long?
 )

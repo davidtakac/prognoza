@@ -6,6 +6,11 @@ class Forecast internal constructor(
   val timeZone: TimeZone,
   val days: List<Day>
 ) {
+  val hours: List<Hour> by lazy { days.flatMap { it.hours } }
+
+  /**
+   * All future days including today.
+   */
   val futureDays: List<Day>
     get() = days.filter {
       val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
@@ -13,8 +18,16 @@ class Forecast internal constructor(
       dayDate >= nowDate
     }
 
+  /**
+   * All past hours including the current one.
+   */
+  val pastHours: List<Hour> = hours - futureHours.drop(1).toSet()
+
+  /**
+   * All future hours including the current one.
+   */
   val futureHours: List<Hour>
-    get() = days.flatMap { it.hours }.filter {
+    get() = hours.filter {
       val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone)
       val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
       val nowDateTimeNormalized = LocalDateTime(
