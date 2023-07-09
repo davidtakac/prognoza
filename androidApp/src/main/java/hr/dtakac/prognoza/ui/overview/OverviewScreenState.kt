@@ -46,5 +46,6 @@ data class OverviewDayState(
   val minimumTemperature: TextResource,
   val maximumTemperature: TextResource,
   val temperatureBarStartFraction: Float,
-  val temperatureBarEndFraction: Float
+  val temperatureBarEndFraction: Float,
+  val currentTemperatureCenterFraction: Float?
 )

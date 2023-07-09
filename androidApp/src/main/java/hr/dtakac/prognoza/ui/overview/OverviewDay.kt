@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +18,8 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
+private val temperatureBarHeight = 10.dp
+
 @Composable
 fun OverviewDay(
   day: String,
@@ -26,6 +29,7 @@ fun OverviewDay(
   maximumTemperature: String,
   temperatureBarStartFraction: Float,
   temperatureBarEndFraction: Float,
+  currentTemperatureCenterFraction: Float?,
   modifier: Modifier = Modifier,
   shape: Shape = RoundedCornerShape(4.dp),
 ) {
@@ -66,26 +70,48 @@ fun OverviewDay(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
       ) {
         Text(text = minimumTemperature, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Row(
+        Box(
           modifier = Modifier
             .weight(1f)
-            .border(
-              border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant),
-              shape = RoundedCornerShape(percent = 100)
-            )
-            .height(10.dp),
+            .height(temperatureBarHeight)
         ) {
-          Spacer(Modifier.fillMaxWidth(fraction = temperatureBarStartFraction))
-          Spacer(
-            Modifier
-              .weight(1f)
-              .fillMaxHeight()
-              .background(
-                color = MaterialTheme.colorScheme.onSurface,
+          Row(
+            modifier = Modifier
+              .border(
+                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant),
                 shape = RoundedCornerShape(percent = 100)
               )
-          )
-          Spacer(Modifier.fillMaxWidth(fraction = temperatureBarEndFraction))
+              .fillMaxSize()
+          ) {
+            Spacer(Modifier.fillMaxWidth(fraction = temperatureBarStartFraction))
+            Spacer(
+              Modifier
+                .weight(1f)
+                .fillMaxHeight()
+                .background(
+                  color = MaterialTheme.colorScheme.onSurface,
+                  shape = RoundedCornerShape(percent = 100)
+                )
+            )
+            Spacer(Modifier.fillMaxWidth(fraction = temperatureBarEndFraction))
+          }
+          currentTemperatureCenterFraction?.let {
+            Row(modifier = Modifier.fillMaxSize()) {
+              Spacer(Modifier.fillMaxWidth(fraction = it))
+              Box(
+                modifier = Modifier
+                  .size(temperatureBarHeight)
+                  .border(
+                    width = 2.dp,
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.inverseOnSurface
+                  )
+                  // Accounts for the fact that the current temperature fraction refers to
+                  // the center of the circle, not the start
+                  .offset(x = -temperatureBarHeight / 2)
+              ) {}
+            }
+          }
         }
         Text(text = maximumTemperature)
       }

@@ -168,6 +168,7 @@ fun OverviewScreen(
             maximumTemperature = day.maximumTemperature.asString(),
             temperatureBarStartFraction = day.temperatureBarStartFraction,
             temperatureBarEndFraction = day.temperatureBarEndFraction,
+            currentTemperatureCenterFraction = day.currentTemperatureCenterFraction,
             shape = RoundedCornerShape(
               topStart = if (idx == 0) roundedCornerRadius else 4.dp,
               topEnd = if (idx == 0) roundedCornerRadius else 4.dp,

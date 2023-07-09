@@ -112,6 +112,7 @@ class OverviewViewModel @Inject constructor(
               maximumTemperature = TextResource.fromTemperature(day.maximumTemperature),
               temperatureBarStartFraction = 1f - (overview.days.minimumTemperature.value / day.minimumTemperature.value).toFloat(),
               temperatureBarEndFraction = 1f - (day.maximumTemperature.value / overview.days.maximumTemperature.value).toFloat(),
+              currentTemperatureCenterFraction = if (idx == 0) (overview.now.temperature.value / overview.days.maximumTemperature.value).toFloat() else null
             )
           },
         ),
