@@ -9,14 +9,14 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun SettingsSectionHeader(
-    text: String,
-    modifier: Modifier = Modifier
+  text: String,
+  modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
-        Text(
-            text = text,
-            style = PrognozaTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.secondary
-        )
-    }
+  Column(modifier = modifier) {
+    Text(
+      text = text,
+      style = PrognozaTheme.typography.titleSmall,
+      color = MaterialTheme.colorScheme.secondary
+    )
+  }
 }

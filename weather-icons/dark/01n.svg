@@ -1,57 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg
-   width="100"
-   height="100"
-   fill="none"
-   viewBox="0 0 100 100"
-   version="1.1"
-   id="svg11"
-   sodipodi:docname="01n.svg"
-   inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:svg="http://www.w3.org/2000/svg">
-  <sodipodi:namedview
-     id="namedview13"
-     pagecolor="#ffffff"
-     bordercolor="#000000"
-     borderopacity="0.25"
-     inkscape:showpageshadow="2"
-     inkscape:pageopacity="0.0"
-     inkscape:pagecheckerboard="0"
-     inkscape:deskcolor="#d1d1d1"
-     showgrid="false"
-     inkscape:zoom="10.27"
-     inkscape:cx="50.97371"
-     inkscape:cy="52.48296"
-     inkscape:window-width="1274"
-     inkscape:window-height="1193"
-     inkscape:window-x="26"
-     inkscape:window-y="23"
-     inkscape:window-maximized="0"
-     inkscape:current-layer="svg11" />
-  <path
-     fill="url(#01n__01n__paint0_linear_149_1381)"
-     d="M51.4 21c2.4 4.2 3.9 9.1 3.9 14.3 0 15.8-12.8 28.6-28.6 28.6-1.3 0-2.5-.1-3.7-.3C28 72.2 37.2 78 47.7 78c15.8 0 28.6-12.8 28.6-28.6 0-14.6-10.8-26.6-24.9-28.4z"
-     id="path2"
-     style="fill:#e9d9b1;fill-opacity:1" />
-  <defs
-     id="defs9">
-    <linearGradient
-       id="01n__01n__paint0_linear_149_1381"
-       x1="34.425"
-       x2="71.181"
-       y1="75.492"
-       y2="31.689"
-       gradientUnits="userSpaceOnUse">
-      <stop
-         stop-color="#686E73"
-         id="stop4" />
-      <stop
-         offset=".989"
-         stop-color="#6A7075"
-         id="stop6" />
-    </linearGradient>
-  </defs>
+<svg xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" fill="none" height="100" id="svg11" version="1.1"
+    viewBox="0 0 100 100" width="100"
+    xmlns="http://www.w3.org/2000/svg"
+    inkscape:version="1.2.2 (b0a8486541, 2022-12-01)"
+    sodipodi:docname="01n.svg">
+    <sodipodi:namedview bordercolor="#000000" borderopacity="0.25" id="namedview13"
+        pagecolor="#ffffff" showgrid="false" inkscape:current-layer="svg11"
+        inkscape:cx="50.97371" inkscape:cy="52.48296" inkscape:deskcolor="#d1d1d1"
+        inkscape:pagecheckerboard="0" inkscape:pageopacity="0.0" inkscape:showpageshadow="2"
+        inkscape:window-height="1193" inkscape:window-maximized="0" inkscape:window-width="1274"
+        inkscape:window-x="26" inkscape:window-y="23" inkscape:zoom="10.27" />
+    <path style="fill:#e9d9b1;fill-opacity:1"
+        d="M51.4 21c2.4 4.2 3.9 9.1 3.9 14.3 0 15.8-12.8 28.6-28.6 28.6-1.3 0-2.5-.1-3.7-.3C28 72.2 37.2 78 47.7 78c15.8 0 28.6-12.8 28.6-28.6 0-14.6-10.8-26.6-24.9-28.4z"
+        fill="url(#01n__01n__paint0_linear_149_1381)" id="path2" />
+    <defs id="defs9">
+        <linearGradient gradientUnits="userSpaceOnUse" id="01n__01n__paint0_linear_149_1381" x1="34.425" x2="71.181"
+            y1="75.492" y2="31.689">
+            <stop id="stop4" stop-color="#686E73" />
+            <stop id="stop6" offset=".989" stop-color="#6A7075" />
+        </linearGradient>
+    </defs>
 </svg>

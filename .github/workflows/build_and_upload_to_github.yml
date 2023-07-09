@@ -11,33 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout the code
-      uses: actions/checkout@v2
-    - name: Assemble release
-      run: ./gradlew assembleRelease
-    - name: Sign release
-      uses: r0adkll/sign-android-release@v1
-      id: sign_release
-      with:
-        releaseDirectory: androidApp/build/outputs/apk/release
-        signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
-        alias: ${{ secrets.KEYSTORE_ALIAS }}
-        keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
-        keyPassword: ${{ secrets.KEY_PASSWORD }}
-    - name: Evaluate version name
-      run: |
-        echo 'VERSION_NAME<<EOF' >> $GITHUB_ENV
-        grep versionName androidApp/build.gradle.kts | cut -d \" -f2 | cut -d \" -f1 >> $GITHUB_ENV
-        echo 'EOF' >> $GITHUB_ENV
-    - name: Evaluate changelog
-      run: |
-        echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
-        sed -n '/## \[${{ env.VERSION_NAME }}.*/,/## \[/p' androidApp/CHANGELOG.md | head -n -2 >> $GITHUB_ENV
-        echo 'EOF' >> $GITHUB_ENV
-    - name: Upload APK to release
-      uses: svenstaro/upload-release-action@v2
-      with:
-        file: ${{ steps.sign_release.outputs.signedReleaseFile }}
-        tag: ${{ env.VERSION_NAME }}
-        body: ${{ env.CHANGELOG }}
-        asset_name: prognoza-$tag.apk
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      - name: Assemble release
+        run: ./gradlew assembleRelease
+      - name: Sign release
+        uses: r0adkll/sign-android-release@v1
+        id: sign_release
+        with:
+          releaseDirectory: androidApp/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEYSTORE_BASE64 }}
+          alias: ${{ secrets.KEYSTORE_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Evaluate version name
+        run: |
+          echo 'VERSION_NAME<<EOF' >> $GITHUB_ENV
+          grep versionName androidApp/build.gradle.kts | cut -d \" -f2 | cut -d \" -f1 >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Evaluate changelog
+        run: |
+          echo 'CHANGELOG<<EOF' >> $GITHUB_ENV
+          sed -n '/## \[${{ env.VERSION_NAME }}.*/,/## \[/p' androidApp/CHANGELOG.md | head -n -2 >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Upload APK to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          file: ${{ steps.sign_release.outputs.signedReleaseFile }}
+          tag: ${{ env.VERSION_NAME }}
+          body: ${{ env.CHANGELOG }}
+          asset_name: prognoza-$tag.apk

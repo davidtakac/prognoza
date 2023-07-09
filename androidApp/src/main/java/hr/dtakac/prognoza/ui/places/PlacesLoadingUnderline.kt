@@ -11,24 +11,24 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PlacesLoadingUnderline(
-    isLoading: Boolean,
-    modifier: Modifier = Modifier
+  isLoading: Boolean,
+  modifier: Modifier = Modifier
 ) {
-    Crossfade(targetState = isLoading, modifier = modifier) {
-        if (it) {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-            )
-        } else {
-            LinearProgressIndicator(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp),
-                color = LocalContentColor.current,
-                progress = 1f
-            )
-        }
+  Crossfade(targetState = isLoading, modifier = modifier) {
+    if (it) {
+      LinearProgressIndicator(
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(1.dp)
+      )
+    } else {
+      LinearProgressIndicator(
+        modifier = Modifier
+          .fillMaxWidth()
+          .height(1.dp),
+        color = LocalContentColor.current,
+        progress = 1f
+      )
     }
+  }
 }

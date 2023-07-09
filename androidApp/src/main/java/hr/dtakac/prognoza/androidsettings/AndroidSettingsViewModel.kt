@@ -8,17 +8,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AndroidSettingsViewModel @Inject constructor(
-    private val androidSettingsRepository: AndroidSettingsRepository
-): ViewModel() {
-    private val _state = mutableStateOf(createState())
-    val state: State<AndroidSettingsState> get() = _state
+  private val androidSettingsRepository: AndroidSettingsRepository
+) : ViewModel() {
+  private val _state = mutableStateOf(createState())
+  val state: State<AndroidSettingsState> get() = _state
 
-    fun getState() {
-        _state.value = createState()
-    }
+  fun getState() {
+    _state.value = createState()
+  }
 
-    private fun createState() = AndroidSettingsState(
-        uiMode = androidSettingsRepository.getUiMode(),
-        moodMode = androidSettingsRepository.getMoodMode()
-    )
+  private fun createState() = AndroidSettingsState(
+    uiMode = androidSettingsRepository.getUiMode(),
+    moodMode = androidSettingsRepository.getMoodMode()
+  )
 }

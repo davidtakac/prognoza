@@ -1,7 +1,8 @@
 package hr.dtakac.prognoza
 
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import hr.dtakac.prognoza.ui.common.ContentLoadingIndicatorHost
@@ -9,116 +10,116 @@ import org.junit.Rule
 import org.junit.Test
 
 class ContentLoadingIndicatorHostTest {
-    @get:Rule
-    val composeTestRule = createComposeRule().apply { mainClock.autoAdvance = false }
+  @get:Rule
+  val composeTestRule = createComposeRule().apply { mainClock.autoAdvance = false }
 
-    private val showDelay = 500L
-    private val minShowTime = 500L
-    private val tolerance = 20L
-    private val loaderText = "loader"
+  private val showDelay = 500L
+  private val minShowTime = 500L
+  private val tolerance = 20L
+  private val loaderText = "loader"
 
-    @Test
-    fun whenNoTimeElapsedAndStateIsTrue_loaderInvisible() {
-        composeTestRule.setContent {
-            TestHost(true)
-        }
-        composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+  @Test
+  fun whenNoTimeElapsedAndStateIsTrue_loaderInvisible() {
+    composeTestRule.setContent {
+      TestHost(true)
+    }
+    composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+  }
+
+  @Test
+  fun whenElapsedTimeLessThanShowDelay_loaderInvisible() {
+    composeTestRule.setContent {
+      TestHost(true)
+    }
+    composeTestRule.mainClock.advanceTimeBy(showDelay - tolerance)
+    composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+  }
+
+  @Test
+  fun whenElapsedTimeGreaterThanShowDelay_loaderVisible() {
+    composeTestRule.setContent {
+      TestHost(true)
+    }
+    composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
+    composeTestRule.onNodeWithText(loaderText).assertExists()
+  }
+
+  @Test
+  fun whenElapsedTimeBetweenShowDelayAndMinShowTime_loaderVisible() {
+    val isLoading = mutableStateOf(true)
+    composeTestRule.setContent {
+      TestHost(isLoading.value)
     }
 
-    @Test
-    fun whenElapsedTimeLessThanShowDelay_loaderInvisible() {
-        composeTestRule.setContent {
-            TestHost(true)
-        }
-        composeTestRule.mainClock.advanceTimeBy(showDelay - tolerance)
-        composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+    composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
+    isLoading.value = false
+
+    // Even though isLoading is false, the minShowTime did not yet elapse, so the loader
+    // must still remain visible
+    composeTestRule.mainClock.advanceTimeBy(tolerance)
+    composeTestRule.onNodeWithText(loaderText).assertExists()
+  }
+
+  @Test
+  fun whenElapsedTimeGreaterThanShowDelayPlusMinShowTime_loaderInvisible() {
+    val isLoading = mutableStateOf(true)
+    composeTestRule.setContent {
+      TestHost(isLoading.value)
     }
 
-    @Test
-    fun whenElapsedTimeGreaterThanShowDelay_loaderVisible() {
-        composeTestRule.setContent {
-            TestHost(true)
-        }
-        composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
-        composeTestRule.onNodeWithText(loaderText).assertExists()
+    composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
+    isLoading.value = false
+
+    composeTestRule.mainClock.advanceTimeBy(minShowTime + tolerance)
+    composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+  }
+
+  @Test
+  fun whenShowAndHideCalledMultipleTimesEndingWithHide_loaderInvisible() {
+    val isLoading = mutableStateOf(true)
+    composeTestRule.setContent {
+      TestHost(isLoading.value)
     }
 
-    @Test
-    fun whenElapsedTimeBetweenShowDelayAndMinShowTime_loaderVisible() {
-        val isLoading = mutableStateOf(true)
-        composeTestRule.setContent {
-            TestHost(isLoading.value)
-        }
-
-        composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
-        isLoading.value = false
-
-        // Even though isLoading is false, the minShowTime did not yet elapse, so the loader
-        // must still remain visible
-        composeTestRule.mainClock.advanceTimeBy(tolerance)
-        composeTestRule.onNodeWithText(loaderText).assertExists()
+    repeat(6) {
+      // last idx is 5. 5 mod 2 = 1, so this sequence ends with hide
+      isLoading.value = it % 2 == 0
+      composeTestRule.mainClock.advanceTimeByFrame()
     }
 
-    @Test
-    fun whenElapsedTimeGreaterThanShowDelayPlusMinShowTime_loaderInvisible() {
-        val isLoading = mutableStateOf(true)
-        composeTestRule.setContent {
-            TestHost(isLoading.value)
-        }
+    composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
+    composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+  }
 
-        composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
-        isLoading.value = false
-
-        composeTestRule.mainClock.advanceTimeBy(minShowTime + tolerance)
-        composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+  @Test
+  fun whenShowAndHideCalledMultipleTimesEndingWithShow_loaderVisible() {
+    val isLoading = mutableStateOf(true)
+    composeTestRule.setContent {
+      TestHost(isLoading.value)
     }
 
-    @Test
-    fun whenShowAndHideCalledMultipleTimesEndingWithHide_loaderInvisible() {
-        val isLoading = mutableStateOf(true)
-        composeTestRule.setContent {
-            TestHost(isLoading.value)
-        }
-
-        repeat(6) {
-            // last idx is 5. 5 mod 2 = 1, so this sequence ends with hide
-            isLoading.value = it % 2 == 0
-            composeTestRule.mainClock.advanceTimeByFrame()
-        }
-
-        composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
-        composeTestRule.onNodeWithText(loaderText).assertDoesNotExist()
+    repeat(7) {
+      // last idx is 6. 6 mod 2 = 0, so this sequence ends with show
+      isLoading.value = it % 2 == 0
+      composeTestRule.mainClock.advanceTimeByFrame()
     }
 
-    @Test
-    fun whenShowAndHideCalledMultipleTimesEndingWithShow_loaderVisible() {
-        val isLoading = mutableStateOf(true)
-        composeTestRule.setContent {
-            TestHost(isLoading.value)
-        }
+    composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
+    composeTestRule.onNodeWithText(loaderText).assertExists()
+  }
 
-        repeat(7) {
-            // last idx is 6. 6 mod 2 = 0, so this sequence ends with show
-            isLoading.value = it % 2 == 0
-            composeTestRule.mainClock.advanceTimeByFrame()
-        }
-
-        composeTestRule.mainClock.advanceTimeBy(showDelay + tolerance)
-        composeTestRule.onNodeWithText(loaderText).assertExists()
+  @Composable
+  private fun TestHost(
+    isLoading: Boolean
+  ) {
+    ContentLoadingIndicatorHost(
+      isLoading = isLoading,
+      showDelay = showDelay,
+      minShowTime = minShowTime
+    ) { isVisible ->
+      if (isVisible) {
+        Text(loaderText)
+      }
     }
-
-    @Composable
-    private fun TestHost(
-        isLoading: Boolean
-    ) {
-        ContentLoadingIndicatorHost(
-            isLoading = isLoading,
-            showDelay = showDelay,
-            minShowTime = minShowTime
-        ) { isVisible ->
-            if (isVisible) {
-                Text(loaderText)
-            }
-        }
-    }
+  }
 }

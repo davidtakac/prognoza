@@ -1,5 +1,5 @@
 package hr.dtakac.prognoza.androidsettings
 
 enum class UiMode {
-    Dark, Light, FollowSystem
+  Dark, Light, FollowSystem
 }

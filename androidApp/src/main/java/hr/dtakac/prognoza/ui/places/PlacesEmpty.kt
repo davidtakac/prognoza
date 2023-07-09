@@ -8,13 +8,13 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun PlacesEmpty(
-    message: String,
-    modifier: Modifier = Modifier
+  message: String,
+  modifier: Modifier = Modifier
 ) {
-    Text(
-        text = message,
-        style = PrognozaTheme.typography.subtitleMedium,
-        color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
-        modifier = modifier
-    )
+  Text(
+    text = message,
+    style = PrognozaTheme.typography.subtitleMedium,
+    color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium),
+    modifier = modifier
+  )
 }

@@ -15,7 +15,11 @@ fun OverviewDetailsRow(
   modifier: Modifier = Modifier
 ) {
   Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-    Box(modifier = Modifier.weight(1f).aspectRatio(1f)) { first() }
-    Box(modifier = Modifier.weight(1f).aspectRatio(1f)) { second() }
+    Box(modifier = Modifier
+      .weight(1f)
+      .aspectRatio(1f)) { first() }
+    Box(modifier = Modifier
+      .weight(1f)
+      .aspectRatio(1f)) { second() }
   }
 }

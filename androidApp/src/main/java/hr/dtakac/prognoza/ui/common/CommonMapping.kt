@@ -3,35 +3,35 @@ package hr.dtakac.prognoza.ui.common
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.shared.entity.*
+import hr.dtakac.prognoza.shared.entity.CardinalDirection
 
 @StringRes
 fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
-    CardinalDirection.N -> R.string.cardinal_n
-    CardinalDirection.NE -> R.string.cardinal_ne
-    CardinalDirection.E -> R.string.cardinal_e
-    CardinalDirection.SE -> R.string.cardinal_se
-    CardinalDirection.S -> R.string.cardinal_s
-    CardinalDirection.SW -> R.string.cardinal_sw
-    CardinalDirection.W -> R.string.cardinal_w
-    else -> R.string.cardinal_nw
+  CardinalDirection.N -> R.string.cardinal_n
+  CardinalDirection.NE -> R.string.cardinal_ne
+  CardinalDirection.E -> R.string.cardinal_e
+  CardinalDirection.SE -> R.string.cardinal_se
+  CardinalDirection.S -> R.string.cardinal_s
+  CardinalDirection.SW -> R.string.cardinal_sw
+  CardinalDirection.W -> R.string.cardinal_w
+  else -> R.string.cardinal_nw
 }
 
 @StringRes
 fun Int.toBeaufortStringId(): Int = when (this) {
-    0 -> R.string.beaufort_label_0
-    1 -> R.string.beaufort_label_1
-    2 -> R.string.beaufort_label_2
-    3 -> R.string.beaufort_label_3
-    4 -> R.string.beaufort_label_4
-    5 -> R.string.beaufort_label_5
-    6 -> R.string.beaufort_label_6
-    7 -> R.string.beaufort_label_7
-    8 -> R.string.beaufort_label_8
-    9 -> R.string.beaufort_label_9
-    11 -> R.string.beaufort_label_11
-    12 -> R.string.beaufort_label_12
-    else -> R.string.beaufort_label_13
+  0 -> R.string.beaufort_label_0
+  1 -> R.string.beaufort_label_1
+  2 -> R.string.beaufort_label_2
+  3 -> R.string.beaufort_label_3
+  4 -> R.string.beaufort_label_4
+  5 -> R.string.beaufort_label_5
+  6 -> R.string.beaufort_label_6
+  7 -> R.string.beaufort_label_7
+  8 -> R.string.beaufort_label_8
+  9 -> R.string.beaufort_label_9
+  11 -> R.string.beaufort_label_11
+  12 -> R.string.beaufort_label_12
+  else -> R.string.beaufort_label_13
 }
 
 /*
@@ -294,35 +294,35 @@ fun Description.asWeatherIconResId(
 // TODO: swap with new icons
 @DrawableRes
 fun wmoCodeToWeatherIcon(wmoCode: Int, isDay: Boolean) =
-    when (wmoCode) {
-        0 -> if (isDay) R.drawable.dark_01d else R.drawable.dark_01n
-        1 -> if (isDay) R.drawable.dark_02d else R.drawable.dark_02n
-        2 -> if (isDay) R.drawable.dark_03d else R.drawable.dark_03n
-        3 -> R.drawable.dark_04
-        45, 48 -> R.drawable.dark_15
-        51, 53, 55, 56, 57 -> R.drawable.dark_46
-        61, 63, 65, 66, 67 -> R.drawable.dark_09
-        71, 73, 75, 77 -> R.drawable.dark_13
-        80, 81, 82 -> if (isDay) R.drawable.dark_05d else R.drawable.dark_05n
-        85, 86 -> if (isDay) R.drawable.dark_08d else R.drawable.dark_08n
-        95, 96, 99 -> if (isDay) R.drawable.dark_06d else R.drawable.dark_06n
-        else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
-    }
+  when (wmoCode) {
+    0 -> if (isDay) R.drawable.dark_01d else R.drawable.dark_01n
+    1 -> if (isDay) R.drawable.dark_02d else R.drawable.dark_02n
+    2 -> if (isDay) R.drawable.dark_03d else R.drawable.dark_03n
+    3 -> R.drawable.dark_04
+    45, 48 -> R.drawable.dark_15
+    51, 53, 55, 56, 57 -> R.drawable.dark_46
+    61, 63, 65, 66, 67 -> R.drawable.dark_09
+    71, 73, 75, 77 -> R.drawable.dark_13
+    80, 81, 82 -> if (isDay) R.drawable.dark_05d else R.drawable.dark_05n
+    85, 86 -> if (isDay) R.drawable.dark_08d else R.drawable.dark_08n
+    95, 96, 99 -> if (isDay) R.drawable.dark_06d else R.drawable.dark_06n
+    else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
+  }
 
 // TODO: Create a new string resource for every one of these WMO codes
 @StringRes
 fun wmoCodeToWeatherDescription(wmoCode: Int) =
-    when (wmoCode) {
-        0 -> R.string.description_clear_sky
-        1 -> R.string.description_fair
-        2 -> R.string.description_partly_cloudy
-        3 -> R.string.description_cloudy
-        45, 48 -> R.string.description_fog
-        51, 53, 55, 56, 57 -> R.string.description_light_rain
-        61, 63, 65, 66, 67 -> R.string.description_rain
-        71, 73, 75, 77 -> R.string.description_snow
-        80, 81, 82 -> R.string.description_rain_showers
-        85, 86 -> R.string.description_snow_showers
-        95, 96, 99 -> R.string.description_rain_showers_and_thunder
-        else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
-    }
+  when (wmoCode) {
+    0 -> R.string.description_clear_sky
+    1 -> R.string.description_fair
+    2 -> R.string.description_partly_cloudy
+    3 -> R.string.description_cloudy
+    45, 48 -> R.string.description_fog
+    51, 53, 55, 56, 57 -> R.string.description_light_rain
+    61, 63, 65, 66, 67 -> R.string.description_rain
+    71, 73, 75, 77 -> R.string.description_snow
+    80, 81, 82 -> R.string.description_rain_showers
+    85, 86 -> R.string.description_snow_showers
+    95, 96, 99 -> R.string.description_rain_showers_and_thunder
+    else -> throw java.lang.IllegalStateException("Unrecognized WMO code: $wmoCode.")
+  }

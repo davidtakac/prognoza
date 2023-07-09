@@ -14,57 +14,57 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.unit.dp
-import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.presentation.places.PlaceUi
+import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlacesList(
-    places: List<PlaceUi>,
-    provider: TextResource?,
-    onPlaceClick: (Int) -> Unit,
-    onPlaceLongClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
+  places: List<PlaceUi>,
+  provider: TextResource?,
+  onPlaceClick: (Int) -> Unit,
+  onPlaceLongClick: (Int) -> Unit,
+  modifier: Modifier = Modifier
 ) {
-    val hapticFeedback = LocalHapticFeedback.current
-    LazyColumn(
-        modifier = modifier,
-        contentPadding = PaddingValues(top = 12.dp, bottom = 24.dp)
-    ) {
-        itemsIndexed(places) { idx, placeUi ->
-            PlaceItem(
-                name = placeUi.name.asString(),
-                details = placeUi.details.asString(),
-                isSelected = placeUi.isSelected,
-                modifier = Modifier
-                    .combinedClickable(
-                        onClick = { onPlaceClick(idx) },
-                        onLongClick = if (placeUi.isDeletable) {
-                            {
-                                onPlaceLongClick(idx)
-                                hapticFeedback.performHapticFeedback(
-                                    hapticFeedbackType = HapticFeedbackType.LongPress
-                                )
-                            }
-                        } else null
-                    )
-                    .fillMaxWidth()
-                    .padding(
-                        vertical = 12.dp,
-                        horizontal = 24.dp
-                    )
-            )
-        }
-        provider?.let {
-            item(key = "provider") {
-                Text(
-                    text = it.asString(),
-                    modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp),
-                    style = PrognozaTheme.typography.body,
-                    color = MaterialTheme.colorScheme.secondary
+  val hapticFeedback = LocalHapticFeedback.current
+  LazyColumn(
+    modifier = modifier,
+    contentPadding = PaddingValues(top = 12.dp, bottom = 24.dp)
+  ) {
+    itemsIndexed(places) { idx, placeUi ->
+      PlaceItem(
+        name = placeUi.name.asString(),
+        details = placeUi.details.asString(),
+        isSelected = placeUi.isSelected,
+        modifier = Modifier
+          .combinedClickable(
+            onClick = { onPlaceClick(idx) },
+            onLongClick = if (placeUi.isDeletable) {
+              {
+                onPlaceLongClick(idx)
+                hapticFeedback.performHapticFeedback(
+                  hapticFeedbackType = HapticFeedbackType.LongPress
                 )
-            }
-        }
+              }
+            } else null
+          )
+          .fillMaxWidth()
+          .padding(
+            vertical = 12.dp,
+            horizontal = 24.dp
+          )
+      )
     }
+    provider?.let {
+      item(key = "provider") {
+        Text(
+          text = it.asString(),
+          modifier = Modifier.padding(start = 24.dp, end = 24.dp, top = 12.dp),
+          style = PrognozaTheme.typography.body,
+          color = MaterialTheme.colorScheme.secondary
+        )
+      }
+    }
+  }
 }

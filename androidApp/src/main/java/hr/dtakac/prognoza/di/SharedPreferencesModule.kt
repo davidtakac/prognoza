@@ -11,8 +11,8 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 class SharedPreferencesModule {
-    @Provides
-    fun provideSharedPreferences(
-        @ApplicationContext context: Context
-    ): SharedPreferences = context.getSharedPreferences("prognoza_prefs", Context.MODE_PRIVATE)
+  @Provides
+  fun provideSharedPreferences(
+    @ApplicationContext context: Context
+  ): SharedPreferences = context.getSharedPreferences("prognoza_prefs", Context.MODE_PRIVATE)
 }

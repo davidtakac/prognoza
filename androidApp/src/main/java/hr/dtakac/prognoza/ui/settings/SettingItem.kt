@@ -15,35 +15,35 @@ import hr.dtakac.prognoza.ui.theme.PrognozaTheme
 
 @Composable
 fun SettingItem(
-    name: String,
-    value: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+  name: String,
+  value: String,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .clickable(onClick = onClick)
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-            .fillMaxWidth()
-    ) {
-        Text(
-            text = name,
-            style = PrognozaTheme.typography.subtitleMedium
-        )
-        Text(
-            text = value,
-            style = PrognozaTheme.typography.body,
-            color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
-        )
-    }
+  Column(
+    modifier = modifier
+      .clickable(onClick = onClick)
+      .padding(horizontal = 24.dp, vertical = 16.dp)
+      .fillMaxWidth()
+  ) {
+    Text(
+      text = name,
+      style = PrognozaTheme.typography.subtitleMedium
+    )
+    Text(
+      text = value,
+      style = PrognozaTheme.typography.body,
+      color = LocalContentColor.current.copy(alpha = PrognozaTheme.alpha.medium)
+    )
+  }
 }
 
 @Preview
 @Composable
 private fun SettingItemPreview() = AppTheme {
-    SettingItem(
-        name = "Temperature unit",
-        value = "Degree Celsius",
-        onClick = {}
-    )
+  SettingItem(
+    name = "Temperature unit",
+    value = "Degree Celsius",
+    onClick = {}
+  )
 }

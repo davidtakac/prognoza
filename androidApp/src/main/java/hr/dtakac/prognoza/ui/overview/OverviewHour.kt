@@ -16,30 +16,30 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun OverviewHour(
-    temperature: String,
-    pop: String?,
-    @DrawableRes weatherIcon: Int,
-    time: String,
-    modifier: Modifier = Modifier
+  temperature: String,
+  pop: String?,
+  @DrawableRes weatherIcon: Int,
+  time: String,
+  modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = temperature, style = MaterialTheme.typography.titleMedium)
-        Text(
-            // Empty pop acts as a placeholder
-            text = pop ?: "",
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(top = 8.dp)
-        )
-        Image(
-            painter = painterResource(id = weatherIcon),
-            contentDescription = null,
-            modifier = Modifier.size(32.dp)
-        )
-        Text(text = time, style = MaterialTheme.typography.bodySmall)
-    }
+  Column(
+    modifier = modifier,
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.SpaceBetween
+  ) {
+    Text(text = temperature, style = MaterialTheme.typography.titleMedium)
+    Text(
+      // Empty pop acts as a placeholder
+      text = pop ?: "",
+      style = MaterialTheme.typography.bodySmall,
+      color = MaterialTheme.colorScheme.onSurfaceVariant,
+      modifier = Modifier.padding(top = 8.dp)
+    )
+    Image(
+      painter = painterResource(id = weatherIcon),
+      contentDescription = null,
+      modifier = Modifier.size(32.dp)
+    )
+    Text(text = time, style = MaterialTheme.typography.bodySmall)
+  }
 }

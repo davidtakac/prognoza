@@ -18,17 +18,22 @@ import hr.dtakac.prognoza.R
 
 @Composable
 fun OverviewSunrise(time: String, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(text = stringResource(id = R.string.forecast_label_sunrise), style = MaterialTheme.typography.titleMedium)
-        Icon(
-            imageVector = Icons.Default.ArrowForward,
-            contentDescription = null,
-            modifier = Modifier.size(32.dp).rotate(-90f)
-        )
-        Text(text = time, style = MaterialTheme.typography.bodySmall)
-    }
+  Column(
+    modifier = modifier,
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.SpaceBetween
+  ) {
+    Text(
+      text = stringResource(id = R.string.forecast_label_sunrise),
+      style = MaterialTheme.typography.titleMedium
+    )
+    Icon(
+      imageVector = Icons.Default.ArrowForward,
+      contentDescription = null,
+      modifier = Modifier
+        .size(32.dp)
+        .rotate(-90f)
+    )
+    Text(text = time, style = MaterialTheme.typography.bodySmall)
+  }
 }

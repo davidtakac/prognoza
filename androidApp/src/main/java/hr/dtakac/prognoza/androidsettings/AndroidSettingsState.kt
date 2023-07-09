@@ -1,6 +1,6 @@
 package hr.dtakac.prognoza.androidsettings
 
 data class AndroidSettingsState(
-    val uiMode: UiMode,
-    val moodMode: MoodMode
+  val uiMode: UiMode,
+  val moodMode: MoodMode
 )

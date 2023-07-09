@@ -5,7 +5,8 @@ import android.content.Intent
 import android.net.Uri
 
 fun openLink(link: String, context: Context) {
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
-    } catch (_: Exception) {}
+  try {
+    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+  } catch (_: Exception) {
+  }
 }

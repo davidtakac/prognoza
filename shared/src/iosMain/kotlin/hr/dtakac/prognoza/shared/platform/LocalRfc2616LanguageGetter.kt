@@ -5,5 +5,5 @@ import platform.Foundation.currentLocale
 import platform.Foundation.languageCode
 
 internal actual class LocalRfc2616LanguageGetter {
-    actual fun get(): String = NSLocale.currentLocale.languageCode
+  actual fun get(): String = NSLocale.currentLocale.languageCode
 }

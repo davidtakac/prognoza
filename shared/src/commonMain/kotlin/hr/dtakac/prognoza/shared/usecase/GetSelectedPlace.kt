@@ -5,11 +5,11 @@ import hr.dtakac.prognoza.shared.data.SettingsRepository
 import hr.dtakac.prognoza.shared.entity.Place
 
 class GetSelectedPlace internal constructor(
-    private val settingsRepository: SettingsRepository,
-    private val placeRepository: PlaceRepository
+  private val settingsRepository: SettingsRepository,
+  private val placeRepository: PlaceRepository
 ) {
-    suspend operator fun invoke(): Place? =
-        settingsRepository.getCoordinates()?.let {
-            placeRepository.getSaved(it)
-        }
+  suspend operator fun invoke(): Place? =
+    settingsRepository.getCoordinates()?.let {
+      placeRepository.getSaved(it)
+    }
 }

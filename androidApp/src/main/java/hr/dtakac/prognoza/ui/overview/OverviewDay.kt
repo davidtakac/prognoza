@@ -19,73 +19,76 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun OverviewDay(
-    day: String,
-    pop: String?,
-    @DrawableRes weatherIcon: Int,
-    minimumTemperature: String,
-    maximumTemperature: String,
-    temperatureBarStartFraction: Float,
-    temperatureBarEndFraction: Float,
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(4.dp),
+  day: String,
+  pop: String?,
+  @DrawableRes weatherIcon: Int,
+  minimumTemperature: String,
+  maximumTemperature: String,
+  temperatureBarStartFraction: Float,
+  temperatureBarEndFraction: Float,
+  modifier: Modifier = Modifier,
+  shape: Shape = RoundedCornerShape(4.dp),
 ) {
-    Card(
-        shape = shape,
-        modifier = modifier,
+  Card(
+    shape = shape,
+    modifier = modifier,
+  ) {
+    Row(
+      modifier = Modifier
+        .fillMaxSize()
+        .padding(horizontal = 16.dp),
+      verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(text = day, Modifier.weight(1f))
-                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-                    pop?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(top = 8.dp)
-                        )
-                    }
-                    Image(
-                        painter = painterResource(id = weatherIcon),
-                        contentDescription = null,
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier.weight(1f),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Text(text = minimumTemperature, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Row(
-                    modifier = Modifier
-                        .weight(1f)
-                        .border(
-                            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant),
-                            shape = RoundedCornerShape(percent = 100)
-                        )
-                        .height(10.dp),
-                ) {
-                    Spacer(Modifier.fillMaxWidth(fraction = temperatureBarStartFraction))
-                    Spacer(Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .background(
-                            color = MaterialTheme.colorScheme.onSurface,
-                            shape = RoundedCornerShape(percent = 100)
-                        )
-                    )
-                    Spacer(Modifier.fillMaxWidth(fraction = temperatureBarEndFraction))
-                }
-                Text(text = maximumTemperature)
-            }
+      Row(
+        modifier = Modifier.weight(1f),
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        Text(text = day, Modifier.weight(1f))
+        Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
+          pop?.let {
+            Text(
+              text = it,
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+              modifier = Modifier.padding(top = 8.dp)
+            )
+          }
+          Image(
+            painter = painterResource(id = weatherIcon),
+            contentDescription = null,
+            modifier = Modifier.size(32.dp)
+          )
         }
+      }
+      Row(
+        modifier = Modifier.weight(1f),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+      ) {
+        Text(text = minimumTemperature, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Row(
+          modifier = Modifier
+            .weight(1f)
+            .border(
+              border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant),
+              shape = RoundedCornerShape(percent = 100)
+            )
+            .height(10.dp),
+        ) {
+          Spacer(Modifier.fillMaxWidth(fraction = temperatureBarStartFraction))
+          Spacer(
+            Modifier
+              .weight(1f)
+              .fillMaxHeight()
+              .background(
+                color = MaterialTheme.colorScheme.onSurface,
+                shape = RoundedCornerShape(percent = 100)
+              )
+          )
+          Spacer(Modifier.fillMaxWidth(fraction = temperatureBarEndFraction))
+        }
+        Text(text = maximumTemperature)
+      }
     }
+  }
 }
