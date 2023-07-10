@@ -75,9 +75,6 @@
     <string name="cardinal_nw">Northwest</string>
 
     <string name="temperature_value">%s°</string>
-    <string name="length_value_mm">%s\u00A0mm</string>
-    <string name="length_value_in">%s\u00A0in</string>
-    <string name="length_value_cm">%s\u00A0cm</string>
     <string name="speed_value_kmh">%s\u00A0km\u2215h</string>
     <string name="speed_value_mps">%s\u00A0m\u2215s</string>
     <string name="speed_value_mph">%s\u00A0mi\u2215h</string>

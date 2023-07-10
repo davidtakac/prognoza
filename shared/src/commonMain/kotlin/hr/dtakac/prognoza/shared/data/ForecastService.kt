@@ -149,7 +149,7 @@ private data class Response(
           rain = Length(hourly.rain[i], LengthUnit.Millimetre),
           showers = Length(hourly.rain[i], LengthUnit.Millimetre),
           snow = Length(hourly.snowfall[i], LengthUnit.Centimetre),
-          pop = hourly.precipitationProbability[i],
+          pop = Pop(hourly.precipitationProbability[i]),
           gust = Speed(hourly.windGusts10m[i], SpeedUnit.MetrePerSecond),
           wind = Speed(hourly.windSpeed10m[i], SpeedUnit.MetrePerSecond),
           windDirection = Angle(hourly.windDirection10m[i], AngleUnit.Degree),

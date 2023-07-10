@@ -42,7 +42,7 @@ class Overview internal constructor(
         OverviewHour.Weather(
           unixSecond = it.startUnixSecond,
           temperature = it.temperature,
-          pop = it.pop,
+          pop = it.pop.humanValue,
           wmoCode = it.wmoCode,
           isDay = it.isDay
         )
@@ -73,7 +73,7 @@ class Overview internal constructor(
           representativeWmoCodeIsDay = day.representativeWmoCode.isDay,
           minimumTemperature = day.minimumTemperature,
           maximumTemperature = day.maximumTemperature,
-          maximumPop = day.maximumPop,
+          maximumPop = day.maximumPop.humanValue,
         )
       },
       minimumTemperature = days.minOf { it.minimumTemperature },
@@ -94,12 +94,7 @@ class Overview internal constructor(
       }
       return OverviewPrecipitation(
         hoursInLastPeriod = lastPeriodHours.size,
-        amountInLastPeriod = lastPeriodHours.fold(
-          Length(
-            value = 0.0,
-            unit = lastPeriodHours[0].rain.unit
-          )
-        ) { acc, curr -> acc + curr.rain + curr.showers },
+        amountInLastPeriod = lastPeriodHours.fold(Length(0.0, unit)) { acc, curr -> acc + curr.rain + curr.showers },
         startUnixSecondOfNextExpectedAmount = nextExpectedStartUnixSecond,
         nextExpectedAmount = nextExpectedAmount
       )
@@ -118,12 +113,7 @@ class Overview internal constructor(
       }
       return OverviewPrecipitation(
         hoursInLastPeriod = lastPeriodHours.size,
-        amountInLastPeriod = lastPeriodHours.fold(
-          Length(
-            0.0,
-            unit
-          )
-        ) { acc, curr -> acc + curr.snow },
+        amountInLastPeriod = lastPeriodHours.fold(Length(0.0, unit)) { acc, curr -> acc + curr.snow },
         startUnixSecondOfNextExpectedAmount = nextExpectedStartUnixSecond,
         nextExpectedAmount = nextExpectedAmount
       )

@@ -61,7 +61,7 @@ class Day internal constructor(
   val totalRain: Length = hours.fold(Length(0.0, hours[0].rain.unit)) { acc, curr -> acc + curr.rain }
   val totalShowers: Length = hours.fold(Length(0.0, hours[0].showers.unit)) { acc, curr -> acc + curr.showers }
   val totalSnow: Length = hours.fold(Length(0.0, hours[0].snow.unit)) { acc, curr -> acc + curr.rain }
-  val maximumPop: Int = hours.maxOf { it.pop }
+  val maximumPop: Pop = hours.maxOf { it.pop }
   val maximumWind: Speed = hours.maxOf { it.wind }
   val maximumGust: Speed = hours.maxOf { it.gust }
   val maximumUvIndex: UvIndex = hours.maxOf { it.uvIndex }
@@ -111,7 +111,7 @@ class Hour internal constructor(
   val rain: Length,
   val showers: Length,
   val snow: Length,
-  val pop: Int,
+  val pop: Pop,
   val wind: Speed,
   val gust: Speed,
   val windDirection: Angle,
