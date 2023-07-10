@@ -2,14 +2,12 @@ package hr.dtakac.prognoza.ui.overview
 
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -195,13 +193,13 @@ fun OverviewScreen(
         state.data.details.forEach {
           item {
             when (it) {
-              is OverviewDetailState.Rainfall -> OverviewRainfall(
-                lastAmount = it.lastPeriodAmount.asString(),
-                lastAmountTimeframe = it.lastPeriodTimeframe.asString(),
+              is OverviewDetailState.Precipitation -> OverviewPrecipitation(
+                amountInLastPeriod = it.amountInLastPeriod.asString(),
+                hoursInLastPeriod = it.hoursInLastPeriod.asString(),
                 nextExpected = it.nextExpected.asString(),
+                isSnow = it.isSnow,
                 modifier = Modifier.fillMaxWidth().aspectRatio(1f)
               )
-              is OverviewDetailState.Snowfall -> TODO()
             }
           }
         }

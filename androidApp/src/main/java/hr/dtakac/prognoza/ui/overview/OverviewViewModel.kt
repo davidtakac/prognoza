@@ -118,13 +118,13 @@ class OverviewViewModel @Inject constructor(
             )
           },
           details = buildList {
-            val rainfall = OverviewDetailState.Rainfall(
-              lastPeriodAmount = TextResource.fromLength(overview.rainfall.lastPeriodAmount),
-              lastPeriodTimeframe = TextResource.fromResId(
+            val rainfall = OverviewDetailState.Precipitation(
+              amountInLastPeriod = TextResource.fromLength(overview.rainfall.amountInLastPeriod),
+              hoursInLastPeriod = TextResource.fromResId(
                 id = R.string.precipitation_value_last_hours,
-                overview.rainfall.lastPeriodHourCount
+                overview.rainfall.hoursInLastPeriod
               ),
-              nextExpected = overview.rainfall.nextExpectedStartUnixSecond?.let {
+              nextExpected = overview.rainfall.startUnixSecondOfNextExpectedAmount?.let {
                 val nowDate = Clock.System.now().toLocalDateTime(overview.timeZone).date
                 val nextExpectedDate = Instant.fromEpochSeconds(it).toLocalDateTime(overview.timeZone).date
                 val nextExpectedAmount = TextResource.fromLength(overview.rainfall.nextExpectedAmount)
@@ -141,7 +141,8 @@ class OverviewViewModel @Inject constructor(
                     TextResource.fromUnixSecondToShortDayOfWeek(it, overview.timeZone)
                   )
                 }
-              } ?: TextResource.fromResId(R.string.rainfall_value_none_expected, overview.days.days.size)
+              } ?: TextResource.fromResId(R.string.rainfall_value_none_expected, overview.days.days.size),
+              isSnow = false
             )
 
             add(rainfall)

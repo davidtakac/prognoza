@@ -23,10 +23,7 @@ fun OverviewSunset(time: String, modifier: Modifier = Modifier) {
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.SpaceBetween
   ) {
-    Text(
-      text = stringResource(id = R.string.forecast_label_sunset),
-      style = MaterialTheme.typography.titleMedium
-    )
+    Text(text = time, style = MaterialTheme.typography.bodySmall)
     Icon(
       imageVector = Icons.Default.ArrowForward,
       contentDescription = null,
@@ -34,6 +31,9 @@ fun OverviewSunset(time: String, modifier: Modifier = Modifier) {
         .size(32.dp)
         .rotate(90f)
     )
-    Text(text = time, style = MaterialTheme.typography.bodySmall)
+    Text(
+      text = stringResource(id = R.string.forecast_label_sunset),
+      style = MaterialTheme.typography.titleMedium
+    )
   }
 }

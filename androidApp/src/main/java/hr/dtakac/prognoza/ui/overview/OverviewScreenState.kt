@@ -52,15 +52,10 @@ data class OverviewDayState(
 )
 
 sealed interface OverviewDetailState {
-  data class Rainfall(
-    val lastPeriodAmount: TextResource,
-    val lastPeriodTimeframe: TextResource,
+  data class Precipitation(
+    val amountInLastPeriod: TextResource,
+    val hoursInLastPeriod: TextResource,
     val nextExpected: TextResource,
-  ) : OverviewDetailState
-
-  data class Snowfall(
-    val lastPeriodAmount: TextResource,
-    val lastPeriodTimeframe: TextResource,
-    val nextExpected: TextResource,
+    val isSnow: Boolean
   ) : OverviewDetailState
 }

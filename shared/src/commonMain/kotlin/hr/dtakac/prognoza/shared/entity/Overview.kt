@@ -24,7 +24,7 @@ class Overview internal constructor(
         snowfall = buildSnowfall(
           lastPeriodHours = last24Hours,
           futureDays = futureDays
-        ).takeIf { it.lastPeriodAmount.value > 0 || it.nextExpectedStartUnixSecond != null },
+        ).takeIf { it.amountInLastPeriod.value > 0 || it.startUnixSecondOfNextExpectedAmount != null },
       )
     }
 
@@ -93,14 +93,14 @@ class Overview internal constructor(
         nextExpectedAmount = (rainyDay.totalRain + rainyDay.totalShowers)
       }
       return OverviewPrecipitation(
-        lastPeriodHourCount = lastPeriodHours.size,
-        lastPeriodAmount = lastPeriodHours.fold(
+        hoursInLastPeriod = lastPeriodHours.size,
+        amountInLastPeriod = lastPeriodHours.fold(
           Length(
             value = 0.0,
             unit = lastPeriodHours[0].rain.unit
           )
         ) { acc, curr -> acc + curr.rain + curr.showers },
-        nextExpectedStartUnixSecond = nextExpectedStartUnixSecond,
+        startUnixSecondOfNextExpectedAmount = nextExpectedStartUnixSecond,
         nextExpectedAmount = nextExpectedAmount
       )
     }
@@ -117,14 +117,14 @@ class Overview internal constructor(
         nextExpectedAmount = snowyDay.totalSnow
       }
       return OverviewPrecipitation(
-        lastPeriodHourCount = lastPeriodHours.size,
-        lastPeriodAmount = lastPeriodHours.fold(
+        hoursInLastPeriod = lastPeriodHours.size,
+        amountInLastPeriod = lastPeriodHours.fold(
           Length(
             0.0,
-            LengthUnit.Centimetre
+            unit
           )
         ) { acc, curr -> acc + curr.snow },
-        nextExpectedStartUnixSecond = nextExpectedStartUnixSecond,
+        startUnixSecondOfNextExpectedAmount = nextExpectedStartUnixSecond,
         nextExpectedAmount = nextExpectedAmount
       )
     }
@@ -172,8 +172,8 @@ class OverviewDay internal constructor(
 )
 
 class OverviewPrecipitation internal constructor(
-  val lastPeriodHourCount: Int,
-  val lastPeriodAmount: Length,
-  val nextExpectedStartUnixSecond: Long?,
+  val hoursInLastPeriod: Int,
+  val amountInLastPeriod: Length,
+  val startUnixSecondOfNextExpectedAmount: Long?,
   val nextExpectedAmount: Length
 )
