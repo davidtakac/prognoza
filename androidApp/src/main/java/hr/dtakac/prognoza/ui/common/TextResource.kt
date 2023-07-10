@@ -143,7 +143,17 @@ private data class LengthTextResource(val length: Length) : TextResource {
         }
       )
       .notation(Notation.compactShort())
-      .precision(Precision.integer())
+      .precision(
+        when (length.unit) {
+          LengthUnit.Metre,
+          LengthUnit.Kilometre,
+          LengthUnit.Foot,
+          LengthUnit.Mile -> Precision.integer()
+          LengthUnit.Millimetre,
+          LengthUnit.Centimetre -> Precision.maxSignificantDigits(1)
+          LengthUnit.Inch -> Precision.maxSignificantDigits(2)
+        }
+      )
       .format(length.value)
       .toString()
 }

@@ -58,4 +58,11 @@ sealed interface OverviewDetailState {
     val nextExpected: TextResource,
     val isSnow: Boolean
   ) : OverviewDetailState
+
+  data class UvIndex(
+    val value: TextResource,
+    val level: TextResource,
+    val valueCenterFraction: Float,
+    val recommendations: TextResource
+  ) : OverviewDetailState
 }

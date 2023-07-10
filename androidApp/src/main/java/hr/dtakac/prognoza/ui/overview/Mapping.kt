@@ -7,6 +7,7 @@ import hr.dtakac.prognoza.shared.entity.OverviewHour
 import hr.dtakac.prognoza.shared.entity.OverviewNow
 import hr.dtakac.prognoza.shared.entity.OverviewPrecipitation
 import hr.dtakac.prognoza.shared.entity.Temperature
+import hr.dtakac.prognoza.shared.entity.UvIndex
 import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherDescription
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherIcon
@@ -37,6 +38,7 @@ fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
     snowfall?.let {
       add(it.toUiModel(numDays = days.days.size, timeZone = timeZone).copy(isSnow = true))
     }
+
   }
 )
 
@@ -105,4 +107,9 @@ private fun OverviewPrecipitation.toUiModel(numDays: Int, timeZone: TimeZone) = 
     }
   } ?: TextResource.fromResId(R.string.precipitation_value_none_expected, numDays),
   isSnow = false
+)
+
+private fun UvIndex.toUiModel() = OverviewDetailState.UvIndex(
+  value = TextResource.fromString("$value"),
+  level = TextResource.fromResId()
 )
