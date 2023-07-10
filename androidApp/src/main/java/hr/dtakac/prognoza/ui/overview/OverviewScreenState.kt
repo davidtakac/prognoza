@@ -13,7 +13,8 @@ data class OverviewScreenState(
 data class OverviewDataState(
   val now: OverviewNowState,
   val hours: List<OverviewHourState>,
-  val days: List<OverviewDayState>
+  val days: List<OverviewDayState>,
+  val details: List<OverviewDetailState>
 )
 
 data class OverviewNowState(
@@ -49,3 +50,17 @@ data class OverviewDayState(
   val temperatureBarEndFraction: Float,
   val currentTemperatureCenterFraction: Float?
 )
+
+sealed interface OverviewDetailState {
+  data class Rainfall(
+    val lastPeriodAmount: TextResource,
+    val lastPeriodTimeframe: TextResource,
+    val nextExpected: TextResource,
+  ) : OverviewDetailState
+
+  data class Snowfall(
+    val lastPeriodAmount: TextResource,
+    val lastPeriodTimeframe: TextResource,
+    val nextExpected: TextResource,
+  ) : OverviewDetailState
+}

@@ -19,8 +19,8 @@ class Temperature internal constructor(
   internal fun convertTo(unit: TemperatureUnit) = Temperature(valueIn(unit), unit)
 
   private fun valueIn(unit: TemperatureUnit): Double =
-    if (unit == unit) value
-    else when (unit) {
+    if (unit == this.unit) value
+    else when (this.unit) {
       TemperatureUnit.DegreeCelsius -> when (unit) {
         TemperatureUnit.DegreeFahrenheit -> celsiusToFahrenheit(value)
         TemperatureUnit.DegreeCelsius -> value

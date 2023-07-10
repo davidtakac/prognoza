@@ -84,20 +84,20 @@ class Overview internal constructor(
       lastPeriodHours: List<Hour>,
       futureDays: List<Day>
     ): OverviewPrecipitation {
+      val unit = lastPeriodHours[0].rain.unit
       var nextExpectedStartUnixSecond: Long? = null
-      var nextExpectedAmount: Length? = null
+      var nextExpectedAmount = Length(0.0, unit)
       futureDays.firstOrNull { (it.totalRain + it.totalShowers).value > 0 }?.let { rainyDay ->
         nextExpectedStartUnixSecond =
           rainyDay.hours.firstOrNull { (it.rain + it.showers).value > 0 }?.startUnixSecond
-        nextExpectedAmount =
-          (rainyDay.totalRain + rainyDay.totalShowers).takeIf { nextExpectedStartUnixSecond != null && it.value > 0 }
+        nextExpectedAmount = (rainyDay.totalRain + rainyDay.totalShowers)
       }
       return OverviewPrecipitation(
         lastPeriodHourCount = lastPeriodHours.size,
         lastPeriodAmount = lastPeriodHours.fold(
           Length(
-            0.0,
-            LengthUnit.Millimetre
+            value = 0.0,
+            unit = lastPeriodHours[0].rain.unit
           )
         ) { acc, curr -> acc + curr.rain + curr.showers },
         nextExpectedStartUnixSecond = nextExpectedStartUnixSecond,
@@ -109,13 +109,12 @@ class Overview internal constructor(
       lastPeriodHours: List<Hour>,
       futureDays: List<Day>
     ): OverviewPrecipitation {
+      val unit = lastPeriodHours[0].snow.unit
       var nextExpectedStartUnixSecond: Long? = null
-      var nextExpectedAmount: Length? = null
+      var nextExpectedAmount = Length(0.0, unit)
       futureDays.firstOrNull { it.totalSnow.value > 0 }?.let { snowyDay ->
-        nextExpectedStartUnixSecond =
-          snowyDay.hours.firstOrNull { it.snow.value > 0 }?.startUnixSecond
-        nextExpectedAmount =
-          snowyDay.totalSnow.takeIf { nextExpectedStartUnixSecond != null && it.value > 0 }
+        nextExpectedStartUnixSecond = snowyDay.hours.firstOrNull { it.snow.value > 0 }?.startUnixSecond
+        nextExpectedAmount = snowyDay.totalSnow
       }
       return OverviewPrecipitation(
         lastPeriodHourCount = lastPeriodHours.size,
@@ -176,5 +175,5 @@ class OverviewPrecipitation internal constructor(
   val lastPeriodHourCount: Int,
   val lastPeriodAmount: Length,
   val nextExpectedStartUnixSecond: Long?,
-  val nextExpectedAmount: Length?
+  val nextExpectedAmount: Length
 )

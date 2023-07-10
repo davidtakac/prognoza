@@ -4,6 +4,10 @@ import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -91,7 +95,9 @@ fun OverviewScreen(
       }
     ) { contentPadding ->
       if (state.data == null) return@Scaffold
-      LazyColumn(
+      LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(
           top = contentPadding.calculateTopPadding() + 24.dp,
           start = contentPadding.calculateStartPadding(LocalLayoutDirection.current) + 24.dp,
@@ -99,7 +105,7 @@ fun OverviewScreen(
           bottom = contentPadding.calculateBottomPadding()
         )
       ) {
-        item("now") {
+        item("now", span = { GridItemSpan(2) }) {
           OverviewNow(
             temperature = state.data.now.temperature.asString(),
             maximumTemperature = state.data.now.maximumTemperature.asString(),
@@ -109,18 +115,16 @@ fun OverviewScreen(
             feelsLikeTemperature = state.data.now.feelsLikeTemperature.asString(),
           )
         }
-        item("hours-heading") {
+        item("hours-heading", span = { GridItemSpan(2) }) {
           Text(
             text = stringResource(id = R.string.forecast_title_hourly),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 64.dp)
+            modifier = Modifier.padding(top = 64.dp, bottom = 12.dp)
           )
         }
-        item("hours") {
+        item("hours", span = { GridItemSpan(2) }) {
           Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 12.dp),
+            modifier = Modifier.fillMaxWidth(),
             shape = RoundedCornerShape(roundedCornerRadius)
           ) {
             LazyRow(
@@ -149,17 +153,17 @@ fun OverviewScreen(
             }
           }
         }
-        item("coming-heading") {
+        item("coming-heading", span = { GridItemSpan(2) }) {
           Text(
             text = stringResource(
               id = R.string.forecast_title_coming,
               state.data.days.size
             ),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 24.dp)
+            modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
           )
         }
-        itemsIndexed(state.data.days) { idx, day ->
+        itemsIndexed(state.data.days, span = { _, _ -> GridItemSpan(2) }) { idx, day ->
           OverviewDay(
             day = day.dayOfWeek.asString(),
             pop = day.pop?.asString(),
@@ -176,20 +180,30 @@ fun OverviewScreen(
               bottomEnd = if (idx == state.data.days.lastIndex) roundedCornerRadius else 4.dp
             ),
             modifier = Modifier
-                .padding(top = if (idx == 0) 12.dp else 4.dp)
-                .fillMaxWidth()
-                .height(64.dp)
+              .padding(top = 4.dp)
+              .fillMaxWidth()
+              .height(64.dp)
           )
         }
-        item("details-heading") {
+        item("details-heading", span = { GridItemSpan(2) }) {
           Text(
             text = stringResource(id = R.string.forecast_title_details),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 24.dp)
+            modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
           )
         }
-        item("details-first-row") {
-
+        state.data.details.forEach {
+          item {
+            when (it) {
+              is OverviewDetailState.Rainfall -> OverviewRainfall(
+                lastAmount = it.lastPeriodAmount.asString(),
+                lastAmountTimeframe = it.lastPeriodTimeframe.asString(),
+                nextExpected = it.nextExpected.asString(),
+                modifier = Modifier.fillMaxWidth().aspectRatio(1f)
+              )
+              is OverviewDetailState.Snowfall -> TODO()
+            }
+          }
         }
       }
     }

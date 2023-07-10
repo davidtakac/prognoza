@@ -8,7 +8,7 @@ class SettingsRepository {
     TODO()
   }
 
-  suspend fun getMeasurementSystem(): MeasurementSystem = MeasurementSystem.Metric
+  suspend fun getMeasurementSystem(): MeasurementSystem = MeasurementSystem.Imperial
   suspend fun setCoordinates(coordinates: Coordinates) {
     TODO()
   }

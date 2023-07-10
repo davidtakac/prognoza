@@ -31,8 +31,8 @@ class Speed internal constructor(
   }
 
   private fun valueIn(unit: SpeedUnit): Double =
-    if (unit == unit) value
-    else value * unit.metresPerSecond / unit.metresPerSecond
+    if (unit == this.unit) value
+    else value * this.unit.metresPerSecond / unit.metresPerSecond
 
   private fun throwInvalidSpeed(): Nothing =
     throw IllegalStateException("Speed must be >= 0 && <= c, was ${toString()}.")

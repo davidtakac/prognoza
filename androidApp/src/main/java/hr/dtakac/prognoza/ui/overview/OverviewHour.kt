@@ -27,19 +27,18 @@ fun OverviewHour(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.SpaceBetween
   ) {
-    Text(text = temperature, style = MaterialTheme.typography.titleMedium)
+    Text(text = time, style = MaterialTheme.typography.bodySmall)
+    Image(
+      painter = painterResource(id = weatherIcon),
+      contentDescription = null,
+      modifier = Modifier.padding(top = 4.dp).size(32.dp)
+    )
     Text(
       // Empty pop acts as a placeholder
       text = pop ?: "",
       style = MaterialTheme.typography.bodySmall,
       color = MaterialTheme.colorScheme.onSurfaceVariant,
-      modifier = Modifier.padding(top = 8.dp)
     )
-    Image(
-      painter = painterResource(id = weatherIcon),
-      contentDescription = null,
-      modifier = Modifier.size(32.dp)
-    )
-    Text(text = time, style = MaterialTheme.typography.bodySmall)
+    Text(text = temperature, style = MaterialTheme.typography.titleMedium)
   }
 }

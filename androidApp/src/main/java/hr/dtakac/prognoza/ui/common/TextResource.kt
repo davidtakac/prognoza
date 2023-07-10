@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.ui.common
 
 import android.content.Context
+import android.icu.number.Notation
 import android.icu.number.NumberFormatter
 import android.icu.number.Precision
 import android.icu.util.MeasureUnit
@@ -9,6 +10,8 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.shared.entity.Length
+import hr.dtakac.prognoza.shared.entity.LengthUnit
 import hr.dtakac.prognoza.shared.entity.Temperature
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -45,6 +48,9 @@ sealed interface TextResource {
 
     fun fromPercentage(percentage: Int): TextResource =
       PercentageTextResource(percentage)
+
+    fun fromLength(length: Length): TextResource =
+      LengthTextResource(length)
   }
 
   fun asString(context: Context): String
@@ -119,4 +125,25 @@ private data class DayOfWeekTextResource(
       .toJavaLocalDateTime()
     return DateTimeFormatter.ofPattern("E").format(localDateTime)
   }
+}
+
+private data class LengthTextResource(val length: Length) : TextResource {
+  override fun asString(context: Context): String =
+    NumberFormatter.with()
+      .locale(context.resources.configuration.locales[0])
+      .unit(
+        when (length.unit) {
+          LengthUnit.Metre -> MeasureUnit.METER
+          LengthUnit.Millimetre -> MeasureUnit.MILLIMETER
+          LengthUnit.Centimetre -> MeasureUnit.CENTIMETER
+          LengthUnit.Kilometre -> MeasureUnit.KILOMETER
+          LengthUnit.Inch -> MeasureUnit.INCH
+          LengthUnit.Foot -> MeasureUnit.FOOT
+          LengthUnit.Mile -> MeasureUnit.MILE
+        }
+      )
+      .notation(Notation.compactShort())
+      .precision(Precision.integer())
+      .format(length.value)
+      .toString()
 }

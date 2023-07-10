@@ -49,19 +49,18 @@ fun OverviewDay(
       ) {
         Text(text = day, Modifier.weight(1f))
         Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.weight(1f)) {
-          pop?.let {
-            Text(
-              text = it,
-              style = MaterialTheme.typography.bodySmall,
-              color = MaterialTheme.colorScheme.onSurfaceVariant,
-              modifier = Modifier.padding(top = 8.dp)
-            )
-          }
           Image(
             painter = painterResource(id = weatherIcon),
             contentDescription = null,
             modifier = Modifier.size(32.dp)
           )
+          pop?.let {
+            Text(
+              text = it,
+              style = MaterialTheme.typography.bodySmall,
+              color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+          }
         }
       }
       Row(

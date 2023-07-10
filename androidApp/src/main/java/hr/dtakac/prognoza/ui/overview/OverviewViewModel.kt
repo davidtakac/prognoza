@@ -14,6 +14,9 @@ import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherDescription
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherIcon
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -114,6 +117,35 @@ class OverviewViewModel @Inject constructor(
               currentTemperatureCenterFraction = if (idx == 0) (overview.now.temperature.value / overview.days.minimumTemperature.value).toFloat() - 1f else null
             )
           },
+          details = buildList {
+            val rainfall = OverviewDetailState.Rainfall(
+              lastPeriodAmount = TextResource.fromLength(overview.rainfall.lastPeriodAmount),
+              lastPeriodTimeframe = TextResource.fromResId(
+                id = R.string.precipitation_value_last_hours,
+                overview.rainfall.lastPeriodHourCount
+              ),
+              nextExpected = overview.rainfall.nextExpectedStartUnixSecond?.let {
+                val nowDate = Clock.System.now().toLocalDateTime(overview.timeZone).date
+                val nextExpectedDate = Instant.fromEpochSeconds(it).toLocalDateTime(overview.timeZone).date
+                val nextExpectedAmount = TextResource.fromLength(overview.rainfall.nextExpectedAmount)
+                if (nextExpectedDate == nowDate) {
+                  TextResource.fromResId(
+                    id = R.string.rainfall_value_next_expected_from_time,
+                    nextExpectedAmount,
+                    TextResource.fromUnixSecondToShortTime(it, overview.timeZone)
+                  )
+                } else {
+                  TextResource.fromResId(
+                    id = R.string.rainfall_value_next_expected_on_day,
+                    nextExpectedAmount,
+                    TextResource.fromUnixSecondToShortDayOfWeek(it, overview.timeZone)
+                  )
+                }
+              } ?: TextResource.fromResId(R.string.rainfall_value_none_expected, overview.days.days.size)
+            )
+
+            add(rainfall)
+          }
         ),
         error = null,
         loading = false
