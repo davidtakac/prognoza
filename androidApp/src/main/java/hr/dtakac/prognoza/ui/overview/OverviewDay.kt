@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
-private val temperatureBarHeight = 10.dp
+private val temperatureBarHeight = 6.dp
 
 @Composable
 fun OverviewDay(
@@ -105,7 +105,7 @@ fun OverviewDay(
                   // the center of the circle, not the start
                   .offset(x = -(temperatureBarHeight / 2))
                   .border(
-                    width = 2.dp,
+                    width = 1.dp,
                     shape = CircleShape,
                     color = Color.Black
                   )
