@@ -310,8 +310,9 @@ fun wmoCodeToWeatherIcon(wmoCode: Int, isDay: Boolean) =
   }
 
 // TODO: Create a new string resource for every one of these WMO codes
+// TODO: differentiate clear as Clear for night and Sunny for day
 @StringRes
-fun wmoCodeToWeatherDescription(wmoCode: Int) =
+fun wmoCodeToWeatherDescription(wmoCode: Int, isDay: Boolean) =
   when (wmoCode) {
     0 -> R.string.description_clear_sky
     1 -> R.string.description_fair
