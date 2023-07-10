@@ -50,25 +50,32 @@ class Forecast internal constructor(
 
 class Day internal constructor(
   val startUnixSecond: Long,
-  val mostExtremeWmoCode: Int,
   val sunriseUnixSecond: Long?,
   val sunsetUnixSecond: Long?,
-  val minimumTemperature: Temperature,
-  val maximumTemperature: Temperature,
-  val minimumFeelsLike: Temperature,
-  val maximumFeelsLike: Temperature,
-  val totalPrecipitation: Length,
-  val totalRain: Length,
-  val totalShowers: Length,
-  val totalSnow: Length,
-  val maximumPop: Int,
-  val maximumWind: Speed,
-  val maximumGust: Speed,
-  val dominantWindDirection: Angle,
-  val maximumUvIndex: UvIndex,
   val hours: List<Hour>
 ) {
-  val representativeWmoCode: RepresentativeWmoCode by lazy {
+  val minimumTemperature: Temperature = hours.minOf { it.temperature }
+  val maximumTemperature: Temperature = hours.maxOf { it.temperature }
+  val minimumFeelsLike: Temperature = hours.minOf { it.feelsLike }
+  val maximumFeelsLike: Temperature = hours.maxOf { it.feelsLike }
+  val totalRain: Length = hours.fold(Length(0.0, hours[0].rain.unit)) { acc, curr -> acc + curr.rain }
+  val totalShowers: Length = hours.fold(Length(0.0, hours[0].showers.unit)) { acc, curr -> acc + curr.showers }
+  val totalSnow: Length = hours.fold(Length(0.0, hours[0].snow.unit)) { acc, curr -> acc + curr.rain }
+  val maximumPop: Int = hours.maxOf { it.pop }
+  val maximumWind: Speed = hours.maxOf { it.wind }
+  val maximumGust: Speed = hours.maxOf { it.gust }
+  val maximumUvIndex: UvIndex = hours.maxOf { it.uvIndex }
+  val representativeWmoCode: RepresentativeWmoCode = getRepresentativeWmoCode(hours)
+
+  fun toMeasurementSystem(measurementSystem: MeasurementSystem): Day =
+    Day(
+      startUnixSecond = startUnixSecond,
+      sunriseUnixSecond = sunriseUnixSecond,
+      sunsetUnixSecond = sunsetUnixSecond,
+      hours = hours.map { it.toMeasurementSystem(measurementSystem) }
+    )
+
+  private fun getRepresentativeWmoCode(hours: List<Hour>): RepresentativeWmoCode =
     if (hours.any { it.wmoCode > 48 }) {
       // The most severe weather condition is at least light drizzle. Because this involves
       // precipitation, it could affect people's plans for the day. In this case they would
@@ -90,59 +97,6 @@ class Day internal constructor(
         .entries.sortedByDescending { it.key }.maxBy { it.value }.key
       RepresentativeWmoCode(mostCommonWmoCode, priorityHours[0].isDay)
     }
-  }
-
-  fun toMeasurementSystem(measurementSystem: MeasurementSystem): Day =
-    Day(
-      startUnixSecond = startUnixSecond,
-      mostExtremeWmoCode = mostExtremeWmoCode,
-      sunriseUnixSecond = sunriseUnixSecond,
-      sunsetUnixSecond = sunsetUnixSecond,
-      minimumTemperature = minimumTemperature.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
-        else TemperatureUnit.DegreeCelsius
-      ),
-      maximumTemperature = maximumTemperature.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
-        else TemperatureUnit.DegreeCelsius
-      ),
-      minimumFeelsLike = minimumFeelsLike.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
-        else TemperatureUnit.DegreeCelsius
-      ),
-      maximumFeelsLike = maximumFeelsLike.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
-        else TemperatureUnit.DegreeCelsius
-      ),
-      totalPrecipitation = totalPrecipitation.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) LengthUnit.Inch
-        else LengthUnit.Millimetre
-      ),
-      totalRain = totalRain.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) LengthUnit.Inch
-        else LengthUnit.Millimetre
-      ),
-      totalShowers = totalShowers.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) LengthUnit.Inch
-        else LengthUnit.Millimetre
-      ),
-      totalSnow = totalSnow.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) LengthUnit.Inch
-        else LengthUnit.Centimetre
-      ),
-      maximumPop = maximumPop,
-      maximumWind = maximumWind.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) SpeedUnit.MilePerHour
-        else SpeedUnit.KilometrePerHour
-      ),
-      maximumGust = maximumGust.convertTo(
-        if (measurementSystem == MeasurementSystem.Imperial) SpeedUnit.MilePerHour
-        else SpeedUnit.KilometrePerHour
-      ),
-      dominantWindDirection = dominantWindDirection,
-      maximumUvIndex = maximumUvIndex,
-      hours = hours.map { it.toMeasurementSystem(measurementSystem) }
-    )
 }
 
 class RepresentativeWmoCode internal constructor(
@@ -157,7 +111,6 @@ class Hour internal constructor(
   val rain: Length,
   val showers: Length,
   val snow: Length,
-  val totalPrecipitation: Length,
   val pop: Int,
   val wind: Speed,
   val gust: Speed,
@@ -188,10 +141,6 @@ class Hour internal constructor(
     snow = snow.convertTo(
       if (measurementSystem == MeasurementSystem.Imperial) LengthUnit.Inch
       else LengthUnit.Centimetre
-    ),
-    totalPrecipitation = totalPrecipitation.convertTo(
-      if (measurementSystem == MeasurementSystem.Imperial) LengthUnit.Inch
-      else LengthUnit.Millimetre
     ),
     pop = pop,
     wind = wind.convertTo(

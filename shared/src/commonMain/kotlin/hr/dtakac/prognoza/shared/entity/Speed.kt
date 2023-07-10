@@ -3,10 +3,12 @@ package hr.dtakac.prognoza.shared.entity
 class Speed internal constructor(
   val value: Double,
   val unit: SpeedUnit
-) {
+) : Comparable<Speed> {
   init {
     if (valueIn(SpeedUnit.MetrePerSecond) !in 0.0..299_792_458.0) throwInvalidSpeed()
   }
+
+  override fun compareTo(other: Speed): Int = value.compareTo(other.valueIn(unit))
 
   override fun toString(): String = "$value ${unit.suffix}"
 

@@ -1,9 +1,11 @@
 package hr.dtakac.prognoza.shared.entity
 
-class UvIndex internal constructor(val value: Double) {
+class UvIndex internal constructor(val value: Double) : Comparable<UvIndex> {
   init {
     if (value < 0.0) throwInvalidValue()
   }
+
+  override fun compareTo(other: UvIndex): Int = value.compareTo(other.value)
 
   val description: UvIndexDescription = when {
     value > 10 -> UvIndexDescription.Extreme

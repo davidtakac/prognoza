@@ -56,6 +56,7 @@ internal class ForecastService(
     }
   }
 
+  // todo: trim params
   private val hourlyParams = listOf(
     "temperature_2m",
     "relativehumidity_2m",
@@ -76,6 +77,7 @@ internal class ForecastService(
     "is_day"
   ).joinToString(",")
 
+  // todo: trim params
   private val dailyParams = listOf(
     "weathercode",
     "temperature_2m_max",
@@ -120,37 +122,8 @@ private data class Response(
       add(
         Day(
           startUnixSecond = dayStartUnixSecond,
-          mostExtremeWmoCode = daily.weathercode[i],
           sunriseUnixSecond = daily.sunrise[i].takeUnless { it == 0L },
           sunsetUnixSecond = daily.sunset[i].takeUnless { it == 0L },
-          minimumTemperature = Temperature(
-            daily.temperature2mMin[i],
-            TemperatureUnit.DegreeCelsius
-          ),
-          maximumTemperature = Temperature(
-            daily.temperature2mMax[i],
-            TemperatureUnit.DegreeCelsius
-          ),
-          minimumFeelsLike = Temperature(
-            daily.apparentTemperatureMin[i],
-            TemperatureUnit.DegreeCelsius
-          ),
-          maximumFeelsLike = Temperature(
-            daily.apparentTemperatureMax[i],
-            TemperatureUnit.DegreeCelsius
-          ),
-          totalPrecipitation = Length(daily.precipitationSum[i], LengthUnit.Millimetre),
-          totalRain = Length(daily.rainSum[i], LengthUnit.Millimetre),
-          totalShowers = Length(daily.showersSum[i], LengthUnit.Millimetre),
-          totalSnow = Length(daily.snowfallSum[i], LengthUnit.Centimetre),
-          maximumGust = Speed(daily.windGusts10mMax[i], SpeedUnit.MetrePerSecond),
-          maximumPop = daily.precipitationProbabilityMax[i],
-          maximumWind = Speed(daily.windSpeed10mMax[i], SpeedUnit.MetrePerSecond),
-          dominantWindDirection = Angle(
-            daily.windDirection10mDominant[i],
-            AngleUnit.Degree
-          ),
-          maximumUvIndex = UvIndex(daily.uvIndexMax[i]),
           hours = hours.filter {
             val hourDate =
               Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
@@ -176,7 +149,6 @@ private data class Response(
           rain = Length(hourly.rain[i], LengthUnit.Millimetre),
           showers = Length(hourly.rain[i], LengthUnit.Millimetre),
           snow = Length(hourly.snowfall[i], LengthUnit.Centimetre),
-          totalPrecipitation = Length(hourly.precipitation[i], LengthUnit.Millimetre),
           pop = hourly.precipitationProbability[i],
           gust = Speed(hourly.windGusts10m[i], SpeedUnit.MetrePerSecond),
           wind = Speed(hourly.windSpeed10m[i], SpeedUnit.MetrePerSecond),
