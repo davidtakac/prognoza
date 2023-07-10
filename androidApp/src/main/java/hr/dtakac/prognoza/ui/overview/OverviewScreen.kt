@@ -135,8 +135,6 @@ fun OverviewScreen(
               ),
             ) {
               items(state.data.hours) {
-                // TODO: to make sunrise, sunset and weather align, make a template
-                //  slots-based composable and reuse it for each of them
                 when (it) {
                   is OverviewHourState.Sunrise -> OverviewSunriseHour(
                     time = it.time.asString(),
