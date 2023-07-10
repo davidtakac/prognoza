@@ -112,9 +112,9 @@ class OverviewViewModel @Inject constructor(
               ),
               minimumTemperature = TextResource.fromTemperature(day.minimumTemperature),
               maximumTemperature = TextResource.fromTemperature(day.maximumTemperature),
-              temperatureBarStartFraction = 1f - (overview.days.minimumTemperature.value / day.minimumTemperature.value).toFloat(),
-              temperatureBarEndFraction = 1f - (day.maximumTemperature.value / overview.days.maximumTemperature.value).toFloat(),
-              currentTemperatureCenterFraction = if (idx == 0) (overview.now.temperature.value / overview.days.minimumTemperature.value).toFloat() - 1f else null
+              temperatureBarStartFraction = ((day.minimumTemperature.value - overview.days.minimumTemperature.value) / (overview.days.maximumTemperature.value - overview.days.minimumTemperature.value)).toFloat(),
+              temperatureBarEndFraction = ((overview.days.maximumTemperature.value - day.maximumTemperature.value) / (overview.days.maximumTemperature.value - overview.days.minimumTemperature.value)).toFloat(),
+              currentTemperatureCenterFraction = if (idx == 0) ((overview.now.temperature.value - overview.days.minimumTemperature.value) / (overview.days.maximumTemperature.value - overview.days.minimumTemperature.value)).toFloat() else null
             )
           },
           details = buildList {
@@ -130,18 +130,18 @@ class OverviewViewModel @Inject constructor(
                 val nextExpectedAmount = TextResource.fromLength(overview.rainfall.nextExpectedAmount)
                 if (nextExpectedDate == nowDate) {
                   TextResource.fromResId(
-                    id = R.string.rainfall_value_next_expected_from_time,
+                    id = R.string.precipitation_value_next_expected_from_time,
                     nextExpectedAmount,
                     TextResource.fromUnixSecondToShortTime(it, overview.timeZone)
                   )
                 } else {
                   TextResource.fromResId(
-                    id = R.string.rainfall_value_next_expected_on_day,
+                    id = R.string.precipitation_value_next_expected_on_day,
                     nextExpectedAmount,
                     TextResource.fromUnixSecondToShortDayOfWeek(it, overview.timeZone)
                   )
                 }
-              } ?: TextResource.fromResId(R.string.rainfall_value_none_expected, overview.days.days.size),
+              } ?: TextResource.fromResId(R.string.precipitation_value_none_expected, overview.days.days.size),
               isSnow = false
             )
 

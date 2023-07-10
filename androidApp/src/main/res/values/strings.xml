@@ -127,7 +127,9 @@
     <string name="forecast_label_today">Today</string>
     <string name="forecast_title_details">Current conditions</string>
     <string name="precipitation_value_last_hours">in last %dh</string>
-    <string name="rainfall_value_next_expected_from_time">Next expected is %s rain from %s.</string>
-    <string name="rainfall_value_next_expected_on_day">Next expected is %s rain on %s.</string>
-    <string name="rainfall_value_none_expected">No rain expected for next %d days.</string>
+    <string name="precipitation_value_next_expected_from_time">Next expected is %s from %s.</string>
+    <string name="precipitation_value_next_expected_on_day">Next expected is %s on %s.</string>
+    <string name="precipitation_value_none_expected">None expected for next %d days.</string>
+    <string name="forecast_label_snow">Snow</string>
+    <string name="forecast_label_rain">Rain</string>
 </resources>
