@@ -34,6 +34,7 @@ fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
       add(it.toUiModel(numDays = days.days.size, timeZone = timeZone).copy(isSnow = true))
     }
     add(uvIndex.toUiModel(timeZone))
+    add(feelsLike.toUiModel())
   }
 )
 
@@ -76,7 +77,7 @@ private fun OverviewDay.toUiModel(
   absoluteMaximumTemperature: Temperature,
   timeZone: TimeZone
 ): OverviewDayState {
-  val temperatureRange = absoluteMaximumTemperature.value - absoluteMinimumTemperature.value
+  val temperatureRange = absoluteMaximumTemperature - absoluteMinimumTemperature
   return OverviewDayState(
     dayOfWeek = if (isToday) TextResource.fromResId(R.string.forecast_label_today)
     else TextResource.fromUnixSecondToShortDayOfWeek(unixSecond, timeZone),
@@ -84,9 +85,9 @@ private fun OverviewDay.toUiModel(
     weatherIcon = wmoCodeToWeatherIcon(representativeWmoCode, representativeWmoCodeIsDay),
     minimumTemperature = TextResource.fromTemperature(minimumTemperature),
     maximumTemperature = TextResource.fromTemperature(maximumTemperature),
-    temperatureBarStartFraction = ((minimumTemperature.value - absoluteMinimumTemperature.value) / temperatureRange).toFloat(),
-    temperatureBarEndFraction = ((absoluteMaximumTemperature.value - maximumTemperature.value) / temperatureRange).toFloat(),
-    currentTemperatureCenterFraction = currentTemperature?.let { (it.value - absoluteMinimumTemperature.value) / temperatureRange }
+    temperatureBarStartFraction = ((minimumTemperature - absoluteMinimumTemperature) / temperatureRange).toFloat(),
+    temperatureBarEndFraction = ((absoluteMaximumTemperature - maximumTemperature) / temperatureRange).toFloat(),
+    currentTemperatureCenterFraction = currentTemperature?.let { (it - absoluteMinimumTemperature) / temperatureRange }
       ?.toFloat()
   )
 }
@@ -160,3 +161,14 @@ private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.U
     }
   )
 }
+
+private fun OverviewFeelsLike.toUiModel() = OverviewDetailState.FeelsLike(
+  value = TextResource.fromTemperature(feelsLike),
+  description = TextResource.fromResId(
+    when (higherThanActualTemperature) {
+      true -> R.string.feels_like_value_higher
+      false -> R.string.feels_like_value_lower
+      null -> R.string.feels_like_value_equal
+    }
+  )
+)

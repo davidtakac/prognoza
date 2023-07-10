@@ -120,8 +120,8 @@
     <string name="settings_msg_app_icon" translatable="false">Nataša Takač</string>
     <string name="forecast_err">Failed to get forecast. Please check your Internet connection and try again.</string>
     <string name="forecast_label_now">Now</string>
-    <string name="forecast_label_high_low">High: %s ꞏ Low: %s</string>
-    <string name="forecast_label_feels_like">Feels like %s</string>
+    <string name="now_value_high_low">High: %s ꞏ Low: %s</string>
+    <string name="now_value_feels_like">Feels like %s</string>
     <string name="forecast_label_sunrise">Sunrise</string>
     <string name="forecast_label_sunset">Sunset</string>
     <string name="forecast_label_today">Today</string>
@@ -143,4 +143,8 @@
     <string name="uv_value_protection_at">Use protection at %s.</string>
     <string name="uv_value_protection_none">No protection needed.</string>
     <string name="forecast_label_uv_index">UV Index</string>
+    <string name="feels_like_value_higher">The humidity is making it feel warmer.</string>
+    <string name="feels_like_value_lower">The wind is making it feel cooler.</string>
+    <string name="feels_like_value_equal">About the same as the actual temperature.</string>
+    <string name="forecast_label_feels_like">Feels like</string>
 </resources>

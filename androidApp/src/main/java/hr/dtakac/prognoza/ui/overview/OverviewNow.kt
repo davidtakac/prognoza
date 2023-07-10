@@ -49,7 +49,7 @@ fun OverviewNow(
         }
         Text(
           text = stringResource(
-            id = R.string.forecast_label_high_low,
+            id = R.string.now_value_high_low,
             maximumTemperature,
             minimumTemperature
           ),
@@ -63,7 +63,7 @@ fun OverviewNow(
           style = MaterialTheme.typography.bodyLarge
         )
         Text(
-          text = stringResource(id = R.string.forecast_label_feels_like, feelsLikeTemperature),
+          text = stringResource(id = R.string.now_value_feels_like, feelsLikeTemperature),
           style = MaterialTheme.typography.bodyLarge,
           color = MaterialTheme.colorScheme.onSurfaceVariant
         )

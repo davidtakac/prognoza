@@ -65,4 +65,9 @@ sealed interface OverviewDetailState {
     val valueCenterFraction: Float,
     val recommendations: TextResource
   ) : OverviewDetailState
+
+  data class FeelsLike(
+    val value: TextResource,
+    val description: TextResource
+  ) : OverviewDetailState
 }

@@ -14,6 +14,12 @@ class Temperature internal constructor(
     return thisCelsius.compareTo(otherCelsius)
   }
 
+  operator fun plus(other: Temperature): Temperature = Temperature(value + other.valueIn(unit), unit)
+
+  operator fun minus(other: Temperature): Temperature = Temperature(value - other.valueIn(unit), unit)
+
+  operator fun div(other: Temperature): Double = value / other.valueIn(unit)
+
   override fun toString(): String = "$value ${unit.suffix}"
 
   internal fun convertTo(unit: TemperatureUnit) = Temperature(valueIn(unit), unit)

@@ -96,7 +96,7 @@ fun OverviewScreen(
       if (state.data == null) return@Scaffold
       LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(
           top = contentPadding.calculateTopPadding() + 24.dp,
           start = contentPadding.calculateStartPadding(LocalLayoutDirection.current) + 24.dp,
@@ -104,7 +104,7 @@ fun OverviewScreen(
           bottom = contentPadding.calculateBottomPadding()
         )
       ) {
-        item("now", span = { GridItemSpan(2) }) {
+        item(key = "now", span = { GridItemSpan(2) }) {
           OverviewNow(
             temperature = state.data.now.temperature.asString(),
             maximumTemperature = state.data.now.maximumTemperature.asString(),
@@ -114,14 +114,14 @@ fun OverviewScreen(
             feelsLikeTemperature = state.data.now.feelsLikeTemperature.asString(),
           )
         }
-        item("hours-heading", span = { GridItemSpan(2) }) {
+        item(key = "hours-heading", span = { GridItemSpan(2) }) {
           Text(
             text = stringResource(id = R.string.forecast_title_hourly),
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(top = 64.dp, bottom = 12.dp)
           )
         }
-        item("hours", span = { GridItemSpan(2) }) {
+        item(key = "hours", span = { GridItemSpan(2) }) {
           Card(
             modifier = Modifier
               .fillMaxWidth()
@@ -159,7 +159,7 @@ fun OverviewScreen(
             }
           }
         }
-        item("coming-heading", span = { GridItemSpan(2) }) {
+        item(key = "coming-heading", span = { GridItemSpan(2) }) {
           Text(
             text = stringResource(
               id = R.string.forecast_title_coming,
@@ -169,7 +169,10 @@ fun OverviewScreen(
             modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
           )
         }
-        itemsIndexed(state.data.days, span = { _, _ -> GridItemSpan(2) }) { idx, day ->
+        itemsIndexed(
+          items = state.data.days,
+          span = { _, _ -> GridItemSpan(2) }
+        ) { idx, day ->
           OverviewDay(
             day = day.dayOfWeek.asString(),
             pop = day.pop?.asString(),
@@ -191,33 +194,43 @@ fun OverviewScreen(
               .height(64.dp)
           )
         }
-        item("details-heading", span = { GridItemSpan(2) }) {
+        item(
+          key = "details-heading",
+          span = { GridItemSpan(2) }
+        ) {
           Text(
             text = stringResource(id = R.string.forecast_title_details),
             style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
+            modifier = Modifier.padding(top = 24.dp)
           )
         }
         state.data.details.forEach {
           item {
+            val modifier = remember {
+              Modifier
+                .padding(top = 12.dp)
+                .fillMaxWidth()
+                .aspectRatio(1f)
+            }
             when (it) {
               is OverviewDetailState.Precipitation -> OverviewPrecipitation(
                 amountInLastPeriod = it.amountInLastPeriod.asString(),
                 hoursInLastPeriod = it.hoursInLastPeriod.asString(),
                 nextExpected = it.nextExpected.asString(),
                 isSnow = it.isSnow,
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .aspectRatio(1f)
+                modifier = modifier
               )
               is OverviewDetailState.UvIndex -> OverviewUvIndex(
                 value = it.value.asString(),
                 level = it.level.asString(),
                 valueCenterFraction = it.valueCenterFraction,
                 recommendations = it.recommendations.asString(),
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .aspectRatio(1f)
+                modifier = modifier
+              )
+              is OverviewDetailState.FeelsLike -> OverviewFeelsLike(
+                value = it.value.asString(),
+                description = it.description.asString(),
+                modifier = modifier
               )
             }
           }

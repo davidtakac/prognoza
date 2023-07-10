@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.hours
 
 class Overview internal constructor(
@@ -11,8 +12,11 @@ class Overview internal constructor(
   val days: OverviewDays,
   val rainfall: OverviewPrecipitation,
   val snowfall: OverviewPrecipitation?,
-  val uvIndex: OverviewUvIndex
+  val uvIndex: OverviewUvIndex,
+  val feelsLike: OverviewFeelsLike
 ) {
+  // todo: why build? use a constructor like god intended :D Go by uv index and feelslike. Do the
+  //  same for Forecast, units of measure, etc.
   companion object {
     fun build(forecast: Forecast): Overview? {
       val last24Hours = forecast.pastHours.take(24)
@@ -26,7 +30,8 @@ class Overview internal constructor(
         rainfall = buildRainfall(last24Hours, futureDays),
         snowfall = buildSnowfall(last24Hours, futureDays)
           .takeIf { it.amountInLastPeriod.value > 0 || it.startUnixSecondOfNextExpectedAmount != null },
-        uvIndex = buildUvIndex(futureDays[0].hours)
+        uvIndex = OverviewUvIndex(futureDays[0].hours),
+        feelsLike = OverviewFeelsLike(next24Hours[0])
       )
     }
 
@@ -120,16 +125,6 @@ class Overview internal constructor(
         nextExpectedAmount = nextExpectedAmount
       )
     }
-
-    private fun buildUvIndex(hours: List<Hour>) = OverviewUvIndex(
-      uvIndex = hours[0].uvIndex,
-      protectionStartUnixSecond = hours.firstOrNull { it.uvIndex.protectionNeeded }
-        // Do not display a redundant start time if we're already in the danger zone
-        ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds },
-      protectionEndUnixSecond = hours.lastOrNull { it.uvIndex.protectionNeeded }
-        // Do not display a redundant end time if we're out of the danger zone
-        ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
-    )
   }
 }
 
@@ -180,8 +175,38 @@ class OverviewPrecipitation internal constructor(
   val nextExpectedAmount: Length
 )
 
-class OverviewUvIndex internal constructor(
-  val uvIndex: UvIndex,
-  val protectionStartUnixSecond: Long?,
+class OverviewUvIndex internal constructor(hours: List<Hour>) {
+  val uvIndex: UvIndex
+  val protectionStartUnixSecond: Long?
   val protectionEndUnixSecond: Long?
-)
+
+  init {
+    uvIndex = hours[0].uvIndex
+    protectionStartUnixSecond = hours.firstOrNull { it.uvIndex.protectionNeeded }
+      // Do not display a redundant start time if we're already in the danger zone
+      ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
+    protectionEndUnixSecond = hours.lastOrNull { it.uvIndex.protectionNeeded }
+      // Do not display a redundant end time if we're out of the danger zone
+      ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
+  }
+}
+
+class OverviewFeelsLike internal constructor(hour: Hour) {
+  val feelsLike: Temperature
+  /**
+   *  - true when feels like temperature is higher because of humidity,
+   *  - false when it is lower because of wind, and
+   *  - null when it is comparable to the actual temperature.
+   */
+  val higherThanActualTemperature: Boolean?
+
+  init {
+    val noticeableDifference = when (hour.feelsLike.unit) {
+      TemperatureUnit.DegreeCelsius -> 1
+      TemperatureUnit.DegreeFahrenheit -> 2
+    }
+    val difference = hour.feelsLike.value - hour.temperature.value
+    higherThanActualTemperature = if (abs(difference) >= noticeableDifference) { difference > 0 } else null
+    feelsLike = hour.feelsLike
+  }
+}
