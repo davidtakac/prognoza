@@ -122,7 +122,7 @@ fun OverviewScreen(
         }
         item("hours", span = { GridItemSpan(2) }) {
           Card(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(128.dp),
             shape = RoundedCornerShape(roundedCornerRadius)
           ) {
             LazyRow(
@@ -138,13 +138,20 @@ fun OverviewScreen(
                 // TODO: to make sunrise, sunset and weather align, make a template
                 //  slots-based composable and reuse it for each of them
                 when (it) {
-                  is OverviewHourState.Sunrise -> OverviewSunrise(time = it.time.asString())
-                  is OverviewHourState.Sunset -> OverviewSunset(time = it.time.asString())
-                  is OverviewHourState.Weather -> OverviewHour(
+                  is OverviewHourState.Sunrise -> OverviewSunriseHour(
+                    time = it.time.asString(),
+                    modifier = Modifier.fillMaxHeight()
+                  )
+                  is OverviewHourState.Sunset -> OverviewSunsetHour(
+                    time = it.time.asString(),
+                    modifier = Modifier.fillMaxHeight()
+                  )
+                  is OverviewHourState.Weather -> OverviewWeatherHour(
                     temperature = it.temperature.asString(),
                     pop = it.pop?.asString(),
                     weatherIcon = it.weatherIcon,
-                    time = it.time.asString()
+                    time = it.time.asString(),
+                    modifier = Modifier.fillMaxHeight()
                   )
                 }
               }
