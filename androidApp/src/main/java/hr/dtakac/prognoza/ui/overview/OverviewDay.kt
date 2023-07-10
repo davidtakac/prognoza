@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -76,8 +77,8 @@ fun OverviewDay(
         ) {
           Row(
             modifier = Modifier
-              .border(
-                border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurfaceVariant),
+              .background(
+                color = Color.Black,
                 shape = RoundedCornerShape(percent = 100)
               )
               .fillMaxSize()
@@ -100,14 +101,14 @@ fun OverviewDay(
               Box(
                 modifier = Modifier
                   .size(temperatureBarHeight)
+                  // Accounts for the fact that the current temperature fraction refers to
+                  // the center of the circle, not the start
+                  .offset(x = -(temperatureBarHeight / 2))
                   .border(
                     width = 2.dp,
                     shape = CircleShape,
-                    color = MaterialTheme.colorScheme.inverseOnSurface
+                    color = Color.Black
                   )
-                  // Accounts for the fact that the current temperature fraction refers to
-                  // the center of the circle, not the start
-                  .offset(x = -temperatureBarHeight / 2)
               ) {}
             }
           }
