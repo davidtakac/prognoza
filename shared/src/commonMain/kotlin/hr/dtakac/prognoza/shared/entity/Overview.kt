@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.shared.entity
 
+import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 
 class Overview internal constructor(
@@ -8,7 +9,8 @@ class Overview internal constructor(
   val hours: List<OverviewHour>,
   val days: OverviewDays,
   val rainfall: OverviewPrecipitation,
-  val snowfall: OverviewPrecipitation?
+  val snowfall: OverviewPrecipitation?,
+  val uvIndex: OverviewUvIndex
 ) {
   companion object {
     fun build(forecast: Forecast): Overview? {
@@ -17,14 +19,13 @@ class Overview internal constructor(
       val futureDays = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
       return Overview(
         timeZone = forecast.timeZone,
-        now = buildNow(now = next24Hours[0], today = futureDays[0]),
-        hours = buildHours(hours = next24Hours, days = futureDays),
-        days = buildDays(days = futureDays),
-        rainfall = buildRainfall(lastPeriodHours = last24Hours, futureDays = futureDays),
-        snowfall = buildSnowfall(
-          lastPeriodHours = last24Hours,
-          futureDays = futureDays
-        ).takeIf { it.amountInLastPeriod.value > 0 || it.startUnixSecondOfNextExpectedAmount != null },
+        now = buildNow(next24Hours[0], futureDays[0]),
+        hours = buildHours(next24Hours, futureDays),
+        days = buildDays(futureDays),
+        rainfall = buildRainfall(last24Hours, futureDays),
+        snowfall = buildSnowfall(last24Hours, futureDays)
+          .takeIf { it.amountInLastPeriod.value > 0 || it.startUnixSecondOfNextExpectedAmount != null },
+        uvIndex = buildUvIndex(futureDays[0].hours)
       )
     }
 
@@ -118,6 +119,14 @@ class Overview internal constructor(
         nextExpectedAmount = nextExpectedAmount
       )
     }
+
+    private fun buildUvIndex(hours: List<Hour>) = OverviewUvIndex(
+      currentValue = hours[0].uvIndex,
+      protectionStartUnixSecond = hours.firstOrNull { it.uvIndex.useProtection }
+        // If the start of the dangerous hour has passed, just display when it's safe again
+        ?.startUnixSecond?.takeUnless { it < Clock.System.now().epochSeconds },
+      protectionEndUnixSecond = hours.lastOrNull { it.uvIndex.useProtection }?.startUnixSecond
+    )
   }
 }
 
@@ -166,4 +175,10 @@ class OverviewPrecipitation internal constructor(
   val amountInLastPeriod: Length,
   val startUnixSecondOfNextExpectedAmount: Long?,
   val nextExpectedAmount: Length
+)
+
+class OverviewUvIndex internal constructor(
+  val currentValue: UvIndex,
+  val protectionStartUnixSecond: Long?,
+  val protectionEndUnixSecond: Long?
 )

@@ -15,6 +15,8 @@ class UvIndex internal constructor(val value: Double) : Comparable<UvIndex> {
     else -> UvIndexDescription.Low
   }
 
+  val useProtection: Boolean = description > UvIndexDescription.Low
+
   private fun throwInvalidValue(): Nothing =
     throw IllegalStateException("UV Index value must be positive, was ${toString()}")
 }
