@@ -7,7 +7,8 @@ class Overview internal constructor(
   val now: OverviewNow,
   val hours: List<OverviewHour>,
   val days: OverviewDays,
-  val precipitation: OverviewPrecipitation
+  val rainfall: OverviewPrecipitation,
+  val snowfall: OverviewPrecipitation?
 ) {
   companion object {
     fun build(forecast: Forecast): Overview? {
@@ -19,12 +20,15 @@ class Overview internal constructor(
         now = buildNow(now = next24Hours[0], today = futureDays[0]),
         hours = buildHours(hours = next24Hours, days = futureDays),
         days = buildDays(days = futureDays),
-        precipitation = buildPrecipitation(lastPeriodHours = last24Hours, futureDays = futureDays)
+        rainfall = buildRainfall(lastPeriodHours = last24Hours, futureDays = futureDays),
+        snowfall = buildSnowfall(
+          lastPeriodHours = last24Hours,
+          futureDays = futureDays
+        ).takeIf { it.lastPeriodAmount.value > 0 || it.nextExpectedStartUnixSecond != null },
       )
     }
 
     private fun buildNow(now: Hour, today: Day) = OverviewNow(
-      unixSecond = now.startUnixSecond,
       temperature = now.temperature,
       minimumTemperature = today.minimumTemperature,
       maximumTemperature = today.maximumTemperature,
@@ -76,39 +80,59 @@ class Overview internal constructor(
       maximumTemperature = days.maxOf { it.maximumTemperature }
     )
 
-    private fun buildPrecipitation(lastPeriodHours: List<Hour>, futureDays: List<Day>): OverviewPrecipitation {
-      var nextExpectedRainStartUnixSecond: Long? = null
-      var nextExpectedRain: Length? = null
-      futureDays.firstOrNull { it.totalRain + it.totalShowers > Length.Zero }?.let { rainyDay ->
-        nextExpectedRainStartUnixSecond = rainyDay.hours.firstOrNull { it.rain + it.showers > Length.Zero }?.startUnixSecond
-        nextExpectedRain = (rainyDay.totalRain + rainyDay.totalShowers).takeIf { it > Length.Zero }?.convertTo(rainyDay.totalRain.unit)
+    private fun buildRainfall(
+      lastPeriodHours: List<Hour>,
+      futureDays: List<Day>
+    ): OverviewPrecipitation {
+      var nextExpectedStartUnixSecond: Long? = null
+      var nextExpectedAmount: Length? = null
+      futureDays.firstOrNull { (it.totalRain + it.totalShowers).value > 0 }?.let { rainyDay ->
+        nextExpectedStartUnixSecond =
+          rainyDay.hours.firstOrNull { (it.rain + it.showers).value > 0 }?.startUnixSecond
+        nextExpectedAmount =
+          (rainyDay.totalRain + rainyDay.totalShowers).takeIf { nextExpectedStartUnixSecond != null && it.value > 0 }
       }
-
-      var nextExpectedSnowStartUnixSecond: Long? = null
-      var nextExpectedSnow: Length? = null
-      futureDays.firstOrNull { it.totalSnow > Length.Zero }?.let { snowyDay ->
-        nextExpectedSnowStartUnixSecond = snowyDay.hours.firstOrNull { it.snow > Length.Zero }?.startUnixSecond
-        nextExpectedSnow = snowyDay.totalSnow.takeIf { it > Length.Zero }?.convertTo(snowyDay.totalSnow.unit)
-      }
-
-      // TODO: figure out why nextExpectedRain can be 0.1mm, but startUnixSecond can be null. Probably because
-      //  the API returns an aggregate that doesn't necessarily correspond to the actual hourly values. To address this,
-      //  you should probably calculate daily values directly from the hours.
       return OverviewPrecipitation(
         lastPeriodHourCount = lastPeriodHours.size,
-        lastPeriodRain = lastPeriodHours.fold(Length.Zero) { acc, curr -> acc + curr.rain + curr.showers }.takeIf { it > Length.Zero },
-        lastPeriodSnow = lastPeriodHours.fold(Length.Zero) { acc, curr -> acc + curr.snow }.takeIf { it > Length.Zero },
-        nextExpectedRain = nextExpectedRain,
-        nextExpectedRainStartUnixSecond = nextExpectedRainStartUnixSecond,
-        nextExpectedSnow = nextExpectedSnow,
-        nextExpectedSnowStartUnixSecond = nextExpectedSnowStartUnixSecond
+        lastPeriodAmount = lastPeriodHours.fold(
+          Length(
+            0.0,
+            LengthUnit.Millimetre
+          )
+        ) { acc, curr -> acc + curr.rain + curr.showers },
+        nextExpectedStartUnixSecond = nextExpectedStartUnixSecond,
+        nextExpectedAmount = nextExpectedAmount
+      )
+    }
+
+    private fun buildSnowfall(
+      lastPeriodHours: List<Hour>,
+      futureDays: List<Day>
+    ): OverviewPrecipitation {
+      var nextExpectedStartUnixSecond: Long? = null
+      var nextExpectedAmount: Length? = null
+      futureDays.firstOrNull { it.totalSnow.value > 0 }?.let { snowyDay ->
+        nextExpectedStartUnixSecond =
+          snowyDay.hours.firstOrNull { it.snow.value > 0 }?.startUnixSecond
+        nextExpectedAmount =
+          snowyDay.totalSnow.takeIf { nextExpectedStartUnixSecond != null && it.value > 0 }
+      }
+      return OverviewPrecipitation(
+        lastPeriodHourCount = lastPeriodHours.size,
+        lastPeriodAmount = lastPeriodHours.fold(
+          Length(
+            0.0,
+            LengthUnit.Centimetre
+          )
+        ) { acc, curr -> acc + curr.snow },
+        nextExpectedStartUnixSecond = nextExpectedStartUnixSecond,
+        nextExpectedAmount = nextExpectedAmount
       )
     }
   }
 }
 
 class OverviewNow internal constructor(
-  val unixSecond: Long,
   val temperature: Temperature,
   val minimumTemperature: Temperature,
   val maximumTemperature: Temperature,
@@ -150,10 +174,7 @@ class OverviewDay internal constructor(
 
 class OverviewPrecipitation internal constructor(
   val lastPeriodHourCount: Int,
-  val lastPeriodRain: Length?,
-  val lastPeriodSnow: Length?,
-  val nextExpectedRain: Length?,
-  val nextExpectedRainStartUnixSecond: Long?,
-  val nextExpectedSnow: Length?,
-  val nextExpectedSnowStartUnixSecond: Long?
+  val lastPeriodAmount: Length,
+  val nextExpectedStartUnixSecond: Long?,
+  val nextExpectedAmount: Length?
 )

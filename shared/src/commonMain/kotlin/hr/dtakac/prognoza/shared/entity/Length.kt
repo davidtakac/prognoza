@@ -2,21 +2,18 @@ package hr.dtakac.prognoza.shared.entity
 
 class Length internal constructor(
   val value: Double,
-  val unit: LengthUnit = LengthUnit.Metre
+  val unit: LengthUnit
 ) : Comparable<Length> {
   init {
     if (value < 0) throwInvalidLength()
   }
 
-  operator fun plus(other: Length): Length {
-    val newUnit = LengthUnit.Metre
-    return Length(
-      value = valueIn(newUnit) + other.valueIn(newUnit),
-      unit = newUnit
-    )
-  }
+  operator fun plus(other: Length): Length = Length(
+    value = value + other.valueIn(unit),
+    unit = unit
+  )
 
-  override fun compareTo(other: Length): Int = value.compareTo(other.convertTo(unit).value)
+  override fun compareTo(other: Length): Int = value.compareTo(other.valueIn(unit))
 
   override fun toString(): String = "$value ${unit.suffix}"
 
@@ -41,10 +38,6 @@ class Length internal constructor(
 
   private fun throwInvalidLength(): Nothing =
     throw IllegalStateException("Length must be positive, was ${toString()}.")
-
-  companion object {
-    val Zero get() = Length(0.0)
-  }
 }
 
 enum class LengthUnit(
