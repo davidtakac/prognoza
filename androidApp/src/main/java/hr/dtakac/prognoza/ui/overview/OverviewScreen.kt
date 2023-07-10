@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
+import hr.dtakac.prognoza.ui.theme.colors.DeepPurpleColorSchemeDark
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +30,7 @@ fun OverviewScreen(
 ) {
   var searchActive by remember { mutableStateOf(false) }
   val roundedCornerRadius = remember { 12.dp }
-  MaterialTheme {
+  MaterialTheme(colorScheme = DeepPurpleColorSchemeDark) {
     Scaffold(
       topBar = {
         Box(
@@ -122,7 +123,9 @@ fun OverviewScreen(
         }
         item("hours", span = { GridItemSpan(2) }) {
           Card(
-            modifier = Modifier.fillMaxWidth().height(128.dp),
+            modifier = Modifier
+              .fillMaxWidth()
+              .height(128.dp),
             shape = RoundedCornerShape(roundedCornerRadius)
           ) {
             LazyRow(
@@ -203,7 +206,18 @@ fun OverviewScreen(
                 hoursInLastPeriod = it.hoursInLastPeriod.asString(),
                 nextExpected = it.nextExpected.asString(),
                 isSnow = it.isSnow,
-                modifier = Modifier.fillMaxWidth().aspectRatio(1f)
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .aspectRatio(1f)
+              )
+              is OverviewDetailState.UvIndex -> OverviewUvIndex(
+                value = it.value.asString(),
+                level = it.level.asString(),
+                valueCenterFraction = it.valueCenterFraction,
+                recommendations = it.recommendations.asString(),
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .aspectRatio(1f)
               )
             }
           }

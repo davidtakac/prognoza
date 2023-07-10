@@ -1,14 +1,9 @@
 package hr.dtakac.prognoza.ui.overview
 
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.shared.entity.Overview
-import hr.dtakac.prognoza.shared.entity.OverviewDay
-import hr.dtakac.prognoza.shared.entity.OverviewHour
-import hr.dtakac.prognoza.shared.entity.OverviewNow
-import hr.dtakac.prognoza.shared.entity.OverviewPrecipitation
-import hr.dtakac.prognoza.shared.entity.Temperature
-import hr.dtakac.prognoza.shared.entity.UvIndex
+import hr.dtakac.prognoza.shared.entity.*
 import hr.dtakac.prognoza.ui.common.TextResource
+import hr.dtakac.prognoza.ui.common.toUvIndexStringId
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherDescription
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherIcon
 import kotlinx.datetime.Clock
@@ -38,7 +33,7 @@ fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
     snowfall?.let {
       add(it.toUiModel(numDays = days.days.size, timeZone = timeZone).copy(isSnow = true))
     }
-
+    add(uvIndex.toUiModel(timeZone))
   }
 )
 
@@ -53,8 +48,18 @@ private fun OverviewNow.toUiModel() = OverviewNowState(
 )
 
 private fun OverviewHour.toUiModel(isNow: Boolean, timeZone: TimeZone) = when (this) {
-  is OverviewHour.Sunrise -> OverviewHourState.Sunrise(TextResource.fromUnixSecondToShortTime(unixSecond, timeZone))
-  is OverviewHour.Sunset -> OverviewHourState.Sunset(TextResource.fromUnixSecondToShortTime(unixSecond, timeZone))
+  is OverviewHour.Sunrise -> OverviewHourState.Sunrise(
+    TextResource.fromUnixSecondToShortTime(
+      unixSecond,
+      timeZone
+    )
+  )
+  is OverviewHour.Sunset -> OverviewHourState.Sunset(
+    TextResource.fromUnixSecondToShortTime(
+      unixSecond,
+      timeZone
+    )
+  )
   is OverviewHour.Weather -> OverviewHourState.Weather(
     time = if (isNow) TextResource.fromResId(R.string.forecast_label_now)
     else TextResource.fromUnixSecondToShortTime(unixSecond, timeZone),
@@ -81,35 +86,77 @@ private fun OverviewDay.toUiModel(
     maximumTemperature = TextResource.fromTemperature(maximumTemperature),
     temperatureBarStartFraction = ((minimumTemperature.value - absoluteMinimumTemperature.value) / temperatureRange).toFloat(),
     temperatureBarEndFraction = ((absoluteMaximumTemperature.value - maximumTemperature.value) / temperatureRange).toFloat(),
-    currentTemperatureCenterFraction = currentTemperature?.let { (it.value - absoluteMinimumTemperature.value) / temperatureRange }?.toFloat()
+    currentTemperatureCenterFraction = currentTemperature?.let { (it.value - absoluteMinimumTemperature.value) / temperatureRange }
+      ?.toFloat()
   )
 }
 
-private fun OverviewPrecipitation.toUiModel(numDays: Int, timeZone: TimeZone) = OverviewDetailState.Precipitation(
-  amountInLastPeriod = TextResource.fromLength(amountInLastPeriod),
-  hoursInLastPeriod = TextResource.fromResId(R.string.precipitation_value_last_hours, hoursInLastPeriod),
-  nextExpected = startUnixSecondOfNextExpectedAmount?.let {
-    val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
-    val nextExpectedDate = Instant.fromEpochSeconds(it).toLocalDateTime(timeZone).date
-    val nextExpectedAmount = TextResource.fromLength(nextExpectedAmount)
-    if (nextExpectedDate == nowDate) {
-      TextResource.fromResId(
-        id = R.string.precipitation_value_next_expected_from_time,
-        nextExpectedAmount,
-        TextResource.fromUnixSecondToShortTime(it, timeZone)
-      )
-    } else {
-      TextResource.fromResId(
-        id = R.string.precipitation_value_next_expected_on_day,
-        nextExpectedAmount,
-        TextResource.fromUnixSecondToShortDayOfWeek(it, timeZone)
-      )
-    }
-  } ?: TextResource.fromResId(R.string.precipitation_value_none_expected, numDays),
-  isSnow = false
-)
+private fun OverviewPrecipitation.toUiModel(numDays: Int, timeZone: TimeZone) =
+  OverviewDetailState.Precipitation(
+    amountInLastPeriod = TextResource.fromLength(amountInLastPeriod),
+    hoursInLastPeriod = TextResource.fromResId(
+      R.string.precipitation_value_last_hours,
+      hoursInLastPeriod
+    ),
+    nextExpected = startUnixSecondOfNextExpectedAmount?.let {
+      val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
+      val nextExpectedDate = Instant.fromEpochSeconds(it).toLocalDateTime(timeZone).date
+      val nextExpectedAmount = TextResource.fromLength(nextExpectedAmount)
+      if (nextExpectedDate == nowDate) {
+        TextResource.fromResId(
+          id = R.string.precipitation_value_next_expected_from_time,
+          nextExpectedAmount,
+          TextResource.fromUnixSecondToShortTime(it, timeZone)
+        )
+      } else {
+        TextResource.fromResId(
+          id = R.string.precipitation_value_next_expected_on_day,
+          nextExpectedAmount,
+          TextResource.fromUnixSecondToShortDayOfWeek(it, timeZone)
+        )
+      }
+    } ?: TextResource.fromResId(R.string.precipitation_value_none_expected, numDays),
+    isSnow = false
+  )
 
-private fun UvIndex.toUiModel() = OverviewDetailState.UvIndex(
-  value = TextResource.fromString("$value"),
-  level = TextResource.fromResId()
-)
+private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.UvIndex {
+  val protectionStartUnixSecond = protectionStartUnixSecond
+  val protectionEndUnixSecond = protectionEndUnixSecond
+  return OverviewDetailState.UvIndex(
+    value = TextResource.fromNumberToInt(uvIndex.preciseValue),
+    level = TextResource.fromResId(uvIndex.toUvIndexStringId()),
+    valueCenterFraction = (uvIndex.preciseValue / 11).toFloat().coerceAtMost(1f),
+    recommendations = if (protectionStartUnixSecond == null) {
+      if (protectionEndUnixSecond == null) {
+        TextResource.fromResId(R.string.uv_value_protection_none)
+      } else {
+        TextResource.fromResId(
+          R.string.uv_value_protection_until,
+          TextResource.fromUnixSecondToShortTime(protectionEndUnixSecond, timeZone)
+        )
+      }
+    } else {
+      when (protectionEndUnixSecond) {
+        null -> {
+          TextResource.fromResId(
+            R.string.uv_value_protection_from,
+            TextResource.fromUnixSecondToShortTime(protectionStartUnixSecond, timeZone)
+          )
+        }
+        protectionStartUnixSecond -> {
+          TextResource.fromResId(
+            R.string.uv_value_protection_at,
+            TextResource.fromUnixSecondToShortTime(protectionStartUnixSecond, timeZone)
+          )
+        }
+        else -> {
+          TextResource.fromResId(
+            R.string.uv_value_protection_from_until,
+            TextResource.fromUnixSecondToShortTime(protectionStartUnixSecond, timeZone),
+            TextResource.fromUnixSecondToShortTime(protectionEndUnixSecond, timeZone)
+          )
+        }
+      }
+    }
+  )
+}

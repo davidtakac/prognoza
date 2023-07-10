@@ -14,7 +14,6 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlin.math.roundToInt
 
 private const val Tag = "ForecastService"
 
@@ -158,7 +157,7 @@ private data class Response(
           relativeHumidity = hourly.relativeHumidity2m[i],
           dewPoint = Temperature(hourly.dewpoint2m[i], TemperatureUnit.DegreeCelsius),
           visibility = Length(hourly.visibility[i], LengthUnit.Metre),
-          uvIndex = UvIndex(hourly.uvIndex[i].roundToInt()),
+          uvIndex = UvIndex(hourly.uvIndex[i]),
           isDay = hourly.isDay[i] == 1,
           feelsLike = Temperature(
             hourly.apparentTemperature[i],

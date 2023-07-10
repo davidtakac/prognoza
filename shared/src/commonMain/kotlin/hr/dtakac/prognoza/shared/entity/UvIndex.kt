@@ -1,30 +1,16 @@
 package hr.dtakac.prognoza.shared.entity
 
-class UvIndex internal constructor(val value: Int) : Comparable<UvIndex> {
+class UvIndex internal constructor(val preciseValue: Double) : Comparable<UvIndex> {
   init {
-    if (value < 0) throwInvalidValue()
+    if (preciseValue < 0) throwInvalidValue()
   }
 
-  override fun compareTo(other: UvIndex): Int = value.compareTo(other.value)
+  override fun compareTo(other: UvIndex): Int = preciseValue.compareTo(other.preciseValue)
 
-  val description: UvIndexDescription = when {
-    value > 10 -> UvIndexDescription.Extreme
-    value > 7 -> UvIndexDescription.VeryHigh
-    value > 5 -> UvIndexDescription.High
-    value > 2 -> UvIndexDescription.Moderate
-    else -> UvIndexDescription.Low
-  }
+  override fun toString(): String = preciseValue.toString()
 
-  val useProtection: Boolean = description > UvIndexDescription.Low
+  val protectionNeeded: Boolean = preciseValue > 2
 
   private fun throwInvalidValue(): Nothing =
     throw IllegalStateException("UV Index value must be positive, was ${toString()}")
-}
-
-enum class UvIndexDescription {
-  Low,
-  Moderate,
-  High,
-  VeryHigh,
-  Extreme
 }

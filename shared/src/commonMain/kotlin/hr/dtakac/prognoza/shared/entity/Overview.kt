@@ -2,6 +2,7 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import kotlin.time.Duration.Companion.hours
 
 class Overview internal constructor(
   val timeZone: TimeZone,
@@ -121,11 +122,13 @@ class Overview internal constructor(
     }
 
     private fun buildUvIndex(hours: List<Hour>) = OverviewUvIndex(
-      currentValue = hours[0].uvIndex,
-      protectionStartUnixSecond = hours.firstOrNull { it.uvIndex.useProtection }
-        // If the start of the dangerous hour has passed, just display when it's safe again
-        ?.startUnixSecond?.takeUnless { it < Clock.System.now().epochSeconds },
-      protectionEndUnixSecond = hours.lastOrNull { it.uvIndex.useProtection }?.startUnixSecond
+      uvIndex = hours[0].uvIndex,
+      protectionStartUnixSecond = hours.firstOrNull { it.uvIndex.protectionNeeded }
+        // Do not display a redundant start time if we're already in the danger zone
+        ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds },
+      protectionEndUnixSecond = hours.lastOrNull { it.uvIndex.protectionNeeded }
+        // Do not display a redundant end time if we're out of the danger zone
+        ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
     )
   }
 }
@@ -178,7 +181,7 @@ class OverviewPrecipitation internal constructor(
 )
 
 class OverviewUvIndex internal constructor(
-  val currentValue: UvIndex,
+  val uvIndex: UvIndex,
   val protectionStartUnixSecond: Long?,
   val protectionEndUnixSecond: Long?
 )

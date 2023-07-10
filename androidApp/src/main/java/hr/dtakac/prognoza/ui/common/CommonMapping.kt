@@ -4,6 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.shared.entity.CardinalDirection
+import hr.dtakac.prognoza.shared.entity.Speed
+import hr.dtakac.prognoza.shared.entity.UvIndex
 
 @StringRes
 fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
@@ -18,7 +20,7 @@ fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
 }
 
 @StringRes
-fun Int.toBeaufortStringId(): Int = when (this) {
+fun Speed.toBeaufortStringId(): Int = when (beaufortNumber) {
   0 -> R.string.beaufort_label_0
   1 -> R.string.beaufort_label_1
   2 -> R.string.beaufort_label_2
@@ -32,6 +34,15 @@ fun Int.toBeaufortStringId(): Int = when (this) {
   11 -> R.string.beaufort_label_11
   12 -> R.string.beaufort_label_12
   else -> R.string.beaufort_label_13
+}
+
+@StringRes
+fun UvIndex.toUvIndexStringId(): Int = when {
+  preciseValue > 10 -> R.string.uv_label_extreme
+  preciseValue > 7 -> R.string.uv_label_very_high
+  preciseValue > 5 -> R.string.uv_label_high
+  preciseValue > 2 -> R.string.uv_label_moderate
+  else -> R.string.uv_label_low
 }
 
 /*

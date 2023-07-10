@@ -33,6 +33,9 @@ sealed interface TextResource {
     fun fromResId(@StringRes id: Int, vararg args: Any): TextResource =
       ResIdTextResourceWithArgs(id, args.toList())
 
+    fun fromNumberToInt(value: Number): TextResource =
+      IntTextResource(value)
+
     fun fromTemperature(temperature: Temperature): TextResource =
       TemperatureTextResource(temperature)
 
@@ -75,6 +78,16 @@ private data class ResIdTextResourceWithArgs(@StringRes val id: Int, val args: L
       id,
       *args.map { if (it is TextResource) it.asString(context) else it }.toTypedArray()
     )
+}
+
+private data class IntTextResource(val value: Number) : TextResource {
+  override fun asString(context: Context): String =
+    NumberFormatter.with()
+      .locale(context.resources.configuration.locales[0])
+      .precision(Precision.integer())
+      .roundingMode(RoundingMode.HALF_UP)
+      .format(value)
+      .toString()
 }
 
 private data class TemperatureTextResource(val temperature: Temperature) : TextResource {
