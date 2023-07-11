@@ -121,6 +121,7 @@ private data class Response(
       val dayStartUnixSecond = daily.startUnixSecond[i]
       add(
         Day(
+          timeZone = timeZone,
           startUnixSecond = dayStartUnixSecond,
           sunriseUnixSecond = daily.sunrise[i].takeUnless { it == 0L },
           sunsetUnixSecond = daily.sunset[i].takeUnless { it == 0L },
