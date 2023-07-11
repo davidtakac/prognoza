@@ -13,4 +13,8 @@ class UvIndex internal constructor(val preciseValue: Double) : Comparable<UvInde
 
   private fun throwInvalidValue(): Nothing =
     throw IllegalStateException("UV Index value must be positive, was ${toString()}")
+
+  companion object {
+    const val Extreme = 11
+  }
 }

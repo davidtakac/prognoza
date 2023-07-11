@@ -2,32 +2,27 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.*
 
-// TODO: construct forecast with constant relative days and hours
-//  because it will be used instantly. no need to complicate with gets
 class Forecast internal constructor(
   val timeZone: TimeZone,
   val days: List<Day>
 ) {
-  val today: Day?
-    get() = days.firstOrNull {
-      val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
-      val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
-      dayDate == nowDate
-    }
+  val today: Day = days.firstOrNull {
+    val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
+    val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
+    dayDate == nowDate
+  } ?: throw OutdatedForecastException()
 
-  val fromTomorrow: List<Day>
-    get() = days.filter {
-      val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
-      val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
-      dayDate > nowDate
-    }
+  val now: Hour = today.hours.firstOrNull {
+    val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone)
+    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
+    hourDateTime.date == nowDateTime.date && hourDateTime.time.hour == nowDateTime.time.hour
+  } ?: throw OutdatedForecastException()
 
-  val untilYesterday: List<Day>
-    get() = days.filter {
-      val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
-      val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
-      dayDate < nowDate
-    }
+  val fromToday: List<Day> = days.filter {
+    val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
+    val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
+    dayDate >= nowDate
+  }
 
   fun toMeasurementSystem(measurementSystem: MeasurementSystem): Forecast = Forecast(
     timeZone = timeZone,
@@ -49,33 +44,25 @@ class Day internal constructor(
   val totalRain: Length = hours.fold(Length(0.0, hours[0].rain.unit)) { acc, curr -> acc + curr.rain }
   val totalShowers: Length = hours.fold(Length(0.0, hours[0].showers.unit)) { acc, curr -> acc + curr.showers }
   val totalRainAndShowers: Length = totalRain + totalShowers
-  val totalSnow: Length = hours.fold(Length(0.0, hours[0].snow.unit)) { acc, curr -> acc + curr.rain }
+  val totalSnow: Length = hours.fold(Length(0.0, hours[0].snow.unit)) { acc, curr -> acc + curr.snow }
   val maximumPop: Pop = hours.maxOf { it.pop }
   val maximumWind: Speed = hours.maxOf { it.wind }
   val maximumGust: Speed = hours.maxOf { it.gust }
   val maximumUvIndex: UvIndex = hours.maxOf { it.uvIndex }
   val representativeWmoCode: RepresentativeWmoCode = getRepresentativeWmoCode(hours)
 
-  val currentHour: Hour?
-    get() = hours.firstOrNull {
-      val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
-      val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
-      hourDateTime == nowDateTime
-    }
-  
-  val untilPreviousHour: List<Hour>
-    get() = hours.filter {
-      val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
-      val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
-      hourDateTime > nowDateTime
-    }
+  val untilNow: List<Hour> = hours.filter {
+    val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
+    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
+    hourDateTime <= nowDateTime
+  }
 
-  val fromNextHour: List<Hour>
-    get() = hours.filter {
-      val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
-      val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
-      hourDateTime < nowDateTime
-    }
+  val fromNow: List<Hour> = hours.filter {
+    val hourDateTime =
+      Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
+    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
+    hourDateTime >= nowDateTime
+  }
 
   fun toMeasurementSystem(measurementSystem: MeasurementSystem): Day =
     Day(
@@ -195,3 +182,5 @@ class Hour internal constructor(
     )
   )
 }
+
+class OutdatedForecastException : Exception()

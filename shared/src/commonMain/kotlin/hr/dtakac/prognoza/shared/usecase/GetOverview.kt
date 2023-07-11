@@ -12,7 +12,7 @@ class GetOverview internal constructor(
   suspend operator fun invoke(coordinates: Coordinates): Overview? =
     getForecast(coordinates)?.let {
       withContext(computationDispatcher) {
-        Overview.build(it)
+        Overview(it)
       }
     }
 }

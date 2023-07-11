@@ -34,7 +34,7 @@ class Length internal constructor(
   internal fun convertTo(unit: LengthUnit) = Length(valueIn(unit), unit)
 
   private fun valueIn(unit: LengthUnit): Double =
-    if (this.unit == unit) value else value * this.unit.metres / unit.metres
+    if (this.unit == unit) value else (value * this.unit.metres / unit.metres)
 
   private fun throwInvalidLength(): Nothing =
     throw IllegalStateException("Length must be positive, was ${toString()}.")

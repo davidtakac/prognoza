@@ -37,7 +37,7 @@ fun OverviewUvIndex(
     mainValue = { Text(text = value) },
     supportingValue = { Text(text = level) },
     supportingGraphic = {
-      Box(
+      Row(
         modifier = Modifier
           .fillMaxWidth()
           .height(barHeight)

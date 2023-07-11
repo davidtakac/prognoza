@@ -37,9 +37,9 @@ class Temperature internal constructor(
       }
     }
 
-  private fun celsiusToFahrenheit(celsius: Double) = celsius * 9 / 5 + 32
+  private fun celsiusToFahrenheit(celsius: Double) = (celsius * (9 / 5)) + 32
 
-  private fun fahrenheitToCelsius(fahrenheit: Double) = (fahrenheit - 32) * 5 / 9
+  private fun fahrenheitToCelsius(fahrenheit: Double) = (fahrenheit - 32) * (5 / 9)
 
   private fun throwTemperatureBelowAbsoluteZero(): Nothing =
     throw IllegalStateException("Temperature must be greater than -273.15, was ${toString()}.")

@@ -13,8 +13,7 @@ class Pressure internal constructor(
   internal fun convertTo(unit: PressureUnit): Pressure = Pressure(valueIn(unit), unit)
 
   private fun valueIn(unit: PressureUnit): Double =
-    if (unit == this.unit) value
-    else value * this.unit.pascals / unit.pascals
+    if (unit == this.unit) value else (value * this.unit.pascals / unit.pascals)
 
   private fun throwInvalidPressure(): Nothing =
     throw IllegalStateException("Pressure must be positive, was ${toString()}.")

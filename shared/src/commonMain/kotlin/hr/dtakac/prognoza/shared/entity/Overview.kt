@@ -3,196 +3,221 @@ package hr.dtakac.prognoza.shared.entity
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlin.math.abs
+import kotlin.reflect.KProperty1
 import kotlin.time.Duration.Companion.hours
 
-class Overview internal constructor(
-  val timeZone: TimeZone,
-  val now: OverviewNow,
-  val hours: List<OverviewHour>,
-  val days: OverviewDays,
-  val rainfall: OverviewPrecipitation,
-  val snowfall: OverviewPrecipitation?,
-  val uvIndex: OverviewUvIndex,
-  val feelsLike: OverviewFeelsLike
-) {
-  // todo: why build? use a constructor like god intended :D Go by uv index and feelslike. Do the
-  //  same for Forecast, units of measure, etc.
-  companion object {
-    fun build(forecast: Forecast): Overview? {
-      val last24Hours = forecast.pastHours.take(24)
-      val next24Hours = forecast.futureHours.take(24).takeIf { it.isNotEmpty() } ?: return null
-      val futureDays = forecast.futureDays.takeIf { it.isNotEmpty() } ?: return null
-      return Overview(
-        timeZone = forecast.timeZone,
-        now = buildNow(next24Hours[0], futureDays[0]),
-        hours = buildHours(next24Hours, futureDays),
-        days = buildDays(futureDays),
-        rainfall = buildRainfall(last24Hours, futureDays),
-        snowfall = buildSnowfall(last24Hours, futureDays)
-          .takeIf { it.amountInLastPeriod.value > 0 || it.startUnixSecondOfNextExpectedAmount != null },
-        uvIndex = OverviewUvIndex(futureDays[0].hours),
-        feelsLike = OverviewFeelsLike(next24Hours[0])
-      )
-    }
+class Overview internal constructor(forecast: Forecast) {
+  val timeZone: TimeZone = forecast.timeZone
+  val now: OverviewNow = OverviewNow(forecast.now, forecast.today)
+  val hours: List<OverviewHour> = buildHours(forecast)
+  val days: OverviewDays = OverviewDays(forecast.fromToday)
+  val rainfall: OverviewPrecipitation = OverviewPrecipitation(forecast, Hour::rainAndShowers, Day::totalRainAndShowers)
+  val snowfall: OverviewPrecipitation? = OverviewPrecipitation(forecast, Hour::snow, Day::totalSnow)
+    .takeUnless { it.past.amount.value == 0.0 && it.future is OverviewPrecipitation.Future.NoneExpected }
+  val uvIndex: OverviewUvIndex = OverviewUvIndex(forecast.now, forecast.today)
+  val feelsLike: OverviewFeelsLike = OverviewFeelsLike(forecast.now)
 
-    private fun buildNow(now: Hour, today: Day) = OverviewNow(
-      temperature = now.temperature,
-      minimumTemperature = today.minimumTemperature,
-      maximumTemperature = today.maximumTemperature,
-      feelsLike = now.feelsLike,
-      wmoCode = now.wmoCode,
-      isDay = now.isDay
-    )
+  private fun buildHours(forecast: Forecast) = buildList<OverviewHour> {
+    val hours = forecast.fromToday.flatMap { it.fromNow }.take(24)
+    addAll(hours.map { OverviewHour.Weather(it) })
 
-    private fun buildHours(hours: List<Hour>, days: List<Day>) = buildList<OverviewHour> {
-      val overviewHours = hours.map {
-        OverviewHour.Weather(
-          unixSecond = it.startUnixSecond,
-          temperature = it.temperature,
-          pop = it.pop.humanValue,
-          wmoCode = it.wmoCode,
-          isDay = it.isDay
-        )
-      }
-      addAll(overviewHours)
+    val fromToday = forecast.fromToday
+    val sunrises = fromToday
+      .mapNotNull { it.sunriseUnixSecond }
+      .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
+      .map { OverviewHour.Sunrise(it) }
+    addAll(sunrises)
 
-      val sunrises = days
-        .mapNotNull { it.sunriseUnixSecond }
-        .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
-        .map { OverviewHour.Sunrise(it) }
-      addAll(sunrises)
+    val sunsets = fromToday
+      .mapNotNull { it.sunsetUnixSecond }
+      .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
+      .map { OverviewHour.Sunset(it) }
+    addAll(sunsets)
 
-      val sunsets = days
-        .mapNotNull { it.sunsetUnixSecond }
-        .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
-        .map { OverviewHour.Sunset(it) }
-      addAll(sunsets)
-
-      // Ensures sunrises and sunsets are placed in between Weather hours
-      sortBy { it.unixSecond }
-    }
-
-    private fun buildDays(days: List<Day>) = OverviewDays(
-      days = days.map { day ->
-        OverviewDay(
-          unixSecond = day.startUnixSecond,
-          representativeWmoCode = day.representativeWmoCode.wmoCode,
-          representativeWmoCodeIsDay = day.representativeWmoCode.isDay,
-          minimumTemperature = day.minimumTemperature,
-          maximumTemperature = day.maximumTemperature,
-          maximumPop = day.maximumPop.humanValue,
-        )
-      },
-      minimumTemperature = days.minOf { it.minimumTemperature },
-      maximumTemperature = days.maxOf { it.maximumTemperature }
-    )
-
-    private fun buildRainfall(
-      lastPeriodHours: List<Hour>,
-      futureDays: List<Day>
-    ): OverviewPrecipitation {
-      val unit = lastPeriodHours[0].rain.unit
-      var nextExpectedStartUnixSecond: Long? = null
-      var nextExpectedAmount = Length(0.0, unit)
-      futureDays.firstOrNull { (it.totalRain + it.totalShowers).value > 0 }?.let { rainyDay ->
-        nextExpectedStartUnixSecond =
-          rainyDay.hours.firstOrNull { (it.rain + it.showers).value > 0 }?.startUnixSecond
-        nextExpectedAmount = (rainyDay.totalRain + rainyDay.totalShowers)
-      }
-      return OverviewPrecipitation(
-        hoursInLastPeriod = lastPeriodHours.size,
-        amountInLastPeriod = lastPeriodHours.fold(Length(0.0, unit)) { acc, curr -> acc + curr.rain + curr.showers },
-        startUnixSecondOfNextExpectedAmount = nextExpectedStartUnixSecond,
-        nextExpectedAmount = nextExpectedAmount
-      )
-    }
-
-    private fun buildSnowfall(
-      lastPeriodHours: List<Hour>,
-      futureDays: List<Day>
-    ): OverviewPrecipitation {
-      val unit = lastPeriodHours[0].snow.unit
-      var nextExpectedStartUnixSecond: Long? = null
-      var nextExpectedAmount = Length(0.0, unit)
-      futureDays.firstOrNull { it.totalSnow.value > 0 }?.let { snowyDay ->
-        nextExpectedStartUnixSecond = snowyDay.hours.firstOrNull { it.snow.value > 0 }?.startUnixSecond
-        nextExpectedAmount = snowyDay.totalSnow
-      }
-      return OverviewPrecipitation(
-        hoursInLastPeriod = lastPeriodHours.size,
-        amountInLastPeriod = lastPeriodHours.fold(Length(0.0, unit)) { acc, curr -> acc + curr.snow },
-        startUnixSecondOfNextExpectedAmount = nextExpectedStartUnixSecond,
-        nextExpectedAmount = nextExpectedAmount
-      )
-    }
+    // Ensures sunrises and sunsets are placed in between Weather hours
+    sortBy { it.unixSecond }
   }
 }
 
-class OverviewNow internal constructor(
-  val temperature: Temperature,
-  val minimumTemperature: Temperature,
-  val maximumTemperature: Temperature,
-  val feelsLike: Temperature,
-  val wmoCode: Int,
-  val isDay: Boolean,
-)
+class OverviewNow internal constructor(now: Hour, today: Day) {
+  val temperature: Temperature = now.temperature
+  val minimumTemperature: Temperature = today.minimumTemperature
+  val maximumTemperature: Temperature = today.maximumTemperature
+  val feelsLike: Temperature = now.feelsLike
+  val wmoCode: Int = now.wmoCode
+  val isDay: Boolean = now.isDay
+}
 
 sealed interface OverviewHour {
   val unixSecond: Long
 
-  class Weather internal constructor(
-    override val unixSecond: Long,
-    val temperature: Temperature,
-    val pop: Int,
-    val wmoCode: Int,
-    val isDay: Boolean
-  ) : OverviewHour
+  class Weather internal constructor(hour: Hour) : OverviewHour {
+    override val unixSecond: Long = hour.startUnixSecond
+    val temperature: Temperature = hour.temperature
+    val pop: Int = hour.pop.humanValue
+    val wmoCode: Int = hour.wmoCode
+    val isDay: Boolean = hour.isDay
+  }
 
   class Sunrise internal constructor(override val unixSecond: Long) : OverviewHour
 
   class Sunset internal constructor(override val unixSecond: Long) : OverviewHour
 }
 
-class OverviewDays internal constructor(
-  val days: List<OverviewDay>,
-  val minimumTemperature: Temperature,
-  val maximumTemperature: Temperature
-)
+class OverviewDays internal constructor(days: List<Day>) {
+  val days: List<OverviewDay> = days.map { OverviewDay(it) }
+  val minimumTemperature: Temperature = days.minOf { it.minimumTemperature }
+  val maximumTemperature: Temperature = days.maxOf { it.maximumTemperature }
+}
 
-class OverviewDay internal constructor(
-  val unixSecond: Long,
-  val representativeWmoCode: Int,
-  val representativeWmoCodeIsDay: Boolean,
-  val minimumTemperature: Temperature,
-  val maximumTemperature: Temperature,
-  val maximumPop: Int
-)
+class OverviewDay internal constructor(day: Day) {
+  val unixSecond: Long = day.startUnixSecond
+  val representativeWmoCode: Int = day.representativeWmoCode.wmoCode
+  val representativeWmoCodeIsDay: Boolean = day.representativeWmoCode.isDay
+  val minimumTemperature: Temperature = day.minimumTemperature
+  val maximumTemperature: Temperature = day.maximumTemperature
+  val maximumPop: Int = day.maximumPop.humanValue
+}
 
 class OverviewPrecipitation internal constructor(
-  val hoursInLastPeriod: Int,
-  val amountInLastPeriod: Length,
-  val startUnixSecondOfNextExpectedAmount: Long?,
-  val nextExpectedAmount: Length
-)
-
-class OverviewUvIndex internal constructor(hours: List<Hour>) {
-  val uvIndex: UvIndex
-  val protectionStartUnixSecond: Long?
-  val protectionEndUnixSecond: Long?
+  forecast: Forecast,
+  hourlyPrecipitation: KProperty1<Hour, Length>,
+  dailyPrecipitation: KProperty1<Day, Length>
+) {
+  val past: Past
+  val future: Future
 
   init {
-    uvIndex = hours[0].uvIndex
-    protectionStartUnixSecond = hours.firstOrNull { it.uvIndex.protectionNeeded }
-      // Do not display a redundant start time if we're already in the danger zone
-      ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
-    protectionEndUnixSecond = hours.lastOrNull { it.uvIndex.protectionNeeded }
-      // Do not display a redundant end time if we're out of the danger zone
-      ?.startUnixSecond?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
+    val unit = hourlyPrecipitation.get(forecast.now).unit
+    past = (forecast.today.untilNow - forecast.now).let {
+      Past(
+        hours = it.size,
+        amount = it.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyPrecipitation.get(hour) }
+      )
+    }
+
+    val futureToday = forecast.today.fromNow.let { fromNow ->
+      var firstRainyIdx: Int? = null
+      var lastRainyIdx: Int? = null
+      var todayAmount = Length(0.0, unit)
+      for (i in fromNow.indices) {
+        val curr = fromNow[i]
+        if (hourlyPrecipitation.get(curr).value > 0) {
+          if (firstRainyIdx == null) firstRainyIdx = i else lastRainyIdx = i
+          todayAmount += hourlyPrecipitation.get(curr)
+        } else if (lastRainyIdx != null && i - lastRainyIdx >= 2) {
+          break
+        }
+      }
+
+      val todayStartUnixSecond = firstRainyIdx?.let { fromNow[it].startUnixSecond }
+      val todayEndUnixSecond = lastRainyIdx?.let { fromNow[it].startUnixSecond }
+
+      if (todayStartUnixSecond == null) {
+        if (todayEndUnixSecond == null) {
+          null
+        } else {
+          Future.Today.WillEnd(
+            endUnixSecond = todayEndUnixSecond,
+            amount = todayAmount
+          )
+        }
+      } else {
+        if (todayEndUnixSecond == null) {
+          Future.Today.WillStart(
+            startUnixSecond = todayStartUnixSecond,
+            amount = todayAmount
+          )
+        } else {
+          Future.Today.WillStartThenEnd(
+            startUnixSecond = todayStartUnixSecond,
+            endUnixSecond = todayEndUnixSecond,
+            amount = todayAmount
+          )
+        }
+      }
+    }
+
+
+    val futureDayOfWeek =
+      (forecast.fromToday - forecast.today).firstOrNull { dailyPrecipitation.get(it).value > 0 }?.let {
+        Future.DayOfWeek(
+          startUnixSecond = it.startUnixSecond,
+          amount = dailyPrecipitation.get(it)
+        )
+      }
+
+    future = futureToday ?: futureDayOfWeek ?: Future.NoneExpected(days = forecast.fromToday.size)
+  }
+
+  class Past internal constructor(
+    val hours: Int,
+    val amount: Length
+  )
+
+  sealed interface Future {
+    sealed interface Today : Future {
+      class WillStartThenEnd internal constructor(
+        val startUnixSecond: Long,
+        val endUnixSecond: Long,
+        val amount: Length
+      ) : Today
+
+      class WillStart internal constructor(
+        val startUnixSecond: Long,
+        val amount: Length
+      ) : Today
+
+      class WillEnd internal constructor(
+        val endUnixSecond: Long,
+        val amount: Length
+      ) : Today
+    }
+
+    class DayOfWeek internal constructor(
+      val startUnixSecond: Long,
+      val amount: Length
+    ) : Future
+
+    class NoneExpected internal constructor(val days: Int) : Future
   }
 }
 
-class OverviewFeelsLike internal constructor(hour: Hour) {
+class OverviewUvIndex internal constructor(now: Hour, today: Day) {
+  val uvIndex: UvIndex
+  val protection: Protection
+
+  sealed interface Protection {
+    object None : Protection
+    data class WillStart(val startUnixSecond: Long) : Protection
+    data class WillEnd(val endUnixSecond: Long) : Protection
+    data class WillStartAndEnd(val startUnixSecond: Long, val endUnixSecond: Long) : Protection
+  }
+
+  init {
+    uvIndex = now.uvIndex
+    val firstDangerousHourStartUnixSecond = today.hours
+      .firstOrNull { it.uvIndex.protectionNeeded }?.startUnixSecond
+      // If we're past the first hour, don't display the start because it's noise
+      ?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
+    val lastDangerousHourStartUnixSecond = today.hours
+      .lastOrNull { it.uvIndex.protectionNeeded }?.startUnixSecond
+      // If we're past the last hour, don't display end because it's also noise
+      ?.takeUnless { (Clock.System.now().epochSeconds - it) > 1.hours.inWholeSeconds }
+
+    protection = if (firstDangerousHourStartUnixSecond == null) {
+      if (lastDangerousHourStartUnixSecond == null) Protection.None
+      else Protection.WillEnd(lastDangerousHourStartUnixSecond)
+    } else {
+      if (lastDangerousHourStartUnixSecond == null) Protection.WillStart(firstDangerousHourStartUnixSecond)
+      else Protection.WillStartAndEnd(firstDangerousHourStartUnixSecond, lastDangerousHourStartUnixSecond)
+    }
+  }
+}
+
+class OverviewFeelsLike internal constructor(now: Hour) {
   val feelsLike: Temperature
+
   /**
    *  - true when feels like temperature is higher because of humidity,
    *  - false when it is lower because of wind, and
@@ -201,12 +226,14 @@ class OverviewFeelsLike internal constructor(hour: Hour) {
   val higherThanActualTemperature: Boolean?
 
   init {
-    val noticeableDifference = when (hour.feelsLike.unit) {
+    val noticeableDifference = when (now.feelsLike.unit) {
       TemperatureUnit.DegreeCelsius -> 1
       TemperatureUnit.DegreeFahrenheit -> 2
     }
-    val difference = hour.feelsLike.value - hour.temperature.value
-    higherThanActualTemperature = if (abs(difference) >= noticeableDifference) { difference > 0 } else null
-    feelsLike = hour.feelsLike
+    val difference = now.feelsLike.value - now.temperature.value
+    higherThanActualTemperature = if (abs(difference) >= noticeableDifference) {
+      difference > 0
+    } else null
+    feelsLike = now.feelsLike
   }
 }
