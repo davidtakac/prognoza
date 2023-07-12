@@ -26,7 +26,7 @@ fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
     )
   },
   details = buildList {
-    add(rainfall.toUiModel(timeZone).copy(isSnow = true))
+    add(rainfall.toUiModel(timeZone).copy(isSnow = false))
     snowfall?.let { add(it.toUiModel(timeZone).copy(isSnow = true)) }
     add(uvIndex.toUiModel(timeZone))
     add(feelsLike.toUiModel())

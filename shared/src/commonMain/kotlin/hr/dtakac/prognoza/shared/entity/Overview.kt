@@ -84,7 +84,9 @@ class OverviewPrecipitation internal constructor(
   hourlyPrecipitation: KProperty1<Hour, Length>,
   dailyPrecipitation: KProperty1<Day, Length>
 ) {
-  val past: Past
+  val hoursInLastPeriod: Int
+  val amountInLastPeriod: Length
+  // todo: combine this with chunks in day to achieve simpler, more reusable logic
   val future: Future
 
   init {

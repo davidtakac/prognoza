@@ -1,6 +1,7 @@
 package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.*
+import kotlin.reflect.KProperty1
 
 class Forecast internal constructor(
   val timeZone: TimeZone,
@@ -64,6 +65,9 @@ class Day internal constructor(
     hourDateTime >= nowDateTime
   }
 
+  val chunksOfRainAndShowers: List<ChunkOfPrecipitation> = getChunksOf(Hour::rainAndShowers)
+  val chunksOfSnow: List<ChunkOfPrecipitation> = getChunksOf(Hour::snow)
+
   fun toMeasurementSystem(measurementSystem: MeasurementSystem): Day =
     Day(
       timeZone = timeZone,
@@ -96,6 +100,43 @@ class Day internal constructor(
       RepresentativeWmoCode(mostCommonWmoCode, priorityHours[0].isDay)
     }
 
+  private fun getChunksOf(precipitation: KProperty1<Hour, Length>): List<ChunkOfPrecipitation> {
+    val chunks = mutableListOf<ChunkOfPrecipitation>()
+    val unit = precipitation.get(hours[0]).unit
+
+    var firstRainyIdx: Int? = null
+    var lastRainyIdx: Int? = null
+    var chunkAmount = Length(0.0, unit)
+    for (i in hours.indices) {
+      val curr = hours[i]
+      if (precipitation.get(curr).value > 0) {
+        if (firstRainyIdx == null) firstRainyIdx = i else lastRainyIdx = i
+        chunkAmount += precipitation.get(curr)
+      } else if (firstRainyIdx != null && lastRainyIdx != null && i - lastRainyIdx >= 2) {
+        chunks.add(
+          ChunkOfPrecipitation(
+            startUnixSecond = hours[firstRainyIdx].startUnixSecond,
+            amount = chunkAmount,
+            endUnixSecond = hours[lastRainyIdx].startUnixSecond
+          )
+        )
+        firstRainyIdx = null
+        lastRainyIdx = null
+        chunkAmount = Length(0.0, unit)
+      }
+    }
+
+    if (firstRainyIdx != null) chunks.add(
+      ChunkOfPrecipitation(
+        startUnixSecond = hours[firstRainyIdx].startUnixSecond,
+        amount = chunkAmount,
+        endUnixSecond = null
+      )
+    )
+
+    return chunks
+  }
+
   private fun LocalDateTime.normalizeToHour() = LocalDateTime(
     year = year,
     month = month,
@@ -106,6 +147,12 @@ class Day internal constructor(
     nanosecond = 0
   )
 }
+
+class ChunkOfPrecipitation(
+  val startUnixSecond: Long,
+  val amount: Length,
+  val endUnixSecond: Long?
+)
 
 class RepresentativeWmoCode internal constructor(
   val wmoCode: Int,
