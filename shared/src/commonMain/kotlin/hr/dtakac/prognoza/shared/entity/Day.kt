@@ -13,6 +13,10 @@ class Day internal constructor(
   val sunsetUnixSecond: Long?,
   val hours: List<Hour>
 ) {
+  init {
+    if (hours.isEmpty()) throwInvalidHours()
+  }
+
   val minimumTemperature: Temperature = hours.minOf { it.temperature }
   val maximumTemperature: Temperature = hours.maxOf { it.temperature }
   val minimumFeelsLike: Temperature = hours.minOf { it.feelsLike }
@@ -25,13 +29,16 @@ class Day internal constructor(
   val maximumWind: Speed = hours.maxOf { it.wind }
   val maximumGust: Speed = hours.maxOf { it.gust }
   val maximumUvIndex: UvIndex = hours.maxOf { it.uvIndex }
+  val averagePressure: Pressure = hours.fold(Pressure(0.0, hours[0].pressure.unit)) { acc, hour -> acc + hour.pressure } / hours.size
   val representativeWmoCode: RepresentativeWmoCode = RepresentativeWmoCode(hours)
-  val sunProtection: SunProtection? = hours.firstOrNull { it.uvIndex.isDangerous }?.let { firstDangerousHour ->
-    SunProtection(
-      fromUnixSecond = firstDangerousHour.startUnixSecond,
-      untilUnixSecond = hours.last { it.uvIndex.isDangerous }.startUnixSecond
-    )
-  }
+  val sunProtection: SunProtection? = hours
+    .firstOrNull { it.uvIndex.isDangerous }
+    ?.let { firstDangerousHour ->
+      SunProtection(
+        fromUnixSecond = firstDangerousHour.startUnixSecond,
+        untilUnixSecond = hours.last { it.uvIndex.isDangerous }.startUnixSecond
+      )
+    }
 
   val untilNow: List<Hour> = hours.filter {
     val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
@@ -54,6 +61,10 @@ class Day internal constructor(
       sunsetUnixSecond = sunsetUnixSecond,
       hours = hours.map { it.toMeasurementSystem(measurementSystem) }
     )
+
+  private fun throwInvalidHours(): Nothing {
+    throw IllegalStateException("Hours must not be empty.")
+  }
 }
 
 class RepresentativeWmoCode internal constructor(hours: List<Hour>) {

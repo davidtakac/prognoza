@@ -56,9 +56,9 @@ class ForecastTest {
     temperature = Temperature(0.0, TemperatureUnit.DegreeCelsius),
     precipitation = Length(0.0, LengthUnit.Millimetre),
     wind = Wind(Speed(0.0, SpeedUnit.KilometrePerHour), Angle(45.0, AngleUnit.Degree)),
-    pressureAtSeaLevel = Pressure(0.25, PressureUnit.Millibar),
+    pressure = Pressure(0.25, PressureUnit.Millibar),
     description = Description.CLEAR_SKY_DAY,
-    relativeHumidity = Percentage(0.5, PercentageUnit.Fraction)
+    humidity = Percentage(0.5, PercentageUnit.Fraction)
   )
 
   private fun getStartOfDay() = LocalDateTime(

@@ -232,6 +232,12 @@ fun OverviewScreen(
                 description = it.description.asString(),
                 modifier = modifier
               )
+              is OverviewDetailState.Wind -> OverviewWind(
+                speed = it.speed.asString(),
+                maximumGust = it.maximumGust.asString(),
+                angle = it.angle,
+                modifier = modifier
+              )
             }
           }
         }

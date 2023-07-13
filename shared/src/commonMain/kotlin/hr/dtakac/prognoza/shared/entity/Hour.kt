@@ -12,8 +12,8 @@ class Hour internal constructor(
   val wind: Speed,
   val gust: Speed,
   val windDirection: Angle,
-  val pressureAtSeaLevel: Pressure,
-  val relativeHumidity: Int,
+  val pressure: Pressure,
+  val humidity: Int,
   val dewPoint: Temperature,
   val visibility: Length,
   val uvIndex: UvIndex,
@@ -49,11 +49,11 @@ class Hour internal constructor(
       else SpeedUnit.KilometrePerHour
     ),
     windDirection = windDirection,
-    pressureAtSeaLevel = pressureAtSeaLevel.convertTo(
+    pressure = pressure.convertTo(
       if (measurementSystem == MeasurementSystem.Imperial) PressureUnit.InchOfMercury
       else PressureUnit.Millibar
     ),
-    relativeHumidity = relativeHumidity,
+    humidity = humidity,
     dewPoint = dewPoint.convertTo(
       if (measurementSystem == MeasurementSystem.Imperial) TemperatureUnit.DegreeFahrenheit
       else TemperatureUnit.DegreeCelsius

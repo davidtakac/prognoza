@@ -10,9 +10,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.shared.entity.Length
-import hr.dtakac.prognoza.shared.entity.LengthUnit
-import hr.dtakac.prognoza.shared.entity.Temperature
+import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toJavaLocalDateTime
@@ -54,6 +52,9 @@ sealed interface TextResource {
 
     fun fromLength(length: Length): TextResource =
       LengthTextResource(length)
+
+    fun fromSpeed(speed: Speed): TextResource =
+      SpeedTextResource(speed)
   }
 
   fun asString(context: Context): String
@@ -169,4 +170,23 @@ private data class LengthTextResource(val length: Length) : TextResource {
       )
       .format(length.value)
       .toString()
+}
+
+private data class SpeedTextResource(val speed: Speed) : TextResource {
+  override fun asString(context: Context): String {
+    return NumberFormatter.with()
+      .locale(context.resources.configuration.locales[0])
+      .unit(
+        when (speed.unit) {
+          SpeedUnit.MetrePerSecond -> MeasureUnit.METER_PER_SECOND
+          SpeedUnit.KilometrePerHour -> MeasureUnit.KILOMETER_PER_HOUR
+          SpeedUnit.MilePerHour -> MeasureUnit.MILE_PER_HOUR
+          SpeedUnit.Knot -> MeasureUnit.KNOT
+        }
+      )
+      .notation(Notation.compactShort())
+      .precision(Precision.integer())
+      .format(speed.value)
+      .toString()
+  }
 }

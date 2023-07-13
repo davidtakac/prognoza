@@ -17,9 +17,14 @@ class Overview internal constructor(forecast: Forecast) {
   }
   val uvIndex: OverviewUvIndex = OverviewUvIndex(forecast.now, forecast.today)
   val feelsLike: OverviewFeelsLike = OverviewFeelsLike(forecast.now)
+  val wind: OverviewWind = OverviewWind(forecast.now)
+  val visibility: Length = forecast.now.visibility
+  val nextSunriseUnixSecond: Long? = forecast.days.firstOrNull { it.sunriseUnixSecond != null }?.sunriseUnixSecond
+  val nextSunsetUnixSecond: Long? = forecast.days.firstOrNull { it.sunsetUnixSecond != null }?.sunriseUnixSecond
+  val humidity: OverviewHumidity = OverviewHumidity(forecast.now)
 
   private fun buildHours(forecast: Forecast) = buildList<OverviewHour> {
-    val hours = forecast.next24Hours
+    val hours = forecast.fromNow.take(24)
     addAll(hours.map { OverviewHour.Weather(it) })
 
     val fromToday = forecast.fromToday
@@ -97,4 +102,20 @@ class OverviewFeelsLike internal constructor(now: Hour) {
     val difference = now.feelsLike.value - now.temperature.value
     feelsHotter = if (abs(difference) >= noticeableDifference) difference > 0 else null
   }
+}
+
+class OverviewWind internal constructor(now: Hour) {
+  val speed: Speed = now.wind
+  val direction: Angle = now.windDirection
+  val maximumGust: Speed = now.gust
+}
+
+class OverviewHumidity internal constructor(now: Hour) {
+  val relativeHumidity: Int = now.humidity
+  val dewPoint: Temperature = now.dewPoint
+}
+
+class OverviewPressure internal constructor(now: Hour, today: Day) {
+  val now: Pressure = now.pressure
+  val average: Pressure = today.averagePressure
 }

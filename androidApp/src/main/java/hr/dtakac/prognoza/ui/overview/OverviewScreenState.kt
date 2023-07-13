@@ -70,4 +70,10 @@ sealed interface OverviewDetailState {
     val value: TextResource,
     val description: TextResource
   ) : OverviewDetailState
+
+  data class Wind(
+    val speed: TextResource,
+    val maximumGust: TextResource,
+    val angle: Float
+  ) : OverviewDetailState
 }

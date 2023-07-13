@@ -75,11 +75,6 @@
     <string name="cardinal_nw">Northwest</string>
 
     <string name="temperature_value">%s°</string>
-    <string name="speed_value_kmh">%s\u00A0km\u2215h</string>
-    <string name="speed_value_mps">%s\u00A0m\u2215s</string>
-    <string name="speed_value_mph">%s\u00A0mi\u2215h</string>
-    <string name="speed_value_kt">%s\u00A0kt</string>
-
     <string name="forecast_msg_empty_no_place">Select a place to see its forecast.</string>
     <string name="forecast_title_hourly">Hourly forecast</string>
     <string name="forecast_title_coming">%d-day forecast</string>
@@ -147,4 +142,6 @@
     <string name="feels_like_value_equal">About the same as the actual temperature.</string>
     <string name="forecast_label_feels_like">Feels like</string>
     <string name="precipitation_value_none_in_coming_days">None expected in next %s days</string>
+    <string name="forecast_label_wind">Wind</string>
+    <string name="wind_value_max_gust">Gusts up to %s</string>
 </resources>

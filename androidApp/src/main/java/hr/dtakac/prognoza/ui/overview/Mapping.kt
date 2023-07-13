@@ -31,6 +31,7 @@ fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
     snowfall?.let { add(it.toUiModel(timeZone).copy(isSnow = true)) }
     add(uvIndex.toUiModel(timeZone))
     add(feelsLike.toUiModel())
+    add(wind.toUiModel())
   }
 )
 
@@ -149,4 +150,13 @@ private fun OverviewFeelsLike.toUiModel() = OverviewDetailState.FeelsLike(
       null -> R.string.feels_like_value_equal
     }
   )
+)
+
+private fun OverviewWind.toUiModel() = OverviewDetailState.Wind(
+  speed = TextResource.fromSpeed(speed),
+  maximumGust = TextResource.fromResId(
+    R.string.wind_value_max_gust,
+    TextResource.fromSpeed(maximumGust)
+  ),
+  angle = direction.value.toFloat()
 )

@@ -10,6 +10,10 @@ class Pressure internal constructor(
 
   override fun toString(): String = "$value ${unit.suffix}"
 
+  operator fun div(other: Int): Pressure = Pressure(value / other, unit)
+
+  operator fun plus(other: Pressure): Pressure = Pressure(value + other.valueIn(unit), unit)
+
   internal fun convertTo(unit: PressureUnit): Pressure = Pressure(valueIn(unit), unit)
 
   private fun valueIn(unit: PressureUnit): Double =

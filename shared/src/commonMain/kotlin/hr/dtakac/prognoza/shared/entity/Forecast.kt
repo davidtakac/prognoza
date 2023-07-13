@@ -34,9 +34,9 @@ class Forecast internal constructor(
     dayDate >= nowDate
   }
 
-  val last24Hours: List<Hour> = untilToday.flatMap { it.untilNow }.take(24)
+  val untilNow: List<Hour> = untilToday.flatMap { it.untilNow }
 
-  val next24Hours: List<Hour> = fromToday.flatMap { it.fromNow }.take(24)
+  val fromNow: List<Hour> = fromToday.flatMap { it.fromNow }
 
   val rainAndShowersToday: PrecipitationToday = PrecipitationToday(this, Hour::rainAndShowers, Day::rainAndShowers)
 
@@ -62,12 +62,13 @@ class PrecipitationToday internal constructor(
 
   init {
     val unit = hourlyGetter.get(forecast.now).unit
-    val pastHours = forecast.last24Hours - forecast.now
+    val pastHours = (forecast.untilNow - forecast.now).take(24)
+    val futureHours = forecast.fromNow.take(24)
     val firstWetDayBesidesToday = (forecast.fromToday - forecast.today).firstOrNull { dailyGetter.get(it).value > 0 }
     hoursInLastPeriod = pastHours.size.takeUnless { it == 0 } ?: 1
     amountInLastPeriod = pastHours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
-    hoursInNextPeriod = forecast.next24Hours.size
-    amountInNextPeriod = forecast.next24Hours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
+    hoursInNextPeriod = futureHours.size
+    amountInNextPeriod = futureHours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
     startUnixSecondOfNextWetDay = firstWetDayBesidesToday?.startUnixSecond
     amountInNextWetDay = firstWetDayBesidesToday?.let(dailyGetter) ?: Length(0.0, unit)
   }
