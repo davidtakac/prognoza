@@ -5,8 +5,8 @@ class Pop internal constructor(val preciseValue: Int) : Comparable<Pop> {
     if (preciseValue < 10) {
       0
     } else {
-      val remainder = preciseValue % 5
-      preciseValue + if (remainder >= 3) 5 - remainder else -remainder
+      val remainder = preciseValue % 10
+      preciseValue + if (remainder >= 5) 10 - remainder else -remainder
     }
 
   override fun compareTo(other: Pop): Int = preciseValue.compareTo(other.preciseValue)

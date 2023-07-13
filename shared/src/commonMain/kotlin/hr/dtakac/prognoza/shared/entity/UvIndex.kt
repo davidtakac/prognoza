@@ -9,12 +9,12 @@ class UvIndex internal constructor(val preciseValue: Double) : Comparable<UvInde
 
   override fun toString(): String = preciseValue.toString()
 
-  val protectionNeeded: Boolean = preciseValue > 2
+  val isDangerous: Boolean = preciseValue >= Dangerous
 
   private fun throwInvalidValue(): Nothing =
     throw IllegalStateException("UV Index value must be positive, was ${toString()}")
 
   companion object {
-    const val Extreme = 11
+    const val Dangerous = 3
   }
 }

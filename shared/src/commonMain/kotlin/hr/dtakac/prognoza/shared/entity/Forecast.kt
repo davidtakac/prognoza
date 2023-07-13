@@ -1,6 +1,9 @@
 package hr.dtakac.prognoza.shared.entity
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import kotlin.reflect.KProperty1
 
 class Forecast internal constructor(
@@ -31,34 +34,43 @@ class Forecast internal constructor(
     dayDate >= nowDate
   }
 
-  val latestRainAndShowers: PrecipitationPeriod =
-    getPrecipitationPeriod(Hour::rainAndShowers, untilToday.flatMap { it.hours }.take(24))
-  val latestSnow: PrecipitationPeriod =
-    getPrecipitationPeriod(Hour::snow, untilToday.flatMap { it.hours }.take(24))
-  val soonestRainAndShowers: PrecipitationPeriod =
-    getPrecipitationPeriod(Hour::rainAndShowers, fromToday.flatMap { it.hours }.take(24))
-  val soonestSnow: PrecipitationPeriod =
-    getPrecipitationPeriod(Hour::snow, fromToday.flatMap { it.hours }.take(24))
+  val last24Hours: List<Hour> = untilToday.flatMap { it.untilNow }.take(24)
+
+  val next24Hours: List<Hour> = fromToday.flatMap { it.fromNow }.take(24)
+
+  val rainAndShowersToday: PrecipitationToday = PrecipitationToday(this, Hour::rainAndShowers, Day::rainAndShowers)
+
+  val snowToday: PrecipitationToday = PrecipitationToday(this, Hour::snow, Day::snow)
 
   fun toMeasurementSystem(measurementSystem: MeasurementSystem): Forecast = Forecast(
     timeZone = timeZone,
     days = days.map { it.toMeasurementSystem(measurementSystem) }
   )
-
-  private fun getPrecipitationPeriod(
-    precipitationGetter: KProperty1<Hour, Length>,
-    hours: List<Hour>
-  ) = PrecipitationPeriod(
-    value = hours.fold(
-      Length(0.0, precipitationGetter.get(hours[0]).unit)
-    ) { acc, hour -> acc + precipitationGetter.get(hour) },
-    hours = hours.size
-  )
 }
 
-class PrecipitationPeriod internal constructor(
-  val value: Length,
-  val hours: Int
-)
+class PrecipitationToday internal constructor(
+  forecast: Forecast,
+  hourlyGetter: KProperty1<Hour, Length>,
+  dailyGetter: KProperty1<Day, Length>
+) {
+  val hoursInLastPeriod: Int
+  val amountInLastPeriod: Length
+  val hoursInNextPeriod: Int
+  val amountInNextPeriod: Length
+  val startUnixSecondOfNextWetDay: Long?
+  val amountInNextWetDay: Length
+
+  init {
+    val unit = hourlyGetter.get(forecast.now).unit
+    val pastHours = forecast.last24Hours - forecast.now
+    val firstWetDayBesidesToday = (forecast.fromToday - forecast.today).firstOrNull { dailyGetter.get(it).value > 0 }
+    hoursInLastPeriod = pastHours.size.takeUnless { it == 0 } ?: 1
+    amountInLastPeriod = pastHours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
+    hoursInNextPeriod = forecast.next24Hours.size
+    amountInNextPeriod = forecast.next24Hours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
+    startUnixSecondOfNextWetDay = firstWetDayBesidesToday?.startUnixSecond
+    amountInNextWetDay = firstWetDayBesidesToday?.let(dailyGetter) ?: Length(0.0, unit)
+  }
+}
 
 class OutdatedForecastException : Exception()

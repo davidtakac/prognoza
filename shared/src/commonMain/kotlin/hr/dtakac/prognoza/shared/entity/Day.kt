@@ -25,7 +25,13 @@ class Day internal constructor(
   val maximumWind: Speed = hours.maxOf { it.wind }
   val maximumGust: Speed = hours.maxOf { it.gust }
   val maximumUvIndex: UvIndex = hours.maxOf { it.uvIndex }
-  val representativeWmoCode: RepresentativeWmoCode = getRepresentativeWmoCode(hours)
+  val representativeWmoCode: RepresentativeWmoCode = RepresentativeWmoCode(hours)
+  val sunProtection: SunProtection? = hours.firstOrNull { it.uvIndex.isDangerous }?.let { firstDangerousHour ->
+    SunProtection(
+      fromUnixSecond = firstDangerousHour.startUnixSecond,
+      untilUnixSecond = hours.last { it.uvIndex.isDangerous }.startUnixSecond
+    )
+  }
 
   val untilNow: List<Hour> = hours.filter {
     val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
@@ -48,14 +54,20 @@ class Day internal constructor(
       sunsetUnixSecond = sunsetUnixSecond,
       hours = hours.map { it.toMeasurementSystem(measurementSystem) }
     )
+}
 
-  private fun getRepresentativeWmoCode(hours: List<Hour>): RepresentativeWmoCode =
+class RepresentativeWmoCode internal constructor(hours: List<Hour>) {
+  val wmoCode: Int
+  val isDay: Boolean
+
+  init {
     if (hours.any { it.wmoCode > 48 }) {
       // The most severe weather condition is at least light drizzle. Because this involves
       // precipitation, it could affect people's plans for the day. In this case they would
       // likely want to know the most severe weather condition so they can prepare accordingly
       val mostExtremeHour = hours.maxBy { it.wmoCode }
-      RepresentativeWmoCode(mostExtremeHour.wmoCode, mostExtremeHour.isDay)
+      wmoCode = mostExtremeHour.wmoCode
+      isDay = mostExtremeHour.isDay
     } else {
       // The most severe weather condition is depositing rime fog. Because this doesn't
       // involve precipitation, it rarely affects people's plans for the day. In this case
@@ -69,21 +81,23 @@ class Day internal constructor(
         .groupingBy { it.wmoCode }.eachCount()
         // Find the most severe WMO code (sortedByDescending) that appears the most (maxBy)
         .entries.sortedByDescending { it.key }.maxBy { it.value }.key
-      RepresentativeWmoCode(mostCommonWmoCode, priorityHours[0].isDay)
+      wmoCode = mostCommonWmoCode
+      isDay = priorityHours[0].isDay
     }
-
-  private fun LocalDateTime.normalizeToHour() = LocalDateTime(
-    year = year,
-    month = month,
-    dayOfMonth = dayOfMonth,
-    hour = hour,
-    minute = 0,
-    second = 0,
-    nanosecond = 0
-  )
+  }
 }
 
-class RepresentativeWmoCode internal constructor(
-  val value: Int,
-  val isDay: Boolean
+class SunProtection internal constructor(
+  val fromUnixSecond: Long,
+  val untilUnixSecond: Long
+)
+
+private fun LocalDateTime.normalizeToHour() = LocalDateTime(
+  year = year,
+  month = month,
+  dayOfMonth = dayOfMonth,
+  hour = hour,
+  minute = 0,
+  second = 0,
+  nanosecond = 0
 )

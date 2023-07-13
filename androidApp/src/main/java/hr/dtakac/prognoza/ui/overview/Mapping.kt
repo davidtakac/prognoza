@@ -6,6 +6,7 @@ import hr.dtakac.prognoza.ui.common.TextResource
 import hr.dtakac.prognoza.ui.common.toUvIndexStringId
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherDescription
 import hr.dtakac.prognoza.ui.common.wmoCodeToWeatherIcon
+import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 
 fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
@@ -77,7 +78,7 @@ private fun OverviewDay.toUiModel(
     dayOfWeek = if (isToday) TextResource.fromResId(R.string.forecast_label_today)
     else TextResource.fromUnixSecondToShortDayOfWeek(unixSecond, timeZone),
     pop = maximumPop.takeUnless { it == 0 }?.let(TextResource::fromPercentage),
-    weatherIcon = wmoCodeToWeatherIcon(representativeWmoCode, representativeWmoCodeIsDay),
+    weatherIcon = wmoCodeToWeatherIcon(representativeWmoCode.wmoCode, representativeWmoCode.isDay),
     minimumTemperature = TextResource.fromTemperature(minimumTemperature),
     maximumTemperature = TextResource.fromTemperature(maximumTemperature),
     temperatureBarStartFraction = ((minimumTemperature - absoluteMinimumTemperature) / temperatureRange).toFloat(),
@@ -87,69 +88,54 @@ private fun OverviewDay.toUiModel(
   )
 }
 
-private fun OverviewPrecipitation.toUiModel(timeZone: TimeZone) =
+private fun PrecipitationToday.toUiModel(timeZone: TimeZone) =
   OverviewDetailState.Precipitation(
-    amountInLastPeriod = TextResource.fromLength(past.amount),
-    hoursInLastPeriod = TextResource.fromResId(R.string.precipitation_value_last_hours, past.hours),
-    nextExpected = when (val future = future) {
-      is OverviewPrecipitation.Future.DayOfWeek -> TextResource.fromResId(
-        id = R.string.precipitation_value_next_expected_on_day,
-        TextResource.fromLength(future.amount),
-        TextResource.fromUnixSecondToShortDayOfWeek(future.startUnixSecond, timeZone)
+    amountInLastPeriod = TextResource.fromLength(amountInLastPeriod),
+    hoursInLastPeriod = TextResource.fromResId(
+      R.string.precipitation_value_last_hours,
+      hoursInLastPeriod
+    ),
+    nextExpected = when {
+      amountInNextPeriod.value > 0 -> TextResource.fromResId(
+        R.string.precipitation_value_next_hours,
+        TextResource.fromLength(amountInNextPeriod),
+        hoursInNextPeriod
       )
-      is OverviewPrecipitation.Future.NoneExpected -> TextResource.fromResId(
-        R.string.precipitation_value_none_expected,
-        future.days
+      startUnixSecondOfNextWetDay != null -> TextResource.fromResId(
+        R.string.precipitation_value_on_day,
+        TextResource.fromLength(amountInNextWetDay),
+        TextResource.fromUnixSecondToShortDayOfWeek(startUnixSecondOfNextWetDay!!, timeZone)
       )
-      is OverviewPrecipitation.Future.Today -> when (future) {
-        is OverviewPrecipitation.Future.Today.WillEnd -> TextResource.fromResId(
-          R.string.precipitation_value_will_end_today,
-          TextResource.fromLength(future.amount),
-          TextResource.fromUnixSecondToShortTime(future.endUnixSecond, timeZone)
-        )
-        is OverviewPrecipitation.Future.Today.WillStart -> TextResource.fromResId(
-          R.string.precipitation_value_will_start_today,
-          TextResource.fromLength(future.amount),
-          TextResource.fromUnixSecondToShortTime(future.startUnixSecond, timeZone)
-        )
-        is OverviewPrecipitation.Future.Today.WillStartThenEnd -> TextResource.fromResId(
-          R.string.precipitation_value_will_start_and_end_today,
-          TextResource.fromLength(future.amount),
-          TextResource.fromUnixSecondToShortTime(future.startUnixSecond, timeZone),
-          TextResource.fromUnixSecondToShortTime(future.endUnixSecond, timeZone)
-        )
-      }
+      else -> TextResource.fromResId(R.string.precipitation_value_none_in_coming_days)
     },
     isSnow = false
   )
 
 private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.UvIndex {
+  val now = Clock.System.now().epochSeconds
+  val protection = sunProtection
   return OverviewDetailState.UvIndex(
     value = TextResource.fromNumberToInt(uvIndex.preciseValue),
     level = TextResource.fromResId(uvIndex.toUvIndexStringId()),
-    valueCenterFraction = (uvIndex.preciseValue / UvIndex.Extreme).toFloat().coerceAtMost(1f),
-    recommendations = when (val protection = protection) {
-      OverviewUvIndex.Protection.None -> TextResource.fromResId(R.string.uv_value_protection_none)
-      is OverviewUvIndex.Protection.WillEnd -> TextResource.fromResId(
+    valueCenterFraction = (uvIndex.preciseValue / 11).toFloat().coerceAtMost(1f),
+    recommendations = if (protection == null || now >= protection.untilUnixSecond) {
+      TextResource.fromResId(R.string.uv_value_protection_none)
+    } else if (protection.fromUnixSecond == protection.untilUnixSecond) {
+      TextResource.fromResId(
+        R.string.uv_value_protection_at,
+        TextResource.fromUnixSecondToShortTime(protection.fromUnixSecond, timeZone)
+      )
+    } else if (now >= protection.fromUnixSecond) {
+      TextResource.fromResId(
         R.string.uv_value_protection_until,
-        TextResource.fromUnixSecondToShortTime(protection.endUnixSecond, timeZone)
+        TextResource.fromUnixSecondToShortTime(protection.untilUnixSecond, timeZone)
       )
-      is OverviewUvIndex.Protection.WillStart -> TextResource.fromResId(
-        R.string.uv_value_protection_from,
-        TextResource.fromUnixSecondToShortTime(protection.startUnixSecond, timeZone)
+    } else {
+      TextResource.fromResId(
+        R.string.uv_value_protection_from_until,
+        TextResource.fromUnixSecondToShortTime(protection.fromUnixSecond, timeZone),
+        TextResource.fromUnixSecondToShortTime(protection.untilUnixSecond, timeZone)
       )
-      is OverviewUvIndex.Protection.WillStartAndEnd ->
-        if (protection.startUnixSecond == protection.endUnixSecond)
-          TextResource.fromResId(
-            R.string.uv_value_protection_at,
-            TextResource.fromUnixSecondToShortTime(protection.startUnixSecond, timeZone)
-          )
-        else
-          TextResource.fromResId(
-            R.string.uv_value_protection_from_until,
-            TextResource.fromUnixSecondToShortTime(protection.startUnixSecond, timeZone),
-            TextResource.fromUnixSecondToShortTime(protection.endUnixSecond, timeZone)
-          )
     }
   )
 }
@@ -157,7 +143,7 @@ private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.U
 private fun OverviewFeelsLike.toUiModel() = OverviewDetailState.FeelsLike(
   value = TextResource.fromTemperature(feelsLike),
   description = TextResource.fromResId(
-    when (higherThanActualTemperature) {
+    when (feelsHotter) {
       true -> R.string.feels_like_value_higher
       false -> R.string.feels_like_value_lower
       null -> R.string.feels_like_value_equal

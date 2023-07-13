@@ -127,8 +127,8 @@
     <string name="forecast_label_today">Today</string>
     <string name="forecast_title_details">Current conditions</string>
     <string name="precipitation_value_last_hours">in last %dh</string>
-    <string name="precipitation_value_next_expected_on_day">Next expected is %s on %s.</string>
-    <string name="precipitation_value_none_expected">None expected for next %d days.</string>
+    <string name="precipitation_value_next_hours">%s expected in next %dh</string>
+    <string name="precipitation_value_on_day">Next expected %s on %s</string>
     <string name="forecast_label_snow">Snow</string>
     <string name="forecast_label_rain">Rain</string>
     <string name="uv_label_extreme">Extreme</string>
@@ -136,17 +136,15 @@
     <string name="uv_label_high">High</string>
     <string name="uv_label_moderate">Moderate</string>
     <string name="uv_label_low">Low</string>
-    <string name="uv_value_protection_from">Protection needed from %s until end of day.</string>
-    <string name="uv_value_protection_from_until">Protection needed from %s to %s.</string>
-    <string name="uv_value_protection_until">Protection needed until %s.</string>
-    <string name="uv_value_protection_at">Protection needed at %s.</string>
-    <string name="uv_value_protection_none">No protection needed for rest of day.</string>
+    <string name="uv_value_protection_from">Use sun protection from %s until end of day</string>
+    <string name="uv_value_protection_from_until">Use sun protection from %s-%s</string>
+    <string name="uv_value_protection_until">Use sun protection until %s</string>
+    <string name="uv_value_protection_at">Use sun protection at %s</string>
+    <string name="uv_value_protection_none">No protection needed for rest of day</string>
     <string name="forecast_label_uv_index">UV Index</string>
-    <string name="feels_like_value_higher">The humidity is making it feel warmer.</string>
-    <string name="feels_like_value_lower">The wind is making it feel cooler.</string>
+    <string name="feels_like_value_higher">Humidity is making it feel hotter</string>
+    <string name="feels_like_value_lower">Wind is making it feel colder</string>
     <string name="feels_like_value_equal">About the same as the actual temperature.</string>
     <string name="forecast_label_feels_like">Feels like</string>
-    <string name="precipitation_value_will_end_today">Expected %s more until %s.</string>
-    <string name="precipitation_value_will_start_today">Expected %s starting at %s until end of day.</string>
-    <string name="precipitation_value_will_start_and_end_today">Expected %s from %s to %s.</string>
+    <string name="precipitation_value_none_in_coming_days">None expected in next %s days</string>
 </resources>
