@@ -11,8 +11,8 @@ class Overview internal constructor(forecast: Forecast) {
   val now: OverviewNow = OverviewNow(forecast.now, forecast.today)
   val hours: List<OverviewHour> = buildHours(forecast)
   val days: OverviewDays = OverviewDays(forecast.fromToday)
-  val rainfall: OverviewPrecipitation = OverviewPrecipitation(forecast, Hour::rainAndShowers, Day::totalRainAndShowers)
-  val snowfall: OverviewPrecipitation? = OverviewPrecipitation(forecast, Hour::snow, Day::totalSnow)
+  val rainfall: OverviewPrecipitation = OverviewPrecipitation(forecast, Hour::rainAndShowers, Day::rainAndShowers)
+  val snowfall: OverviewPrecipitation? = OverviewPrecipitation(forecast, Hour::snow, Day::snow)
     .takeUnless { it.past.amount.value == 0.0 && it.future is OverviewPrecipitation.Future.NoneExpected }
   val uvIndex: OverviewUvIndex = OverviewUvIndex(forecast.now, forecast.today)
   val feelsLike: OverviewFeelsLike = OverviewFeelsLike(forecast.now)
@@ -72,7 +72,7 @@ class OverviewDays internal constructor(days: List<Day>) {
 
 class OverviewDay internal constructor(day: Day) {
   val unixSecond: Long = day.startUnixSecond
-  val representativeWmoCode: Int = day.representativeWmoCode.wmoCode
+  val representativeWmoCode: Int = day.representativeWmoCode.value
   val representativeWmoCodeIsDay: Boolean = day.representativeWmoCode.isDay
   val minimumTemperature: Temperature = day.minimumTemperature
   val maximumTemperature: Temperature = day.maximumTemperature
