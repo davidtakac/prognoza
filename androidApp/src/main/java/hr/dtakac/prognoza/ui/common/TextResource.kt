@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.common
 
 import android.content.Context
-import android.icu.number.Notation
 import android.icu.number.NumberFormatter
 import android.icu.number.Precision
 import android.icu.util.MeasureUnit
@@ -9,7 +8,6 @@ import android.text.format.DateFormat
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
-import hr.dtakac.prognoza.R
 import hr.dtakac.prognoza.shared.entity.*
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -83,8 +81,8 @@ private data class ResIdTextResourceWithArgs(@StringRes val id: Int, val args: L
 
 private data class IntTextResource(val value: Number) : TextResource {
   override fun asString(context: Context): String =
-    NumberFormatter.with()
-      .locale(context.resources.configuration.locales[0])
+    NumberFormatter
+      .withLocale(context.supportedLocaleOrDefault)
       .precision(Precision.integer())
       .roundingMode(RoundingMode.HALF_UP)
       .format(value)
@@ -93,15 +91,14 @@ private data class IntTextResource(val value: Number) : TextResource {
 
 private data class TemperatureTextResource(val temperature: Temperature) : TextResource {
   override fun asString(context: Context): String =
-    context.getString(
-      R.string.temperature_value,
-      NumberFormatter.with()
-        .locale(context.resources.configuration.locales[0])
-        .precision(Precision.integer())
-        .roundingMode(RoundingMode.HALF_UP)
-        .format(temperature.value)
-        .toString()
-    )
+    NumberFormatter
+      .withLocale(context.supportedLocaleOrDefault)
+      .unit(MeasureUnit.DEGREE)
+      .unitWidth(NumberFormatter.UnitWidth.NARROW)
+      .precision(Precision.integer())
+      .roundingMode(RoundingMode.HALF_UP)
+      .format(temperature.value)
+      .toString()
 }
 
 private data class TimeTextResource(
@@ -116,16 +113,19 @@ private data class TimeTextResource(
     val pattern = (if (use24Hr) "H" else "h") +
         (if (localDateTime.minute > 0) ":mm" else "") +
         (if (use24Hr) "" else " a")
-    return DateTimeFormatter.ofPattern(pattern).format(localDateTime)
+    return DateTimeFormatter
+      .ofPattern(pattern)
+      .withLocale(context.supportedLocaleOrDefault)
+      .format(localDateTime)
   }
 }
 
 private data class PercentageTextResource(val percentage: Int) : TextResource {
   override fun asString(context: Context): String =
-    NumberFormatter.with()
-      .locale(context.resources.configuration.locales[0])
-      .notation(Notation.compactShort())
+    NumberFormatter
+      .withLocale(context.supportedLocaleOrDefault)
       .unit(MeasureUnit.PERCENT)
+      .unitWidth(NumberFormatter.UnitWidth.NARROW)
       .format(percentage)
       .toString()
 }
@@ -138,14 +138,17 @@ private data class DayOfWeekTextResource(
     val localDateTime = Instant.fromEpochSeconds(unixSecond)
       .toLocalDateTime(timeZone)
       .toJavaLocalDateTime()
-    return DateTimeFormatter.ofPattern("E").format(localDateTime)
+    return DateTimeFormatter
+      .ofPattern("E")
+      .withLocale(context.supportedLocaleOrDefault)
+      .format(localDateTime)
   }
 }
 
 private data class LengthTextResource(val length: Length) : TextResource {
   override fun asString(context: Context): String =
-    NumberFormatter.with()
-      .locale(context.resources.configuration.locales[0])
+    NumberFormatter
+      .withLocale(context.supportedLocaleOrDefault)
       .unit(
         when (length.unit) {
           LengthUnit.Metre -> MeasureUnit.METER
@@ -157,7 +160,7 @@ private data class LengthTextResource(val length: Length) : TextResource {
           LengthUnit.Mile -> MeasureUnit.MILE
         }
       )
-      .notation(Notation.compactShort())
+      .unitWidth(NumberFormatter.UnitWidth.SHORT)
       .precision(
         when (length.unit) {
           LengthUnit.Metre,
@@ -175,8 +178,8 @@ private data class LengthTextResource(val length: Length) : TextResource {
 
 private data class SpeedTextResource(val speed: Speed) : TextResource {
   override fun asString(context: Context): String {
-    return NumberFormatter.with()
-      .locale(context.resources.configuration.locales[0])
+    return NumberFormatter
+      .withLocale(context.supportedLocaleOrDefault)
       .unit(
         when (speed.unit) {
           SpeedUnit.MetrePerSecond -> MeasureUnit.METER_PER_SECOND
@@ -185,7 +188,7 @@ private data class SpeedTextResource(val speed: Speed) : TextResource {
           SpeedUnit.Knot -> MeasureUnit.KNOT
         }
       )
-      .notation(Notation.compactShort())
+      .unitWidth(NumberFormatter.UnitWidth.SHORT)
       .precision(Precision.integer())
       .format(speed.value)
       .toString()

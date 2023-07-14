@@ -65,7 +65,6 @@
     <string name="beaufort_label_12">Violent storm</string>
     <string name="beaufort_label_13">Hurricane</string>
 
-    <string name="temperature_value">%s°</string>
     <string name="forecast_msg_empty_no_place">Select a place to see its forecast.</string>
     <string name="forecast_title_hourly">Hourly forecast</string>
     <string name="forecast_title_coming">%d-day forecast</string>

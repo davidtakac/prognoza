@@ -1,20 +1,11 @@
 package hr.dtakac.prognoza.ui.overview
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +15,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import kotlin.math.PI
@@ -44,9 +36,14 @@ fun OverviewWind(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
       ) {
-        Compass(
-          speed = speed,
-          arrowAngle = windDirection,
+        Compass(arrowAngle = windDirection)
+        Text(
+          text = speed,
+          style = MaterialTheme.typography.labelSmall,
+          modifier = Modifier
+            .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(100))
+            .padding(8.dp),
+          textAlign = TextAlign.Center
         )
       }
     },
@@ -66,7 +63,6 @@ private val arrowRootStrokeWidth = 2.dp
 
 @Composable
 private fun Compass(
-  speed: String,
   arrowAngle: Float,
   modifier: Modifier = Modifier
 ) {
@@ -78,22 +74,6 @@ private fun Compass(
   ) {
     CompassBackground(modifier = Modifier.fillMaxSize())
     CompassArrow(modifier = Modifier.fillMaxHeight().rotate(arrowAngle))
-    Surface(
-      color = MaterialTheme.colorScheme.surface,
-      shape = CircleShape,
-      modifier = Modifier
-        .fillMaxWidth(0.4f)
-        .aspectRatio(1f)
-    ) {
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-      ) {
-        val (value, unit) = speed.split(" ")
-        Text(text = value, style = MaterialTheme.typography.titleSmall)
-        Text(text = unit, style = MaterialTheme.typography.labelSmall)
-      }
-    }
   }
 }
 
