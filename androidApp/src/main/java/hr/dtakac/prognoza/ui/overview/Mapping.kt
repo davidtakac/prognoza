@@ -32,6 +32,7 @@ fun Overview.toUiModel(): OverviewDataState = OverviewDataState(
     add(uvIndex.toUiModel(timeZone))
     add(feelsLike.toUiModel())
     add(wind.toUiModel())
+    add(humidity.toUiModel())
   }
 )
 
@@ -116,7 +117,7 @@ private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.U
   val now = Clock.System.now().epochSeconds
   val protection = sunProtection
   return OverviewDetailState.UvIndex(
-    value = TextResource.fromNumberToInt(uvIndex.preciseValue),
+    uvIndex = TextResource.fromNumberToInt(uvIndex.preciseValue),
     level = TextResource.fromResId(uvIndex.toUvIndexStringId()),
     valueCenterFraction = (uvIndex.preciseValue / 11).toFloat().coerceAtMost(1f),
     recommendations = if (protection == null || now >= protection.untilUnixSecond) {
@@ -142,7 +143,7 @@ private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.U
 }
 
 private fun OverviewFeelsLike.toUiModel() = OverviewDetailState.FeelsLike(
-  value = TextResource.fromTemperature(feelsLike),
+  feelsLike = TextResource.fromTemperature(feelsLike),
   description = TextResource.fromResId(
     when (feelsHotter) {
       true -> R.string.feels_like_value_higher
@@ -159,4 +160,12 @@ private fun OverviewWind.toUiModel() = OverviewDetailState.Wind(
     TextResource.fromSpeed(maximumGust)
   ),
   angle = direction.value.toFloat()
+)
+
+private fun OverviewHumidity.toUiModel() = OverviewDetailState.Humidity(
+  humidity = TextResource.fromPercentage(humidity),
+  dewPoint = TextResource.fromResId(
+    R.string.dew_point_value,
+    TextResource.fromTemperature(dewPoint)
+  )
 )

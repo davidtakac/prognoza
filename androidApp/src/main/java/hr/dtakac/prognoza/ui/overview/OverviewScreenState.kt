@@ -60,14 +60,14 @@ sealed interface OverviewDetailState {
   ) : OverviewDetailState
 
   data class UvIndex(
-    val value: TextResource,
+    val uvIndex: TextResource,
     val level: TextResource,
     val valueCenterFraction: Float,
     val recommendations: TextResource
   ) : OverviewDetailState
 
   data class FeelsLike(
-    val value: TextResource,
+    val feelsLike: TextResource,
     val description: TextResource
   ) : OverviewDetailState
 
@@ -75,5 +75,10 @@ sealed interface OverviewDetailState {
     val speed: TextResource,
     val maximumGust: TextResource,
     val angle: Float
+  ) : OverviewDetailState
+
+  data class Humidity(
+    val humidity: TextResource,
+    val dewPoint: TextResource
   ) : OverviewDetailState
 }

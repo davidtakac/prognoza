@@ -144,7 +144,7 @@ class OverviewWind internal constructor(now: Hour) {
 }
 
 class OverviewHumidity internal constructor(now: Hour) {
-  val relativeHumidity: Int = now.humidity
+  val humidity: Int = now.humidity
   val dewPoint: Temperature = now.dewPoint
 }
 

@@ -221,14 +221,14 @@ fun OverviewScreen(
                 modifier = modifier
               )
               is OverviewDetailState.UvIndex -> OverviewUvIndex(
-                value = it.value.asString(),
+                value = it.uvIndex.asString(),
                 level = it.level.asString(),
                 valueCenterFraction = it.valueCenterFraction,
                 recommendations = it.recommendations.asString(),
                 modifier = modifier
               )
               is OverviewDetailState.FeelsLike -> OverviewFeelsLike(
-                value = it.value.asString(),
+                value = it.feelsLike.asString(),
                 description = it.description.asString(),
                 modifier = modifier
               )
@@ -236,6 +236,11 @@ fun OverviewScreen(
                 speed = it.speed.asString(),
                 maximumGust = it.maximumGust.asString(),
                 windDirection = it.angle,
+                modifier = modifier
+              )
+              is OverviewDetailState.Humidity -> OverviewHumidity(
+                humidity = it.humidity.asString(),
+                dewPoint = it.dewPoint.asString(),
                 modifier = modifier
               )
             }

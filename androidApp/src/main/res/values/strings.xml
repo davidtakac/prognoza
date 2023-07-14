@@ -139,4 +139,6 @@
     <string name="south_label_short">S</string>
     <string name="west_label_short">W</string>
     <string name="east_label_short">E</string>
+    <string name="forecast_label_humidity">Humidity</string>
+    <string name="dew_point_value">The dew point is %s right now</string>
 </resources>
