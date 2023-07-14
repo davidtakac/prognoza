@@ -108,7 +108,10 @@ private fun PrecipitationToday.toUiModel(timeZone: TimeZone) =
         TextResource.fromLength(amountInNextWetDay),
         TextResource.fromUnixSecondToShortDayOfWeek(startUnixSecondOfNextWetDay!!, timeZone)
       )
-      else -> TextResource.fromResId(R.string.precipitation_value_none_in_coming_days)
+      else -> TextResource.fromResId(
+        R.string.precipitation_value_none_in_coming_days,
+        numNextDaysScanned
+      )
     },
     isSnow = false
   )

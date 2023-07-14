@@ -64,22 +64,26 @@ class PrecipitationToday internal constructor(
 ) {
   val hoursInLastPeriod: Int
   val amountInLastPeriod: Length
+
   val hoursInNextPeriod: Int
   val amountInNextPeriod: Length
+
   val startUnixSecondOfNextWetDay: Long?
   val amountInNextWetDay: Length
+  val numNextDaysScanned: Int
 
   init {
     val unit = hourlyGetter.get(forecast.now).unit
     val pastHours = forecast.beforeNow.take(24)
     val futureHours = forecast.fromNow.take(24)
-    val firstWetDayBesidesToday = (forecast.futureDays - forecast.today).firstOrNull { dailyGetter.get(it).value > 0 }
+    val nextWetDay = forecast.futureDays.firstOrNull { dailyGetter.get(it).value > 0 }
     hoursInLastPeriod = pastHours.size.takeUnless { it == 0 } ?: 1
     amountInLastPeriod = pastHours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
     hoursInNextPeriod = futureHours.size
     amountInNextPeriod = futureHours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
-    startUnixSecondOfNextWetDay = firstWetDayBesidesToday?.startUnixSecond
-    amountInNextWetDay = firstWetDayBesidesToday?.let(dailyGetter) ?: Length(0.0, unit)
+    startUnixSecondOfNextWetDay = nextWetDay?.startUnixSecond
+    amountInNextWetDay = nextWetDay?.let(dailyGetter) ?: Length(0.0, unit)
+    numNextDaysScanned = forecast.futureDays.size + 1 // Takes into account today as well
   }
 }
 
