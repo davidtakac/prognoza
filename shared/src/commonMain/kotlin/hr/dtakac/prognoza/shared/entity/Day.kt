@@ -1,5 +1,7 @@
 package hr.dtakac.prognoza.shared.entity
 
+import kotlin.time.Duration.Companion.hours
+
 class Day internal constructor(val hours: List<Hour>) {
   init {
     if (hours.isEmpty()) throwInvalidHours()
@@ -25,7 +27,8 @@ class Day internal constructor(val hours: List<Hour>) {
     ?.let { firstDangerousHour ->
       SunProtection(
         fromUnixSecond = firstDangerousHour.startUnixSecond,
-        untilUnixSecond = hours.last { it.uvIndex.isDangerous }.startUnixSecond
+        // Stop using sun protection at the end of the last dangerous hour
+        untilUnixSecond = hours.last { it.uvIndex.isDangerous }.startUnixSecond + 1.hours.inWholeSeconds
       )
     }
 

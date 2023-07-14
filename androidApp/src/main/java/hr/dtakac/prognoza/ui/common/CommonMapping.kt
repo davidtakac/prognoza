@@ -25,10 +25,10 @@ fun Speed.toBeaufortStringId(): Int = when (beaufortNumber) {
 
 @StringRes
 fun UvIndex.toUvIndexStringId(): Int = when {
-  preciseValue > 10 -> R.string.uv_label_extreme
-  preciseValue > 7 -> R.string.uv_label_very_high
-  preciseValue > 5 -> R.string.uv_label_high
-  preciseValue > 2 -> R.string.uv_label_moderate
+  value > 10 -> R.string.uv_label_extreme
+  value > 7 -> R.string.uv_label_very_high
+  value > 5 -> R.string.uv_label_high
+  value > 2 -> R.string.uv_label_moderate
   else -> R.string.uv_label_low
 }
 

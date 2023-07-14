@@ -120,9 +120,9 @@ private fun OverviewUvIndex.toUiModel(timeZone: TimeZone): OverviewDetailState.U
   val now = Clock.System.now().epochSeconds
   val protection = sunProtection
   return OverviewDetailState.UvIndex(
-    uvIndex = TextResource.fromNumberToInt(uvIndex.preciseValue),
+    uvIndex = TextResource.fromNumberToInt(uvIndex.value),
     level = TextResource.fromResId(uvIndex.toUvIndexStringId()),
-    valueCenterFraction = (uvIndex.preciseValue / 11).toFloat().coerceAtMost(1f),
+    valueCenterFraction = (uvIndex.value / 11f).coerceAtMost(1f),
     recommendations = if (protection == null || now >= protection.untilUnixSecond) {
       TextResource.fromResId(R.string.uv_value_protection_none)
     } else if (protection.fromUnixSecond == protection.untilUnixSecond) {

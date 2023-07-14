@@ -9,11 +9,10 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlin.math.roundToInt
 
 private const val Tag = "ForecastService"
 
@@ -121,7 +120,7 @@ private data class Response(
           humidity = hourly.relativeHumidity2m[i],
           dewPoint = Temperature(hourly.dewpoint2m[i], TemperatureUnit.DegreeCelsius),
           visibility = Length(hourly.visibility[i], LengthUnit.Metre),
-          uvIndex = UvIndex(hourly.uvIndex[i]),
+          uvIndex = UvIndex(hourly.uvIndex[i].roundToInt()),
           isDay = hourly.isDay[i] == 1,
           feelsLike = Temperature(
             hourly.apparentTemperature[i],
