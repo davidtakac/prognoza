@@ -124,6 +124,7 @@ private data class PercentageTextResource(val percentage: Int) : TextResource {
   override fun asString(context: Context): String =
     NumberFormatter.with()
       .locale(context.resources.configuration.locales[0])
+      .notation(Notation.compactShort())
       .unit(MeasureUnit.PERCENT)
       .format(percentage)
       .toString()
