@@ -11,6 +11,23 @@ class UvIndex internal constructor(val value: Int) : Comparable<UvIndex> {
 
   val isDangerous: Boolean = value > 2
 
+  val description: Description =
+    when {
+      value > 10 -> Description.Extreme
+      value > 7 -> Description.VeryHigh
+      value > 5 -> Description.High
+      value > 2 -> Description.Moderate
+      else -> Description.Low
+    }
+
+  enum class Description {
+    Low,
+    Moderate,
+    High,
+    VeryHigh,
+    Extreme
+  }
+
   private fun throwInvalidValue(): Nothing =
     throw IllegalStateException("UV Index value must be positive, was ${toString()}")
 }

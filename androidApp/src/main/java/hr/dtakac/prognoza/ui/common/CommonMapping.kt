@@ -1,5 +1,6 @@
 package hr.dtakac.prognoza.ui.common
 
+import android.view.Display.Mode
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
@@ -24,12 +25,12 @@ fun Speed.toBeaufortStringId(): Int = when (beaufortNumber) {
 }
 
 @StringRes
-fun UvIndex.toUvIndexStringId(): Int = when {
-  value > 10 -> R.string.uv_label_extreme
-  value > 7 -> R.string.uv_label_very_high
-  value > 5 -> R.string.uv_label_high
-  value > 2 -> R.string.uv_label_moderate
-  else -> R.string.uv_label_low
+fun UvIndex.toUvIndexStringId(): Int = when (description) {
+  UvIndex.Description.Extreme -> R.string.uv_label_extreme
+  UvIndex.Description.VeryHigh -> R.string.uv_label_very_high
+  UvIndex.Description.High -> R.string.uv_label_high
+  UvIndex.Description.Moderate -> R.string.uv_label_moderate
+  UvIndex.Description.Low -> R.string.uv_label_low
 }
 
 /*
