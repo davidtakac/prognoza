@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import hr.dtakac.prognoza.R
 import kotlin.math.PI
@@ -56,9 +55,11 @@ fun OverviewWind(
   )
 }
 
-private val notchLength = 6.dp
+private val notchLength = 8.dp
+private val northArrowHeight = notchLength
+private val northArrowWidth = notchLength + 2.dp
 private val arrowTipHeight = notchLength + 4.dp
-private val arrowTipWidth = 10.dp
+private val arrowTipWidth = notchLength + 4.dp
 private val arrowShaftWidth = 2.dp
 private val arrowRootHeight = notchLength
 private val arrowRootStrokeWidth = 2.dp
@@ -93,6 +94,15 @@ private fun Compass(
           strokeWidth = if (i % 45 == 0) density.run { 1.dp.toPx() } else Stroke.HairlineWidth
         )
       }
+      val northArrowHeightPx = density.run { northArrowHeight.toPx() }
+      val northArrowWidthPx = density.run { northArrowWidth.toPx() }
+      val northArrowPath = Path().apply {
+        moveTo(x = size.width / 2, y = 0f)
+        lineTo(x = (size.width / 2) - (northArrowWidthPx / 2), y = northArrowHeightPx)
+        lineTo(x = (size.width / 2) + (northArrowWidthPx / 2), y = northArrowHeightPx)
+        lineTo(x = size.width / 2, y = 0f)
+      }
+      drawPath(northArrowPath, color)
     }
     Column(
       modifier = Modifier
@@ -112,9 +122,11 @@ private fun Compass(
       Text(stringResource(id = R.string.west_label_short), style = MaterialTheme.typography.labelSmall)
       Text(stringResource(id = R.string.east_label_short), style = MaterialTheme.typography.labelSmall)
     }
-    Canvas(modifier = Modifier
-      .fillMaxHeight()
-      .rotate(arrowAngle)) {
+    Canvas(
+      modifier = Modifier
+        .fillMaxHeight()
+        .rotate(arrowAngle)
+    ) {
       val arrowTipHeightPx = density.run { arrowTipHeight.toPx() }
       val arrowTipWidthPx = density.run { arrowTipWidth.toPx() }
       val arrowRootHeightPx = density.run { arrowRootHeight.toPx() }
