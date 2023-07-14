@@ -16,6 +16,7 @@ import kotlinx.datetime.toLocalDateTime
 import java.math.RoundingMode
 import java.time.format.DateTimeFormatter
 
+// TODO: add hour and day text resources instead of relying on strings xml again... :)
 sealed interface TextResource {
   companion object {
     fun empty(): TextResource = fromString("")
