@@ -1,22 +1,11 @@
 package hr.dtakac.prognoza.shared.entity
 
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
-
-class Day internal constructor(
-  val timeZone: TimeZone,
-  val startUnixSecond: Long,
-  val sunriseUnixSecond: Long?,
-  val sunsetUnixSecond: Long?,
-  val hours: List<Hour>
-) {
+class Day internal constructor(val hours: List<Hour>) {
   init {
     if (hours.isEmpty()) throwInvalidHours()
   }
 
+  val startUnixSecond: Long = hours.first().startUnixSecond
   val minimumTemperature: Temperature = hours.minOf { it.temperature }
   val maximumTemperature: Temperature = hours.maxOf { it.temperature }
   val minimumFeelsLike: Temperature = hours.minOf { it.feelsLike }
@@ -39,28 +28,6 @@ class Day internal constructor(
         untilUnixSecond = hours.last { it.uvIndex.isDangerous }.startUnixSecond
       )
     }
-
-  val untilNow: List<Hour> = hours.filter {
-    val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
-    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
-    hourDateTime <= nowDateTime
-  }
-
-  val fromNow: List<Hour> = hours.filter {
-    val hourDateTime =
-      Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
-    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
-    hourDateTime >= nowDateTime
-  }
-
-  fun toMeasurementSystem(measurementSystem: MeasurementSystem): Day =
-    Day(
-      timeZone = timeZone,
-      startUnixSecond = startUnixSecond,
-      sunriseUnixSecond = sunriseUnixSecond,
-      sunsetUnixSecond = sunsetUnixSecond,
-      hours = hours.map { it.toMeasurementSystem(measurementSystem) }
-    )
 
   private fun throwInvalidHours(): Nothing {
     throw IllegalStateException("Hours must not be empty.")
@@ -101,14 +68,4 @@ class RepresentativeWmoCode internal constructor(hours: List<Hour>) {
 class SunProtection internal constructor(
   val fromUnixSecond: Long,
   val untilUnixSecond: Long
-)
-
-private fun LocalDateTime.normalizeToHour() = LocalDateTime(
-  year = year,
-  month = month,
-  dayOfMonth = dayOfMonth,
-  hour = hour,
-  minute = 0,
-  second = 0,
-  nanosecond = 0
 )

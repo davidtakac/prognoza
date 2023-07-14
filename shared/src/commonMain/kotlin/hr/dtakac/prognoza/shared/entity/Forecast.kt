@@ -2,41 +2,48 @@ package hr.dtakac.prognoza.shared.entity
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlin.reflect.KProperty1
 
 class Forecast internal constructor(
   val timeZone: TimeZone,
-  val days: List<Day>
+  val hours: List<Hour>,
+  val sunriseEpochSeconds: List<Long>,
+  val sunsetEpochSeconds: List<Long>,
 ) {
+  private val days: List<Day> = hours
+    .groupBy { Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date }
+    .map { (_, hoursInDay) -> Day(hoursInDay) }
+
+  val now: Hour = hours.firstOrNull {
+    val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone)
+    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
+    hourDateTime.date == nowDateTime.date && hourDateTime.time.hour == nowDateTime.time.hour
+  } ?: throw OutdatedForecastException()
+
+  val futureDays: List<Day> = days.dropWhile {
+    val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
+    val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
+    dayDate <= nowDate
+  }
+
   val today: Day = days.firstOrNull {
     val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
     val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
     dayDate == nowDate
   } ?: throw OutdatedForecastException()
 
-  val now: Hour = today.hours.firstOrNull {
-    val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone)
-    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
-    hourDateTime.date == nowDateTime.date && hourDateTime.time.hour == nowDateTime.time.hour
-  } ?: throw OutdatedForecastException()
-
-  val untilToday: List<Day> = days.filter {
-    val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
-    val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
-    dayDate <= nowDate
+  val beforeNow: List<Hour> = hours.takeWhile {
+    val hourDateTime = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).normalizeToHour()
+    val nowDateTime = Clock.System.now().toLocalDateTime(timeZone).normalizeToHour()
+    hourDateTime < nowDateTime
   }
 
-  val fromToday: List<Day> = days.filter {
-    val dayDate = Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
-    val nowDate = Clock.System.now().toLocalDateTime(timeZone).date
-    dayDate >= nowDate
-  }
+  val restOfToday: Day = Day(today.hours - beforeNow.toSet())
 
-  val untilNow: List<Hour> = untilToday.flatMap { it.untilNow }
-
-  val fromNow: List<Hour> = fromToday.flatMap { it.fromNow }
+  val fromNow: List<Hour> = hours - beforeNow.toSet()
 
   val rainAndShowersToday: PrecipitationToday = PrecipitationToday(this, Hour::rainAndShowers, Day::rainAndShowers)
 
@@ -44,7 +51,9 @@ class Forecast internal constructor(
 
   fun toMeasurementSystem(measurementSystem: MeasurementSystem): Forecast = Forecast(
     timeZone = timeZone,
-    days = days.map { it.toMeasurementSystem(measurementSystem) }
+    hours = hours.map { it.toMeasurementSystem(measurementSystem) },
+    sunriseEpochSeconds = sunriseEpochSeconds,
+    sunsetEpochSeconds = sunsetEpochSeconds
   )
 }
 
@@ -62,9 +71,9 @@ class PrecipitationToday internal constructor(
 
   init {
     val unit = hourlyGetter.get(forecast.now).unit
-    val pastHours = (forecast.untilNow - forecast.now).take(24)
+    val pastHours = forecast.beforeNow.take(24)
     val futureHours = forecast.fromNow.take(24)
-    val firstWetDayBesidesToday = (forecast.fromToday - forecast.today).firstOrNull { dailyGetter.get(it).value > 0 }
+    val firstWetDayBesidesToday = (forecast.futureDays - forecast.today).firstOrNull { dailyGetter.get(it).value > 0 }
     hoursInLastPeriod = pastHours.size.takeUnless { it == 0 } ?: 1
     amountInLastPeriod = pastHours.fold(Length(0.0, unit)) { acc, hour -> acc + hourlyGetter.get(hour) }
     hoursInNextPeriod = futureHours.size
@@ -75,3 +84,13 @@ class PrecipitationToday internal constructor(
 }
 
 class OutdatedForecastException : Exception()
+
+private fun LocalDateTime.normalizeToHour() = LocalDateTime(
+  year = year,
+  month = month,
+  dayOfMonth = dayOfMonth,
+  hour = hour,
+  minute = 0,
+  second = 0,
+  nanosecond = 0
+)

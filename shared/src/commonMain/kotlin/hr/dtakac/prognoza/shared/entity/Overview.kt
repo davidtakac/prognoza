@@ -6,8 +6,12 @@ import kotlin.math.abs
 class Overview internal constructor(forecast: Forecast) {
   val timeZone: TimeZone = forecast.timeZone
   val now: OverviewNow = OverviewNow(forecast.now, forecast.today)
-  val hours: List<OverviewHour> = buildHours(forecast)
-  val days: OverviewDays = OverviewDays(forecast.days)
+  val hours: List<OverviewHour> = buildHours(
+    hours = forecast.fromNow.take(24),
+    sunrises = forecast.sunriseEpochSeconds,
+    sunsets = forecast.sunsetEpochSeconds
+  )
+  val days: OverviewDays = OverviewDays(buildList { add(forecast.restOfToday); addAll(forecast.futureDays) })
 
   val rainfall: PrecipitationToday = forecast.rainAndShowersToday
   val snowfall: PrecipitationToday? = forecast.snowToday.takeIf {
@@ -19,26 +23,26 @@ class Overview internal constructor(forecast: Forecast) {
   val feelsLike: OverviewFeelsLike = OverviewFeelsLike(forecast.now)
   val wind: OverviewWind = OverviewWind(forecast.now)
   val visibility: Length = forecast.now.visibility
-  val nextSunriseUnixSecond: Long? = forecast.days.firstOrNull { it.sunriseUnixSecond != null }?.sunriseUnixSecond
-  val nextSunsetUnixSecond: Long? = forecast.days.firstOrNull { it.sunsetUnixSecond != null }?.sunriseUnixSecond
+  val nextSunriseUnixSecond: Long? = forecast.sunriseEpochSeconds.firstOrNull()
+  val nextSunsetUnixSecond: Long? = forecast.sunsetEpochSeconds.firstOrNull()
   val humidity: OverviewHumidity = OverviewHumidity(forecast.now)
 
-  private fun buildHours(forecast: Forecast) = buildList<OverviewHour> {
-    val hours = forecast.fromNow.take(24)
+  private fun buildHours(
+    hours: List<Hour>,
+    sunrises: List<Long>,
+    sunsets: List<Long>
+  ) = buildList<OverviewHour> {
     addAll(hours.map { OverviewHour.Weather(it) })
 
-    val fromToday = forecast.fromToday
-    val sunrises = fromToday
-      .mapNotNull { it.sunriseUnixSecond }
+    val sunriseHours = sunrises
       .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
       .map { OverviewHour.Sunrise(it) }
-    addAll(sunrises)
+    addAll(sunriseHours)
 
-    val sunsets = fromToday
-      .mapNotNull { it.sunsetUnixSecond }
+    val sunsetHours = sunsets
       .filter { it in hours.first().startUnixSecond..hours.last().startUnixSecond }
       .map { OverviewHour.Sunset(it) }
-    addAll(sunsets)
+    addAll(sunsetHours)
 
     // Ensures sunrises and sunsets are placed in between Weather hours
     sortBy { it.unixSecond }

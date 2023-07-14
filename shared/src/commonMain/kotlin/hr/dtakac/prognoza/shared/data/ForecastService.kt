@@ -56,7 +56,6 @@ internal class ForecastService(
     }
   }
 
-  // todo: trim params
   private val hourlyParams = listOf(
     "temperature_2m",
     "relativehumidity_2m",
@@ -77,25 +76,7 @@ internal class ForecastService(
     "is_day"
   ).joinToString(",")
 
-  // todo: trim params
-  private val dailyParams = listOf(
-    "weathercode",
-    "temperature_2m_max",
-    "temperature_2m_min",
-    "apparent_temperature_max",
-    "apparent_temperature_min",
-    "sunrise",
-    "sunset",
-    "uv_index_max",
-    "precipitation_sum",
-    "rain_sum",
-    "showers_sum",
-    "snowfall_sum",
-    "precipitation_probability_max",
-    "windspeed_10m_max",
-    "windgusts_10m_max",
-    "winddirection_10m_dominant"
-  ).joinToString(",")
+  private val dailyParams = listOf("sunrise", "sunset",).joinToString(",")
 }
 
 @Serializable
@@ -111,30 +92,10 @@ private data class Response(
     val timeZone = TimeZone.of(timeZoneId)
     return Forecast(
       timeZone = timeZone,
-      days = buildDays(timeZone)
+      hours = buildHours(),
+      sunriseEpochSeconds = daily.sunrise,
+      sunsetEpochSeconds = daily.sunset
     )
-  }
-
-  private fun buildDays(timeZone: TimeZone) = buildList {
-    val hours = buildHours()
-    for (i in daily.startUnixSecond.indices) {
-      val dayStartUnixSecond = daily.startUnixSecond[i]
-      add(
-        Day(
-          timeZone = timeZone,
-          startUnixSecond = dayStartUnixSecond,
-          sunriseUnixSecond = daily.sunrise[i].takeUnless { it == 0L },
-          sunsetUnixSecond = daily.sunset[i].takeUnless { it == 0L },
-          hours = hours.filter {
-            val hourDate =
-              Instant.fromEpochSeconds(it.startUnixSecond).toLocalDateTime(timeZone).date
-            val dayDate =
-              Instant.fromEpochSeconds(dayStartUnixSecond).toLocalDateTime(timeZone).date
-            hourDate == dayDate
-          }
-        )
-      )
-    }
   }
 
   private fun buildHours() = buildList {
@@ -194,21 +155,6 @@ private data class Hourly(
 
 @Serializable
 private data class Daily(
-  @SerialName("time") var startUnixSecond: List<Long>,
-  @SerialName("weathercode") var weathercode: List<Int>,
-  @SerialName("temperature_2m_max") var temperature2mMax: List<Double>,
-  @SerialName("temperature_2m_min") var temperature2mMin: List<Double>,
-  @SerialName("apparent_temperature_max") var apparentTemperatureMax: List<Double>,
-  @SerialName("apparent_temperature_min") var apparentTemperatureMin: List<Double>,
   @SerialName("sunrise") var sunrise: List<Long>,
   @SerialName("sunset") var sunset: List<Long>,
-  @SerialName("uv_index_max") var uvIndexMax: List<Double>,
-  @SerialName("precipitation_sum") var precipitationSum: List<Double>,
-  @SerialName("rain_sum") var rainSum: List<Double>,
-  @SerialName("showers_sum") var showersSum: List<Double>,
-  @SerialName("snowfall_sum") var snowfallSum: List<Double>,
-  @SerialName("precipitation_probability_max") var precipitationProbabilityMax: List<Int>,
-  @SerialName("windspeed_10m_max") var windSpeed10mMax: List<Double>,
-  @SerialName("windgusts_10m_max") var windGusts10mMax: List<Double>,
-  @SerialName("winddirection_10m_dominant") var windDirection10mDominant: List<Double>
 )
