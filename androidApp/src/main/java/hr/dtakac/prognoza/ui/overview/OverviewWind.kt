@@ -39,7 +39,7 @@ fun OverviewWind(
         Compass(arrowAngle = windDirection)
         Text(
           text = speed,
-          style = MaterialTheme.typography.labelSmall,
+          style = MaterialTheme.typography.titleSmall,
           modifier = Modifier
             .background(MaterialTheme.colorScheme.surface, RoundedCornerShape(100))
             .padding(8.dp),
