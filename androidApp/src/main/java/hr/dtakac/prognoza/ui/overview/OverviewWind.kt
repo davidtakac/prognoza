@@ -76,6 +76,30 @@ private fun Compass(
       .then(modifier),
     contentAlignment = Alignment.Center
   ) {
+    CompassBackground(modifier = Modifier.fillMaxSize())
+    CompassArrow(modifier = Modifier.fillMaxHeight().rotate(arrowAngle))
+    Surface(
+      color = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp),
+      shape = CircleShape,
+      modifier = Modifier
+        .fillMaxWidth(0.4f)
+        .aspectRatio(1f)
+    ) {
+      Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+      ) {
+        val (value, unit) = speed.split(" ")
+        Text(text = value, style = MaterialTheme.typography.titleSmall)
+        Text(text = unit, style = MaterialTheme.typography.labelSmall)
+      }
+    }
+  }
+}
+
+@Composable
+private fun CompassBackground(modifier: Modifier = Modifier) {
+  Box(modifier = modifier, contentAlignment = Alignment.Center) {
     val color = MaterialTheme.colorScheme.onSurface
     val density = LocalDensity.current
     Canvas(modifier = Modifier.fillMaxSize()) {
@@ -122,55 +146,40 @@ private fun Compass(
       Text(stringResource(id = R.string.west_label_short), style = MaterialTheme.typography.labelSmall)
       Text(stringResource(id = R.string.east_label_short), style = MaterialTheme.typography.labelSmall)
     }
-    Canvas(
-      modifier = Modifier
-        .fillMaxHeight()
-        .rotate(arrowAngle)
-    ) {
-      val arrowTipHeightPx = density.run { arrowTipHeight.toPx() }
-      val arrowTipWidthPx = density.run { arrowTipWidth.toPx() }
-      val arrowRootHeightPx = density.run { arrowRootHeight.toPx() }
-      val arrowShaftWidthPx = density.run { arrowShaftWidth.toPx() }
-      val arrowRootStrokeWidthPx = density.run { arrowRootStrokeWidth.toPx() }
-      val tipPath = Path().apply {
-        moveTo(x = size.width / 2, y = 0f)
-        lineTo(x = - (arrowTipWidthPx / 2), y = arrowTipHeightPx)
-        lineTo(x = size.width / 2, y = arrowTipHeightPx * 0.7f)
-        lineTo(x = arrowTipWidthPx / 2, y = arrowTipHeightPx)
-        lineTo(x = size.width / 2, y = 0f)
-      }
-      drawPath(path = tipPath, color = color)
-      drawLine(
-        color = color,
-        start = Offset(0f, 0f),
-        end = Offset(x = size.width / 2, y = size.height - arrowRootHeightPx),
-        strokeWidth = arrowShaftWidthPx
-      )
-      drawCircle(
-        color = color,
-        radius = arrowRootHeightPx / 2,
-        center = Offset(
-          x = size.width / 2,
-          y = size.height - (arrowRootHeightPx / 2),
-        ),
-        style = Stroke(width = arrowRootStrokeWidthPx)
-      )
+  }
+}
+
+@Composable
+private fun CompassArrow(modifier: Modifier = Modifier) {
+  val color = MaterialTheme.colorScheme.onSurface
+  Canvas(modifier = modifier) {
+    val arrowTipHeightPx = density.run { arrowTipHeight.toPx() }
+    val arrowTipWidthPx = density.run { arrowTipWidth.toPx() }
+    val arrowRootHeightPx = density.run { arrowRootHeight.toPx() }
+    val arrowShaftWidthPx = density.run { arrowShaftWidth.toPx() }
+    val arrowRootStrokeWidthPx = density.run { arrowRootStrokeWidth.toPx() }
+    val tipPath = Path().apply {
+      moveTo(x = size.width / 2, y = 0f)
+      lineTo(x = - (arrowTipWidthPx / 2), y = arrowTipHeightPx)
+      lineTo(x = size.width / 2, y = arrowTipHeightPx * 0.7f)
+      lineTo(x = arrowTipWidthPx / 2, y = arrowTipHeightPx)
+      lineTo(x = size.width / 2, y = 0f)
     }
-    Surface(
-      color = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp),
-      shape = CircleShape,
-      modifier = Modifier
-        .fillMaxWidth(0.4f)
-        .aspectRatio(1f)
-    ) {
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-      ) {
-        val (value, unit) = speed.split(" ")
-        Text(text = value, style = MaterialTheme.typography.titleSmall)
-        Text(text = unit, style = MaterialTheme.typography.labelSmall)
-      }
-    }
+    drawPath(path = tipPath, color = color)
+    drawLine(
+      color = color,
+      start = Offset(0f, 0f),
+      end = Offset(x = size.width / 2, y = size.height - arrowRootHeightPx),
+      strokeWidth = arrowShaftWidthPx
+    )
+    drawCircle(
+      color = color,
+      radius = arrowRootHeightPx / 2,
+      center = Offset(
+        x = size.width / 2,
+        y = size.height - (arrowRootHeightPx / 2),
+      ),
+      style = Stroke(width = arrowRootStrokeWidthPx)
+    )
   }
 }
