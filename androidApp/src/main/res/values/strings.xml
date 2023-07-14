@@ -114,7 +114,7 @@
     <string name="forecast_title_details">Current conditions</string>
     <string name="precipitation_value_last_hours">in last %dh</string>
     <string name="precipitation_value_next_hours">%s expected in next %dh</string>
-    <string name="precipitation_value_on_day">Next expected %s on %s</string>
+    <string name="precipitation_value_on_day">Next expected is %s on %s</string>
     <string name="forecast_label_snow">Snow</string>
     <string name="forecast_label_rain">Rain</string>
     <string name="uv_label_extreme">Extreme</string>
