@@ -65,15 +65,6 @@
     <string name="beaufort_label_12">Violent storm</string>
     <string name="beaufort_label_13">Hurricane</string>
 
-    <string name="cardinal_n">North</string>
-    <string name="cardinal_ne">Northeast</string>
-    <string name="cardinal_e">East</string>
-    <string name="cardinal_se">Southeast</string>
-    <string name="cardinal_s">South</string>
-    <string name="cardinal_sw">Southwest</string>
-    <string name="cardinal_w">West</string>
-    <string name="cardinal_nw">Northwest</string>
-
     <string name="temperature_value">%s°</string>
     <string name="forecast_msg_empty_no_place">Select a place to see its forecast.</string>
     <string name="forecast_title_hourly">Hourly forecast</string>
@@ -144,4 +135,8 @@
     <string name="precipitation_value_none_in_coming_days">None expected in next %s days</string>
     <string name="forecast_label_wind">Wind</string>
     <string name="wind_value_max_gust">Gusts up to %s</string>
+    <string name="north_label_short">N</string>
+    <string name="south_label_short">S</string>
+    <string name="west_label_short">W</string>
+    <string name="east_label_short">E</string>
 </resources>

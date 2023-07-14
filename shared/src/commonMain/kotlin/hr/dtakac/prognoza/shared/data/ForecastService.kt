@@ -37,6 +37,8 @@ internal class ForecastService(
         )
         parameter("timezone", "auto")
         parameter("timeformat", "unixtime")
+        parameter("past_days", 1)
+        parameter("forecast_days", 10)
         parameter("hourly", hourlyParams)
         parameter("daily", dailyParams)
         parameter("temperature_unit", "celsius")

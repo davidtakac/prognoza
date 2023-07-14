@@ -11,7 +11,11 @@ class Overview internal constructor(forecast: Forecast) {
     sunrises = forecast.sunriseEpochSeconds,
     sunsets = forecast.sunsetEpochSeconds
   )
-  val days: OverviewDays = OverviewDays(buildList { add(forecast.restOfToday); addAll(forecast.futureDays) })
+  val days: OverviewDays = OverviewDays(
+    today = forecast.today,
+    restOfToday = forecast.restOfToday,
+    futureDays = forecast.futureDays
+  )
 
   val rainfall: PrecipitationToday = forecast.rainAndShowersToday
   val snowfall: PrecipitationToday? = forecast.snowToday.takeIf {
@@ -74,18 +78,43 @@ sealed interface OverviewHour {
   class Sunset internal constructor(override val unixSecond: Long) : OverviewHour
 }
 
-class OverviewDays internal constructor(days: List<Day>) {
-  val days: List<OverviewDay> = days.map { OverviewDay(it) }
-  val minimumTemperature: Temperature = days.minOf { it.minimumTemperature }
-  val maximumTemperature: Temperature = days.maxOf { it.maximumTemperature }
+class OverviewDays internal constructor(
+  today: Day,
+  restOfToday: Day,
+  futureDays: List<Day>
+) {
+  val days: List<OverviewDay>
+  val minimumTemperature: Temperature
+  val maximumTemperature: Temperature
+
+  init {
+    val todayOverview = OverviewDay(
+      startUnixSecond = today.startUnixSecond,
+      representativeWmoCode = restOfToday.representativeWmoCode,
+      minimumTemperature = today.minimumTemperature,
+      maximumTemperature = today.maximumTemperature,
+      maximumPop = restOfToday.maximumPop.humanValue
+    )
+    days = buildList { add(todayOverview); addAll(futureDays.map { OverviewDay(it) }) }
+    minimumTemperature = minOf(today.minimumTemperature, futureDays.minOf { it.minimumTemperature })
+    maximumTemperature = maxOf(today.maximumTemperature, futureDays.maxOf { it.maximumTemperature })
+  }
 }
 
-class OverviewDay internal constructor(day: Day) {
-  val unixSecond: Long = day.startUnixSecond
-  val representativeWmoCode: RepresentativeWmoCode = day.representativeWmoCode
-  val minimumTemperature: Temperature = day.minimumTemperature
-  val maximumTemperature: Temperature = day.maximumTemperature
-  val maximumPop: Int = day.maximumPop.humanValue
+class OverviewDay internal constructor(
+  val startUnixSecond: Long,
+  val representativeWmoCode: RepresentativeWmoCode,
+  val minimumTemperature: Temperature,
+  val maximumTemperature: Temperature,
+  val maximumPop: Int
+) {
+  internal constructor(day: Day) : this(
+    startUnixSecond = day.startUnixSecond,
+    representativeWmoCode = day.representativeWmoCode,
+    minimumTemperature = day.minimumTemperature,
+    maximumTemperature = day.maximumTemperature,
+    maximumPop = day.maximumPop.humanValue
+  )
 }
 
 class OverviewUvIndex internal constructor(now: Hour, today: Day) {

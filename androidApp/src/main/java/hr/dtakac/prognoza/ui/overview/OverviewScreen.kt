@@ -235,7 +235,7 @@ fun OverviewScreen(
               is OverviewDetailState.Wind -> OverviewWind(
                 speed = it.speed.asString(),
                 maximumGust = it.maximumGust.asString(),
-                angle = it.angle,
+                windDirection = it.angle,
                 modifier = modifier
               )
             }

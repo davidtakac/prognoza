@@ -3,21 +3,8 @@ package hr.dtakac.prognoza.ui.common
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import hr.dtakac.prognoza.R
-import hr.dtakac.prognoza.shared.entity.CardinalDirection
 import hr.dtakac.prognoza.shared.entity.Speed
 import hr.dtakac.prognoza.shared.entity.UvIndex
-
-@StringRes
-fun CardinalDirection.toCompassDirectionStringId(): Int = when (this) {
-  CardinalDirection.N -> R.string.cardinal_n
-  CardinalDirection.NE -> R.string.cardinal_ne
-  CardinalDirection.E -> R.string.cardinal_e
-  CardinalDirection.SE -> R.string.cardinal_se
-  CardinalDirection.S -> R.string.cardinal_s
-  CardinalDirection.SW -> R.string.cardinal_sw
-  CardinalDirection.W -> R.string.cardinal_w
-  else -> R.string.cardinal_nw
-}
 
 @StringRes
 fun Speed.toBeaufortStringId(): Int = when (beaufortNumber) {

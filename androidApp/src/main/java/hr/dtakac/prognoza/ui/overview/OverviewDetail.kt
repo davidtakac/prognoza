@@ -12,9 +12,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun OverviewDetail(
   label: @Composable () -> Unit,
-  mainValue: @Composable () -> Unit,
-  description: @Composable () -> Unit,
   modifier: Modifier = Modifier,
+  description: (@Composable () -> Unit)? = null,
+  mainValue: (@Composable () -> Unit)? = null,
   supportingValue: (@Composable () -> Unit)? = null,
   supportingGraphic: (@Composable () -> Unit)? = null
 ) {
@@ -30,10 +30,12 @@ fun OverviewDetail(
           LocalTextStyle provides MaterialTheme.typography.titleSmall,
           content = label
         )
-        CompositionLocalProvider(
-          LocalTextStyle provides MaterialTheme.typography.headlineMedium,
-          content = mainValue
-        )
+        mainValue?.let {
+          CompositionLocalProvider(
+            LocalTextStyle provides MaterialTheme.typography.headlineMedium,
+            content = it
+          )
+        }
         supportingValue?.let {
           CompositionLocalProvider(
             LocalTextStyle provides MaterialTheme.typography.bodyMedium,
@@ -45,10 +47,12 @@ fun OverviewDetail(
           it()
         }
       }
-      CompositionLocalProvider(
-        LocalTextStyle provides MaterialTheme.typography.bodyMedium,
-        content = description
-      )
+      description?.let {
+        CompositionLocalProvider(
+          LocalTextStyle provides MaterialTheme.typography.bodyMedium,
+          content = it
+        )
+      }
     }
   }
 }

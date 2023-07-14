@@ -77,7 +77,7 @@ private fun OverviewDay.toUiModel(
   val temperatureRange = absoluteMaximumTemperature - absoluteMinimumTemperature
   return OverviewDayState(
     dayOfWeek = if (isToday) TextResource.fromResId(R.string.forecast_label_today)
-    else TextResource.fromUnixSecondToShortDayOfWeek(unixSecond, timeZone),
+    else TextResource.fromUnixSecondToShortDayOfWeek(startUnixSecond, timeZone),
     pop = maximumPop.takeUnless { it == 0 }?.let(TextResource::fromPercentage),
     weatherIcon = wmoCodeToWeatherIcon(representativeWmoCode.wmoCode, representativeWmoCode.isDay),
     minimumTemperature = TextResource.fromTemperature(minimumTemperature),
