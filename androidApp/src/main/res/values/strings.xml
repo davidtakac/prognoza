@@ -126,7 +126,7 @@
     <string name="uv_value_protection_from_until">Use sun protection from %s-%s</string>
     <string name="uv_value_protection_until">Use sun protection until %s</string>
     <string name="uv_value_protection_at">Use sun protection at %s</string>
-    <string name="uv_value_protection_none">No protection needed for rest of day</string>
+    <string name="uv_value_protection_none">Low for rest of day</string>
     <string name="forecast_label_uv_index">UV Index</string>
     <string name="feels_like_value_higher">Humidity is making it feel hotter</string>
     <string name="feels_like_value_lower">Wind is making it feel colder</string>
