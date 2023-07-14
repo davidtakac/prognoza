@@ -1,7 +1,6 @@
 package hr.dtakac.prognoza.ui.overview
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,9 +10,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -52,6 +49,13 @@ fun OverviewWind(
   )
 }
 
+private val notchLength = 6.dp
+private val arrowTipHeight = notchLength + 4.dp
+private val arrowTipWidth = 10.dp
+private val arrowShaftWidth = 2.dp
+private val arrowRootHeight = notchLength
+private val arrowRootStrokeWidth = 2.dp
+
 @Composable
 private fun Compass(
   speed: String,
@@ -65,7 +69,6 @@ private fun Compass(
     contentAlignment = Alignment.Center
   ) {
     val color = MaterialTheme.colorScheme.onSurface
-    val notchLength = 8.dp
     val density = LocalDensity.current
     Canvas(modifier = Modifier.fillMaxSize()) {
       val outerRadius = size.height / 2
@@ -85,43 +88,52 @@ private fun Compass(
       }
     }
     Column(
-      modifier = Modifier.fillMaxHeight().padding(vertical = notchLength),
+      modifier = Modifier
+        .fillMaxHeight()
+        .padding(vertical = notchLength),
       verticalArrangement = Arrangement.SpaceBetween
     ) {
       Text(stringResource(id = R.string.north_label_short), style = MaterialTheme.typography.labelSmall)
       Text(stringResource(id = R.string.south_label_short), style = MaterialTheme.typography.labelSmall)
     }
     Row(
-      modifier = Modifier.fillMaxWidth().padding(horizontal = notchLength + 2.dp),
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = notchLength + 2.dp),
       horizontalArrangement = Arrangement.SpaceBetween
     ) {
       Text(stringResource(id = R.string.west_label_short), style = MaterialTheme.typography.labelSmall)
       Text(stringResource(id = R.string.east_label_short), style = MaterialTheme.typography.labelSmall)
     }
-    Box(
-      modifier = Modifier
-        .fillMaxHeight()
-        .rotate(arrowAngle)
-    ) {
-      Column(
-        modifier = Modifier.fillMaxHeight(),
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        Box(
-          modifier = Modifier
-            .size(12.dp)
-            .background(
-              color = MaterialTheme.colorScheme.onSurface,
-              shape = CircleShape
-            )
-        )
-        Box(
-          modifier = Modifier
-            .weight(1f)
-            .width(2.dp)
-            .background(MaterialTheme.colorScheme.onSurface)
-        )
+    Canvas(modifier = Modifier.fillMaxHeight().rotate(arrowAngle)) {
+      val arrowTipHeightPx = density.run { arrowTipHeight.toPx() }
+      val arrowTipWidthPx = density.run { arrowTipWidth.toPx() }
+      val arrowRootHeightPx = density.run { arrowRootHeight.toPx() }
+      val arrowShaftWidthPx = density.run { arrowShaftWidth.toPx() }
+      val arrowRootStrokeWidthPx = density.run { arrowRootStrokeWidth.toPx() }
+      val tipPath = Path().apply {
+        moveTo(x = size.width / 2, y = 0f)
+        lineTo(x = - (arrowTipWidthPx / 2), y = arrowTipHeightPx)
+        lineTo(x = size.width / 2, y = arrowTipHeightPx * 0.7f)
+        lineTo(x = arrowTipWidthPx / 2, y = arrowTipHeightPx)
+        lineTo(x = size.width / 2, y = 0f)
       }
+      drawPath(path = tipPath, color = color)
+      drawLine(
+        color = color,
+        start = Offset(0f, 0f),
+        end = Offset(x = size.width / 2, y = size.height - arrowRootHeightPx),
+        strokeWidth = arrowShaftWidthPx
+      )
+      drawCircle(
+        color = color,
+        radius = arrowRootHeightPx / 2,
+        center = Offset(
+          x = size.width / 2,
+          y = size.height - (arrowRootHeightPx / 2),
+        ),
+        style = Stroke(width = arrowRootStrokeWidthPx)
+      )
     }
     Text(text = speed.replace(" ", "\n"), textAlign = TextAlign.Center)
   }
