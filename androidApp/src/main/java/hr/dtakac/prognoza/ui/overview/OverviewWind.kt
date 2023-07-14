@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,11 +41,15 @@ fun OverviewWind(
   OverviewDetail(
     label = { Text(stringResource(id = R.string.forecast_label_wind)) },
     supportingGraphic = {
-      Compass(
-        speed = speed,
-        arrowAngle = windDirection,
-        modifier = Modifier.fillMaxSize()
-      )
+      Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+      ) {
+        Compass(
+          speed = speed,
+          arrowAngle = windDirection,
+        )
+      }
     },
     description = { Text(maximumGust) },
     modifier = modifier
@@ -105,7 +112,9 @@ private fun Compass(
       Text(stringResource(id = R.string.west_label_short), style = MaterialTheme.typography.labelSmall)
       Text(stringResource(id = R.string.east_label_short), style = MaterialTheme.typography.labelSmall)
     }
-    Canvas(modifier = Modifier.fillMaxHeight().rotate(arrowAngle)) {
+    Canvas(modifier = Modifier
+      .fillMaxHeight()
+      .rotate(arrowAngle)) {
       val arrowTipHeightPx = density.run { arrowTipHeight.toPx() }
       val arrowTipWidthPx = density.run { arrowTipWidth.toPx() }
       val arrowRootHeightPx = density.run { arrowRootHeight.toPx() }
@@ -135,6 +144,21 @@ private fun Compass(
         style = Stroke(width = arrowRootStrokeWidthPx)
       )
     }
-    Text(text = speed.replace(" ", "\n"), textAlign = TextAlign.Center)
+    Surface(
+      color = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp),
+      shape = CircleShape,
+      modifier = Modifier
+        .fillMaxWidth(0.4f)
+        .aspectRatio(1f)
+    ) {
+      Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+      ) {
+        val (value, unit) = speed.split(" ")
+        Text(text = value, style = MaterialTheme.typography.titleSmall)
+        Text(text = unit, style = MaterialTheme.typography.labelSmall)
+      }
+    }
   }
 }
