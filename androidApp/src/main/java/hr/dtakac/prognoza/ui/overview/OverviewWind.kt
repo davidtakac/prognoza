@@ -79,7 +79,7 @@ private fun Compass(
     CompassBackground(modifier = Modifier.fillMaxSize())
     CompassArrow(modifier = Modifier.fillMaxHeight().rotate(arrowAngle))
     Surface(
-      color = MaterialTheme.colorScheme.surfaceColorAtElevation(8.dp),
+      color = MaterialTheme.colorScheme.surface,
       shape = CircleShape,
       modifier = Modifier
         .fillMaxWidth(0.4f)
