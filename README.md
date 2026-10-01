@@ -1,3 +1,4 @@
+<h1 align="center" style="vertical-align:middle">This project has been archived and will receive no further updates. Work continues in <a href="https://github.com/davidtakac/bura">Bura</a>.</h1>
 <div align="center"><img src="images/app_icon.png" width="100"/></div>
 <h1 align="center" style="vertical-align:middle">Prognoza</h1>
 <h3 align="center">Libre weather app with widgets and offline support</h3>
