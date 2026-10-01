@@ -61,11 +61,6 @@ The app is undergoing a redesign that will bring a bunch of new features includi
 
 Because of this, please do not open PRs for new features now. Only bugfixes will be accepted.
 
-## Donate
-If you like Prognoza, you're welcome to send a donation with LiberaPay.
-
-<a href="https://liberapay.com/davidtakac/"><img src="https://liberapay.com/assets/widgets/donate.svg" alt="Liberapay" width="80px" ></a>
-
 ## Credit
 Forecast data by [MET Norway](https://www.met.no/en) and [Open-Meteo](https://open-meteo.com/)  
 Weather icons by [MET Norway](https://www.met.no/en)  
